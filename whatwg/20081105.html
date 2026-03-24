@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20081105</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20081105.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2008-11-05 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed Nov 05 00:00:00 2008</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="aboodman"><a href="#l-3">#</a> [00:01] &lt;aboodman&gt; so again, in the case of dedicated workers, you have worker.postMessage(). In the case of shared workers, you have worker.port.postMessage().</li>
+ <li id="l-4" _a="aboodman"><a href="#l-4">#</a> [00:01] &lt;aboodman&gt; the inside is also different.</li>
+ <li id="l-5" _a="sicking"><a href="#l-5">#</a> [00:02] &lt;sicking&gt; i guess if you consider them different or not is a matter of definition. But they aren't *that* different IMHO</li>
+ <li id="l-6" _a="aboodman"><a href="#l-6">#</a> [00:03] &lt;aboodman&gt; well it is different. a developer must remember that in the case of dedicated workers you can call postMessage() on the worker object, but not on shared workers.</li>
+ <li id="l-7" _a="aboodman"><a href="#l-7">#</a> [00:03] &lt;aboodman&gt; I don't see why this should be the case.</li>
+ <li id="l-8" _a="Hixie"><a href="#l-8">#</a> [00:03] &lt;Hixie&gt; in the case of shared workers, it can't be optimised further since there are multiple ports</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:04] &lt;Hixie&gt; it's not worker.port.postMessage()</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:04] &lt;Hixie&gt; it's just myPort.postMessage()</li>
+ <li id="l-11" _a="Hixie"><a href="#l-11">#</a> [00:04] &lt;Hixie&gt; oh you mean on the outside</li>
+ <li id="l-12" _a="Hixie"><a href="#l-12">#</a> [00:04] &lt;Hixie&gt; not the inside</li>
+ <li id="l-13" _a="sicking" _r="aboodman"><a href="#l-13">#</a> [00:04] &lt;sicking&gt; aboodman, making all cases as complicated as the most complicated isn't neccesarily a win IMHO</li>
+ <li id="l-14" _a="sicking"><a href="#l-14">#</a> [00:04] &lt;sicking&gt; necessarily</li>
+ <li id="l-15" _a="aboodman" _r="Hixie"><a href="#l-15">#</a> [00:04] &lt;aboodman&gt; Hixie: yes, i was talking about the outside.</li>
+ <li id="l-16" _a="Hixie"><a href="#l-16">#</a> [00:04] &lt;Hixie&gt; we could remove the .port on the shared worker case, but that would be an oversimplification of the API, imho</li>
+ <li id="l-17" _a="Hixie"><a href="#l-17">#</a> [00:05] &lt;Hixie&gt; i don't understand why we'd want to expose the port only on one side</li>
+ <li id="l-18" _a="aboodman" _r="Hixie"><a href="#l-18">#</a> [00:05] &lt;aboodman&gt; Hixie: what difference would that make?</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:05] &lt;Hixie&gt; that would be even mroe confusing</li>
+ <li id="l-20" _a="aboodman" _r="Hixie"><a href="#l-20">#</a> [00:05] &lt;aboodman&gt; Hixie: why would that be more confusing?</li>
+ <li id="l-21" _a="sicking" _r="Hixie"><a href="#l-21">#</a> [00:06] &lt;sicking&gt; Hixie, the advantage of not having an implicit connect() is that you remove the correlation one-page-one-connection</li>
+ <li id="l-22" _a="Hixie"><a href="#l-22">#</a> [00:06] &lt;Hixie&gt; the answer to the question &quot;Is this a MessagePort or something special?&quot; would be &quot;well...&quot;</li>
+ <li id="l-23" _a="sicking" _r="Hixie"><a href="#l-23">#</a> [00:06] &lt;sicking&gt; Hixie, so if you have some service that does server-db access for example and you want several such connections from a single page, you act the same way for each such connection</li>
+ <li id="l-24" _a="sicking" _r="Hixie"><a href="#l-24">#</a> [00:07] &lt;sicking&gt; Hixie, and on the inside you don't care about what connection is from a new page and what is a new connection from an already existing page</li>
+ <li id="l-25" _a="aboodman"><a href="#l-25">#</a> [00:07] &lt;aboodman&gt; Since people are not that thrilled with startConversation/connect, I can make an alternate proposal that also collapses the shared worker/dedicated worker duality.</li>
+ <li id="l-26" _a="aboodman"><a href="#l-26">#</a> [00:07] &lt;aboodman&gt; but does not have startConversation</li>
+ <li id="l-27" _a="aboodman" _r="OUTSIDE"><a href="#l-27">#</a> [00:08] &lt;aboodman&gt; OUTSIDE: var worker = new SharedWorker(&quot;foo.js&quot;, &quot;foo&quot;); worker.postMessage(&quot;ping&quot;);</li>
+ <li id="l-28" _a="sicking" _r="aboodman"><a href="#l-28">#</a> [00:08] &lt;sicking&gt; aboodman, i do like the separation between shared and dedicated. Because it allows us to keep the dedicated simpler than the shared one inheritly can be</li>
+ <li id="l-29" _a="aboodman" _r="INSIDE"><a href="#l-29">#</a> [00:09] &lt;aboodman&gt; INSIDE: onmessage = function(e) { e.messagePort.sendMessage(&quot;pong&quot;) }</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:09] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-31" _a="Hixie"><a href="#l-31">#</a> [00:09] &lt;Hixie&gt; look i don't mind going back to the generic mechanism we used to have, where shared and dedicated workers were indistinguishable, and there was exactly one mechanism</li>
+ <li id="l-32" _a="Hixie"><a href="#l-32">#</a> [00:09] &lt;Hixie&gt; but nobody liked that</li>
+ <li id="l-33" _a="Hixie"><a href="#l-33">#</a> [00:09] &lt;Hixie&gt; i don't really understand the point of trying to get that withotu actually getting it</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:10] &lt;Hixie&gt; i don't have a problem with startConversation()</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:10] &lt;Hixie&gt; i think it's fine</li>
+ <li id="l-36" _a="aboodman" _r="Hixie"><a href="#l-36">#</a> [00:11] &lt;aboodman&gt; Hixie, I think that my last proposal is almost exactly the same as your initial one, except that there is a first class Worker object.</li>
+ <li id="l-37" _a="aboodman"><a href="#l-37">#</a> [00:11] &lt;aboodman&gt; But the Worker object, does not have any postMessage() related apis on it.</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:11] &lt;Hixie&gt; how does this address sicking's original complaints?</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:12] &lt;Hixie&gt; (for a while the spec did have an api with a first class worker object with a pipe on it, btw)</li>
+ <li id="l-40" _a="aboodman"><a href="#l-40">#</a> [00:12] &lt;aboodman&gt; it doesn't, I was just clarifying that basically I am in favor of going back to your original design with a few minor alterations.</li>
+ <li id="l-41" _a="Hixie"><a href="#l-41">#</a> [00:13] &lt;Hixie&gt; i'm not, sicking said he wouldn't implement it :-)</li>
+ <li id="l-42" _a="aboodman"><a href="#l-42">#</a> [00:13] &lt;aboodman&gt; gotcha.</li>
+ <li id="l-43" _a="aboodman" _r="sicking"><a href="#l-43">#</a> [00:15] &lt;aboodman&gt; sicking: I think that if we get rid of connect/startConveration then we can combine the two interfaces w/o adding any code at all to the DedicatedWorker case. I think this would be a win.</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:15] &lt;Hixie&gt; why?</li>
+ <li id="l-45" _a="Hixie"><a href="#l-45">#</a> [00:15] &lt;Hixie&gt; (just curious)</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:15] &lt;Hixie&gt; (not saying there's no reason it'd be a win)</li>
+ <li id="l-47" _a="aboodman"><a href="#l-47">#</a> [00:16] &lt;aboodman&gt; the same reason code reuse is usually good</li>
+ <li id="l-48" _a="sicking" _r="aboodman"><a href="#l-48">#</a> [00:16] &lt;sicking&gt; aboodman, well, you'll have a weird implicit port created on the inside that isn't reachable until someone posts</li>
+ <li id="l-49" _a="aboodman"><a href="#l-49">#</a> [00:16] &lt;aboodman&gt; less opportunity for bugs.</li>
+ <li id="l-50" _a="sicking" _r="aboodman"><a href="#l-50">#</a> [00:16] &lt;sicking&gt; aboodman, i know someone (maciej?) wasn't too exited about not being able to post out until someone had posted in</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:16] &lt;Hixie&gt; are we talking inside or outside here? i'm confused. what are you saying you want to change exactly?</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [00:17] &lt;Hixie&gt; there are use cases for posting in both directions first, we shouldn't preclude that in either case</li>
+ <li id="l-53" _a="aboodman"><a href="#l-53">#</a> [00:17] &lt;aboodman&gt; I don't think we need to preclude posting from outwardly first.</li>
+ <li id="l-54" _a="aboodman"><a href="#l-54">#</a> [00:17] &lt;aboodman&gt; s/from//</li>
+ <li id="l-55" _a="sicking" _r="aboodman"><a href="#l-55">#</a> [00:17] &lt;sicking&gt; aboodman, how would you post out then?</li>
+ <li id="l-56" _a="Hixie"><a href="#l-56">#</a> [00:17] &lt;Hixie&gt; what are you saying you want to change exactly? relative to the current spec</li>
+ <li id="l-57" _a="sicking" _r="aboodman"><a href="#l-57">#</a> [00:18] &lt;sicking&gt; aboodman, i.e. what object would you call postMessage on?</li>
+ <li id="l-58" _a="aboodman"><a href="#l-58">#</a> [00:18] &lt;aboodman&gt; in both the dedicated and shared case you'd call postmessage on the worker object.</li>
+ <li id="l-59" _a="sicking" _r="aboodman"><a href="#l-59">#</a> [00:18] &lt;sicking&gt; aboodman, what would that send a message to on the shared worker</li>
+ <li id="l-60" _a="sicking"><a href="#l-60">#</a> [00:18] &lt;sicking&gt; ?</li>
+ <li id="l-61" _a="aboodman"><a href="#l-61">#</a> [00:18] &lt;aboodman&gt; getting to that :)</li>
+ <li id="l-62" _a="aboodman"><a href="#l-62">#</a> [00:18] &lt;aboodman&gt; on the inside there are onconnect and onmessage events</li>
+ <li id="l-63" _a="aboodman"><a href="#l-63">#</a> [00:20] &lt;aboodman&gt; in both events you get a &quot;port&quot; (maybe not exactly the same thing currently called MessagePort) in the event object which allows you to talk back to the outer interface that sent you  a message or connected.</li>
+ <li id="l-64" _a="aboodman" _r="note"><a href="#l-64">#</a> [00:21] &lt;aboodman&gt; note: there is no global postMessage() or port object on the inside of workers for either the dedicated or shared case.</li>
+ <li id="l-65" _a="sicking" _r="aboodman"><a href="#l-65">#</a> [00:21] &lt;sicking&gt; aboodman, 'in the event'? if you want to post outward first there is no event, no?</li>
+ <li id="l-66" _a="sicking"><a href="#l-66">#</a> [00:21] &lt;sicking&gt; oh</li>
+ <li id="l-67" _a="aboodman" _r="sicking"><a href="#l-67">#</a> [00:21] &lt;aboodman&gt; sicking: you get onconnect</li>
+ <li id="l-68" _a="aboodman"><a href="#l-68">#</a> [00:21] &lt;aboodman&gt; which is basically onload</li>
+ <li id="l-69" _a="aboodman"><a href="#l-69">#</a> [00:21] &lt;aboodman&gt; in the case of dedicated workers</li>
+ <li id="l-70" _a="sicking"><a href="#l-70">#</a> [00:23] &lt;sicking&gt; hm</li>
+ <li id="l-71" _a="sicking"><a href="#l-71">#</a> [00:23] &lt;sicking&gt; it still looks to me like you're adding complexity to the dedicated worker solely for the case of making it more similar to the shared one</li>
+ <li id="l-72" _a="aboodman"><a href="#l-72">#</a> [00:24] &lt;aboodman&gt; i have reduced the amount of added complexity to only the case where the worker wants to send messages outward first.</li>
+ <li id="l-73" _a="sicking" _r="sure"><a href="#l-73">#</a> [00:25] &lt;sicking&gt; sure, you're adding just a little complexiy, but still seems like it's only for the sake of making it more similar to the dedicated worker</li>
+ <li id="l-74" _a="sicking" _r="hm"><a href="#l-74">#</a> [00:26] &lt;sicking&gt; hm, btw, where do messages appear?</li>
+ <li id="l-75" _a="aboodman"><a href="#l-75">#</a> [00:26] &lt;aboodman&gt; i suppose. the global complexity is lower though. it seems like a great trade-off to me.</li>
+ <li id="l-76" _a="sicking"><a href="#l-76">#</a> [00:26] &lt;sicking&gt; if i do   w = new Worker(...); w.postMessage('foo');</li>
+ <li id="l-77" _a="sicking"><a href="#l-77">#</a> [00:26] &lt;sicking&gt; where do i catch that on the inside?</li>
+ <li id="l-78" _a="aboodman"><a href="#l-78">#</a> [00:26] &lt;aboodman&gt; global onmessage event</li>
+ <li id="l-79" _a="sicking"><a href="#l-79">#</a> [00:27] &lt;sicking&gt; so there's a global onmessage but no global postMessage?</li>
+ <li id="l-80" _a="aboodman"><a href="#l-80">#</a> [00:27] &lt;aboodman&gt; yes.</li>
+ <li id="l-81" _a="aboodman"><a href="#l-81">#</a> [00:27] &lt;aboodman&gt; that is the proposal.</li>
+ <li id="l-82" _a="aboodman"><a href="#l-82">#</a> [00:27] &lt;aboodman&gt; which makes sense functionally -- the relationship between workers and clients is 1 to many.</li>
+ <li id="l-83" _a="sicking"><a href="#l-83">#</a> [00:28] &lt;sicking&gt; that seems unexpected given that we don't have that anywhere else</li>
+ <li id="l-84"><a href="#l-84">#</a> [00:28] * Joins: tantek (n=tantek@dsl001-150-252.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-85" _a="aboodman"><a href="#l-85">#</a> [00:29] &lt;aboodman&gt; not sure what to tell you. it doesn't seem weird to me.</li>
+ <li id="l-86" _a="sicking"><a href="#l-86">#</a> [00:30] &lt;sicking&gt; i still prefer what we currently have (possibly modulo removing startConversaion and the implicit call to connect() on shared workers)</li>
+ <li id="l-87" _a="sicking" _r="aboodman"><a href="#l-87">#</a> [00:30] &lt;sicking&gt; aboodman, but do post to the list and see what others feel</li>
+ <li id="l-88" _a="aboodman" _r="sicking"><a href="#l-88">#</a> [00:30] &lt;aboodman&gt; sicking: how do you think that shared workers should talk to the outside?</li>
+ <li id="l-89" _a="sicking" _r="aboodman"><a href="#l-89">#</a> [00:32] &lt;sicking&gt; aboodman, if we remove implicit connect()?</li>
+ <li id="l-90" _a="aboodman" _r="sicking"><a href="#l-90">#</a> [00:33] &lt;aboodman&gt; sicking: yeah, i don't understand what your proposal is for shared workers in general.</li>
+ <li id="l-91" _a="aboodman"><a href="#l-91">#</a> [00:34] &lt;aboodman&gt; the current spec for them doesn't make a lot of sense to me</li>
+ <li id="l-92" _a="sicking"><a href="#l-92">#</a> [00:34] &lt;sicking&gt; start with as now</li>
+ <li id="l-93" _a="sicking"><a href="#l-93">#</a> [00:34] &lt;sicking&gt; add a connect() method</li>
+ <li id="l-94" _a="sicking"><a href="#l-94">#</a> [00:34] &lt;sicking&gt; remove .port</li>
+ <li id="l-95" _a="aboodman"><a href="#l-95">#</a> [00:34] &lt;aboodman&gt; i see.</li>
+ <li id="l-96" _a="sicking"><a href="#l-96">#</a> [00:34] &lt;sicking&gt; when connect() is called a port is returned</li>
+ <li id="l-97" _a="sicking"><a href="#l-97">#</a> [00:35] &lt;sicking&gt; and a 'connect' event is fired inside the worker</li>
+ <li id="l-98" _a="sicking"><a href="#l-98">#</a> [00:35] &lt;sicking&gt; the connect event object holds the port for the other end of the channel</li>
+ <li id="l-99" _a="aboodman"><a href="#l-99">#</a> [00:35] &lt;aboodman&gt; i think part of the disconnect (hah!) is that you think connect() is a feature of shared workers only. i think it is useful for all workers. i actually think it is _less_ useful for shared workers, since you can get basically the same effect by just creating multiple instances of the shared worker.</li>
+ <li id="l-100" _a="aboodman"><a href="#l-100">#</a> [00:35] &lt;aboodman&gt; so if it isn't on dedicated workers, i wouldn't put it on shared workers</li>
+ <li id="l-101" _a="sicking"><a href="#l-101">#</a> [00:36] &lt;sicking&gt; hmm</li>
+ <li id="l-102" _a="sicking"><a href="#l-102">#</a> [00:36] &lt;sicking&gt; interesting idea</li>
+ <li id="l-103" _a="sicking"><a href="#l-103">#</a> [00:36] &lt;sicking&gt; so just talking about shared workers for a sec</li>
+ <li id="l-104" _a="Hixie" _r="wait"><a href="#l-104">#</a> [00:36] &lt;Hixie&gt; wait, what's connect)?</li>
+ <li id="l-105"><a href="#l-105">#</a> [00:36] * Quits: dbaron (n=dbaron@corp-241.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-106" _a="Hixie"><a href="#l-106">#</a> [00:36] &lt;Hixie&gt; connect()?</li>
+ <li id="l-107" _a="sicking" _r="Hixie"><a href="#l-107">#</a> [00:37] &lt;sicking&gt; Hixie, in my described solution above it raises a connect event inside the worker with a port, and then returns the other port</li>
+ <li id="l-108" _a="sicking" _r="aboodman"><a href="#l-108">#</a> [00:37] &lt;sicking&gt; aboodman, so just talking about shared workers for a sec, how would you do communication with a shared worker?</li>
+ <li id="l-109" _a="aboodman"><a href="#l-109">#</a> [00:38] &lt;aboodman&gt; i think that what i proposed above would be my ideal solution</li>
+ <li id="l-110" _a="sicking"><a href="#l-110">#</a> [00:38] &lt;sicking&gt; so there is a worker.postMessage</li>
+ <li id="l-111" _a="aboodman"><a href="#l-111">#</a> [00:38] &lt;aboodman&gt; var worker = new SharedWorker(&quot;foo.js&quot;, &quot;foo&quot;); worker.postMessage(&quot;ping&quot;); ||| onmessage = function(e) { e.messagePort.postMessage(&quot;pong&quot;); }</li>
+ <li id="l-112" _a="sicking" _r="aboodman"><a href="#l-112">#</a> [00:41] &lt;sicking&gt; aboodman, (still just talking about shared workers). So that looks nice, except the disconnect between onmessage/no-postMessage. So how about this: take that proposal, except that when a new shared worker is instantiated a 'connect' message is raised. That message contains a port that has postMessage/onmessage</li>
+ <li id="l-113"><a href="#l-113">#</a> [00:41] * Quits: erlehmann (n=nils@dslb-092-078-104-081.pools.arcor-ip.net) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-114"><a href="#l-114">#</a> [00:41] * Joins: erlehmann (n=nils@dslb-092-078-104-081.pools.arcor-ip.net)</li>
+ <li id="l-115" _a="Hixie" _r="sicking"><a href="#l-115">#</a> [00:42] &lt;Hixie&gt; sicking: why would we want that?</li>
+ <li id="l-116" _a="sicking" _r="Hixie"><a href="#l-116">#</a> [00:42] &lt;sicking&gt; Hixie, want what?</li>
+ <li id="l-117" _a="aboodman" _r="sicking"><a href="#l-117">#</a> [00:42] &lt;aboodman&gt; sicking: i prefer it w/o special cases for dedicated workers. i don't think the lack of a global postMessage() is a big deal.</li>
+ <li id="l-118" _a="Hixie"><a href="#l-118">#</a> [00:42] &lt;Hixie&gt; connect()</li>
+ <li id="l-119" _a="sicking" _r="Hixie"><a href="#l-119">#</a> [00:42] &lt;sicking&gt; Hixie, there seems to have been some disconnect about that</li>
+ <li id="l-120" _a="Hixie"><a href="#l-120">#</a> [00:42] &lt;Hixie&gt; yeah sorry i'm not really paying much attention here, supposed to be on vacation :-)</li>
+ <li id="l-121" _a="Hixie"><a href="#l-121">#</a> [00:43] &lt;Hixie&gt; watching electrion coverage and replying to two e-mails at the same time too</li>
+ <li id="l-122"><a href="#l-122">#</a> [00:43] * Quits: tantek (n=tantek@dsl001-150-252.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-123" _a="sicking" _r="aboodman"><a href="#l-123">#</a> [00:45] &lt;sicking&gt; aboodman, still feels like doing that is just adding complexity to the dedicated worker for the sole purpose of having it more similar to the shared one</li>
+ <li id="l-124" _a="sicking" _r="aboodman"><a href="#l-124">#</a> [00:45] &lt;sicking&gt; aboodman, dedicated workers are by nature simpler, why not let them be</li>
+ <li id="l-125" _a="sicking" _r="aboodman"><a href="#l-125">#</a> [00:46] &lt;sicking&gt; aboodman, with this new proposal the difference is minimal</li>
+ <li id="l-126" _a="sicking" _r="aboodman"><a href="#l-126">#</a> [00:47] &lt;sicking&gt; aboodman, no difference on the outside, and on the inside the only difference is that shared workers have to listen to 'connect' to get new incoming communication channels</li>
+ <li id="l-127" _a="sicking" _r="aboodman"><a href="#l-127">#</a> [00:47] &lt;sicking&gt; aboodman, whereas the dedicated worker simply lets the global scope be the communication channel</li>
+ <li id="l-128" _a="aboodman" _r="sicking"><a href="#l-128">#</a> [00:48] &lt;aboodman&gt; sicking: yes, it is a big improvement. i don't think the remaining differences are that big a deal.</li>
+ <li id="l-129" _a="aboodman"><a href="#l-129">#</a> [00:48] &lt;aboodman&gt; i still think it would be better if the inner interfaces were the same, but this difference won't bother me that much if it is what browser supported.</li>
+ <li id="l-130" _a="sicking" _r="aboodman"><a href="#l-130">#</a> [00:49] &lt;sicking&gt; aboodman, i do really like to keep onmessage/postMessage in sync</li>
+ <li id="l-131" _a="aboodman" _r="&lt;shrug&gt"><a href="#l-131">#</a> [00:50] &lt;aboodman&gt; &lt;shrug&gt; ok.</li>
+ <li id="l-132" _a="sicking"><a href="#l-132">#</a> [00:50] &lt;sicking&gt; wanna mail to the list or should I?</li>
+ <li id="l-133" _a="aboodman"><a href="#l-133">#</a> [00:50] &lt;aboodman&gt; i will</li>
+ <li id="l-134" _a="sicking" _r="cool"><a href="#l-134">#</a> [00:50] &lt;sicking&gt; cool, do bring up both proposals</li>
+ <li id="l-135" _a="aboodman"><a href="#l-135">#</a> [00:50] &lt;aboodman&gt; which ones?</li>
+ <li id="l-136" _a="aboodman"><a href="#l-136">#</a> [00:51] &lt;aboodman&gt; oh you mean the two that are very close together.</li>
+ <li id="l-137" _a="sicking"><a href="#l-137">#</a> [00:51] &lt;sicking&gt; right</li>
+ <li id="l-138" _a="aboodman" _r="ok"><a href="#l-138">#</a> [00:51] &lt;aboodman&gt; ok, sure.</li>
+ <li id="l-139" _a="sicking"><a href="#l-139">#</a> [00:51] &lt;sicking&gt; thanks</li>
+ <li id="l-140" _a="aboodman"><a href="#l-140">#</a> [00:51] &lt;aboodman&gt; on the bright side, i believe this would mean no changes to things you've already implemented.</li>
+ <li id="l-141" _a="sicking"><a href="#l-141">#</a> [00:51] &lt;sicking&gt; yup</li>
+ <li id="l-142" _a="sicking"><a href="#l-142">#</a> [00:52] &lt;sicking&gt; that'd be the case with either of them</li>
+ <li id="l-143"><a href="#l-143">#</a> [00:55] * Joins: dbaron (n=dbaron@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-144"><a href="#l-144">#</a> [01:00] * Quits: svl (n=me@ip565744a7.direct-adsl.nl) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-145"><a href="#l-145">#</a> [01:01] * Joins: svl (n=me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-146"><a href="#l-146">#</a> [01:09] * Quits: sbublava (n=stephan@77.119.88.197.wireless.dyn.drei.com)</li>
+ <li id="l-147"><a href="#l-147">#</a> [01:30] * Joins: famicom (i=famicom@5ED2FF2D.cable.ziggo.nl)</li>
+ <li id="l-148"><a href="#l-148">#</a> [01:33] * Joins: tantek (n=tantek@12.140.254.34)</li>
+ <li id="l-149"><a href="#l-149">#</a> [01:33] * Joins: nessy (n=nessy@115.129.11.62)</li>
+ <li id="l-150"><a href="#l-150">#</a> [01:37] * Quits: smedero (n=smedero@pia145-154.pioneernet.net)</li>
+ <li id="l-151"><a href="#l-151">#</a> [01:39] * Joins: ginger (n=nessy@115.129.5.115)</li>
+ <li id="l-152"><a href="#l-152">#</a> [01:45] * Quits: jwalden (n=waldo@guest-225.mountainview.mozilla.com) (&quot;ChatZilla 0.9.82.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-153"><a href="#l-153">#</a> [01:51] * Joins: mcarter (n=mcarter@adsl-71-135-97-139.dsl.pltn13.pacbell.net)</li>
+ <li id="l-154"><a href="#l-154">#</a> [01:56] * Quits: webben (n=webben@nat/yahoo/x-814338dc86545a2f) (Read error: 113 (No route to host))</li>
+ <li id="l-155"><a href="#l-155">#</a> [01:59] * Quits: nessy (n=nessy@115.129.11.62) (Read error: 110 (Connection timed out))</li>
+ <li id="l-156"><a href="#l-156">#</a> [01:59] * Joins: jwalden (n=waldo@guest-225.mountainview.mozilla.com)</li>
+ <li id="l-157"><a href="#l-157">#</a> [02:03] * Quits: dglazkov (n=dglazkov@nat/google/x-784a8a5d6409131c)</li>
+ <li id="l-158"><a href="#l-158">#</a> [02:08] * Quits: ginger (n=nessy@115.129.5.115) (Connection timed out)</li>
+ <li id="l-159"><a href="#l-159">#</a> [02:09] * Quits: shepazu (n=schepers@cpe-069-134-123-228.nc.res.rr.com)</li>
+ <li id="l-160"><a href="#l-160">#</a> [02:10] * Quits: psa (n=yomode@71.93.19.66) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-161"><a href="#l-161">#</a> [02:15] * Joins: psa (n=yomode@71.93.19.66)</li>
+ <li id="l-162"><a href="#l-162">#</a> [02:18] * Joins: tantek_ (n=tantek@32.156.168.133)</li>
+ <li id="l-163"><a href="#l-163">#</a> [02:22] * Quits: tantek (n=tantek@12.140.254.34) (Read error: 60 (Operation timed out))</li>
+ <li id="l-164"><a href="#l-164">#</a> [02:23] * Joins: tantek (n=tantek@32.158.252.6)</li>
+ <li id="l-165"><a href="#l-165">#</a> [02:26] * Joins: tantek__ (n=tantek@32.158.224.65)</li>
+ <li id="l-166"><a href="#l-166">#</a> [02:36] * Joins: smerp (n=smerp@cpe-066-057-061-202.nc.res.rr.com)</li>
+ <li id="l-167"><a href="#l-167">#</a> [02:38] * Joins: tantek___ (n=tantek@32.157.113.150)</li>
+ <li id="l-168"><a href="#l-168">#</a> [02:40] * Joins: smerp_ (n=smerp@66.192.95.199)</li>
+ <li id="l-169"><a href="#l-169">#</a> [02:44] * Quits: tantek_ (n=tantek@32.156.168.133) (Read error: 110 (Connection timed out))</li>
+ <li id="l-170"><a href="#l-170">#</a> [02:45] * Joins: tantek_ (n=tantek@32.159.25.165)</li>
+ <li id="l-171"><a href="#l-171">#</a> [02:46] * Joins: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net)</li>
+ <li id="l-172"><a href="#l-172">#</a> [02:46] * Quits: tantek (n=tantek@32.158.252.6) (Read error: 110 (Connection timed out))</li>
+ <li id="l-173"><a href="#l-173">#</a> [02:49] * Quits: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-174"><a href="#l-174">#</a> [02:51] * Joins: tantek (n=tantek@12.140.254.34)</li>
+ <li id="l-175"><a href="#l-175">#</a> [02:52] * Quits: othermaciej (n=mjs@nat/apple/x-7c5d36737a4390e3)</li>
+ <li id="l-176"><a href="#l-176">#</a> [02:52] * Quits: tantek__ (n=tantek@32.158.224.65) (Read error: 110 (Connection timed out))</li>
+ <li id="l-177"><a href="#l-177">#</a> [02:57] * Quits: smerp (n=smerp@cpe-066-057-061-202.nc.res.rr.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-178"><a href="#l-178">#</a> [03:00] * Joins: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-179"><a href="#l-179">#</a> [03:01] * Quits: tantek___ (n=tantek@32.157.113.150) (Read error: 110 (Connection timed out))</li>
+ <li id="l-180"><a href="#l-180">#</a> [03:01] * Quits: weinig (n=weinig@17.203.15.152)</li>
+ <li id="l-181"><a href="#l-181">#</a> [03:03] * Joins: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au)</li>
+ <li id="l-182"><a href="#l-182">#</a> [03:03] * Quits: tantek (n=tantek@12.140.254.34)</li>
+ <li id="l-183"><a href="#l-183">#</a> [03:04] * Quits: tantek_ (n=tantek@32.159.25.165) (Read error: 110 (Connection timed out))</li>
+ <li id="l-184"><a href="#l-184">#</a> [03:06] * Quits: ojan (n=ojan@nat/google/x-52987594d3723466) (&quot;Leaving&quot;)</li>
+ <li id="l-185"><a href="#l-185">#</a> [03:31] * Joins: hdh0 (n=hdh@118.71.125.44)</li>
+ <li id="l-186"><a href="#l-186">#</a> [03:42] * Quits: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-187"><a href="#l-187">#</a> [03:49] * Quits: hdh (n=hdh@118.71.125.23) (Connection timed out)</li>
+ <li id="l-188"><a href="#l-188">#</a> [03:49] * Quits: aboodman (n=aboodman@72.14.229.81) (Read error: 110 (Connection timed out))</li>
+ <li id="l-189"><a href="#l-189">#</a> [03:49] * Quits: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-190"><a href="#l-190">#</a> [03:50] * Joins: webben (n=webben@91.85.155.65)</li>
+ <li id="l-191"><a href="#l-191">#</a> [03:53] * Quits: hdh0 (n=hdh@118.71.125.44) (Connection timed out)</li>
+ <li id="l-192"><a href="#l-192">#</a> [04:09] * Joins: erlehmann_ (n=nils@dslb-092-078-098-022.pools.arcor-ip.net)</li>
+ <li id="l-193"><a href="#l-193">#</a> [04:13] * Quits: dbaron (n=dbaron@corp-241.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-194"><a href="#l-194">#</a> [04:15] * Joins: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net)</li>
+ <li id="l-195"><a href="#l-195">#</a> [04:15] * Joins: hdh0 (n=hdh@118.71.120.34)</li>
+ <li id="l-196"><a href="#l-196">#</a> [04:20] * Quits: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au) (Read error: 110 (Connection timed out))</li>
+ <li id="l-197"><a href="#l-197">#</a> [04:24] * Quits: erlehmann (n=nils@dslb-092-078-104-081.pools.arcor-ip.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-198"><a href="#l-198">#</a> [04:27] * Joins: shepazu (n=schepers@cpe-076-182-063-070.nc.res.rr.com)</li>
+ <li id="l-199"><a href="#l-199">#</a> [04:29] * Joins: john_fallows (n=j_r_fall@adsl-76-231-45-30.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-200"><a href="#l-200">#</a> [04:30] * Quits: erlehmann_ (n=nils@dslb-092-078-098-022.pools.arcor-ip.net) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-201"><a href="#l-201">#</a> [04:34] * Joins: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-202"><a href="#l-202">#</a> [04:56] * Joins: renke3 (n=user@Lc54a.l.pppool.de)</li>
+ <li id="l-203"><a href="#l-203">#</a> [04:58] * Quits: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net)</li>
+ <li id="l-204"><a href="#l-204">#</a> [04:59] * Quits: shepazu (n=schepers@cpe-076-182-063-070.nc.res.rr.com)</li>
+ <li id="l-205"><a href="#l-205">#</a> [05:12] * Joins: erlehmann (n=nils@dslb-092-078-098-022.pools.arcor-ip.net)</li>
+ <li id="l-206"><a href="#l-206">#</a> [05:14] * Quits: renke2 (n=user@Lc9e1.l.pppool.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-207"><a href="#l-207">#</a> [05:14] * Joins: dbaron (n=dbaron@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-208"><a href="#l-208">#</a> [05:14] * Quits: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net)</li>
+ <li id="l-209"><a href="#l-209">#</a> [05:27] * Joins: othermaciej (n=mjs@c-69-181-43-20.hsd1.ca.comcast.net)</li>
+ <li id="l-210"><a href="#l-210">#</a> [05:51] * Quits: heycam (n=cam@clm-laptop.infotech.monash.edu.au) (&quot;bye&quot;)</li>
+ <li id="l-211"><a href="#l-211">#</a> [05:58] * Joins: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com)</li>
+ <li id="l-212"><a href="#l-212">#</a> [05:59] * Quits: tndH (n=Rob@james-baillie-pc083-058.student-halls.leeds.ac.uk) (&quot;ChatZilla 0.9.83-rdmsoft [XULRunner 1.9.0.1/2008072406]&quot;)</li>
+ <li id="l-213"><a href="#l-213">#</a> [06:01] * Joins: shepazu (n=schepers@pool-71-111-236-104.rlghnc.dsl-w.verizon.net)</li>
+ <li id="l-214"><a href="#l-214">#</a> [06:10] * Quits: roc (n=roc@202.0.36.64)</li>
+ <li id="l-215"><a href="#l-215">#</a> [06:10] * Quits: john_fallows (n=j_r_fall@adsl-76-231-45-30.dsl.pltn13.sbcglobal.net) (Remote closed the connection)</li>
+ <li id="l-216"><a href="#l-216">#</a> [06:13] * Joins: heycam (n=cam@124-168-34-173.dyn.iinet.net.au)</li>
+ <li id="l-217"><a href="#l-217">#</a> [06:16] * Quits: syp_ (n=syp@lasigpc9.epfl.ch) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-218"><a href="#l-218">#</a> [06:16] * Joins: syp (n=syp@lasigpc9.epfl.ch)</li>
+ <li id="l-219"><a href="#l-219">#</a> [06:27] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (Read error: 110 (Connection timed out))</li>
+ <li id="l-220"><a href="#l-220">#</a> [06:28] * Joins: mpt (n=mpt@canonical/launchpad/mpt)</li>
+ <li id="l-221"><a href="#l-221">#</a> [06:35] * Joins: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au)</li>
+ <li id="l-222"><a href="#l-222">#</a> [06:39] * Quits: dbaron (n=dbaron@corp-241.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-223"><a href="#l-223">#</a> [06:43] * Quits: smerp_ (n=smerp@66.192.95.199)</li>
+ <li id="l-224"><a href="#l-224">#</a> [06:51] * Joins: hdh00 (n=hdh@118.71.120.34)</li>
+ <li id="l-225"><a href="#l-225">#</a> [06:52] * Quits: virtuelv (n=virtuelv@163.80-202-65.nextgentel.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-226"><a href="#l-226">#</a> [06:54] * Joins: virtuelv (n=virtuelv@163.80-202-65.nextgentel.com)</li>
+ <li id="l-227"><a href="#l-227">#</a> [06:59] * Quits: hdh0 (n=hdh@118.71.120.34) (Read error: 145 (Connection timed out))</li>
+ <li id="l-228"><a href="#l-228">#</a> [07:05] * Quits: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-229"><a href="#l-229">#</a> [07:11] * Joins: dbaron (n=dbaron@c-71-204-144-136.hsd1.ca.comcast.net)</li>
+ <li id="l-230"><a href="#l-230">#</a> [07:12] * Quits: svl (n=me@ip565744a7.direct-adsl.nl) (&quot;And back he spurred like a madman, shrieking a curse to the sky.&quot;)</li>
+ <li id="l-231"><a href="#l-231">#</a> [07:12] * Joins: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net)</li>
+ <li id="l-232"><a href="#l-232">#</a> [07:14] * Quits: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-233"><a href="#l-233">#</a> [07:20] * Quits: virtuelv (n=virtuelv@163.80-202-65.nextgentel.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-234"><a href="#l-234">#</a> [07:22] * Joins: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net)</li>
+ <li id="l-235" _a="fakeolliej"><a href="#l-235">#</a> [07:24] * fakeolliej is now known as olliej</li>
+ <li id="l-236"><a href="#l-236">#</a> [07:28] * Quits: othermaciej (n=mjs@c-69-181-43-20.hsd1.ca.comcast.net)</li>
+ <li id="l-237"><a href="#l-237">#</a> [07:40] * Quits: csarven (n=csarven@modemcable150.182-202-24.mc.videotron.ca) (&quot;<a href="http://www.csarven.ca/">http://www.csarven.ca/</a>&quot;)</li>
+ <li id="l-238"><a href="#l-238">#</a> [07:45] * Quits: shepazu (n=schepers@pool-71-111-236-104.rlghnc.dsl-w.verizon.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-239"><a href="#l-239">#</a> [07:45] * Joins: jruderman (n=jruderma@c-67-180-39-55.hsd1.ca.comcast.net)</li>
+ <li id="l-240"><a href="#l-240">#</a> [07:52] * Joins: maikmerten (n=merten@ls5laptop14.cs.uni-dortmund.de)</li>
+ <li id="l-241"><a href="#l-241">#</a> [07:57] * Joins: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-242"><a href="#l-242">#</a> [08:02] * Quits: erlehmann (n=nils@dslb-092-078-098-022.pools.arcor-ip.net) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-243"><a href="#l-243">#</a> [08:03] * Quits: MikeSmith (n=MikeSmit@58.157.21.205) (&quot;Less talk, more pimp walk.&quot;)</li>
+ <li id="l-244"><a href="#l-244">#</a> [08:08] * Joins: shepazu (n=schepers@cpe-069-134-123-228.nc.res.rr.com)</li>
+ <li id="l-245"><a href="#l-245">#</a> [08:20] * Quits: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com) (Connection reset by peer)</li>
+ <li id="l-246"><a href="#l-246">#</a> [08:27] * Joins: virtuelv (n=virtuelv@pat-tdc.opera.com)</li>
+ <li id="l-247"><a href="#l-247">#</a> [08:37] * Joins: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com)</li>
+ <li id="l-248"><a href="#l-248">#</a> [08:39] * Quits: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-249" _a="BenMillard"><a href="#l-249">#</a> [08:40] &lt;BenMillard&gt; I've finished analysing the &lt;q&gt; collection Philip` gathered: <a href="http://projectcerbera.com/web/study/2008/quotes#pt">http://projectcerbera.com/web/study/2008/quotes#pt</a></li>
+ <li id="l-250" _a="BenMillard"><a href="#l-250">#</a> [08:43] &lt;BenMillard&gt; I e-mailed the list with my findings: <a href="http://lists.w3.org/Archives/Public/public-html/2008Nov/0011.html">http://lists.w3.org/Archives/Public/public-html/2008Nov/0011.html</a></li>
+ <li id="l-251"><a href="#l-251">#</a> [08:49] * Joins: Mau`werk (n=ano@a80-100-71-209.adsl.xs4all.nl)</li>
+ <li id="l-252"><a href="#l-252">#</a> [08:53] * Quits: dbaron (n=dbaron@c-71-204-144-136.hsd1.ca.comcast.net) (&quot;g'night&quot;)</li>
+ <li id="l-253"><a href="#l-253">#</a> [08:58] * Quits: virtuelv (n=virtuelv@pat-tdc.opera.com) (&quot;Leaving&quot;)</li>
+ <li id="l-254" _a="BenMillard"><a href="#l-254">#</a> [09:00] &lt;BenMillard&gt; I also reviewed the implementability of internationalised automatic quote mark generation on &lt;q&gt; in relation to what HTML4 says and what HTML5 could say: <a href="http://lists.w3.org/Archives/Public/public-html/2008Nov/0012.html">http://lists.w3.org/Archives/Public/public-html/2008Nov/0012.html</a></li>
+ <li id="l-255" _a="BenMillard" _r="basically"><a href="#l-255">#</a> [09:00] &lt;BenMillard&gt; basically, the feature seems far more trouble than it's worth</li>
+ <li id="l-256" _a="BenMillard" _r="hmm"><a href="#l-256">#</a> [09:01] &lt;BenMillard&gt; hmm, despite proofreading and revising those 2 messages several times over the past week there are still some bad typos :(</li>
+ <li id="l-257"><a href="#l-257">#</a> [09:01] * Parts: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-258"><a href="#l-258">#</a> [09:06] * Joins: MikeSmith (n=MikeSmit@EM114-48-165-213.pool.e-mobile.ne.jp)</li>
+ <li id="l-259"><a href="#l-259">#</a> [09:47] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (Read error: 113 (No route to host))</li>
+ <li id="l-260"><a href="#l-260">#</a> [09:51] * Quits: jwalden (n=waldo@guest-225.mountainview.mozilla.com) (&quot;ChatZilla 0.9.82.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-261"><a href="#l-261">#</a> [10:02] * Quits: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-262"><a href="#l-262">#</a> [10:06] * Joins: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com)</li>
+ <li id="l-263"><a href="#l-263">#</a> [10:15] * Joins: mabdul (n=mabdul@host154.natpool.mwn.de)</li>
+ <li id="l-264"><a href="#l-264">#</a> [10:33] * Quits: KevinMarks (n=KevinMar@150.sub-70-215-62.myvzw.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-265"><a href="#l-265">#</a> [10:41] * Joins: KevinMarks (n=KevinMar@72.164.184.10)</li>
+ <li id="l-266"><a href="#l-266">#</a> [10:45] * Parts: mabdul (n=mabdul@host154.natpool.mwn.de)</li>
+ <li id="l-267"><a href="#l-267">#</a> [10:46] * Quits: webben (n=webben@91.85.155.65) (Read error: 110 (Connection timed out))</li>
+ <li id="l-268"><a href="#l-268">#</a> [10:51] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-269"><a href="#l-269">#</a> [10:52] * Joins: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-270"><a href="#l-270">#</a> [10:56] * Joins: ROBOd (n=robod@89.122.216.38)</li>
+ <li id="l-271"><a href="#l-271">#</a> [11:00] * Joins: yecril71 (n=giecrilj@piekna-gts.2a.pl)</li>
+ <li id="l-272" _a="yecril71"><a href="#l-272">#</a> [11:02] &lt;yecril71&gt; Why should interruptions be more problematic for accessibility than any other part of speech?</li>
+ <li id="l-273" _a="yecril71"><a href="#l-273">#</a> [11:07] &lt;yecril71&gt; If you want to mark up content for consistently and flexibly,</li>
+ <li id="l-274" _a="yecril71"><a href="#l-274">#</a> [11:07] &lt;yecril71&gt; there are other open standards that achieve them.</li>
+ <li id="l-275" _a="yecril71" _r="However"><a href="#l-275">#</a> [11:08] &lt;yecril71&gt; However, you probably need a strong scientific background</li>
+ <li id="l-276" _a="yecril71"><a href="#l-276">#</a> [11:08] &lt;yecril71&gt; and several months of preparation to use them correctly.</li>
+ <li id="l-277" _a="yecril71"><a href="#l-277">#</a> [11:08] &lt;yecril71&gt; Otherwise your document will turn out into a big blob of nonsense markup.</li>
+ <li id="l-278"><a href="#l-278">#</a> [11:09] * Quits: shepazu (n=schepers@cpe-069-134-123-228.nc.res.rr.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-279" _a="yecril71"><a href="#l-279">#</a> [11:10] &lt;yecril71&gt; HTML should be simple enough for a high school child to use.</li>
+ <li id="l-280" _a="yecril71"><a href="#l-280">#</a> [11:12] &lt;yecril71&gt; An abbreviation is no more a reference than any word is.</li>
+ <li id="l-281" _a="hsivonen" _r="yecril71"><a href="#l-281">#</a> [11:12] &lt;hsivonen&gt; yecril71: are you referring to a particular email message?</li>
+ <li id="l-282" _a="yecril71" _r="Re"><a href="#l-282">#</a> [11:12] &lt;yecril71&gt; Re: [whatwg] ---</li>
+ <li id="l-283" _a="yecril71"><a href="#l-283">#</a> [11:13] &lt;yecril71&gt; Every word, as it is written, is a reference to a notion,</li>
+ <li id="l-284" _a="yecril71"><a href="#l-284">#</a> [11:13] &lt;yecril71&gt; except where it is used obliquely, as a reference to itself.</li>
+ <li id="l-285" _a="yecril71"><a href="#l-285">#</a> [11:13] &lt;yecril71&gt; Those cases, however, are rare.</li>
+ <li id="l-286"><a href="#l-286">#</a> [11:14] * Joins: broquaint (i=fe9c180b@spc1-brig11-0-0-cust544.asfd.broadband.ntl.com)</li>
+ <li id="l-287" _a="yecril71"><a href="#l-287">#</a> [11:15] &lt;yecril71&gt; So a reference is too broad a term to name an element.</li>
+ <li id="l-288"><a href="#l-288">#</a> [11:15] * Joins: webben (n=webben@nat/yahoo/x-02b62daad7f3549c)</li>
+ <li id="l-289" _a="yecril71"><a href="#l-289">#</a> [11:17] &lt;yecril71&gt; Sup and sub are not style elements.</li>
+ <li id="l-290" _a="yecril71"><a href="#l-290">#</a> [11:18] &lt;yecril71&gt; Text browsers cannot just render them transparently with no harm to the meaning.</li>
+ <li id="l-291" _a="yecril71"><a href="#l-291">#</a> [11:18] &lt;yecril71&gt; PRE is not a style element because it alters the parsing mode.</li>
+ <li id="l-292" _a="yecril71"><a href="#l-292">#</a> [11:19] &lt;yecril71&gt; VAR is not the same as function;</li>
+ <li id="l-293" _a="yecril71"><a href="#l-293">#</a> [11:20] &lt;yecril71&gt; you can have &lt;VAR &gt;f&lt;/VAR &gt; and &lt;I &gt;f&lt;/I &gt; with different meanings.</li>
+ <li id="l-294" _a="yecril71"><a href="#l-294">#</a> [11:20] &lt;yecril71&gt; I mean, both are functions,</li>
+ <li id="l-295" _a="yecril71"><a href="#l-295">#</a> [11:20] &lt;yecril71&gt; but the second refers to a well-known function</li>
+ <li id="l-296"><a href="#l-296">#</a> [11:21] * Quits: maikmerten (n=merten@ls5laptop14.cs.uni-dortmund.de) (Read error: 145 (Connection timed out))</li>
+ <li id="l-297" _a="yecril71"><a href="#l-297">#</a> [11:21] &lt;yecril71&gt; and the first is sort of local, incidental.</li>
+ <li id="l-298" _a="hsivonen" _r="yecril71"><a href="#l-298">#</a> [11:21] &lt;hsivonen&gt; yecril71: does a reader appreciate the distinction?</li>
+ <li id="l-299" _a="yecril71"><a href="#l-299">#</a> [11:22] &lt;yecril71&gt; I think so; it is better to know what kind of a symbol is presented.</li>
+ <li id="l-300" _a="yecril71"><a href="#l-300">#</a> [11:22] &lt;yecril71&gt; Symbols are hard to read and any clues are welcome.</li>
+ <li id="l-301" _a="yecril71"><a href="#l-301">#</a> [11:23] &lt;yecril71&gt; (That is why code editors mark various elements with different colours).</li>
+ <li id="l-302" _a="hsivonen"><a href="#l-302">#</a> [11:23] &lt;hsivonen&gt; I'd argue that one's literary expression sucks if it is so ambiguous that it wouldn't work on paper and the reader needs to inspect markup</li>
+ <li id="l-303" _a="yecril71"><a href="#l-303">#</a> [11:24] &lt;yecril71&gt; Who says it would not work on paper?</li>
+ <li id="l-304" _a="hsivonen"><a href="#l-304">#</a> [11:24] &lt;hsivonen&gt; (assuming that usually sin() and f() aren't presented in different colors)</li>
+ <li id="l-305" _a="yecril71"><a href="#l-305">#</a> [11:24] &lt;yecril71&gt; But they are presented in different typefaces.</li>
+ <li id="l-306" _a="hsivonen"><a href="#l-306">#</a> [11:25] &lt;hsivonen&gt; sin is often presented without italics, so your &lt;i&gt; example above doesn't apply</li>
+ <li id="l-307" _a="hsivonen"><a href="#l-307">#</a> [11:25] &lt;hsivonen&gt; bad example from me</li>
+ <li id="l-308" _a="yecril71" _r="(Actually"><a href="#l-308">#</a> [11:25] &lt;yecril71&gt; (Actually, the ISO standard recomments well-known symbols to be typeset upright).</li>
+ <li id="l-309" _a="yecril71"><a href="#l-309">#</a> [11:25] &lt;yecril71&gt; recommends.</li>
+ <li id="l-310" _a="hsivonen"><a href="#l-310">#</a> [11:25] &lt;hsivonen&gt; the ISO standard?</li>
+ <li id="l-311" _a="yecril71"><a href="#l-311">#</a> [11:26] &lt;yecril71&gt; The italic typeface could be styled out in a context where only symbols appear.</li>
+ <li id="l-312" _a="yecril71"><a href="#l-312">#</a> [11:26] &lt;yecril71&gt; There is an ISO standard for typesetting scientific publications.</li>
+ <li id="l-313" _a="yecril71"><a href="#l-313">#</a> [11:26] &lt;yecril71&gt; And they say well-known objects should be upright.</li>
+ <li id="l-314" _a="yecril71"><a href="#l-314">#</a> [11:27] &lt;yecril71&gt; It is rarely used because the TeX community did not fully embrace it.</li>
+ <li id="l-315" _a="hsivonen"><a href="#l-315">#</a> [11:28] &lt;hsivonen&gt; :-)</li>
+ <li id="l-316" _a="yecril71"><a href="#l-316">#</a> [11:32] &lt;yecril71&gt; The case of symbols inserted into running text is a bit different.</li>
+ <li id="l-317" _a="yecril71"><a href="#l-317">#</a> [11:33] &lt;yecril71&gt; I think it would be acceptable to leave them in italics</li>
+ <li id="l-318" _a="yecril71"><a href="#l-318">#</a> [11:33] &lt;yecril71&gt; if typeface distinction is not available.</li>
+ <li id="l-319" _a="yecril71"><a href="#l-319">#</a> [11:35] &lt;yecril71&gt; I agree documents should be readable without styling;</li>
+ <li id="l-320"><a href="#l-320">#</a> [11:35] * Joins: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au)</li>
+ <li id="l-321" _a="yecril71"><a href="#l-321">#</a> [11:35] &lt;yecril71&gt; they are just easier to read with proper styling than without.</li>
+ <li id="l-322"><a href="#l-322">#</a> [11:44] * Joins: myakura (n=myakura@p4200-ipbf2306marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-323" _a="yecril71"><a href="#l-323">#</a> [11:49] &lt;yecril71&gt; One example of something unreadable without styling</li>
+ <li id="l-324" _a="yecril71"><a href="#l-324">#</a> [11:49] &lt;yecril71&gt; is 14&lt;SUP &gt;&lt;U &gt;25&lt;/U &gt;&lt;/SUP &gt;</li>
+ <li id="l-325" _a="yecril71"><a href="#l-325">#</a> [11:49] &lt;yecril71&gt; which in Polish means 2:15 PM.</li>
+ <li id="l-326" _a="yecril71"><a href="#l-326">#</a> [11:51] &lt;yecril71&gt; This probably should be coded as</li>
+ <li id="l-327" _a="yecril71"><a href="#l-327">#</a> [11:52] &lt;yecril71&gt; &lt;time &gt;&lt;hrs &gt;14&lt;/hrs &gt;&lt;sep &gt;:&lt;/sep &gt;&lt;mins &gt;25&lt;/mins &gt;&lt;/time &gt;</li>
+ <li id="l-328" _a="yecril71"><a href="#l-328">#</a> [11:53] &lt;yecril71&gt; where sep is display:none.</li>
+ <li id="l-329" _a="yecril71"><a href="#l-329">#</a> [11:57] &lt;yecril71&gt; End body tag otherwise means nothing when there is no body element open.</li>
+ <li id="l-330" _a="yecril71"><a href="#l-330">#</a> [12:04] &lt;yecril71&gt; Any markup language can be used to describe how content is tagged.</li>
+ <li id="l-331" _a="yecril71"><a href="#l-331">#</a> [12:05] &lt;yecril71&gt; The &quot;HT&quot; in &quot;HTML&quot; means it is text with hyperlinks for easy publishing on the Web.</li>
+ <li id="l-332" _a="yecril71"><a href="#l-332">#</a> [12:05] &lt;yecril71&gt; There are other markup schemes to do scientific research on text corpora.</li>
+ <li id="l-333" _a="yecril71"><a href="#l-333">#</a> [12:06] &lt;yecril71&gt; Not everything must be coded in HTML.</li>
+ <li id="l-334"><a href="#l-334">#</a> [12:07] * Quits: webben (n=webben@nat/yahoo/x-02b62daad7f3549c) (&quot;Lost terminal&quot;)</li>
+ <li id="l-335"><a href="#l-335">#</a> [12:22] * Joins: webben (n=webben@nat/yahoo/x-ee05979d64886e6e)</li>
+ <li id="l-336" _a="yecril71"><a href="#l-336">#</a> [12:44] &lt;yecril71&gt; An attribute is a bad choice for a title because attributes are not rendered.</li>
+ <li id="l-337" _a="yecril71"><a href="#l-337">#</a> [12:44] &lt;yecril71&gt; At least should not be.</li>
+ <li id="l-338"><a href="#l-338">#</a> [13:06] * Joins: Lachy (n=Lachlan@pat-tdc.opera.com)</li>
+ <li id="l-339" _a="Lachy"><a href="#l-339">#</a> [13:31] &lt;Lachy&gt; Oh No! Microsoft have discontinued Windows 3.x. <a href="http://tech.slashdot.org/article.pl?sid=08/11/05/0257202&amp;from=rss">http://tech.slashdot.org/article.pl?sid=08/11/05/0257202&amp;from=rss</a></li>
+ <li id="l-340" _a="jcranmer" _r="Lachy"><a href="#l-340">#</a> [13:34] &lt;jcranmer&gt; Lachy: did you just join the 21st century?</li>
+ <li id="l-341" _a="hsivonen"><a href="#l-341">#</a> [13:34] * hsivonen wonders what it feels like to maintain a severely legacy piece of software knowing what the state of the art is</li>
+ <li id="l-342"><a href="#l-342">#</a> [13:41] * Quits: webben (n=webben@nat/yahoo/x-ee05979d64886e6e) (Read error: 110 (Connection timed out))</li>
+ <li id="l-343"><a href="#l-343">#</a> [13:41] * Joins: hdh (n=hdh@118.71.120.34)</li>
+ <li id="l-344"><a href="#l-344">#</a> [13:48] * Joins: operairc (n=freebsd_@195.161.25.8)</li>
+ <li id="l-345" _a="operairc"><a href="#l-345">#</a> [13:48] &lt;operairc&gt; hello</li>
+ <li id="l-346" _a="Lachy" _r="operairc"><a href="#l-346">#</a> [13:50] &lt;Lachy&gt; operairc, hi</li>
+ <li id="l-347"><a href="#l-347">#</a> [13:50] * Joins: smerp (n=smerp@cpe-066-057-061-202.nc.res.rr.com)</li>
+ <li id="l-348"><a href="#l-348">#</a> [13:54] * Joins: aaronlev (n=chatzill@65-78-28-198.c3-0.arl-ubr1.sbo-arl.ma.cable.rcn.com)</li>
+ <li id="l-349"><a href="#l-349">#</a> [13:54] * Quits: smerp (n=smerp@cpe-066-057-061-202.nc.res.rr.com) (Client Quit)</li>
+ <li id="l-350"><a href="#l-350">#</a> [13:58] * Quits: hdh00 (n=hdh@118.71.120.34) (Read error: 110 (Connection timed out))</li>
+ <li id="l-351"><a href="#l-351">#</a> [14:02] * Quits: zcorpan (n=zcorpan@pat.se.opera.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-352"><a href="#l-352">#</a> [14:03] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-353"><a href="#l-353">#</a> [14:05] * Quits: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au) (Read error: 110 (Connection timed out))</li>
+ <li id="l-354"><a href="#l-354">#</a> [14:05] * Parts: aaronlev (n=chatzill@65-78-28-198.c3-0.arl-ubr1.sbo-arl.ma.cable.rcn.com)</li>
+ <li id="l-355"><a href="#l-355">#</a> [14:18] * Parts: operairc (n=freebsd_@195.161.25.8)</li>
+ <li id="l-356"><a href="#l-356">#</a> [14:31] * Joins: webben (n=webben@nat/yahoo/x-af1184ad192a8558)</li>
+ <li id="l-357"><a href="#l-357">#</a> [14:35] * Joins: virtuelv (n=virtuelv@pat-tdc.opera.com)</li>
+ <li id="l-358"><a href="#l-358">#</a> [14:41] * Joins: famicom_ (i=famicom@5ED2FF2D.cable.ziggo.nl)</li>
+ <li id="l-359"><a href="#l-359">#</a> [14:45] * Quits: hdh (n=hdh@118.71.120.34) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-360"><a href="#l-360">#</a> [14:45] * Quits: Amorphous (i=jan@unaffiliated/amorphous) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-361"><a href="#l-361">#</a> [14:45] * Quits: olliej (n=oliver@nat/apple/x-36cbff9bbc5d13b5) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-362"><a href="#l-362">#</a> [14:45] * Quits: deltab (n=deltab@82-36-30-34.cable.ubr02.smal.blueyonder.co.uk) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-363"><a href="#l-363">#</a> [14:45] * Quits: nym (n=nym@216.218.203.211) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-364"><a href="#l-364">#</a> [14:45] * Quits: jmb (n=jmb@login.ecs.soton.ac.uk) (lindbohm.freenode.net irc.freenode.net)</li>
+ <li id="l-365"><a href="#l-365">#</a> [14:46] * Joins: hdh (n=hdh@118.71.120.34)</li>
+ <li id="l-366"><a href="#l-366">#</a> [14:46] * Joins: Amorphous (i=jan@unaffiliated/amorphous)</li>
+ <li id="l-367"><a href="#l-367">#</a> [14:46] * Joins: olliej (n=oliver@nat/apple/x-36cbff9bbc5d13b5)</li>
+ <li id="l-368"><a href="#l-368">#</a> [14:46] * Joins: deltab (n=deltab@82-36-30-34.cable.ubr02.smal.blueyonder.co.uk)</li>
+ <li id="l-369"><a href="#l-369">#</a> [14:46] * Joins: nym (n=nym@216.218.203.211)</li>
+ <li id="l-370"><a href="#l-370">#</a> [14:46] * Joins: jmb (n=jmb@login.ecs.soton.ac.uk)</li>
+ <li id="l-371"><a href="#l-371">#</a> [14:47] * Quits: famicom (i=famicom@5ED2FF2D.cable.ziggo.nl) (Read error: 60 (Operation timed out))</li>
+ <li id="l-372"><a href="#l-372">#</a> [15:03] * Quits: famicom_ (i=famicom@5ED2FF2D.cable.ziggo.nl) (&quot;Leaving&quot;)</li>
+ <li id="l-373"><a href="#l-373">#</a> [15:03] * Joins: famicom (i=famicom@5ED2FF2D.cable.ziggo.nl)</li>
+ <li id="l-374" _a="Lachy"><a href="#l-374">#</a> [15:22] &lt;Lachy&gt; any suggestions for what font I should use in my presentation slides? It has to be done in Powerpoint and so the font has to be available on Windows</li>
+ <li id="l-375"><a href="#l-375">#</a> [15:26] * Quits: MikeSmith (n=MikeSmit@EM114-48-165-213.pool.e-mobile.ne.jp) (Read error: 110 (Connection timed out))</li>
+ <li id="l-376"><a href="#l-376">#</a> [15:28] * Joins: othermaciej (n=mjs@c-69-181-43-20.hsd1.ca.comcast.net)</li>
+ <li id="l-377" _a="hsivonen" _r="Lachy"><a href="#l-377">#</a> [15:29] &lt;hsivonen&gt; Lachy: Arial in that cas</li>
+ <li id="l-378" _a="hsivonen"><a href="#l-378">#</a> [15:29] &lt;hsivonen&gt; e</li>
+ <li id="l-379" _a="Lachy"><a href="#l-379">#</a> [15:29] &lt;Lachy&gt; I wanted to avoid Arial</li>
+ <li id="l-380" _a="hsivonen" _r="(alternatively"><a href="#l-380">#</a> [15:30] &lt;hsivonen&gt; (alternatively, you could do your thing in Keynote, export to a bunch of TIFF, drag&amp;drop the TIFF set onto a blank Keynote presentation to import them back and then export the resulting bitmap slides to PowerPoint)</li>
+ <li id="l-381" _a="Philip`"><a href="#l-381">#</a> [15:30] &lt;Philip`&gt; What version of Windows?</li>
+ <li id="l-382" _a="Lachy"><a href="#l-382">#</a> [15:30] &lt;Lachy&gt; I've chosen Book Antiqua for now</li>
+ <li id="l-383" _a="Philip`"><a href="#l-383">#</a> [15:30] &lt;Philip`&gt; (Vista has nicer fonts)</li>
+ <li id="l-384" _a="Lachy"><a href="#l-384">#</a> [15:30] &lt;Lachy&gt; I only have XP available</li>
+ <li id="l-385" _a="Philip`"><a href="#l-385">#</a> [15:31] &lt;Philip`&gt; Ah</li>
+ <li id="l-386" _a="Lachy"><a href="#l-386">#</a> [15:31] &lt;Lachy&gt; and I think the machines at the conference have XP too</li>
+ <li id="l-387" _a="Philip`"><a href="#l-387">#</a> [15:31] &lt;Philip`&gt; Comic Sans is clearly the sensible choice</li>
+ <li id="l-388" _a="Lachy" _r="true"><a href="#l-388">#</a> [15:31] &lt;Lachy&gt; true, but I figured that's what everyone else would be using and wanted to be different</li>
+ <li id="l-389" _a="Philip`"><a href="#l-389">#</a> [15:32] &lt;Philip`&gt; You could use italic Comic Sans instead</li>
+ <li id="l-390" _a="Lachy"><a href="#l-390">#</a> [15:33] &lt;Lachy&gt; exporting keynote is possible. But I also have to create it with OperaShow to keep chaals happy. I'm supposed to present using OperaShow if possible, but I still need to have the powerpoint as a backup</li>
+ <li id="l-391" _a="hsivonen"><a href="#l-391">#</a> [15:33] &lt;hsivonen&gt; wow. Windows has crazy bugs. now I need to sniff if my Python script runs on Windows...</li>
+ <li id="l-392" _a="hsivonen"><a href="#l-392">#</a> [15:34] &lt;hsivonen&gt; one needs to stuff an extra quote into the argument of os.system() so that Windows can swallow the quote and then see the right command</li>
+ <li id="l-393" _a="Lachy"><a href="#l-393">#</a> [15:35] &lt;Lachy&gt; This is the panel I'm on, in which I need to give a 15 min presentation on HTML5. <a href="http://www.pubcon.com/sessions.cgi?action=view&amp;record=150">http://www.pubcon.com/sessions.cgi?action=view&amp;record=150</a></li>
+ <li id="l-394" _a="Philip`" _r="hsivonen"><a href="#l-394">#</a> [15:43] &lt;Philip`&gt; hsivonen: Do you really have to use os.system() and rely on the system shell, rather than using the subprocess module or something?</li>
+ <li id="l-395" _a="hsivonen" _r="Philip`"><a href="#l-395">#</a> [15:45] &lt;hsivonen&gt; Philip`: I have no idea. os.system has served me well on OS X and Ubuntu</li>
+ <li id="l-396" _a="Philip`"><a href="#l-396">#</a> [15:47] &lt;Philip`&gt; <a href="http://docs.python.org/library/os.html#os.system">http://docs.python.org/library/os.html#os.system</a> suggests subprocess</li>
+ <li id="l-397" _a="Philip`"><a href="#l-397">#</a> [15:47] &lt;Philip`&gt; which should be more reliable since it doesn't use the shell, so there aren't all the problems of quoting and escaping</li>
+ <li id="l-398"><a href="#l-398">#</a> [15:49] * Quits: Lachy (n=Lachlan@pat-tdc.opera.com) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-399" _a="hsivonen" _r="Philip`"><a href="#l-399">#</a> [15:49] &lt;hsivonen&gt; Philip`: that looks like more work than stuffing an extra quote in there</li>
+ <li id="l-400" _a="hsivonen"><a href="#l-400">#</a> [15:52] &lt;hsivonen&gt; what should I use on windows in place of os.symlink?</li>
+ <li id="l-401" _a="Philip`"><a href="#l-401">#</a> [15:53] &lt;Philip`&gt; Pre-Vista doesn't have anything equivalent to symlinks, so you'd need to reconsider your problem from a higher level</li>
+ <li id="l-402" _a="hsivonen" _r="zcorpan"><a href="#l-402">#</a> [15:53] &lt;hsivonen&gt; zcorpan: do you read the WHATWG implemontors list?</li>
+ <li id="l-403" _a="zcorpan" _r="hsivonen"><a href="#l-403">#</a> [15:54] &lt;zcorpan&gt; hsivonen: yes</li>
+ <li id="l-404" _a="zcorpan"><a href="#l-404">#</a> [15:55] &lt;zcorpan&gt; though you had already replied when i saw the email</li>
+ <li id="l-405" _a="hsivonen" _r="zcorpan"><a href="#l-405">#</a> [15:55] &lt;hsivonen&gt; zcorpan: OK. then I don't try to reply to the reply to my reply.</li>
+ <li id="l-406"><a href="#l-406">#</a> [15:55] * Joins: smerp (n=smerp@66.192.95.199)</li>
+ <li id="l-407"><a href="#l-407">#</a> [15:55] * Joins: famicom_ (i=famicom@5ED2FF2D.cable.ziggo.nl)</li>
+ <li id="l-408" _a="hsivonen" _r="Philip`"><a href="#l-408">#</a> [15:58] &lt;hsivonen&gt; Philip`: what about shortcuts? if I create shortcuts to make a directory appear in multiple places, will Python shutil follow shortcuts?</li>
+ <li id="l-409" _a="hsivonen"><a href="#l-409">#</a> [15:59] &lt;hsivonen&gt; and will Java file IO follow shortcuts in paths?</li>
+ <li id="l-410" _a="Philip`" _r="hsivonen"><a href="#l-410">#</a> [15:59] &lt;Philip`&gt; hsivonen: No (unless shutil is really crazy, which I don't think it is) - shortcuts are purely an Explorer thing, not a kernel or filesystem thing</li>
+ <li id="l-411" _a="hsivonen"><a href="#l-411">#</a> [16:00] &lt;hsivonen&gt; hmm. that's not cool</li>
+ <li id="l-412" _a="Philip`"><a href="#l-412">#</a> [16:00] &lt;Philip`&gt; so the Win32 API doesn't understand shortcuts, and just treats them like plain files (which is all they are)</li>
+ <li id="l-413" _a="hsivonen"><a href="#l-413">#</a> [16:01] &lt;hsivonen&gt; I guess I need to write a Python function that copies instead of symlinking on Windows</li>
+ <li id="l-414" _a="hsivonen"><a href="#l-414">#</a> [16:01] &lt;hsivonen&gt; sigh</li>
+ <li id="l-415" _a="Philip`"><a href="#l-415">#</a> [16:01] &lt;Philip`&gt; (Pre-Vista NTFS does have junction points, which are kind of like symlinks to directories, but they're pretty obscure and nobody uses them)</li>
+ <li id="l-416" _a="jcranmer"><a href="#l-416">#</a> [16:01] &lt;jcranmer&gt;  /nick jcranmer|away</li>
+ <li id="l-417"><a href="#l-417">#</a> [16:04] * Joins: Lachy (n=Lachlan@85.196.122.246)</li>
+ <li id="l-418"><a href="#l-418">#</a> [16:04] * Joins: mabdul (n=mabdul@host140.natpool.mwn.de)</li>
+ <li id="l-419"><a href="#l-419">#</a> [16:08] * Quits: famicom (i=famicom@5ED2FF2D.cable.ziggo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-420" _a="Hixie"><a href="#l-420">#</a> [16:10] &lt;Hixie&gt; junction points are directory hard links</li>
+ <li id="l-421" _a="Hixie"><a href="#l-421">#</a> [16:10] &lt;Hixie&gt; (and mount points)</li>
+ <li id="l-422" _a="Philip`"><a href="#l-422">#</a> [16:11] &lt;Philip`&gt; They're not hard links in the Unixy sense, i.e. just a different name for the same node on disk - there's a distinction between the original directory and the junction points pointing to it</li>
+ <li id="l-423" _a="Hixie"><a href="#l-423">#</a> [16:12] &lt;Hixie&gt; oh?</li>
+ <li id="l-424" _a="Hixie"><a href="#l-424">#</a> [16:12] &lt;Hixie&gt; yeah i guess so</li>
+ <li id="l-425" _a="Hixie"><a href="#l-425">#</a> [16:13] &lt;Hixie&gt; ntfs also has multiple streams per file, which as far as i can tell is used exclusively by malware authors</li>
+ <li id="l-426" _a="Philip`"><a href="#l-426">#</a> [16:13] &lt;Philip`&gt; e.g. Wikipedia says &quot;The dir command in Windows 2000 or later recognizes junction points, displaying &lt;JUNCTION&gt; instead of &lt;DIR&gt; in directory listings&quot;</li>
+ <li id="l-427" _a="Hixie"><a href="#l-427">#</a> [16:13] &lt;Hixie&gt; yeah</li>
+ <li id="l-428" _a="Philip`"><a href="#l-428">#</a> [16:14] &lt;Philip`&gt; Maybe that's because anyone other than malware authors wants to avoid getting support calls from users with FAT filesystems :-)</li>
+ <li id="l-429" _a="othermaciej"><a href="#l-429">#</a> [16:15] &lt;othermaciej&gt; hard links in the Unixy sense *are* different names for the same node on disk</li>
+ <li id="l-430" _a="othermaciej"><a href="#l-430">#</a> [16:15] &lt;othermaciej&gt; whereas symlinks are different names for a path in the filesystem</li>
+ <li id="l-431" _a="othermaciej"><a href="#l-431">#</a> [16:16] &lt;othermaciej&gt; it may be that junction points are not exactly like either</li>
+ <li id="l-432" _a="Philip`" _r="othermaciej"><a href="#l-432">#</a> [16:16] &lt;Philip`&gt; othermaciej: That's what I meant about hard links</li>
+ <li id="l-433" _a="othermaciej"><a href="#l-433">#</a> [16:16] &lt;othermaciej&gt; I see</li>
+ <li id="l-434" _a="Philip`"><a href="#l-434">#</a> [16:16] &lt;Philip`&gt; so I agree with you :-)</li>
+ <li id="l-435" _a="othermaciej"><a href="#l-435">#</a> [16:17] &lt;othermaciej&gt; are junction points references to the filesystem object directly, or to a path?</li>
+ <li id="l-436" _a="othermaciej"><a href="#l-436">#</a> [16:18] &lt;othermaciej&gt; to me that's the biggest difference between symlinks and hardlinks, more so than being indistinguishable from the original</li>
+ <li id="l-437" _a="Philip`"><a href="#l-437">#</a> [16:18] &lt;Philip`&gt; I guess the issue there is: if you move the pointed-at directory, does the junction point still point at it?</li>
+ <li id="l-438" _a="Hixie"><a href="#l-438">#</a> [16:18] &lt;Hixie&gt; junction points are basically mount points for other paths, iirc</li>
+ <li id="l-439" _a="Hixie"><a href="#l-439">#</a> [16:19] &lt;Hixie&gt; but what do i know</li>
+ <li id="l-440" _a="Philip`"><a href="#l-440">#</a> [16:19] &lt;Philip`&gt; and I don't know the answer to that</li>
+ <li id="l-441" _a="Hixie"><a href="#l-441">#</a> [16:19] &lt;Hixie&gt; ask me an html question!</li>
+ <li id="l-442" _a="Hixie"><a href="#l-442">#</a> [16:19] &lt;Hixie&gt; :-)</li>
+ <li id="l-443" _a="Philip`"><a href="#l-443">#</a> [16:22] * Philip` can't actually think of any HTML questions :-(</li>
+ <li id="l-444" _a="Hixie"><a href="#l-444">#</a> [16:22] &lt;Hixie&gt; hah</li>
+ <li id="l-445" _a="Hixie"><a href="#l-445">#</a> [16:22] &lt;Hixie&gt; i have 1000s, it's ok</li>
+ <li id="l-446"><a href="#l-446">#</a> [16:23] * Quits: KevinMarks (n=KevinMar@72.164.184.10) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-447" _a="Philip`" _r="Hmm"><a href="#l-447">#</a> [16:24] &lt;Philip`&gt; Hmm, the fun fair outside my bedroom window has been playing loud music for an hour, and it's not even going to open until three hours from now</li>
+ <li id="l-448"><a href="#l-448">#</a> [16:24] * Quits: jcranmer (n=jcranmer@ltsp1.csl.tjhsst.edu) (Read error: 110 (Connection timed out))</li>
+ <li id="l-449"><a href="#l-449">#</a> [16:26] * Joins: mstange (n=markus@buntes215.wohnheim.uni-kl.de)</li>
+ <li id="l-450" _a="Philip`"><a href="#l-450">#</a> [16:26] &lt;Philip`&gt; (Hooray for bonfire night, where we celebrate the capture and torture and mutilation and death of a suspected terrorist)</li>
+ <li id="l-451"><a href="#l-451">#</a> [16:31] * Joins: svl (n=me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-452"><a href="#l-452">#</a> [16:33] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-453"><a href="#l-453">#</a> [16:36] * Joins: jcranmer_ (n=jcranmer@ltsp1.csl.tjhsst.edu)</li>
+ <li id="l-454" _a="jcranmer_"><a href="#l-454">#</a> [16:36] * jcranmer_ is now known as jcranmer</li>
+ <li id="l-455"><a href="#l-455">#</a> [16:37] * Joins: jcranmer_ (n=jcranmer@ltsp1.csl.tjhsst.edu)</li>
+ <li id="l-456"><a href="#l-456">#</a> [16:38] * Quits: jcranmer (n=jcranmer@ltsp1.csl.tjhsst.edu) (Client Quit)</li>
+ <li id="l-457"><a href="#l-457">#</a> [16:38] * Quits: jcranmer_ (n=jcranmer@ltsp1.csl.tjhsst.edu) (Client Quit)</li>
+ <li id="l-458"><a href="#l-458">#</a> [16:39] * Joins: jcranmer (n=jcranmer@ltsp1.csl.tjhsst.edu)</li>
+ <li id="l-459"><a href="#l-459">#</a> [16:39] * Parts: mabdul (n=mabdul@host140.natpool.mwn.de)</li>
+ <li id="l-460"><a href="#l-460">#</a> [16:42] * Joins: aroben_ (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-461"><a href="#l-461">#</a> [16:48] * Quits: psa (n=yomode@71.93.19.66) (Remote closed the connection)</li>
+ <li id="l-462"><a href="#l-462">#</a> [16:53] * Joins: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net)</li>
+ <li id="l-463"><a href="#l-463">#</a> [16:54] * Joins: eric_carlson (n=ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-464"><a href="#l-464">#</a> [16:54] * Quits: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-465"><a href="#l-465">#</a> [16:55] * Joins: billmason (n=billmaso@ip41.unival.com)</li>
+ <li id="l-466"><a href="#l-466">#</a> [17:01] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-467"><a href="#l-467">#</a> [17:07] * Quits: Mau`werk (n=ano@a80-100-71-209.adsl.xs4all.nl) (&quot;Disconnected...&quot;)</li>
+ <li id="l-468"><a href="#l-468">#</a> [17:07] * Quits: myakura (n=myakura@p4200-ipbf2306marunouchi.tokyo.ocn.ne.jp) (&quot;Leaving...&quot;)</li>
+ <li id="l-469"><a href="#l-469">#</a> [17:09] * Quits: renke3 (n=user@Lc54a.l.pppool.de) (Remote closed the connection)</li>
+ <li id="l-470"><a href="#l-470">#</a> [17:10] * Quits: dglazkov (n=dglazkov@c-24-130-144-56.hsd1.ca.comcast.net)</li>
+ <li id="l-471"><a href="#l-471">#</a> [17:11] * Quits: hdh (n=hdh@118.71.120.34) (Remote closed the connection)</li>
+ <li id="l-472"><a href="#l-472">#</a> [17:11] * Joins: hdh (n=hdh@118.71.120.34)</li>
+ <li id="l-473"><a href="#l-473">#</a> [17:11] * Joins: renke2 (n=user@Lc54a.l.pppool.de)</li>
+ <li id="l-474"><a href="#l-474">#</a> [17:11] * Quits: billmason (n=billmaso@ip41.unival.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-475"><a href="#l-475">#</a> [17:11] * Joins: billmason (n=billmaso@ip41.unival.com)</li>
+ <li id="l-476" _a="gsnedders" _r="Philip`"><a href="#l-476">#</a> [17:15] &lt;gsnedders&gt; Philip`: You still living where you were in July?</li>
+ <li id="l-477" _a="Philip`" _r="gsnedders"><a href="#l-477">#</a> [17:34] &lt;Philip`&gt; gsnedders: No</li>
+ <li id="l-478" _a="gsnedders" _r="Philip`"><a href="#l-478">#</a> [17:35] &lt;gsnedders&gt; Philip`: Where do you live now?</li>
+ <li id="l-479" _a="gsnedders" _r="Philip`"><a href="#l-479">#</a> [17:35] &lt;gsnedders&gt; Philip`: Somewhere overlooking a park I guess :P</li>
+ <li id="l-480" _a="Philip`" _r="gsnedders"><a href="#l-480">#</a> [17:35] &lt;Philip`&gt; gsnedders: Around <a href="http://maps.google.co.uk/?ie=UTF8&amp;ll=52.209553,0.131621&amp;spn=0.003373,0.010085&amp;t=h&amp;z=17">http://maps.google.co.uk/?ie=UTF8&amp;ll=52.209553,0.131621&amp;spn=0.003373,0.010085&amp;t=h&amp;z=17</a></li>
+ <li id="l-481" _a="Philip`"><a href="#l-481">#</a> [17:37] &lt;Philip`&gt; I have a nicer view from my room than I did in July :-)</li>
+ <li id="l-482"><a href="#l-482">#</a> [17:42] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-483"><a href="#l-483">#</a> [17:50] * Joins: dglazkov (n=dglazkov@nat/google/x-851eb1d3f43947fc)</li>
+ <li id="l-484" _a="gsnedders" _r="Yeah"><a href="#l-484">#</a> [17:52] &lt;gsnedders&gt; Yeah, you wouldn't see much from where you were then :)</li>
+ <li id="l-485" _a="gsnedders"><a href="#l-485">#</a> [17:52] &lt;gsnedders&gt; Only 59 hours by train from Le Mans to Istabul! :P</li>
+ <li id="l-486"><a href="#l-486">#</a> [17:53] * Joins: csarven (n=csarven@80.76.201.52)</li>
+ <li id="l-487"><a href="#l-487">#</a> [17:56] * Joins: aroben__ (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-488"><a href="#l-488">#</a> [17:58] * Quits: aroben_ (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-489"><a href="#l-489">#</a> [18:04] * Joins: aroben_ (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-490"><a href="#l-490">#</a> [18:04] * Quits: aroben (n=aroben@unaffiliated/aroben) (Nick collision from services.)</li>
+ <li id="l-491"><a href="#l-491">#</a> [18:04] * Quits: aroben__ (n=aroben@unaffiliated/aroben) (Nick collision from services.)</li>
+ <li id="l-492" _a="aroben_"><a href="#l-492">#</a> [18:04] * aroben_ is now known as aroben</li>
+ <li id="l-493"><a href="#l-493">#</a> [18:07] * Joins: zcorpan_ (n=zcorpan@c83-252-193-84.bredband.comhem.se)</li>
+ <li id="l-494"><a href="#l-494">#</a> [18:07] * Quits: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net)</li>
+ <li id="l-495"><a href="#l-495">#</a> [18:09] * Joins: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-496"><a href="#l-496">#</a> [18:11] * Joins: Maurice` (n=copyman@cc90688-a.emmen1.dr.home.nl)</li>
+ <li id="l-497"><a href="#l-497">#</a> [18:13] * Quits: renke2 (n=user@Lc54a.l.pppool.de) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-498"><a href="#l-498">#</a> [18:22] * Joins: renke2 (n=user@Lc54a.l.pppool.de)</li>
+ <li id="l-499"><a href="#l-499">#</a> [18:23] * Joins: hdh0 (n=hdh@118.71.120.34)</li>
+ <li id="l-500"><a href="#l-500">#</a> [18:27] * Quits: virtuelv (n=virtuelv@pat-tdc.opera.com) (&quot;Leaving&quot;)</li>
+ <li id="l-501" _a="Hixie"><a href="#l-501">#</a> [18:33] &lt;Hixie&gt; 89.</li>
+ <li id="l-502"><a href="#l-502">#</a> [18:41] * Quits: hdh (n=hdh@118.71.120.34) (Read error: 110 (Connection timed out))</li>
+ <li id="l-503"><a href="#l-503">#</a> [18:42] * Joins: weinig (n=weinig@nat/apple/x-be7b2ddb3341dd69)</li>
+ <li id="l-504" _a="yecril71"><a href="#l-504">#</a> [18:43] &lt;yecril71&gt; What is wrong with</li>
+ <li id="l-505" _a="yecril71"><a href="#l-505">#</a> [18:43] &lt;yecril71&gt; &lt;STRONG class=&quot;requirements&quot; &gt;Enter an odd number! &lt;INPUT &gt;&lt;/STRONG &gt;?</li>
+ <li id="l-506" _a="yecril71"><a href="#l-506">#</a> [18:45] &lt;yecril71&gt; And consider that Hixie thinks it is right</li>
+ <li id="l-507" _a="yecril71"><a href="#l-507">#</a> [18:46] &lt;yecril71&gt; that labels do not work in Internet Explorer.</li>
+ <li id="l-508"><a href="#l-508">#</a> [18:46] * Quits: othermaciej (n=mjs@c-69-181-43-20.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-509" _a="yecril71"><a href="#l-509">#</a> [18:46] &lt;yecril71&gt; Since they officially should not work,</li>
+ <li id="l-510" _a="yecril71"><a href="#l-510">#</a> [18:46] &lt;yecril71&gt; it is not a big deal that they actually do not.</li>
+ <li id="l-511" _a="Hixie"><a href="#l-511">#</a> [18:56] &lt;Hixie&gt; ?</li>
+ <li id="l-512"><a href="#l-512">#</a> [18:56] * Joins: maikmerten (n=maikmert@Lba85.l.pppool.de)</li>
+ <li id="l-513" _a="gsnedders" _r="Hixie"><a href="#l-513">#</a> [18:56] &lt;gsnedders&gt; Hixie: ?</li>
+ <li id="l-514" _a="Hixie"><a href="#l-514">#</a> [18:58] &lt;Hixie&gt; not sure what you meant</li>
+ <li id="l-515"><a href="#l-515">#</a> [19:02] * Joins: psa (n=yomode@71.93.19.66)</li>
+ <li id="l-516" _a="gsnedders" _r="Hixie"><a href="#l-516">#</a> [19:06] &lt;gsnedders&gt; Hixie: I mean the 89</li>
+ <li id="l-517"><a href="#l-517">#</a> [19:07] * Joins: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au)</li>
+ <li id="l-518" _a="gsnedders" _r="Hixie"><a href="#l-518">#</a> [19:08] &lt;gsnedders&gt; Hixie: My statement of the 59 hours made sense :P</li>
+ <li id="l-519" _a="Hixie"><a href="#l-519">#</a> [19:10] &lt;Hixie&gt; er i meant not sure what yecril71 meant, sorry</li>
+ <li id="l-520" _a="yecril71"><a href="#l-520">#</a> [19:15] &lt;yecril71&gt; I meant labels, Internet Explorer, inputs and error messages, of course.</li>
+ <li id="l-521" _a="yecril71"><a href="#l-521">#</a> [19:16] &lt;yecril71&gt; What if we put the input inside the validation message?</li>
+ <li id="l-522" _a="gsnedders" _r="Hixie"><a href="#l-522">#</a> [19:16] &lt;gsnedders&gt; Hixie: But what was your 89?</li>
+ <li id="l-523" _a="yecril71"><a href="#l-523">#</a> [19:17] &lt;yecril71&gt; My 89 was fine, thanks.</li>
+ <li id="l-524" _a="yecril71"><a href="#l-524">#</a> [19:18] &lt;yecril71&gt; I graduated from high school.</li>
+ <li id="l-525"><a href="#l-525">#</a> [19:24] * Joins: tndH (n=Rob@james-baillie-pc083-058.student-halls.leeds.ac.uk)</li>
+ <li id="l-526"><a href="#l-526">#</a> [19:28] * Joins: dbaron (n=dbaron@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-527"><a href="#l-527">#</a> [19:29] * Joins: ojan (n=ojan@nat/google/x-ba13beaeb9ef4536)</li>
+ <li id="l-528"><a href="#l-528">#</a> [19:31] * Joins: jwalden (n=waldo@guest-225.mountainview.mozilla.com)</li>
+ <li id="l-529"><a href="#l-529">#</a> [19:31] * Joins: aboodman (n=aboodman@72.14.229.81)</li>
+ <li id="l-530"><a href="#l-530">#</a> [19:36] * Quits: jruderman (n=jruderma@c-67-180-39-55.hsd1.ca.comcast.net)</li>
+ <li id="l-531"><a href="#l-531">#</a> [19:48] * Joins: othermaciej (n=mjs@nat/apple/x-78acf78b62cfdcc0)</li>
+ <li id="l-532"><a href="#l-532">#</a> [19:55] * Joins: aaronlev (n=chatzill@pool-151-203-26-53.bstnma.east.verizon.net)</li>
+ <li id="l-533"><a href="#l-533">#</a> [20:01] * Joins: jruderman (n=jruderma@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-534"><a href="#l-534">#</a> [20:03] * Quits: zcorpan_ (n=zcorpan@c83-252-193-84.bredband.comhem.se)</li>
+ <li id="l-535"><a href="#l-535">#</a> [20:08] * Joins: weinig_ (n=weinig@17.203.15.152)</li>
+ <li id="l-536"><a href="#l-536">#</a> [20:13] * Joins: othermaciej_ (n=mjs@17.244.18.25)</li>
+ <li id="l-537"><a href="#l-537">#</a> [20:14] * Quits: othermaciej (n=mjs@nat/apple/x-78acf78b62cfdcc0) (Read error: 60 (Operation timed out))</li>
+ <li id="l-538"><a href="#l-538">#</a> [20:18] * Quits: gsnedders (n=gsnedder@host81-156-237-236.range81-156.btcentralplus.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-539"><a href="#l-539">#</a> [20:20] * Quits: csarven (n=csarven@80.76.201.52) (Remote closed the connection)</li>
+ <li id="l-540"><a href="#l-540">#</a> [20:23] * Quits: weinig (n=weinig@nat/apple/x-be7b2ddb3341dd69) (Read error: 110 (Connection timed out))</li>
+ <li id="l-541"><a href="#l-541">#</a> [20:39] * Joins: aaronlev_ (n=chatzill@pool-151-203-26-53.bstnma.east.verizon.net)</li>
+ <li id="l-542"><a href="#l-542">#</a> [20:44] * Quits: aaronlev (n=chatzill@pool-151-203-26-53.bstnma.east.verizon.net) (Read error: 145 (Connection timed out))</li>
+ <li id="l-543" _a="aaronlev_"><a href="#l-543">#</a> [20:44] * aaronlev_ is now known as aaronlev</li>
+ <li id="l-544"><a href="#l-544">#</a> [20:54] * Quits: weinig_ (n=weinig@17.203.15.152)</li>
+ <li id="l-545"><a href="#l-545">#</a> [20:56] * Joins: weinig (n=weinig@17.203.15.152)</li>
+ <li id="l-546"><a href="#l-546">#</a> [21:04] * Quits: weinig (n=weinig@17.203.15.152)</li>
+ <li id="l-547"><a href="#l-547">#</a> [21:08] * Quits: mstange (n=markus@buntes215.wohnheim.uni-kl.de) (&quot;ChatZilla 0.9.83 [Firefox 3.1b2pre/20081102020254]&quot;)</li>
+ <li id="l-548"><a href="#l-548">#</a> [21:08] * Joins: weinig (n=weinig@17.244.25.193)</li>
+ <li id="l-549"><a href="#l-549">#</a> [21:11] * Quits: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au) (Read error: 110 (Connection timed out))</li>
+ <li id="l-550"><a href="#l-550">#</a> [21:13] * Quits: weinig (n=weinig@17.244.25.193)</li>
+ <li id="l-551"><a href="#l-551">#</a> [21:13] * Quits: YaaL (i=yaal@hell.pl) (Read error: 60 (Operation timed out))</li>
+ <li id="l-552"><a href="#l-552">#</a> [21:18] * Joins: pergj__ (n=pergj@cm-84.208.140.163.getinternet.no)</li>
+ <li id="l-553"><a href="#l-553">#</a> [21:19] * Joins: virtuelv (n=virtuelv@163.80-202-65.nextgentel.com)</li>
+ <li id="l-554"><a href="#l-554">#</a> [21:30] * Joins: mstange (n=markus@buntes215.wohnheim.uni-kl.de)</li>
+ <li id="l-555" _a="othermaciej_"><a href="#l-555">#</a> [21:35] * othermaciej_ is now known as othermaciej</li>
+ <li id="l-556"><a href="#l-556">#</a> [21:37] * Joins: othermaciej_ (n=mjs@nat/apple/x-49b520d1b29ef73c)</li>
+ <li id="l-557"><a href="#l-557">#</a> [21:37] * Quits: maikmerten (n=maikmert@Lba85.l.pppool.de) (Remote closed the connection)</li>
+ <li id="l-558"><a href="#l-558">#</a> [21:37] * Quits: mstange (n=markus@buntes215.wohnheim.uni-kl.de) (Remote closed the connection)</li>
+ <li id="l-559"><a href="#l-559">#</a> [21:38] * Joins: YaaL (i=yaal@hell.pl)</li>
+ <li id="l-560"><a href="#l-560">#</a> [21:40] * Joins: mstange (n=markus@buntes215.wohnheim.uni-kl.de)</li>
+ <li id="l-561"><a href="#l-561">#</a> [21:40] * Joins: roc (n=roc@202.0.36.64)</li>
+ <li id="l-562"><a href="#l-562">#</a> [21:47] * Quits: Amorphous (i=jan@unaffiliated/amorphous) (Read error: 110 (Connection timed out))</li>
+ <li id="l-563"><a href="#l-563">#</a> [21:50] * Joins: Amorphous (i=jan@unaffiliated/amorphous)</li>
+ <li id="l-564"><a href="#l-564">#</a> [21:53] * Quits: othermaciej (n=mjs@17.244.18.25) (Read error: 110 (Connection timed out))</li>
+ <li id="l-565"><a href="#l-565">#</a> [21:58] * Joins: gsnedders (n=gsnedder@host86-139-222-113.range86-139.btcentralplus.com)</li>
+ <li id="l-566"><a href="#l-566">#</a> [22:00] * Joins: nessy (n=nessy@124-168-174-92.dyn.iinet.net.au)</li>
+ <li id="l-567"><a href="#l-567">#</a> [22:03] * Quits: aaronlev (n=chatzill@pool-151-203-26-53.bstnma.east.verizon.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-568"><a href="#l-568">#</a> [22:07] * Joins: othermaciej (n=mjs@17.244.18.25)</li>
+ <li id="l-569"><a href="#l-569">#</a> [22:10] * Quits: othermaciej_ (n=mjs@nat/apple/x-49b520d1b29ef73c) (Read error: 60 (Operation timed out))</li>
+ <li id="l-570" _a="gsnedders"><a href="#l-570">#</a> [22:22] &lt;gsnedders&gt; w00t</li>
+ <li id="l-571" _a="gsnedders"><a href="#l-571">#</a> [22:22] &lt;gsnedders&gt; I really have made it with the latest last week post!</li>
+ <li id="l-572"><a href="#l-572">#</a> [22:24] * Joins: weinig (n=weinig@nat/apple/x-3102e077346d806c)</li>
+ <li id="l-573"><a href="#l-573">#</a> [22:25] * Joins: mrmonday (n=mrmonday@fullcirclemagazine/communicationsmanager/mrmonday)</li>
+ <li id="l-574"><a href="#l-574">#</a> [22:44] * Quits: ROBOd (n=robod@89.122.216.38) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-575"><a href="#l-575">#</a> [22:50] * Quits: YaaL (i=yaal@hell.pl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-576"><a href="#l-576">#</a> [22:54] * Quits: smerp (n=smerp@66.192.95.199) (&quot;Jesus Built My Workstation&quot;)</li>
+ <li id="l-577"><a href="#l-577">#</a> [22:57] * Joins: erlehmann (n=nils@dslb-092-078-098-022.pools.arcor-ip.net)</li>
+ <li id="l-578"><a href="#l-578">#</a> [22:58] * Joins: YaaL (i=yaal@hell.pl)</li>
+ <li id="l-579"><a href="#l-579">#</a> [23:04] * Quits: mstange (n=markus@buntes215.wohnheim.uni-kl.de) (&quot;ChatZilla 0.9.83 [Firefox 3.1b2pre/20081105020338]&quot;)</li>
+ <li id="l-580"><a href="#l-580">#</a> [23:07] * Joins: weinig_ (n=weinig@17.203.15.152)</li>
+ <li id="l-581"><a href="#l-581">#</a> [23:18] * Quits: heycam (n=cam@124-168-34-173.dyn.iinet.net.au) (&quot;bye&quot;)</li>
+ <li id="l-582"><a href="#l-582">#</a> [23:23] * Quits: weinig (n=weinig@nat/apple/x-3102e077346d806c) (Read error: 110 (Connection timed out))</li>
+ <li id="l-583"><a href="#l-583">#</a> [23:27] * Quits: Maurice` (n=copyman@cc90688-a.emmen1.dr.home.nl) (&quot;Disconnected...&quot;)</li>
+ <li id="l-584"><a href="#l-584">#</a> [23:30] * Quits: erlehmann (n=nils@dslb-092-078-098-022.pools.arcor-ip.net) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-585"><a href="#l-585">#</a> [23:30] * Quits: virtuelv (n=virtuelv@163.80-202-65.nextgentel.com) (&quot;Leaving&quot;)</li>
+ <li id="l-586"><a href="#l-586">#</a> [23:33] * Joins: othermaciej_ (n=mjs@nat/apple/x-67bce97b8fac33f0)</li>
+ <li id="l-587"><a href="#l-587">#</a> [23:42] * Quits: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com) (Remote closed the connection)</li>
+ <li id="l-588"><a href="#l-588">#</a> [23:43] * Joins: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-589"><a href="#l-589">#</a> [23:45] * Joins: heycam (n=cam@clm-laptop.infotech.monash.edu.au)</li>
+ <li id="l-590"><a href="#l-590">#</a> [23:50] * Quits: othermaciej (n=mjs@17.244.18.25) (Read error: 110 (Connection timed out))</li>
+ <li id="l-591"><a href="#l-591">#</a> [23:58] * Quits: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com) (Remote closed the connection)</li>
+ <li id="l-592"><a href="#l-592">#</a> [23:59] * Joins: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-593"><a href="#l-593">#</a> [00:00] * Quits: billmason (n=billmaso@ip41.unival.com) (&quot;.&quot;)</li>
+ <li id="l-594"><a href="#l-594">#</a> Session Close: Thu Nov 06 00:00:00 2008</li>
+</ol>
+<p id="end">The end :)

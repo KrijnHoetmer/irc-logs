@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20111119</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20111119.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2011-11-19 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Nov 19 00:00:01 2011</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:00] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:01] * Joins: MacTed (~Thud@c-71-233-244-175.hsd1.ma.comcast.net)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:04] * Quits: astearns (~anonymous@192.150.22.5) (Ping timeout: 245 seconds)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:05] * Joins: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90)</li>
+ <li id="l-7" _a="ap" _r="Hixie"><a href="#l-7">#</a> [00:06] &lt;ap&gt; Hixie: does HTML5 parser (still) disallow surrogates in numeric entities (such as &amp;#xd83d;&amp;#xde12;)?</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:08] * Quits: othermaciej (~mjs@2620:149:f01:202:699e:a64c:e03f:5f4b) (Quit: othermaciej)</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:12] &lt;Hixie&gt; yes</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:12] &lt;Hixie&gt; ewll</li>
+ <li id="l-11" _a="Hixie"><a href="#l-11">#</a> [00:12] &lt;Hixie&gt; well</li>
+ <li id="l-12" _a="ap" _r="Hixie"><a href="#l-12">#</a> [00:12] &lt;ap&gt; Hixie: this used to work in Gecko and in WebKit, and I just got a bug</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:12] &lt;Hixie&gt; the parser doesn't allow or disallow anything</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:12] &lt;Hixie&gt; bu the syntax does</li>
+ <li id="l-15"><a href="#l-15">#</a> [00:13] * Quits: Morphous (jan@unaffiliated/amorphous) (Read error: Connection reset by peer)</li>
+ <li id="l-16" _a="ap" _r="Hixie"><a href="#l-16">#</a> [00:13] &lt;ap&gt; Hixie: the parser converts these to U+FFFD</li>
+ <li id="l-17" _a="Hixie"><a href="#l-17">#</a> [00:13] &lt;Hixie&gt; that appears to be consistent with the spec (<a href="http://www.whatwg.org/specs/web-apps/current-work/#tokenizing-character-references">http://www.whatwg.org/specs/web-apps/current-work/#tokenizing-character-references</a>)</li>
+ <li id="l-18" _a="ap" _r="Hixie"><a href="#l-18">#</a> [00:16] &lt;ap&gt; Hixie: so I sent that bug back for now, but I don't have a great explanation why we had to break this. It worked in at least two engines, and appeared useful</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:16] &lt;Hixie&gt; why is it useful?</li>
+ <li id="l-20" _a="Hixie"><a href="#l-20">#</a> [00:16] &lt;Hixie&gt; just encode the actual character</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:16] * Joins: tantek (~tantek@udp089923uds.ucsf.edu)</li>
+ <li id="l-22" _a="Hixie"><a href="#l-22">#</a> [00:16] &lt;Hixie&gt; surrogates are a UTF-16 feature</li>
+ <li id="l-23"><a href="#l-23">#</a> [00:17] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-24" _a="ap" _r="Hixie"><a href="#l-24">#</a> [00:17] &lt;ap&gt; Hixie: in that some dumb perl script had more chance of encoding non-ASCII correctly. for some people, lots of people don't want to transfer non-ASCII</li>
+ <li id="l-25" _a="ap"><a href="#l-25">#</a> [00:17] &lt;ap&gt; for some reason</li>
+ <li id="l-26" _a="TabAtkins" _r="ap"><a href="#l-26">#</a> [00:17] &lt;TabAtkins&gt; ap: He meant use the escape for the actual character.</li>
+ <li id="l-27" class="flagged" _a="roc"><a href="#l-27">#</a> [00:17] &lt;roc&gt; oh dear, bz used the classic &quot;with all due respect&quot; -&gt; &quot;with absolutely no respect&quot;</li>
+ <li id="l-28" _a="Hixie" _r="ap"><a href="#l-28">#</a> [00:17] &lt;Hixie&gt; ap: supporting surrogates would be like supporting &amp;#xC3;&amp;#xA9; for &amp;eacute;</li>
+ <li id="l-29" _a="ap" _r="TabAtkins"><a href="#l-29">#</a> [00:18] &lt;ap&gt; TabAtkins: like &amp;#128530; ? that's what I've been responding to. A dumb script won't do that</li>
+ <li id="l-30" _a="Hixie" _r="ap"><a href="#l-30">#</a> [00:18] &lt;Hixie&gt; ap: just use the actual unicode codepoint</li>
+ <li id="l-31" _a="Hixie" _r="ap"><a href="#l-31">#</a> [00:18] &lt;Hixie&gt; ap: why would a dumb perl script ever see utf-16? perl uses utf-8.</li>
+ <li id="l-32" _a="Hixie" _r="tantek"><a href="#l-32">#</a> [00:18] &lt;Hixie&gt; tantek: i updated the spec to make : optional in time zones</li>
+ <li id="l-33" _a="ap" _r="Hixie"><a href="#l-33">#</a> [00:19] &lt;ap&gt; Hixie: practically, lots of software can handle UTF-16, but it's a tiny minority that works with non-BMP characters correctly</li>
+ <li id="l-34" _a="ap" _r="Hixie"><a href="#l-34">#</a> [00:19] &lt;ap&gt; Hixie: I entirely share your vision of what's right</li>
+ <li id="l-35" class="flagged" _a="Hixie"><a href="#l-35">#</a> [00:20] &lt;Hixie&gt; my recommendation is to get people to ignore UTF-16 entirely</li>
+ <li id="l-36" _a="tantek"><a href="#l-36">#</a> [00:20] &lt;tantek&gt; Hixie - thanks re: tz</li>
+ <li id="l-37" class="flagged" _a="Hixie"><a href="#l-37">#</a> [00:20] &lt;Hixie&gt; honestly if we could drop utf-16 support the way we dropped utf-32 support, i'd be all over it</li>
+ <li id="l-38" class="flagged" _a="TabAtkins"><a href="#l-38">#</a> [00:20] * TabAtkins still has a soft spot for utf-32.</li>
+ <li id="l-39" _a="tantek"><a href="#l-39">#</a> [00:20] &lt;tantek&gt; The time-zone offset examples should show/prefer without : also</li>
+ <li id="l-40"><a href="#l-40">#</a> [00:21] * Joins: othermaciej (~mjs@17.244.8.71)</li>
+ <li id="l-41" _a="Hixie" _r="TabAtkins"><a href="#l-41">#</a> [00:21] &lt;Hixie&gt; TabAtkins: a pretty wide one i would assume :-P</li>
+ <li id="l-42" _a="TabAtkins" _r="Hixie"><a href="#l-42">#</a> [00:21] &lt;TabAtkins&gt; Hixie: Narrower than my ints, at least.</li>
+ <li id="l-43" _a="ap" _r="Hixie"><a href="#l-43">#</a> [00:21] &lt;ap&gt; Hixie: anyway, I'm not asking to revert the spec to previously interoperable behavior at this point. I'd love to have a better explanation of why we broke this, which I don't.</li>
+ <li id="l-44" _a="Hixie" _r="tantek"><a href="#l-44">#</a> [00:22] &lt;Hixie&gt; tantek: i made them use a variety (though i think most still have the colon), but i'll bear that in mind when adding more examples</li>
+ <li id="l-45" _a="tantek"><a href="#l-45">#</a> [00:22] &lt;tantek&gt; ideally the examples should be exemplary</li>
+ <li id="l-46" _a="tantek"><a href="#l-46">#</a> [00:22] &lt;tantek&gt; to teach authors well</li>
+ <li id="l-47" _a="Hixie" _r="ap"><a href="#l-47">#</a> [00:22] &lt;Hixie&gt; ap: the real reason is probably that i didn't even think to test it, because i had a lapse of judgement in which i assumed browsers wouldn't do something so silly</li>
+ <li id="l-48" _a="tantek"><a href="#l-48">#</a> [00:23] &lt;tantek&gt; especially the time-zone by itself examples</li>
+ <li id="l-49" _a="Hixie" _r="tantek"><a href="#l-49">#</a> [00:23] &lt;Hixie&gt; tantek: when it comes to syntax, the examples are intentionally varied in their use of syntax to indicate that all valid syntaxes are equally valid</li>
+ <li id="l-50" _a="Hixie" _r="tantek"><a href="#l-50">#</a> [00:23] &lt;Hixie&gt; tantek: (this applies to everything, not just date formats)</li>
+ <li id="l-51" _a="tantek"><a href="#l-51">#</a> [00:25] &lt;tantek&gt; I realize the spec as-is isn't for authors, however I do think the varied use of syntax should be biased towards syntax that results in fewer authoring mistakes / data quality errors over time</li>
+ <li id="l-52"><a href="#l-52">#</a> [00:25] * Quits: othermaciej (~mjs@17.244.8.71) (Client Quit)</li>
+ <li id="l-53" _a="tantek"><a href="#l-53">#</a> [00:25] &lt;tantek&gt; sorry maybe i'm looking at an older snapshot</li>
+ <li id="l-54" _a="tantek"><a href="#l-54">#</a> [00:25] &lt;tantek&gt; reloading</li>
+ <li id="l-55" _a="Hixie"><a href="#l-55">#</a> [00:26] &lt;Hixie&gt; a slight bias, agreed</li>
+ <li id="l-56" _a="Hixie"><a href="#l-56">#</a> [00:26] &lt;Hixie&gt; as i said, i'll make the examples lean more that way over time</li>
+ <li id="l-57" _a="tantek"><a href="#l-57">#</a> [00:26] &lt;tantek&gt; yeah I was looking at an older version (multipage)</li>
+ <li id="l-58" _a="Hixie"><a href="#l-58">#</a> [00:26] &lt;Hixie&gt; i'm more concerned with getting the normative text of the w3c and whatwg specs converged again than worrying about example text :-)</li>
+ <li id="l-59" _a="tantek"><a href="#l-59">#</a> [00:26] &lt;tantek&gt; looking at one-page version now</li>
+ <li id="l-60" _a="Hixie"><a href="#l-60">#</a> [00:26] &lt;Hixie&gt; multipage should be updated now, is it not?</li>
+ <li id="l-61" _a="Hixie" _r="oh"><a href="#l-61">#</a> [00:27] &lt;Hixie&gt; oh, i haven't uploaded it yet</li>
+ <li id="l-62" _a="Hixie"><a href="#l-62">#</a> [00:27] &lt;Hixie&gt; my bad</li>
+ <li id="l-63" _a="tantek"><a href="#l-63">#</a> [00:27] &lt;tantek&gt; yeah one-page version looks better</li>
+ <li id="l-64" _a="Hixie"><a href="#l-64">#</a> [00:28] &lt;Hixie&gt; multipage should be updated in about 5 min</li>
+ <li id="l-65" _a="tantek"><a href="#l-65">#</a> [00:29] &lt;tantek&gt; no problem - I'll stick with one page</li>
+ <li id="l-66"><a href="#l-66">#</a> [00:29] * Quits: Maurice` (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-67"><a href="#l-67">#</a> [00:32] * Joins: Morphous (jan@unaffiliated/amorphous)</li>
+ <li id="l-68" _a="tantek" _r="Hixie"><a href="#l-68">#</a> [00:35] &lt;tantek&gt; Hixie, I think I need to raise a 4th separate issue and change proposal to get the ISO week formats in there, no problem doing so, I'll take care of that this weekend.</li>
+ <li id="l-69" _a="tantek"><a href="#l-69">#</a> [00:35] &lt;tantek&gt; (regarding Sam's email)</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:36] &lt;Hixie&gt; your devotion to their process is quite entertaining</li>
+ <li id="l-71" _a="tantek"><a href="#l-71">#</a> [00:36] &lt;tantek&gt; just trying to help the wheels rotate</li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [00:36] &lt;Hixie&gt; sam did say though that if everyone thought the patch was ok we could short-circuit it, which may help them rotate faster :-)</li>
+ <li id="l-73" _a="tantek"><a href="#l-73">#</a> [00:37] &lt;tantek&gt; I'll email you a suggested replacement for the schema.org example because I think that's the remaining outstanding issue that Sam (re)raised.</li>
+ <li id="l-74" _a="tantek"><a href="#l-74">#</a> [00:37] &lt;tantek&gt; (regarding your patch)</li>
+ <li id="l-75"><a href="#l-75">#</a> [00:40] * Joins: othermaciej (~mjs@17.244.0.78)</li>
+ <li id="l-76" _a="Hixie" _r="tantek"><a href="#l-76">#</a> [00:41] &lt;Hixie&gt; tantek: there's an issue with an example?</li>
+ <li id="l-77" _a="Hixie"><a href="#l-77">#</a> [00:41] &lt;Hixie&gt; i couldn't find any of these issues in the issue list so i wasn't sure what sam meant to be honest</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:42] &lt;Hixie&gt; i don't recall even seeing a bug regarding a schema.org example, so by process it surely can't be an issue yet</li>
+ <li id="l-79"><a href="#l-79">#</a> [00:42] * Quits: othermaciej (~mjs@17.244.0.78) (Client Quit)</li>
+ <li id="l-80" _a="tantek"><a href="#l-80">#</a> [00:45] &lt;tantek&gt; it was raised as a comment in the bug on data</li>
+ <li id="l-81" _a="tantek"><a href="#l-81">#</a> [00:45] &lt;tantek&gt; IIRC</li>
+ <li id="l-82" _a="Hixie"><a href="#l-82">#</a> [00:45] &lt;Hixie&gt; ah</li>
+ <li id="l-83" _a="Hixie"><a href="#l-83">#</a> [00:45] &lt;Hixie&gt; well the chairs told me not to touch that bug anymore so i haven't been reading it</li>
+ <li id="l-84" _a="Hixie"><a href="#l-84">#</a> [00:46] &lt;Hixie&gt; let me go have a look</li>
+ <li id="l-85"><a href="#l-85">#</a> [00:48] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Ping timeout: 248 seconds)</li>
+ <li id="l-86" _a="Hixie" _r="oh"><a href="#l-86">#</a> [00:48] &lt;Hixie&gt; oh, i see, it's because they don't want microdata in the examples, not because they don't wnat schema.org in the examples</li>
+ <li id="l-87" _a="tantek"><a href="#l-87">#</a> [00:48] &lt;tantek&gt; huh? not AFAICT</li>
+ <li id="l-88" _a="tantek"><a href="#l-88">#</a> [00:48] &lt;tantek&gt; the opposite</li>
+ <li id="l-89"><a href="#l-89">#</a> [00:48] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-90" _a="tantek"><a href="#l-90">#</a> [00:49] &lt;tantek&gt; nothing wrong with microdata in the examples</li>
+ <li id="l-91" _a="tantek"><a href="#l-91">#</a> [00:49] &lt;tantek&gt; the specific comment about schema.org was objecting to that</li>
+ <li id="l-92"><a href="#l-92">#</a> [00:49] * Quits: dave_levin (dave_levin@nat/google/x-kpmgwjyyzfwervek) (Quit: dave_levin)</li>
+ <li id="l-93" _a="Hixie"><a href="#l-93">#</a> [00:49] &lt;Hixie&gt; &quot;In addtion to that, schema.org examples have no business in the W3C spec</li>
+ <li id="l-94" class="flagged" _a="Hixie"><a href="#l-94">#</a> [00:49] &lt;Hixie&gt; because microdata is not part of HTML5 ( just like RDFa isn't part of the spec</li>
+ <li id="l-95" _a="Hixie"><a href="#l-95">#</a> [00:49] &lt;Hixie&gt; ).&quot;</li>
+ <li id="l-96"><a href="#l-96">#</a> [00:49] * Quits: scor (~scor@drupal.org/user/52142/view) (Client Quit)</li>
+ <li id="l-97" _a="Hixie"><a href="#l-97">#</a> [00:49] &lt;Hixie&gt; all the comments that contain &quot;schema.org&quot; seem to support this train of thought</li>
+ <li id="l-98" class="flagged" _a="Hixie"><a href="#l-98">#</a> [00:50] &lt;Hixie&gt; anyway i don't mind stripping all the schema.org examples from the proposal and not adding them to the w3c spec</li>
+ <li id="l-99" _a="Hixie"><a href="#l-99">#</a> [00:50] &lt;Hixie&gt; that's fine</li>
+ <li id="l-100" _a="Hixie"><a href="#l-100">#</a> [00:50] &lt;Hixie&gt; it's the normative text that i care about</li>
+ <li id="l-101" class="flagged" _a="Hixie"><a href="#l-101">#</a> [00:51] &lt;Hixie&gt; (it baffles me that the w3c continues to consider microdata to not be part of html)</li>
+ <li id="l-102" _a="tantek" _r="Hixie"><a href="#l-102">#</a> [00:52] &lt;tantek&gt; Hixie, here's an attempt at a replacement example for the blog post that's not microformats nor schema.org</li>
+ <li id="l-103" class="flagged" _a="tantek"><a href="#l-103">#</a> [00:52] &lt;tantek&gt; &lt;article itemscope itemtype=&quot;<a href="http://tools.ietf.org/html/rfc4287">http://tools.ietf.org/html/rfc4287</a>&quot;&gt;</li>
+ <li id="l-104" class="flagged" _a="tantek"><a href="#l-104">#</a> [00:52] &lt;tantek&gt;  &lt;h1 itemprop=&quot;title&quot;&gt;Small tasks&lt;/h1&gt;</li>
+ <li id="l-105" class="flagged" _a="tantek"><a href="#l-105">#</a> [00:52] &lt;tantek&gt;  &lt;footer&gt;Published &lt;time itemprop=&quot;published&quot; datetime=&quot;2009-08-30&quot;&gt;yesterday&lt;/time&gt;.&lt;/footer&gt;</li>
+ <li id="l-106" class="flagged" _a="tantek"><a href="#l-106">#</a> [00:52] &lt;tantek&gt;  &lt;p itemprop=&quot;content&quot;&gt;I put a bike bell on his bike.&lt;/p&gt;</li>
+ <li id="l-107" class="flagged" _a="tantek"><a href="#l-107">#</a> [00:52] &lt;tantek&gt; &lt;/article&gt;</li>
+ <li id="l-108" _a="Hixie"><a href="#l-108">#</a> [00:52] &lt;Hixie&gt; that's still microdata though</li>
+ <li id="l-109" _a="tantek" _r="sure"><a href="#l-109">#</a> [00:52] &lt;tantek&gt; sure, but it's not microdata that anyone is going to use in practice</li>
+ <li id="l-110" _a="tantek"><a href="#l-110">#</a> [00:52] &lt;tantek&gt; I have a feeling that would resolve that particular objection</li>
+ <li id="l-111" _a="Hixie"><a href="#l-111">#</a> [00:52] &lt;Hixie&gt; which is fine by me and i'm happy to add the example to the whatwg spec, but my point is that the objection to those examples was over the use of microdata, not over the use of schema.org</li>
+ <li id="l-112"><a href="#l-112">#</a> [00:53] * Quits: WeirdAl (~chatzilla@g2spf.ask.info) (Quit: ChatZilla 0.9.87 [Firefox 8.0/20111104165243])</li>
+ <li id="l-113"><a href="#l-113">#</a> [00:53] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-114"><a href="#l-114">#</a> [00:53] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-115" class="flagged" _a="tantek" _r="Hixie"><a href="#l-115">#</a> [00:56] &lt;tantek&gt; Hixie, I will point that Sam's response to you seemed to agree with my proposed resolution to the issue</li>
+ <li id="l-116" class="flagged" _a="tantek"><a href="#l-116">#</a> [00:56] &lt;tantek&gt; which says &quot;Provide one or more examples that show use with microformats, microdata, and RDFa&quot;</li>
+ <li id="l-117" _a="Hixie"><a href="#l-117">#</a> [00:56] &lt;Hixie&gt; examples of what? &lt;time&gt;?</li>
+ <li id="l-118" _a="tantek"><a href="#l-118">#</a> [00:56] &lt;tantek&gt; and &quot;Prefer use of openly developed vocabularies/URLs (e.g. microformats.org, whatwg.org, w3.org) rather than those developed by one company (or just a few companies) like schema.org.&quot;</li>
+ <li id="l-119" _a="Hixie"><a href="#l-119">#</a> [00:57] &lt;Hixie&gt; what are you quoting from?</li>
+ <li id="l-120" _a="Hixie"><a href="#l-120">#</a> [00:57] &lt;Hixie&gt; i see nothing in that bug that supports this line of reasoning</li>
+ <li id="l-121" _a="tantek"><a href="#l-121">#</a> [00:57] &lt;tantek&gt; Sam's email</li>
+ <li id="l-122" _a="Hixie"><a href="#l-122">#</a> [00:57] &lt;Hixie&gt; (note that using rdfa with &lt;time&gt; is impossible wince RDFa doesn't support &lt;time&gt; yet as far as i can tell)</li>
+ <li id="l-123" _a="tantek"><a href="#l-123">#</a> [00:57] &lt;tantek&gt; where he quotes me from</li>
+ <li id="l-124" _a="Hixie"><a href="#l-124">#</a> [00:57] &lt;Hixie&gt; which one</li>
+ <li id="l-125" _a="Hixie"><a href="#l-125">#</a> [00:57] &lt;Hixie&gt; url?</li>
+ <li id="l-126" _a="tantek"><a href="#l-126">#</a> [00:58] &lt;tantek&gt; most recent - let me get the url</li>
+ <li id="l-127" _a="Hixie"><a href="#l-127">#</a> [00:58] &lt;Hixie&gt; oh i see</li>
+ <li id="l-128" _a="Hixie"><a href="#l-128">#</a> [00:58] &lt;Hixie&gt; got it</li>
+ <li id="l-129" _a="Hixie"><a href="#l-129">#</a> [00:58] &lt;Hixie&gt; he's quoting you</li>
+ <li id="l-130" _a="Hixie"><a href="#l-130">#</a> [00:58] &lt;Hixie&gt; ok</li>
+ <li id="l-131" _a="tantek"><a href="#l-131">#</a> [00:58] &lt;tantek&gt; <a href="http://lists.w3.org/Archives/Public/public-html/2011Nov/0184.html">http://lists.w3.org/Archives/Public/public-html/2011Nov/0184.html</a></li>
+ <li id="l-132" _a="tantek"><a href="#l-132">#</a> [00:58] &lt;tantek&gt; yeah</li>
+ <li id="l-133" _a="Hixie"><a href="#l-133">#</a> [00:58] &lt;Hixie&gt; i suggest a simpler solution then</li>
+ <li id="l-134" _a="Hixie"><a href="#l-134">#</a> [00:58] &lt;Hixie&gt; remove that part of your change proposal :-P</li>
+ <li id="l-135" _a="Hixie"><a href="#l-135">#</a> [00:58] &lt;Hixie&gt; and i'll add whatever examples you want :-)</li>
+ <li id="l-136" _a="tantek"><a href="#l-136">#</a> [00:59] &lt;tantek&gt; it was added because Sam complained that my change proposal didn't address enough issues</li>
+ <li id="l-137" _a="tantek" _r="sorry"><a href="#l-137">#</a> [00:59] &lt;tantek&gt; sorry, &quot;complained&quot; is a bit harsh. pointed out.</li>
+ <li id="l-138" _a="Hixie"><a href="#l-138">#</a> [00:59] &lt;Hixie&gt; so he wants you to address more issues, but if you address them in a way that has no bearing on what was actually raised, he's ok with it?</li>
+ <li id="l-139" _a="tantek"><a href="#l-139">#</a> [01:00] &lt;tantek&gt; ah this about *data*</li>
+ <li id="l-140" _a="tantek"><a href="#l-140">#</a> [01:00] &lt;tantek&gt; sorry</li>
+ <li id="l-141" class="flagged" _a="Hixie"><a href="#l-141">#</a> [01:00] &lt;Hixie&gt; working with the w3c hurts my brain</li>
+ <li id="l-142" _a="tantek"><a href="#l-142">#</a> [01:00] &lt;tantek&gt; he's quoting from</li>
+ <li id="l-143" _a="tantek"><a href="#l-143">#</a> [01:00] &lt;tantek&gt; <a href="http://www.w3.org/wiki/User:Tantekelik/data_element">http://www.w3.org/wiki/User:Tantekelik/data_element</a></li>
+ <li id="l-144" _a="tantek"><a href="#l-144">#</a> [01:00] &lt;tantek&gt; which is my attempt at a change proposal to add data</li>
+ <li id="l-145" _a="Hixie"><a href="#l-145">#</a> [01:00] &lt;Hixie&gt; it's not clear to me why we need any CPs here at all</li>
+ <li id="l-146" _a="Hixie"><a href="#l-146">#</a> [01:00] &lt;Hixie&gt; we have a patch</li>
+ <li id="l-147" _a="Hixie"><a href="#l-147">#</a> [01:01] &lt;Hixie&gt; unless someone has any objections, why can't the CP just be &quot;apply the patch&quot;</li>
+ <li id="l-148" _a="tantek" _r="Hixie"><a href="#l-148">#</a> [01:01] &lt;tantek&gt; Hixie, I'm trying to interpret the issues in a way that will achieve consensus which is another way of saying minimizing friction so you can get on to more things</li>
+ <li id="l-149" _a="tantek"><a href="#l-149">#</a> [01:01] &lt;tantek&gt; it started as one change proposal yes</li>
+ <li id="l-150" class="flagged" _a="Hixie"><a href="#l-150">#</a> [01:01] &lt;Hixie&gt; ok tell you what, i'll let you deal with the process as you wish, you tell me what to add to the spec</li>
+ <li id="l-151" _a="tantek"><a href="#l-151">#</a> [01:01] &lt;tantek&gt; I've updated it / split it per feedback / guidance from Sam</li>
+ <li id="l-152" _a="tantek"><a href="#l-152">#</a> [01:02] &lt;tantek&gt; in the interests of moving it through the HTML WG process</li>
+ <li id="l-153" _a="tantek"><a href="#l-153">#</a> [01:02] &lt;tantek&gt; hoops etc.</li>
+ <li id="l-154" _a="Hixie"><a href="#l-154">#</a> [01:02] &lt;Hixie&gt; ok so what do you want me to add, and where</li>
+ <li id="l-155"><a href="#l-155">#</a> [01:03] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Ping timeout: 260 seconds)</li>
+ <li id="l-156" _a="tantek"><a href="#l-156">#</a> [01:03] &lt;tantek&gt; (reloading one-page version)</li>
+ <li id="l-157"><a href="#l-157">#</a> [01:05] * Joins: othermaciej (~mjs@17.245.90.173)</li>
+ <li id="l-158" _a="tantek"><a href="#l-158">#</a> [01:06] &lt;tantek&gt; so the first change is to replace the schema.org example in the time section with the rfc4287 version I pasted above: <a href="http://krijnhoetmer.nl/irc-logs/whatwg/20111119#l-103">http://krijnhoetmer.nl/irc-logs/whatwg/20111119#l-103</a></li>
+ <li id="l-159" _a="tantek"><a href="#l-159">#</a> [01:06] &lt;tantek&gt; and yes, RDFa use of &lt;time&gt; is currently undefined</li>
+ <li id="l-160" _a="tantek"><a href="#l-160">#</a> [01:07] &lt;tantek&gt; I'll monitor the RDFa discussions and when they've figured it out I can suggest an example for RDFa+time as well, but we don't have to wait for that.</li>
+ <li id="l-161" _a="Hixie"><a href="#l-161">#</a> [01:07] &lt;Hixie&gt; do you mind if i tweak the example contents a bit?</li>
+ <li id="l-162" _a="Hixie" _r="also"><a href="#l-162">#</a> [01:07] &lt;Hixie&gt; also, i'm not sure it makes sense to use an RFC url as an itemtype, is an example.org URL ok instead?</li>
+ <li id="l-163" _a="tantek"><a href="#l-163">#</a> [01:07] &lt;tantek&gt; sure - I was just picking something that somehow made sense</li>
+ <li id="l-164" _a="tantek"><a href="#l-164">#</a> [01:08] &lt;tantek&gt; with a URL that people could look at</li>
+ <li id="l-165" _a="tantek"><a href="#l-165">#</a> [01:08] &lt;tantek&gt; and see what terms/vocab was (re)used</li>
+ <li id="l-166" _a="tantek"><a href="#l-166">#</a> [01:08] &lt;tantek&gt; it's a hypothetical example</li>
+ <li id="l-167" _a="tantek"><a href="#l-167">#</a> [01:08] &lt;tantek&gt; example.org is better though - good idea</li>
+ <li id="l-168" _a="tantek"><a href="#l-168">#</a> [01:08] &lt;tantek&gt; less likely to be blindly copy/pasted</li>
+ <li id="l-169" _a="Hixie"><a href="#l-169">#</a> [01:09] * Hixie looks at rfc487 instead of 4287 and gets very confused :-P</li>
+ <li id="l-170" _a="tantek"><a href="#l-170">#</a> [01:09] &lt;tantek&gt; lol</li>
+ <li id="l-171" _a="Hixie" _r="ah"><a href="#l-171">#</a> [01:09] &lt;Hixie&gt; ah, atom</li>
+ <li id="l-172" _a="Hixie"><a href="#l-172">#</a> [01:09] &lt;Hixie&gt; makes sense</li>
+ <li id="l-173" _a="tantek"><a href="#l-173">#</a> [01:09] &lt;tantek&gt; so sure. example.org/rfc4287 ;)</li>
+ <li id="l-174" _a="Hixie"><a href="#l-174">#</a> [01:09] &lt;Hixie&gt; and i already have a reference, awesome</li>
+ <li id="l-175"><a href="#l-175">#</a> [01:09] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-176" _a="Hixie"><a href="#l-176">#</a> [01:15] &lt;Hixie&gt; ok i've marked the old schema.org example as being for the whatwg spec only, and added an example based on the one you suggested.</li>
+ <li id="l-177" _a="Hixie"><a href="#l-177">#</a> [01:15] &lt;Hixie&gt; should be up momentarily on the single-page copy</li>
+ <li id="l-178" _a="Hixie" _r="tantek"><a href="#l-178">#</a> [01:16] &lt;Hixie&gt; tantek: k, new example is up, just before the one that's whatwg-only</li>
+ <li id="l-179" _a="tantek"><a href="#l-179">#</a> [01:16] &lt;tantek&gt; reloading</li>
+ <li id="l-180" _a="tantek" _r="Hixie"><a href="#l-180">#</a> [01:18] &lt;tantek&gt; Hixie, with all this example updating, would it be too much to ask to fix the hCalendar example as well since you're in that area?</li>
+ <li id="l-181" _a="tantek"><a href="#l-181">#</a> [01:18] &lt;tantek&gt; (or does that mess up your bug resolution stats ;) )</li>
+ <li id="l-182" _a="tantek"><a href="#l-182">#</a> [01:19] &lt;tantek&gt; (new fictional microdata vocab example looks good)</li>
+ <li id="l-183" _a="tantek"><a href="#l-183">#</a> [01:19] * tantek goes to review data element while he's here on the single-page version</li>
+ <li id="l-184" _a="Hixie"><a href="#l-184">#</a> [01:22] &lt;Hixie&gt; if we can consider it part of the same issue, sure</li>
+ <li id="l-185" _a="Hixie"><a href="#l-185">#</a> [01:23] &lt;Hixie&gt; i don't want to be making changes to the spec that aren't in the htmlwg copy</li>
+ <li id="l-186" _a="tantek"><a href="#l-186">#</a> [01:23] &lt;tantek&gt; yeah</li>
+ <li id="l-187" class="flagged" _a="Hixie"><a href="#l-187">#</a> [01:23] &lt;Hixie&gt; it's bad enough that we're diverged so much as it is (which was caused by having things in flight when the chairs decided to force mike to do his stuff)</li>
+ <li id="l-188" _a="tantek"><a href="#l-188">#</a> [01:23] &lt;tantek&gt; trying to figure out how to make your one patch address multiple issues / change proposals simultaneously</li>
+ <li id="l-189" _a="tantek" _r="yeah"><a href="#l-189">#</a> [01:23] &lt;tantek&gt; yeah, apologies again for failing to realize how bad that was going to be and failing to object to the revert / and/or ask for a delay</li>
+ <li id="l-190" _a="tantek"><a href="#l-190">#</a> [01:24] &lt;tantek&gt; (I was on that telcon)</li>
+ <li id="l-191" _a="Hixie"><a href="#l-191">#</a> [01:24] &lt;Hixie&gt; i'm still baffled by why the chairs decided to do it this way instead of following their process</li>
+ <li id="l-192" _a="Hixie"><a href="#l-192">#</a> [01:24] &lt;Hixie&gt; (i.e. reopen the bug)</li>
+ <li id="l-193" _a="tantek"><a href="#l-193">#</a> [01:24] &lt;tantek&gt; I don't quite understand the revert request process</li>
+ <li id="l-194" _a="Hixie"><a href="#l-194">#</a> [01:24] &lt;Hixie&gt; but whatever</li>
+ <li id="l-195" _a="Hixie"><a href="#l-195">#</a> [01:24] &lt;Hixie&gt; i'm letting you deal with it :-)</li>
+ <li id="l-196" _a="tantek"><a href="#l-196">#</a> [01:24] &lt;tantek&gt; fair enough</li>
+ <li id="l-197" _a="Hixie"><a href="#l-197">#</a> [01:24] &lt;Hixie&gt; gotta move to another room, one moment. then will examine the hcalendar thing.</li>
+ <li id="l-198" _a="tantek"><a href="#l-198">#</a> [01:25] &lt;tantek&gt; ok</li>
+ <li id="l-199" _a="tantek"><a href="#l-199">#</a> [01:31] &lt;tantek&gt; data element description seems fine</li>
+ <li id="l-200" _a="tantek"><a href="#l-200">#</a> [01:31] &lt;tantek&gt; couple of notes</li>
+ <li id="l-201" _a="tantek"><a href="#l-201">#</a> [01:31] &lt;tantek&gt; interesting that value attribute is required</li>
+ <li id="l-202" _a="tantek"><a href="#l-202">#</a> [01:31] &lt;tantek&gt; I guess that makes sense</li>
+ <li id="l-203" _a="tantek"><a href="#l-203">#</a> [01:31] &lt;tantek&gt; would there be any value in &lt;data&gt; without value?</li>
+ <li id="l-204" _a="tantek"><a href="#l-204">#</a> [01:31] &lt;tantek&gt; or is that just a span?</li>
+ <li id="l-205" _a="TabAtkins"><a href="#l-205">#</a> [01:31] &lt;TabAtkins&gt; It's just &lt;span&gt; at that ponit.</li>
+ <li id="l-206" _a="tantek"><a href="#l-206">#</a> [01:32] &lt;tantek&gt; the only minor difference I can think of:</li>
+ <li id="l-207" _a="tantek"><a href="#l-207">#</a> [01:32] &lt;tantek&gt; span can be / is just used for styling hooks sometimes</li>
+ <li id="l-208" _a="tantek"><a href="#l-208">#</a> [01:32] &lt;tantek&gt; data would be an explicit way of saying &quot;this is data&quot;</li>
+ <li id="l-209" _a="tantek"><a href="#l-209">#</a> [01:32] &lt;tantek&gt; but that's pretty minor</li>
+ <li id="l-210" _a="tantek"><a href="#l-210">#</a> [01:32] &lt;tantek&gt; not worth quibbling or changing the spec about</li>
+ <li id="l-211" _a="TabAtkins"><a href="#l-211">#</a> [01:33] &lt;TabAtkins&gt; The presence of @itemprop on &lt;span&gt; also says that.</li>
+ <li id="l-212" _a="tantek"><a href="#l-212">#</a> [01:33] &lt;tantek&gt; let's see how web developers use &lt;data&gt;</li>
+ <li id="l-213" _a="tantek" _r="TabAtkins"><a href="#l-213">#</a> [01:34] &lt;tantek&gt; TabAtkins, thanks for your updates to <a href="http://www.w3.org/wiki/User:Tantekelik/data_element">http://www.w3.org/wiki/User:Tantekelik/data_element</a></li>
+ <li id="l-214" _a="TabAtkins"><a href="#l-214">#</a> [01:34] &lt;TabAtkins&gt; np</li>
+ <li id="l-215"><a href="#l-215">#</a> [01:37] * Quits: plutoniix (~plutoniix@ppp-115-87-71-8.revip4.asianet.co.th) (Quit: Leaving)</li>
+ <li id="l-216"><a href="#l-216">#</a> [01:39] * Quits: tantek (~tantek@udp089923uds.ucsf.edu) (Ping timeout: 244 seconds)</li>
+ <li id="l-217"><a href="#l-217">#</a> [01:39] * Quits: othermaciej (~mjs@17.245.90.173) (Remote host closed the connection)</li>
+ <li id="l-218"><a href="#l-218">#</a> [01:39] * Joins: othermaciej (~mjs@2620:149:4:1b01:bcda:7fd:350d:c8d0)</li>
+ <li id="l-219"><a href="#l-219">#</a> [01:40] * Joins: tantek (~tantek@udp089923uds.ucsf.edu)</li>
+ <li id="l-220" _a="tantek"><a href="#l-220">#</a> [01:41] &lt;tantek&gt; updated with Contributors section</li>
+ <li id="l-221" _a="Hixie" _r="tantek"><a href="#l-221">#</a> [01:54] &lt;Hixie&gt; tantek: ok, fixing hcalendar example</li>
+ <li id="l-222" _a="Hixie"><a href="#l-222">#</a> [01:54] &lt;Hixie&gt; should be up</li>
+ <li id="l-223" _a="Hixie" _r="tantek"><a href="#l-223">#</a> [01:55] &lt;Hixie&gt; tantek: anything else?</li>
+ <li id="l-224" _a="Hixie"><a href="#l-224">#</a> [01:56] &lt;Hixie&gt; if not i'll reply to sam saying that i've worked with you to address his concerns</li>
+ <li id="l-225"><a href="#l-225">#</a> [01:56] * Quits: KillerX (~anant@nat/mozilla/x-gjltsepveyytzqfs) (Quit: KillerX)</li>
+ <li id="l-226" _a="tantek"><a href="#l-226">#</a> [01:57] &lt;tantek&gt; Hixie thanks - checking</li>
+ <li id="l-227" _a="tantek" _r="also"><a href="#l-227">#</a> [01:57] &lt;tantek&gt; also, I just wrote up a fourth change proposal to handle the year week only dates</li>
+ <li id="l-228" _a="tantek"><a href="#l-228">#</a> [01:57] &lt;tantek&gt; <a href="http://www.w3.org/wiki/User:Tantekelik/time_input_match">http://www.w3.org/wiki/User:Tantekelik/time_input_match</a></li>
+ <li id="l-229" _a="Hixie"><a href="#l-229">#</a> [01:59] &lt;Hixie&gt; k</li>
+ <li id="l-230" _a="tantek"><a href="#l-230">#</a> [01:59] &lt;tantek&gt; I believe the four change proposals I've written up at <a href="http://www.w3.org/wiki/User:Tantekelik#change_proposals">http://www.w3.org/wiki/User:Tantekelik#change_proposals</a> now cover the edits in your patch</li>
+ <li id="l-231" _a="Hixie"><a href="#l-231">#</a> [01:59] &lt;Hixie&gt; cool</li>
+ <li id="l-232" _a="tantek"><a href="#l-232">#</a> [01:59] &lt;tantek&gt; or vice versa</li>
+ <li id="l-233" _a="tantek"><a href="#l-233">#</a> [02:00] &lt;tantek&gt; temporal order isn't that relevant right?</li>
+ <li id="l-234" _a="Hixie" _r="yeah"><a href="#l-234">#</a> [02:00] &lt;Hixie&gt; yeah, i was gonna say, more vice versa :-)</li>
+ <li id="l-235"><a href="#l-235">#</a> [02:00] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-236" _a="Hixie"><a href="#l-236">#</a> [02:01] &lt;Hixie&gt; do you want to reply to sam or should i?</li>
+ <li id="l-237" _a="tantek"><a href="#l-237">#</a> [02:01] &lt;tantek&gt; I'll go ahead since I wrote up the 4th change proposal, as that will require raising a 4th issue to be addressed by the 4th change proposal</li>
+ <li id="l-238" _a="Hixie" _r="cool"><a href="#l-238">#</a> [02:02] &lt;Hixie&gt; cool, thanks</li>
+ <li id="l-239" _a="tantek"><a href="#l-239">#</a> [02:02] * tantek digs through his email</li>
+ <li id="l-240"><a href="#l-240">#</a> [02:03] * Quits: mkanat (mkanat@nat/google/x-ybmbfzuyiuzfulnw) (Quit: Ex-Chat)</li>
+ <li id="l-241"><a href="#l-241">#</a> [02:03] * Quits: ezoe (~ezoe@203-140-88-173f1.kyt1.eonet.ne.jp) (Quit: And Now for Something Completely Different.)</li>
+ <li id="l-242"><a href="#l-242">#</a> [02:05] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-243"><a href="#l-243">#</a> [02:11] * Quits: ojan (ojan@nat/google/x-jpuwhceenrhozrjt) (Quit: ojan)</li>
+ <li id="l-244" _a="tantek"><a href="#l-244">#</a> [02:18] &lt;tantek&gt; email sent. awaiting the 30 second &quot;Undo&quot; delay ;)</li>
+ <li id="l-245" _a="tantek" _r="Hixie"><a href="#l-245">#</a> [02:18] &lt;tantek&gt; Hixie, since you've updated your patch, you may want to send that to the list</li>
+ <li id="l-246" _a="Hixie"><a href="#l-246">#</a> [02:19] &lt;Hixie&gt; k</li>
+ <li id="l-247" _a="tantek"><a href="#l-247">#</a> [02:22] &lt;tantek&gt; <a href="http://lists.w3.org/Archives/Public/public-html/2011Nov/0186.html">http://lists.w3.org/Archives/Public/public-html/2011Nov/0186.html</a></li>
+ <li id="l-248"><a href="#l-248">#</a> [02:23] * Joins: othermaciej_ (~mjs@17.245.90.173)</li>
+ <li id="l-249"><a href="#l-249">#</a> [02:24] * Quits: cgcardona (~cgcardona@unaffiliated/cgcardona) (Quit: cgcardona)</li>
+ <li id="l-250"><a href="#l-250">#</a> [02:24] * Joins: nonge (~nonge@p5B326C36.dip.t-dialin.net)</li>
+ <li id="l-251"><a href="#l-251">#</a> [02:27] * Quits: othermaciej (~mjs@2620:149:4:1b01:bcda:7fd:350d:c8d0) (Ping timeout: 244 seconds)</li>
+ <li id="l-252"><a href="#l-252">#</a> [02:27] * Quits: othermaciej_ (~mjs@17.245.90.173) (Ping timeout: 252 seconds)</li>
+ <li id="l-253"><a href="#l-253">#</a> [02:29] * Joins: tantek-ipod (~tantek@66-87-0-93.pools.spcsdns.net)</li>
+ <li id="l-254"><a href="#l-254">#</a> [02:30] * Quits: rniwa (rniwa@nat/google/x-lzosakqjepqzcdxf) (Quit: rniwa)</li>
+ <li id="l-255" _a="tantek-ipod"><a href="#l-255">#</a> [02:30] &lt;tantek-ipod&gt; Ok going mobile. Will try to lurk for a while in case there are any other time related discussions. Maybe see some of you (sf folks) at Ilya's memorial tonight. (see plancast.com/t )</li>
+ <li id="l-256"><a href="#l-256">#</a> [02:32] * Quits: ap (~ap@17.212.155.203) (Quit: ap)</li>
+ <li id="l-257"><a href="#l-257">#</a> [02:32] * Quits: tantek (~tantek@udp089923uds.ucsf.edu) (Quit: tantek)</li>
+ <li id="l-258" _a="tantek-ipod"><a href="#l-258">#</a> [02:32] * tantek-ipod is now known as tantek</li>
+ <li id="l-259"><a href="#l-259">#</a> [02:38] * Joins: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net)</li>
+ <li id="l-260"><a href="#l-260">#</a> [02:39] * Quits: jacobolu_ (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-261"><a href="#l-261">#</a> [02:43] * Quits: rillian_ (~rillian@184.71.166.126) (Remote host closed the connection)</li>
+ <li id="l-262"><a href="#l-262">#</a> [02:48] * Quits: necolas (~necolas@host-92-12-156-249.as43234.net) (Read error: Connection reset by peer)</li>
+ <li id="l-263"><a href="#l-263">#</a> [02:51] * Quits: kinetik (~kinetik@121.98.132.55) (Ping timeout: 245 seconds)</li>
+ <li id="l-264"><a href="#l-264">#</a> [02:52] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 240 seconds)</li>
+ <li id="l-265"><a href="#l-265">#</a> [03:00] * Joins: bga_ (~bga@ppp91-122-180-182.pppoe.avangarddsl.ru)</li>
+ <li id="l-266"><a href="#l-266">#</a> [03:00] * Quits: _bga (~bga@ppp91-122-180-182.pppoe.avangarddsl.ru) (Read error: Connection reset by peer)</li>
+ <li id="l-267"><a href="#l-267">#</a> [03:01] * Quits: tantek (~tantek@66-87-0-93.pools.spcsdns.net) (Quit: Colloquy for iPod touch - <a href="http://colloquy.mobi">http://colloquy.mobi</a>)</li>
+ <li id="l-268"><a href="#l-268">#</a> [03:03] * Quits: jamesr (jamesr@nat/google/x-kcicrmaalfthjnwc) (Ping timeout: 240 seconds)</li>
+ <li id="l-269"><a href="#l-269">#</a> [03:14] * Quits: margle (~Margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-270"><a href="#l-270">#</a> [03:14] * Joins: kinetik (~kinetik@121.98.132.55)</li>
+ <li id="l-271"><a href="#l-271">#</a> [03:21] * Joins: miketaylr (~miketaylr@24.42.93.245)</li>
+ <li id="l-272"><a href="#l-272">#</a> [03:32] * Joins: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net)</li>
+ <li id="l-273"><a href="#l-273">#</a> [03:32] * Joins: myakura (~myakura@FL1-211-135-241-47.tky.mesh.ad.jp)</li>
+ <li id="l-274"><a href="#l-274">#</a> [03:33] * Quits: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net) (Ping timeout: 260 seconds)</li>
+ <li id="l-275"><a href="#l-275">#</a> [03:34] * Joins: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net)</li>
+ <li id="l-276"><a href="#l-276">#</a> [03:39] * Joins: jacobolu_ (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net)</li>
+ <li id="l-277"><a href="#l-277">#</a> [03:41] * Quits: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-278"><a href="#l-278">#</a> [03:50] * Quits: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net) (Quit: The computer fell asleep)</li>
+ <li id="l-279"><a href="#l-279">#</a> [03:50] * Joins: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net)</li>
+ <li id="l-280"><a href="#l-280">#</a> [03:52] * Joins: tantek (~tantek@66-87-2-237.pools.spcsdns.net)</li>
+ <li id="l-281"><a href="#l-281">#</a> [03:54] * Quits: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-282" _a="nimbupani"><a href="#l-282">#</a> [03:56] * nimbupani is now known as divya</li>
+ <li id="l-283"><a href="#l-283">#</a> [03:59] * Quits: sicking (~chatzilla@nat/mozilla/x-owiemiienxbrmbsw) (Ping timeout: 244 seconds)</li>
+ <li id="l-284"><a href="#l-284">#</a> [04:02] * Quits: tantek (~tantek@66-87-2-237.pools.spcsdns.net) (Quit: Colloquy for iPod touch - <a href="http://colloquy.mobi">http://colloquy.mobi</a>)</li>
+ <li id="l-285"><a href="#l-285">#</a> [04:02] * Quits: gavinc (~gavin@50-0-76-242.dsl.dynamic.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-286"><a href="#l-286">#</a> [04:07] * Joins: erlehmann (~erlehmann@89.204.130.228)</li>
+ <li id="l-287"><a href="#l-287">#</a> [04:17] * Quits: myakura (~myakura@FL1-211-135-241-47.tky.mesh.ad.jp) (Remote host closed the connection)</li>
+ <li id="l-288"><a href="#l-288">#</a> [04:33] * Quits: bga_ (~bga@ppp91-122-180-182.pppoe.avangarddsl.ru) (Read error: Connection reset by peer)</li>
+ <li id="l-289"><a href="#l-289">#</a> [04:40] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-3.1450hg.fc15 [XULRunner 7.0.1/20110930134335])</li>
+ <li id="l-290"><a href="#l-290">#</a> [04:41] * Joins: ezoe (~ezoe@203-140-88-173f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-291"><a href="#l-291">#</a> [04:45] * Joins: sicking (~chatzilla@c-98-210-155-80.hsd1.ca.comcast.net)</li>
+ <li id="l-292"><a href="#l-292">#</a> [04:45] * Quits: miketaylr (~miketaylr@24.42.93.245) (Quit: miketaylr)</li>
+ <li id="l-293"><a href="#l-293">#</a> [04:57] * Quits: MikeSmith (~MikeSmith@EM111-191-234-9.pool.e-mobile.ne.jp) (Ping timeout: 244 seconds)</li>
+ <li id="l-294"><a href="#l-294">#</a> [05:01] * Joins: MikeSmith (~MikeSmith@EM1-112-218-254.pool.e-mobile.ne.jp)</li>
+ <li id="l-295"><a href="#l-295">#</a> [05:02] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 248 seconds)</li>
+ <li id="l-296"><a href="#l-296">#</a> [05:10] * Quits: tndH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com) (Quit: ChatZilla 0.9.87-rdmsoft [XULRunner 1.9.0.1/2008072406])</li>
+ <li id="l-297"><a href="#l-297">#</a> [05:21] * Joins: nonge_ (~nonge@p5B326D76.dip.t-dialin.net)</li>
+ <li id="l-298"><a href="#l-298">#</a> [05:25] * Quits: nonge (~nonge@p5B326C36.dip.t-dialin.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-299"><a href="#l-299">#</a> [05:31] * Quits: sicking (~chatzilla@c-98-210-155-80.hsd1.ca.comcast.net) (Ping timeout: 260 seconds)</li>
+ <li id="l-300"><a href="#l-300">#</a> [05:41] * Quits: ezoe (~ezoe@203-140-88-173f1.kyt1.eonet.ne.jp) (Quit: And Now for Something Completely Different.)</li>
+ <li id="l-301"><a href="#l-301">#</a> [06:13] * Joins: jochen___ (jochen@nat/google/x-zzhitbudqksdhkkk)</li>
+ <li id="l-302"><a href="#l-302">#</a> [06:15] * Quits: jochen__ (jochen@nat/google/x-nyoknpazbboaktrs) (Ping timeout: 244 seconds)</li>
+ <li id="l-303" _a="jochen___"><a href="#l-303">#</a> [06:15] * jochen___ is now known as jochen__</li>
+ <li id="l-304"><a href="#l-304">#</a> [06:21] * Joins: jochen___ (jochen@nat/google/x-xjmancvdltyfehka)</li>
+ <li id="l-305"><a href="#l-305">#</a> [06:24] * Quits: jochen__ (jochen@nat/google/x-zzhitbudqksdhkkk) (Ping timeout: 244 seconds)</li>
+ <li id="l-306"><a href="#l-306">#</a> [06:26] * Joins: jochen__ (jochen@nat/google/x-kqxipkwphzpsvquv)</li>
+ <li id="l-307"><a href="#l-307">#</a> [06:26] * Quits: jochen___ (jochen@nat/google/x-xjmancvdltyfehka) (Ping timeout: 244 seconds)</li>
+ <li id="l-308"><a href="#l-308">#</a> [07:21] * Joins: jochen___ (jochen@nat/google/x-ilwabgnsstxdkvxl)</li>
+ <li id="l-309"><a href="#l-309">#</a> [07:24] * Quits: jochen__ (jochen@nat/google/x-kqxipkwphzpsvquv) (Ping timeout: 244 seconds)</li>
+ <li id="l-310" _a="jochen___"><a href="#l-310">#</a> [07:24] * jochen___ is now known as jochen__</li>
+ <li id="l-311"><a href="#l-311">#</a> [07:26] * Quits: TabAtkins (tabatkins@nat/google/x-puqsfppbokdglqpv) (Ping timeout: 252 seconds)</li>
+ <li id="l-312"><a href="#l-312">#</a> [07:27] * Joins: TabAtkins (tabatkins@nat/google/x-zppgezkawzcgkikj)</li>
+ <li id="l-313"><a href="#l-313">#</a> [07:29] * Joins: fishd_ (darin@nat/google/x-agmltglloaitwumb)</li>
+ <li id="l-314"><a href="#l-314">#</a> [07:32] * Quits: fishd (darin@nat/google/x-cqmehzfmjvwwzvtw) (Ping timeout: 244 seconds)</li>
+ <li id="l-315"><a href="#l-315">#</a> [08:20] * Joins: jochen___ (jochen@nat/google/x-lztfkfgkedbmsxuy)</li>
+ <li id="l-316"><a href="#l-316">#</a> [08:24] * Quits: jochen__ (jochen@nat/google/x-ilwabgnsstxdkvxl) (Ping timeout: 244 seconds)</li>
+ <li id="l-317" _a="jochen___"><a href="#l-317">#</a> [08:24] * jochen___ is now known as jochen__</li>
+ <li id="l-318"><a href="#l-318">#</a> [08:24] * Quits: connrs (~connrs@conners.plus.com) (Ping timeout: 260 seconds)</li>
+ <li id="l-319"><a href="#l-319">#</a> [08:30] * Joins: connrs (~connrs@conners.plus.com)</li>
+ <li id="l-320"><a href="#l-320">#</a> [08:50] * Joins: drublic (~drublic@frbg-5d84f10c.pool.mediaWays.net)</li>
+ <li id="l-321" _a="heycam|away"><a href="#l-321">#</a> [08:59] * heycam|away is now known as heycam</li>
+ <li id="l-322"><a href="#l-322">#</a> [09:02] * Quits: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net) (Quit: astearns)</li>
+ <li id="l-323" _a="heycam"><a href="#l-323">#</a> [09:04] * heycam is now known as heycam|away</li>
+ <li id="l-324" _a="heycam|away"><a href="#l-324">#</a> [09:04] * heycam|away is now known as heycam</li>
+ <li id="l-325"><a href="#l-325">#</a> [09:17] * Quits: drublic (~drublic@frbg-5d84f10c.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-326"><a href="#l-326">#</a> [09:19] * Quits: divya (~divyam@c-24-18-47-160.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-327"><a href="#l-327">#</a> [09:39] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-328"><a href="#l-328">#</a> [09:44] * Quits: ashaw (ashaw@129.94.198.88) (Ping timeout: 260 seconds)</li>
+ <li id="l-329"><a href="#l-329">#</a> [09:45] * Joins: ashaw (ashaw@129.94.198.88)</li>
+ <li id="l-330"><a href="#l-330">#</a> [09:48] * Joins: margle (~Margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-331"><a href="#l-331">#</a> [10:01] * Joins: Areks (~Areks@95-27-83-235.broadband.corbina.ru)</li>
+ <li id="l-332"><a href="#l-332">#</a> [10:04] * Quits: Druide_ (~Druid@p5B1366FE.dip.t-dialin.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-333"><a href="#l-333">#</a> [10:07] * Joins: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-334"><a href="#l-334">#</a> [10:09] * Joins: Druide_ (~Druid@p5B05DFB4.dip.t-dialin.net)</li>
+ <li id="l-335"><a href="#l-335">#</a> [10:15] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-336"><a href="#l-336">#</a> [10:27] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-337"><a href="#l-337">#</a> [10:29] * Quits: margle (~Margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-338"><a href="#l-338">#</a> [10:31] * Joins: margle (~Margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-339"><a href="#l-339">#</a> [10:41] * Quits: jacobolu_ (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-340"><a href="#l-340">#</a> [10:41] * Joins: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net)</li>
+ <li id="l-341"><a href="#l-341">#</a> [10:55] * Joins: MikeSmith_ (~MikeSmith@EM114-48-102-34.pool.e-mobile.ne.jp)</li>
+ <li id="l-342"><a href="#l-342">#</a> [10:58] * Quits: MikeSmith (~MikeSmith@EM1-112-218-254.pool.e-mobile.ne.jp) (Ping timeout: 252 seconds)</li>
+ <li id="l-343" _a="MikeSmith_"><a href="#l-343">#</a> [10:58] * MikeSmith_ is now known as MikeSmith</li>
+ <li id="l-344" _a="heycam"><a href="#l-344">#</a> [11:15] * heycam laughs at the grindr related bug raised on the spec</li>
+ <li id="l-345"><a href="#l-345">#</a> [11:29] * Joins: bga_ (~bga@ppp91-122-180-182.pppoe.avangarddsl.ru)</li>
+ <li id="l-346"><a href="#l-346">#</a> [11:29] * Quits: ashaw (ashaw@129.94.198.88) (Ping timeout: 240 seconds)</li>
+ <li id="l-347"><a href="#l-347">#</a> [11:35] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 240 seconds)</li>
+ <li id="l-348"><a href="#l-348">#</a> [11:36] * Joins: necolas (~necolas@host-92-12-156-249.as43234.net)</li>
+ <li id="l-349"><a href="#l-349">#</a> [11:37] * Joins: ashaw (ashaw@129.94.198.37)</li>
+ <li id="l-350"><a href="#l-350">#</a> [11:40] * Joins: espadrine (~thaddee_t@acces2064.res.insa-lyon.fr)</li>
+ <li id="l-351"><a href="#l-351">#</a> [11:46] * Joins: ezoe (~ezoe@112-68-245-133f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-352"><a href="#l-352">#</a> [12:25] * Joins: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net)</li>
+ <li id="l-353"><a href="#l-353">#</a> [12:29] * Joins: nessy (~Adium@124-169-131-96.dyn.iinet.net.au)</li>
+ <li id="l-354"><a href="#l-354">#</a> [12:43] * Quits: FireFly (firefly@firefly.xen.prgmr.com) (Changing host)</li>
+ <li id="l-355"><a href="#l-355">#</a> [12:43] * Joins: FireFly (firefly@unaffiliated/firefly)</li>
+ <li id="l-356"><a href="#l-356">#</a> [12:44] * Quits: nessy (~Adium@124-169-131-96.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-357"><a href="#l-357">#</a> [12:46] * Joins: dragon__ (~dragon@58-70-11-213f1.hyg2.eonet.ne.jp)</li>
+ <li id="l-358"><a href="#l-358">#</a> [12:46] * Quits: dragon__ (~dragon@58-70-11-213f1.hyg2.eonet.ne.jp) (Client Quit)</li>
+ <li id="l-359"><a href="#l-359">#</a> [12:55] * Joins: tomasf (~tom@2002:55e5:dbb7:0:b560:17a8:25d4:573f)</li>
+ <li id="l-360"><a href="#l-360">#</a> [13:12] * Quits: erlehmann (~erlehmann@89.204.130.228) (Quit: Ex-Chat)</li>
+ <li id="l-361"><a href="#l-361">#</a> [13:12] * Joins: mpt (~mpt@nat/canonical/x-qtuarcyaytqhogsd)</li>
+ <li id="l-362"><a href="#l-362">#</a> [13:12] * Quits: mpt (~mpt@nat/canonical/x-qtuarcyaytqhogsd) (Changing host)</li>
+ <li id="l-363"><a href="#l-363">#</a> [13:12] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-364"><a href="#l-364">#</a> [13:31] * Quits: ashaw (ashaw@129.94.198.37) (Ping timeout: 240 seconds)</li>
+ <li id="l-365"><a href="#l-365">#</a> [13:34] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: This computer has gone to sleep)</li>
+ <li id="l-366" _a="heycam"><a href="#l-366">#</a> [13:45] * heycam is now known as heycam|away</li>
+ <li id="l-367"><a href="#l-367">#</a> [14:02] * Quits: Areks (~Areks@95-27-83-235.broadband.corbina.ru) (Quit: KVIrc 4.0.2 Insomnia <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>)</li>
+ <li id="l-368"><a href="#l-368">#</a> [14:29] * Quits: ezoe (~ezoe@112-68-245-133f1.kyt1.eonet.ne.jp) (Quit: And Now for Something Completely Different.)</li>
+ <li id="l-369"><a href="#l-369">#</a> [14:40] * Quits: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-370"><a href="#l-370">#</a> [14:53] * Joins: erlehmann (~erlehmann@89.204.130.228)</li>
+ <li id="l-371"><a href="#l-371">#</a> [15:02] * Joins: drublic (~drublic@p54AE14A4.dip0.t-ipconnect.de)</li>
+ <li id="l-372"><a href="#l-372">#</a> [15:12] * Joins: adtykfhyipoh (185b4691@gateway/web/freenode/ip.24.91.70.145)</li>
+ <li id="l-373" _a="adtykfhyipoh"><a href="#l-373">#</a> [15:12] &lt;adtykfhyipoh&gt; hey can someone invite me to #php?</li>
+ <li id="l-374" _a="adtykfhyipoh"><a href="#l-374">#</a> [15:14] &lt;adtykfhyipoh&gt; I need help with pp</li>
+ <li id="l-375" _a="adtykfhyipoh"><a href="#l-375">#</a> [15:14] &lt;adtykfhyipoh&gt; *php</li>
+ <li id="l-376" _a="adtykfhyipoh"><a href="#l-376">#</a> [15:19] &lt;adtykfhyipoh&gt; hello</li>
+ <li id="l-377" _a="adtykfhyipoh"><a href="#l-377">#</a> [15:19] &lt;adtykfhyipoh&gt; please help</li>
+ <li id="l-378" _a="adtykfhyipoh"><a href="#l-378">#</a> [15:19] &lt;adtykfhyipoh&gt; where are php file uploads stored by default? I need to set permissions</li>
+ <li id="l-379"><a href="#l-379">#</a> [15:23] * Quits: adtykfhyipoh (185b4691@gateway/web/freenode/ip.24.91.70.145) (Quit: Page closed)</li>
+ <li id="l-380" _a="erlehmann"><a href="#l-380">#</a> [15:31] &lt;erlehmann&gt; wat</li>
+ <li id="l-381"><a href="#l-381">#</a> [15:56] * Joins: scor (~scor@c-98-216-102-251.hsd1.ma.comcast.net)</li>
+ <li id="l-382"><a href="#l-382">#</a> [15:56] * Quits: scor (~scor@c-98-216-102-251.hsd1.ma.comcast.net) (Changing host)</li>
+ <li id="l-383"><a href="#l-383">#</a> [15:56] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-384"><a href="#l-384">#</a> [16:01] * Joins: danielfilho_ (~daniel@187.31.77.7)</li>
+ <li id="l-385"><a href="#l-385">#</a> [16:02] * Quits: danielfilho (~daniel@187.31.77.7) (Ping timeout: 258 seconds)</li>
+ <li id="l-386" _a="danielfilho_"><a href="#l-386">#</a> [16:02] * danielfilho_ is now known as danielfilho</li>
+ <li id="l-387"><a href="#l-387">#</a> [16:09] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-388"><a href="#l-388">#</a> [16:10] * Quits: Evanescence (~Evanescen@122.237.37.212) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-389"><a href="#l-389">#</a> [16:18] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-390"><a href="#l-390">#</a> [16:20] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-391"><a href="#l-391">#</a> [16:25] * Quits: foolip_ (u3586@gateway/web/irccloud.com/x-xtoczsthmnfrrchc) (Quit: Connection closed for inactivity)</li>
+ <li id="l-392"><a href="#l-392">#</a> [16:26] * Joins: plutoniix (~plutoniix@1.46.108.87)</li>
+ <li id="l-393"><a href="#l-393">#</a> [16:27] * Quits: margle (~Margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-394"><a href="#l-394">#</a> [16:57] * Quits: MikeSmith (~MikeSmith@EM114-48-102-34.pool.e-mobile.ne.jp) (Ping timeout: 244 seconds)</li>
+ <li id="l-395"><a href="#l-395">#</a> [17:02] * Joins: MikeSmith (~MikeSmith@EM1-112-98-133.pool.e-mobile.ne.jp)</li>
+ <li id="l-396"><a href="#l-396">#</a> [17:23] * Joins: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net)</li>
+ <li id="l-397"><a href="#l-397">#</a> [17:32] * Joins: margle (~Margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-398"><a href="#l-398">#</a> [17:44] * Quits: plutoniix (~plutoniix@1.46.108.87) (Quit: Leaving)</li>
+ <li id="l-399"><a href="#l-399">#</a> [17:44] * Quits: margle (~Margle@41-133-196-64.dsl.mweb.co.za) (Ping timeout: 276 seconds)</li>
+ <li id="l-400"><a href="#l-400">#</a> [17:45] * Joins: smaug____ (~chatzilla@GGZYYMKCMLVIII.gprs.sl-laajakaista.fi)</li>
+ <li id="l-401"><a href="#l-401">#</a> [17:48] * Quits: shetech1 (~shetech@c-76-126-167-49.hsd1.ca.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-402"><a href="#l-402">#</a> [17:49] * Quits: smaug____ (~chatzilla@GGZYYMKCMLVIII.gprs.sl-laajakaista.fi) (Ping timeout: 245 seconds)</li>
+ <li id="l-403"><a href="#l-403">#</a> [17:55] * Joins: nimbupani (~divyam@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-404" _a="nimbupani"><a href="#l-404">#</a> [17:55] * nimbupani is now known as divya</li>
+ <li id="l-405"><a href="#l-405">#</a> [17:58] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 260 seconds)</li>
+ <li id="l-406"><a href="#l-406">#</a> [17:59] * Joins: shetech (~shetech@c-76-126-167-49.hsd1.ca.comcast.net)</li>
+ <li id="l-407"><a href="#l-407">#</a> [18:07] * Quits: divya (~divyam@c-24-18-47-160.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-408"><a href="#l-408">#</a> [18:16] * Joins: smaug____ (~chatzilla@ZMMCDVIII.gprs.sl-laajakaista.fi)</li>
+ <li id="l-409"><a href="#l-409">#</a> [18:29] * Joins: margle (~Margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-410"><a href="#l-410">#</a> [18:34] * Joins: tndH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com)</li>
+ <li id="l-411"><a href="#l-411">#</a> [18:34] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-412"><a href="#l-412">#</a> [18:46] * Quits: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl) (Remote host closed the connection)</li>
+ <li id="l-413"><a href="#l-413">#</a> [18:47] * Joins: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-414"><a href="#l-414">#</a> [19:02] * Joins: FlorianX (~Dimitri@p4FCF7602.dip.t-dialin.net)</li>
+ <li id="l-415"><a href="#l-415">#</a> [19:23] * Quits: margle (~Margle@41-133-196-64.dsl.mweb.co.za) (Ping timeout: 252 seconds)</li>
+ <li id="l-416"><a href="#l-416">#</a> [19:34] * Quits: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net) (Quit: astearns)</li>
+ <li id="l-417"><a href="#l-417">#</a> [19:34] * Joins: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net)</li>
+ <li id="l-418"><a href="#l-418">#</a> [19:35] * Quits: jacobolus (~jacobolus@c-71-198-169-213.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-419"><a href="#l-419">#</a> [19:51] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-420"><a href="#l-420">#</a> [20:02] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-421"><a href="#l-421">#</a> [20:05] * Joins: sicking (~chatzilla@c-98-210-155-80.hsd1.ca.comcast.net)</li>
+ <li id="l-422"><a href="#l-422">#</a> [20:27] * Joins: bartleby (~bartleby@12.51.147.18)</li>
+ <li id="l-423"><a href="#l-423">#</a> [20:28] * Quits: bartleby (~bartleby@12.51.147.18) (Client Quit)</li>
+ <li id="l-424"><a href="#l-424">#</a> [20:29] * Joins: bartleby (~scrivener@12.51.147.18)</li>
+ <li id="l-425"><a href="#l-425">#</a> [20:30] * Quits: FlorianX (~Dimitri@p4FCF7602.dip.t-dialin.net) (Quit: Leaving.)</li>
+ <li id="l-426"><a href="#l-426">#</a> [20:30] * Quits: bartleby (~scrivener@12.51.147.18) (Client Quit)</li>
+ <li id="l-427"><a href="#l-427">#</a> [20:44] * Joins: _bga (~bga@ppp78-37-239-101.pppoe.avangarddsl.ru)</li>
+ <li id="l-428"><a href="#l-428">#</a> [20:46] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-429"><a href="#l-429">#</a> [20:46] * Quits: bga_ (~bga@ppp91-122-180-182.pppoe.avangarddsl.ru) (Ping timeout: 245 seconds)</li>
+ <li id="l-430"><a href="#l-430">#</a> [20:51] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-431"><a href="#l-431">#</a> [20:52] * Quits: smaug____ (~chatzilla@ZMMCDVIII.gprs.sl-laajakaista.fi) (Ping timeout: 258 seconds)</li>
+ <li id="l-432"><a href="#l-432">#</a> [20:56] * Joins: Margle (~Margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-433"><a href="#l-433">#</a> [21:42] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-434"><a href="#l-434">#</a> [21:53] * Joins: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net)</li>
+ <li id="l-435"><a href="#l-435">#</a> [22:00] * Joins: jacobolus (~jacobolus@user-64-9-236-115.googlewifi.com)</li>
+ <li id="l-436"><a href="#l-436">#</a> [22:02] * Quits: jacobolus (~jacobolus@user-64-9-236-115.googlewifi.com) (Remote host closed the connection)</li>
+ <li id="l-437"><a href="#l-437">#</a> [22:07] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-438"><a href="#l-438">#</a> [22:12] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-439"><a href="#l-439">#</a> [22:16] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Read error: Connection reset by peer)</li>
+ <li id="l-440"><a href="#l-440">#</a> [22:16] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-441"><a href="#l-441">#</a> [22:16] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Read error: Connection reset by peer)</li>
+ <li id="l-442"><a href="#l-442">#</a> [22:21] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-443"><a href="#l-443">#</a> [22:21] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Read error: Connection reset by peer)</li>
+ <li id="l-444"><a href="#l-444">#</a> [22:21] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-445"><a href="#l-445">#</a> [22:23] * Joins: micheil (~micheil@94.197.127.11.threembb.co.uk)</li>
+ <li id="l-446"><a href="#l-446">#</a> [22:29] * Joins: myakura (~myakura@FL1-211-135-241-47.tky.mesh.ad.jp)</li>
+ <li id="l-447"><a href="#l-447">#</a> [22:37] * Joins: bga_ (~bga@ppp78-37-239-101.pppoe.avangarddsl.ru)</li>
+ <li id="l-448"><a href="#l-448">#</a> [22:37] * Quits: _bga (~bga@ppp78-37-239-101.pppoe.avangarddsl.ru) (Read error: Connection reset by peer)</li>
+ <li id="l-449"><a href="#l-449">#</a> [22:39] * Quits: erlehmann (~erlehmann@89.204.130.228) (Quit: Ex-Chat)</li>
+ <li id="l-450"><a href="#l-450">#</a> [22:40] * Joins: erlehmann (~erlehmann@89.204.130.228)</li>
+ <li id="l-451"><a href="#l-451">#</a> [22:48] * Quits: erlehmann (~erlehmann@89.204.130.228) (Quit: Ex-Chat)</li>
+ <li id="l-452"><a href="#l-452">#</a> [22:52] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-453"><a href="#l-453">#</a> [22:55] * Joins: MikeSmith_ (~MikeSmith@EM111-191-134-119.pool.e-mobile.ne.jp)</li>
+ <li id="l-454"><a href="#l-454">#</a> [22:55] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-455"><a href="#l-455">#</a> [22:57] * Quits: MikeSmith (~MikeSmith@EM1-112-98-133.pool.e-mobile.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-456" _a="MikeSmith_"><a href="#l-456">#</a> [22:58] * MikeSmith_ is now known as MikeSmith</li>
+ <li id="l-457"><a href="#l-457">#</a> [23:00] * Joins: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba)</li>
+ <li id="l-458"><a href="#l-458">#</a> [23:10] * Quits: sicking (~chatzilla@c-98-210-155-80.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-459" _a="heycam|away"><a href="#l-459">#</a> [23:11] * heycam|away is now known as heycam</li>
+ <li id="l-460"><a href="#l-460">#</a> [23:14] * Quits: tomasf (~tom@2002:55e5:dbb7:0:b560:17a8:25d4:573f) (Quit: tomasf)</li>
+ <li id="l-461" _a="heycam"><a href="#l-461">#</a> [23:15] * heycam is now known as heycam|away</li>
+ <li id="l-462"><a href="#l-462">#</a> [23:22] * Joins: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net)</li>
+ <li id="l-463"><a href="#l-463">#</a> [23:39] * Quits: myakura (~myakura@FL1-211-135-241-47.tky.mesh.ad.jp) (Remote host closed the connection)</li>
+ <li id="l-464"><a href="#l-464">#</a> [23:41] * Joins: Lachy (~Lachy@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-465"><a href="#l-465">#</a> [23:43] * Quits: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-466" _a="Margle" _r="paul_irish"><a href="#l-466">#</a> [23:46] &lt;Margle&gt; paul_irish: cool talk bro</li>
+ <li id="l-467" _a="paul_irish"><a href="#l-467">#</a> [23:46] &lt;paul_irish&gt; thxx</li>
+ <li id="l-468"><a href="#l-468">#</a> [23:55] * Quits: danbri (~danbri@cable-146-255-152-131.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-469"><a href="#l-469">#</a> [23:59] * Quits: zewt (~x@c-24-62-196-44.hsd1.ma.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-470"><a href="#l-470">#</a> Session Close: Sun Nov 20 00:00:00 2011</li>
+</ol>
+<p id="end">The end :)

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20070524</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20070524.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2007-05-24 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Thu May 24 00:00:00 2007</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Philip`"><a href="#l-3">#</a> [00:00] &lt;Philip`&gt; which is kind of irritating since a single page can jam the database until you restart your browser</li>
+ <li id="l-4" _a="met_"><a href="#l-4">#</a> [00:00] * met_ rememer only Firefox to have js threads via  XPCOM</li>
+ <li id="l-5" _a="Philip`" _r="Oh"><a href="#l-5">#</a> [00:00] &lt;Philip`&gt; Oh, no, it only jams the database until you close the page which had the lock</li>
+ <li id="l-6" _a="Philip`"><a href="#l-6">#</a> [00:00] &lt;Philip`&gt; (since that page has its own connection, and locks belong to connections)</li>
+ <li id="l-7" _a="met_"><a href="#l-7">#</a> [00:01] &lt;met_&gt; or there can be some max_time_limit for one sql request</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:01] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-9" _a="Philip`"><a href="#l-9">#</a> [00:01] &lt;Philip`&gt; I think multiple windows still have to all be in the same single thread (or at least appear exactly as if they are), because they can interact with each other in various ways</li>
+ <li id="l-10" _a="met_"><a href="#l-10">#</a> [00:01] &lt;met_&gt; if it takes too long db should stop it</li>
+ <li id="l-11" _a="Philip`"><a href="#l-11">#</a> [00:03] &lt;Philip`&gt; It doesn't have to be a slow request - you could just do &quot;&lt;script&gt;executeSql('BEGIN EXCLUSIVE')&lt;/script&gt;&quot; and the request would finish quickly, but the database would still be locked</li>
+ <li id="l-12" _a="Philip`" _r="(Oops"><a href="#l-12">#</a> [00:03] &lt;Philip`&gt; (Oops, I said it was per-table but actually it's per-database)</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:05] &lt;Hixie&gt; yeah the spec already describes the threading model in detail</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:06] &lt;Hixie&gt; though i can't find it now</li>
+ <li id="l-15" _a="Hixie"><a href="#l-15">#</a> [00:06] &lt;Hixie&gt; hm</li>
+ <li id="l-16" _a="Philip`"><a href="#l-16">#</a> [00:06] &lt;Philip`&gt; <a href="http://www.whatwg.org/specs/web-apps/current-work/#threads">http://www.whatwg.org/specs/web-apps/current-work/#threads</a> ?</li>
+ <li id="l-17" _a="Hixie"><a href="#l-17">#</a> [00:06] &lt;Hixie&gt; oh there we go</li>
+ <li id="l-18"><a href="#l-18">#</a> [00:06] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:06] &lt;Hixie&gt; 4.1.4</li>
+ <li id="l-20"><a href="#l-20">#</a> [00:07] * Quits: weinigLap_ (i=weinig@nat/apple/x-742d9daa8455f2c5)</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:11] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-22" _a="met_"><a href="#l-22">#</a> [00:12] &lt;met_&gt; if i read br. context well it  looks like if I have two independent browser windows with www.example.com, these are 2 browsing context and do not know about each other, so single-thread rule doesn't apply for them</li>
+ <li id="l-23" _a="Hixie"><a href="#l-23">#</a> [00:12] &lt;Hixie&gt; correct</li>
+ <li id="l-24" _a="Hixie"><a href="#l-24">#</a> [00:13] &lt;Hixie&gt; bbiab</li>
+ <li id="l-25" _a="Philip`" _r="Oh"><a href="#l-25">#</a> [00:13] &lt;Philip`&gt; Oh, in that case it's not true that the database access is single-threaded and easy</li>
+ <li id="l-26" _a="met_"><a href="#l-26">#</a> [00:14] &lt;met_&gt; yes</li>
+ <li id="l-27"><a href="#l-27">#</a> [00:15] * Joins: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-28"><a href="#l-28">#</a> [00:15] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-29" _a="Philip`"><a href="#l-29">#</a> [00:15] * Philip` wonders what happens if there are two unrelated browsing contexts, one in a window named &quot;A&quot; and one in a window named &quot;B&quot;, and simultaneously the first does &quot;while (1) window.open(uri, 'B');&quot; and the second does &quot;while (1) window.open(uri, 'A');&quot;</li>
+ <li id="l-30" _a="Dashiva"><a href="#l-30">#</a> [00:18] &lt;Dashiva&gt; One would win</li>
+ <li id="l-31"><a href="#l-31">#</a> [00:18] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-32" _a="Dashiva"><a href="#l-32">#</a> [00:19] &lt;Dashiva&gt; Unless you're somehow managing to really run both at once using two processors and a multithread-script UA or somesuch</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:19] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com) (Client Quit)</li>
+ <li id="l-34" _a="Philip`"><a href="#l-34">#</a> [00:20] &lt;Philip`&gt; The threading model in the spec allows them to be in separate threads on separate processors, as far as I can tell</li>
+ <li id="l-35" _a="Philip`"><a href="#l-35">#</a> [00:21] &lt;Philip`&gt; I guess a sensible implementation would just abort one of the scripts when it's forcibly navigated away from, since it's the same as if one page does &quot;while (1) {}&quot; and the user tries to hit the back button to get away</li>
+ <li id="l-36"><a href="#l-36">#</a> [00:22] * Quits: gavin_ (n=gavin@firefox/developer/gavin) (Connection timed out)</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:23] * Joins: MasterLexx (n=m@p54b7351f.dip0.t-ipconnect.de)</li>
+ <li id="l-38" _a="MasterLexx"><a href="#l-38">#</a> [00:23] &lt;MasterLexx&gt; heho</li>
+ <li id="l-39" _a="Philip`"><a href="#l-39">#</a> [00:24] &lt;Philip`&gt; (Or maybe a sensible implementation would do everything in a single thread anyway, since it's not like people tend to look at multiple unrelated pages which are simultaneously using the full CPU to execute JS)</li>
+ <li id="l-40" _a="Philip`"><a href="#l-40">#</a> [00:24] &lt;Philip`&gt; Good evening</li>
+ <li id="l-41" _a="MasterLexx"><a href="#l-41">#</a> [00:24] &lt;MasterLexx&gt; html5?</li>
+ <li id="l-42" _a="Philip`"><a href="#l-42">#</a> [00:25] &lt;Philip`&gt; Yes?</li>
+ <li id="l-43" _a="MasterLexx"><a href="#l-43">#</a> [00:25] &lt;MasterLexx&gt; i did just read about it, is it only because of backwards compatibility and the xml must 100% valid problem?</li>
+ <li id="l-44"><a href="#l-44">#</a> [00:25] * Quits: met_ (n=Hassman@r5bx220.net.upc.cz) (&quot;Chemists never die, they just stop reacting.&quot;)</li>
+ <li id="l-45" _a="Dashiva"><a href="#l-45">#</a> [00:25] &lt;Dashiva&gt; It's not a 'only', no</li>
+ <li id="l-46" _a="MasterLexx"><a href="#l-46">#</a> [00:26] &lt;MasterLexx&gt; i am currently using xhtml 1.0 strict for all my small websites, so tell me, what is the future? xhtml2 or xhtml5?</li>
+ <li id="l-47" _a="Dashiva" _r="Well"><a href="#l-47">#</a> [00:26] &lt;Dashiva&gt; Well, browsers are implementing parts of xhtml5 already</li>
+ <li id="l-48" _a="MasterLexx"><a href="#l-48">#</a> [00:27] &lt;MasterLexx&gt; i have read here and there a bit, but can't find much examples of html5 and so, i am no technician, so i don't udnerstand all those documentations with this abstract text</li>
+ <li id="l-49" _a="Dashiva"><a href="#l-49">#</a> [00:27] &lt;Dashiva&gt; It's a work in progress</li>
+ <li id="l-50" _a="MasterLexx"><a href="#l-50">#</a> [00:27] &lt;MasterLexx&gt; is there a site where i can see a comparison of xhtml2 and 5 and 1?</li>
+ <li id="l-51" _a="MasterLexx" _r="okay"><a href="#l-51">#</a> [00:28] &lt;MasterLexx&gt; okay, and html5 will have all the elements of html 4.01 strict? or on what does it build up on?</li>
+ <li id="l-52" _a="Dashiva"><a href="#l-52">#</a> [00:29] &lt;Dashiva&gt; It builds on the existing web</li>
+ <li id="l-53" _a="MasterLexx"><a href="#l-53">#</a> [00:30] &lt;MasterLexx&gt; .....</li>
+ <li id="l-54" _a="Philip`"><a href="#l-54">#</a> [00:30] &lt;Philip`&gt; <a href="http://wiki.whatwg.org/wiki/Changes_from_HTML4">http://wiki.whatwg.org/wiki/Changes_from_HTML4</a> lists some differences between HTML4 and HTML5</li>
+ <li id="l-55" _a="MasterLexx"><a href="#l-55">#</a> [00:30] &lt;MasterLexx&gt; thx</li>
+ <li id="l-56" _a="hasather" _r="Hopefully"><a href="#l-56">#</a> [00:32] &lt;hasather&gt; Hopefully, this will be a success: <a href="http://yodel.yahoo.com/2007/05/22/one-small-step-for-email-one-giant-leap-for-internet-safety/">http://yodel.yahoo.com/2007/05/22/one-small-step-for-email-one-giant-leap-for-internet-safety/</a></li>
+ <li id="l-57"><a href="#l-57">#</a> [00:35] * Joins: othermaciej (n=mjs@17.255.97.241)</li>
+ <li id="l-58"><a href="#l-58">#</a> [00:36] * Quits: tantek (n=tantek@c-71-202-60-161.hsd1.ca.comcast.net)</li>
+ <li id="l-59" _a="MasterLexx"><a href="#l-59">#</a> [00:37] &lt;MasterLexx&gt; is the stupid target attribute removed in html5?</li>
+ <li id="l-60" _a="MasterLexx"><a href="#l-60">#</a> [00:38] &lt;MasterLexx&gt; as far as i read, frames arent supported</li>
+ <li id="l-61" _a="Hixie" _r="Philip`"><a href="#l-61">#</a> [00:40] &lt;Hixie&gt; Philip`: in that kind of UA, i would imagine that the ua would not determine &quot;that the two browsing contexts are related enough that it is ok if they reach each other&quot;</li>
+ <li id="l-62"><a href="#l-62">#</a> [00:43] * Joins: tantek (n=tantek@c-71-202-60-161.hsd1.ca.comcast.net)</li>
+ <li id="l-63"><a href="#l-63">#</a> [00:55] * Joins: weinigLap_ (n=weinig@17.203.15.217)</li>
+ <li id="l-64" _a="Philip`" _r="Hixie"><a href="#l-64">#</a> [00:56] &lt;Philip`&gt; Hixie: Ah, didn't see that bit - makes sense</li>
+ <li id="l-65"><a href="#l-65">#</a> [01:03] * Joins: KevinMarks (i=KevinMar@nat/google/x-5dda08bfa2c312ad)</li>
+ <li id="l-66"><a href="#l-66">#</a> [01:08] * Quits: weinigLap (n=weinig@17.255.96.198) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-67"><a href="#l-67">#</a> [01:08] * Joins: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-68"><a href="#l-68">#</a> [01:15] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-69" _a="Philip`" _r="Wow"><a href="#l-69">#</a> [01:17] &lt;Philip`&gt; Wow, I'd forgotten how great Verlet integration is when compared to Euler integration</li>
+ <li id="l-70"><a href="#l-70">#</a> [01:20] * Quits: billmason (n=billmaso@ip156.unival.com) (&quot;.&quot;)</li>
+ <li id="l-71"><a href="#l-71">#</a> [01:21] * Quits: weinigLap_ (n=weinig@17.203.15.217) (Read error: 110 (Connection timed out))</li>
+ <li id="l-72"><a href="#l-72">#</a> [01:22] * Quits: weinigLap (n=weinig@17.255.96.198) (Remote closed the connection)</li>
+ <li id="l-73"><a href="#l-73">#</a> [01:23] * Joins: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-74" _a="Philip`"><a href="#l-74">#</a> [01:25] &lt;Philip`&gt; <a href="http://canvex.lazyilluminati.com/misc/physics.html">http://canvex.lazyilluminati.com/misc/physics.html</a> - I don't know why it doesn't work nicely in Opera - the circle rendering is broken and it only goes at 10fps :-(</li>
+ <li id="l-75" _a="Philip`"><a href="#l-75">#</a> [01:26] &lt;Philip`&gt; Also it's extremely jerky in FF3, but at least FF2 works fine...</li>
+ <li id="l-76" _a="MasterLexx" _r="okay"><a href="#l-76">#</a> [01:30] &lt;MasterLexx&gt; okay, now i am not anymore so sure of the success of html 5 <a href="http://www.webdevout.net/tidings/2007/04/23/the-whimzical-world-of-html-5/">http://www.webdevout.net/tidings/2007/04/23/the-whimzical-world-of-html-5/</a></li>
+ <li id="l-77" _a="moeffju[Work]"><a href="#l-77">#</a> [01:32] * moeffju[Work] is now known as moeffju</li>
+ <li id="l-78" _a="MasterLexx"><a href="#l-78">#</a> [01:32] &lt;MasterLexx&gt; i hope those html5 guys will make something good out of it, but i don't think this will happen in the next time</li>
+ <li id="l-79"><a href="#l-79">#</a> [01:33] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [01:33] &lt;Hixie&gt; we're the html5 guys :-)</li>
+ <li id="l-81"><a href="#l-81">#</a> [01:34] * Joins: gavins (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-82" _a="gavins"><a href="#l-82">#</a> [01:34] * gavins is now known as gavin_</li>
+ <li id="l-83" _a="MasterLexx"><a href="#l-83">#</a> [01:39] &lt;MasterLexx&gt; ohh</li>
+ <li id="l-84" _a="MasterLexx" _r="hmm"><a href="#l-84">#</a> [01:40] &lt;MasterLexx&gt; hmm, i hope you guys fix those things</li>
+ <li id="l-85"><a href="#l-85">#</a> [01:41] * Quits: weinigLap (n=weinig@17.255.96.198) (Remote closed the connection)</li>
+ <li id="l-86"><a href="#l-86">#</a> [01:42] * Joins: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-87" _a="Hixie"><a href="#l-87">#</a> [01:43] &lt;Hixie&gt; what do you want us to fix?</li>
+ <li id="l-88" _a="MasterLexx"><a href="#l-88">#</a> [01:50] &lt;MasterLexx&gt; i meant those things described there, like the bugmode</li>
+ <li id="l-89" _a="MasterLexx"><a href="#l-89">#</a> [01:50] &lt;MasterLexx&gt; and the thing with no version information.... why not? i don't think it can harm.</li>
+ <li id="l-90" _a="Hixie"><a href="#l-90">#</a> [01:50] &lt;Hixie&gt; the bugmode was just an idea someone proposed, we're not doing it</li>
+ <li id="l-91" _a="Hixie"><a href="#l-91">#</a> [01:51] &lt;Hixie&gt; why would you want version information? it's just more stuff for you to remember when you write HTML pages</li>
+ <li id="l-92" _a="Hixie"><a href="#l-92">#</a> [01:51] &lt;Hixie&gt; and most people don't bother with it anyway</li>
+ <li id="l-93" _a="MasterLexx"><a href="#l-93">#</a> [01:51] &lt;MasterLexx&gt; browsers have to bother with it</li>
+ <li id="l-94" _a="Hixie"><a href="#l-94">#</a> [01:51] &lt;Hixie&gt; why?</li>
+ <li id="l-95" _a="Hixie"><a href="#l-95">#</a> [01:51] &lt;Hixie&gt; they haven't up to now...</li>
+ <li id="l-96" _a="MasterLexx"><a href="#l-96">#</a> [01:51] &lt;MasterLexx&gt; it's not bad, at least let is a option!</li>
+ <li id="l-97" _a="Hixie"><a href="#l-97">#</a> [01:51] &lt;Hixie&gt; i don't understand what you would want it for</li>
+ <li id="l-98" _a="Lachy"><a href="#l-98">#</a> [01:52] &lt;Lachy&gt; only IE is going to bother implementing a bug mode switch</li>
+ <li id="l-99" _a="MasterLexx"><a href="#l-99">#</a> [01:52] &lt;MasterLexx&gt; i meant, i could still be there as optional emlement</li>
+ <li id="l-100" _a="Hixie" _r="right"><a href="#l-100">#</a> [01:52] &lt;Hixie&gt; right, but what would it be good for?</li>
+ <li id="l-101" _a="Hixie"><a href="#l-101">#</a> [01:52] &lt;Hixie&gt; there's no point having an optional thing if it isn't used for anything</li>
+ <li id="l-102" _a="Hixie"><a href="#l-102">#</a> [01:52] &lt;Hixie&gt; just makes people who don't understand HTML think it's important and confuses them</li>
+ <li id="l-103" _a="MasterLexx"><a href="#l-103">#</a> [01:53] &lt;MasterLexx&gt; as wrtitten in the article, what if something goes wrong? what if one docuemnt has to be handeled in another manner?</li>
+ <li id="l-104" _a="MasterLexx"><a href="#l-104">#</a> [01:53] &lt;MasterLexx&gt; (sorry for my grammar, i am german)</li>
+ <li id="l-105" _a="Hixie"><a href="#l-105">#</a> [01:53] &lt;Hixie&gt; i don't understand why you would want documents to be handled in a different manner</li>
+ <li id="l-106" _a="Hixie"><a href="#l-106">#</a> [01:53] &lt;Hixie&gt; wouldn't we want just one set of rules?</li>
+ <li id="l-107" _a="Hixie"><a href="#l-107">#</a> [01:54] &lt;Hixie&gt; having multiple different sets of rules just seems like it would be really confusing for authors</li>
+ <li id="l-108" _a="MasterLexx"><a href="#l-108">#</a> [01:54] &lt;MasterLexx&gt; what if in a future html 6 some elemets are deprecated...</li>
+ <li id="l-109" _a="MasterLexx"><a href="#l-109">#</a> [01:54] &lt;MasterLexx&gt; i don't think so, you have one set of elements and attributes that you use, like in xhtml 1.0 strict, i don't use others...</li>
+ <li id="l-110" _a="Lachy"><a href="#l-110">#</a> [01:54] &lt;Lachy&gt; elements still have tob e supported, even if they're deprecated</li>
+ <li id="l-111" _a="Hixie"><a href="#l-111">#</a> [01:54] &lt;Hixie&gt; deprecating them doesn't mean browsers stop supporting it</li>
+ <li id="l-112" _a="Hixie"><a href="#l-112">#</a> [01:55] &lt;Hixie&gt; e.g. browsers still support &lt;p align=&quot;&quot;&gt;, but align=&quot;&quot; isn't in HTML5</li>
+ <li id="l-113" _a="MasterLexx"><a href="#l-113">#</a> [01:55] &lt;MasterLexx&gt; but then this is some sort of quirks mode</li>
+ <li id="l-114" _a="Hixie" _r="no"><a href="#l-114">#</a> [01:55] &lt;Hixie&gt; no, it's just the one mode</li>
+ <li id="l-115" _a="Hixie"><a href="#l-115">#</a> [01:55] &lt;Hixie&gt; we're trying to remove quirks mode as much as possible</li>
+ <li id="l-116" _a="Hixie"><a href="#l-116">#</a> [01:55] &lt;Hixie&gt; just have one mode</li>
+ <li id="l-117" _a="MasterLexx"><a href="#l-117">#</a> [01:56] &lt;MasterLexx&gt; oh god</li>
+ <li id="l-118" _a="MasterLexx"><a href="#l-118">#</a> [01:57] &lt;MasterLexx&gt; i think, there will be always other versions and things that are left out of new ones...</li>
+ <li id="l-119" _a="Hixie"><a href="#l-119">#</a> [01:57] &lt;Hixie&gt; they'll be left out of the language, but that doesn't affect what browsers have to do</li>
+ <li id="l-120" _a="Hixie"><a href="#l-120">#</a> [01:57] &lt;Hixie&gt; browsers just have one set of code that handles all versions</li>
+ <li id="l-121" _a="MasterLexx"><a href="#l-121">#</a> [01:57] &lt;MasterLexx&gt; nahh okay, i think i will wait a bit and see what heppens to html5</li>
+ <li id="l-122" _a="MasterLexx"><a href="#l-122">#</a> [01:58] &lt;MasterLexx&gt; i don't think i understand much of this, but it would meen that there will be a mess of elemets and attributes that all always have to be supported by browsers, there will never be a clear html this way</li>
+ <li id="l-123" _a="Hixie" _r="yes"><a href="#l-123">#</a> [01:59] &lt;Hixie&gt; yes, browsers will always support old documents</li>
+ <li id="l-124" _a="Hixie"><a href="#l-124">#</a> [01:59] &lt;Hixie&gt; having a version doesn't change that</li>
+ <li id="l-125" _a="madmoose"><a href="#l-125">#</a> [01:59] &lt;madmoose&gt; Browsers that want to be backwards compatible have to support all the old stuff anyway.</li>
+ <li id="l-126" _a="Hixie"><a href="#l-126">#</a> [02:00] &lt;Hixie&gt; note though that even though browsers have to support old stuff, it doesn't mean new versions of html can't be &quot;clean&quot;</li>
+ <li id="l-127" _a="Hixie"><a href="#l-127">#</a> [02:00] &lt;Hixie&gt; e.g. HTML5 doesn't have &lt;tt&gt; and &lt;center&gt; and so on</li>
+ <li id="l-128" _a="Hixie"><a href="#l-128">#</a> [02:00] &lt;Hixie&gt; even though browsers support &lt;tt&gt; and &lt;center&gt;</li>
+ <li id="l-129" _a="MasterLexx"><a href="#l-129">#</a> [02:00] &lt;MasterLexx&gt; okay okay, i read today the first time about html 5 in the news on selfhtml... i think i need to know more first</li>
+ <li id="l-130" _a="madmoose"><a href="#l-130">#</a> [02:00] &lt;madmoose&gt; Microsofts argument for a version number (if I understand it correctly) is that they want to support old bugs in their implementation, but their release cycle isn't going to coincide with html versions anyway.</li>
+ <li id="l-131" _a="Lachy"><a href="#l-131">#</a> [02:02] &lt;Lachy&gt; Microsoft's argument is flawed</li>
+ <li id="l-132" _a="Lachy"><a href="#l-132">#</a> [02:02] &lt;Lachy&gt; they want to perpetuate every bug in every single browser version, for all time</li>
+ <li id="l-133" _a="madmoose"><a href="#l-133">#</a> [02:03] &lt;madmoose&gt; Well that's their prerogative.</li>
+ <li id="l-134" _a="madmoose"><a href="#l-134">#</a> [02:03] &lt;madmoose&gt; It doesn't have anything to do with html version numbers though.</li>
+ <li id="l-135" _a="mpt" _r="gsnedders"><a href="#l-135">#</a> [02:04] &lt;mpt&gt; gsnedders, iCab doesn't have alerts asking you if you want pages to render per spec or per Web, but it does have checkboxes for it</li>
+ <li id="l-136" _a="mpt" _r="hsivonen"><a href="#l-136">#</a> [02:05] &lt;mpt&gt; hsivonen, on the Web at least, starship names are possibly more common than ship names</li>
+ <li id="l-137" _a="MasterLexx"><a href="#l-137">#</a> [02:07] &lt;MasterLexx&gt; what?</li>
+ <li id="l-138" _a="MasterLexx"><a href="#l-138">#</a> [02:08] &lt;MasterLexx&gt; bye and good night</li>
+ <li id="l-139"><a href="#l-139">#</a> [02:08] * Parts: MasterLexx (n=m@p54b7351f.dip0.t-ipconnect.de)</li>
+ <li id="l-140"><a href="#l-140">#</a> [02:16] * Quits: h3h (n=w3rd@66-162-32-234.static.twtelecom.net) (&quot;|&quot;)</li>
+ <li id="l-141"><a href="#l-141">#</a> [02:21] * Quits: tantek (n=tantek@c-71-202-60-161.hsd1.ca.comcast.net)</li>
+ <li id="l-142"><a href="#l-142">#</a> [02:37] * Quits: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-143"><a href="#l-143">#</a> [02:38] * Joins: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au)</li>
+ <li id="l-144"><a href="#l-144">#</a> [02:42] * Quits: aroben (i=adamrobe@nat/apple/x-671c5a17b11e7edf)</li>
+ <li id="l-145"><a href="#l-145">#</a> [02:43] * Quits: YaaL (i=yaal@hell.pl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-146"><a href="#l-146">#</a> [02:43] * Quits: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-147"><a href="#l-147">#</a> [02:52] * Quits: dbaron (n=dbaron@corp-242.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-148"><a href="#l-148">#</a> [02:57] * Joins: tantek (n=tantek@corp.technorati.com)</li>
+ <li id="l-149"><a href="#l-149">#</a> [02:58] * Quits: bzed (n=bzed@dslb-084-059-117-253.pools.arcor-ip.net) (&quot;Leaving&quot;)</li>
+ <li id="l-150"><a href="#l-150">#</a> [03:01] * Joins: yod (n=ot@dhcp-246-155.mag.keio.ac.jp)</li>
+ <li id="l-151"><a href="#l-151">#</a> [03:12] * Quits: othermaciej (n=mjs@17.255.97.241)</li>
+ <li id="l-152"><a href="#l-152">#</a> [03:23] * Joins: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-153"><a href="#l-153">#</a> [03:25] * Joins: aroben (n=adamrobe@17.255.100.177)</li>
+ <li id="l-154"><a href="#l-154">#</a> [03:41] * Joins: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-155"><a href="#l-155">#</a> [04:19] * Joins: YaaL (i=yaal@hell.pl)</li>
+ <li id="l-156"><a href="#l-156">#</a> [04:21] * Quits: tantek (n=tantek@corp.technorati.com)</li>
+ <li id="l-157"><a href="#l-157">#</a> [04:23] * Joins: barnett (n=barnett@74.194.13.109)</li>
+ <li id="l-158" _a="barnett"><a href="#l-158">#</a> [04:26] * barnett is now known as jonbarnett</li>
+ <li id="l-159" _a="moeffju"><a href="#l-159">#</a> [04:32] * moeffju is now known as moeffju[ZzZz]</li>
+ <li id="l-160"><a href="#l-160">#</a> [04:34] * Quits: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-161"><a href="#l-161">#</a> [04:37] * Quits: YaaL (i=yaal@hell.pl) (Remote closed the connection)</li>
+ <li id="l-162"><a href="#l-162">#</a> [05:14] * Quits: aroben (n=adamrobe@17.255.100.177)</li>
+ <li id="l-163"><a href="#l-163">#</a> [05:31] * Quits: psa (n=yomode@69.55.224.49) (Remote closed the connection)</li>
+ <li id="l-164"><a href="#l-164">#</a> [05:38] * Quits: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au) (&quot;Leaving&quot;)</li>
+ <li id="l-165"><a href="#l-165">#</a> [06:04] * Quits: jruderman (n=jruderma@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-166"><a href="#l-166">#</a> [06:22] * Joins: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au)</li>
+ <li id="l-167"><a href="#l-167">#</a> [06:28] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-168"><a href="#l-168">#</a> [06:31] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Client Quit)</li>
+ <li id="l-169"><a href="#l-169">#</a> [06:35] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-170"><a href="#l-170">#</a> [06:41] * Joins: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-171"><a href="#l-171">#</a> [06:44] * Joins: YaaL (i=yaal@hell.pl)</li>
+ <li id="l-172"><a href="#l-172">#</a> [06:50] * Quits: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-173"><a href="#l-173">#</a> [07:20] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-174"><a href="#l-174">#</a> [07:21] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-175"><a href="#l-175">#</a> [07:21] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-176"><a href="#l-176">#</a> [07:38] * Quits: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-177"><a href="#l-177">#</a> [07:42] * Quits: jonbarnett (n=barnett@74.194.13.109) (Remote closed the connection)</li>
+ <li id="l-178"><a href="#l-178">#</a> [07:44] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-179"><a href="#l-179">#</a> [08:23] * Joins: KevinMarks (n=KevinMar@ppp-71-139-174-81.dsl.snfc21.pacbell.net)</li>
+ <li id="l-180"><a href="#l-180">#</a> [08:39] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-181"><a href="#l-181">#</a> [08:49] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-182"><a href="#l-182">#</a> [08:51] * Quits: KevinMarks (n=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-183"><a href="#l-183">#</a> [08:57] * Joins: hendry (n=hendry@91.84.53.136)</li>
+ <li id="l-184"><a href="#l-184">#</a> [08:57] * Quits: weinigLap (n=weinig@17.255.96.198)</li>
+ <li id="l-185"><a href="#l-185">#</a> [09:14] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-186"><a href="#l-186">#</a> [09:17] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-187"><a href="#l-187">#</a> [09:19] * Joins: annevk (n=annevk@pat-tdc.opera.com)</li>
+ <li id="l-188"><a href="#l-188">#</a> [09:20] * Quits: yod (n=ot@dhcp-246-155.mag.keio.ac.jp) (&quot;Leaving&quot;)</li>
+ <li id="l-189"><a href="#l-189">#</a> [09:27] * Joins: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au)</li>
+ <li id="l-190"><a href="#l-190">#</a> [09:30] * Joins: bzed (n=bzed@dslb-084-059-113-028.pools.arcor-ip.net)</li>
+ <li id="l-191"><a href="#l-191">#</a> [09:31] * Joins: karlUshi (n=karl@pptp20-223.enst.fr)</li>
+ <li id="l-192" _a="annevk"><a href="#l-192">#</a> [09:36] &lt;annevk&gt; &quot;</li>
+ <li id="l-193" _a="annevk"><a href="#l-193">#</a> [09:36] &lt;annevk&gt; HTML5 is that spec. That was the original goal of the WHATWG effort, and</li>
+ <li id="l-194" _a="annevk"><a href="#l-194">#</a> [09:36] &lt;annevk&gt; continues to be this goal. There are already other groups writing</li>
+ <li id="l-195" _a="annevk"><a href="#l-195">#</a> [09:36] &lt;annevk&gt; specifications that don't take today's content into account, e.g. XHTML2.</li>
+ <li id="l-196" _a="annevk"><a href="#l-196">#</a> [09:36] &lt;annevk&gt; Those specs will be ignored. I have no intention of writing a spec that</li>
+ <li id="l-197" _a="annevk"><a href="#l-197">#</a> [09:36] &lt;annevk&gt; will be ignored, it seems like a spectacular waste of time and of the</li>
+ <li id="l-198" _a="annevk"><a href="#l-198">#</a> [09:36] &lt;annevk&gt; human race's resources.&quot;</li>
+ <li id="l-199" _a="Hixie"><a href="#l-199">#</a> [09:40] &lt;Hixie&gt; hm?</li>
+ <li id="l-200" _a="annevk"><a href="#l-200">#</a> [09:41] &lt;annevk&gt; I liked the way you phrased it</li>
+ <li id="l-201" _a="annevk" _r="btw"><a href="#l-201">#</a> [09:42] &lt;annevk&gt; btw, it seems like &lt;script for= event=&gt; needs to be implemented :(</li>
+ <li id="l-202" _a="Hixie"><a href="#l-202">#</a> [09:44] &lt;Hixie&gt; it's not backwards compatible</li>
+ <li id="l-203"><a href="#l-203">#</a> [09:45] * Joins: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-204" _a="annevk"><a href="#l-204">#</a> [09:45] &lt;annevk&gt; it's implemented in IE and Firefox and is used by plugins</li>
+ <li id="l-205" _a="annevk"><a href="#l-205">#</a> [09:45] &lt;annevk&gt; executeSql() isn't backwards compatible either for that matter :)</li>
+ <li id="l-206" _a="Hixie"><a href="#l-206">#</a> [09:45] &lt;Hixie&gt; it's used in firefox?</li>
+ <li id="l-207" _a="Hixie"><a href="#l-207">#</a> [09:46] &lt;Hixie&gt; executeSql doesn't cause scripts to run when they shouldn't</li>
+ <li id="l-208" _a="annevk"><a href="#l-208">#</a> [09:46] &lt;annevk&gt; yeah</li>
+ <li id="l-209"><a href="#l-209">#</a> [09:50] * Joins: mikeday (n=mikeday@60.224.50.129)</li>
+ <li id="l-210"><a href="#l-210">#</a> [09:57] * Joins: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-211"><a href="#l-211">#</a> [10:04] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-212"><a href="#l-212">#</a> [10:09] * Joins: met_ (n=Hassman@b14-4.vscht.cz)</li>
+ <li id="l-213"><a href="#l-213">#</a> [10:12] * Joins: mpt (n=mpt@121-72-128-178.dsl.telstraclear.net)</li>
+ <li id="l-214" _a="mikeday"><a href="#l-214">#</a> [10:29] &lt;mikeday&gt; some of the imperative pseudo-code/prose in the HTML5 spec is rather difficult to follow</li>
+ <li id="l-215"><a href="#l-215">#</a> [10:37] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-216" _a="annevk"><a href="#l-216">#</a> [10:37] &lt;annevk&gt; you have to be a native en-GB-x-Hixie speaker</li>
+ <li id="l-217" _a="mikeday"><a href="#l-217">#</a> [10:38] &lt;mikeday&gt; that could be awkward</li>
+ <li id="l-218" _a="mikeday"><a href="#l-218">#</a> [10:39] &lt;mikeday&gt; it's rather frustrating, as you can almost represent all this stuff with regular expressions</li>
+ <li id="l-219" _a="mikeday"><a href="#l-219">#</a> [10:39] &lt;mikeday&gt; which would be a lot easier to check that you've got it right</li>
+ <li id="l-220" _a="mikeday"><a href="#l-220">#</a> [10:40] &lt;mikeday&gt; I'm stuck on the &quot;get an attribute&quot; step</li>
+ <li id="l-221" _a="annevk"><a href="#l-221">#</a> [10:40] &lt;annevk&gt; if you read carefully it shouldn't be a problem</li>
+ <li id="l-222" _a="mikeday"><a href="#l-222">#</a> [10:40] &lt;mikeday&gt; the code gets rather long and fiddly</li>
+ <li id="l-223" _a="annevk"><a href="#l-223">#</a> [10:45] &lt;annevk&gt; you don't have to follow the specification</li>
+ <li id="l-224" _a="annevk"><a href="#l-224">#</a> [10:45] &lt;annevk&gt; you just have to ensure that A &gt; algorithm &gt; B is identicala</li>
+ <li id="l-225" _a="jgraham" _r="mikeday"><a href="#l-225">#</a> [10:45] &lt;jgraham&gt; mikeday: Charset sniffing? Yeah, I didn't like doing that either</li>
+ <li id="l-226" _a="annevk" _r="actually"><a href="#l-226">#</a> [10:45] &lt;annevk&gt; actually, A &gt; B &gt; C</li>
+ <li id="l-227" _a="annevk"><a href="#l-227">#</a> [10:45] &lt;annevk&gt; where B can be English prose or C</li>
+ <li id="l-228" _a="annevk"><a href="#l-228">#</a> [10:45] &lt;annevk&gt; or Python, etc.</li>
+ <li id="l-229" _a="mikeday"><a href="#l-229">#</a> [10:46] &lt;mikeday&gt; right</li>
+ <li id="l-230" _a="mikeday"><a href="#l-230">#</a> [10:53] &lt;mikeday&gt; the charset sniffer seems to parse attributes on close tags, eg. &lt;/foo bar=&quot;baz&quot;&gt;</li>
+ <li id="l-231" _a="annevk"><a href="#l-231">#</a> [10:53] &lt;annevk&gt; yeah</li>
+ <li id="l-232" _a="annevk"><a href="#l-232">#</a> [10:53] &lt;annevk&gt; tokenizer does that too</li>
+ <li id="l-233" _a="mikeday"><a href="#l-233">#</a> [10:54] &lt;mikeday&gt; does the tokenizer parse them then throw them away?</li>
+ <li id="l-234" _a="annevk"><a href="#l-234">#</a> [10:54] &lt;annevk&gt; yes</li>
+ <li id="l-235" _a="mikeday"><a href="#l-235">#</a> [10:54] &lt;mikeday&gt; phew :)</li>
+ <li id="l-236"><a href="#l-236">#</a> [10:56] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-237" _a="mikeday"><a href="#l-237">#</a> [10:57] &lt;mikeday&gt; what I meant about the spec is that the description is actually lower level than the code</li>
+ <li id="l-238" _a="mikeday"><a href="#l-238">#</a> [10:57] &lt;mikeday&gt; it's easier to implement a high level spec with low level code than the reverse.</li>
+ <li id="l-239" _a="annevk"><a href="#l-239">#</a> [10:57] &lt;annevk&gt; hmm</li>
+ <li id="l-240" _a="annevk"><a href="#l-240">#</a> [10:57] &lt;annevk&gt; isn't the spec at the same level?</li>
+ <li id="l-241" _a="annevk"><a href="#l-241">#</a> [10:58] &lt;annevk&gt; charset sniffing needs to be done at the byte level</li>
+ <li id="l-242" _a="mikeday"><a href="#l-242">#</a> [10:59] &lt;mikeday&gt; I mean it's very imperative</li>
+ <li id="l-243" _a="mikeday"><a href="#l-243">#</a> [10:59] &lt;mikeday&gt; the spec is longer than your python implementation, for example</li>
+ <li id="l-244" _a="mikeday"><a href="#l-244">#</a> [10:59] &lt;mikeday&gt; and much harder to understand</li>
+ <li id="l-245" _a="annevk"><a href="#l-245">#</a> [11:01] &lt;annevk&gt; so how can it be done in the same way being as exact as it is now?</li>
+ <li id="l-246" _a="annevk"><a href="#l-246">#</a> [11:01] &lt;annevk&gt; if it can be improved I suppose it should be done</li>
+ <li id="l-247" _a="mikeday"><a href="#l-247">#</a> [11:02] &lt;mikeday&gt; that's what I'm trying to figure out</li>
+ <li id="l-248" _a="mikeday"><a href="#l-248">#</a> [11:02] &lt;mikeday&gt; using regular expressions would be an obvious place to start</li>
+ <li id="l-249" _a="mikeday"><a href="#l-249">#</a> [11:02] &lt;mikeday&gt; and it's easy to see how that could be done for most of it</li>
+ <li id="l-250" _a="mikeday"><a href="#l-250">#</a> [11:03] &lt;mikeday&gt; for example: &lt;![^&gt;]*&gt;</li>
+ <li id="l-251" _a="mikeday"><a href="#l-251">#</a> [11:03] &lt;mikeday&gt; that's the regular expression to match &lt;!DOCTYPE...&gt; and similar junk and skip over it</li>
+ <li id="l-252" _a="mikeday"><a href="#l-252">#</a> [11:04] &lt;mikeday&gt; similarly for comments: &lt;!--([^-]|-[^-]|--[^&gt;])*--&gt;</li>
+ <li id="l-253" _a="mikeday"><a href="#l-253">#</a> [11:04] &lt;mikeday&gt; defining it using a regular expression means that there is no ambiguity about &lt;!--&gt; vs. &lt;!---&gt; vs. &lt;!----&gt;</li>
+ <li id="l-254" class="flagged" _a="mikeday"><a href="#l-254">#</a> [11:05] &lt;mikeday&gt; start tags and get attribute are a little trickier, but I think can still be done</li>
+ <li id="l-255" _a="mikeday"><a href="#l-255">#</a> [11:06] &lt;mikeday&gt; to match the beginning of a start tag: &lt;/?[A-Za-z][^\s&gt;&lt;]*</li>
+ <li id="l-256" _a="mikeday"><a href="#l-256">#</a> [11:07] &lt;mikeday&gt; (or end tag, as it has an optional slash)</li>
+ <li id="l-257" _a="mikeday"><a href="#l-257">#</a> [11:08] &lt;mikeday&gt; the resulting regular expressions could just about be pasted straight into lex or perl or whatever</li>
+ <li id="l-258"><a href="#l-258">#</a> [11:09] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-259" _a="annevk" _r="however"><a href="#l-259">#</a> [11:09] &lt;annevk&gt; however, it makes it harder to introduce &lt;!--&gt; as comment</li>
+ <li id="l-260" _a="mikeday"><a href="#l-260">#</a> [11:10] &lt;mikeday&gt; very easy, just change the regular expression</li>
+ <li id="l-261" _a="mikeday"><a href="#l-261">#</a> [11:10] &lt;mikeday&gt; much easier than editing the prose</li>
+ <li id="l-262" _a="mikeday" _r="actually"><a href="#l-262">#</a> [11:11] &lt;mikeday&gt; actually, the expression I pasted before is a little bit too strict</li>
+ <li id="l-263" _a="annevk"><a href="#l-263">#</a> [11:11] &lt;annevk&gt; if you're going down that route you have to define what subset of regular expressions and such...</li>
+ <li id="l-264" _a="mikeday" _r="&lt;!--([^-]|-+[^&gt;])*--&gt"><a href="#l-264">#</a> [11:11] &lt;mikeday&gt; &lt;!--([^-]|-+[^&gt;])*--&gt; would be better</li>
+ <li id="l-265" _a="annevk"><a href="#l-265">#</a> [11:11] * annevk prefers the prose actually</li>
+ <li id="l-266" _a="mikeday"><a href="#l-266">#</a> [11:12] &lt;mikeday&gt; that's not a problem, many many specifications use standard subset of regular expressions or BNF</li>
+ <li id="l-267" _a="mikeday"><a href="#l-267">#</a> [11:12] &lt;mikeday&gt; oh well :)</li>
+ <li id="l-268" _a="annevk"><a href="#l-268">#</a> [11:13] &lt;annevk&gt; regular expressions also encourages a particular implementation</li>
+ <li id="l-269" _a="annevk"><a href="#l-269">#</a> [11:13] &lt;annevk&gt; which isn't necessarily good</li>
+ <li id="l-270" _a="annevk"><a href="#l-270">#</a> [11:14] &lt;annevk&gt; meeting</li>
+ <li id="l-271" _a="mikeday" _r="hmm"><a href="#l-271">#</a> [11:14] &lt;mikeday&gt; hmm, I think the current prose is more biased towards a particular implementation</li>
+ <li id="l-272" _a="mikeday"><a href="#l-272">#</a> [11:14] &lt;mikeday&gt; whereas regular expressions can be implemented directly, or used as specification for hand written parser</li>
+ <li id="l-273"><a href="#l-273">#</a> [11:14] * Joins: ddfreyne (n=ddfreyne@d51A5CE12.access.telenet.be)</li>
+ <li id="l-274" _a="mikeday" _r="ahah"><a href="#l-274">#</a> [11:20] &lt;mikeday&gt; ahah, regular expression for attributes: [\s/]*([^&lt;&gt;][^=\s/&lt;&gt;]*)[\s]*=[\s]*('[^']*'|&quot;[^&quot;]*&quot;|[^\s&lt;&gt;]*)</li>
+ <li id="l-275" _a="mikeday"><a href="#l-275">#</a> [11:21] &lt;mikeday&gt; it may look like line noise, but you don't have to be an en-GB-x-Hixie speaker to understand it :)</li>
+ <li id="l-276" _a="mikeday"><a href="#l-276">#</a> [11:22] * mikeday is now known as mikeday|away</li>
+ <li id="l-277"><a href="#l-277">#</a> [11:31] * Joins: KevinMarks (n=KevinMar@h-68-164-93-9.snvacaid.dynamic.covad.net)</li>
+ <li id="l-278"><a href="#l-278">#</a> [11:35] * Quits: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-279"><a href="#l-279">#</a> [11:52] * Quits: karlUshi (n=karl@pptp20-223.enst.fr) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-280"><a href="#l-280">#</a> [11:56] * Quits: KevinMarks (n=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;brb&quot;)</li>
+ <li id="l-281"><a href="#l-281">#</a> [11:57] * Joins: KevinMarks (n=KevinMar@h-68-164-93-9.snvacaid.dynamic.covad.net)</li>
+ <li id="l-282"><a href="#l-282">#</a> [11:58] * Joins: maikmerten (n=maikmert@L9537.l.pppool.de)</li>
+ <li id="l-283"><a href="#l-283">#</a> [12:05] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-284"><a href="#l-284">#</a> [12:10] * Joins: weinigLap_ (n=weinig@c-67-188-78-122.hsd1.ca.comcast.net)</li>
+ <li id="l-285"><a href="#l-285">#</a> [12:12] * Quits: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-286"><a href="#l-286">#</a> [12:15] * Joins: weinigLap (n=weinig@c-67-188-78-122.hsd1.ca.comcast.net)</li>
+ <li id="l-287"><a href="#l-287">#</a> [12:31] * Quits: weinigLap_ (n=weinig@c-67-188-78-122.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-288"><a href="#l-288">#</a> [12:32] * Joins: BenWard (i=BenWard@nat/yahoo/x-82a6051e366985c9)</li>
+ <li id="l-289" _a="annevk" _r="mikeday|away"><a href="#l-289">#</a> [12:35] &lt;annevk&gt; mikeday|away, you have to be crazy instead :p</li>
+ <li id="l-290" _a="mikeday|away"><a href="#l-290">#</a> [12:38] * mikeday|away is now known as mikeday</li>
+ <li id="l-291" _a="mikeday"><a href="#l-291">#</a> [12:40] &lt;mikeday&gt; it's not really as nasty as it looks :)</li>
+ <li id="l-292"><a href="#l-292">#</a> [12:46] * Joins: jruderman (n=jruderma@c-67-169-24-116.hsd1.ca.comcast.net)</li>
+ <li id="l-293" _a="moeffju[ZzZz]"><a href="#l-293">#</a> [12:53] * moeffju[ZzZz] is now known as moeffju</li>
+ <li id="l-294" _a="gsnedders" _r="mikeday"><a href="#l-294">#</a> [13:18] &lt;gsnedders&gt; mikeday: and how do you define error handling with ABNF/regex?</li>
+ <li id="l-295" _a="mikeday"><a href="#l-295">#</a> [13:19] &lt;mikeday&gt; you don't have to</li>
+ <li id="l-296" _a="mikeday"><a href="#l-296">#</a> [13:19] &lt;mikeday&gt; charset sniffing doesn't do error handling</li>
+ <li id="l-297" _a="gsnedders" _r="mikeday"><a href="#l-297">#</a> [13:20] &lt;gsnedders&gt; mikeday: the majority of the tokeniser does, though</li>
+ <li id="l-298" _a="mikeday"><a href="#l-298">#</a> [13:20] &lt;mikeday&gt; the tokeniser is more complex</li>
+ <li id="l-299" _a="mikeday"><a href="#l-299">#</a> [13:21] &lt;mikeday&gt; but even that could be &quot;more formalised&quot; than it currently is</li>
+ <li id="l-300" _a="gsnedders" _r="mikeday"><a href="#l-300">#</a> [13:21] &lt;gsnedders&gt; mikeday: then where were you going to use ABNF/regex? in the document conformance section?</li>
+ <li id="l-301" _a="mikeday"><a href="#l-301">#</a> [13:21] &lt;mikeday&gt; I'm just looking at charset sniffing now</li>
+ <li id="l-302" _a="mikeday"><a href="#l-302">#</a> [13:23] &lt;mikeday&gt; currently it is defined imperatively: go forward one byte, if it's this then goto step 1, otherwise step 2...</li>
+ <li id="l-303" _a="gsnedders"><a href="#l-303">#</a> [13:23] &lt;gsnedders&gt; trying to work out how to implement things without using regex when given like that can get rather complex</li>
+ <li id="l-304" _a="mikeday"><a href="#l-304">#</a> [13:25] &lt;mikeday&gt; eh? you mean if I give you a regular expression you don't know what to do with it, or what?</li>
+ <li id="l-305" _a="gsnedders"><a href="#l-305">#</a> [13:25] &lt;gsnedders&gt; I mean trying to implement a complex regular expression without using regular expressions can be hard to work out</li>
+ <li id="l-306" _a="mikeday" _r="well"><a href="#l-306">#</a> [13:26] &lt;mikeday&gt; well, not really; regular expressions can be transformed into code mechanically</li>
+ <li id="l-307" _a="mikeday"><a href="#l-307">#</a> [13:26] &lt;mikeday&gt; unlike prose.</li>
+ <li id="l-308" _a="Dashiva"><a href="#l-308">#</a> [13:27] &lt;Dashiva&gt; The regular expressions have to be created from prose first, though</li>
+ <li id="l-309" _a="Philip`"><a href="#l-309">#</a> [13:27] &lt;Philip`&gt; Would BNF be easier to understand and less line-noise-like than regular expressions, but still work about the same?</li>
+ <li id="l-310" _a="mikeday"><a href="#l-310">#</a> [13:28] &lt;mikeday&gt; yes</li>
+ <li id="l-311" _a="gsnedders"><a href="#l-311">#</a> [13:28] &lt;gsnedders&gt; BNF is slightly easier, yes</li>
+ <li id="l-312" _a="mikeday"><a href="#l-312">#</a> [13:28] &lt;mikeday&gt; you would create definitions for commonly used bits</li>
+ <li id="l-313" _a="mikeday"><a href="#l-313">#</a> [13:28] &lt;mikeday&gt; avoid regular expression style shorthand</li>
+ <li id="l-314" _a="mikeday"><a href="#l-314">#</a> [13:28] &lt;mikeday&gt; more like the EBNF in the XML spec</li>
+ <li id="l-315" _a="gsnedders"><a href="#l-315">#</a> [13:29] &lt;gsnedders&gt; I have a preference of ABNF, personally</li>
+ <li id="l-316" _a="mikeday"><a href="#l-316">#</a> [13:29] &lt;mikeday&gt; Comment ::= '&lt;!--' Char* '--&gt;'</li>
+ <li id="l-317" _a="mikeday"><a href="#l-317">#</a> [13:29] &lt;mikeday&gt; (as a rough example)</li>
+ <li id="l-318" _a="annevk"><a href="#l-318">#</a> [13:32] &lt;annevk&gt; tree construction is now 63 lines...</li>
+ <li id="l-319" _a="annevk"><a href="#l-319">#</a> [13:32] &lt;annevk&gt; two simple functions :)</li>
+ <li id="l-320" _a="mikeday"><a href="#l-320">#</a> [13:33] &lt;mikeday&gt; sounds good!</li>
+ <li id="l-321" _a="gsnedders"><a href="#l-321">#</a> [13:34] * gsnedders still doesn't really know how to parse URIs without using regular expressions, when you don't know how many parts of the URI you have</li>
+ <li id="l-322" _a="mikeday"><a href="#l-322">#</a> [13:35] &lt;mikeday&gt; you mean like optional query parameters or port numbers?</li>
+ <li id="l-323" _a="gsnedders"><a href="#l-323">#</a> [13:35] &lt;gsnedders&gt; or schemes, or authority, etc.</li>
+ <li id="l-324" _a="mikeday"><a href="#l-324">#</a> [13:36] &lt;mikeday&gt; it's pretty horrible</li>
+ <li id="l-325" _a="mikeday"><a href="#l-325">#</a> [13:37] &lt;mikeday&gt; :)</li>
+ <li id="l-326" _a="gsnedders"><a href="#l-326">#</a> [13:37] &lt;gsnedders&gt; I can think of ways of doing it, but all very expensive</li>
+ <li id="l-327" _a="gsnedders"><a href="#l-327">#</a> [13:37] &lt;gsnedders&gt; and in a non-cached interpreted language…</li>
+ <li id="l-328" _a="mikeday"><a href="#l-328">#</a> [13:38] &lt;mikeday&gt; the overlap between URLs and filenames makes things even worse</li>
+ <li id="l-329" _a="mikeday"><a href="#l-329">#</a> [13:39] &lt;mikeday&gt; c:foo is a filename, not a URL with scheme &quot;c&quot;</li>
+ <li id="l-330" _a="mikeday"><a href="#l-330">#</a> [13:39] &lt;mikeday&gt; of course, <a href="http://slashdot.org">http://slashdot.org</a> is a valid filename on Linux...</li>
+ <li id="l-331" _a="gsnedders"><a href="#l-331">#</a> [13:40] &lt;gsnedders&gt; what FSes is it not valid on?</li>
+ <li id="l-332" _a="gsnedders"><a href="#l-332">#</a> [13:41] &lt;gsnedders&gt; NTFS?</li>
+ <li id="l-333"><a href="#l-333">#</a> [13:42] * Quits: ddfreyne (n=ddfreyne@unaffiliated/ddfreyne) (&quot;k lol plz thx bai&quot;)</li>
+ <li id="l-334" _a="annevk"><a href="#l-334">#</a> [13:47] &lt;annevk&gt; so it will become a little longer I'm afraid</li>
+ <li id="l-335" _a="annevk"><a href="#l-335">#</a> [13:47] &lt;annevk&gt; need to deal with after the last closing tag too</li>
+ <li id="l-336" _a="annevk"><a href="#l-336">#</a> [13:47] &lt;annevk&gt; oops</li>
+ <li id="l-337" _a="gsnedders"><a href="#l-337">#</a> [13:50] &lt;gsnedders&gt; only two exams left this year!</li>
+ <li id="l-338" _a="mikeday"><a href="#l-338">#</a> [14:06] &lt;mikeday&gt; Windows won't like http://... as a filename I suspect</li>
+ <li id="l-339" _a="Dashiva"><a href="#l-339">#</a> [14:10] &lt;Dashiva&gt; \/:*?&quot;&lt;&gt;| are illegal</li>
+ <li id="l-340"><a href="#l-340">#</a> [14:10] * Joins: karlUshi (n=karl@pptp20-70.enst.fr)</li>
+ <li id="l-341" _a="mikeday"><a href="#l-341">#</a> [14:10] &lt;mikeday&gt; but anyway, if you try to use &quot;<a href="http://...">http://...</a>&quot; as a filename, many programs will treat it as a URL instead</li>
+ <li id="l-342" _a="mikeday"><a href="#l-342">#</a> [14:11] &lt;mikeday&gt; 'cos it starts with http:</li>
+ <li id="l-343" _a="mikeday"><a href="#l-343">#</a> [14:11] &lt;mikeday&gt; can't really blame them</li>
+ <li id="l-344"><a href="#l-344">#</a> [14:11] * Quits: dolphinling (n=chatzill@rbpool5-115.shoreham.net) (&quot;kernel upgrade!&quot;)</li>
+ <li id="l-345"><a href="#l-345">#</a> [14:15] * Quits: mikeday (n=mikeday@60.224.50.129) (&quot;-&quot;)</li>
+ <li id="l-346" _a="gsnedders"><a href="#l-346">#</a> [14:28] &lt;gsnedders&gt; Mac OS X won't like http:// as a filename, but HFS+ doesn't care. You can actually create a file called that going through the POSIX layers of OS X</li>
+ <li id="l-347"><a href="#l-347">#</a> [14:28] * Joins: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-348"><a href="#l-348">#</a> [14:36] * Joins: dolphinling (n=chatzill@rbpool5-115.shoreham.net)</li>
+ <li id="l-349" _a="annevk"><a href="#l-349">#</a> [14:53] * annevk wonders why mike uses both tabs and spaces</li>
+ <li id="l-350" _a="annevk"><a href="#l-350">#</a> [14:53] * annevk doesn't like that</li>
+ <li id="l-351" _a="MikeSmith"><a href="#l-351">#</a> [14:55] &lt;MikeSmith&gt; annevk - mike = me?</li>
+ <li id="l-352" _a="annevk" _r="no"><a href="#l-352">#</a> [14:56] &lt;annevk&gt; no, mikeday</li>
+ <li id="l-353" _a="annevk"><a href="#l-353">#</a> [14:56] &lt;annevk&gt; in his libhtml project</li>
+ <li id="l-354" _a="MikeSmith"><a href="#l-354">#</a> [14:59] &lt;MikeSmith&gt; maybe because he inherited parts of the code from somebody ...</li>
+ <li id="l-355" _a="MikeSmith"><a href="#l-355">#</a> [15:00] &lt;MikeSmith&gt; happens to me sometimes</li>
+ <li id="l-356" _a="annevk"><a href="#l-356">#</a> [15:00] &lt;annevk&gt; seems like he's starting from zero</li>
+ <li id="l-357" _a="annevk"><a href="#l-357">#</a> [15:00] &lt;annevk&gt; (there's not much there so far)</li>
+ <li id="l-358" _a="annevk"><a href="#l-358">#</a> [15:12] &lt;annevk&gt; XML5 sort of works now :)</li>
+ <li id="l-359" _a="annevk"><a href="#l-359">#</a> [15:13] &lt;annevk&gt; there's no spec yet, but there's an implementation</li>
+ <li id="l-360" _a="Dashiva"><a href="#l-360">#</a> [15:14] &lt;Dashiva&gt; What are the major changes so far?</li>
+ <li id="l-361" _a="annevk"><a href="#l-361">#</a> [15:15] &lt;annevk&gt; I don't have DOCTYPE nodes (DOCTYPEs do affect processing of entities), I got &lt;/&gt;, I got error handling</li>
+ <li id="l-362" _a="annevk"><a href="#l-362">#</a> [15:15] &lt;annevk&gt; s/got/have//</li>
+ <li id="l-363" _a="annevk"><a href="#l-363">#</a> [15:16] &lt;annevk&gt; I need to make testcases at some point and once I tweaked stuff a bit more I want to set up some online demo so people can generate trees for themselves</li>
+ <li id="l-364"><a href="#l-364">#</a> [15:28] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-365"><a href="#l-365">#</a> [15:30] * Joins: zcorpan (n=zcorpan@84-216-42-206.sprayadsl.telenor.se)</li>
+ <li id="l-366" _a="Philip`" _r="zcorpan"><a href="#l-366">#</a> [15:44] &lt;Philip`&gt; zcorpan: <a href="http://canvex.lazyilluminati.com/misc/physics.html">http://canvex.lazyilluminati.com/misc/physics.html</a> (probably works best in Firefox) seems to be the desired kind of concept, and it's not particularly complex, though I still don't think it could get close enough to Elasto Mania without having their code to copy :-(</li>
+ <li id="l-367" _a="annevk" _r="Philip`"><a href="#l-367">#</a> [15:45] &lt;annevk&gt; Philip`, btw, instead of using toDataURL and drawImage() one could use getImageData and putImageData</li>
+ <li id="l-368" _a="met_"><a href="#l-368">#</a> [15:46] &lt;met_&gt; Philip`looks nice</li>
+ <li id="l-369" _a="zcorpan" _r="Philip`"><a href="#l-369">#</a> [15:47] &lt;zcorpan&gt; Philip`: cool!</li>
+ <li id="l-370" _a="Philip`" _r="annevk"><a href="#l-370">#</a> [15:47] &lt;Philip`&gt; annevk: You can't really use get/putImageData if you want to save the image between browser sessions, because it's not unlikely that the user will change their screen resolution or switch to a different browser, and then ImageData will no longer correspond to the correct size (and you have no way of knowing what the correct size would be)</li>
+ <li id="l-371" _a="Philip`"><a href="#l-371">#</a> [15:49] &lt;Philip`&gt; Also it seems incredibly inefficient saving ImageData to disk, because it'll be dozens of bytes per pixel, whereas toDataURL is nice since it's about the best compression possible</li>
+ <li id="l-372" _a="Philip`" _r="(Er"><a href="#l-372">#</a> [15:49] &lt;Philip`&gt; (Er, except it's base64-encoded, which kind of damages that a bit)</li>
+ <li id="l-373" _a="annevk"><a href="#l-373">#</a> [15:49] &lt;annevk&gt; the first is an argument for having canvas pixel == image data pixel and the second, yeah fair enough</li>
+ <li id="l-374" _a="Philip`"><a href="#l-374">#</a> [15:49] &lt;Philip`&gt; (but not a lot)</li>
+ <li id="l-375" _a="annevk"><a href="#l-375">#</a> [15:50] &lt;annevk&gt; doesn't have to be base64 encoded in theory</li>
+ <li id="l-376"><a href="#l-376">#</a> [15:50] * Joins: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-377" _a="Philip`" _r="Hmm"><a href="#l-377">#</a> [15:51] &lt;Philip`&gt; Hmm, can you get Unicode URIs with no limits on whatever characters are included? Then you could do image/png;base65536,&lt;...&gt; which'd be better</li>
+ <li id="l-378" _a="annevk" _r="Philip`"><a href="#l-378">#</a> [15:51] &lt;annevk&gt; Philip`, I managed to jump out your physics model</li>
+ <li id="l-379" _a="annevk"><a href="#l-379">#</a> [15:51] &lt;annevk&gt; I'm falling hard and forever :)</li>
+ <li id="l-380" _a="met_"><a href="#l-380">#</a> [15:51] &lt;met_&gt; me too</li>
+ <li id="l-381" _a="Philip`"><a href="#l-381">#</a> [15:51] &lt;Philip`&gt; The jumping-through-walls thing is an intentional feature ;-)</li>
+ <li id="l-382" _a="met_"><a href="#l-382">#</a> [15:51] &lt;met_&gt; on the left side</li>
+ <li id="l-383" _a="Philip`"><a href="#l-383">#</a> [15:52] &lt;Philip`&gt; because apparently that's what Elasto Mania does, so I'm just doing the same, though I'm probably using larger timesteps so it's a more visible problem</li>
+ <li id="l-384" _a="Dashiva" _r="Philip`"><a href="#l-384">#</a> [15:52] &lt;Dashiva&gt; Philip`: Might as well stick to base256, no? :)</li>
+ <li id="l-385" _a="Philip`" _r="Dashiva"><a href="#l-385">#</a> [15:52] &lt;Philip`&gt; Dashiva: Depends on whether it's being stored on disk as UTF-8 or UTF-16</li>
+ <li id="l-386" _a="Philip`" _r="Actually"><a href="#l-386">#</a> [15:53] &lt;Philip`&gt; Actually, neither of those would work because they've got funny non-codepoint values :-(</li>
+ <li id="l-387" _a="Dashiva"><a href="#l-387">#</a> [15:53] &lt;Dashiva&gt; Yep</li>
+ <li id="l-388" _a="Philip`"><a href="#l-388">#</a> [15:53] &lt;Philip`&gt; If you're storing ISO-8859-1 or UCS-2, then it'd work as base 256/65536 nicely</li>
+ <li id="l-389" _a="Philip`" _r="annevk"><a href="#l-389">#</a> [15:55] &lt;Philip`&gt; annevk: If you had canvas pixel == image data pixel, why would one want to use get/putImageData instead of toDataURL/drawImage?</li>
+ <li id="l-390" _a="annevk"><a href="#l-390">#</a> [15:56] &lt;annevk&gt; security</li>
+ <li id="l-391" _a="Philip`" _r="Ah"><a href="#l-391">#</a> [15:56] &lt;Philip`&gt; Ah, right</li>
+ <li id="l-392" _a="Philip`"><a href="#l-392">#</a> [15:58] &lt;Philip`&gt; ...though toDataURL/drawImage should have the same security permissions/restrictions as ImageData (I think), except that current implementations don't do that</li>
+ <li id="l-393" _a="annevk"><a href="#l-393">#</a> [15:58] &lt;annevk&gt; It's still unclear to me if you can somehow get an unsafe data: URL</li>
+ <li id="l-394" _a="Philip`"><a href="#l-394">#</a> [16:01] &lt;Philip`&gt; If you've got any kind of data: URL at all, how is being able to new Image()/drawImage/toDataURL any worse than simply transmitting the data: URL string directly to somebody?</li>
+ <li id="l-395" _a="Philip`"><a href="#l-395">#</a> [16:05] &lt;Philip`&gt; If you've got an image which was loaded from an external data: URL (or in another document or something) and you can't actually get the data: URL string out from it, then I think that's handled under different security rules and it's given a different origin so you can't drawImage/toDataURL it, so maybe that handles the problems (but I should probably leave security issues to people who understand them :-) )</li>
+ <li id="l-396" _a="annevk"><a href="#l-396">#</a> [16:06] &lt;annevk&gt; I suppose data: URIs might be &quot;safe&quot; then</li>
+ <li id="l-397" _a="annevk"><a href="#l-397">#</a> [16:06] &lt;annevk&gt; as long as you don't use data:image/svg+xml, or something</li>
+ <li id="l-398"><a href="#l-398">#</a> [16:07] * Quits: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-399"><a href="#l-399">#</a> [16:25] * Joins: nickshanks (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-400"><a href="#l-400">#</a> [16:33] * Quits: annevk (n=annevk@pat-tdc.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-401"><a href="#l-401">#</a> [16:41] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-402"><a href="#l-402">#</a> [16:47] * Quits: karlUshi (n=karl@pptp20-70.enst.fr) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-403" _a="zcorpan" _r="btw"><a href="#l-403">#</a> [16:49] &lt;zcorpan&gt; btw, the presentation went well yesterday</li>
+ <li id="l-404"><a href="#l-404">#</a> [16:50] * Quits: weinigLap (n=weinig@c-67-188-78-122.hsd1.ca.comcast.net)</li>
+ <li id="l-405"><a href="#l-405">#</a> [16:51] * Quits: KevinMarks (n=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-406"><a href="#l-406">#</a> [16:54] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-407" _a="gsnedders"><a href="#l-407">#</a> [17:10] &lt;gsnedders&gt; exams over! w00t!</li>
+ <li id="l-408" _a="Philip`"><a href="#l-408">#</a> [17:13] &lt;Philip`&gt; Just until next year? :-)</li>
+ <li id="l-409" _a="zcorpan"><a href="#l-409">#</a> [17:15] &lt;zcorpan&gt; html5.org seems to be down :(</li>
+ <li id="l-410" _a="hasather" _r="zcorpan"><a href="#l-410">#</a> [17:17] &lt;hasather&gt; zcorpan: hmm, that happens fairly often</li>
+ <li id="l-411" _a="MikeSmith"><a href="#l-411">#</a> [17:18] &lt;MikeSmith&gt; zcorpan - presentation?</li>
+ <li id="l-412" _a="zcorpan" _r="MikeSmith"><a href="#l-412">#</a> [17:18] &lt;zcorpan&gt; MikeSmith: yeah, <a href="http://www.robertnyman.com/2007/04/26/geek-meet-may-2007-html-5-and-xhtml/">http://www.robertnyman.com/2007/04/26/geek-meet-may-2007-html-5-and-xhtml/</a></li>
+ <li id="l-413" _a="hasather" _r="zcorpan"><a href="#l-413">#</a> [17:20] &lt;hasather&gt; zcorpan: probably because of this: <a href="http://www.dreamhoststatus.com/2007/05/23/more-dns-issues/">http://www.dreamhoststatus.com/2007/05/23/more-dns-issues/</a></li>
+ <li id="l-414" _a="zcorpan" _r="hasather"><a href="#l-414">#</a> [17:29] &lt;zcorpan&gt; hasather: ok</li>
+ <li id="l-415"><a href="#l-415">#</a> [17:39] * Joins: annevk (n=annevk@237.84-48-121.nextgentel.com)</li>
+ <li id="l-416" _a="annevk" _r="zcorpan"><a href="#l-416">#</a> [17:40] &lt;annevk&gt; zcorpan, what questions did you get?</li>
+ <li id="l-417"><a href="#l-417">#</a> [17:41] * Quits: met_ (n=Hassman@b14-4.vscht.cz) (&quot;Chemists never die, they just stop reacting.&quot;)</li>
+ <li id="l-418" _a="annevk" _r="zcorpan"><a href="#l-418">#</a> [17:41] &lt;annevk&gt; zcorpan, and what about the other presentation?</li>
+ <li id="l-419" _a="zcorpan" _r="annevk"><a href="#l-419">#</a> [17:43] &lt;zcorpan&gt; annevk: mostly about document conformance things (like &lt;font&gt;), versioning (and doctypes), if html5lib could parse tag soup, whether the presence/absence of &quot;/&quot; in void elements need to consistent...</li>
+ <li id="l-420" _a="zcorpan"><a href="#l-420">#</a> [17:43] &lt;zcorpan&gt; when html5 will be ready/used/implemented</li>
+ <li id="l-421" _a="annevk"><a href="#l-421">#</a> [17:44] &lt;annevk&gt; it's used and implemented... ready? well...</li>
+ <li id="l-422" _a="annevk"><a href="#l-422">#</a> [17:44] &lt;annevk&gt; :)</li>
+ <li id="l-423" _a="zcorpan"><a href="#l-423">#</a> [17:44] &lt;zcorpan&gt; jarvklo talked about xhtml and the mobile web, mostly</li>
+ <li id="l-424" _a="zcorpan"><a href="#l-424">#</a> [17:45] &lt;zcorpan&gt; he had some good ideas about what can be done server side, like checking conformance without using a third party</li>
+ <li id="l-425" _a="annevk"><a href="#l-425">#</a> [17:45] &lt;annevk&gt; how XHTML is fucked up there?</li>
+ <li id="l-426" _a="zcorpan"><a href="#l-426">#</a> [17:46] &lt;zcorpan&gt; not really</li>
+ <li id="l-427" _a="zcorpan"><a href="#l-427">#</a> [17:47] &lt;zcorpan&gt; more that the w3c and wap forum (or what it is) have finally come to an agreement about what markup to use for mobiles</li>
+ <li id="l-428" _a="annevk"><a href="#l-428">#</a> [17:47] &lt;annevk&gt; oh that</li>
+ <li id="l-429"><a href="#l-429">#</a> [17:48] * Joins: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-430" _a="annevk"><a href="#l-430">#</a> [17:48] &lt;annevk&gt; I think vendors have mostly decided that HTML is to be used for mobiles</li>
+ <li id="l-431" _a="annevk"><a href="#l-431">#</a> [17:48] &lt;annevk&gt; (Vendors being Apple, Nokia and Opera here...)</li>
+ <li id="l-432" _a="zcorpan"><a href="#l-432">#</a> [17:48] &lt;zcorpan&gt; ok</li>
+ <li id="l-433" _a="zcorpan"><a href="#l-433">#</a> [17:48] &lt;zcorpan&gt; i'd encourage you to talk to jarklo directly though</li>
+ <li id="l-434" _a="moeffju"><a href="#l-434">#</a> [17:48] * moeffju is now known as moeffju[Away]</li>
+ <li id="l-435" _a="annevk"><a href="#l-435">#</a> [17:49] &lt;annevk&gt; the actual news from &quot;wapforum&quot; is that they're no longer going to subset and then superset W3C specs</li>
+ <li id="l-436" _a="annevk"><a href="#l-436">#</a> [17:49] &lt;annevk&gt; like they did with WML2 and XHTML Mobile Profile</li>
+ <li id="l-437" _a="zcorpan"><a href="#l-437">#</a> [17:49] &lt;zcorpan&gt; indeed</li>
+ <li id="l-438" _a="annevk"><a href="#l-438">#</a> [17:49] &lt;annevk&gt; not that XHTML is now recommended or something</li>
+ <li id="l-439" _a="zcorpan"><a href="#l-439">#</a> [17:50] &lt;zcorpan&gt; i thought it was</li>
+ <li id="l-440" _a="annevk" _r="yeah"><a href="#l-440">#</a> [17:51] &lt;annevk&gt; yeah, it probably still is</li>
+ <li id="l-441" _a="zcorpan"><a href="#l-441">#</a> [17:51] &lt;zcorpan&gt; on what grounds i don't know, really</li>
+ <li id="l-442"><a href="#l-442">#</a> [17:52] * Joins: weinigLap (n=weinig@17.203.15.217)</li>
+ <li id="l-443" _a="annevk" _r="&quot;latest"><a href="#l-443">#</a> [17:52] &lt;annevk&gt; &quot;latest, greatest&quot;</li>
+ <li id="l-444" _a="annevk"><a href="#l-444">#</a> [17:52] &lt;annevk&gt; Anyone know how to escape !- inside a Linux terminal?</li>
+ <li id="l-445" _a="othermaciej"><a href="#l-445">#</a> [17:53] &lt;othermaciej&gt; \?</li>
+ <li id="l-446" _a="annevk"><a href="#l-446">#</a> [17:53] &lt;annevk&gt; I'm trying to test comments but doing 'python test.py &quot;&lt;!-- --&gt;&quot;' doesn't work</li>
+ <li id="l-447" _a="othermaciej"><a href="#l-447">#</a> [17:53] &lt;othermaciej&gt; backslash or single quote</li>
+ <li id="l-448" _a="annevk"><a href="#l-448">#</a> [17:54] &lt;annevk&gt; I tried backslash, didn't work</li>
+ <li id="l-449" _a="annevk"><a href="#l-449">#</a> [17:54] &lt;annevk&gt; Single quote doesn't seem to work either...</li>
+ <li id="l-450" _a="othermaciej"><a href="#l-450">#</a> [17:54] &lt;othermaciej&gt; what shell are you using?</li>
+ <li id="l-451" _a="annevk"><a href="#l-451">#</a> [17:55] &lt;annevk&gt; Ah wait, backslash does work</li>
+ <li id="l-452" _a="annevk"><a href="#l-452">#</a> [17:55] &lt;annevk&gt; The problem is that the backslash ends up in my Python script...</li>
+ <li id="l-453" _a="othermaciej"><a href="#l-453">#</a> [17:55] &lt;othermaciej&gt; echo &quot;&lt;&quot;\!&quot;-- --&gt;&quot;</li>
+ <li id="l-454" _a="annevk"><a href="#l-454">#</a> [17:55] &lt;annevk&gt; I'm using &quot;GNOME Terminal 2.x&quot;</li>
+ <li id="l-455" _a="othermaciej"><a href="#l-455">#</a> [17:55] &lt;othermaciej&gt; does what you'd want in bash</li>
+ <li id="l-456" _a="othermaciej"><a href="#l-456">#</a> [17:56] &lt;othermaciej&gt; the terminal is not the shell</li>
+ <li id="l-457" _a="annevk"><a href="#l-457">#</a> [17:56] &lt;annevk&gt; ah ok</li>
+ <li id="l-458" _a="annevk"><a href="#l-458">#</a> [17:56] &lt;annevk&gt; that does work</li>
+ <li id="l-459" _a="annevk"><a href="#l-459">#</a> [17:56] &lt;annevk&gt; thanks</li>
+ <li id="l-460"><a href="#l-460">#</a> [18:03] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-461" class="flagged" _a="annevk"><a href="#l-461">#</a> [18:06] &lt;annevk&gt; twitter is funny... it escapes your text input and then counts the number of characters and complaints about it being over 140...</li>
+ <li id="l-462" class="flagged" _a="Dashiva"><a href="#l-462">#</a> [18:07] &lt;Dashiva&gt; Even better with forum software showing title previews, first 10 chars or so, after escaping</li>
+ <li id="l-463" _a="Dashiva"><a href="#l-463">#</a> [18:08] &lt;Dashiva&gt; Here we &amp;nb... -&gt;</li>
+ <li id="l-464" _a="annevk"><a href="#l-464">#</a> [18:08] &lt;annevk&gt; the thing is that the client side check does count the visual characters and it therefore does get submitted and ends up in their database</li>
+ <li id="l-465" _a="annevk"><a href="#l-465">#</a> [18:23] &lt;annevk&gt; whatwg is down</li>
+ <li id="l-466" _a="hasather" _r="annevk"><a href="#l-466">#</a> [18:24] &lt;hasather&gt; annevk: DH is having DNS issues</li>
+ <li id="l-467"><a href="#l-467">#</a> [18:28] * Quits: virtuelv (n=virtuelv@pat-tdc.opera.com) (&quot;Leaving&quot;)</li>
+ <li id="l-468"><a href="#l-468">#</a> [18:28] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-469" _a="annevk"><a href="#l-469">#</a> [18:29] &lt;annevk&gt; k</li>
+ <li id="l-470"><a href="#l-470">#</a> [18:29] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-471"><a href="#l-471">#</a> [18:29] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-472" _a="moeffju[Away]"><a href="#l-472">#</a> [18:29] * moeffju[Away] is now known as moeffju</li>
+ <li id="l-473" _a="zcorpan"><a href="#l-473">#</a> [18:44] &lt;zcorpan&gt; html5.org is up again</li>
+ <li id="l-474" _a="zcorpan"><a href="#l-474">#</a> [18:46] &lt;zcorpan&gt; perhaps i should blog about the presentation at blog.w.o</li>
+ <li id="l-475" _a="annevk"><a href="#l-475">#</a> [18:47] &lt;annevk&gt; you have a blog now? :)</li>
+ <li id="l-476" _a="zcorpan"><a href="#l-476">#</a> [18:47] &lt;zcorpan&gt; blog.whatwg.org</li>
+ <li id="l-477"><a href="#l-477">#</a> [18:48] * Quits: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-478" _a="annevk"><a href="#l-478">#</a> [18:49] &lt;annevk&gt; heh</li>
+ <li id="l-479"><a href="#l-479">#</a> [18:54] * Joins: KevinMarks (i=KevinMar@nat/google/x-e02cb81d724c1b80)</li>
+ <li id="l-480"><a href="#l-480">#</a> [18:57] * Quits: BenWard (i=BenWard@nat/yahoo/x-82a6051e366985c9) (&quot;Fades out again…&quot;)</li>
+ <li id="l-481"><a href="#l-481">#</a> [19:05] * Quits: nickshanks (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-482"><a href="#l-482">#</a> [19:09] * Joins: nickshanks (n=nickshan@home.nickshanks.com)</li>
+ <li id="l-483"><a href="#l-483">#</a> [19:11] * Quits: nickshanks (n=nickshan@home.nickshanks.com) (Client Quit)</li>
+ <li id="l-484"><a href="#l-484">#</a> [19:15] * Joins: psa (n=yomode@posom.com)</li>
+ <li id="l-485" _a="gsnedders"><a href="#l-485">#</a> [19:24] * gsnedders has been given the best reason _ever_ for using &lt;em&gt; for italics even though they've been told better — &quot;we prefer it&quot;.</li>
+ <li id="l-486" _a="Hixie"><a href="#l-486">#</a> [19:27] &lt;Hixie&gt; if anyone can work out the code ni <a href="http://img.shopping.com/jfe/JavaFrontEnd-fe55.1.1-874/js/tabMenus.js">http://img.shopping.com/jfe/JavaFrontEnd-fe55.1.1-874/js/tabMenus.js</a> gets called in a way that actually does something, i'll give them 500 points.</li>
+ <li id="l-487" _a="Hixie"><a href="#l-487">#</a> [19:27] &lt;Hixie&gt; a sample page that gets that js file is <a href="http://www1.uk.shopping.com/xPP-hobs--neff-price_range_630_800">http://www1.uk.shopping.com/xPP-hobs--neff-price_range_630_800</a></li>
+ <li id="l-488"><a href="#l-488">#</a> [20:00] * Quits: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Connection timed out)</li>
+ <li id="l-489" _a="Philip`"><a href="#l-489">#</a> [20:10] &lt;Philip`&gt; <a href="http://66.102.9.104/search?q=cache:4IXIf9DhazkJ:zhulianxing.blogspot.com/feeds/posts/default/7688979022477086776">http://66.102.9.104/search?q=cache:4IXIf9DhazkJ:zhulianxing.blogspot.com/feeds/posts/default/7688979022477086776</a> - back in February it had &lt;a ... onmouseover=&quot;startShow(&amp;#39;1&amp;#39;,&amp;#39;6&amp;#39;);setMenusSize(&amp;#39;8&amp;#39;);&quot; onmouseout=&quot;sMH();hIfr();&quot; ...&gt;</li>
+ <li id="l-490" _a="Philip`" _r="Uh"><a href="#l-490">#</a> [20:12] &lt;Philip`&gt; Uh, March</li>
+ <li id="l-491" _a="Philip`"><a href="#l-491">#</a> [20:12] &lt;Philip`&gt; (probably)</li>
+ <li id="l-492" _a="Philip`"><a href="#l-492">#</a> [20:14] &lt;Philip`&gt; (I really don't know why <a href="http://zhulianxing.blogspot.com/">http://zhulianxing.blogspot.com/</a> posted shopping.com's front page on their blog...)</li>
+ <li id="l-493" _a="Hixie"><a href="#l-493">#</a> [20:15] &lt;Hixie&gt; aah</li>
+ <li id="l-494" _a="Hixie"><a href="#l-494">#</a> [20:15] &lt;Hixie&gt; interesting</li>
+ <li id="l-495"><a href="#l-495">#</a> [20:20] * Joins: nickshanks (n=nickshan@home.nickshanks.com)</li>
+ <li id="l-496" _a="moeffju"><a href="#l-496">#</a> [20:20] * moeffju is now known as moeffju[Away]</li>
+ <li id="l-497" _a="bewest"><a href="#l-497">#</a> [20:20] &lt;bewest&gt; what will 500 points get me?</li>
+ <li id="l-498" _a="nickshanks" _r="ian"><a href="#l-498">#</a> [20:20] &lt;nickshanks&gt; ian, did you see my mailing list suggestion? is it workable?</li>
+ <li id="l-499"><a href="#l-499">#</a> [20:21] * Joins: jonbarnett (n=jbarnett@Flower-Shop-Network-Inc-1149542.cust-rtr.pacbell.net)</li>
+ <li id="l-500" _a="Hixie" _r="bewest"><a href="#l-500">#</a> [20:21] &lt;Hixie&gt; bewest: dunno :-)</li>
+ <li id="l-501" _a="Hixie" _r="nickshanks"><a href="#l-501">#</a> [20:21] &lt;Hixie&gt; nickshanks: which one?</li>
+ <li id="l-502" _a="zcorpan"><a href="#l-502">#</a> [20:21] &lt;zcorpan&gt; <a href="http://blog.whatwg.org/html5-geekmeet">http://blog.whatwg.org/html5-geekmeet</a></li>
+ <li id="l-503" _a="Hixie" _r="bewest"><a href="#l-503">#</a> [20:22] &lt;Hixie&gt; bewest: thanks, though, that's very helpful</li>
+ <li id="l-504" _a="nickshanks" _r="ian"><a href="#l-504">#</a> [20:22] &lt;nickshanks&gt; ian: one document or two</li>
+ <li id="l-505" _a="Philip`"><a href="#l-505">#</a> [20:25] &lt;Philip`&gt; &quot;Does that mean that you can convert any old HTML document to XML by feeding it through html5lib?&quot; - not really, since it seems a significant number produce DOMs that can't be serialised to well-formed XML</li>
+ <li id="l-506" _a="Hixie" _r="nickshanks"><a href="#l-506">#</a> [20:25] &lt;Hixie&gt; nickshanks: when did you send it?</li>
+ <li id="l-507" _a="Hixie"><a href="#l-507">#</a> [20:25] &lt;Hixie&gt; oh i see it</li>
+ <li id="l-508" _a="nickshanks"><a href="#l-508">#</a> [20:25] &lt;nickshanks&gt; about 20 mins ago. i can't receive emails now, so haven't seen if anyone replied</li>
+ <li id="l-509" _a="Hixie"><a href="#l-509">#</a> [20:25] &lt;Hixie&gt; haven't gotten to that yet in my e-mail</li>
+ <li id="l-510" _a="Hixie"><a href="#l-510">#</a> [20:25] &lt;Hixie&gt; :-)</li>
+ <li id="l-511" _a="zcorpan" _r="Philip`"><a href="#l-511">#</a> [20:25] &lt;zcorpan&gt; Philip`: yeah, true</li>
+ <li id="l-512" _a="Hixie"><a href="#l-512">#</a> [20:25] &lt;Hixie&gt; there's a reply</li>
+ <li id="l-513" _a="nickshanks"><a href="#l-513">#</a> [20:25] &lt;nickshanks&gt; but since you popped up in #webkit, i thought i'd ask :)</li>
+ <li id="l-514" _a="zcorpan" _r="Philip`"><a href="#l-514">#</a> [20:26] &lt;zcorpan&gt; Philip`: you can probably convert it to XML5 however ;)</li>
+ <li id="l-515" _a="Philip`" _r="(Actually"><a href="#l-515">#</a> [20:26] &lt;Philip`&gt; (Actually, I'm not sure how significant a number - at least there are some with &lt;!--------&gt; which I think can't be done, and some with invalid characters in attribute names, but I never looked at what the actual problems were and if they could be worked around easily)</li>
+ <li id="l-516" _a="bewest"><a href="#l-516">#</a> [20:27] &lt;bewest&gt; I don't think that javascript is used on that page</li>
+ <li id="l-517" _a="bewest" _r="Hixie"><a href="#l-517">#</a> [20:27] &lt;bewest&gt; Hixie: it looks like legacy stuff that someone new is trying to clean up</li>
+ <li id="l-518" _a="bewest" _r="Hixie"><a href="#l-518">#</a> [20:27] &lt;bewest&gt; Hixie: looks to me like thereis more than one author involved in the javascript across the site</li>
+ <li id="l-519" _a="Hixie"><a href="#l-519">#</a> [20:28] &lt;Hixie&gt; seems likely</li>
+ <li id="l-520" _a="Hixie"><a href="#l-520">#</a> [20:28] &lt;Hixie&gt; oh well</li>
+ <li id="l-521" _a="bewest"><a href="#l-521">#</a> [20:28] &lt;bewest&gt; sometimes new people may not like javascript that goes out onthe site... but they can't necessarily just get rid of it because it's not clear what might break</li>
+ <li id="l-522"><a href="#l-522">#</a> [20:29] * Joins: SavageX (n=maikmert@T6435.t.pppool.de)</li>
+ <li id="l-523"><a href="#l-523">#</a> [20:29] * Joins: tantek (n=tantek@64.244.67.2)</li>
+ <li id="l-524" _a="Philip`"><a href="#l-524">#</a> [20:30] &lt;Philip`&gt; shopping.com on archive.org shows that the tabMenus thing wasn't there six months ago, so it's a new addition (and then half-removal)</li>
+ <li id="l-525" _a="Hixie"><a href="#l-525">#</a> [20:30] &lt;Hixie&gt; fun</li>
+ <li id="l-526" _a="Philip`"><a href="#l-526">#</a> [20:30] &lt;Philip`&gt; <a href="http://wordsandpictures.dyndns.org/cgi-bin/parsetree/parsetree.py?source=%3Cspacer+type%22block%22+width%3D%221%22+height%3D%221%22%3E%3C%2Fspacer%3E">http://wordsandpictures.dyndns.org/cgi-bin/parsetree/parsetree.py?source=%3Cspacer+type%22block%22+width%3D%221%22+height%3D%221%22%3E%3C%2Fspacer%3E</a> - aha, that's one I found that couldn't be serialised to XML</li>
+ <li id="l-527" _a="Philip`"><a href="#l-527">#</a> [20:31] &lt;Philip`&gt; Can XML5 do that? :-)</li>
+ <li id="l-528" _a="Hixie" _r="hm"><a href="#l-528">#</a> [20:31] &lt;Hixie&gt; hm, the tag wants to talk to me</li>
+ <li id="l-529" _a="Hixie"><a href="#l-529">#</a> [20:31] &lt;Hixie&gt; that can't bode well</li>
+ <li id="l-530" _a="jonbarnett"><a href="#l-530">#</a> [20:33] * jonbarnett is now known as jbarnett_</li>
+ <li id="l-531" _a="jbarnett_"><a href="#l-531">#</a> [20:33] * jbarnett_ is now known as jonbarnett</li>
+ <li id="l-532" _a="Philip`"><a href="#l-532">#</a> [20:33] &lt;Philip`&gt; Hallucinating about speaking HTML tags?</li>
+ <li id="l-533" _a="Hixie" _r="no"><a href="#l-533">#</a> [20:34] &lt;Hixie&gt; no, the w3c tag</li>
+ <li id="l-534" _a="Hixie"><a href="#l-534">#</a> [20:34] &lt;Hixie&gt; apparently there is &quot;significant interest&quot; in me joining them for lunch next week</li>
+ <li id="l-535" _a="Dashiva"><a href="#l-535">#</a> [20:34] &lt;Dashiva&gt; Bring a food taster</li>
+ <li id="l-536" _a="Hixie"><a href="#l-536">#</a> [20:35] &lt;Hixie&gt; it'll be in a google cafeteria, so i think i'm safe</li>
+ <li id="l-537" _a="Dashiva"><a href="#l-537">#</a> [20:36] &lt;Dashiva&gt; Polonium or whatnot, I tell you</li>
+ <li id="l-538" _a="othermaciej" _r="Hixie"><a href="#l-538">#</a> [20:37] &lt;othermaciej&gt; Hixie: perhaps they want you to say hello to their little friend</li>
+ <li id="l-539" _a="nickshanks" _r="Dashiva"><a href="#l-539">#</a> [20:43] &lt;nickshanks&gt; Dashiva: that's the soviets silly</li>
+ <li id="l-540" _a="nickshanks"><a href="#l-540">#</a> [20:43] &lt;nickshanks&gt; soogle isn't microsoft</li>
+ <li id="l-541" _a="nickshanks"><a href="#l-541">#</a> [20:43] &lt;nickshanks&gt; -s +g</li>
+ <li id="l-542"><a href="#l-542">#</a> [20:43] * Joins: billmason (n=billmaso@ip156.unival.com)</li>
+ <li id="l-543" _a="Hixie" _r="nickshanks"><a href="#l-543">#</a> [20:43] &lt;Hixie&gt; nickshanks: replied</li>
+ <li id="l-544" _a="nickshanks"><a href="#l-544">#</a> [20:43] &lt;nickshanks&gt; what did you say? :)</li>
+ <li id="l-545" _a="nickshanks"><a href="#l-545">#</a> [20:44] &lt;nickshanks&gt; (i can't get email atm.)</li>
+ <li id="l-546"><a href="#l-546">#</a> [20:44] * Quits: maikmerten (n=maikmert@L9537.l.pppool.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-547" _a="Hixie"><a href="#l-547">#</a> [20:44] &lt;Hixie&gt; you said that an option would be to &quot;simply have two views of the spec&quot;</li>
+ <li id="l-548" _a="Hixie"><a href="#l-548">#</a> [20:44] &lt;Hixie&gt; i said that it was from &quot;simple&quot;</li>
+ <li id="l-549"><a href="#l-549">#</a> [20:47] * Quits: tantek (n=tantek@64.244.67.2)</li>
+ <li id="l-550"><a href="#l-550">#</a> [20:50] * Joins: epeus (i=KevinMar@nat/google/x-9c14ee12cf043386)</li>
+ <li id="l-551"><a href="#l-551">#</a> [20:50] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (Read error: 110 (Connection timed out))</li>
+ <li id="l-552" _a="epeus"><a href="#l-552">#</a> [20:51] * epeus is now known as KevinMarks</li>
+ <li id="l-553"><a href="#l-553">#</a> [20:54] * Joins: jcgregorio (n=chatzill@adsl-072-148-043-048.sip.rmo.bellsouth.net)</li>
+ <li id="l-554"><a href="#l-554">#</a> [20:57] * Joins: dbaron (n=dbaron@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-555"><a href="#l-555">#</a> [21:00] * Joins: virtuelv (n=virtuelv@47.80-202-66.nextgentel.com)</li>
+ <li id="l-556"><a href="#l-556">#</a> [21:11] * Quits: virtuelv (n=virtuelv@47.80-202-66.nextgentel.com) (&quot;Leaving&quot;)</li>
+ <li id="l-557"><a href="#l-557">#</a> [21:13] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-558"><a href="#l-558">#</a> [21:14] * Quits: nickshanks (n=nickshan@home.nickshanks.com)</li>
+ <li id="l-559"><a href="#l-559">#</a> [21:18] * Joins: tantek (n=tantek@64.244.67.2)</li>
+ <li id="l-560"><a href="#l-560">#</a> [21:24] * Quits: zcorpan (n=zcorpan@84-216-42-206.sprayadsl.telenor.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-561"><a href="#l-561">#</a> [21:44] * Quits: tantek (n=tantek@64.244.67.2)</li>
+ <li id="l-562"><a href="#l-562">#</a> [21:51] * Joins: zcorpan (n=zcorpan@84-216-43-110.sprayadsl.telenor.se)</li>
+ <li id="l-563"><a href="#l-563">#</a> [21:54] * Quits: SavageX (n=maikmert@T6435.t.pppool.de) (&quot;Leaving&quot;)</li>
+ <li id="l-564"><a href="#l-564">#</a> [22:19] * Joins: nickshanks (n=nickshan@home.nickshanks.com)</li>
+ <li id="l-565" _a="aroben"><a href="#l-565">#</a> [22:22] * aroben is now known as arobenLunch</li>
+ <li id="l-566" _a="arobenLunch"><a href="#l-566">#</a> [22:22] * arobenLunch is now known as aroben|lunch</li>
+ <li id="l-567" _a="aroben|lunch"><a href="#l-567">#</a> [22:51] * aroben|lunch is now known as aroben</li>
+ <li id="l-568"><a href="#l-568">#</a> [23:00] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-569"><a href="#l-569">#</a> [23:00] * Quits: annevk (n=annevk@237.84-48-121.nextgentel.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-570"><a href="#l-570">#</a> [23:03] * Quits: hendry (n=hendry@91.84.53.136) (&quot;nn&quot;)</li>
+ <li id="l-571"><a href="#l-571">#</a> [23:06] * Quits: jcgregorio (n=chatzill@adsl-072-148-043-048.sip.rmo.bellsouth.net) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.3/0000000000]&quot;)</li>
+ <li id="l-572"><a href="#l-572">#</a> [23:18] * Joins: tantek (n=tantek@64.244.67.2)</li>
+ <li id="l-573"><a href="#l-573">#</a> [23:40] * Joins: hasather_ (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-574" _a="jgraham"><a href="#l-574">#</a> [23:40] &lt;jgraham&gt; html5lib now has BeautifulSoup support (at last. I really made a meal of implementing it)</li>
+ <li id="l-575" _a="Hixie"><a href="#l-575">#</a> [23:40] &lt;Hixie&gt; what's BeautifulSoup?</li>
+ <li id="l-576" _a="jgraham"><a href="#l-576">#</a> [23:41] &lt;jgraham&gt; <a href="http://www.crummy.com/software/BeautifulSoup/">http://www.crummy.com/software/BeautifulSoup/</a></li>
+ <li id="l-577" _a="jgraham"><a href="#l-577">#</a> [23:41] &lt;jgraham&gt; (we just build a tree in that format, the BeautifulSoup parser is irrelevant, obviously)</li>
+ <li id="l-578" _a="Hixie"><a href="#l-578">#</a> [23:42] &lt;Hixie&gt; ah ok</li>
+ <li id="l-579" _a="jgraham"><a href="#l-579">#</a> [23:42] &lt;jgraham&gt; Simon Willison asked for it at XTech so he could use his getElementsByCSSSelector function with html5lib</li>
+ <li id="l-580"><a href="#l-580">#</a> [23:46] * Parts: hasather_ (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-581" _a="Hixie"><a href="#l-581">#</a> [23:47] &lt;Hixie&gt; ah</li>
+ <li id="l-582"><a href="#l-582">#</a> [23:48] * Joins: hasather_ (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-583"><a href="#l-583">#</a> [23:54] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-584"><a href="#l-584">#</a> [23:55] * Parts: hasather_ (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-585" _a="zcorpan"><a href="#l-585">#</a> [23:58] &lt;zcorpan&gt; is there a reason why <a href="http://wiki.whatwg.org/wiki/HTML5_Presentations">http://wiki.whatwg.org/wiki/HTML5_Presentations</a> doesn't link to hsivonen's slides?</li>
+ <li id="l-586"><a href="#l-586">#</a> Session Close: Fri May 25 00:00:00 2007</li>
+</ol>
+<p id="end">The end :)

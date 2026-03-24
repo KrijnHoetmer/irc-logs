@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20100904</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20100904.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2010-09-04 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Sep 04 00:00:00 2010</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:00] * Quits: Maurice (copyman@5ED573FA.cable.ziggo.nl)</li>
+ <li id="l-4" _a="Ms2ger" _r="Hixie"><a href="#l-4">#</a> [00:01] &lt;Ms2ger&gt; Hixie, now I was seriously thinking you loved it!</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:03] * Quits: Ms2ger (~Ms2ger@91.181.72.112) (Quit: nn)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:08] * Joins: nessy (~Adium@124-169-0-56.dyn.iinet.net.au)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:16] * Quits: dbaron (~dbaron@nat/mozilla/x-qxwzgreurumvhvar) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:16] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Ping timeout: 252 seconds)</li>
+ <li id="l-9"><a href="#l-9">#</a> [00:16] * Quits: tndH (~Rob@cpc6-seac20-2-0-cust102.7-2.cable.virginmedia.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-10"><a href="#l-10">#</a> [00:21] * Quits: estes (~aestes@17.246.18.187) (Quit: estes)</li>
+ <li id="l-11"><a href="#l-11">#</a> [00:34] * Joins: variable (~variable@unaffiliated/variable)</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:48] * Quits: stalled (~stalled@unaffiliated/stalled) (Ping timeout: 265 seconds)</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:58] * Quits: oal (~oal@5.79-160-122.customer.lyse.net) (Read error: Connection reset by peer)</li>
+ <li id="l-14"><a href="#l-14">#</a> [01:02] * Quits: FireFly (~firefly@unaffiliated/firefly) (Quit: swatted to death)</li>
+ <li id="l-15"><a href="#l-15">#</a> [01:02] * Quits: dandaman (~Daniel.Sa@216.52.240.243) (Read error: Connection reset by peer)</li>
+ <li id="l-16"><a href="#l-16">#</a> [01:04] * Joins: stalled (~stalled@unaffiliated/stalled)</li>
+ <li id="l-17"><a href="#l-17">#</a> [01:05] * Joins: estes (~aestes@17.246.18.187)</li>
+ <li id="l-18"><a href="#l-18">#</a> [01:15] * Joins: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-19"><a href="#l-19">#</a> [01:23] * Quits: eric_carlson (~ericc@2620:0:1b00:1191:223:32ff:feb1:5d30) (Quit: eric_carlson)</li>
+ <li id="l-20" _a="volkmar" _r="Hixie"><a href="#l-20">#</a> [01:34] &lt;volkmar&gt; Hixie: about the input type change algorithm (for value management)</li>
+ <li id="l-21" _a="volkmar"><a href="#l-21">#</a> [01:35] &lt;volkmar&gt; it looks like we loose the value with type='file'</li>
+ <li id="l-22" _a="volkmar"><a href="#l-22">#</a> [01:35] &lt;volkmar&gt; if input.type='text', .value='foo', .type='file', .value would be &quot;&quot;</li>
+ <li id="l-23" _a="volkmar"><a href="#l-23">#</a> [01:35] &lt;volkmar&gt; because we don't save the value to the content attribute when switching to a file type</li>
+ <li id="l-24" _a="volkmar"><a href="#l-24">#</a> [01:36] &lt;volkmar&gt; why not doing that?</li>
+ <li id="l-25" _a="tabatkins" _r="volkmar"><a href="#l-25">#</a> [01:37] &lt;tabatkins&gt; volkmar: Because you could just script-fill the value of the type=text with a filepath, then change it to type=file.  If the input is visually hidden, it can be smuggled inside another form, so the user ends up accidentally submitting files from their hard drive they didn't know about.</li>
+ <li id="l-26" _a="tabatkins"><a href="#l-26">#</a> [01:37] * tabatkins is now known as TabAtkins</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [01:37] &lt;Hixie&gt; the &lt;input type=file&gt; always ignored the /value/</li>
+ <li id="l-28" _a="volkmar" _r="TabAtkins"><a href="#l-28">#</a> [01:38] &lt;volkmar&gt; TabAtkins: hmmm, not what i meant</li>
+ <li id="l-29" _a="Hixie" _r="volkmar"><a href="#l-29">#</a> [01:38] &lt;Hixie&gt; volkmar: .value would still be &quot;&quot; even if we saved the /value/ to the value=&quot;&quot; content attribute</li>
+ <li id="l-30" _a="Hixie" _r="volkmar"><a href="#l-30">#</a> [01:38] &lt;Hixie&gt; volkmar: because .value for type=file has nothing to do with either the /value/ concept or the value=&quot;&quot; attribute</li>
+ <li id="l-31" _a="volkmar" _r="Hixie"><a href="#l-31">#</a> [01:38] &lt;volkmar&gt; Hixie: yes, the problem is if i go back to &lt;input type='text'&gt; i loose the previous value</li>
+ <li id="l-32" _a="Hixie"><a href="#l-32">#</a> [01:38] &lt;Hixie&gt; so?</li>
+ <li id="l-33" _a="volkmar"><a href="#l-33">#</a> [01:39] &lt;volkmar&gt; why not saving the value to the content attribute when we change teh type to 'file' considering 'file' shouldn't use it but it will be re-used if the type is changed to something else</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [01:39] &lt;Hixie&gt; why bother?</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [01:40] &lt;Hixie&gt; what's the use case?</li>
+ <li id="l-36" _a="Hixie"><a href="#l-36">#</a> [01:40] &lt;Hixie&gt; why does it matter?</li>
+ <li id="l-37" _a="volkmar" _r="Hixie"><a href="#l-37">#</a> [01:40] &lt;volkmar&gt; Hixie: it doesn't really matter, just sound weird than it's required for default and default_on and not filename</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [01:41] * Hixie points to the topic</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [01:41] &lt;Hixie&gt; if that's the only thing that sounds weird about the forms model in HTML, you haven't looked closely :-P</li>
+ <li id="l-40" _a="Hixie"><a href="#l-40">#</a> [01:41] &lt;Hixie&gt; personally I think what's weird is that we have to change things at all</li>
+ <li id="l-41" _a="Hixie"><a href="#l-41">#</a> [01:41] &lt;Hixie&gt; not that it gets reset to &quot;&quot;</li>
+ <li id="l-42" _a="Hixie"><a href="#l-42">#</a> [01:42] &lt;Hixie&gt; unfortunately if we don't reset things, it breaks backcompat</li>
+ <li id="l-43" _a="volkmar"><a href="#l-43">#</a> [01:42] &lt;volkmar&gt; yeah...</li>
+ <li id="l-44" class="flagged" _a="Hixie"><a href="#l-44">#</a> [01:42] &lt;Hixie&gt; anyway if you think it should change, file a bug explaining why</li>
+ <li id="l-45" class="flagged" _a="Hixie"><a href="#l-45">#</a> [01:42] &lt;Hixie&gt; i don't make changes based on irc discussions :-)</li>
+ <li id="l-46" class="flagged" _a="Hixie"><a href="#l-46">#</a> [01:42] &lt;Hixie&gt; at least not while i'm making other changes :-)</li>
+ <li id="l-47" _a="volkmar" _r="Hixie"><a href="#l-47">#</a> [01:43] &lt;volkmar&gt; Hixie: i don't think it _should_ be changed, just wondering if there were a reason</li>
+ <li id="l-48" _a="volkmar"><a href="#l-48">#</a> [01:43] &lt;volkmar&gt; i don't really care actually</li>
+ <li id="l-49"><a href="#l-49">#</a> [01:43] * Quits: jlebar (~jlebar@nat/mozilla/x-wnaedehejzzlyutt) (Ping timeout: 252 seconds)</li>
+ <li id="l-50" _a="Hixie"><a href="#l-50">#</a> [01:43] &lt;Hixie&gt; no reason particularly</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [01:43] &lt;Hixie&gt; it just didn't seem to matter for compat</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [01:43] &lt;Hixie&gt; bz and i looked at what seemed to matter and just changed that</li>
+ <li id="l-53" _a="volkmar"><a href="#l-53">#</a> [01:43] &lt;volkmar&gt; fine then</li>
+ <li id="l-54"><a href="#l-54">#</a> [01:45] * Joins: jlebar (~jlebar@nat/mozilla/x-wwmqygpaperoursr)</li>
+ <li id="l-55"><a href="#l-55">#</a> [01:46] * Joins: ZombieLoffe (~e@c-36d471d5.014-169-73746f28.cust.bredbandsbolaget.se)</li>
+ <li id="l-56"><a href="#l-56">#</a> [01:46] * Quits: ZombieLoffe (~e@c-36d471d5.014-169-73746f28.cust.bredbandsbolaget.se) (Changing host)</li>
+ <li id="l-57"><a href="#l-57">#</a> [01:46] * Joins: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-58"><a href="#l-58">#</a> [02:05] * Quits: cying (~cying@173-228-29-224.dsl.static.sonic.net) (Quit: cying)</li>
+ <li id="l-59"><a href="#l-59">#</a> [02:05] * Quits: dglazkov (~dglazkov@nat/google/x-spqdzdpzieoconrd) (Quit: dglazkov)</li>
+ <li id="l-60"><a href="#l-60">#</a> [02:07] * Quits: aroben (~aroben@unaffiliated/aroben) (Read error: Connection reset by peer)</li>
+ <li id="l-61"><a href="#l-61">#</a> [02:17] * Joins: dbaron (~dbaron@nat/mozilla/x-ygglrylqfvmiwrls)</li>
+ <li id="l-62"><a href="#l-62">#</a> [02:19] * Joins: othermaciej (~mjs@c-69-181-196-33.hsd1.ca.comcast.net)</li>
+ <li id="l-63"><a href="#l-63">#</a> [02:24] * Quits: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-64"><a href="#l-64">#</a> [02:28] * Quits: romeo_ (~romeo__@x1-6-00-02-44-60-6c-8e.k233.webspeed.dk) (Quit: Leaving)</li>
+ <li id="l-65"><a href="#l-65">#</a> [02:33] * Quits: ap (~ap@17.246.19.253) (Quit: ap)</li>
+ <li id="l-66"><a href="#l-66">#</a> [02:41] * Joins: agektmr (~Adium@220.109.219.244)</li>
+ <li id="l-67"><a href="#l-67">#</a> [02:43] * Quits: jlebar (~jlebar@nat/mozilla/x-wwmqygpaperoursr) (Quit: Leaving)</li>
+ <li id="l-68"><a href="#l-68">#</a> [02:45] * Joins: paul_irish (~paul_iris@74.125.121.49)</li>
+ <li id="l-69"><a href="#l-69">#</a> [02:48] * Quits: dave_levin (~dave_levi@nat/google/x-xbqhwuikkoeybakp) (Quit: dave_levin)</li>
+ <li id="l-70"><a href="#l-70">#</a> [02:52] * Joins: miketaylr (~miketaylr@24.42.95.108)</li>
+ <li id="l-71"><a href="#l-71">#</a> [02:54] * Quits: othree_ (~othree@admin39.ct.ntust.edu.tw) (Ping timeout: 252 seconds)</li>
+ <li id="l-72"><a href="#l-72">#</a> [03:00] * Quits: JoePeck (~JoePeck@2620:0:1b00:1f08:fa1e:dfff:fed9:b9a) (Quit: -)</li>
+ <li id="l-73"><a href="#l-73">#</a> [03:01] * Quits: KevinMarks (~KevinMark@157.22.22.57) (Quit: The computer fell asleep)</li>
+ <li id="l-74"><a href="#l-74">#</a> [03:14] * Joins: peol (~andree@unaffiliated/peol)</li>
+ <li id="l-75"><a href="#l-75">#</a> [03:16] * Joins: Jon_Neal (~Jonathan_@rrcs-76-79-114-212.west.biz.rr.com)</li>
+ <li id="l-76"><a href="#l-76">#</a> [03:19] * Quits: JonathanNeal (~Jonathan_@rrcs-76-79-114-212.west.biz.rr.com) (Ping timeout: 258 seconds)</li>
+ <li id="l-77"><a href="#l-77">#</a> [03:20] * Quits: roc (~roc@121.98.230.221) (Ping timeout: 255 seconds)</li>
+ <li id="l-78"><a href="#l-78">#</a> [03:21] * Quits: Jon_Neal (~Jonathan_@rrcs-76-79-114-212.west.biz.rr.com) (Ping timeout: 258 seconds)</li>
+ <li id="l-79"><a href="#l-79">#</a> [03:26] * Joins: roc (~roc@121.98.230.221)</li>
+ <li id="l-80"><a href="#l-80">#</a> [03:26] * Quits: sicking (~chatzilla@nat/mozilla/x-gluzafnvamvypgkn) (Ping timeout: 252 seconds)</li>
+ <li id="l-81"><a href="#l-81">#</a> [03:35] * Quits: peol (~andree@unaffiliated/peol) (Remote host closed the connection)</li>
+ <li id="l-82"><a href="#l-82">#</a> [04:02] * Quits: TelFiRE (~TelFiRE@c-24-10-155-57.hsd1.ut.comcast.net) (Quit: TelFiRE)</li>
+ <li id="l-83"><a href="#l-83">#</a> [04:02] * Quits: roc (~roc@121.98.230.221) (Ping timeout: 260 seconds)</li>
+ <li id="l-84"><a href="#l-84">#</a> [04:05] * Quits: ukai (~ukai@nat/google/x-cuukacfaypxnvoat) (Ping timeout: 276 seconds)</li>
+ <li id="l-85"><a href="#l-85">#</a> [04:06] * Joins: ukai (~ukai@nat/google/x-txzotrcoeatsimsn)</li>
+ <li id="l-86"><a href="#l-86">#</a> [04:16] * Joins: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net)</li>
+ <li id="l-87"><a href="#l-87">#</a> [04:19] * Quits: miketaylr (~miketaylr@24.42.95.108) (Remote host closed the connection)</li>
+ <li id="l-88"><a href="#l-88">#</a> [04:19] * Quits: estes (~aestes@17.246.18.187) (Quit: estes)</li>
+ <li id="l-89"><a href="#l-89">#</a> [04:29] * Joins: roc (~roc@121.98.230.221)</li>
+ <li id="l-90"><a href="#l-90">#</a> [04:29] * Quits: paul_irish (~paul_iris@74.125.121.49) (Remote host closed the connection)</li>
+ <li id="l-91"><a href="#l-91">#</a> [04:41] * Joins: MikeSmith (~MikeSmith@EM111-188-3-106.pool.e-mobile.ne.jp)</li>
+ <li id="l-92"><a href="#l-92">#</a> [04:44] * Quits: Martijnc (~Martijnc@91.176.4.189) (Ping timeout: 260 seconds)</li>
+ <li id="l-93"><a href="#l-93">#</a> [04:48] * Joins: Martijnc (~Martijnc@91.176.7.50)</li>
+ <li id="l-94"><a href="#l-94">#</a> [04:58] * Quits: dbaron (~dbaron@nat/mozilla/x-ygglrylqfvmiwrls) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-95"><a href="#l-95">#</a> [04:58] * Quits: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net) (Quit: dglazkov)</li>
+ <li id="l-96"><a href="#l-96">#</a> [05:01] * Quits: agektmr (~Adium@220.109.219.244) (Quit: Leaving.)</li>
+ <li id="l-97"><a href="#l-97">#</a> [05:10] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-98"><a href="#l-98">#</a> [05:11] * Joins: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net)</li>
+ <li id="l-99"><a href="#l-99">#</a> [05:20] * Joins: Heimidal (~heimidal@unaffiliated/heimidal)</li>
+ <li id="l-100"><a href="#l-100">#</a> [05:22] * Quits: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net) (Quit: -)</li>
+ <li id="l-101"><a href="#l-101">#</a> [05:29] * Joins: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net)</li>
+ <li id="l-102"><a href="#l-102">#</a> [05:45] * Quits: knowtheory (~knowtheor@cpe-71-79-238-195.columbus.res.rr.com) (Quit: logging out to switch gfx cards)</li>
+ <li id="l-103"><a href="#l-103">#</a> [05:52] * Quits: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net) (Quit: dglazkov)</li>
+ <li id="l-104"><a href="#l-104">#</a> [05:53] * Joins: cying (~cying@c-24-4-120-70.hsd1.ca.comcast.net)</li>
+ <li id="l-105"><a href="#l-105">#</a> [06:00] * Joins: espadrine_ (~yannt@AMontsouris-157-1-66-245.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-106"><a href="#l-106">#</a> [06:00] * Quits: espadrine (~yannt@AMontsouris-157-1-66-245.w90-46.abo.wanadoo.fr) (Read error: Connection reset by peer)</li>
+ <li id="l-107" _a="espadrine_"><a href="#l-107">#</a> [06:00] * espadrine_ is now known as espadrine</li>
+ <li id="l-108"><a href="#l-108">#</a> [06:01] * Joins: estes (~aestes@17.246.18.187)</li>
+ <li id="l-109"><a href="#l-109">#</a> [06:01] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Ping timeout: 252 seconds)</li>
+ <li id="l-110"><a href="#l-110">#</a> [06:07] * Quits: othermaciej (~mjs@c-69-181-196-33.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-111"><a href="#l-111">#</a> [06:08] * Quits: gavin_ (~gavin@firefox/developer/gavin) (Ping timeout: 245 seconds)</li>
+ <li id="l-112"><a href="#l-112">#</a> [06:09] * Quits: MikeSmith (~MikeSmith@EM111-188-3-106.pool.e-mobile.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-113"><a href="#l-113">#</a> [06:10] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-114"><a href="#l-114">#</a> [06:10] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-115"><a href="#l-115">#</a> [06:14] * Joins: gavin_ (~gavin@firefox/developer/gavin)</li>
+ <li id="l-116"><a href="#l-116">#</a> [06:19] * Joins: MikeSmith (~MikeSmith@EM111-188-22-101.pool.e-mobile.ne.jp)</li>
+ <li id="l-117"><a href="#l-117">#</a> [06:23] * Quits: MikeSmith (~MikeSmith@EM111-188-22-101.pool.e-mobile.ne.jp) (Client Quit)</li>
+ <li id="l-118"><a href="#l-118">#</a> [06:24] * Joins: MikeSmith (~MikeSmith@EM111-188-22-101.pool.e-mobile.ne.jp)</li>
+ <li id="l-119"><a href="#l-119">#</a> [06:29] * Quits: estes (~aestes@17.246.18.187) (Quit: estes)</li>
+ <li id="l-120"><a href="#l-120">#</a> [06:35] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Quit: Leaving.)</li>
+ <li id="l-121"><a href="#l-121">#</a> [06:39] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-122"><a href="#l-122">#</a> [06:45] * Quits: nessy (~Adium@124-169-0-56.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-123"><a href="#l-123">#</a> [06:47] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-124"><a href="#l-124">#</a> [06:59] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-125"><a href="#l-125">#</a> [07:05] * Quits: Yudai (~Yudai@p8bc812.kngwnt01.ap.so-net.ne.jp) (Quit: SIGTERM received; exit)</li>
+ <li id="l-126"><a href="#l-126">#</a> [07:06] * Joins: Yudai (~Yudai@p8bc812.kngwnt01.ap.so-net.ne.jp)</li>
+ <li id="l-127"><a href="#l-127">#</a> [07:20] * Joins: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net)</li>
+ <li id="l-128"><a href="#l-128">#</a> [07:23] * Joins: shepazu (~schepers@81.253.16.209)</li>
+ <li id="l-129"><a href="#l-129">#</a> [07:29] * Joins: erlehmann (~erlehmann@89.204.153.109)</li>
+ <li id="l-130"><a href="#l-130">#</a> [07:30] * Joins: othermaciej (~mjs@c-69-181-196-33.hsd1.ca.comcast.net)</li>
+ <li id="l-131"><a href="#l-131">#</a> [07:33] * Quits: shepazu (~schepers@81.253.16.209) (Read error: Connection reset by peer)</li>
+ <li id="l-132"><a href="#l-132">#</a> [07:33] * Joins: shepazu (~schepers@81.253.16.209)</li>
+ <li id="l-133"><a href="#l-133">#</a> [07:35] * Quits: shepazu (~schepers@81.253.16.209) (Read error: Connection reset by peer)</li>
+ <li id="l-134"><a href="#l-134">#</a> [07:35] * Joins: shepazu (~schepers@81.253.16.209)</li>
+ <li id="l-135"><a href="#l-135">#</a> [07:37] * Joins: kennyluck (~kennyluck@2001:200:1c0:2900:226:8ff:fe07:40c6)</li>
+ <li id="l-136"><a href="#l-136">#</a> [07:37] * Quits: kennyluck (~kennyluck@2001:200:1c0:2900:226:8ff:fe07:40c6) (Excess Flood)</li>
+ <li id="l-137"><a href="#l-137">#</a> [07:38] * Joins: kennyluck (~kennyluck@2001:200:1c0:2900:226:8ff:fe07:40c6)</li>
+ <li id="l-138"><a href="#l-138">#</a> [07:41] * Quits: shepazu (~schepers@81.253.16.209) (Read error: Connection reset by peer)</li>
+ <li id="l-139"><a href="#l-139">#</a> [07:47] * Joins: mamund_ (~mamund@2001:49f0:1017::2)</li>
+ <li id="l-140"><a href="#l-140">#</a> [07:47] * Quits: mamund (mamund@frost.nullshells.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-141"><a href="#l-141">#</a> [07:50] * Joins: estellevw (~estelle@adsl-99-170-148-99.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-142"><a href="#l-142">#</a> [07:50] * Parts: estellevw (~estelle@adsl-99-170-148-99.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-143"><a href="#l-143">#</a> [07:55] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Quit: Leaving.)</li>
+ <li id="l-144"><a href="#l-144">#</a> [07:56] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-145"><a href="#l-145">#</a> [08:04] * Joins: jlebar (~jlebar@nat/mozilla/x-lqfbukylncpbvanb)</li>
+ <li id="l-146"><a href="#l-146">#</a> [08:10] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-147"><a href="#l-147">#</a> [08:13] * Quits: Heimidal (~heimidal@unaffiliated/heimidal) (Remote host closed the connection)</li>
+ <li id="l-148"><a href="#l-148">#</a> [08:13] * Quits: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net) (Quit: -)</li>
+ <li id="l-149"><a href="#l-149">#</a> [08:15] * Joins: Heimidal (~heimidal@unaffiliated/heimidal)</li>
+ <li id="l-150"><a href="#l-150">#</a> [08:27] * Disconnected</li>
+ <li id="l-151" _a="Attempting"><a href="#l-151">#</a> [08:28] * Attempting to rejoin channel #whatwg</li>
+ <li id="l-152" _a="Rejoined"><a href="#l-152">#</a> [08:28] * Rejoined channel #whatwg</li>
+ <li id="l-153" _a="Topic"><a href="#l-153">#</a> [08:28] * Topic is 'WHATWG: <a href="http://www.whatwg.org/">http://www.whatwg.org/</a> -- logs: <a href="http://krijnhoetmer.nl/irc-logs/">http://krijnhoetmer.nl/irc-logs/</a> -- stats: <a href="http://gavinsharp.com/irc/whatwg.html">http://gavinsharp.com/irc/whatwg.html</a> -- Please leave your sense of logic at the door, thanks!'</li>
+ <li id="l-154" _a="Set"><a href="#l-154">#</a> [08:28] * Set by annevk42 on Mon Oct 19 23:03:06</li>
+ <li id="l-155"><a href="#l-155">#</a> [08:28] * Quits: krijnh (~krijnhoet@83.160.77.30) (Read error: Connection reset by peer)</li>
+ <li id="l-156"><a href="#l-156">#</a> [08:33] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-157"><a href="#l-157">#</a> [08:45] * Quits: cying (~cying@c-24-4-120-70.hsd1.ca.comcast.net) (Quit: cying)</li>
+ <li id="l-158"><a href="#l-158">#</a> [08:47] * Joins: shepazu (~schepers@81.253.31.249)</li>
+ <li id="l-159"><a href="#l-159">#</a> [08:47] * Quits: shepazu (~schepers@81.253.31.249) (Read error: Connection reset by peer)</li>
+ <li id="l-160"><a href="#l-160">#</a> [08:48] * Joins: shepazu (~schepers@81.253.31.249)</li>
+ <li id="l-161"><a href="#l-161">#</a> [08:48] * Quits: shepazu (~schepers@81.253.31.249) (Read error: Connection reset by peer)</li>
+ <li id="l-162"><a href="#l-162">#</a> [08:50] * Joins: shepazu (~schepers@81.253.31.249)</li>
+ <li id="l-163"><a href="#l-163">#</a> [08:52] * Quits: shepazu (~schepers@81.253.31.249) (Read error: Connection reset by peer)</li>
+ <li id="l-164"><a href="#l-164">#</a> [08:52] * Joins: shepazu (~schepers@81.253.31.249)</li>
+ <li id="l-165"><a href="#l-165">#</a> [08:55] * Quits: shepazu (~schepers@81.253.31.249) (Read error: Connection reset by peer)</li>
+ <li id="l-166"><a href="#l-166">#</a> [08:55] * Joins: shepazutoo (~schepers@81.253.31.249)</li>
+ <li id="l-167"><a href="#l-167">#</a> [08:56] * Quits: shepazutoo (~schepers@81.253.31.249) (Read error: Connection reset by peer)</li>
+ <li id="l-168"><a href="#l-168">#</a> [08:56] * Joins: shepazu (~schepers@81.253.31.249)</li>
+ <li id="l-169"><a href="#l-169">#</a> [09:01] * Joins: shepazutoo (~schepers@81.253.34.169)</li>
+ <li id="l-170"><a href="#l-170">#</a> [09:03] * Quits: shepazu (~schepers@81.253.31.249) (Ping timeout: 272 seconds)</li>
+ <li id="l-171"><a href="#l-171">#</a> [09:04] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Quit: Leaving.)</li>
+ <li id="l-172"><a href="#l-172">#</a> [09:06] * Quits: Amorphous (jan@unaffiliated/amorphous) (Ping timeout: 240 seconds)</li>
+ <li id="l-173"><a href="#l-173">#</a> [09:10] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-174"><a href="#l-174">#</a> [09:10] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-175"><a href="#l-175">#</a> [09:11] * Quits: shepazutoo (~schepers@81.253.34.169) (Quit: shepazutoo)</li>
+ <li id="l-176"><a href="#l-176">#</a> [09:21] * Joins: Amorphous (jan@unaffiliated/amorphous)</li>
+ <li id="l-177"><a href="#l-177">#</a> [09:30] * Quits: erlehmann (~erlehmann@89.204.153.109) (Quit: Ex-Chat)</li>
+ <li id="l-178"><a href="#l-178">#</a> [09:31] * Joins: Maurice (copyman@5ED573FA.cable.ziggo.nl)</li>
+ <li id="l-179"><a href="#l-179">#</a> [09:31] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-180"><a href="#l-180">#</a> [09:32] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Client Quit)</li>
+ <li id="l-181"><a href="#l-181">#</a> [09:38] * Joins: matjas (~matjas@91.182.221.55)</li>
+ <li id="l-182"><a href="#l-182">#</a> [09:40] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-183"><a href="#l-183">#</a> [09:47] * Joins: nessy (~Adium@124-169-0-56.dyn.iinet.net.au)</li>
+ <li id="l-184"><a href="#l-184">#</a> [09:50] * Quits: othermaciej (~mjs@c-69-181-196-33.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-185"><a href="#l-185">#</a> [09:56] * Quits: nessy (~Adium@124-169-0-56.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-186"><a href="#l-186">#</a> [10:14] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-187"><a href="#l-187">#</a> [10:18] * Joins: espadrine_ (~yannt@AMontsouris-157-1-126-123.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-188"><a href="#l-188">#</a> [10:19] * Quits: jlebar (~jlebar@nat/mozilla/x-lqfbukylncpbvanb) (Quit: Leaving)</li>
+ <li id="l-189"><a href="#l-189">#</a> [10:21] * Joins: JonathanNeal (~Jonathan_@99-59-124-67.lightspeed.irvnca.sbcglobal.net)</li>
+ <li id="l-190"><a href="#l-190">#</a> [10:22] * Quits: espadrine (~yannt@AMontsouris-157-1-66-245.w90-46.abo.wanadoo.fr) (Ping timeout: 276 seconds)</li>
+ <li id="l-191" _a="espadrine_"><a href="#l-191">#</a> [10:22] * espadrine_ is now known as espadrine</li>
+ <li id="l-192"><a href="#l-192">#</a> [10:23] * Joins: annevk (~annevk@host86-184-97-104.range86-184.btcentralplus.com)</li>
+ <li id="l-193" _a="annevk" _r="really"><a href="#l-193">#</a> [10:23] &lt;annevk&gt; really: <a href="http://html5.org/tools/web-apps-tracker?from=5413&amp;to=5414">http://html5.org/tools/web-apps-tracker?from=5413&amp;to=5414</a> :/</li>
+ <li id="l-194" class="flagged" _a="annevk"><a href="#l-194">#</a> [10:23] &lt;annevk&gt; charset overrides is one of the worst ideas anyone ever came up with</li>
+ <li id="l-195" class="flagged" _a="annevk"><a href="#l-195">#</a> [10:23] &lt;annevk&gt; and has given us security issues (and is still giving them to anyone with UTF-7 support)</li>
+ <li id="l-196"><a href="#l-196">#</a> [10:28] * Joins: Ms2ger (~Ms2ger@91.181.72.112)</li>
+ <li id="l-197"><a href="#l-197">#</a> [10:35] * Joins: Twisol (~Twisol@wikia/Oddlyoko)</li>
+ <li id="l-198"><a href="#l-198">#</a> [10:35] * Quits: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no) (Quit: Leaving)</li>
+ <li id="l-199"><a href="#l-199">#</a> [10:41] * Quits: crash\ (crash@lubyte.de) (Quit: <a href="http://www.lubyte.de/">http://www.lubyte.de/</a>)</li>
+ <li id="l-200"><a href="#l-200">#</a> [10:42] * Quits: Heimidal (~heimidal@unaffiliated/heimidal) (Remote host closed the connection)</li>
+ <li id="l-201"><a href="#l-201">#</a> [10:45] * Joins: Necrathex (~bleptop@212-123-163-12.ip.telfort.nl)</li>
+ <li id="l-202"><a href="#l-202">#</a> [10:45] * Joins: crash\ (~crash@lubyte.de)</li>
+ <li id="l-203"><a href="#l-203">#</a> [10:48] * Joins: nessy (~Adium@124-169-0-56.dyn.iinet.net.au)</li>
+ <li id="l-204"><a href="#l-204">#</a> [10:49] * Joins: othree (~othree@140.118.5.39)</li>
+ <li id="l-205"><a href="#l-205">#</a> [10:51] * Joins: ROBOd (~robod@109.96.244.1)</li>
+ <li id="l-206"><a href="#l-206">#</a> [10:52] * Quits: crash\ (~crash@lubyte.de) (Read error: Connection reset by peer)</li>
+ <li id="l-207"><a href="#l-207">#</a> [10:53] * Joins: crash\ (~crash@lubyte.de)</li>
+ <li id="l-208"><a href="#l-208">#</a> [10:57] * Quits: crash\ (~crash@lubyte.de) (Client Quit)</li>
+ <li id="l-209"><a href="#l-209">#</a> [10:59] * Quits: Twisol (~Twisol@wikia/Oddlyoko) (Quit: Night all)</li>
+ <li id="l-210"><a href="#l-210">#</a> [10:59] * Joins: maikmerten (~merten@m83-185-18-21.cust.tele2.se)</li>
+ <li id="l-211"><a href="#l-211">#</a> [11:01] * Joins: crash\ (crash@lubyte.de)</li>
+ <li id="l-212"><a href="#l-212">#</a> [11:01] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-213"><a href="#l-213">#</a> [11:03] * Joins: cypha (~sallabanc@69.50.70.12)</li>
+ <li id="l-214"><a href="#l-214">#</a> [11:04] * Quits: ukai (~ukai@nat/google/x-txzotrcoeatsimsn) (Ping timeout: 240 seconds)</li>
+ <li id="l-215"><a href="#l-215">#</a> [11:08] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-216"><a href="#l-216">#</a> [11:08] * Joins: ukai (~ukai@nat/google/x-zhtlnzvtuguznfaa)</li>
+ <li id="l-217"><a href="#l-217">#</a> [11:18] * Quits: crash\ (crash@lubyte.de) (Quit: <a href="http://www.lubyte.de/">http://www.lubyte.de/</a>)</li>
+ <li id="l-218"><a href="#l-218">#</a> [11:20] * Joins: crash\ (~crash@lubyte.de)</li>
+ <li id="l-219" _a="Philip`"><a href="#l-219">#</a> [11:25] &lt;Philip`&gt; If someone wants to argue about completeness of rel registries, maybe they should look at which of the common values in <a href="http://philip.html5.org/data/rel-rev-200904.txt">http://philip.html5.org/data/rel-rev-200904.txt</a> are in each registry</li>
+ <li id="l-220" class="flagged" _a="Philip`"><a href="#l-220">#</a> [11:26] &lt;Philip`&gt; I expect someone who's using the registry to either understand a random web document or avoid collisions when choosing their own names will care much more about rel=&quot;edituri&quot; than about rel=&quot;child&quot;</li>
+ <li id="l-221"><a href="#l-221">#</a> [11:26] * Joins: shepazu (~schepers@81.253.60.108)</li>
+ <li id="l-222"><a href="#l-222">#</a> [11:28] * Quits: crash\ (~crash@lubyte.de) (Ping timeout: 240 seconds)</li>
+ <li id="l-223" _a="espadrine"><a href="#l-223">#</a> [11:29] &lt;espadrine&gt; What are those french 'rel's at the end of the page?</li>
+ <li id="l-224" _a="Philip`" _r="espadrine"><a href="#l-224">#</a> [11:35] &lt;Philip`&gt; espadrine: People mixing up rel with src, I expect</li>
+ <li id="l-225"><a href="#l-225">#</a> [11:37] * Joins: crash\ (crash@lubyte.de)</li>
+ <li id="l-226"><a href="#l-226">#</a> [11:37] * Quits: crash\ (crash@lubyte.de) (Excess Flood)</li>
+ <li id="l-227"><a href="#l-227">#</a> [11:37] * Quits: shepazu (~schepers@81.253.60.108) (Read error: Connection reset by peer)</li>
+ <li id="l-228"><a href="#l-228">#</a> [11:37] * Joins: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-229"><a href="#l-229">#</a> [11:38] * Joins: crash\ (crash@lubyte.de)</li>
+ <li id="l-230" _a="Philip`" _r="espadrine"><a href="#l-230">#</a> [11:39] &lt;Philip`&gt; espadrine: <a href="http://www.tourdumonde.over-blog.com/photo-257570-saopaulo-placadese-cathedrale_jpg.html">http://www.tourdumonde.over-blog.com/photo-257570-saopaulo-placadese-cathedrale_jpg.html</a></li>
+ <li id="l-231" _a="Philip`"><a href="#l-231">#</a> [11:39] &lt;Philip`&gt; &lt;img src=&quot;<a href="http://img.over-blog.com/630x470-000000/0/44/26/71//09-bresil/saopaulo-placadese-cathedrale.jpg">http://img.over-blog.com/630x470-000000/0/44/26/71//09-bresil/saopaulo-placadese-cathedrale.jpg</a>&quot; alt=&quot;saopaulo-placadese-cathedrale.jpg&quot; class=&quot;played&quot; rel=&quot;0/44/26/71//09-bresil/saopaulo-placadese-cathedrale.jpg&quot; height=&quot;470&quot; width=&quot;630&quot; /&gt;</li>
+ <li id="l-232"><a href="#l-232">#</a> [11:50] * Quits: crash\ (crash@lubyte.de) (Quit: <a href="http://www.lubyte.de/">http://www.lubyte.de/</a>)</li>
+ <li id="l-233"><a href="#l-233">#</a> [11:50] * Joins: shepazu (~schepers@81.253.63.168)</li>
+ <li id="l-234"><a href="#l-234">#</a> [11:54] * Joins: crash\ (crash@lubyte.de)</li>
+ <li id="l-235"><a href="#l-235">#</a> [11:56] * Quits: shepazu (~schepers@81.253.63.168) (Ping timeout: 240 seconds)</li>
+ <li id="l-236" _a="away01"><a href="#l-236">#</a> [11:56] * away01 is now known as temp01</li>
+ <li id="l-237"><a href="#l-237">#</a> [12:00] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-238"><a href="#l-238">#</a> [12:01] * Joins: peol (~andree@unaffiliated/peol)</li>
+ <li id="l-239"><a href="#l-239">#</a> [12:01] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Quit: Leaving.)</li>
+ <li id="l-240" _a="Hixie" _r="annevk"><a href="#l-240">#</a> [12:08] &lt;Hixie&gt; annevk: i'm open to better ideas</li>
+ <li id="l-241" _a="annevk"><a href="#l-241">#</a> [12:09] &lt;annevk&gt; allow the HTTP charset parameter?</li>
+ <li id="l-242" _a="annevk"><a href="#l-242">#</a> [12:09] &lt;annevk&gt; I guess that is not very author friendly</li>
+ <li id="l-243" _a="annevk"><a href="#l-243">#</a> [12:10] &lt;annevk&gt; though how about marking this as a v2 feature?</li>
+ <li id="l-244"><a href="#l-244">#</a> [12:10] * Quits: MikeSmith (~MikeSmith@EM111-188-22-101.pool.e-mobile.ne.jp) (Ping timeout: 264 seconds)</li>
+ <li id="l-245" _a="annevk"><a href="#l-245">#</a> [12:10] &lt;annevk&gt; we'll deploy &lt;track&gt;, see how it works out in the first year and if enough problems occur we go for it</li>
+ <li id="l-246" _a="annevk"><a href="#l-246">#</a> [12:11] &lt;annevk&gt; cause people will likely need to move SRT files around anyway and maybe making the adjustments is easy enough for them</li>
+ <li id="l-247" _a="Hixie"><a href="#l-247">#</a> [12:11] &lt;Hixie&gt; if the idea is to be compatible with legacy SRT, MIME types and UTF-8 only are both failures</li>
+ <li id="l-248" _a="Hixie"><a href="#l-248">#</a> [12:11] &lt;Hixie&gt; if it's not, we don't need the override, indeed</li>
+ <li id="l-249" _a="Hixie"><a href="#l-249">#</a> [12:12] &lt;Hixie&gt; people seemed pretty much in favour of the former though (haven't yet sent my reply to that thread, working on it still)</li>
+ <li id="l-250" _a="annevk"><a href="#l-250">#</a> [12:13] &lt;annevk&gt; well yeah, it's tricky -- i want to be compatible too but I also do not want to introduce more features such as charset</li>
+ <li id="l-251" _a="Hixie"><a href="#l-251">#</a> [12:14] &lt;Hixie&gt; if you can think of an attack vector, mail the list and i'll remove it</li>
+ <li id="l-252" _a="Hixie"><a href="#l-252">#</a> [12:14] &lt;Hixie&gt; security trumps compatibility</li>
+ <li id="l-253" _a="Hixie"><a href="#l-253">#</a> [12:14] &lt;Hixie&gt; bed time now</li>
+ <li id="l-254" _a="Hixie"><a href="#l-254">#</a> [12:14] &lt;Hixie&gt; nn</li>
+ <li id="l-255"><a href="#l-255">#</a> [12:30] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-256"><a href="#l-256">#</a> [12:31] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-257"><a href="#l-257">#</a> [12:31] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-258"><a href="#l-258">#</a> [12:33] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-259"><a href="#l-259">#</a> [12:34] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-260"><a href="#l-260">#</a> [12:34] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-261"><a href="#l-261">#</a> [12:35] * Joins: Phae (~Phae@gatekeeper.macmillan.co.uk)</li>
+ <li id="l-262"><a href="#l-262">#</a> [12:37] * Joins: shepazutoo (~schepers@81.253.4.165)</li>
+ <li id="l-263"><a href="#l-263">#</a> [12:38] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-264"><a href="#l-264">#</a> [12:39] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-265"><a href="#l-265">#</a> [12:39] * Quits: shepazutoo (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-266"><a href="#l-266">#</a> [12:41] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-267"><a href="#l-267">#</a> [12:42] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-268"><a href="#l-268">#</a> [12:43] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-269"><a href="#l-269">#</a> [12:43] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-270"><a href="#l-270">#</a> [12:51] * Joins: henrikbjorn (~henrik@c83-249-72-254.bredband.comhem.se)</li>
+ <li id="l-271"><a href="#l-271">#</a> [12:52] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-272"><a href="#l-272">#</a> [12:52] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-273"><a href="#l-273">#</a> [12:58] * Joins: shepazutoo (~schepers@81.253.4.165)</li>
+ <li id="l-274"><a href="#l-274">#</a> [12:58] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-275"><a href="#l-275">#</a> [13:01] * Joins: FireFly (~firefly@unaffiliated/firefly)</li>
+ <li id="l-276"><a href="#l-276">#</a> [13:01] * Joins: erlehmann (~erlehmann@89.204.153.5)</li>
+ <li id="l-277"><a href="#l-277">#</a> [13:30] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-278"><a href="#l-278">#</a> [13:31] * Quits: shepazutoo (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-279"><a href="#l-279">#</a> [13:46] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-280"><a href="#l-280">#</a> [13:47] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-281"><a href="#l-281">#</a> [13:48] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-282"><a href="#l-282">#</a> [13:49] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-283"><a href="#l-283">#</a> [13:51] * Joins: shepazutoo (~schepers@81.253.4.165)</li>
+ <li id="l-284"><a href="#l-284">#</a> [13:51] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-285"><a href="#l-285">#</a> [14:02] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-286"><a href="#l-286">#</a> [14:02] * Quits: shepazutoo (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-287"><a href="#l-287">#</a> [14:03] * Joins: shepazutoo (~schepers@81.253.4.165)</li>
+ <li id="l-288"><a href="#l-288">#</a> [14:03] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-289"><a href="#l-289">#</a> [14:05] * Quits: shepazutoo (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-290"><a href="#l-290">#</a> [14:05] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-291" _a="annevk" _r="Ms2ger"><a href="#l-291">#</a> [14:06] &lt;annevk&gt; Ms2ger, yo, where is PARSE_ERR from?</li>
+ <li id="l-292" _a="annevk"><a href="#l-292">#</a> [14:06] &lt;annevk&gt; is that DOM L&amp;S? if so, isn't that obsolete?</li>
+ <li id="l-293" _a="Ms2ger"><a href="#l-293">#</a> [14:07] &lt;Ms2ger&gt; Yes/Dunno</li>
+ <li id="l-294"><a href="#l-294">#</a> [14:07] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-295" _a="annevk" _r="k"><a href="#l-295">#</a> [14:07] &lt;annevk&gt; k, I think it should be</li>
+ <li id="l-296" _a="annevk"><a href="#l-296">#</a> [14:07] &lt;annevk&gt; but maybe something else uses PARSE_ERR too... hmm</li>
+ <li id="l-297"><a href="#l-297">#</a> [14:08] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-298"><a href="#l-298">#</a> [14:09] * Joins: shepazutoo (~schepers@81.253.4.165)</li>
+ <li id="l-299" _a="Dashiva"><a href="#l-299">#</a> [14:09] &lt;Dashiva&gt; My google only finds L&amp;S, and the reference in HTML5</li>
+ <li id="l-300"><a href="#l-300">#</a> [14:09] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-301" _a="annevk"><a href="#l-301">#</a> [14:09] &lt;annevk&gt; HTML5 mentions them?</li>
+ <li id="l-302" _a="annevk"><a href="#l-302">#</a> [14:10] &lt;annevk&gt; figures</li>
+ <li id="l-303"><a href="#l-303">#</a> [14:10] * Joins: sebmarkbage (50a87316@gateway/web/freenode/ip.80.168.115.22)</li>
+ <li id="l-304" _a="annevk"><a href="#l-304">#</a> [14:10] &lt;annevk&gt; I believe the WHATWG wiki does too</li>
+ <li id="l-305" _a="annevk"><a href="#l-305">#</a> [14:10] &lt;annevk&gt; guess we just tried to be complete</li>
+ <li id="l-306" _a="Ms2ger"><a href="#l-306">#</a> [14:10] &lt;Ms2ger&gt; I'm blaming you, annevk</li>
+ <li id="l-307" _a="annevk" _r="Ms2ger"><a href="#l-307">#</a> [14:10] &lt;annevk&gt; Ms2ger, what is this &quot;tempTests&quot; in DOMImpl...createDocument..exceptions? rewriting that test now</li>
+ <li id="l-308"><a href="#l-308">#</a> [14:10] * Quits: shepazutoo (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-309" _a="Ms2ger"><a href="#l-309">#</a> [14:10] &lt;Ms2ger&gt; <a href="http://wiki.whatwg.org/index.php?title=Exception_Codes&amp;diff=next&amp;oldid=2625">http://wiki.whatwg.org/index.php?title=Exception_Codes&amp;diff=next&amp;oldid=2625</a></li>
+ <li id="l-310" _a="annevk" _r="Ms2ger"><a href="#l-310">#</a> [14:10] &lt;annevk&gt; Ms2ger, win</li>
+ <li id="l-311"><a href="#l-311">#</a> [14:11] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-312" _a="annevk"><a href="#l-312">#</a> [14:11] &lt;annevk&gt; i'll annotate the wiki with &quot;should be obsolete&quot;</li>
+ <li id="l-313" _a="Ms2ger"><a href="#l-313">#</a> [14:12] &lt;Ms2ger&gt; Does any ua have them?</li>
+ <li id="l-314" _a="annevk"><a href="#l-314">#</a> [14:12] &lt;annevk&gt; opera might</li>
+ <li id="l-315" _a="annevk"><a href="#l-315">#</a> [14:12] &lt;annevk&gt; but i'm campaigning for nuking our (i believe somewhat broken) dom ls support</li>
+ <li id="l-316" _a="annevk" _r="ok"><a href="#l-316">#</a> [14:12] &lt;annevk&gt; ok, breakfast time o_O</li>
+ <li id="l-317" _a="annevk"><a href="#l-317">#</a> [14:12] &lt;annevk&gt; back later</li>
+ <li id="l-318" _a="Ms2ger" _r="annevk"><a href="#l-318">#</a> [14:13] &lt;Ms2ger&gt; annevk, ask gsnedders :)</li>
+ <li id="l-319"><a href="#l-319">#</a> [14:16] * Quits: shepazu (~schepers@81.253.4.165) (Read error: Connection reset by peer)</li>
+ <li id="l-320"><a href="#l-320">#</a> [14:17] * Joins: shepazu (~schepers@81.253.4.165)</li>
+ <li id="l-321"><a href="#l-321">#</a> [14:20] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: This computer has gone to sleep)</li>
+ <li id="l-322"><a href="#l-322">#</a> [14:24] * Joins: crash\\ (crash@lubyte.de)</li>
+ <li id="l-323"><a href="#l-323">#</a> [14:25] * Quits: crash\ (crash@lubyte.de) (Read error: Connection reset by peer)</li>
+ <li id="l-324"><a href="#l-324">#</a> [14:39] * Quits: shepazu (~schepers@81.253.4.165) (Ping timeout: 252 seconds)</li>
+ <li id="l-325" _a="annevk" _r="Ms2ger"><a href="#l-325">#</a> [14:40] &lt;annevk&gt; Ms2ger, guess i should use hg log more often</li>
+ <li id="l-326" _a="annevk"><a href="#l-326">#</a> [14:40] &lt;annevk&gt; :)</li>
+ <li id="l-327"><a href="#l-327">#</a> [14:41] * Joins: oal (~oal@5.79-160-122.customer.lyse.net)</li>
+ <li id="l-328"><a href="#l-328">#</a> [14:42] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Ping timeout: 252 seconds)</li>
+ <li id="l-329" _a="Ms2ger" _r="annevk"><a href="#l-329">#</a> [14:42] &lt;Ms2ger&gt; annevk, and all my tests have link rel=author :)</li>
+ <li id="l-330" _a="annevk"><a href="#l-330">#</a> [14:45] &lt;annevk&gt; aah so i'm adding the wrong credits here</li>
+ <li id="l-331" _a="Ms2ger"><a href="#l-331">#</a> [14:47] &lt;Ms2ger&gt; Though I think I added a few cases recently</li>
+ <li id="l-332"><a href="#l-332">#</a> [14:50] * Quits: jorlow (~jorlow@74.125.57.60) (Quit: jorlow)</li>
+ <li id="l-333"><a href="#l-333">#</a> [14:55] * Joins: Henrik`G (~henrik@c83-249-72-254.bredband.comhem.se)</li>
+ <li id="l-334"><a href="#l-334">#</a> [14:57] * Joins: henrikbjorn2 (~henrik@c83-249-72-254.bredband.comhem.se)</li>
+ <li id="l-335"><a href="#l-335">#</a> [14:58] * Quits: henrikbjorn (~henrik@c83-249-72-254.bredband.comhem.se) (Ping timeout: 245 seconds)</li>
+ <li id="l-336"><a href="#l-336">#</a> [15:00] * Quits: Henrik`G (~henrik@c83-249-72-254.bredband.comhem.se) (Ping timeout: 276 seconds)</li>
+ <li id="l-337" _a="henrikbjorn2"><a href="#l-337">#</a> [15:00] * henrikbjorn2 is now known as henrikbjorn</li>
+ <li id="l-338"><a href="#l-338">#</a> [15:02] * Quits: annevk (~annevk@host86-184-97-104.range86-184.btcentralplus.com) (Quit: annevk)</li>
+ <li id="l-339"><a href="#l-339">#</a> [15:06] * Joins: davidwalsh (~davidwals@pool-98-108-33-155.chi01.dsl-w.verizon.net)</li>
+ <li id="l-340"><a href="#l-340">#</a> [15:08] * Quits: daedb (~daed@78-72-108-100-no178.tbcn.telia.com) (Remote host closed the connection)</li>
+ <li id="l-341" _a="llrcombs"><a href="#l-341">#</a> [15:14] &lt;llrcombs&gt; if a page has a .manifest file, shouldn't the UA check for a new version of each content file?</li>
+ <li id="l-342"><a href="#l-342">#</a> [15:22] * Joins: espadrine_ (~yannt@AMontsouris-157-1-126-123.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-343"><a href="#l-343">#</a> [15:22] * Quits: espadrine (~yannt@AMontsouris-157-1-126-123.w90-46.abo.wanadoo.fr) (Read error: Connection reset by peer)</li>
+ <li id="l-344" _a="espadrine_"><a href="#l-344">#</a> [15:22] * espadrine_ is now known as espadrine</li>
+ <li id="l-345" _a="llrcombs"><a href="#l-345">#</a> [15:24] &lt;llrcombs&gt; (just see if it's changed, not reload the whole file unless it hasn't changed)</li>
+ <li id="l-346" _a="llrcombs"><a href="#l-346">#</a> [15:24] &lt;llrcombs&gt; amirite?</li>
+ <li id="l-347"><a href="#l-347">#</a> [15:51] * Joins: daedb (~daed@78-72-108-100-no178.tbcn.telia.com)</li>
+ <li id="l-348"><a href="#l-348">#</a> [15:54] * Quits: davidwalsh (~davidwals@pool-98-108-33-155.chi01.dsl-w.verizon.net) (Quit: Reading <a href="http://davidwalsh.name">http://davidwalsh.name</a>)</li>
+ <li id="l-349"><a href="#l-349">#</a> [15:54] * Joins: hdhoang (~hdhoang@hdhoang.zahe.me)</li>
+ <li id="l-350"><a href="#l-350">#</a> [15:56] * Joins: dbaron (~dbaron@c-98-234-51-190.hsd1.ca.comcast.net)</li>
+ <li id="l-351"><a href="#l-351">#</a> [16:22] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-352"><a href="#l-352">#</a> [16:36] * Joins: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-353"><a href="#l-353">#</a> [16:39] * Quits: erlehmann (~erlehmann@89.204.153.5) (Read error: Connection reset by peer)</li>
+ <li id="l-354"><a href="#l-354">#</a> [16:43] * Quits: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-355"><a href="#l-355">#</a> [16:46] * Joins: workmad3 (~workmad3@cpc3-bagu10-0-0-cust651.1-3.cable.virginmedia.com)</li>
+ <li id="l-356"><a href="#l-356">#</a> [17:01] * Quits: matjas (~matjas@91.182.221.55) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-357"><a href="#l-357">#</a> [17:15] * Quits: workmad3 (~workmad3@cpc3-bagu10-0-0-cust651.1-3.cable.virginmedia.com) (Remote host closed the connection)</li>
+ <li id="l-358"><a href="#l-358">#</a> [17:15] * Quits: nessy (~Adium@124-169-0-56.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-359"><a href="#l-359">#</a> [17:16] * Joins: nimbupani (~nimbupani@c-24-22-131-46.hsd1.wa.comcast.net)</li>
+ <li id="l-360"><a href="#l-360">#</a> [17:17] * Quits: nimbupani (~nimbupani@c-24-22-131-46.hsd1.wa.comcast.net) (Client Quit)</li>
+ <li id="l-361"><a href="#l-361">#</a> [17:23] * Quits: gavin_ (~gavin@firefox/developer/gavin) (Ping timeout: 264 seconds)</li>
+ <li id="l-362"><a href="#l-362">#</a> [17:24] * Quits: hdhoang (~hdhoang@hdhoang.zahe.me) (Quit: Leaving.)</li>
+ <li id="l-363"><a href="#l-363">#</a> [17:26] * Joins: matjas (~matjas@91.182.221.55)</li>
+ <li id="l-364"><a href="#l-364">#</a> [17:28] * Joins: nessy (~Adium@124-169-0-56.dyn.iinet.net.au)</li>
+ <li id="l-365"><a href="#l-365">#</a> [17:28] * Joins: gavin_ (~gavin@firefox/developer/gavin)</li>
+ <li id="l-366"><a href="#l-366">#</a> [17:38] * Quits: nessy (~Adium@124-169-0-56.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-367"><a href="#l-367">#</a> [17:50] * Joins: cying (~cying@c-24-4-120-70.hsd1.ca.comcast.net)</li>
+ <li id="l-368" _a="llrcombs"><a href="#l-368">#</a> [17:50] &lt;llrcombs&gt; hello?</li>
+ <li id="l-369"><a href="#l-369">#</a> [18:02] * Joins: Heimidal (~heimidal@unaffiliated/heimidal)</li>
+ <li id="l-370"><a href="#l-370">#</a> [18:02] * Quits: Heimidal (~heimidal@unaffiliated/heimidal) (Remote host closed the connection)</li>
+ <li id="l-371"><a href="#l-371">#</a> [18:05] * Quits: oal (~oal@5.79-160-122.customer.lyse.net) (Remote host closed the connection)</li>
+ <li id="l-372" _a="Dashiva" _r="llrcombs"><a href="#l-372">#</a> [18:12] &lt;Dashiva&gt; llrcombs: Better to just say or ask what you came for right away. People will get back to you :)</li>
+ <li id="l-373" _a="Philip`"><a href="#l-373">#</a> [18:13] &lt;Philip`&gt; It looks like he did ask, 3 hours ago, and nobody got back yet :-p</li>
+ <li id="l-374" _a="Dashiva"><a href="#l-374">#</a> [18:15] &lt;Dashiva&gt; I just did</li>
+ <li id="l-375"><a href="#l-375">#</a> [18:17] * Joins: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net)</li>
+ <li id="l-376"><a href="#l-376">#</a> [18:19] * Quits: ukai (~ukai@nat/google/x-zhtlnzvtuguznfaa) (Ping timeout: 252 seconds)</li>
+ <li id="l-377" _a="llrcombs"><a href="#l-377">#</a> [18:21] &lt;llrcombs&gt; if a page has a .manifest file, should the UA check for a new version of each content file on load?</li>
+ <li id="l-378"><a href="#l-378">#</a> [18:22] * Joins: ukai (~ukai@nat/google/x-tsakdttbgmyplhew)</li>
+ <li id="l-379" _a="temp01"><a href="#l-379">#</a> [18:26] * temp01 is now known as away01</li>
+ <li id="l-380" _a="llrcombs" _r="Dashiva"><a href="#l-380">#</a> [18:32] &lt;llrcombs&gt; Dashiva; getting back?</li>
+ <li id="l-381"><a href="#l-381">#</a> [18:35] * Quits: kennyluck (~kennyluck@2001:200:1c0:2900:226:8ff:fe07:40c6) (Quit: kennyluck)</li>
+ <li id="l-382" _a="Dashiva"><a href="#l-382">#</a> [18:35] &lt;Dashiva&gt; I'm not well versed in offline, but my understanding is that content files are only checked when the manifest changes (and not necessarily then either)</li>
+ <li id="l-383" _a="Dashiva"><a href="#l-383">#</a> [18:36] &lt;Dashiva&gt; You shouldn't take my word for it, though</li>
+ <li id="l-384"><a href="#l-384">#</a> [18:39] * Joins: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net)</li>
+ <li id="l-385"><a href="#l-385">#</a> [18:51] * Quits: dglazkov (~dglazkov@75-37-194-175.lightspeed.lsatca.sbcglobal.net) (Quit: dglazkov)</li>
+ <li id="l-386"><a href="#l-386">#</a> [18:57] * Joins: kennyluck (~kennyluck@2001:200:1c0:3602:225:ff:fe4d:f8c7)</li>
+ <li id="l-387" _a="llrcombs"><a href="#l-387">#</a> [19:14] &lt;llrcombs&gt; hmmm</li>
+ <li id="l-388" _a="llrcombs"><a href="#l-388">#</a> [19:15] &lt;llrcombs&gt; not much provision for when there's a new version of the file then, eh?</li>
+ <li id="l-389"><a href="#l-389">#</a> [19:25] * Joins: annevk (~annevk@host86-184-97-104.range86-184.btcentralplus.com)</li>
+ <li id="l-390"><a href="#l-390">#</a> [19:31] * Joins: MikeSmith (~MikeSmith@EM111-188-51-221.pool.e-mobile.ne.jp)</li>
+ <li id="l-391"><a href="#l-391">#</a> [19:37] * Joins: shepazu (~schepers@81.253.7.12)</li>
+ <li id="l-392"><a href="#l-392">#</a> [19:37] * Quits: shepazu (~schepers@81.253.7.12) (Read error: Connection reset by peer)</li>
+ <li id="l-393"><a href="#l-393">#</a> [19:42] * Joins: shepazu (~schepers@81.253.7.12)</li>
+ <li id="l-394"><a href="#l-394">#</a> [19:44] * Quits: shepazu (~schepers@81.253.7.12) (Read error: Connection reset by peer)</li>
+ <li id="l-395"><a href="#l-395">#</a> [19:44] * Joins: shepazu (~schepers@81.253.7.12)</li>
+ <li id="l-396" _a="annevk" _r="hmm"><a href="#l-396">#</a> [19:46] &lt;annevk&gt; hmm, I screwed up all the help links in tests</li>
+ <li id="l-397" _a="annevk"><a href="#l-397">#</a> [19:46] &lt;annevk&gt; but I don't really believe in those anyway</li>
+ <li id="l-398" _a="annevk"><a href="#l-398">#</a> [19:47] &lt;annevk&gt; or in author for that matter...</li>
+ <li id="l-399" _a="annevk" _r="Ms2ger"><a href="#l-399">#</a> [19:47] &lt;annevk&gt; Ms2ger, any particular reason we are using those fields?</li>
+ <li id="l-400" _a="Ms2ger"><a href="#l-400">#</a> [19:48] &lt;Ms2ger&gt; Blame the CSSWG</li>
+ <li id="l-401" _a="Ms2ger"><a href="#l-401">#</a> [19:48] &lt;Ms2ger&gt; You can get rid of them if you want</li>
+ <li id="l-402" _a="annevk"><a href="#l-402">#</a> [19:49] &lt;annevk&gt; cool</li>
+ <li id="l-403"><a href="#l-403">#</a> [19:49] * Joins: payman_s (~payman@h85-8-2-58.static.se.alltele.net)</li>
+ <li id="l-404" _a="payman_s"><a href="#l-404">#</a> [19:50] * payman_s is now known as payman_h</li>
+ <li id="l-405" _a="annevk"><a href="#l-405">#</a> [19:51] &lt;annevk&gt; not quite sure if rewriting the tests is the most efficient approach rather than just starting over but I guess overall it's not too much work</li>
+ <li id="l-406" _a="annevk"><a href="#l-406">#</a> [19:51] &lt;annevk&gt; and it's almost done</li>
+ <li id="l-407"><a href="#l-407">#</a> [19:54] * Joins: shepazutoo (~schepers@81.253.7.12)</li>
+ <li id="l-408" _a="annevk" _r="jgraham"><a href="#l-408">#</a> [19:55] &lt;annevk&gt; jgraham, you around? how do you test for ECMAScript errors using your framework?</li>
+ <li id="l-409" _a="annevk"><a href="#l-409">#</a> [19:55] &lt;annevk&gt; e.g. error instanceof TypeError</li>
+ <li id="l-410"><a href="#l-410">#</a> [19:55] * Quits: shepazu (~schepers@81.253.7.12) (Ping timeout: 264 seconds)</li>
+ <li id="l-411" _a="annevk"><a href="#l-411">#</a> [19:56] &lt;annevk&gt; i.e. how to rewrite this code to use assert_throws:</li>
+ <li id="l-412" _a="annevk"><a href="#l-412">#</a> [19:56] &lt;annevk&gt;   try {</li>
+ <li id="l-413" _a="annevk"><a href="#l-413">#</a> [19:56] &lt;annevk&gt;     document.body.removeChild({'a':'b'})</li>
+ <li id="l-414" _a="annevk"><a href="#l-414">#</a> [19:56] &lt;annevk&gt;     assert_unreached()</li>
+ <li id="l-415" _a="annevk"><a href="#l-415">#</a> [19:56] &lt;annevk&gt;   } catch (e) {</li>
+ <li id="l-416" _a="away01"><a href="#l-416">#</a> [19:56] * away01 is now known as temp01</li>
+ <li id="l-417" _a="Ms2ger"><a href="#l-417">#</a> [19:57] &lt;Ms2ger&gt;     assert_true(e instancof TypeError)</li>
+ <li id="l-418" _a="Ms2ger"><a href="#l-418">#</a> [19:57] &lt;Ms2ger&gt;   }</li>
+ <li id="l-419"><a href="#l-419">#</a> [20:00] * Quits: shepazutoo (~schepers@81.253.7.12) (Ping timeout: 252 seconds)</li>
+ <li id="l-420" _a="annevk"><a href="#l-420">#</a> [20:00] &lt;annevk&gt; ?</li>
+ <li id="l-421" _a="annevk"><a href="#l-421">#</a> [20:00] &lt;annevk&gt; it's instanceof afaict</li>
+ <li id="l-422" _a="Ms2ger"><a href="#l-422">#</a> [20:01] &lt;Ms2ger&gt; It is</li>
+ <li id="l-423" _a="annevk"><a href="#l-423">#</a> [20:10] &lt;annevk&gt; hmm</li>
+ <li id="l-424" _a="annevk"><a href="#l-424">#</a> [20:10] &lt;annevk&gt; document.body.removeChild(null) makes the framework collapse?</li>
+ <li id="l-425" _a="annevk"><a href="#l-425">#</a> [20:10] &lt;annevk&gt; i wonder if i do something wrong</li>
+ <li id="l-426" _a="annevk" _r="ooh"><a href="#l-426">#</a> [20:11] &lt;annevk&gt; ooh, I guess it's a bug in the framework</li>
+ <li id="l-427" _a="annevk"><a href="#l-427">#</a> [20:11] &lt;annevk&gt; assert_throws is continuously buggy</li>
+ <li id="l-428"><a href="#l-428">#</a> [20:31] * Joins: Heimidal (~heimidal@unaffiliated/heimidal)</li>
+ <li id="l-429"><a href="#l-429">#</a> [20:34] * Joins: bgalbraith (~bgalbrait@c-71-198-27-150.hsd1.ca.comcast.net)</li>
+ <li id="l-430"><a href="#l-430">#</a> [20:43] * Quits: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no) (Quit: Leaving)</li>
+ <li id="l-431"><a href="#l-431">#</a> [20:45] * Joins: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-432"><a href="#l-432">#</a> [20:46] * Quits: Necrathex (~bleptop@212-123-163-12.ip.telfort.nl) (Quit: Necrathex)</li>
+ <li id="l-433"><a href="#l-433">#</a> [20:55] * Joins: Twisol (~Twisol@wikia/Oddlyoko)</li>
+ <li id="l-434" _a="annevk"><a href="#l-434">#</a> [21:08] &lt;annevk&gt; yay</li>
+ <li id="l-435" _a="annevk"><a href="#l-435">#</a> [21:08] &lt;annevk&gt; all existing stuff is fixored</li>
+ <li id="l-436" _a="annevk"><a href="#l-436">#</a> [21:08] &lt;annevk&gt; now all the new stuff needs doing</li>
+ <li id="l-437"><a href="#l-437">#</a> [21:09] * Quits: henrikbjorn (~henrik@c83-249-72-254.bredband.comhem.se) (Remote host closed the connection)</li>
+ <li id="l-438" _a="llrcombs"><a href="#l-438">#</a> [21:10] &lt;llrcombs&gt; if a page has a .manifest file, should the UA check for a new version of each content file on load? If not, when should it?</li>
+ <li id="l-439" _a="annevk"><a href="#l-439">#</a> [21:11] &lt;annevk&gt; only when the manifest changes</li>
+ <li id="l-440" _a="llrcombs"><a href="#l-440">#</a> [21:12] &lt;llrcombs&gt; so how would I designate that a file had been updated?</li>
+ <li id="l-441" _a="llrcombs"><a href="#l-441">#</a> [21:12] &lt;llrcombs&gt; (i.e. a .js file with a new version)</li>
+ <li id="l-442" _a="annevk"><a href="#l-442">#</a> [21:12] &lt;annevk&gt; you change the manifest</li>
+ <li id="l-443" _a="mamund_"><a href="#l-443">#</a> [21:12] * mamund_ is now known as mamund</li>
+ <li id="l-444" _a="annevk"><a href="#l-444">#</a> [21:12] &lt;annevk&gt; e.g. change a comment or do something like foo.js?v=2</li>
+ <li id="l-445" _a="llrcombs"><a href="#l-445">#</a> [21:12] &lt;llrcombs&gt; or add whitespace?</li>
+ <li id="l-446" _a="annevk"><a href="#l-446">#</a> [21:13] &lt;annevk&gt; could work</li>
+ <li id="l-447" _a="llrcombs"><a href="#l-447">#</a> [21:13] &lt;llrcombs&gt; seems flawed</li>
+ <li id="l-448" _a="annevk"><a href="#l-448">#</a> [21:13] &lt;annevk&gt; we can make it more complicated later</li>
+ <li id="l-449" _a="llrcombs" _r="suggestion"><a href="#l-449">#</a> [21:13] &lt;llrcombs&gt; suggestion: allow a .manifest to include last-modified datetimes for each file</li>
+ <li id="l-450" _a="annevk"><a href="#l-450">#</a> [21:13] &lt;annevk&gt; that would be complicated</li>
+ <li id="l-451" _a="llrcombs"><a href="#l-451">#</a> [21:13] &lt;llrcombs&gt; so the UA can figure out if it should grab a new rev</li>
+ <li id="l-452" _a="llrcombs"><a href="#l-452">#</a> [21:14] &lt;llrcombs&gt; until then, I can't use manifests for my webapps/widgets/etc</li>
+ <li id="l-453" _a="annevk"><a href="#l-453">#</a> [21:14] &lt;annevk&gt; why?</li>
+ <li id="l-454" _a="annevk"><a href="#l-454">#</a> [21:14] &lt;annevk&gt; you can just print the timestamp as comment, no?</li>
+ <li id="l-455" _a="llrcombs" _r="yeah"><a href="#l-455">#</a> [21:15] &lt;llrcombs&gt; yeah, but then it'd grab a new version of every file for every load</li>
+ <li id="l-456" _a="annevk"><a href="#l-456">#</a> [21:15] &lt;annevk&gt; the server can return 304 like it can normally</li>
+ <li id="l-457" _a="llrcombs"><a href="#l-457">#</a> [21:15] &lt;llrcombs&gt; defeats the purpose</li>
+ <li id="l-458" _a="annevk"><a href="#l-458">#</a> [21:15] &lt;annevk&gt; if your file changes all the time you should prolly not put it in the manifest</li>
+ <li id="l-459" _a="llrcombs" _r="no"><a href="#l-459">#</a> [21:16] &lt;llrcombs&gt; no, I'm debugging</li>
+ <li id="l-460" _a="llrcombs"><a href="#l-460">#</a> [21:16] &lt;llrcombs&gt; and I'll end up updating it to make new versions</li>
+ <li id="l-461" _a="llrcombs"><a href="#l-461">#</a> [21:19] &lt;llrcombs&gt; you know, mantinence, new features...</li>
+ <li id="l-462" _a="llrcombs"><a href="#l-462">#</a> [21:19] &lt;llrcombs&gt; bugfixes</li>
+ <li id="l-463" _a="annevk"><a href="#l-463">#</a> [21:20] &lt;annevk&gt; sure</li>
+ <li id="l-464" _a="annevk"><a href="#l-464">#</a> [21:20] &lt;annevk&gt; so add manifest when most of the other stuff is done</li>
+ <li id="l-465" _a="annevk"><a href="#l-465">#</a> [21:20] &lt;annevk&gt; I don't really see the problem here</li>
+ <li id="l-466" _a="llrcombs"><a href="#l-466">#</a> [21:21] &lt;llrcombs&gt; here's my idea:</li>
+ <li id="l-467" _a="llrcombs"><a href="#l-467">#</a> [21:22] &lt;llrcombs&gt; the manifest file could be generated by a script, or just manually edited, so it include last-modified dates for each file in it</li>
+ <li id="l-468" _a="llrcombs"><a href="#l-468">#</a> [21:22] &lt;llrcombs&gt; so when offline, the UA uses its cached versions of everything</li>
+ <li id="l-469" _a="llrcombs"><a href="#l-469">#</a> [21:22] &lt;llrcombs&gt; and when online, it just checks the manifest against its stored manifest</li>
+ <li id="l-470" _a="llrcombs"><a href="#l-470">#</a> [21:22] &lt;llrcombs&gt; to see if there's a new version of anything</li>
+ <li id="l-471" _a="annevk" _r="yeah"><a href="#l-471">#</a> [21:22] &lt;annevk&gt; yeah, I just told you you can do that</li>
+ <li id="l-472" _a="llrcombs"><a href="#l-472">#</a> [21:22] &lt;llrcombs&gt; if there is, it just downloads THAT file</li>
+ <li id="l-473" _a="llrcombs" _r="otherwise"><a href="#l-473">#</a> [21:23] &lt;llrcombs&gt; otherwise, it keeps using its cached version</li>
+ <li id="l-474" _a="annevk"><a href="#l-474">#</a> [21:23] &lt;annevk&gt; it doesn't download the whole file anyway</li>
+ <li id="l-475" _a="llrcombs"><a href="#l-475">#</a> [21:23] &lt;llrcombs&gt; the whole cached entity, or the whole .manifest?</li>
+ <li id="l-476" _a="annevk"><a href="#l-476">#</a> [21:23] &lt;annevk&gt; the former</li>
+ <li id="l-477" _a="annevk"><a href="#l-477">#</a> [21:24] &lt;annevk&gt; it just does a request and the server can say 304</li>
+ <li id="l-478" _a="gsnedders"><a href="#l-478">#</a> [21:24] &lt;gsnedders&gt; For all those people nagging me about Anolis while I've been away, the following statement is true: 10:40 #whatwg: &lt; jgraham&gt; annevk: gsnedders has explicitly lost interest in anolis</li>
+ <li id="l-479" _a="annevk"><a href="#l-479">#</a> [21:24] &lt;annevk&gt; SPDY will prolly optimize away the remaining bits</li>
+ <li id="l-480" _a="llrcombs"><a href="#l-480">#</a> [21:24] &lt;llrcombs&gt; :D @ SPDY</li>
+ <li id="l-481" _a="llrcombs"><a href="#l-481">#</a> [21:24] &lt;llrcombs&gt; but no one is implementing...</li>
+ <li id="l-482" _a="llrcombs"><a href="#l-482">#</a> [21:25] &lt;llrcombs&gt; so it makes a request for every file, even those in the cache manifest?</li>
+ <li id="l-483" _a="annevk"><a href="#l-483">#</a> [21:25] &lt;annevk&gt; yawn</li>
+ <li id="l-484" _a="Ms2ger" _r="gsnedders"><a href="#l-484">#</a> [21:25] &lt;Ms2ger&gt; gsnedders, are you still going to put anolis2 somewhere?</li>
+ <li id="l-485" _a="llrcombs"><a href="#l-485">#</a> [21:25] &lt;llrcombs&gt; sorry</li>
+ <li id="l-486" _a="llrcombs"><a href="#l-486">#</a> [21:25] &lt;llrcombs&gt; I guess I'm not a caching expert</li>
+ <li id="l-487" _a="gsnedders" _r="Ms2ger"><a href="#l-487">#</a> [21:25] &lt;gsnedders&gt; Ms2ger: Let me do that riht now</li>
+ <li id="l-488"><a href="#l-488">#</a> [21:26] * Quits: annevk (~annevk@host86-184-97-104.range86-184.btcentralplus.com) (Quit: annevk)</li>
+ <li id="l-489" _a="gsnedders" _r="Ms2ger"><a href="#l-489">#</a> [21:28] &lt;gsnedders&gt; Ms2ger: <a href="http://hg.gsnedders.com/anolis2/">http://hg.gsnedders.com/anolis2/</a></li>
+ <li id="l-490" _a="gsnedders"><a href="#l-490">#</a> [21:28] * gsnedders has no idea whether it even works at the moment</li>
+ <li id="l-491" _a="Ms2ger"><a href="#l-491">#</a> [21:30] * Ms2ger wonders what prompted &quot;I &lt;3 namespaces.&quot;</li>
+ <li id="l-492" _a="gsnedders" _r="Ms2ger"><a href="#l-492">#</a> [21:30] &lt;gsnedders&gt; Ms2ger: See the diff</li>
+ <li id="l-493"><a href="#l-493">#</a> [21:30] * Joins: pauld (~chatzilla@host86-174-210-104.range86-174.btcentralplus.com)</li>
+ <li id="l-494"><a href="#l-494">#</a> [21:34] * Quits: sebmarkbage (50a87316@gateway/web/freenode/ip.80.168.115.22) (Ping timeout: 252 seconds)</li>
+ <li id="l-495"><a href="#l-495">#</a> [21:39] * Quits: JonathanNeal (~Jonathan_@99-59-124-67.lightspeed.irvnca.sbcglobal.net) (Read error: Connection reset by peer)</li>
+ <li id="l-496"><a href="#l-496">#</a> [21:39] * Joins: JonathanNeal (~Jonathan_@99-59-124-67.lightspeed.irvnca.sbcglobal.net)</li>
+ <li id="l-497"><a href="#l-497">#</a> [21:39] * Quits: JonathanNeal (~Jonathan_@99-59-124-67.lightspeed.irvnca.sbcglobal.net) (Client Quit)</li>
+ <li id="l-498" _a="jgraham"><a href="#l-498">#</a> [22:03] &lt;jgraham&gt; Oh anne left</li>
+ <li id="l-499" _a="jgraham"><a href="#l-499">#</a> [22:03] &lt;jgraham&gt; dammit</li>
+ <li id="l-500" class="flagged" _a="jgraham"><a href="#l-500">#</a> [22:04] &lt;jgraham&gt; for the record assert_throws(new TypeError(), document.body.removeChild({'a':'b'}))</li>
+ <li id="l-501" _a="jgraham"><a href="#l-501">#</a> [22:04] &lt;jgraham&gt; should work</li>
+ <li id="l-502" _a="jgraham"><a href="#l-502">#</a> [22:06] * jgraham wonders what the bug is</li>
+ <li id="l-503" _a="jgraham"><a href="#l-503">#</a> [22:07] &lt;jgraham&gt; I guess I could investigate</li>
+ <li id="l-504" _a="jgraham"><a href="#l-504">#</a> [22:07] &lt;jgraham&gt; But I should probably do the thing that Sam wanted first</li>
+ <li id="l-505" _a="Philip`"><a href="#l-505">#</a> [22:08] &lt;Philip`&gt; Surely that won't work since it'll call removeChild before calling assert_throws?</li>
+ <li id="l-506"><a href="#l-506">#</a> [22:08] * Quits: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net) (Quit: -)</li>
+ <li id="l-507"><a href="#l-507">#</a> [22:09] * Quits: bgalbraith (~bgalbrait@c-71-198-27-150.hsd1.ca.comcast.net) (Quit: bgalbraith)</li>
+ <li id="l-508" _a="Ms2ger"><a href="#l-508">#</a> [22:09] * Ms2ger assumes function() { document.body.removeChild({'a':'b'}) }</li>
+ <li id="l-509" _a="Philip`" _r="Ah"><a href="#l-509">#</a> [22:10] &lt;Philip`&gt; Ah, that would seem more sensible and less like magic</li>
+ <li id="l-510" _a="jgraham" _r="Er"><a href="#l-510">#</a> [22:10] &lt;jgraham&gt; Er, yeah right</li>
+ <li id="l-511" _a="jgraham"><a href="#l-511">#</a> [22:10] &lt;jgraham&gt; Lots of function() {} wrappers needed everywhere</li>
+ <li id="l-512" _a="jgraham"><a href="#l-512">#</a> [22:11] * jgraham wishes javascript had a Haskell-like syntax for anonymous functions</li>
+ <li id="l-513" _a="jgraham"><a href="#l-513">#</a> [22:12] &lt;jgraham&gt; It would make this kind of thing much less visually noisy</li>
+ <li id="l-514"><a href="#l-514">#</a> [22:14] * Quits: ukai (~ukai@nat/google/x-tsakdttbgmyplhew) (Ping timeout: 265 seconds)</li>
+ <li id="l-515"><a href="#l-515">#</a> [22:16] * Joins: ukai (~ukai@nat/google/x-jqyklrizlwfkyzzh)</li>
+ <li id="l-516" _a="gsnedders" _r="jgraham"><a href="#l-516">#</a> [22:17] &lt;gsnedders&gt; jgraham: Are you starting to admit Haskell is a good language? :P</li>
+ <li id="l-517"><a href="#l-517">#</a> [22:21] * Joins: drunknbass (~drunknbas@76.91.255.83)</li>
+ <li id="l-518" _a="Twisol"><a href="#l-518">#</a> [22:25] * Twisol is now known as Twisol|away</li>
+ <li id="l-519"><a href="#l-519">#</a> [22:34] * Quits: pauld (~chatzilla@host86-174-210-104.range86-174.btcentralplus.com) (Remote host closed the connection)</li>
+ <li id="l-520" _a="jgraham" _r="gsnedders"><a href="#l-520">#</a> [22:36] &lt;jgraham&gt; gsnedders: WTF?</li>
+ <li id="l-521" _a="jgraham"><a href="#l-521">#</a> [22:36] &lt;jgraham&gt; I have *nver* said Haskell was a bad language</li>
+ <li id="l-522" _a="jgraham"><a href="#l-522">#</a> [22:36] &lt;jgraham&gt; **never*</li>
+ <li id="l-523" _a="jgraham"><a href="#l-523">#</a> [22:36] &lt;jgraham&gt; I sai it has a steep learning curve</li>
+ <li id="l-524" _a="jgraham"><a href="#l-524">#</a> [22:36] &lt;jgraham&gt; +d</li>
+ <li id="l-525" _a="gsnedders"><a href="#l-525">#</a> [22:43] &lt;gsnedders&gt; You've said it in such a way as to imply it is bad as a result</li>
+ <li id="l-526"><a href="#l-526">#</a> [22:43] * Quits: f1lt3r (~f1lt3r@64.119.159.231) (Read error: Connection reset by peer)</li>
+ <li id="l-527"><a href="#l-527">#</a> [22:43] * Quits: boaz (~boaz@64.119.159.231) (Read error: Connection reset by peer)</li>
+ <li id="l-528"><a href="#l-528">#</a> [22:44] * Joins: boaz (~boaz@64.119.159.231)</li>
+ <li id="l-529"><a href="#l-529">#</a> [22:44] * Joins: f1lt3r (~f1lt3r@64.119.159.231)</li>
+ <li id="l-530"><a href="#l-530">#</a> [22:46] * Joins: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-531"><a href="#l-531">#</a> [22:56] * Quits: Ms2ger (~Ms2ger@91.181.72.112) (Quit: nn, back Sept. 11)</li>
+ <li id="l-532" _a="jgraham"><a href="#l-532">#</a> [22:56] &lt;jgraham&gt; Only if I was being severely misunderstood</li>
+ <li id="l-533" _a="jgraham"><a href="#l-533">#</a> [22:56] &lt;jgraham&gt; Which is possible if I wasn't being clear</li>
+ <li id="l-534" _a="jgraham"><a href="#l-534">#</a> [22:56] &lt;jgraham&gt; (being hard to learn is a bad property. It is not necessarily enough to create a bad whole)</li>
+ <li id="l-535" _a="gsnedders" _r="jgraham"><a href="#l-535">#</a> [23:00] &lt;gsnedders&gt; jgraham: what happened about the t-shirt, btw?</li>
+ <li id="l-536" _a="jgraham" _r="gsnedders"><a href="#l-536">#</a> [23:04] &lt;jgraham&gt; gsnedders: Not sure</li>
+ <li id="l-537" _a="gsnedders" _r="jgraham"><a href="#l-537">#</a> [23:05] &lt;gsnedders&gt; jgraham: Feel free to just keep it till New Year, fwiw</li>
+ <li id="l-538" _a="jgraham" _r="gsnedders"><a href="#l-538">#</a> [23:05] &lt;jgraham&gt; gsnedders: It wouldn't fit</li>
+ <li id="l-539" _a="jgraham"><a href="#l-539">#</a> [23:05] &lt;jgraham&gt; :)</li>
+ <li id="l-540" _a="gsnedders"><a href="#l-540">#</a> [23:06] &lt;gsnedders&gt; ;P</li>
+ <li id="l-541"><a href="#l-541">#</a> [23:08] * Joins: jacobolus (~jacobolus@c-67-186-134-101.hsd1.ma.comcast.net)</li>
+ <li id="l-542" _a="Twisol|away"><a href="#l-542">#</a> [23:27] * Twisol|away is now known as Twisol</li>
+ <li id="l-543"><a href="#l-543">#</a> [23:31] * Joins: jacobolu_ (~jacobolus@c-67-186-134-101.hsd1.ma.comcast.net)</li>
+ <li id="l-544"><a href="#l-544">#</a> [23:32] * Quits: ROBOd (~robod@109.96.244.1) (Quit: .)</li>
+ <li id="l-545"><a href="#l-545">#</a> [23:33] * Quits: jacobolus (~jacobolus@c-67-186-134-101.hsd1.ma.comcast.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-546" _a="jacobolu_"><a href="#l-546">#</a> [23:37] * jacobolu_ is now known as jacobolus</li>
+ <li id="l-547"><a href="#l-547">#</a> [23:43] * Joins: JoePeck (~JoePeck@c-76-102-33-198.hsd1.ca.comcast.net)</li>
+ <li id="l-548"><a href="#l-548">#</a> [23:49] * Joins: othermaciej (~mjs@c-69-181-196-33.hsd1.ca.comcast.net)</li>
+ <li id="l-549"><a href="#l-549">#</a> [23:54] * Joins: bgalbraith (~bgalbrait@c-71-198-27-150.hsd1.ca.comcast.net)</li>
+ <li id="l-550"><a href="#l-550">#</a> Session Close: Sun Sep 05 00:00:00 2010</li>
+</ol>
+<p id="end">The end :)

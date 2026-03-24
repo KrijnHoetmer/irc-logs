@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20080531</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20080531.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2008-05-31 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat May 31 00:00:00 2008</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:00] * Joins: jruderman (n=jruderma@guest-226.mountainview.mozilla.com)</li>
+ <li id="l-4" _a="Philip`" _r="Hmm"><a href="#l-4">#</a> [00:02] &lt;Philip`&gt; Hmm, the problem is too non-obvious and hard to reproduce :-(</li>
+ <li id="l-5" _a="Philip`"><a href="#l-5">#</a> [00:02] * Philip` therefore gives up on it</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:06] * Quits: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:08] * Quits: phsiao (n=shawn@nat/ibm/x-3e9c41088111dbdf)</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:10] * Quits: hober (n=ted@unaffiliated/hober) (&quot;ERC Version 5.3 (IRC client for Emacs)&quot;)</li>
+ <li id="l-9"><a href="#l-9">#</a> [00:13] * Joins: eseidel (n=eseidel@nat/google/x-bda2832df4ab85ec)</li>
+ <li id="l-10"><a href="#l-10">#</a> [00:17] * Quits: qwert666 (n=qwert666@acbg240.neoplus.adsl.tpnet.pl) (&quot;Leaving&quot;)</li>
+ <li id="l-11" _a="Philip`"><a href="#l-11">#</a> [00:27] &lt;Philip`&gt; Why are EBCDIC encoding not a &quot;must not support&quot;? They seem to have the same security problems, if you write a U+0014 and convince the user's browser to decode it as EBCDIC to get a '&lt;'</li>
+ <li id="l-12" _a="Philip`"><a href="#l-12">#</a> [00:27] &lt;Philip`&gt; *encodings</li>
+ <li id="l-13" _a="Philip`"><a href="#l-13">#</a> [00:28] &lt;Philip`&gt; *same security problems as UTF-7 etc</li>
+ <li id="l-14"><a href="#l-14">#</a> [00:33] * Quits: csarven (i=csarven@on-irc.csarven.ca) (&quot;<a href="http://www.csarven.ca">http://www.csarven.ca</a>&quot;)</li>
+ <li id="l-15" _a="Philip`"><a href="#l-15">#</a> [00:39] &lt;Philip`&gt; s/U+0014/U+004C/</li>
+ <li id="l-16" _a="Hixie"><a href="#l-16">#</a> [00:57] &lt;Hixie&gt; the problem with UTF-7 is that IE autodetected it too eagerly, so non-UTF-7 pages let people smuggle in UTF-7 stuff that got treated as such</li>
+ <li id="l-17" _a="Hixie"><a href="#l-17">#</a> [00:57] &lt;Hixie&gt; does it do that with EBCDIC?</li>
+ <li id="l-18" _a="Hixie"><a href="#l-18">#</a> [00:58] &lt;Hixie&gt; the only difference really is that EBCDIC has more than zero users</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:58] &lt;Hixie&gt; probably not much more than zero, but probably enough that we don't want to make them non-conforming</li>
+ <li id="l-20" _a="Philip`"><a href="#l-20">#</a> [01:03] &lt;Philip`&gt; I have no idea how much support/usage EBCDIC has</li>
+ <li id="l-21" _a="gsnedders"><a href="#l-21">#</a> [01:05] &lt;gsnedders&gt; The fun of EBCDIC is all the different codepages</li>
+ <li id="l-22"><a href="#l-22">#</a> [01:06] * Quits: smedero (n=smedero@mdp-nat251.mdp.com)</li>
+ <li id="l-23" _a="Philip`"><a href="#l-23">#</a> [01:07] &lt;Philip`&gt; It just seems like UTF-7 and EBCDIC have the same inherent technical problems, so they should both be handled the same, i.e. either both permitted (but require that they don't get autodetected) or both forbidden</li>
+ <li id="l-24" class="flagged" _a="Philip`"><a href="#l-24">#</a> [01:08] &lt;Philip`&gt; (Presumably both still suffer from the &quot;Web browsers have an awesome easter egg! Just click the Encoding menu then select EBCDIC and there's a cool space fighter game.                    (EBCDIC-encoded &lt;script&gt;...)&quot; attack)</li>
+ <li id="l-25" class="flagged" _a="Hixie"><a href="#l-25">#</a> [01:15] &lt;Hixie&gt; any non-ASCII encoding has that problem</li>
+ <li id="l-26" _a="Hixie"><a href="#l-26">#</a> [01:16] &lt;Hixie&gt; it seems to be very easy to massively confuse browsers by playing with .focus() and onfocus=&quot;&quot;</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [01:16] &lt;Hixie&gt; <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%20%0A...%3Cform%3E%3Cinput%20name%3Da%20onfocus%3D%22value%2B%3D1%3Bd.name%3D%27a%27%3Bname%3D%27d%27%3Bb.focus()%22%3E%0A%3Cinput%20name%3Db%20onfocus%3D%22value%2B%3D1%3Bc.focus()%22%3E%0A%3Cinput%20name%3Dc%20onfocus%3D%22value%2B%3D1%3Bd.focus()%22%3E%0A%3Cinput%20name%3Dd%20onfocus%3D%22value%2B%3D1%3Ba.focus()%22%3E">http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%20%0A...%3Cform%3E%3Cinput%20name%3Da%20onfocus%3D%22value%2B%3D1%3Bd.name%3D%27a%27%3Bname%3D%27d%27%3Bb.focus()%22%3E%0A%3Cinput%20name%3Db%20onfocus%3D%22value%2B%3D1%3Bc.focus()%22%3E%0A%3Cinput%20name%3Dc%20onfocus%3D%22value%2B%3D1%3Bd.focus()%22%3E%0A%3Cinput%20name%3Dd%20onfocus%3D%22value%2B%3D1%3Ba.focus()%22%3E</a></li>
+ <li id="l-28" _a="gsnedders" _r="Hixie"><a href="#l-28">#</a> [01:16] &lt;gsnedders&gt; Hixie: Therefore, we should require everyone to use ASCII!</li>
+ <li id="l-29" _a="Hixie"><a href="#l-29">#</a> [01:17] &lt;Hixie&gt; e.g. in firefox, click the fourth input</li>
+ <li id="l-30" _a="Hixie"><a href="#l-30">#</a> [01:17] &lt;Hixie&gt; firefox is the most graceful</li>
+ <li id="l-31" _a="Hixie"><a href="#l-31">#</a> [01:17] &lt;Hixie&gt; opera just locks the page</li>
+ <li id="l-32" _a="gsnedders"><a href="#l-32">#</a> [01:18] &lt;gsnedders&gt; Saf behaves like Op</li>
+ <li id="l-33" _a="gsnedders"><a href="#l-33">#</a> [01:18] &lt;gsnedders&gt; Fun.</li>
+ <li id="l-34" _a="annevk" _r="man"><a href="#l-34">#</a> [01:18] &lt;annevk&gt; man, amazon.co.uk sucks</li>
+ <li id="l-35" _a="gsnedders"><a href="#l-35">#</a> [01:18] &lt;gsnedders&gt; Browsers are silly</li>
+ <li id="l-36" _a="Hixie"><a href="#l-36">#</a> [01:18] &lt;Hixie&gt; safari and ie hang altoether</li>
+ <li id="l-37" _a="Hixie"><a href="#l-37">#</a> [01:18] &lt;Hixie&gt; opera doesn't hang altogether</li>
+ <li id="l-38" _a="gsnedders" _r="annevk"><a href="#l-38">#</a> [01:18] &lt;gsnedders&gt; annevk: That's because it includes .uk :)</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [01:18] &lt;Hixie&gt; just the page</li>
+ <li id="l-40" _a="annevk"><a href="#l-40">#</a> [01:18] &lt;annevk&gt; I login, select a set of books, go to the order pages, at that point it tells me I can't get them shipped to NL</li>
+ <li id="l-41" _a="gsnedders"><a href="#l-41">#</a> [01:18] &lt;gsnedders&gt; heh</li>
+ <li id="l-42" _a="Hixie"><a href="#l-42">#</a> [01:19] &lt;Hixie&gt; ok IE hangs the system</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [01:19] &lt;Hixie&gt; not just the browser</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [01:19] &lt;Hixie&gt; jesus</li>
+ <li id="l-45" _a="Hixie"><a href="#l-45">#</a> [01:19] * Hixie reboots his vm</li>
+ <li id="l-46" _a="gsnedders"><a href="#l-46">#</a> [01:19] &lt;gsnedders&gt; Awesomeness.</li>
+ <li id="l-47" _a="Hixie"><a href="#l-47">#</a> [01:19] &lt;Hixie&gt; bbl</li>
+ <li id="l-48" _a="gsnedders"><a href="#l-48">#</a> [01:19] &lt;gsnedders&gt; bye</li>
+ <li id="l-49" _a="annevk"><a href="#l-49">#</a> [01:20] &lt;annevk&gt; the last time I ordered something from them it never arrived</li>
+ <li id="l-50" _a="annevk"><a href="#l-50">#</a> [01:20] &lt;annevk&gt; and I didn't get my money back, so maybe it was silly to look again</li>
+ <li id="l-51" _a="gsnedders"><a href="#l-51">#</a> [01:20] &lt;gsnedders&gt; I've had misprinted books come</li>
+ <li id="l-52" _a="gsnedders"><a href="#l-52">#</a> [01:21] &lt;gsnedders&gt; Sent it back, got a replacement with the same problem</li>
+ <li id="l-53"><a href="#l-53">#</a> [01:22] * Quits: othermaciej (n=mjs@206-169-112-6.static.twtelecom.net)</li>
+ <li id="l-54"><a href="#l-54">#</a> [01:22] * Quits: aaronlev (n=chatzill@e176251108.adsl.alicedsl.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-55" _a="gsnedders"><a href="#l-55">#</a> [01:23] * gsnedders should probably put in a late application to start uni this year</li>
+ <li id="l-56" _a="gsnedders"><a href="#l-56">#</a> [01:23] * gsnedders just wants to get the hell away from school</li>
+ <li id="l-57" _a="Hixie"><a href="#l-57">#</a> [01:30] &lt;Hixie&gt; amazon's tech support were always very good when i complained about stuff</li>
+ <li id="l-58" _a="Hixie"><a href="#l-58">#</a> [01:33] &lt;Hixie&gt; does .blur() simply undo the focus regardless of the element it is invoked on?</li>
+ <li id="l-59"><a href="#l-59">#</a> [01:35] * Parts: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-60"><a href="#l-60">#</a> [01:45] * Quits: aruner (n=chatzill@206-169-112-6.static.twtelecom.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-61" _a="annevk" _r="Hixie"><a href="#l-61">#</a> [01:51] &lt;annevk&gt; Hixie, not in Opera</li>
+ <li id="l-62" _a="annevk"><a href="#l-62">#</a> [01:53] &lt;annevk&gt; doesn't seem to happen in Firefox either</li>
+ <li id="l-63"><a href="#l-63">#</a> [01:53] * Joins: roc (n=roc@222-154-9-47.jetstream.xtra.co.nz)</li>
+ <li id="l-64" _a="Hixie" _r="woah"><a href="#l-64">#</a> [01:55] &lt;Hixie&gt; woah, IE is the only browser that does onfocus/onblur asynchronously</li>
+ <li id="l-65" _a="Hixie"><a href="#l-65">#</a> [02:07] &lt;Hixie&gt; i think i'm just gonna spec focus and blur to be sensible</li>
+ <li id="l-66" _a="Hixie"><a href="#l-66">#</a> [02:07] &lt;Hixie&gt; and not worry too much about compat</li>
+ <li id="l-67" _a="Hixie"><a href="#l-67">#</a> [02:07] &lt;Hixie&gt; since the browsers mostly hang...</li>
+ <li id="l-68"><a href="#l-68">#</a> [02:08] * Quits: eseidel (n=eseidel@nat/google/x-bda2832df4ab85ec)</li>
+ <li id="l-69"><a href="#l-69">#</a> [02:23] * Quits: kingryan (n=ryan@c-24-5-77-167.hsd1.ca.comcast.net)</li>
+ <li id="l-70"><a href="#l-70">#</a> [02:23] * Joins: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net)</li>
+ <li id="l-71" _a="Hixie"><a href="#l-71">#</a> [02:37] &lt;Hixie&gt; <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%3Cbody%20onload%3D%22document.forms%5B0%5D.a.focus()%22%3E%0A...%3Cform%3E%0A%3Ctextarea%20name%3Dt%20cols%3D100%20rows%3D3%3E%3C%2Ftextarea%3E%3Cp%3E%0A%3Cinput%20name%3Da%20onblur%3D%22t.value%2B%3D'ab%20'%3B%20b.focus()%3B%22%3E%0A%3Cinput%20name%3Db%20onfocus%3D%22t.value%2B%3D'bf1%20'%3Ba.focus()%3Bt.value%2B%3D'bf2%20'%3B%22%20onblur%3D%22t.value%2B%3D'bb%20'%3B%22%3E">http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%3Cbody%20onload%3D%22document.forms%5B0%5D.a.focus()%22%3E%0A...%3Cform%3E%0A%3Ctextarea%20name%3Dt%20cols%3D100%20rows%3D3%3E%3C%2Ftextarea%3E%3Cp%3E%0A%3Cinput%20name%3Da%20onblur%3D%22t.value%2B%3D'ab%20'%3B%20b.focus()%3B%22%3E%0A%3Cinput%20name%3Db%20onfocus%3D%22t.value%2B%3D'bf1%20'%3Ba.focus()%3Bt.value%2B%3D'bf2%20'%3B%22%20onblur%3D%22t.value%2B%3D'bb%20'%3B%22%3E</a></li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [02:37] &lt;Hixie&gt; wtf is safari doing</li>
+ <li id="l-73"><a href="#l-73">#</a> [02:38] * Joins: jwalden (n=waldo@RANDOM-THREE-O-EIGHT.MIT.EDU)</li>
+ <li id="l-74" _a="Dashiva"><a href="#l-74">#</a> [02:40] &lt;Dashiva&gt; Making your job more interesting</li>
+ <li id="l-75"><a href="#l-75">#</a> [02:41] * Parts: hdh (n=hdh@118.71.121.143) (&quot;Konversation terminated!&quot;)</li>
+ <li id="l-76" _a="Hixie"><a href="#l-76">#</a> [02:47] &lt;Hixie&gt; safari is clearly buggy here</li>
+ <li id="l-77" _a="othermaciej"><a href="#l-77">#</a> [02:50] &lt;othermaciej&gt; that test case makes me cry</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [02:55] &lt;Hixie&gt; well if you want to fix it wait a few days, i'm writing a spec for it</li>
+ <li id="l-79"><a href="#l-79">#</a> [02:58] * Joins: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-80" _a="othermaciej" _r="honestly"><a href="#l-80">#</a> [03:02] &lt;othermaciej&gt; honestly, I don't care all that much what happens when nodes focus each other from blur and focus handlers in complicated ways, but I am sure there are sites depending on it</li>
+ <li id="l-81" _a="Hixie"><a href="#l-81">#</a> [03:02] &lt;Hixie&gt; i doubt it, IE hangs.</li>
+ <li id="l-82" _a="othermaciej"><a href="#l-82">#</a> [03:03] &lt;othermaciej&gt; we don't have the worst behavior, then :-)</li>
+ <li id="l-83" _a="Hixie"><a href="#l-83">#</a> [03:03] &lt;Hixie&gt; you hang in certain situations too</li>
+ <li id="l-84" _a="Hixie"><a href="#l-84">#</a> [03:03] &lt;Hixie&gt; though IE's hang at one point required me to reboot my vm</li>
+ <li id="l-85" _a="Hixie"><a href="#l-85">#</a> [03:03] &lt;Hixie&gt; so...</li>
+ <li id="l-86" _a="jwalden"><a href="#l-86">#</a> [03:06] &lt;jwalden&gt; haha</li>
+ <li id="l-87"><a href="#l-87">#</a> [03:27] * Quits: dbaron (n=dbaron@corp-241.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-88"><a href="#l-88">#</a> [03:27] * Joins: sverrej (n=sverrej@89.10.27.86)</li>
+ <li id="l-89"><a href="#l-89">#</a> [03:29] * Joins: hdh (n=hdh@118.71.121.143)</li>
+ <li id="l-90"><a href="#l-90">#</a> [03:46] * Joins: aroben (n=adamrobe@76.111.160.14)</li>
+ <li id="l-91"><a href="#l-91">#</a> [03:47] * Parts: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-92"><a href="#l-92">#</a> [03:54] * Quits: hdh (n=hdh@118.71.121.143) (Remote closed the connection)</li>
+ <li id="l-93" _a="Hixie"><a href="#l-93">#</a> [04:06] &lt;Hixie&gt; i love that browsers have FOUR different events for focusing</li>
+ <li id="l-94" _a="Hixie" _r="focus"><a href="#l-94">#</a> [04:06] &lt;Hixie&gt; focus, activate, focusin, and DOMFocusIn</li>
+ <li id="l-95"><a href="#l-95">#</a> [04:19] * Quits: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-96"><a href="#l-96">#</a> [04:21] * Joins: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net)</li>
+ <li id="l-97"><a href="#l-97">#</a> [04:32] * Quits: weinig (n=weinig@nat/apple/x-8ff1f1dd60934a2c)</li>
+ <li id="l-98"><a href="#l-98">#</a> [04:36] * Joins: othermaciej_ (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net)</li>
+ <li id="l-99"><a href="#l-99">#</a> [04:37] * Quits: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-100" _a="othermaciej_"><a href="#l-100">#</a> [04:38] * othermaciej_ is now known as othermaciej</li>
+ <li id="l-101"><a href="#l-101">#</a> [04:47] * Joins: htmlfivedotnet (n=dcostali@c-67-162-99-121.hsd1.il.comcast.net)</li>
+ <li id="l-102"><a href="#l-102">#</a> [04:47] * Parts: htmlfivedotnet (n=dcostali@c-67-162-99-121.hsd1.il.comcast.net)</li>
+ <li id="l-103"><a href="#l-103">#</a> [05:12] * Joins: hdh (n=hdh@118.71.123.66)</li>
+ <li id="l-104"><a href="#l-104">#</a> [05:15] * Joins: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net)</li>
+ <li id="l-105"><a href="#l-105">#</a> [05:16] * Quits: weinig (n=weinig@c-71-198-176-23.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-106"><a href="#l-106">#</a> [05:20] * Joins: aroben_ (n=adamrobe@76.111.160.14)</li>
+ <li id="l-107"><a href="#l-107">#</a> [05:20] * Quits: aroben (n=adamrobe@unaffiliated/aroben) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-108"><a href="#l-108">#</a> [05:21] * Quits: mcarter (n=mcarter@ip-12-22-56-126.hqglobal.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-109"><a href="#l-109">#</a> [05:44] * Quits: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-110"><a href="#l-110">#</a> [06:03] * Quits: aroben_ (n=adamrobe@unaffiliated/aroben)</li>
+ <li id="l-111"><a href="#l-111">#</a> [06:06] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-112"><a href="#l-112">#</a> [06:30] * Quits: jruderman (n=jruderma@guest-226.mountainview.mozilla.com)</li>
+ <li id="l-113"><a href="#l-113">#</a> [06:32] * Joins: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net)</li>
+ <li id="l-114"><a href="#l-114">#</a> [07:07] * Joins: qwert666 (n=qwert666@acbg240.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-115"><a href="#l-115">#</a> [07:23] * Joins: jruderman (n=jruderma@c-67-180-39-55.hsd1.ca.comcast.net)</li>
+ <li id="l-116"><a href="#l-116">#</a> [07:24] * Joins: Lachy (n=Lachlan@81.253.87.128)</li>
+ <li id="l-117" _a="Lachy"><a href="#l-117">#</a> [07:34] &lt;Lachy&gt; good morning everyone</li>
+ <li id="l-118"><a href="#l-118">#</a> [07:36] * Joins: myakura (n=myakura@p5047-ipbf1403marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-119" _a="hdh"><a href="#l-119">#</a> [07:42] &lt;hdh&gt; hi</li>
+ <li id="l-120"><a href="#l-120">#</a> [07:49] * Joins: MacDome (n=eric@c-67-180-49-110.hsd1.ca.comcast.net)</li>
+ <li id="l-121"><a href="#l-121">#</a> [08:25] * Quits: MacDome (n=eric@c-67-180-49-110.hsd1.ca.comcast.net)</li>
+ <li id="l-122"><a href="#l-122">#</a> [08:33] * Quits: qwert666 (n=qwert666@acbg240.neoplus.adsl.tpnet.pl) (&quot;Leaving&quot;)</li>
+ <li id="l-123"><a href="#l-123">#</a> [08:51] * Quits: jwalden (n=waldo@RANDOM-THREE-O-EIGHT.MIT.EDU) (Remote closed the connection)</li>
+ <li id="l-124"><a href="#l-124">#</a> [08:58] * Quits: hdh (n=hdh@118.71.123.66) (Remote closed the connection)</li>
+ <li id="l-125"><a href="#l-125">#</a> [09:05] * Joins: itpastorn (n=itpastor@139.57.227.87.static.th.siw.siwnet.net)</li>
+ <li id="l-126"><a href="#l-126">#</a> [09:06] * Quits: Lachy (n=Lachlan@81.253.87.128) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-127"><a href="#l-127">#</a> [09:07] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-128" _a="hsivonen" _r="Hixie"><a href="#l-128">#</a> [09:07] &lt;hsivonen&gt; Hixie: do you have examples of Web pages and browsers that use/support EBCDIC?</li>
+ <li id="l-129"><a href="#l-129">#</a> [09:21] * Joins: MacDome (n=eric@c-67-180-49-110.hsd1.ca.comcast.net)</li>
+ <li id="l-130"><a href="#l-130">#</a> [09:29] * Quits: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-131"><a href="#l-131">#</a> [09:48] * Joins: qwert666 (n=qwert666@acbg240.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-132"><a href="#l-132">#</a> [09:58] * Joins: othermaciej (n=mjs@adsl-70-137-131-51.dsl.snfc21.sbcglobal.net)</li>
+ <li id="l-133"><a href="#l-133">#</a> [11:08] * Joins: ROBOd (n=robod@89.122.216.38)</li>
+ <li id="l-134"><a href="#l-134">#</a> [11:13] * Quits: myakura (n=myakura@p5047-ipbf1403marunouchi.tokyo.ocn.ne.jp) (&quot;Leaving...&quot;)</li>
+ <li id="l-135" _a="Hixie" _r="hsivonen"><a href="#l-135">#</a> [11:16] &lt;Hixie&gt; hsivonen: nope</li>
+ <li id="l-136" _a="Hixie"><a href="#l-136">#</a> [11:21] &lt;Hixie&gt; and this is why &lt;video&gt; doesn't have a fullscreen option:</li>
+ <li id="l-137" _a="Hixie"><a href="#l-137">#</a> [11:21] &lt;Hixie&gt; <a href="http://www.bunnyhero.org/2008/05/10/scaring-people-with-fullscreen/">http://www.bunnyhero.org/2008/05/10/scaring-people-with-fullscreen/</a></li>
+ <li id="l-138" _a="annevk"><a href="#l-138">#</a> [11:25] * annevk doesn't have Flash</li>
+ <li id="l-139" _a="Hixie"><a href="#l-139">#</a> [11:33] &lt;Hixie&gt; probably wise</li>
+ <li id="l-140" _a="gsnedders"><a href="#l-140">#</a> [11:56] &lt;gsnedders&gt; Hmm… <a href="http://www.drps.ed.ac.uk/08-09/dpts/SCE_FINAL/205.html">http://www.drps.ed.ac.uk/08-09/dpts/SCE_FINAL/205.html</a></li>
+ <li id="l-141" _a="gsnedders"><a href="#l-141">#</a> [11:57] &lt;gsnedders&gt; That just seems too mixed for its own good</li>
+ <li id="l-142"><a href="#l-142">#</a> [12:01] * Joins: qwert666_ (n=qwert666@ets247.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-143"><a href="#l-143">#</a> [12:19] * Quits: qwert666 (n=qwert666@acbg240.neoplus.adsl.tpnet.pl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-144"><a href="#l-144">#</a> [12:19] * Joins: myakura (n=myakura@p5047-ipbf1403marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-145"><a href="#l-145">#</a> [12:33] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-146"><a href="#l-146">#</a> [12:43] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-147"><a href="#l-147">#</a> [12:49] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-148"><a href="#l-148">#</a> [13:04] * Joins: virtuelv (n=virtuelv@ti132110a341-0043.bb.online.no)</li>
+ <li id="l-149"><a href="#l-149">#</a> [13:12] * Quits: tommorris (n=tommorri@193.195.164.58) (Read error: 110 (Connection timed out))</li>
+ <li id="l-150"><a href="#l-150">#</a> [13:14] * Quits: virtuelv (n=virtuelv@ti132110a341-0043.bb.online.no) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-151"><a href="#l-151">#</a> [13:22] * Joins: deane (n=dean@121.98.128.155)</li>
+ <li id="l-152"><a href="#l-152">#</a> [13:51] * Joins: tndH (i=Rob@adsl-87-102-84-180.karoo.KCOM.COM)</li>
+ <li id="l-153" _a="hsivonen" _r="Hixie"><a href="#l-153">#</a> [13:56] &lt;hsivonen&gt; Hixie: if there's no EBCDIC to be found, wouldn't it be a good idea to ban EBCDIC altogether? i.e. tell implementors not to add it</li>
+ <li id="l-154"><a href="#l-154">#</a> [14:06] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-155" _a="hsivonen" _r="Hixie"><a href="#l-155">#</a> [14:20] &lt;hsivonen&gt; Hixie: OK. I debugged it. It's a compiler bug. I have default: break eofloop; that the compiler just loses on the way.</li>
+ <li id="l-156" _a="hsivonen"><a href="#l-156">#</a> [14:21] &lt;hsivonen&gt; I'll file a bug</li>
+ <li id="l-157"><a href="#l-157">#</a> [14:29] * Joins: qwert666 (n=qwert666@ets247.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-158"><a href="#l-158">#</a> [14:35] * Joins: jgraham_ (n=jgraham@xpc9.ast.cam.ac.uk)</li>
+ <li id="l-159" _a="annevk"><a href="#l-159">#</a> [14:41] &lt;annevk&gt; So I set up the Google Webmaster Tools and it turns out that Google can't handle 410 responses</li>
+ <li id="l-160" _a="annevk"><a href="#l-160">#</a> [14:42] &lt;annevk&gt; It claims these are &quot;HTTP errors&quot;</li>
+ <li id="l-161" _a="annevk"><a href="#l-161">#</a> [14:43] &lt;annevk&gt; Though <a href="http://www.google.com/support/webmasters/bin/answer.py?answer=83045&amp;hl=en">http://www.google.com/support/webmasters/bin/answer.py?answer=83045&amp;hl=en</a> suggests this is an intentional message</li>
+ <li id="l-162" _a="annevk"><a href="#l-162">#</a> [14:43] * annevk submits feedback</li>
+ <li id="l-163" _a="Dashiva"><a href="#l-163">#</a> [14:45] &lt;Dashiva&gt; It seems pretty odd to suggest replacing 410 with a redirect, considering 410 means there is nothing to redirect to...</li>
+ <li id="l-164"><a href="#l-164">#</a> [14:45] * Joins: maikmerten (n=maikmert@Lad90.l.pppool.de)</li>
+ <li id="l-165"><a href="#l-165">#</a> [14:45] * Quits: qwert666_ (n=qwert666@ets247.neoplus.adsl.tpnet.pl) (Connection timed out)</li>
+ <li id="l-166" _a="annevk" _r="indeed"><a href="#l-166">#</a> [14:46] &lt;annevk&gt; indeed, I mentioned Mark Pilgrim in my response, in the hope that he can explain that to them :)</li>
+ <li id="l-167" _a="hsivonen" _r="Hixie"><a href="#l-167">#</a> [14:47] &lt;hsivonen&gt; Hixie: it turned out to be a known bug: <a href="http://code.google.com/p/google-web-toolkit/issues/detail?id=2069">http://code.google.com/p/google-web-toolkit/issues/detail?id=2069</a></li>
+ <li id="l-168" _a="hsivonen" _r="well"><a href="#l-168">#</a> [14:52] &lt;hsivonen&gt; well, at least now I've reached the point in my life where program misbehavior is really a compiler bug and not my bug</li>
+ <li id="l-169" _a="annevk"><a href="#l-169">#</a> [14:53] &lt;annevk&gt; I suppose it's not a happy moment?</li>
+ <li id="l-170" _a="annevk"><a href="#l-170">#</a> [14:53] &lt;annevk&gt; RB madness: <a href="http://lists.w3.org/Archives/Public/public-html-wg-issue-tracking/2008May/">http://lists.w3.org/Archives/Public/public-html-wg-issue-tracking/2008May/</a></li>
+ <li id="l-171" _a="hsivonen" _r="annevk"><a href="#l-171">#</a> [14:54] &lt;hsivonen&gt; annevk: it's not a happy moment in the sense that it's a bug that I can't easily fix</li>
+ <li id="l-172"><a href="#l-172">#</a> [14:55] * Joins: hdh (n=hdh@118.71.123.66)</li>
+ <li id="l-173" _a="hsivonen" _r="annevk"><a href="#l-173">#</a> [14:55] &lt;hsivonen&gt; annevk: it is happy in the sense that I'm not blaming my own mistakes on a compiler without a reason</li>
+ <li id="l-174" _a="hsivonen"><a href="#l-174">#</a> [14:56] &lt;hsivonen&gt; hmm. actually, now that I think of it, I've already hit a known javac bug in V.nu before</li>
+ <li id="l-175" _a="Dashiva" _r="annevk"><a href="#l-175">#</a> [14:56] &lt;Dashiva&gt; annevk: He was gone for 6 months? I never noticed...</li>
+ <li id="l-176" _a="hsivonen"><a href="#l-176">#</a> [14:57] &lt;hsivonen&gt; but the javac case wasn't program misbehavior but javac failing to compile altogether</li>
+ <li id="l-177" _a="hsivonen" _r="anyway"><a href="#l-177">#</a> [14:57] &lt;hsivonen&gt; anyway, Eclipse's built-in compiler seems to be the least buggy of the three</li>
+ <li id="l-178" _a="hsivonen"><a href="#l-178">#</a> [14:57] &lt;hsivonen&gt; at least in the areas that I use</li>
+ <li id="l-179" _a="jgraham_"><a href="#l-179">#</a> [15:01] &lt;jgraham_&gt; Rob-Burns-spam really discourages me from spending what little free time I have at the moment reading public-html email</li>
+ <li id="l-180" _a="jgraham_"><a href="#l-180">#</a> [15:02] &lt;jgraham_&gt; It's like he's set out to DOS the WG</li>
+ <li id="l-181" _a="annevk"><a href="#l-181">#</a> [15:02] &lt;annevk&gt; I suggest you just skip his e-mail</li>
+ <li id="l-182" _a="annevk"><a href="#l-182">#</a> [15:02] &lt;annevk&gt; It's not productive to let what you want to do be blocked by a single person</li>
+ <li id="l-183" _a="jgraham_" _r="annevk"><a href="#l-183">#</a> [15:02] &lt;jgraham_&gt; annevk: Yeah, but it's hard to do because he sucks in sensible people</li>
+ <li id="l-184" _a="jgraham_"><a href="#l-184">#</a> [15:03] &lt;jgraham_&gt; (I have a big block of unread email from him that I intend to ignore)</li>
+ <li id="l-185" _a="annevk" _r="Oh"><a href="#l-185">#</a> [15:03] &lt;annevk&gt; Oh, I'd suggest skipping those threads altogether (about namespaces and ARIA)</li>
+ <li id="l-186" _a="annevk"><a href="#l-186">#</a> [15:03] &lt;annevk&gt; They contain no new information / silly suggestions</li>
+ <li id="l-187" _a="jgraham_"><a href="#l-187">#</a> [15:04] &lt;jgraham_&gt; The ARIA thread is good as a warning of what happens when you let the TAG back down below the atmosphere</li>
+ <li id="l-188" _a="jgraham_"><a href="#l-188">#</a> [15:04] &lt;jgraham_&gt; :)</li>
+ <li id="l-189" _a="jgraham_"><a href="#l-189">#</a> [15:05] &lt;jgraham_&gt; Or at least what happens when they try to solve ground-level problems from their positon way up in space</li>
+ <li id="l-190" _a="annevk"><a href="#l-190">#</a> [15:05] &lt;annevk&gt; The TAG is good in describing architecture, not in inventing it :)</li>
+ <li id="l-191" _a="hsivonen"><a href="#l-191">#</a> [15:05] * hsivonen expects countless hours and email messages to be spent on distributed extensibility over the next year</li>
+ <li id="l-192" _a="Philip`"><a href="#l-192">#</a> [15:06] &lt;Philip`&gt; Is Henry S. Thompson representing the views of the whole TAG in that discussion?</li>
+ <li id="l-193" _a="Dashiva"><a href="#l-193">#</a> [15:06] &lt;Dashiva&gt; That would be scary</li>
+ <li id="l-194" _a="annevk"><a href="#l-194">#</a> [15:07] &lt;annevk&gt; s/year/decade/</li>
+ <li id="l-195" _a="jgraham_"><a href="#l-195">#</a> [15:07] &lt;jgraham_&gt; On an entirely different topic and just because I'm too lazy to find somewhere more sensible to ask, has anyone ever experienced problems getting Evince to display the correct glyphs for certian characters? I have a document that works fine in kpdf and acroread but has all the capital greek letters replaced with other things in evince</li>
+ <li id="l-196" _a="jgraham_"><a href="#l-196">#</a> [15:08] &lt;jgraham_&gt; But only on certian machines</li>
+ <li id="l-197" _a="annevk"><a href="#l-197">#</a> [15:08] &lt;annevk&gt; Also on a slightly different topic, how did the presentation go?</li>
+ <li id="l-198" _a="Philip`"><a href="#l-198">#</a> [15:08] &lt;Philip`&gt; Does the PDF have the fonts embedded in it?</li>
+ <li id="l-199" _a="jgraham_" _r="Philip`"><a href="#l-199">#</a> [15:08] &lt;jgraham_&gt; Philip`: Mostly, yes (the cmr fonts seem to be embedded)</li>
+ <li id="l-200" _a="jgraham_" _r="annevk"><a href="#l-200">#</a> [15:08] &lt;jgraham_&gt; annevk: It was good, I think. Either people liked it or they lied to me :)</li>
+ <li id="l-201" _a="annevk"><a href="#l-201">#</a> [15:09] &lt;annevk&gt; Any tough questions?</li>
+ <li id="l-202" _a="hsivonen" _r="jgraham_"><a href="#l-202">#</a> [15:09] &lt;hsivonen&gt; jgraham_: how did you divide talking time with Lachy?</li>
+ <li id="l-203" _a="jgraham_"><a href="#l-203">#</a> [15:10] &lt;jgraham_&gt; We ran out of time for questions. Afterwards some people seemed concerned that we were introducing too many new sectioning elements for no reason</li>
+ <li id="l-204" _a="Philip`"><a href="#l-204">#</a> [15:10] &lt;Philip`&gt; Does anybody ever say &quot;I thought your talk was a bit boring / superficial / pointless / poorly presented / etc&quot; to anybody?</li>
+ <li id="l-205" _a="jgraham_" _r="hsivonen"><a href="#l-205">#</a> [15:10] &lt;jgraham_&gt; hsivonen: Kind of randomly. He did most of the design principles stuff, with some interjections from me. I did more of the new features stuff with some slides from him</li>
+ <li id="l-206" _a="jgraham_" _r="Philip`"><a href="#l-206">#</a> [15:11] &lt;jgraham_&gt; Philip`: There are /so many/ people I would like to say that to, but am too polite :)</li>
+ <li id="l-207" _a="jgraham_"><a href="#l-207">#</a> [15:11] &lt;jgraham_&gt; (Simon Willison seemed to be mainly asleep in the front row)</li>
+ <li id="l-208" _a="Philip`"><a href="#l-208">#</a> [15:11] * Philip` would imagine that would be considered impolite, but otherwise everyone will always get a biased view of how their presentations went</li>
+ <li id="l-209" _a="annevk"><a href="#l-209">#</a> [15:11] &lt;annevk&gt; <a href="http://pdkm.spaces.live.com/blog/cns!D1DDEC9FF002FB8C!872.entry">http://pdkm.spaces.live.com/blog/cns!D1DDEC9FF002FB8C!872.entry</a> didn't like the talk at least... complaining about mailing lists and academia</li>
+ <li id="l-210" _a="annevk"><a href="#l-210">#</a> [15:11] &lt;annevk&gt; but spaces.live.com prolly says enough</li>
+ <li id="l-211"><a href="#l-211">#</a> [15:12] * Quits: maikmerten (n=maikmert@Lad90.l.pppool.de) (&quot;Leaving&quot;)</li>
+ <li id="l-212" _a="hsivonen" _r="Philip`"><a href="#l-212">#</a> [15:12] &lt;hsivonen&gt; Philip`: occasionally the audience pointedly disagrees with the presenter</li>
+ <li id="l-213" _a="jgraham_" _r="Yeah"><a href="#l-213">#</a> [15:12] &lt;jgraham_&gt; Yeah, I think we spent too long on design principles</li>
+ <li id="l-214" _a="hsivonen" _r="Philip`"><a href="#l-214">#</a> [15:12] &lt;hsivonen&gt; Philip`: happened at XTech with Steven Pemberton's talk</li>
+ <li id="l-215" _a="Philip`" _r="hsivonen"><a href="#l-215">#</a> [15:13] &lt;Philip`&gt; hsivonen: Disagreeing with presenter doesn't make it a bad presentation - it's good if things are thought-provoking and get people interested and involved :-)</li>
+ <li id="l-216" _a="jgraham_"><a href="#l-216">#</a> [15:13] &lt;jgraham_&gt; So even being on spaces.live.com it isn't an entirely unfair criticism :)</li>
+ <li id="l-217" _a="hsivonen"><a href="#l-217">#</a> [15:13] &lt;hsivonen&gt; a Flickr guy made notes in the audience during the presentation and then flushed his counter-arguments at the end</li>
+ <li id="l-218" _a="jgraham_"><a href="#l-218">#</a> [15:14] &lt;jgraham_&gt; (I should note for posterity that it is in no way Lachy's fault that we sepnt too long on that section)</li>
+ <li id="l-219" _a="annevk"><a href="#l-219">#</a> [15:14] &lt;annevk&gt; <a href="http://blog.lylo.co.uk/2008/05/31/media-london-2008-round-up-day-1/">http://blog.lylo.co.uk/2008/05/31/media-london-2008-round-up-day-1/</a> mainly complaints about HTML5 features likely taking a long time</li>
+ <li id="l-220" _a="annevk"><a href="#l-220">#</a> [15:15] &lt;annevk&gt; <a href="http://gareth53.blogspot.com/2008/05/atmedia2008-day-1-notes.html">http://gareth53.blogspot.com/2008/05/atmedia2008-day-1-notes.html</a> has notes on &quot;HTML5 by Jame Hunt &amp; Lachlan Young&quot;</li>
+ <li id="l-221" _a="annevk"><a href="#l-221">#</a> [15:16] &lt;annevk&gt; <a href="http://blog.charlvn.za.net/2008/05/media-2008.html">http://blog.charlvn.za.net/2008/05/media-2008.html</a> wants videos because he couldn't attend</li>
+ <li id="l-222" _a="hsivonen"><a href="#l-222">#</a> [15:16] &lt;hsivonen&gt; Netscape 4 went away eventually, too</li>
+ <li id="l-223" _a="annevk"><a href="#l-223">#</a> [15:16] &lt;annevk&gt; (that's about all blogsearch.google.com gives me)</li>
+ <li id="l-224" _a="jgraham_"><a href="#l-224">#</a> [15:16] &lt;jgraham_&gt; I think the 'it's not going to happen anytime soon thing' is a bit unfortunate. We had a problem doing the video demo (note to others: VMWare doen't like being run on an external display)</li>
+ <li id="l-225" _a="gsnedders"><a href="#l-225">#</a> [15:16] * gsnedders is curious how he went down</li>
+ <li id="l-226" _a="hsivonen"><a href="#l-226">#</a> [15:16] &lt;hsivonen&gt; I think stopping progress due to IE6 being still around doesn't make sense</li>
+ <li id="l-227" _a="jgraham_" _r="gsnedders"><a href="#l-227">#</a> [15:17] &lt;jgraham_&gt; gsnedders: afterwards somebody mentioned that it was amazing that you were involved given your age</li>
+ <li id="l-228" _a="annevk"><a href="#l-228">#</a> [15:17] &lt;annevk&gt; I guess the point is more that the audience of @media expects to get things they can do right away rather than information of something that comes in five years.</li>
+ <li id="l-229" _a="gsnedders" _r="jgraham_"><a href="#l-229">#</a> [15:17] &lt;gsnedders&gt; jgraham_: Heh</li>
+ <li id="l-230" _a="annevk"><a href="#l-230">#</a> [15:17] &lt;annevk&gt; Not that we should do something else :)</li>
+ <li id="l-231" _a="jgraham_"><a href="#l-231">#</a> [15:18] &lt;jgraham_&gt; I think if we'd had more demos it would be more obvious that some of this stuff is avaliable either now or in the very near future</li>
+ <li id="l-232" _a="Philip`"><a href="#l-232">#</a> [15:18] &lt;Philip`&gt; (I suppose disagreement sometimes does just indicate the presentation wasn't very good - I was at a talk by Richard Stallman about his suggestion for a new copyright system, and many people seemed to disagree with him and he just dismissed most of the arguments (because e.g. it's clearly trivial to have a single source collecting donations for musicians, and poll the global population to see what music they listen to and distribute the donations fairly</li>
+ <li id="l-233" _a="jgraham_"><a href="#l-233">#</a> [15:19] &lt;jgraham_&gt; I plan to post to blog.whatwg.org once Lachlan has put the slides up on his site with links to the demos that we put together but that didn't make the talk</li>
+ <li id="l-234" _a="Philip`"><a href="#l-234">#</a> [15:19] &lt;Philip`&gt; ...in proportion to sqrt(popularity))</li>
+ <li id="l-235" _a="gsnedders" _r="jgraham_"><a href="#l-235">#</a> [15:19] &lt;gsnedders&gt; jgraham_: As long as you got my current age right, and not how old I was last month :P</li>
+ <li id="l-236" _a="jgraham_" _r="gsnedders"><a href="#l-236">#</a> [15:19] &lt;jgraham_&gt; gsnedders: You're 12, right? :-p</li>
+ <li id="l-237" _a="annevk" _r="Philip`"><a href="#l-237">#</a> [15:19] &lt;annevk&gt; Philip`, hah</li>
+ <li id="l-238" _a="hsivonen" _r="Philip`"><a href="#l-238">#</a> [15:20] &lt;hsivonen&gt; Philip`: single source is already implemented on a national level in many places</li>
+ <li id="l-239" _a="gsnedders" _r="jgraham_"><a href="#l-239">#</a> [15:20] &lt;gsnedders&gt; jgraham_: Yeah, certainly :P</li>
+ <li id="l-240" _a="hsivonen" _r="Philip`"><a href="#l-240">#</a> [15:20] &lt;hsivonen&gt; Philip`: the fair distribution part isn't</li>
+ <li id="l-241" _a="jgraham_"><a href="#l-241">#</a> [15:20] &lt;jgraham_&gt; (seriously I said you were 16, which I think is right unless you get older much fater than normal people)</li>
+ <li id="l-242" _a="hsivonen"><a href="#l-242">#</a> [15:20] &lt;hsivonen&gt; (it seems to me that the national single sources are quite happy with the distribution being unfair)</li>
+ <li id="l-243" _a="jgraham_"><a href="#l-243">#</a> [15:20] &lt;jgraham_&gt; s/fater/faster/</li>
+ <li id="l-244" _a="Philip`" _r="hsivonen"><a href="#l-244">#</a> [15:20] &lt;Philip`&gt; hsivonen: It's never implemented as a replacement for purchasing music, as far as I'm aware</li>
+ <li id="l-245" _a="hsivonen"><a href="#l-245">#</a> [15:21] &lt;hsivonen&gt; (e.g. by pocketing the royalties for airplay of foreign music)</li>
+ <li id="l-246" _a="hsivonen" _r="Philip`"><a href="#l-246">#</a> [15:21] &lt;hsivonen&gt; Philip`: ah</li>
+ <li id="l-247" _a="gsnedders" _r="jgraham_"><a href="#l-247">#</a> [15:21] &lt;gsnedders&gt; jgraham_: (Yeah, I don't seem to get much older)</li>
+ <li id="l-248" _a="hsivonen"><a href="#l-248">#</a> [15:22] &lt;hsivonen&gt; even though it doesn't license me to do whatever with music, I already have to pay a slice in the price of storage media to the music protection money collector</li>
+ <li id="l-249" _a="annevk"><a href="#l-249">#</a> [15:22] &lt;annevk&gt; the national thing is more about playing music in stores / work place / etc.</li>
+ <li id="l-250" _a="annevk"><a href="#l-250">#</a> [15:22] &lt;annevk&gt; not about buying CDs</li>
+ <li id="l-251" _a="hsivonen" _r="annevk"><a href="#l-251">#</a> [15:22] &lt;hsivonen&gt; annevk: in Finland it is also about individuals copying music</li>
+ <li id="l-252" _a="annevk"><a href="#l-252">#</a> [15:23] &lt;annevk&gt; like a tax?</li>
+ <li id="l-253" _a="hsivonen" _r="annevk"><a href="#l-253">#</a> [15:23] &lt;hsivonen&gt; annevk: yes, like a tax</li>
+ <li id="l-254" _a="hsivonen" _r="annevk"><a href="#l-254">#</a> [15:23] &lt;hsivonen&gt; annevk: but they still want to ban copying of course and just pocket the tax</li>
+ <li id="l-255" _a="annevk" _r="interesting"><a href="#l-255">#</a> [15:23] &lt;annevk&gt; interesting, and everyone pays?</li>
+ <li id="l-256" _a="hsivonen" _r="annevk"><a href="#l-256">#</a> [15:24] &lt;hsivonen&gt; annevk: everyone except those who have the time and energy to get their blank storage from Estonia</li>
+ <li id="l-257" _a="annevk"><a href="#l-257">#</a> [15:25] &lt;annevk&gt; the video game industry is much less affected by this, but maybe that's also because long time storage is not important for video games</li>
+ <li id="l-258" _a="Philip`"><a href="#l-258">#</a> [15:25] &lt;Philip`&gt; If I remember correctly (which I may well not be), RMS was suggesting that all music (and other artistic creations) would be uncopyrightable, and the public would choose to pay a voluntary tax that would be distributed to all artists</li>
+ <li id="l-259" _a="hsivonen" _r="annevk"><a href="#l-259">#</a> [15:25] &lt;hsivonen&gt; annevk: the guy who writes copyright law in Finland used to work for the music royalty collectors and his wife has a stake in a book royalty collection society</li>
+ <li id="l-260" _a="annevk"><a href="#l-260">#</a> [15:25] &lt;annevk&gt; and there's some amount of hardware lock in with video game systems</li>
+ <li id="l-261" _a="annevk" _r="hsivonen"><a href="#l-261">#</a> [15:26] &lt;annevk&gt; hsivonen, hehe</li>
+ <li id="l-262"><a href="#l-262">#</a> [15:26] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-263" _a="hsivonen"><a href="#l-263">#</a> [15:30] &lt;hsivonen&gt; It sucks that unelected officials run the show and the elected ministers can't control them</li>
+ <li id="l-264"><a href="#l-264">#</a> [15:32] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-265" _a="hsivonen"><a href="#l-265">#</a> [15:32] &lt;hsivonen&gt; If I star an issue on Google Code, will it send notifications to Gmail?</li>
+ <li id="l-266" _a="jgraham_" _r="hsivonen"><a href="#l-266">#</a> [15:33] &lt;jgraham_&gt; hsivonen: Yeah in theory I think</li>
+ <li id="l-267" _a="jgraham_"><a href="#l-267">#</a> [15:34] * jgraham_ hasn't worked out why issues in the html5lib issue tracker aren't sent to the mailing list</li>
+ <li id="l-268" _a="jgraham_"><a href="#l-268">#</a> [15:34] &lt;jgraham_&gt; (although I'm probably overlooking something obvious)</li>
+ <li id="l-269" _a="hsivonen"><a href="#l-269">#</a> [15:34] * hsivonen sets up a forward from gmail to normal email</li>
+ <li id="l-270" _a="jgraham_" _r="bzed"><a href="#l-270">#</a> [15:35] &lt;jgraham_&gt; bzed: On the subject of html5lib I can try and make a release in the next couple of days. I think we don't have any serious blockers at this point</li>
+ <li id="l-271" _a="hsivonen"><a href="#l-271">#</a> [15:35] * hsivonen is a bit discouraged by the GWT compiler bug not having an owner</li>
+ <li id="l-272" _a="Philip`" _r="jgraham_"><a href="#l-272">#</a> [15:36] &lt;Philip`&gt; jgraham_: There are 13 test failures when I run it, probably due to self-closing tag stuff though I've not looked in any detail</li>
+ <li id="l-273" _a="jgraham_" _r="Philip`"><a href="#l-273">#</a> [15:37] &lt;jgraham_&gt; Philip`: If the test faliures are related to the self closing tag stuff we should just skip those tests for now. If they're more serious, I blame you for trying to make our oerformance suck less ;)</li>
+ <li id="l-274" _a="jgraham_"><a href="#l-274">#</a> [15:38] &lt;jgraham_&gt; (seriously though the regexp stuff is cool)</li>
+ <li id="l-275" _a="Philip`" _r="jgraham_"><a href="#l-275">#</a> [15:38] &lt;Philip`&gt; jgraham_: Those tests failed before I made any changes, so they're not my fault, which is why I didn't bother trying to fix them :-)</li>
+ <li id="l-276" _a="gsnedders"><a href="#l-276">#</a> [15:40] * gsnedders blames Philip` anyway :P</li>
+ <li id="l-277" _a="annevk" _r="jgraham_"><a href="#l-277">#</a> [15:42] &lt;annevk&gt; jgraham_, did you add the mailing list as user to the project and starred the items while logged in as the mailing list?</li>
+ <li id="l-278" _a="annevk" _r="jgraham_"><a href="#l-278">#</a> [15:43] &lt;annevk&gt; jgraham_, I haven't actually tried this feature myself, but it seems it might work that way</li>
+ <li id="l-279" _a="bzed" _r="jgraham_"><a href="#l-279">#</a> [15:45] &lt;bzed&gt; jgraham_: I'm not sure how far the debian lenny freeze is away, so that would be good</li>
+ <li id="l-280" _a="Philip`" _r="jgraham_"><a href="#l-280">#</a> [15:48] &lt;Philip`&gt; jgraham_: By the way, have you looked at issue 70 at all? (I was wondering if I should try fixing it, since I can see where the problem is)</li>
+ <li id="l-281" _a="jgraham_" _r="Philip`"><a href="#l-281">#</a> [15:55] &lt;jgraham_&gt; Philip`: No, I haven't made time to look yet. If you know where the problem is I'm quite confident that you'll fix it faster than I can</li>
+ <li id="l-282" _a="annevk"><a href="#l-282">#</a> [15:56] * annevk wants a C -&gt; Python version of html5lib and a browser impl</li>
+ <li id="l-283" _a="Philip`"><a href="#l-283">#</a> [15:57] * Philip` tries to work out which of the tree-construction/tests[1-7].dat files to add new tests to, and fails</li>
+ <li id="l-284" _a="jgraham_" _r="annevk"><a href="#l-284">#</a> [15:57] &lt;jgraham_&gt; annevk: On the admin page, under Email notifications of project activity will automatically be sent to the following email addresses. We have html5lib-discuss@googlegroups.com under &quot;All issue changes&quot; but AFAICT issue changes don't get sent there</li>
+ <li id="l-285"><a href="#l-285">#</a> [15:57] * Joins: maikmerten (n=maikmert@Lad90.l.pppool.de)</li>
+ <li id="l-286" _a="gsnedders"><a href="#l-286">#</a> [15:59] &lt;gsnedders&gt; How can you check whether an ECMAScript variable is a string?</li>
+ <li id="l-287" _a="annevk" _r="jgraham_"><a href="#l-287">#</a> [16:00] &lt;annevk&gt; jgraham_, did we add codesite-noreply@google.com to html5lib-discuss?</li>
+ <li id="l-288" _a="annevk" _r="jgraham_"><a href="#l-288">#</a> [16:00] &lt;annevk&gt; jgraham_, and to html5lib-commits?</li>
+ <li id="l-289" _a="annevk"><a href="#l-289">#</a> [16:01] * annevk wonders who owns html5lib-discuss</li>
+ <li id="l-290" _a="jgraham_" _r="annevk"><a href="#l-290">#</a> [16:01] &lt;jgraham_&gt; annevk: Ah, that could be it</li>
+ <li id="l-291" _a="annevk"><a href="#l-291">#</a> [16:01] &lt;annevk&gt; (seems html5lib-commits is ok)</li>
+ <li id="l-292" _a="jgraham_" _r="gsnedders"><a href="#l-292">#</a> [16:02] &lt;jgraham_&gt; gsnedders: Can't you use foo instanceof String</li>
+ <li id="l-293" _a="jgraham_"><a href="#l-293">#</a> [16:03] &lt;jgraham_&gt; ?</li>
+ <li id="l-294" _a="gsnedders"><a href="#l-294">#</a> [16:03] &lt;gsnedders&gt; Seemingly yes</li>
+ <li id="l-295" _a="gsnedders"><a href="#l-295">#</a> [16:03] &lt;gsnedders&gt; Hmm… Everything goes bizarre in WebKit, without it causing errors</li>
+ <li id="l-296"><a href="#l-296">#</a> [16:04] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-297" _a="jgraham_" _r="annevk"><a href="#l-297">#</a> [16:04] &lt;jgraham_&gt; annevk: I own it, but under an odd gmail account I only use for backup of my university email</li>
+ <li id="l-298" _a="annevk"><a href="#l-298">#</a> [16:05] &lt;annevk&gt; I still have this plan of integrating all my non-work accounts into gmail one day...</li>
+ <li id="l-299" _a="gsnedders"><a href="#l-299">#</a> [16:07] &lt;gsnedders&gt; Saf returns odd things from getResponseHeader(header)</li>
+ <li id="l-300" _a="gsnedders"><a href="#l-300">#</a> [16:07] &lt;gsnedders&gt; (or at least when you try and run typeof of it)</li>
+ <li id="l-301" _a="gsnedders"><a href="#l-301">#</a> [16:08] &lt;gsnedders&gt; It returns typeof xhr.getResponseHeader(&quot;connection&quot;) == &quot;object&quot; for some requests :\</li>
+ <li id="l-302" _a="gsnedders"><a href="#l-302">#</a> [16:09] &lt;gsnedders&gt; Actually…</li>
+ <li id="l-303" _a="gsnedders"><a href="#l-303">#</a> [16:09] &lt;gsnedders&gt; Maybe they're treated as HTTP/0.9</li>
+ <li id="l-304" _a="jgraham_" _r="annevk"><a href="#l-304">#</a> [16:09] &lt;jgraham_&gt; annevk: Added you as an owner for html5lib-discuss</li>
+ <li id="l-305" _a="gsnedders"><a href="#l-305">#</a> [16:09] &lt;gsnedders&gt; yup. that seems to be it.</li>
+ <li id="l-306"><a href="#l-306">#</a> [16:10] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-307" _a="hsivonen" _r="annevk"><a href="#l-307">#</a> [16:10] &lt;hsivonen&gt; annevk: isn't &lt;em&gt; to &lt;i&gt; what &lt;object&gt; is to &lt;embed&gt;?</li>
+ <li id="l-308" _a="annevk"><a href="#l-308">#</a> [16:11] &lt;annevk&gt; in my mind &lt;em&gt; and &lt;embed&gt; are the subsets</li>
+ <li id="l-309" _a="hsivonen"><a href="#l-309">#</a> [16:11] &lt;hsivonen&gt; ah</li>
+ <li id="l-310" _a="jgraham_" _r="hsivonen"><a href="#l-310">#</a> [16:13] &lt;jgraham_&gt; hsivonen: I don't have a problem with you changing the tests</li>
+ <li id="l-311" _a="hsivonen" _r="jgraham_"><a href="#l-311">#</a> [16:14] &lt;hsivonen&gt; jgraham_: ok. thanks</li>
+ <li id="l-312"><a href="#l-312">#</a> [16:14] * Quits: maikmerten (n=maikmert@Lad90.l.pppool.de) (&quot;Leaving&quot;)</li>
+ <li id="l-313" _a="hdh" _r="heh"><a href="#l-313">#</a> [16:18] &lt;hdh&gt; heh, I'm running cdouble's firefox, and everything after &lt;video&gt; gets treated as fallback content, I have to read the rest in source</li>
+ <li id="l-314" _a="gsnedders" _r="jgraham_"><a href="#l-314">#</a> [16:20] &lt;gsnedders&gt; jgraham_: <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%0A%3Cscript%3E%0Avar%20foo%20%3D%20%22bar%22%3B%0Aalert(foo%20instanceof%20String)%3B%0A%3C%2Fscript%3E">http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%0A%3Cscript%3E%0Avar%20foo%20%3D%20%22bar%22%3B%0Aalert(foo%20instanceof%20String)%3B%0A%3C%2Fscript%3E</a></li>
+ <li id="l-315" _a="Philip`" _r="Hmm"><a href="#l-315">#</a> [16:22] &lt;Philip`&gt; Hmm, BeautifulSoup's 'replace' method is a bit broken - if you have &quot;foo&lt;br&gt;foo&quot; and want to replace the second 'foo' node, you can't, because it's indistinguishable from the first one :-/</li>
+ <li id="l-316" _a="hsivonen" _r="Hixie"><a href="#l-316">#</a> [16:22] &lt;hsivonen&gt; Hixie: do you have pending update for the meta prescan algorithm? that is, is now a good time to sync implementation?</li>
+ <li id="l-317" _a="jgraham_"><a href="#l-317">#</a> [16:25] &lt;jgraham_&gt; gsnedders typeof foo == &quot;string&quot;?</li>
+ <li id="l-318" _a="gsnedders" _r="jgraham_"><a href="#l-318">#</a> [16:26] &lt;gsnedders&gt; jgraham_: Yeah, that's what I eventually found. Seems to work, at least</li>
+ <li id="l-319" _a="gsnedders"><a href="#l-319">#</a> [16:28] * gsnedders realises one test is broken because XMLHttpRequest forbids him from testing it</li>
+ <li id="l-320" _a="gsnedders"><a href="#l-320">#</a> [16:29] * gsnedders blames annevk for making his life hard</li>
+ <li id="l-321" _a="gsnedders"><a href="#l-321">#</a> [16:29] * gsnedders thinks Opera is odd</li>
+ <li id="l-322" _a="gsnedders"><a href="#l-322">#</a> [16:29] &lt;gsnedders&gt; (in terms of what it returns from XMLHttpRequest)</li>
+ <li id="l-323" _a="annevk"><a href="#l-323">#</a> [16:30] &lt;annevk&gt; meh</li>
+ <li id="l-324" _a="Philip`" _r="Oh"><a href="#l-324">#</a> [16:32] &lt;Philip`&gt; Oh, and BeautifulSoup's 'extract' method is also broken, because it uses 'remove' which has the same problem as 'replace'</li>
+ <li id="l-325" _a="Philip`" _r="So"><a href="#l-325">#</a> [16:32] &lt;Philip`&gt; So, uh, that's a pain</li>
+ <li id="l-326" _a="gsnedders" _r="annevk"><a href="#l-326">#</a> [16:33] &lt;gsnedders&gt; annevk: Opera seems to always return an empty string when you try and see what you got for the &quot;connection&quot; header</li>
+ <li id="l-327" _a="annevk"><a href="#l-327">#</a> [16:33] &lt;annevk&gt; what does beautifyfulsoup do that html5 doesn't?</li>
+ <li id="l-328" _a="annevk" _r="gsnedders"><a href="#l-328">#</a> [16:34] &lt;annevk&gt; gsnedders, file a bug?</li>
+ <li id="l-329" _a="annevk" _r="gsnedders"><a href="#l-329">#</a> [16:34] &lt;annevk&gt; gsnedders, also, I suggest to use some HTTP sniffer instead of XHR, prolly more reliable</li>
+ <li id="l-330" _a="gsnedders" _r="annevk"><a href="#l-330">#</a> [16:34] &lt;gsnedders&gt; annevk: But how do I do automated tested from browsers? :(</li>
+ <li id="l-331" _a="Philip`" _r="annevk"><a href="#l-331">#</a> [16:36] &lt;Philip`&gt; annevk: ?</li>
+ <li id="l-332" _a="gsnedders"><a href="#l-332">#</a> [16:36] * gsnedders wishes you could actually view your own bugs on Opera</li>
+ <li id="l-333" _a="gsnedders"><a href="#l-333">#</a> [16:36] &lt;gsnedders&gt; I may well have reported this months ago</li>
+ <li id="l-334" _a="jgraham_" _r="annevk"><a href="#l-334">#</a> [16:39] &lt;jgraham_&gt; annevk: The point is that the BeautifulSoup interface for python has an infinite-recursion bug that Philip` is trying to fix</li>
+ <li id="l-335" _a="Philip`" _r="gsnedders"><a href="#l-335">#</a> [16:39] &lt;Philip`&gt; gsnedders: You did, about six months ago</li>
+ <li id="l-336" _a="Philip`"><a href="#l-336">#</a> [16:39] &lt;Philip`&gt; (303305)</li>
+ <li id="l-337" _a="jgraham_"><a href="#l-337">#</a> [16:39] &lt;jgraham_&gt; BeautifulSoup isn't really designed to be used the way that html5lib uses it, unfortunatly</li>
+ <li id="l-338" _a="jgraham_"><a href="#l-338">#</a> [16:40] &lt;jgraham_&gt; I remember it was somewhat non-trivial to get it working in the first place</li>
+ <li id="l-339" _a="Philip`" _r="jgraham_"><a href="#l-339">#</a> [16:40] &lt;Philip`&gt; jgraham_: The infinite recursion is a bug in html5lib; the problem is I encountered a new bug when trying to fix it, and I'm not sure how to cleanly fix that one</li>
+ <li id="l-340" _a="jgraham_" _r="Oh"><a href="#l-340">#</a> [16:40] &lt;jgraham_&gt; Oh, OK :)</li>
+ <li id="l-341" _a="Philip`"><a href="#l-341">#</a> [16:40] &lt;Philip`&gt; since that's a problem with BeautifulSoup's API being unusable</li>
+ <li id="l-342" _a="gsnedders" _r="Philip`"><a href="#l-342">#</a> [16:40] &lt;gsnedders&gt; Philip`: You have access? Heh. That's cheating! :P</li>
+ <li id="l-343" _a="jgraham_"><a href="#l-343">#</a> [16:41] &lt;jgraham_&gt; I meant Beautifulsoup interface for html5lib btw</li>
+ <li id="l-344" _a="jgraham_"><a href="#l-344">#</a> [16:42] &lt;jgraham_&gt; (was the bug just in BS code or in all html5lib?)</li>
+ <li id="l-345" _a="Philip`"><a href="#l-345">#</a> [16:42] &lt;Philip`&gt; Of course the real problem is that Python strings are immutable</li>
+ <li id="l-346" _a="jgraham_"><a href="#l-346">#</a> [16:42] &lt;jgraham_&gt; s/code/html5lib code/</li>
+ <li id="l-347" _a="Philip`" _r="jgraham_"><a href="#l-347">#</a> [16:43] &lt;Philip`&gt; jgraham_: The infinite recursion was the BS part of html5lib, since appendChild(TextNode(NavigableText(...))) was just calling itself</li>
+ <li id="l-348" _a="jgraham_"><a href="#l-348">#</a> [16:44] &lt;jgraham_&gt; I can see how that would be bad</li>
+ <li id="l-349" _a="Philip`"><a href="#l-349">#</a> [16:45] &lt;Philip`&gt; Since strings are immutable, this code has to splice a new string node into the tree in place of the old one, but I can't use the BS API because that doesn't work when you have two equivalent nodes within an element, and it's hard to do manually since there's loads of references to fix up :-(</li>
+ <li id="l-350" _a="Philip`" _r="(Actually"><a href="#l-350">#</a> [16:46] &lt;Philip`&gt; (Actually, maybe it's not as bad as I'm thinking it is...)</li>
+ <li id="l-351" _a="gsnedders"><a href="#l-351">#</a> [16:47] &lt;gsnedders&gt; hmm… this is an odd case.</li>
+ <li id="l-352" _a="gsnedders"><a href="#l-352">#</a> [16:48] &lt;gsnedders&gt; Safari/CFNetwork are stricter than anything else, and I expect it may well be a case of it just not being so old</li>
+ <li id="l-353" _a="gsnedders"><a href="#l-353">#</a> [16:48] &lt;gsnedders&gt; (and therefore not having to deal with what the web was like in 2000/2001)</li>
+ <li id="l-354" _a="Philip`" _r="Hmm"><a href="#l-354">#</a> [16:50] &lt;Philip`&gt; Hmm, tests pass - that means I don't have enough tests</li>
+ <li id="l-355" _a="gsnedders" _r="Yeah"><a href="#l-355">#</a> [16:51] &lt;gsnedders&gt; Yeah, I'm in a similar state with Fx and Saf :P</li>
+ <li id="l-356" _a="gsnedders"><a href="#l-356">#</a> [16:51] &lt;gsnedders&gt; s/Saf/IE/</li>
+ <li id="l-357"><a href="#l-357">#</a> [16:51] * Quits: MacDome (n=eric@c-67-180-49-110.hsd1.ca.comcast.net)</li>
+ <li id="l-358" _a="Philip`"><a href="#l-358">#</a> [16:53] &lt;Philip`&gt; Is it bad that html5lib can take quadratic time to parse a document?</li>
+ <li id="l-359" _a="Philip`"><a href="#l-359">#</a> [16:53] &lt;Philip`&gt; (because &quot;a&lt;/a&gt;a&lt;/a&gt;a&lt;/a&gt;...&quot; does quadratic-cost string concatenation)</li>
+ <li id="l-360" _a="annevk"><a href="#l-360">#</a> [16:54] &lt;annevk&gt; as long as the C version doesn't do it :)</li>
+ <li id="l-361" _a="Philip`"><a href="#l-361">#</a> [16:55] &lt;Philip`&gt; That would require treebuilders to not be generating Python data structures</li>
+ <li id="l-362" _a="Philip`"><a href="#l-362">#</a> [16:56] &lt;Philip`&gt; or else to have a postprocessing step that takes a tree and coalesces adjacent text nodes</li>
+ <li id="l-363" _a="Philip`"><a href="#l-363">#</a> [16:56] &lt;Philip`&gt; (which wouldn't work once html5lib has scripting support)</li>
+ <li id="l-364" _a="jgraham_"><a href="#l-364">#</a> [16:58] &lt;jgraham_&gt; Couldn't you use a list in the adoption agency and then join things later to avoid some of the concatenation? I haven't thought this throught at-all so I could well be wrong</li>
+ <li id="l-365" _a="Philip`"><a href="#l-365">#</a> [16:58] &lt;Philip`&gt; This is nothing to do with the adoption agency</li>
+ <li id="l-366" _a="Philip`"><a href="#l-366">#</a> [16:59] &lt;Philip`&gt; It's just to do with adjacent text nodes</li>
+ <li id="l-367" _a="hsivonen"><a href="#l-367">#</a> [16:59] &lt;hsivonen&gt; the V.nu parser in the coalescing mode just makes a guess about how large a coalescing buffer to allocate</li>
+ <li id="l-368" _a="hsivonen"><a href="#l-368">#</a> [16:59] &lt;hsivonen&gt; SaxTree isn't coalescing</li>
+ <li id="l-369"><a href="#l-369">#</a> [16:59] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-370"><a href="#l-370">#</a> [17:02] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-371"><a href="#l-371">#</a> [17:02] * Quits: gsnedders (n=gsnedder@host217-44-35-200.range217-44.btcentralplus.com)</li>
+ <li id="l-372" _a="Philip`" _r="hsivonen"><a href="#l-372">#</a> [17:03] &lt;Philip`&gt; hsivonen: What does the coalescing buffer do?</li>
+ <li id="l-373"><a href="#l-373">#</a> [17:03] * Quits: jgraham_ (n=jgraham@xpc9.ast.cam.ac.uk) (&quot;leaving&quot;)</li>
+ <li id="l-374" _a="Philip`"><a href="#l-374">#</a> [17:03] &lt;Philip`&gt; and how does it handle input like foo&lt;table&gt;&lt;td&gt;bar&lt;/a&gt;baz&lt;/td&gt;quux ?</li>
+ <li id="l-375" _a="hsivonen" _r="Philip`"><a href="#l-375">#</a> [17:04] &lt;hsivonen&gt; Philip`: hmm. I'm not sure.</li>
+ <li id="l-376" _a="Philip`" _r="Hmm"><a href="#l-376">#</a> [17:07] &lt;Philip`&gt; Hmm, no browser coalesces fooquux</li>
+ <li id="l-377" _a="Philip`"><a href="#l-377">#</a> [17:07] &lt;Philip`&gt; I can't think of any way to handle this using immutable strings without getting quadratic performance, which is bad</li>
+ <li id="l-378" _a="Philip`"><a href="#l-378">#</a> [17:08] &lt;Philip`&gt; (I guess you can handle barbaz more reasonably by having an appendable buffer, though only Firefox seems to do that in practice)</li>
+ <li id="l-379" _a="Philip`"><a href="#l-379">#</a> [17:09] &lt;Philip`&gt; (*only Firefox and IE)</li>
+ <li id="l-380"><a href="#l-380">#</a> [17:09] * Joins: KevinMarks (n=KevinMar@c-98-207-134-151.hsd1.ca.comcast.net)</li>
+ <li id="l-381"><a href="#l-381">#</a> [17:11] * Joins: aruner (n=chatzill@adsl-75-37-26-199.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-382" _a="hsivonen"><a href="#l-382">#</a> [17:14] &lt;hsivonen&gt; if no browser coalesces those nodes, it's not an interop issue, so we don't need to worry about it (except perhaps the spec should tell implementors not to worry about it)</li>
+ <li id="l-383" _a="Philip`"><a href="#l-383">#</a> [17:15] &lt;Philip`&gt; Half the browsers don't even put quux as a text node outside the table</li>
+ <li id="l-384"><a href="#l-384">#</a> [17:18] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-385" _a="annevk"><a href="#l-385">#</a> [17:19] &lt;annevk&gt; how do you tell what browsers do? (especially IE / Opera) did you make performance tests to quantify your assumptions?</li>
+ <li id="l-386"><a href="#l-386">#</a> [17:19] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-387" _a="Philip`" _r="annevk"><a href="#l-387">#</a> [17:23] &lt;Philip`&gt; annevk: Oops, I meant only Firefox and IE seem to produce a single coalesced text node in the output DOM (whereas Opera and WebKit create multiple nodes)</li>
+ <li id="l-388" _a="Philip`"><a href="#l-388">#</a> [17:23] &lt;Philip`&gt; I have no idea how they implement it internally</li>
+ <li id="l-389" _a="Philip`"><a href="#l-389">#</a> [17:23] &lt;Philip`&gt; (but I would hope they do it sanely)</li>
+ <li id="l-390" _a="Philip`"><a href="#l-390">#</a> [17:25] &lt;Philip`&gt; (If I do foo&lt;script id=i&gt;i=document.getElementById('i');i.parentNode.removeChild(i)&lt;/script&gt;bar then Firefox does produce two text nodes, so it looks like it's detecting consecutive text appends in the parser, rather than detecting appending to a node that already ends in text)</li>
+ <li id="l-391"><a href="#l-391">#</a> [17:36] * Joins: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-392"><a href="#l-392">#</a> [17:40] * Quits: myakura (n=myakura@p5047-ipbf1403marunouchi.tokyo.ocn.ne.jp) (&quot;Leaving...&quot;)</li>
+ <li id="l-393"><a href="#l-393">#</a> [17:45] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-394"><a href="#l-394">#</a> [17:45] * Quits: tommorris (n=tommorri@193.195.164.58) (Client Quit)</li>
+ <li id="l-395" _a="hsivonen"><a href="#l-395">#</a> [18:00] &lt;hsivonen&gt; cross-site RPC by abusing GET: <a href="http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/94c18c4ec158070c/">http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/94c18c4ec158070c/</a></li>
+ <li id="l-396" _a="Philip`"><a href="#l-396">#</a> [18:04] &lt;Philip`&gt; Aaargh</li>
+ <li id="l-397" _a="Philip`"><a href="#l-397">#</a> [18:04] &lt;Philip`&gt; I don't like BeautifulSoup :-(</li>
+ <li id="l-398" _a="Philip`"><a href="#l-398">#</a> [18:05] &lt;Philip`&gt; x&lt;table 1&gt;&lt;table 2&gt;x parses correctly, but x&lt;table&gt;&lt;table&gt;x doesn't</li>
+ <li id="l-399" _a="Philip`"><a href="#l-399">#</a> [18:06] &lt;Philip`&gt; because insertBefore(second &lt;table&gt;) does a lookup of &lt;table&gt; and finds the first one</li>
+ <li id="l-400" _a="Philip`" _r="Oh"><a href="#l-400">#</a> [18:08] &lt;Philip`&gt; Oh, actually that's mostly html5lib's fault</li>
+ <li id="l-401"><a href="#l-401">#</a> [18:27] * Parts: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-402" _a="Philip`"><a href="#l-402">#</a> [18:38] &lt;Philip`&gt; Is it ever possible to have to insert an element before another element, when that 'another element' is not the last child of its parent? (when there's no scripting)</li>
+ <li id="l-403"><a href="#l-403">#</a> [18:45] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-404"><a href="#l-404">#</a> [19:34] * Disconnected</li>
+ <li id="l-405" _a="Attempting"><a href="#l-405">#</a> [19:34] * Attempting to rejoin channel #whatwg</li>
+ <li id="l-406" _a="Rejoined"><a href="#l-406">#</a> [19:34] * Rejoined channel #whatwg</li>
+ <li id="l-407" _a="Topic"><a href="#l-407">#</a> [19:34] * Topic is 'WHATWG (HTML5) -- <a href="http://www.whatwg.org/">http://www.whatwg.org/</a> -- Logs: <a href="http://krijnhoetmer.nl/irc-logs/">http://krijnhoetmer.nl/irc-logs/</a> -- Please leave your sense of logic at the door, thanks!'</li>
+ <li id="l-408" _a="Set"><a href="#l-408">#</a> [19:34] * Set by gsnedders on Tue Dec 18 21:41:19</li>
+ <li id="l-409"><a href="#l-409">#</a> [19:38] * Joins: weinig (n=weinig@nat/apple/session)</li>
+ <li id="l-410"><a href="#l-410">#</a> [19:47] * Joins: hasather (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-411"><a href="#l-411">#</a> [19:53] * Quits: aruner (n=chatzill@adsl-75-37-26-199.dsl.pltn13.sbcglobal.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-412" _a="hsivonen"><a href="#l-412">#</a> [20:07] &lt;hsivonen&gt; <a href="http://www.w3.org/DesignIssues/diagrams/arch/follow.svg">http://www.w3.org/DesignIssues/diagrams/arch/follow.svg</a></li>
+ <li id="l-413" _a="hsivonen"><a href="#l-413">#</a> [20:07] &lt;hsivonen&gt; somehow protein looks out of place</li>
+ <li id="l-414" _a="Philip`"><a href="#l-414">#</a> [20:10] &lt;Philip`&gt; Is there a version of that image that doesn't freeze for a second each time I click a scrollbar?</li>
+ <li id="l-415" _a="Philip`"><a href="#l-415">#</a> [20:10] &lt;Philip`&gt; Bonus points if the shadows don't get cut off near the right edge</li>
+ <li id="l-416" _a="hsivonen" _r="Philip`"><a href="#l-416">#</a> [20:12] &lt;hsivonen&gt; Philip`: WFM in Firefox 3</li>
+ <li id="l-417" _a="Philip`"><a href="#l-417">#</a> [20:13] &lt;Philip`&gt; Not FM, though :-(</li>
+ <li id="l-418" _a="Philip`"><a href="#l-418">#</a> [20:13] &lt;Philip`&gt; (or at least not acceptably)</li>
+ <li id="l-419" _a="Philip`"><a href="#l-419">#</a> [20:14] &lt;Philip`&gt; Safari in Wine renders it almost fast enough, though probably just because it misses the shadows</li>
+ <li id="l-420" _a="hsivonen" _r="Philip`"><a href="#l-420">#</a> [20:14] &lt;hsivonen&gt; Philip`: it seems to suffer from the OmniGraffle/SVG clipping bogosity that poisons SVG filter clipping</li>
+ <li id="l-421" _a="Philip`" _r="hsivonen"><a href="#l-421">#</a> [20:14] &lt;Philip`&gt; hsivonen: I thought FF3 had workarounds for that</li>
+ <li id="l-422" _a="Philip`"><a href="#l-422">#</a> [20:15] &lt;Philip`&gt; but maybe I'm remembering wrong</li>
+ <li id="l-423" _a="hsivonen"><a href="#l-423">#</a> [20:15] &lt;hsivonen&gt; like I said, WFM in Firefox 3</li>
+ <li id="l-424"><a href="#l-424">#</a> [20:16] * Joins: jwalden (n=waldo@RANDOM-THREE-O-EIGHT.MIT.EDU)</li>
+ <li id="l-425"><a href="#l-425">#</a> [20:45] * Joins: eseidel_ (n=eseidel@c-67-180-49-110.hsd1.ca.comcast.net)</li>
+ <li id="l-426"><a href="#l-426">#</a> [20:45] * Joins: eseidel__ (n=eseidel@72.14.228.1)</li>
+ <li id="l-427"><a href="#l-427">#</a> [20:54] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-428"><a href="#l-428">#</a> [20:55] * Quits: eseidel__ (n=eseidel@72.14.228.1)</li>
+ <li id="l-429"><a href="#l-429">#</a> [21:02] * Quits: eseidel_ (n=eseidel@c-67-180-49-110.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-430" _a="gavin__"><a href="#l-430">#</a> [21:21] * gavin__ is now known as gavin_</li>
+ <li id="l-431"><a href="#l-431">#</a> [21:43] * Joins: itpastor1 (n=itpastor@139.57.227.87.static.th.siw.siwnet.net)</li>
+ <li id="l-432"><a href="#l-432">#</a> [21:44] * Quits: hdh (n=hdh@118.71.123.66) (Remote closed the connection)</li>
+ <li id="l-433" _a="gsnedders" _r="Now"><a href="#l-433">#</a> [21:55] &lt;gsnedders&gt; Now, to blog something this month…</li>
+ <li id="l-434"><a href="#l-434">#</a> [22:14] * Joins: deane (n=dean@121.98.128.155)</li>
+ <li id="l-435"><a href="#l-435">#</a> [22:14] * Joins: virtuelv (n=virtuelv@ti132110a341-1814.bb.online.no)</li>
+ <li id="l-436"><a href="#l-436">#</a> [22:51] * Joins: aroben_ (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-437"><a href="#l-437">#</a> [23:00] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-438"><a href="#l-438">#</a> [23:11] * Quits: aroben_ (n=aroben@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-439"><a href="#l-439">#</a> [23:15] * Joins: aaronlev (n=chatzill@e179086130.adsl.alicedsl.de)</li>
+ <li id="l-440"><a href="#l-440">#</a> [23:21] * Quits: roc (n=roc@222-154-9-47.jetstream.xtra.co.nz)</li>
+ <li id="l-441"><a href="#l-441">#</a> [23:23] * Joins: roc (n=roc@222-154-9-47.jetstream.xtra.co.nz)</li>
+ <li id="l-442"><a href="#l-442">#</a> [23:30] * Quits: ROBOd (n=robod@89.122.216.38) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-443"><a href="#l-443">#</a> [23:45] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-444"><a href="#l-444">#</a> [23:55] * Quits: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-445"><a href="#l-445">#</a> [23:59] * Joins: tommorris (n=tommorri@193.195.164.58)</li>
+ <li id="l-446"><a href="#l-446">#</a> Session Close: Sun Jun 01 00:00:00 2008</li>
+</ol>
+<p id="end">The end :)

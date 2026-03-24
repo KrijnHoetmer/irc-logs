@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20080418</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20080418.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2008-04-18 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Fri Apr 18 00:00:00 2008</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="roc"><a href="#l-3">#</a> [00:00] &lt;roc&gt; yeah</li>
+ <li id="l-4" _a="roc"><a href="#l-4">#</a> [00:00] &lt;roc&gt; elementFromPoint should really have taken floats</li>
+ <li id="l-5" _a="roc"><a href="#l-5">#</a> [00:00] &lt;roc&gt; oh well</li>
+ <li id="l-6" _a="Hixie" _r="annevk"><a href="#l-6">#</a> [00:00] &lt;Hixie&gt; annevk: i have a big open issue on event transparency</li>
+ <li id="l-7" class="flagged" _a="Hixie" _r="roc"><a href="#l-7">#</a> [00:00] &lt;Hixie&gt; roc: the whole platform screws that up</li>
+ <li id="l-8" _a="othermaciej"><a href="#l-8">#</a> [00:00] &lt;othermaciej&gt; is there a reason elementFromPoint can't take floats?</li>
+ <li id="l-9" _a="Hixie" _r="roc"><a href="#l-9">#</a> [00:00] &lt;Hixie&gt; roc: we use integers for coordinates throughout</li>
+ <li id="l-10" _a="othermaciej"><a href="#l-10">#</a> [00:00] &lt;othermaciej&gt; implementations that don't do float layout could just round</li>
+ <li id="l-11" class="flagged" _a="roc"><a href="#l-11">#</a> [00:00] &lt;roc&gt; not in getBoundingClientRect</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:00] * Quits: KevinMarks (n=KevinMar@253.sub-75-208-23.myvzw.com) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-13" _a="Hixie" _r="roc"><a href="#l-13">#</a> [00:00] &lt;Hixie&gt; roc: e.g. you can't even get a float out of the event that gives you the mouse coords</li>
+ <li id="l-14" _a="roc" _r="othermaciej"><a href="#l-14">#</a> [00:01] &lt;roc&gt; othermaciej: maybe, if IE doesn't barf if you pass it floats</li>
+ <li id="l-15" _a="Hixie" _r="annevk"><a href="#l-15">#</a> [00:01] &lt;Hixie&gt; annevk: which will also depend on hit testing</li>
+ <li id="l-16" _a="Hixie" _r="annevk"><a href="#l-16">#</a> [00:01] &lt;Hixie&gt; annevk: in a ridiculously complicated way</li>
+ <li id="l-17" _a="annevk" _r="Hixie"><a href="#l-17">#</a> [00:01] &lt;annevk&gt; Hixie, i've seen that IE stuff</li>
+ <li id="l-18" _a="annevk"><a href="#l-18">#</a> [00:01] &lt;annevk&gt; and it kind of makes sense for authors, but it's indeed something I rather not specified as part of that draft :)</li>
+ <li id="l-19" _a="roc"><a href="#l-19">#</a> [00:02] &lt;roc&gt; I like rangeFromPoint too</li>
+ <li id="l-20" _a="annevk"><a href="#l-20">#</a> [00:02] * annevk checks if IE7 allows floats</li>
+ <li id="l-21" class="flagged" _a="roc"><a href="#l-21">#</a> [00:02] &lt;roc&gt; although it's a little counterintuitive</li>
+ <li id="l-22" _a="roc"><a href="#l-22">#</a> [00:02] &lt;roc&gt; maybe it should give you the character cell that contains the float</li>
+ <li id="l-23" _a="roc"><a href="#l-23">#</a> [00:03] &lt;roc&gt; so a range from (node, index) to (node, index+1) if you're over a character</li>
+ <li id="l-24" _a="roc"><a href="#l-24">#</a> [00:03] &lt;roc&gt; or even (index+n) if you're over a cluster</li>
+ <li id="l-25" _a="annevk"><a href="#l-25">#</a> [00:04] &lt;annevk&gt; seems we can change elementFromPoint to take floats</li>
+ <li id="l-26" _a="roc"><a href="#l-26">#</a> [00:04] &lt;roc&gt; we provide character offset information in events? News to me</li>
+ <li id="l-27" _a="roc"><a href="#l-27">#</a> [00:05] * roc wonders if he can get that change into Gecko at this stage</li>
+ <li id="l-28" _a="Hixie"><a href="#l-28">#</a> [00:06] &lt;Hixie&gt; hm?</li>
+ <li id="l-29" _a="roc"><a href="#l-29">#</a> [00:06] &lt;roc&gt; hm what?</li>
+ <li id="l-30" class="flagged" _a="annevk"><a href="#l-30">#</a> [00:07] &lt;annevk&gt; would rangeFromPoint always return the empty range? also if there's some selection at the specified location?</li>
+ <li id="l-31" _a="Hixie"><a href="#l-31">#</a> [00:07] &lt;Hixie&gt; who provides character offset information in events?</li>
+ <li id="l-32" _a="annevk"><a href="#l-32">#</a> [00:08] &lt;annevk&gt; Gecko per othermaciej</li>
+ <li id="l-33" _a="Hixie" _r="oh"><a href="#l-33">#</a> [00:08] &lt;Hixie&gt; oh, i see</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:08] &lt;Hixie&gt; huh</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:08] &lt;Hixie&gt; didn't know that</li>
+ <li id="l-36" _a="roc"><a href="#l-36">#</a> [00:08] &lt;roc&gt; I think Maciej said we do. I don't think so, although I could be wrong</li>
+ <li id="l-37" _a="Hixie" _r="annevk"><a href="#l-37">#</a> [00:08] &lt;Hixie&gt; annevk: i like roc's idea of returning the smallest range that contains the pixel (typically one character)</li>
+ <li id="l-38"><a href="#l-38">#</a> [00:09] * Quits: tor_ (n=tor@nat/ibm/x-10b5ee063ba7c4b8)</li>
+ <li id="l-39" _a="annevk"><a href="#l-39">#</a> [00:10] &lt;annevk&gt; and the empty string when there's no character present I suppose?</li>
+ <li id="l-40"><a href="#l-40">#</a> [00:11] * Quits: tantek (n=tantek@70-13-212-82.area2.spcsdns.net)</li>
+ <li id="l-41" _a="roc"><a href="#l-41">#</a> [00:11] &lt;roc&gt; hmm?</li>
+ <li id="l-42" _a="roc"><a href="#l-42">#</a> [00:11] &lt;roc&gt; what do you mean &quot;no character present&quot;?</li>
+ <li id="l-43" _a="roc"><a href="#l-43">#</a> [00:11] &lt;roc&gt; I think we always return the document element at least</li>
+ <li id="l-44" _a="annevk" _r="yeah"><a href="#l-44">#</a> [00:12] &lt;annevk&gt; yeah, but that's not a range :)</li>
+ <li id="l-45" _a="roc"><a href="#l-45">#</a> [00:12] &lt;roc&gt; but you can return a range containing the document element</li>
+ <li id="l-46" _a="annevk"><a href="#l-46">#</a> [00:12] * annevk was still discussing rangeFromPoint</li>
+ <li id="l-47" _a="annevk"><a href="#l-47">#</a> [00:12] &lt;annevk&gt; I see</li>
+ <li id="l-48"><a href="#l-48">#</a> [00:12] * Joins: svl (n=me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-49"><a href="#l-49">#</a> [00:13] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-90e40dba2fea9ab6)</li>
+ <li id="l-50" _a="Hixie"><a href="#l-50">#</a> [00:14] &lt;Hixie&gt; or maybe it would be more useful to return a range that represents where you'd put the caret if you were an editor</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:14] &lt;Hixie&gt; i'm not sure what the use cases are</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [00:15] &lt;Hixie&gt; bbl</li>
+ <li id="l-53" _a="othermaciej" _r="roc"><a href="#l-53">#</a> [00:16] &lt;othermaciej&gt; roc: someone from Google told me so, but I could be wrong</li>
+ <li id="l-54" _a="roc"><a href="#l-54">#</a> [00:16] &lt;roc&gt; when you're doing drag selection, for example, you sometimes want to put the caret after the character (cluster) under the mouse, sometimes before</li>
+ <li id="l-55" _a="roc"><a href="#l-55">#</a> [00:16] &lt;roc&gt; so providing the range actually is best, because you can choose which end to put the caret at</li>
+ <li id="l-56" class="flagged" _a="othermaciej"><a href="#l-56">#</a> [00:16] &lt;othermaciej&gt; googling for mozilla event.rangeParent finds some hits</li>
+ <li id="l-57" class="flagged" _a="roc"><a href="#l-57">#</a> [00:16] &lt;roc&gt; although it gets messy with RTL</li>
+ <li id="l-58" class="flagged" _a="othermaciej"><a href="#l-58">#</a> [00:17] &lt;othermaciej&gt; (I forget what the corresponding offset property was named)</li>
+ <li id="l-59" _a="roc" _r="othermaciej"><a href="#l-59">#</a> [00:17] &lt;roc&gt; othermaciej: ah!</li>
+ <li id="l-60" _a="roc"><a href="#l-60">#</a> [00:17] &lt;roc&gt; rangeOffset</li>
+ <li id="l-61"><a href="#l-61">#</a> [00:17] * Quits: heycam (n=cam@124-168-100-30.dyn.iinet.net.au) (&quot;bye&quot;)</li>
+ <li id="l-62" _a="roc"><a href="#l-62">#</a> [00:17] &lt;roc&gt; thanks</li>
+ <li id="l-63" _a="roc"><a href="#l-63">#</a> [00:18] &lt;roc&gt; I guess you can figure out the actual directionality of things using range.getClientRects</li>
+ <li id="l-64" _a="annevk"><a href="#l-64">#</a> [00:19] &lt;annevk&gt; IE has TextRange.moveToPoint()</li>
+ <li id="l-65" _a="othermaciej"><a href="#l-65">#</a> [00:19] &lt;othermaciej&gt; I think it would be nice not to depend on TextRange</li>
+ <li id="l-66" _a="othermaciej"><a href="#l-66">#</a> [00:19] &lt;othermaciej&gt; since implementing TextRange may actually be a compatibility hazard</li>
+ <li id="l-67" _a="annevk" _r="well"><a href="#l-67">#</a> [00:19] &lt;annevk&gt; well, we could have Range.moveToPoint()</li>
+ <li id="l-68" class="flagged" _a="othermaciej"><a href="#l-68">#</a> [00:19] &lt;othermaciej&gt; because editing libraries feature-test for it</li>
+ <li id="l-69" _a="othermaciej"><a href="#l-69">#</a> [00:20] &lt;othermaciej&gt; I think rangeFromPoint is a better API design</li>
+ <li id="l-70" _a="annevk"><a href="#l-70">#</a> [00:20] &lt;annevk&gt; does make sense given elementFromPoint</li>
+ <li id="l-71" _a="annevk"><a href="#l-71">#</a> [00:21] &lt;annevk&gt; (though both are IE inventions :) )</li>
+ <li id="l-72" _a="othermaciej"><a href="#l-72">#</a> [00:22] &lt;othermaciej&gt; in a way it would make more sense for hit testing to be on the Window rather than Document (since it is the view object) but the DOM isn't really that good about model-view separation and adding global functions sucks</li>
+ <li id="l-73" _a="othermaciej"><a href="#l-73">#</a> [00:23] &lt;othermaciej&gt; but certainly it makes more sense to say you are hit testing against a document than for hit testing to be a feature of ranges that happens to work against the implied document associated with the range</li>
+ <li id="l-74" _a="annevk"><a href="#l-74">#</a> [00:23] &lt;annevk&gt; the DOM actually might be, but all the proprietary stuff isn't (and is more convenient now and then, consider getComputedStyle versus currentStyle)</li>
+ <li id="l-75" _a="annevk" _r="ok"><a href="#l-75">#</a> [00:24] &lt;annevk&gt; ok, the question that remains is how to define it properly</li>
+ <li id="l-76" _a="roc"><a href="#l-76">#</a> [00:24] &lt;roc&gt; the model-view separation blew up some time ago</li>
+ <li id="l-77" _a="roc" _r="consider"><a href="#l-77">#</a> [00:25] &lt;roc&gt; consider, oh, getBoundingClientRect</li>
+ <li id="l-78" _a="roc"><a href="#l-78">#</a> [00:25] &lt;roc&gt; and its evil ancestors</li>
+ <li id="l-79" _a="othermaciej"><a href="#l-79">#</a> [00:26] &lt;othermaciej&gt; rangeFromPoint could give a collapsed range when you aren't in text, and a one-char range if you are</li>
+ <li id="l-80" _a="othermaciej"><a href="#l-80">#</a> [00:26] &lt;othermaciej&gt; (not sure which of these categories applies to clicking in, say, the margin of a paragraph left of a line)</li>
+ <li id="l-81" _a="annevk"><a href="#l-81">#</a> [00:26] &lt;annevk&gt; selecting the element seems fine too (as far as I'm concerned)</li>
+ <li id="l-82" _a="othermaciej"><a href="#l-82">#</a> [00:26] &lt;othermaciej&gt; or you could just give a collapsed range for nearest char boundary</li>
+ <li id="l-83" _a="othermaciej"><a href="#l-83">#</a> [00:27] &lt;othermaciej&gt; selecting the whole element? even if it has text contents?</li>
+ <li id="l-84" _a="roc"><a href="#l-84">#</a> [00:27] &lt;roc&gt; hmm</li>
+ <li id="l-85" _a="othermaciej"><a href="#l-85">#</a> [00:27] &lt;othermaciej&gt; that defeats the use case for this API</li>
+ <li id="l-86" _a="othermaciej"><a href="#l-86">#</a> [00:27] &lt;othermaciej&gt; which is hit testing down to a char offset</li>
+ <li id="l-87" _a="annevk" _r="well"><a href="#l-87">#</a> [00:27] &lt;annevk&gt; well, what's selected depends on the target node</li>
+ <li id="l-88" _a="roc"><a href="#l-88">#</a> [00:27] &lt;roc&gt; that's a good point</li>
+ <li id="l-89" _a="roc"><a href="#l-89">#</a> [00:28] &lt;roc&gt; I'm not sure how to spec what you want though</li>
+ <li id="l-90" _a="othermaciej"><a href="#l-90">#</a> [00:28] &lt;othermaciej&gt; people want to use this for things like processing a click on non-editable text, getting the position where the caret would have gone had the text been editable, and then replacing the text with a contentEditable area or textarea or designMode iframe</li>
+ <li id="l-91" _a="othermaciej"><a href="#l-91">#</a> [00:28] &lt;othermaciej&gt; and then place the caret in the right spot in the new thing</li>
+ <li id="l-92" _a="annevk"><a href="#l-92">#</a> [00:28] &lt;annevk&gt; i guess if the target node is a text node you do magic and otherwise you create a range for the target element...</li>
+ <li id="l-93" _a="roc"><a href="#l-93">#</a> [00:29] &lt;roc&gt; also things like &quot;find the word that you clicked on and do something with it&quot;</li>
+ <li id="l-94"><a href="#l-94">#</a> [00:29] * Joins: tantek (n=tantek@static-68-236-184-75.ny325.east.verizon.net)</li>
+ <li id="l-95" _a="othermaciej"><a href="#l-95">#</a> [00:30] &lt;othermaciej&gt; nick om_afk</li>
+ <li id="l-96" _a="othermaciej"><a href="#l-96">#</a> [00:30] &lt;othermaciej&gt; dammit</li>
+ <li id="l-97" _a="roc"><a href="#l-97">#</a> [00:30] &lt;roc&gt; I think Maciej wants the ability to detect a click in the left margin and find the text at the start of the adjacent line</li>
+ <li id="l-98" _a="othermaciej"><a href="#l-98">#</a> [00:30] * othermaciej is now known as om_afk</li>
+ <li id="l-99" _a="annevk"><a href="#l-99">#</a> [00:33] &lt;annevk&gt; that seems kind of tricky</li>
+ <li id="l-100" _a="annevk"><a href="#l-100">#</a> [00:33] &lt;annevk&gt; that would not just be hit testing, but also involve layout calculations</li>
+ <li id="l-101" _a="bkardell"><a href="#l-101">#</a> [00:34] &lt;bkardell&gt; Hey - I was curious about this:  The whatwg faq says &quot;HTML 5 is being developed with compatibility with existing browsers in mind, though (including IE). Support for many features can be simulated using JavaScript. &quot;</li>
+ <li id="l-102" _a="annevk"><a href="#l-102">#</a> [00:35] &lt;annevk&gt; i guess that's the case Hixie brought up</li>
+ <li id="l-103" _a="bkardell"><a href="#l-103">#</a> [00:35] &lt;bkardell&gt; can someone clarrify that?  Is the idea to use like some pseudo xbl implementation?</li>
+ <li id="l-104" _a="annevk" _r="bkardell"><a href="#l-104">#</a> [00:36] &lt;annevk&gt; bkardell, not XBL per se, script libraries that implement features in IE, such as IECanvas, count</li>
+ <li id="l-105" _a="bkardell"><a href="#l-105">#</a> [00:36] &lt;bkardell&gt; how would you simulate &lt;canvas&gt; for example in ie?  via script? plugin?</li>
+ <li id="l-106" _a="Philip`" _r="bkardell"><a href="#l-106">#</a> [00:36] &lt;Philip`&gt; bkardell: <a href="http://excanvas.sourceforge.net/">http://excanvas.sourceforge.net/</a></li>
+ <li id="l-107" _a="Philip`"><a href="#l-107">#</a> [00:36] &lt;Philip`&gt; which uses script to produce VML which IE can render</li>
+ <li id="l-108" _a="annevk"><a href="#l-108">#</a> [00:36] &lt;annevk&gt; (I just said: _script_ libraries :) )</li>
+ <li id="l-109" _a="bkardell"><a href="#l-109">#</a> [00:38] &lt;bkardell&gt; yeah - so followup question on that...</li>
+ <li id="l-110" _a="bkardell"><a href="#l-110">#</a> [00:39] &lt;bkardell&gt; has anyone considered introducing some way of making those kinds of things any easier?</li>
+ <li id="l-111" _a="Philip`"><a href="#l-111">#</a> [00:39] &lt;Philip`&gt; Making it easier to write script libraries that emulate features in IE?</li>
+ <li id="l-112" _a="hsivonen"><a href="#l-112">#</a> [00:39] &lt;hsivonen&gt; I started a new UI text wiki page: <a href="http://wiki.whatwg.org/wiki/Validator.nu_alt_advice">http://wiki.whatwg.org/wiki/Validator.nu_alt_advice</a></li>
+ <li id="l-113" _a="bkardell"><a href="#l-113">#</a> [00:39] &lt;bkardell&gt; especially given history and IE's particular ability to prevent really widespread adoption by just controlling too much marketshare</li>
+ <li id="l-114" _a="hsivonen"><a href="#l-114">#</a> [00:40] &lt;hsivonen&gt; it will be hard to write good advice that fits in the UI</li>
+ <li id="l-115" _a="Philip`"><a href="#l-115">#</a> [00:40] &lt;Philip`&gt; I'm not sure how that would work - every case seems to be sufficiently different that it's not worth trying to make a common framework for all the cases</li>
+ <li id="l-116" _a="bkardell"><a href="#l-116">#</a> [00:40] &lt;bkardell&gt; it could really be any vendor though - not limited exclusively to ie</li>
+ <li id="l-117" _a="bkardell"><a href="#l-117">#</a> [00:41] &lt;bkardell&gt; let me give an _extremely_ simple example of what I'm talking about</li>
+ <li id="l-118" _a="annevk"><a href="#l-118">#</a> [00:42] &lt;annevk&gt; So I'm not going to define rangeFromPoint in a few minutes after all it seems :) There seem to be two ideas so far: 1) nearest char or otherwise element. 2) the place you'd insert the cursor if the document was editable</li>
+ <li id="l-119" _a="annevk"><a href="#l-119">#</a> [00:42] &lt;annevk&gt; I guess the 2 covers more use cases</li>
+ <li id="l-120" _a="annevk"><a href="#l-120">#</a> [00:42] &lt;annevk&gt; 2nd*</li>
+ <li id="l-121" _a="bkardell"><a href="#l-121">#</a> [00:43] &lt;bkardell&gt; pretty much every vendor agrees to how events are registered -- except ie</li>
+ <li id="l-122" _a="bkardell"><a href="#l-122">#</a> [00:43] &lt;bkardell&gt; so people have to write it both ways</li>
+ <li id="l-123"><a href="#l-123">#</a> [00:44] * Joins: webben (n=benh@nat/yahoo/x-697d68eec6887790)</li>
+ <li id="l-124" _a="bkardell"><a href="#l-124">#</a> [00:45] &lt;bkardell&gt; has there been any discussion or thought on how to remedy that?  Other than to say &quot;ie violates the rec&quot; - which appears to not bother them too much</li>
+ <li id="l-125" _a="annevk"><a href="#l-125">#</a> [00:45] &lt;annevk&gt; they've stated that they'll fix that in due course</li>
+ <li id="l-126" _a="bkardell"><a href="#l-126">#</a> [00:45] &lt;bkardell&gt; lol</li>
+ <li id="l-127" _a="bkardell"><a href="#l-127">#</a> [00:46] &lt;bkardell&gt; (literally I _am_ laughing out loud)</li>
+ <li id="l-128" _a="annevk" _r="anyway"><a href="#l-128">#</a> [00:46] &lt;annevk&gt; anyway, again, there are libraries</li>
+ <li id="l-129" _a="bkardell"><a href="#l-129">#</a> [00:46] &lt;bkardell&gt; even within the realm of following the rec - sometimes there are admittedly different implementations which do more or less follow the spec</li>
+ <li id="l-130" _a="bkardell"><a href="#l-130">#</a> [00:47] &lt;bkardell&gt; again - every script has to make the same accomodations</li>
+ <li id="l-131" _a="bkardell"><a href="#l-131">#</a> [00:47] &lt;bkardell&gt; yes - there are libraries</li>
+ <li id="l-132" _a="bkardell"><a href="#l-132">#</a> [00:48] &lt;bkardell&gt; that's what I'm asking I guess... the idea would be that in the meantime you'll have to pick a good library?</li>
+ <li id="l-133" class="flagged" _a="annevk"><a href="#l-133">#</a> [00:49] &lt;annevk&gt; basically</li>
+ <li id="l-134" _a="Philip`"><a href="#l-134">#</a> [00:49] &lt;Philip`&gt; You could always pick a bad library instead</li>
+ <li id="l-135" _a="bkardell"><a href="#l-135">#</a> [00:49] &lt;bkardell&gt; nice!</li>
+ <li id="l-136" _a="bkardell"><a href="#l-136">#</a> [00:50] &lt;bkardell&gt; good idea phillip!  I picked a bad browser might as well pick a bad library too ;)</li>
+ <li id="l-137" _a="roc" _r="annevk"><a href="#l-137">#</a> [00:52] &lt;roc&gt; annevk: the IE team stated they'll do DOM2 events?</li>
+ <li id="l-138" _a="annevk"><a href="#l-138">#</a> [00:54] &lt;annevk&gt; they said as much during some Web API telcon yes, but they didn't give specifics so I guess not for IE8</li>
+ <li id="l-139" _a="roc"><a href="#l-139">#</a> [00:54] &lt;roc&gt; I saw a post from one of their people about DOM2 events so I thought they might be interested</li>
+ <li id="l-140" _a="roc"><a href="#l-140">#</a> [00:54] &lt;roc&gt; I guess I'd like to know if it's for IE8 :-)</li>
+ <li id="l-141" _a="roc"><a href="#l-141">#</a> [00:55] &lt;roc&gt; supporting both event models would not be fun for them</li>
+ <li id="l-142" _a="Philip`"><a href="#l-142">#</a> [00:55] &lt;Philip`&gt; They can solve that by using the incompatibility switch</li>
+ <li id="l-143" _a="roc"><a href="#l-143">#</a> [00:56] &lt;roc&gt; I guess but internally, it's going to suck</li>
+ <li id="l-144" _a="Philip`"><a href="#l-144">#</a> [00:57] &lt;Philip`&gt; It's a web browser, so I'd guess they're used to that</li>
+ <li id="l-145" _a="roc"><a href="#l-145">#</a> [00:57] &lt;roc&gt; there's levels of suck :-)</li>
+ <li id="l-146" _a="weinig"><a href="#l-146">#</a> [01:08] * weinig is now known as weinig|afk</li>
+ <li id="l-147"><a href="#l-147">#</a> [01:09] * Joins: KevinMarks (n=KevinMar@235.sub-75-209-0.myvzw.com)</li>
+ <li id="l-148" _a="om_afk"><a href="#l-148">#</a> [01:10] * om_afk is now known as othermaciej</li>
+ <li id="l-149" _a="othermaciej" _r="annevk"><a href="#l-149">#</a> [01:11] &lt;othermaciej&gt; annevk: we already have hit testing ability in the engine to determine &quot;where the caret would go if you clicked here in an editable area&quot;</li>
+ <li id="l-150" _a="othermaciej" _r="annevk"><a href="#l-150">#</a> [01:11] &lt;othermaciej&gt; annevk: so it's not that tricky</li>
+ <li id="l-151" _a="othermaciej"><a href="#l-151">#</a> [01:11] &lt;othermaciej&gt; we have that code because we already need to do that for actual editable areas</li>
+ <li id="l-152" _a="roc"><a href="#l-152">#</a> [01:12] &lt;roc&gt; yeah</li>
+ <li id="l-153" _a="roc"><a href="#l-153">#</a> [01:12] &lt;roc&gt; maybe we need two methods :-(</li>
+ <li id="l-154" _a="annevk"><a href="#l-154">#</a> [01:13] &lt;annevk&gt; textRangeFromPoint and rangeFromPoint ?</li>
+ <li id="l-155"><a href="#l-155">#</a> [01:13] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-90e40dba2fea9ab6) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-156" _a="annevk"><a href="#l-156">#</a> [01:13] &lt;annevk&gt; the former does the caret thingie (no idea how to define that in prose yet) and the latter does the char -&gt; element thingie</li>
+ <li id="l-157" _a="othermaciej"><a href="#l-157">#</a> [01:14] * othermaciej shrugs</li>
+ <li id="l-158" _a="othermaciej"><a href="#l-158">#</a> [01:14] &lt;othermaciej&gt; SVG also has hit testing APIs</li>
+ <li id="l-159"><a href="#l-159">#</a> [01:14] * Quits: tantek (n=tantek@static-68-236-184-75.ny325.east.verizon.net)</li>
+ <li id="l-160" _a="othermaciej"><a href="#l-160">#</a> [01:15] &lt;othermaciej&gt; but only on elements that contain text (so hit testing to the element has to be done first as a separate step()</li>
+ <li id="l-161" _a="annevk" _r="grmbl"><a href="#l-161">#</a> [01:16] &lt;annevk&gt; grmbl, the SVG spec is so complex and hard to navigate</li>
+ <li id="l-162" _a="shepazu" _r="anne"><a href="#l-162">#</a> [01:17] &lt;shepazu&gt; anne, are you looking for text selection stuff?</li>
+ <li id="l-163"><a href="#l-163">#</a> [01:17] * Quits: billmason (n=billmaso@ip200.unival.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-164" _a="Philip`"><a href="#l-164">#</a> [01:17] * Philip` thinks the HTML5 spec is more complex and harder to navigate</li>
+ <li id="l-165" _a="hsivonen" _r="Philip`"><a href="#l-165">#</a> [01:18] &lt;hsivonen&gt; Philip`: at least the HTML5 spec comes as a single file so seaching on the page works</li>
+ <li id="l-166" _a="shepazu"><a href="#l-166">#</a> [01:18] &lt;shepazu&gt; we need more extensive indexing, which we're working on</li>
+ <li id="l-167" _a="hsivonen"><a href="#l-167">#</a> [01:18] &lt;hsivonen&gt; I have to search the SVG 1.1 spec as PDF</li>
+ <li id="l-168" _a="hsivonen"><a href="#l-168">#</a> [01:18] &lt;hsivonen&gt; because the multipage HTML version is a pain to work with in a random access manner</li>
+ <li id="l-169" _a="Philip`"><a href="#l-169">#</a> [01:18] &lt;Philip`&gt; <a href="http://www.google.com/search?q=site%3Aw3.org+inurl%3Atr%2Fsvg+purple">http://www.google.com/search?q=site%3Aw3.org+inurl%3Atr%2Fsvg+purple</a></li>
+ <li id="l-170" _a="othermaciej" _r="annevk"><a href="#l-170">#</a> [01:19] &lt;othermaciej&gt; annevk: <a href="http://www.w3.org/TR/SVG/text.html#DOMInterfaces">http://www.w3.org/TR/SVG/text.html#DOMInterfaces</a></li>
+ <li id="l-171" _a="othermaciej"><a href="#l-171">#</a> [01:19] &lt;othermaciej&gt; getCharNumAtPosition is what I was thinking of</li>
+ <li id="l-172" _a="othermaciej"><a href="#l-172">#</a> [01:19] &lt;othermaciej&gt; though getStartPositionOfChar, getEndPositionOfChar, and getSubStringLength provide the opposite direction</li>
+ <li id="l-173" _a="weinig|afk"><a href="#l-173">#</a> [01:20] * weinig|afk is now known as weinig</li>
+ <li id="l-174" _a="othermaciej"><a href="#l-174">#</a> [01:20] &lt;othermaciej&gt; I think getCharNumAtPosition may not be compatible with DOM range notions of offset though</li>
+ <li id="l-175" _a="Philip`"><a href="#l-175">#</a> [01:21] * Philip` wonders if Opera 9.5 has fixed the thing where search-as-you-type is incredibly slow, because it tries highlighting every occurrence in the 2MB file of the letter &quot;e&quot; when you're trying to start searching for &quot;elephants&quot; or whatever</li>
+ <li id="l-176"><a href="#l-176">#</a> [01:22] * Quits: jacobolus (n=jacobolu@dhcp-0000036913-b5-5e.client.fas.harvard.edu)</li>
+ <li id="l-177" _a="annevk"><a href="#l-177">#</a> [01:22] &lt;annevk&gt; i guess we don't need to worry about those methods...</li>
+ <li id="l-178" _a="othermaciej" _r="yeah"><a href="#l-178">#</a> [01:22] &lt;othermaciej&gt; yeah, I'm just mentioning them as prior art</li>
+ <li id="l-179" _a="othermaciej"><a href="#l-179">#</a> [01:22] &lt;othermaciej&gt; not sure they are the best model to generalize</li>
+ <li id="l-180" _a="weinig" _r="annevk"><a href="#l-180">#</a> [01:22] &lt;weinig&gt; annevk: I am curious as to what your opinion is on what to do when not enough arguments are passed to a method like getRequsetHeader from the XMLHttpRequest Object spec</li>
+ <li id="l-181" _a="Philip`" _r="(Aha"><a href="#l-181">#</a> [01:23] &lt;Philip`&gt; (Aha, it has, by just making the search/highlighting much faster)</li>
+ <li id="l-182" _a="annevk" _r="weinig"><a href="#l-182">#</a> [01:23] &lt;annevk&gt; weinig, whatever Web IDL says should happen :)</li>
+ <li id="l-183" _a="weinig" _r="annevk"><a href="#l-183">#</a> [01:23] &lt;weinig&gt; annevk: ah, ok</li>
+ <li id="l-184"><a href="#l-184">#</a> [01:24] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-73e4dcb17f70128c)</li>
+ <li id="l-185" _a="othermaciej"><a href="#l-185">#</a> [01:24] &lt;othermaciej&gt; normal practice is to just threat missing arguments as undefined rather than going out of your way to throw</li>
+ <li id="l-186" _a="annevk" _r="weinig"><a href="#l-186">#</a> [01:24] &lt;annevk&gt; weinig, at some point <a href="http://www.w3.org/TR/DOM-Bindings/">http://www.w3.org/TR/DOM-Bindings/</a> will be named &quot;Web IDL&quot; and when that happens I'll update XMLHttpRequest to explicitly point to it I guess so all that will be resolved automatically</li>
+ <li id="l-187" _a="othermaciej"><a href="#l-187">#</a> [01:24] &lt;othermaciej&gt; so I'd say do that unless it is spec'd differently for some specific case</li>
+ <li id="l-188" _a="othermaciej"><a href="#l-188">#</a> [01:24] &lt;othermaciej&gt; or undefined would be a type error</li>
+ <li id="l-189" _a="othermaciej"><a href="#l-189">#</a> [01:25] &lt;othermaciej&gt; or would stringify or numberify as something that raises an error</li>
+ <li id="l-190" _a="annevk"><a href="#l-190">#</a> [01:25] &lt;annevk&gt; or maybe caretRangeFromPoint()</li>
+ <li id="l-191" _a="annevk"><a href="#l-191">#</a> [01:25] &lt;annevk&gt; that would make it explicit :)</li>
+ <li id="l-192" _a="annevk"><a href="#l-192">#</a> [01:26] &lt;annevk&gt; and although arguably the name is not abstract enough as some UIs might not have a caret, it's very clear for authors</li>
+ <li id="l-193" _a="roc"><a href="#l-193">#</a> [01:26] &lt;roc&gt; sounds good</li>
+ <li id="l-194" _a="annevk"><a href="#l-194">#</a> [01:27] &lt;annevk&gt; g'night all, will look into this more tomorrow</li>
+ <li id="l-195" _a="Philip`" _r="Hixie"><a href="#l-195">#</a> [01:32] &lt;Philip`&gt; Hixie: The &quot;h1-h6&quot; in the spec would look much nicer with an en-dash</li>
+ <li id="l-196"><a href="#l-196">#</a> [01:35] * Quits: webben (n=benh@nat/yahoo/x-697d68eec6887790) (Read error: 110 (Connection timed out))</li>
+ <li id="l-197"><a href="#l-197">#</a> [01:41] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-73e4dcb17f70128c) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-198"><a href="#l-198">#</a> [01:43] * Quits: KevinMarks (n=KevinMar@235.sub-75-209-0.myvzw.com) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-199"><a href="#l-199">#</a> [01:47] * Quits: eseidel (n=eseidel@nat/google/x-84d0956abc71f6c5)</li>
+ <li id="l-200"><a href="#l-200">#</a> [01:56] * Quits: Hixie (i=ianh@trivini.no) (&quot;Lost terminal&quot;)</li>
+ <li id="l-201" _a="Philip`"><a href="#l-201">#</a> [01:56] * Philip` sees <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/section-sections.html#headings0">http://www.whatwg.org/specs/web-apps/current-work/multipage/section-sections.html#headings0</a> saying &quot;&amp;endash;&quot;</li>
+ <li id="l-202" _a="Philip`"><a href="#l-202">#</a> [01:56] &lt;Philip`&gt; but the commit email had &amp;ndash; instead</li>
+ <li id="l-203" _a="Philip`"><a href="#l-203">#</a> [01:56] * Philip` wonders if it's just slow at regenerating</li>
+ <li id="l-204"><a href="#l-204">#</a> [01:57] * Joins: Hixie (i=ianh@trivini.no)</li>
+ <li id="l-205" _a="Philip`" _r="Hixie"><a href="#l-205">#</a> [01:58] &lt;Philip`&gt; Hixie: <a href="http://krijnhoetmer.nl/irc-logs/whatwg/20080418#l-201">http://krijnhoetmer.nl/irc-logs/whatwg/20080418#l-201</a></li>
+ <li id="l-206" _a="Hixie"><a href="#l-206">#</a> [02:00] &lt;Hixie&gt; yeah i was reading the archives</li>
+ <li id="l-207" _a="Hixie"><a href="#l-207">#</a> [02:00] &lt;Hixie&gt; there is no way for me to check something in that isn't what the site has</li>
+ <li id="l-208" _a="Hixie"><a href="#l-208">#</a> [02:00] &lt;Hixie&gt; because i check in the same file that apache serves</li>
+ <li id="l-209" _a="Hixie"><a href="#l-209">#</a> [02:00] &lt;Hixie&gt; so try reloading :-)</li>
+ <li id="l-210"><a href="#l-210">#</a> [02:01] * Joins: eseidel (n=eseidel@nat/google/x-b76d61042b930bea)</li>
+ <li id="l-211" _a="Philip`"><a href="#l-211">#</a> [02:01] &lt;Philip`&gt; I've reloaded multiple times, and it still says &amp;endash;</li>
+ <li id="l-212" _a="Philip`"><a href="#l-212">#</a> [02:01] &lt;Philip`&gt; though the single-page version looks right</li>
+ <li id="l-213" _a="Philip`"><a href="#l-213">#</a> [02:01] &lt;Philip`&gt; and much nicer than those ugly hyphens - thanks :-)</li>
+ <li id="l-214"><a href="#l-214">#</a> [02:02] * Quits: hober (n=ted@unaffiliated/hober) (&quot;ERC Version 5.3 (IRC client for Emacs)&quot;)</li>
+ <li id="l-215" _a="Lachy"><a href="#l-215">#</a> [02:04] &lt;Lachy&gt; It's nice to see Microsoft have agreed to change their selectors api implementation. <a href="http://lists.w3.org/Archives/Public/public-webapi/2008Apr/0189.html">http://lists.w3.org/Archives/Public/public-webapi/2008Apr/0189.html</a></li>
+ <li id="l-216" class="flagged" _a="Hixie"><a href="#l-216">#</a> [02:04] &lt;Hixie&gt; oh the multipage version always lags behind</li>
+ <li id="l-217" _a="Hixie"><a href="#l-217">#</a> [02:05] &lt;Hixie&gt; i have another host that generates it</li>
+ <li id="l-218" _a="Philip`" _r="Hixie"><a href="#l-218">#</a> [02:06] &lt;Philip`&gt; Hixie: Ah, right</li>
+ <li id="l-219"><a href="#l-219">#</a> [02:09] * Quits: roc (n=roc@202.0.36.64)</li>
+ <li id="l-220"><a href="#l-220">#</a> [02:17] * Quits: starjive (i=beos@213-66-217-32-no30.tbcn.telia.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-221"><a href="#l-221">#</a> [02:28] * Joins: eseidel_ (n=eseidel@nat/google/x-5ec9279f6a2cf5da)</li>
+ <li id="l-222"><a href="#l-222">#</a> [02:28] * Quits: eseidel (n=eseidel@nat/google/x-b76d61042b930bea) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-223"><a href="#l-223">#</a> [02:31] * Quits: eseidel_ (n=eseidel@nat/google/x-5ec9279f6a2cf5da) (Client Quit)</li>
+ <li id="l-224"><a href="#l-224">#</a> [02:32] * Joins: starjive (i=beos@213-66-217-32-no30.tbcn.telia.com)</li>
+ <li id="l-225"><a href="#l-225">#</a> [02:41] * Quits: svl (n=me@ip565744a7.direct-adsl.nl) (&quot;And back he spurred like a madman, shrieking a curse to the sky.&quot;)</li>
+ <li id="l-226"><a href="#l-226">#</a> [02:41] * Joins: webben (n=benh@91.84.239.85)</li>
+ <li id="l-227" _a="Hixie" _r="woah"><a href="#l-227">#</a> [02:46] &lt;Hixie&gt; woah, my imap server just got way faster</li>
+ <li id="l-228" _a="andersca"><a href="#l-228">#</a> [02:49] &lt;andersca&gt; nice</li>
+ <li id="l-229" _a="bradee-oh" _r="Hixie"><a href="#l-229">#</a> [02:50] &lt;bradee-oh&gt; Hixie: does this mean the frequency at which we can expect your batch email replies increased, as well?</li>
+ <li id="l-230" _a="Hixie" _r="yes"><a href="#l-230">#</a> [02:51] &lt;Hixie&gt; yes, but this is &quot;way faster&quot; compared to yesterday, not compared to last week</li>
+ <li id="l-231" _a="Hixie"><a href="#l-231">#</a> [02:51] &lt;Hixie&gt; these past few days my imap server got stuck in a swamp somewhere and was having trouble getting data out of the mud</li>
+ <li id="l-232" _a="Philip`"><a href="#l-232">#</a> [02:55] &lt;Philip`&gt; Maybe it was scared of the alt discussion</li>
+ <li id="l-233"><a href="#l-233">#</a> [02:55] * Joins: jacobolus (n=jacobolu@dhcp-0000036913-b5-5e.client.fas.harvard.edu)</li>
+ <li id="l-234" _a="Philip`" _r="Hixie"><a href="#l-234">#</a> [03:04] &lt;Philip`&gt; Hixie: The multipage one still says &amp;endash;, so that's quite a lot of lag...</li>
+ <li id="l-235" _a="Hixie"><a href="#l-235">#</a> [03:05] &lt;Hixie&gt; odd</li>
+ <li id="l-236" _a="Hixie"><a href="#l-236">#</a> [03:05] * Hixie runs .update.sh again</li>
+ <li id="l-237"><a href="#l-237">#</a> [03:07] * Quits: jruderman (n=jruderma@c-67-180-174-213.hsd1.ca.comcast.net)</li>
+ <li id="l-238"><a href="#l-238">#</a> [03:07] * Joins: jruderman (n=jruderma@c-67-180-174-213.hsd1.ca.comcast.net)</li>
+ <li id="l-239"><a href="#l-239">#</a> [03:24] * Quits: Lachy (n=Lachlan@ti200710a340-2662.bb.online.no) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-240"><a href="#l-240">#</a> [03:24] * Quits: psa (n=yomode@71.93.19.66) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-241"><a href="#l-241">#</a> [03:24] * Quits: hsivonen (n=hsivonen@kekkonen.cs.hut.fi) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-242"><a href="#l-242">#</a> [03:24] * Quits: jmb (n=jmb@login.ecs.soton.ac.uk) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-243"><a href="#l-243">#</a> [03:24] * Joins: jmb^ (n=jmb@login.ecs.soton.ac.uk)</li>
+ <li id="l-244"><a href="#l-244">#</a> [03:24] * Joins: hsivonen (n=hsivonen@kekkonen.cs.hut.fi)</li>
+ <li id="l-245"><a href="#l-245">#</a> [03:24] * Joins: Lachy (n=Lachlan@ti200710a340-2662.bb.online.no)</li>
+ <li id="l-246" _a="jmb^"><a href="#l-246">#</a> [03:24] * jmb^ is now known as jmb</li>
+ <li id="l-247"><a href="#l-247">#</a> [03:26] * Quits: virtuelv (n=virtuelv@225.80-203-100.nextgentel.com) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-248"><a href="#l-248">#</a> [03:26] * Quits: csarven- (n=csarven@on-irc.csarven.ca) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-249"><a href="#l-249">#</a> [03:26] * Quits: jeremyb (n=jeremy@unaffiliated/jeremyb) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-250"><a href="#l-250">#</a> [03:26] * Quits: Philip` (n=philip@zaynar.demon.co.uk) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-251"><a href="#l-251">#</a> [03:26] * Quits: inimino (n=inimino@c-75-70-128-190.hsd1.co.comcast.net) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-252"><a href="#l-252">#</a> [03:26] * Quits: hendry (n=hendry@nox.vm.bytemark.co.uk) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-253"><a href="#l-253">#</a> [03:26] * Joins: hendry (n=hendry@nox.vm.bytemark.co.uk)</li>
+ <li id="l-254"><a href="#l-254">#</a> [03:26] * Joins: Philip` (n=philip@zaynar.demon.co.uk)</li>
+ <li id="l-255"><a href="#l-255">#</a> [03:26] * Joins: virtuelv (n=virtuelv@225.80-203-100.nextgentel.com)</li>
+ <li id="l-256"><a href="#l-256">#</a> [03:26] * Joins: inimino (n=inimino@c-75-70-128-190.hsd1.co.comcast.net)</li>
+ <li id="l-257"><a href="#l-257">#</a> [03:28] * Joins: MacDome (n=eric@c-24-130-11-246.hsd1.ca.comcast.net)</li>
+ <li id="l-258"><a href="#l-258">#</a> [03:31] * Joins: jeremyb (n=jeremy@unaffiliated/jeremyb)</li>
+ <li id="l-259"><a href="#l-259">#</a> [03:33] * Joins: dglazkov (n=dglazkov@adsl-074-229-248-021.sip.bhm.bellsouth.net)</li>
+ <li id="l-260"><a href="#l-260">#</a> [03:34] * Quits: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-261"><a href="#l-261">#</a> [03:43] * Joins: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-262"><a href="#l-262">#</a> [03:45] * Quits: csarven (n=csarven@on-irc.csarven.ca) (&quot;<a href="http://www.csarven.ca">http://www.csarven.ca</a>&quot;)</li>
+ <li id="l-263" _a="MikeSmith" _r="roc"><a href="#l-263">#</a> [03:46] &lt;MikeSmith&gt; roc: was just reading your latest blog entry</li>
+ <li id="l-264" _a="MikeSmith"><a href="#l-264">#</a> [03:47] &lt;MikeSmith&gt; well put</li>
+ <li id="l-265" _a="roc" _r="thanks"><a href="#l-265">#</a> [03:48] &lt;roc&gt; thanks, but I mostly just cribbed from #whatwg</li>
+ <li id="l-266" _a="roc"><a href="#l-266">#</a> [03:48] &lt;roc&gt; :-)</li>
+ <li id="l-267" _a="Hixie"><a href="#l-267">#</a> [03:49] * Hixie blushes at the implication of the target of the link for &quot;few people&quot;</li>
+ <li id="l-268"><a href="#l-268">#</a> [03:49] * Quits: dglazkov (n=dglazkov@adsl-074-229-248-021.sip.bhm.bellsouth.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-269"><a href="#l-269">#</a> [03:49] * Quits: andersca (n=andersca@nat/apple/x-2059234ce6f003bc) (&quot;a&quot;)</li>
+ <li id="l-270"><a href="#l-270">#</a> [03:49] * Joins: dglazkov (n=dglazkov@adsl-074-229-248-021.sip.bhm.bellsouth.net)</li>
+ <li id="l-271"><a href="#l-271">#</a> [03:51] * Quits: dglazkov (n=dglazkov@adsl-074-229-248-021.sip.bhm.bellsouth.net) (Client Quit)</li>
+ <li id="l-272" _a="MikeSmith" _r="fwiw"><a href="#l-272">#</a> [03:55] &lt;MikeSmith&gt; fwiw, in the product-development organizations I've been in, I've found that experienced QA people are also grossly undervalued</li>
+ <li id="l-273" _a="MikeSmith"><a href="#l-273">#</a> [03:55] &lt;MikeSmith&gt; by experienced I mean experienced with a particular product</li>
+ <li id="l-274" _a="MikeSmith"><a href="#l-274">#</a> [03:56] &lt;MikeSmith&gt; they have whole lot of information in their heads that they've acquired through many instances of testing and troubleshooting that product</li>
+ <li id="l-275"><a href="#l-275">#</a> [03:57] * Quits: jwalden (n=waldo@STRATTON-ONE-SIXTY-THREE.MIT.EDU) (Remote closed the connection)</li>
+ <li id="l-276"><a href="#l-276">#</a> [04:00] * Joins: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-277" _a="roc"><a href="#l-277">#</a> [04:01] &lt;roc&gt; we've got quite a few of those people. Not sure if they're undervalued or not. I hope not</li>
+ <li id="l-278"><a href="#l-278">#</a> [04:03] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-279"><a href="#l-279">#</a> [04:10] * Joins: tantek (n=tantek@68.236.184.75)</li>
+ <li id="l-280"><a href="#l-280">#</a> [04:23] * Quits: Camaban (n=alee@77-103-78-94.cable.ubr08.hawk.blueyonder.co.uk) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-281"><a href="#l-281">#</a> [04:57] * Joins: Thezilch (n=fuz007@cpe-76-170-22-23.socal.res.rr.com)</li>
+ <li id="l-282"><a href="#l-282">#</a> [05:47] * Quits: othermaciej (n=mjs@17.203.15.181) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-283"><a href="#l-283">#</a> [05:47] * Quits: MacDome (n=eric@c-24-130-11-246.hsd1.ca.comcast.net) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-284"><a href="#l-284">#</a> [05:47] * Quits: sverrej (n=sverrej@89.10.27.86) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-285"><a href="#l-285">#</a> [05:47] * Quits: mitsuhiko (n=nnmitsuh@ubuntu/member/mitsuhiko) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-286"><a href="#l-286">#</a> [05:47] * Quits: fearphage (n=fearphag@xbmc/user/fearphage) (brown.freenode.net irc.freenode.net)</li>
+ <li id="l-287"><a href="#l-287">#</a> [05:48] * Joins: fearphage (n=fearphag@cpe-66-68-52-63.austin.res.rr.com)</li>
+ <li id="l-288"><a href="#l-288">#</a> [05:48] * Joins: sverrej (n=sverrej@89.10.27.86)</li>
+ <li id="l-289"><a href="#l-289">#</a> [05:48] * Joins: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-290"><a href="#l-290">#</a> [05:49] * Quits: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-291"><a href="#l-291">#</a> [06:30] * Joins: heycam (n=cam@clm-laptop.infotech.monash.edu.au)</li>
+ <li id="l-292"><a href="#l-292">#</a> [06:39] * Quits: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-293"><a href="#l-293">#</a> [07:01] * Quits: weinig (n=weinig@17.203.15.172)</li>
+ <li id="l-294"><a href="#l-294">#</a> [07:13] * Joins: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-295"><a href="#l-295">#</a> [07:16] * Joins: webben_ (n=benh@dip5-fw.corp.ukl.yahoo.com)</li>
+ <li id="l-296"><a href="#l-296">#</a> [07:31] * Quits: webben (n=benh@91.84.239.85) (Read error: 110 (Connection timed out))</li>
+ <li id="l-297"><a href="#l-297">#</a> [07:34] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-298"><a href="#l-298">#</a> [07:46] * Joins: maikmerten (n=merten@ls5laptop14.cs.uni-dortmund.de)</li>
+ <li id="l-299"><a href="#l-299">#</a> [07:57] * Quits: heycam (n=cam@clm-laptop.infotech.monash.edu.au) (&quot;bye&quot;)</li>
+ <li id="l-300"><a href="#l-300">#</a> [08:15] * Quits: tantek (n=tantek@68.236.184.75)</li>
+ <li id="l-301"><a href="#l-301">#</a> [08:15] * Quits: virtuelv (n=virtuelv@225.80-203-100.nextgentel.com) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-302"><a href="#l-302">#</a> [08:27] * Joins: KevinMarks (n=KevinMar@c-98-207-134-151.hsd1.ca.comcast.net)</li>
+ <li id="l-303"><a href="#l-303">#</a> [08:29] * Joins: heycam (n=cam@124-168-100-30.dyn.iinet.net.au)</li>
+ <li id="l-304"><a href="#l-304">#</a> [08:44] * Joins: mitsuhiko (n=nnnmitsu@ubuntu/member/mitsuhiko)</li>
+ <li id="l-305"><a href="#l-305">#</a> [08:59] * Quits: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-306"><a href="#l-306">#</a> [09:09] * Joins: tndH__ (i=Rob@adsl-87-102-85-189.karoo.KCOM.COM)</li>
+ <li id="l-307" _a="tndH__"><a href="#l-307">#</a> [09:09] * tndH__ is now known as tndH</li>
+ <li id="l-308"><a href="#l-308">#</a> [09:29] * Joins: qwert666 (n=qwert666@etu218.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-309"><a href="#l-309">#</a> [09:31] * Quits: Thezilch (n=fuz007@cpe-76-170-22-23.socal.res.rr.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-310" _a="Hixie"><a href="#l-310">#</a> [09:35] &lt;Hixie&gt; i wish i understood what the real problem was with this alt text issue</li>
+ <li id="l-311" _a="Hixie"><a href="#l-311">#</a> [09:35] &lt;Hixie&gt; i'm clearly missing something</li>
+ <li id="l-312"><a href="#l-312">#</a> [09:41] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-313" _a="hsivonen" _r="Hixie"><a href="#l-313">#</a> [09:50] &lt;hsivonen&gt; Hixie: the underlying problem statements aka. use cases would indeed be more useful than a dogmatic syntax conclusion</li>
+ <li id="l-314"><a href="#l-314">#</a> [09:52] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-315" _a="Hixie"><a href="#l-315">#</a> [09:54] &lt;Hixie&gt; i tried to go that way with my recent e-mail</li>
+ <li id="l-316"><a href="#l-316">#</a> [09:57] * Quits: gavin (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-317"><a href="#l-317">#</a> [10:00] * Quits: sverrej (n=sverrej@89.10.27.86) (Read error: 110 (Connection timed out))</li>
+ <li id="l-318"><a href="#l-318">#</a> [10:00] * Joins: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-319"><a href="#l-319">#</a> [10:00] * Joins: gavin (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-320" _a="hsivonen"><a href="#l-320">#</a> [10:02] * hsivonen looks if the TAG thread needs a reply from me</li>
+ <li id="l-321" _a="annevk"><a href="#l-321">#</a> [10:02] &lt;annevk&gt; I hope my reply is enough</li>
+ <li id="l-322" _a="annevk"><a href="#l-322">#</a> [10:03] &lt;annevk&gt; though maybe I should have stayed out of it</li>
+ <li id="l-323" _a="annevk"><a href="#l-323">#</a> [10:03] &lt;annevk&gt; it's not like they're going to affect anything</li>
+ <li id="l-324" _a="hsivonen" _r="annevk"><a href="#l-324">#</a> [10:04] &lt;hsivonen&gt; annevk: ah you replied already. thanks</li>
+ <li id="l-325" _a="othermaciej"><a href="#l-325">#</a> [10:05] &lt;othermaciej&gt; which list?</li>
+ <li id="l-326"><a href="#l-326">#</a> [10:06] * Joins: virtuelv (n=virtuelv@pat-tdc.opera.com)</li>
+ <li id="l-327" _a="hsivonen" _r="othermaciej"><a href="#l-327">#</a> [10:06] &lt;hsivonen&gt; othermaciej: www-tag</li>
+ <li id="l-328" _a="annevk"><a href="#l-328">#</a> [10:08] &lt;annevk&gt; I can't believe people are suggesting to hurt copy-and-paste authors. Copy-and-paste is the nr1 feature of the Web platform.</li>
+ <li id="l-329" _a="othermaciej"><a href="#l-329">#</a> [10:12] &lt;othermaciej&gt; whoever wants to hurt copy-paste authors should talk to the SVG WG</li>
+ <li id="l-330" _a="annevk"><a href="#l-330">#</a> [10:13] &lt;annevk&gt; It was in that thread, exactly. Though not by someone from the SVG WG :)</li>
+ <li id="l-331" _a="annevk"><a href="#l-331">#</a> [10:15] &lt;annevk&gt; The alt e-mail flame war is accomplishing exactly nothing it seems :(</li>
+ <li id="l-332" _a="othermaciej"><a href="#l-332">#</a> [10:17] * othermaciej is now known as om_sleep</li>
+ <li id="l-333" _a="Lachy" _r="annevk"><a href="#l-333">#</a> [10:17] &lt;Lachy&gt; annevk, I wouldn't call it nothing, though it's very little. There was some discussion about how to gather data on the use of alt, which would be useful, though no results from that yet.</li>
+ <li id="l-334" _a="hsivonen"><a href="#l-334">#</a> [10:20] &lt;hsivonen&gt; it has altered my software development priorities</li>
+ <li id="l-335" _a="hsivonen"><a href="#l-335">#</a> [10:21] &lt;hsivonen&gt; although letting it alter the priorities may set a bad precedent if it seems that the way to get me to write software is to make spec discussions too unproductive</li>
+ <li id="l-336" _a="om_sleep" _r="man"><a href="#l-336">#</a> [10:21] &lt;om_sleep&gt; man, TAG people love the colon character</li>
+ <li id="l-337" _a="hsivonen"><a href="#l-337">#</a> [10:21] &lt;hsivonen&gt; indeed</li>
+ <li id="l-338" _a="om_sleep"><a href="#l-338">#</a> [10:21] * om_sleep is now known as othermaciej</li>
+ <li id="l-339" _a="hsivonen"><a href="#l-339">#</a> [10:22] &lt;hsivonen&gt; that's another dogma</li>
+ <li id="l-340" _a="othermaciej" _r="like"><a href="#l-340">#</a> [10:22] &lt;othermaciej&gt; like, they don't even care any more if it is even used as a namespace prefix separator</li>
+ <li id="l-341" _a="othermaciej"><a href="#l-341">#</a> [10:22] &lt;othermaciej&gt; as long as there's colons</li>
+ <li id="l-342" _a="Lachy"><a href="#l-342">#</a> [10:24] &lt;Lachy&gt; some usability studies performed on sites like wikipedia that evaluated the very redundant use of alt=&quot;...&quot;, title=&quot;...&quot; and image captions in their articles would be useful.</li>
+ <li id="l-343" class="flagged" _a="hsivonen"><a href="#l-343">#</a> [10:24] &lt;hsivonen&gt; I guess at some point someone has to make the impolite point that if a TAG member can't get a reasonable code path condition written in 6 hours, how do they expect Joe Blow to get it right</li>
+ <li id="l-344" _a="othermaciej"><a href="#l-344">#</a> [10:25] &lt;othermaciej&gt; because the Tools Will Save Us</li>
+ <li id="l-345"><a href="#l-345">#</a> [10:25] * Joins: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-346" _a="othermaciej"><a href="#l-346">#</a> [10:25] &lt;othermaciej&gt; and Everyone Will Just Use a Library</li>
+ <li id="l-347" _a="hsivonen" _r="seriously"><a href="#l-347">#</a> [10:25] &lt;hsivonen&gt; seriously, making a sniffer that has different paths for Firefox and Opera and an untested failure in Safari should be a red flag</li>
+ <li id="l-348"><a href="#l-348">#</a> [10:26] * Quits: webben_ (n=benh@dip5-fw.corp.ukl.yahoo.com)</li>
+ <li id="l-349" _a="hsivonen" _r="Hixie"><a href="#l-349">#</a> [10:28] &lt;hsivonen&gt; Hixie: when a markup generator makes a linked thumbnail of a photo of unknown meaning, would you put the function of the link in alt?</li>
+ <li id="l-350" _a="hsivonen"><a href="#l-350">#</a> [10:28] &lt;hsivonen&gt; alt=thumbnail 30 per page</li>
+ <li id="l-351" _a="hsivonen"><a href="#l-351">#</a> [10:29] &lt;hsivonen&gt; 30 times</li>
+ <li id="l-352" _a="hsivonen"><a href="#l-352">#</a> [10:29] &lt;hsivonen&gt; with current AT even that would be less bad than letting the crazy file name reading kick in</li>
+ <li id="l-353"><a href="#l-353">#</a> [10:31] * Joins: ROBOd (n=robod@89.122.216.38)</li>
+ <li id="l-354" _a="Lachy"><a href="#l-354">#</a> [10:32] &lt;Lachy&gt; I think some people are focussing too much on the spec saying &quot;rare subset&quot;, rather than considering that the conditions need to be evaulated on an individual site basis.</li>
+ <li id="l-355" _a="Lachy"><a href="#l-355">#</a> [10:33] &lt;Lachy&gt; although I thought the spec said rare as a way to encourage people to avoid the situation if possible, people seem to be interpreting it as a loophole that people will aim for</li>
+ <li id="l-356" _a="othermaciej" _r="&quot;thumbnail&quot"><a href="#l-356">#</a> [10:35] &lt;othermaciej&gt; &quot;thumbnail&quot; isn't good text for the link</li>
+ <li id="l-357" _a="hsivonen"><a href="#l-357">#</a> [10:35] &lt;hsivonen&gt; it isn't</li>
+ <li id="l-358" _a="othermaciej"><a href="#l-358">#</a> [10:35] &lt;othermaciej&gt; since the link surrounding a thumbnail doesn't lead to a thumbnail, it leads to the full photo page</li>
+ <li id="l-359" _a="hsivonen"><a href="#l-359">#</a> [10:35] &lt;hsivonen&gt; but it's less horrible than reading out a GUID or some other hex name</li>
+ <li id="l-360" _a="hsivonen"><a href="#l-360">#</a> [10:35] &lt;hsivonen&gt; right</li>
+ <li id="l-361" _a="othermaciej"><a href="#l-361">#</a> [10:36] &lt;othermaciej&gt; I think &lt;a title=&quot;photo page&quot;&gt; or something might be right</li>
+ <li id="l-362" _a="othermaciej"><a href="#l-362">#</a> [10:36] &lt;othermaciej&gt; maybe even duplicate title or description there</li>
+ <li id="l-363" _a="othermaciej"><a href="#l-363">#</a> [10:36] &lt;othermaciej&gt; I dunno</li>
+ <li id="l-364" _a="hsivonen"><a href="#l-364">#</a> [10:36] &lt;hsivonen&gt; assuming that title isn't IMG3827.JPG</li>
+ <li id="l-365" _a="othermaciej"><a href="#l-365">#</a> [10:38] &lt;othermaciej&gt; fair enough</li>
+ <li id="l-366" _a="hsivonen"><a href="#l-366">#</a> [10:39] &lt;hsivonen&gt; I think the default behavior of Flickr Uploadr sucks, btw</li>
+ <li id="l-367" _a="hsivonen"><a href="#l-367">#</a> [10:39] &lt;hsivonen&gt; it's a classic example of having a metadata field (title) and trying to fill it with *some* junk when the user is uncooperative</li>
+ <li id="l-368"><a href="#l-368">#</a> [10:40] * Quits: Lachy (n=Lachlan@ti200710a340-2662.bb.online.no) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-369" _a="hsivonen"><a href="#l-369">#</a> [10:40] * hsivonen uses his own custom uploader</li>
+ <li id="l-370" _a="othermaciej"><a href="#l-370">#</a> [10:41] * othermaciej is now known as om_sleep</li>
+ <li id="l-371"><a href="#l-371">#</a> [10:42] * Joins: sverrej (n=sverrej@pat-tdc.opera.com)</li>
+ <li id="l-372"><a href="#l-372">#</a> [10:53] * Joins: Lachy (n=Lachlan@pat-tdc.opera.com)</li>
+ <li id="l-373"><a href="#l-373">#</a> [11:07] * Joins: webben (n=benh@nat/yahoo/x-ac7d25d6306d10ac)</li>
+ <li id="l-374" _a="Hixie" _r="hsivonen"><a href="#l-374">#</a> [11:12] &lt;Hixie&gt; hsivonen: based on impl experience we had when mozilla experimented with this, imho the src or parts of the src are never good alt text</li>
+ <li id="l-375" _a="Hixie" _r="well"><a href="#l-375">#</a> [11:12] &lt;Hixie&gt; well, never is strong</li>
+ <li id="l-376" _a="Hixie"><a href="#l-376">#</a> [11:12] &lt;Hixie&gt; not often enough that it should be considered by the ua</li>
+ <li id="l-377" _a="Hixie"><a href="#l-377">#</a> [11:13] &lt;Hixie&gt; the point of thumbnails is to provide a quick overview of what is available</li>
+ <li id="l-378" _a="Hixie"><a href="#l-378">#</a> [11:14] &lt;Hixie&gt; if nothing but the image is known (i.e. no metadata at all) then you might as well just say alt=&quot;2&quot; alt=&quot;3&quot; etc</li>
+ <li id="l-379" _a="Hixie"><a href="#l-379">#</a> [11:14] &lt;Hixie&gt; as in: &lt;p&gt;Photos: &lt;img src=... alt=&quot;1&quot;&gt; ... &lt;img src=... alt=&quot;50&quot;&gt;&lt;/p&gt;</li>
+ <li id="l-380" _a="hsivonen" _r="Hixie"><a href="#l-380">#</a> [11:14] &lt;hsivonen&gt; Hixie: shouldn't that be aria-posinset='2', etc.?</li>
+ <li id="l-381" _a="Hixie"><a href="#l-381">#</a> [11:14] &lt;Hixie&gt; with links, of course</li>
+ <li id="l-382" _a="Hixie"><a href="#l-382">#</a> [11:14] &lt;Hixie&gt; why?</li>
+ <li id="l-383" _a="Hixie"><a href="#l-383">#</a> [11:15] &lt;Hixie&gt; i think the aria thing is a classic example of second system syndrome</li>
+ <li id="l-384" _a="hsivonen" _r="Hixie"><a href="#l-384">#</a> [11:15] &lt;hsivonen&gt; Hixie: to make the user experience consistent with other &quot;items n of M&quot; cases</li>
+ <li id="l-385" _a="Hixie"><a href="#l-385">#</a> [11:15] &lt;Hixie&gt; and people apply solution-looking-for-a-problem attitudes when they learn of it</li>
+ <li id="l-386" _a="hsivonen" _r="Hixie"><a href="#l-386">#</a> [11:16] &lt;hsivonen&gt; Hixie: I wasn't looking for a use of ARIA here</li>
+ <li id="l-387" _a="Hixie"><a href="#l-387">#</a> [11:17] &lt;Hixie&gt; my last two lines weren't really related to your suggestion</li>
+ <li id="l-388" _a="Hixie"><a href="#l-388">#</a> [11:17] &lt;Hixie&gt; just a general observation</li>
+ <li id="l-389" _a="Hixie"><a href="#l-389">#</a> [11:17] &lt;Hixie&gt; but frankly even in this case i don't see much point</li>
+ <li id="l-390" _a="Hixie"><a href="#l-390">#</a> [11:17] &lt;Hixie&gt; it's a bunch of links</li>
+ <li id="l-391" _a="Hixie"><a href="#l-391">#</a> [11:17] &lt;Hixie&gt; people know how to deal with those</li>
+ <li id="l-392" _a="Hixie"><a href="#l-392">#</a> [11:17] &lt;Hixie&gt; what's the problem we're trying to solve?</li>
+ <li id="l-393" _a="hsivonen"><a href="#l-393">#</a> [11:17] &lt;hsivonen&gt; in fact, I think this case happens to be one where the posinset/setsize design would actually make sense</li>
+ <li id="l-394" _a="hsivonen"><a href="#l-394">#</a> [11:18] &lt;hsivonen&gt; in the more obvious cases, the current ARIA design kinda sucks</li>
+ <li id="l-395" _a="hsivonen" _r="Hixie"><a href="#l-395">#</a> [11:18] &lt;hsivonen&gt; Hixie: the problem we are trying to solve is to convey that we have N links to photos and we don't know what those photos are about</li>
+ <li id="l-396" _a="Philip`"><a href="#l-396">#</a> [11:19] &lt;Philip`&gt; You should draw all the images onto a canvas and then use some JS code to map mouse coordinates onto links</li>
+ <li id="l-397" _a="Philip`"><a href="#l-397">#</a> [11:19] &lt;Philip`&gt; and then you wouldn't have to worry about alt text at all</li>
+ <li id="l-398" _a="hsivonen"><a href="#l-398">#</a> [11:19] &lt;hsivonen&gt; if it is a set of N links, presumably it would be good for the UE to be the same as the AT presenting a set of N items in general</li>
+ <li id="l-399" _a="hsivonen"><a href="#l-399">#</a> [11:21] &lt;hsivonen&gt; Please try out the new &quot;Image Report&quot; feature of Validator.nu and help me make the UI text suck less</li>
+ <li id="l-400" _a="hsivonen"><a href="#l-400">#</a> [11:21] &lt;hsivonen&gt; there's a tension between instructing first-time users and making the UI non-crufty for repeat users</li>
+ <li id="l-401" _a="Hixie" _r="hsivonen"><a href="#l-401">#</a> [11:23] &lt;Hixie&gt; hsivonen: i don't really see why N is especially more relevant in this case than in any other case of a set of links</li>
+ <li id="l-402" _a="Hixie"><a href="#l-402">#</a> [11:24] &lt;Hixie&gt; (and thus why the UA wouldn't automatically do all this clever processing itself)</li>
+ <li id="l-403" _a="hsivonen" _r="Hixie"><a href="#l-403">#</a> [11:25] &lt;hsivonen&gt; Hixie: yeah, it's only relevant on paged flickr thumbnail pages</li>
+ <li id="l-404" _a="hsivonen"><a href="#l-404">#</a> [11:25] &lt;hsivonen&gt; where the ARIA stuff would make it possible to spread the N links across several HTML pages</li>
+ <li id="l-405"><a href="#l-405">#</a> [11:25] * Quits: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-406" _a="hsivonen" _r="Hixie"><a href="#l-406">#</a> [11:25] &lt;hsivonen&gt; Hixie: but I agree that in general the assumption that the author should manage posinset/setsize sucks</li>
+ <li id="l-407" _a="hsivonen"><a href="#l-407">#</a> [11:26] &lt;hsivonen&gt; see my feedback on public-pfwg-comment</li>
+ <li id="l-408" _a="Hixie"><a href="#l-408">#</a> [11:26] &lt;Hixie&gt; the image report is cool, though wordy. not sure how to reduce that though.</li>
+ <li id="l-409" _a="Hixie"><a href="#l-409">#</a> [11:28] &lt;Hixie&gt; I would have a warning if there's an image without alt=&quot;&quot; saying &quot;N images were not declared as decorative and yet had no alternative text specified; please see the _image_report_ to manually check that this is appropriate.&quot; or some such</li>
+ <li id="l-410"><a href="#l-410">#</a> [11:35] * Joins: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-411" _a="hsivonen" _r="Hixie"><a href="#l-411">#</a> [11:36] &lt;hsivonen&gt; Hixie: that might make the report more discoverable, yes</li>
+ <li id="l-412" _a="hsivonen"><a href="#l-412">#</a> [11:36] * hsivonen is annoyed at Leopard Screen Sharing not doing full screen</li>
+ <li id="l-413" _a="hsivonen"><a href="#l-413">#</a> [11:36] &lt;hsivonen&gt; do I have to pay for Pro or something? :-)</li>
+ <li id="l-414" _a="hsivonen"><a href="#l-414">#</a> [11:37] * hsivonen wants VNC connections to appear in Spaces so that local and remote spaces look the same</li>
+ <li id="l-415" _a="hsivonen" _r="anyway"><a href="#l-415">#</a> [11:40] &lt;hsivonen&gt; anyway, if anyone has better UI text, Validator.nu pulls the UI text from the wiki at startup</li>
+ <li id="l-416" _a="annevk"><a href="#l-416">#</a> [11:42] &lt;annevk&gt; I wonder if the wordy descriptions should go on a separate page with pointers</li>
+ <li id="l-417" _a="annevk"><a href="#l-417">#</a> [11:42] &lt;annevk&gt; so that for frequent use you don't have to scan all those paragraphs</li>
+ <li id="l-418" _a="hsivonen"><a href="#l-418">#</a> [11:42] &lt;hsivonen&gt; that's a possibility</li>
+ <li id="l-419" _a="hsivonen"><a href="#l-419">#</a> [11:44] &lt;hsivonen&gt; I should show off the RTL support: <a href="http://html5.validator.nu/?doc=http%3A%2F%2Fhe.wikipedia.org%2Fwiki%2F%25D7%25A2%25D7%259E%25D7%2595%25D7%2593_%25D7%25A8%25D7%2590%25D7%25A9%25D7%2599&amp;showimagereport=yes&amp;showsource=yes#l244c238">http://html5.validator.nu/?doc=http%3A%2F%2Fhe.wikipedia.org%2Fwiki%2F%25D7%25A2%25D7%259E%25D7%2595%25D7%2593_%25D7%25A8%25D7%2590%25D7%25A9%25D7%2599&amp;showimagereport=yes&amp;showsource=yes#l244c238</a></li>
+ <li id="l-420" _a="annevk"><a href="#l-420">#</a> [11:47] &lt;annevk&gt; does the validator check &lt;a&gt;  &lt;img alt&gt;  &lt;/a&gt; cases?</li>
+ <li id="l-421" _a="hsivonen" _r="annevk"><a href="#l-421">#</a> [11:48] &lt;hsivonen&gt; annevk: no, but it checks for &lt;a&gt;  &lt;img&gt;  &lt;/a&gt;</li>
+ <li id="l-422" _a="hsivonen" _r="annevk"><a href="#l-422">#</a> [11:49] &lt;hsivonen&gt; annevk: when the alt attribute is present, linkness doesn't seem to need further considerations at least not in VO</li>
+ <li id="l-423" _a="annevk"><a href="#l-423">#</a> [11:49] &lt;annevk&gt; if the alt attribute is the empty string as in my example it is probably an authoring error</li>
+ <li id="l-424" _a="hsivonen"><a href="#l-424">#</a> [11:50] &lt;hsivonen&gt; at least with VO, not a worse authoring error than misapplying alt='' in general</li>
+ <li id="l-425" _a="annevk"><a href="#l-425">#</a> [11:51] &lt;annevk&gt; i think that &lt;a&gt; &lt;img alt&gt; &lt;/a&gt;, &lt;button&gt;&lt;img alt&gt;&lt;/button&gt; (others?) should be non-conforming</li>
+ <li id="l-426" _a="hsivonen" _r="moreover"><a href="#l-426">#</a> [11:51] &lt;hsivonen&gt; moreover, the code currently doesn't distinguish &lt;a&gt;&lt;img alt=''&gt;&lt;/a&gt; and &lt;a&gt;&lt;img alt=''&gt; Redundant text&lt;/a&gt;</li>
+ <li id="l-427" _a="annevk"><a href="#l-427">#</a> [11:52] &lt;annevk&gt; (if there's text it's obviously a different case)</li>
+ <li id="l-428" _a="hsivonen" _r="yeah"><a href="#l-428">#</a> [11:53] &lt;hsivonen&gt; yeah, but it's also obviously more difficult to check for in SAX, hence, left undistinguished in the first version</li>
+ <li id="l-429" _a="hsivonen" _r="Hixie"><a href="#l-429">#</a> [11:56] &lt;hsivonen&gt; Hixie: I'm not sure I want to add the warning you suggested since it changes the badge hunter effects of the feature</li>
+ <li id="l-430" _a="annevk"><a href="#l-430">#</a> [12:00] &lt;annevk&gt; i was more thinking about it being a content model restriction</li>
+ <li id="l-431" _a="hsivonen"><a href="#l-431">#</a> [12:00] &lt;hsivonen&gt; Ah.</li>
+ <li id="l-432" _a="Lachy" _r="&lt;a&gt;&lt;img&gt"><a href="#l-432">#</a> [12:01] &lt;Lachy&gt; &lt;a&gt;&lt;img&gt; text&lt;/a&gt; could also be considered non-conforming, since the only logical alt text for it would be alt=&quot;&quot; or alt=&quot;non-redundant text&quot;. Omitting alt in that case would obviously be an error</li>
+ <li id="l-433" _a="hsivonen"><a href="#l-433">#</a> [12:01] &lt;hsivonen&gt; I think I'd still use the same code.</li>
+ <li id="l-434" _a="hsivonen"><a href="#l-434">#</a> [12:01] &lt;hsivonen&gt; (as amended to distinguish the cases, that is)</li>
+ <li id="l-435" _a="hsivonen"><a href="#l-435">#</a> [12:05] * hsivonen wonders how dictionary-based Hebrew text-to-speech needs to be</li>
+ <li id="l-436" _a="zcorpan_" _r="hsivonen"><a href="#l-436">#</a> [12:12] &lt;zcorpan_&gt; hsivonen: i think the image report is a bit unstructured visually; the sections blend together and it looks like one big blob of text. i think it would help with h3 { font-style:italic } or something</li>
+ <li id="l-437" _a="zcorpan_"><a href="#l-437">#</a> [12:14] &lt;zcorpan_&gt; and/or more spacing between the sections</li>
+ <li id="l-438" _a="mpt" _r="Lachy"><a href="#l-438">#</a> [12:15] &lt;mpt&gt; Lachy, I worked on a page design this week where that markup pattern would have non-empty alt= text</li>
+ <li id="l-439" _a="mpt" _r="Specifically"><a href="#l-439">#</a> [12:16] &lt;mpt&gt; Specifically, something like 'Owner: &lt;a href=&quot;...+edit&quot;&gt;&lt;img alt=&quot;[Edit]&quot; src=&quot;edit-icon&quot; /&gt; Rowley Birkin&lt;/a&gt;'</li>
+ <li id="l-440" _a="Lachy" _r="mpt"><a href="#l-440">#</a> [12:17] &lt;Lachy&gt; mpt, yeah, that would be the alt=&quot;non-redundant text&quot; case I mentioned.</li>
+ <li id="l-441" _a="mpt" _r="oh"><a href="#l-441">#</a> [12:18] &lt;mpt&gt; oh, right</li>
+ <li id="l-442" _a="zcorpan_" _r="hsivonen"><a href="#l-442">#</a> [12:18] &lt;zcorpan_&gt; hsivonen: uh, actually, never mind... for some reason the headings aren't bold for me in opera</li>
+ <li id="l-443" _a="mpt"><a href="#l-443">#</a> [12:18] &lt;mpt&gt; I was thinking we were still in the phase where &lt;img&gt; == &lt;img alt=&quot;&quot;&gt;</li>
+ <li id="l-444" _a="Philip`" _r="hsivonen"><a href="#l-444">#</a> [12:19] &lt;Philip`&gt; hsivonen: It took me quite a while to realise that the top list of images was ones with alt=&quot;&quot;</li>
+ <li id="l-445" _a="Philip`"><a href="#l-445">#</a> [12:19] &lt;Philip`&gt; since it's not obvious that the &quot;Omitted from non-graphical presentation&quot; heading is associated with that table, and it's not obvious what that heading means anyway, and I don't want to read all the text</li>
+ <li id="l-446" _a="hsivonen" _r="Philip`"><a href="#l-446">#</a> [12:20] &lt;hsivonen&gt; Philip`: would it help if h3 had a larger margin-top?</li>
+ <li id="l-447"><a href="#l-447">#</a> [12:21] * Parts: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-448" _a="Philip`"><a href="#l-448">#</a> [12:21] &lt;Philip`&gt; (Also the &lt;th&gt;Image&lt;/th&gt; should maybe have text-align:right since it looks quite unbalanced when the image directly under the heading is very narrow and right-aligned)</li>
+ <li id="l-449" _a="Lachy" _r="mpt"><a href="#l-449">#</a> [12:21] &lt;Lachy&gt; mpt, the spec basically says alt=&quot;&quot; means decorative, missing alt means key part of the content (not decorative), without any alt text available from any reliable source</li>
+ <li id="l-450"><a href="#l-450">#</a> [12:21] * Joins: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-451" _a="mpt" _r="ok"><a href="#l-451">#</a> [12:21] &lt;mpt&gt; ok, good</li>
+ <li id="l-452" _a="Philip`" _r="hsivonen"><a href="#l-452">#</a> [12:22] &lt;Philip`&gt; hsivonen: I imagine that could help with making the heading seem associated with the text+table, rather than just with the text</li>
+ <li id="l-453" _a="hsivonen" _r="Philip`"><a href="#l-453">#</a> [12:23] &lt;hsivonen&gt; Philip`: any suggestion on how to make it look that way?</li>
+ <li id="l-454" _a="Philip`" _r="hsivonen"><a href="#l-454">#</a> [12:23] &lt;Philip`&gt; hsivonen: You already gave a suggestion that seems reasonable to me :-)</li>
+ <li id="l-455" _a="zcorpan_" _r="hsivonen"><a href="#l-455">#</a> [12:24] &lt;zcorpan_&gt; hsivonen: i had rules in user.css that took away the boldness</li>
+ <li id="l-456"><a href="#l-456">#</a> [12:24] * Quits: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-457" _a="hsivonen" _r="zcorpan_"><a href="#l-457">#</a> [12:25] &lt;hsivonen&gt; zcorpan_, Philip` : is it better now after reload?</li>
+ <li id="l-458" _a="Philip`" _r="hsivonen"><a href="#l-458">#</a> [12:26] &lt;Philip`&gt; hsivonen: Hmm, I think the &lt;th&gt;Image&lt;/th&gt; needs some padding-right or something</li>
+ <li id="l-459" _a="Philip`"><a href="#l-459">#</a> [12:26] &lt;Philip`&gt; but otherwise it does look better</li>
+ <li id="l-460" _a="hsivonen"><a href="#l-460">#</a> [12:26] &lt;hsivonen&gt; oh right</li>
+ <li id="l-461"><a href="#l-461">#</a> [12:26] * Joins: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-462"><a href="#l-462">#</a> [12:26] * Parts: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-463" _a="hsivonen"><a href="#l-463">#</a> [12:27] &lt;hsivonen&gt; what about now?</li>
+ <li id="l-464"><a href="#l-464">#</a> [12:27] * Quits: webben (n=benh@nat/yahoo/x-ac7d25d6306d10ac)</li>
+ <li id="l-465"><a href="#l-465">#</a> [12:27] * Joins: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-466" _a="Philip`" _r="hsivonen"><a href="#l-466">#</a> [12:27] &lt;Philip`&gt; hsivonen: That looks more better now</li>
+ <li id="l-467" _a="hsivonen"><a href="#l-467">#</a> [12:28] &lt;hsivonen&gt; ok</li>
+ <li id="l-468" _a="Philip`"><a href="#l-468">#</a> [12:28] &lt;Philip`&gt; Is it at all useful to say &quot;From line 90, column 146; to line 90, column 301&quot;, instead of &quot;Line 90, column 146&quot;?</li>
+ <li id="l-469" _a="Philip`"><a href="#l-469">#</a> [12:28] &lt;Philip`&gt; I can imagine automatic syntax-highlighting tools caring, but not humans</li>
+ <li id="l-470" _a="Philip`"><a href="#l-470">#</a> [12:29] * Philip` goes for a while</li>
+ <li id="l-471" _a="hsivonen"><a href="#l-471">#</a> [12:29] &lt;hsivonen&gt; the location number matter if you want to correlate stuff with a text editor buffer manually</li>
+ <li id="l-472" _a="zcorpan_" _r="hsivonen"><a href="#l-472">#</a> [12:30] &lt;zcorpan_&gt; hsivonen: yep, looks better now. (i now have body, label { font-weight:normal } in user.css instead of what i had before)</li>
+ <li id="l-473" _a="hsivonen" _r="otherwise"><a href="#l-473">#</a> [12:30] &lt;hsivonen&gt; otherwise, you can check &quot;Show Source&quot; and use the links</li>
+ <li id="l-474"><a href="#l-474">#</a> [12:30] * Joins: svl (n=me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-475" _a="hsivonen" _r="zcorpan_"><a href="#l-475">#</a> [12:30] &lt;hsivonen&gt; zcorpan_: is that your user.css in general of for validator.nu in particular?</li>
+ <li id="l-476" _a="zcorpan_" _r="hsivonen"><a href="#l-476">#</a> [12:32] &lt;zcorpan_&gt; hsivonen: for validator.nu in particular. the use of system fonts in your style sheets in combination of my font choise in windows makes everything go bold in opera otherwise</li>
+ <li id="l-477" _a="hsivonen"><a href="#l-477">#</a> [12:32] &lt;hsivonen&gt; ok</li>
+ <li id="l-478"><a href="#l-478">#</a> [12:36] * Joins: webben (n=benh@nat/yahoo/x-0e16783764f54e61)</li>
+ <li id="l-479"><a href="#l-479">#</a> [12:43] * Joins: maikmerten_ (n=merten@ls5laptop14.cs.uni-dortmund.de)</li>
+ <li id="l-480"><a href="#l-480">#</a> [12:43] * Quits: maikmerten (n=merten@ls5laptop14.cs.uni-dortmund.de) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-481" _a="zcorpan_" _r="hsivonen"><a href="#l-481">#</a> [12:44] &lt;zcorpan_&gt; hsivonen: the image report is very useful</li>
+ <li id="l-482" _a="zcorpan_" _r="hsivonen"><a href="#l-482">#</a> [12:44] &lt;zcorpan_&gt; hsivonen: good work :)</li>
+ <li id="l-483" _a="zcorpan_" _r="hsivonen"><a href="#l-483">#</a> [12:51] &lt;zcorpan_&gt; hsivonen: i think the headings would require less thinking from the user if they just said &quot;Images with alt=''&quot;, &quot;Images without alt&quot;, etc</li>
+ <li id="l-484"><a href="#l-484">#</a> [12:51] * Quits: shepazu (n=schepers@cpe-069-134-123-228.nc.res.rr.com) (&quot;Core Breach&quot;)</li>
+ <li id="l-485" _a="hsivonen" _r="zcorpan_"><a href="#l-485">#</a> [12:52] &lt;hsivonen&gt; zcorpan_: thanks. and yeah, changing the headers like that might make sense</li>
+ <li id="l-486" _a="hsivonen"><a href="#l-486">#</a> [12:52] &lt;hsivonen&gt; too bad I'll have to change the interfaces to do &lt;code&gt; in heading :-(</li>
+ <li id="l-487" _a="zcorpan_" _r="hsivonen"><a href="#l-487">#</a> [12:54] &lt;zcorpan_&gt; hsivonen: might also be useful with a TOC at this point, not sure</li>
+ <li id="l-488"><a href="#l-488">#</a> [13:03] * Joins: maikmerten__ (n=merten@ls5laptop14.cs.uni-dortmund.de)</li>
+ <li id="l-489"><a href="#l-489">#</a> [13:05] * Quits: maikmerten_ (n=merten@ls5laptop14.cs.uni-dortmund.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-490"><a href="#l-490">#</a> [13:05] * Quits: webben (n=benh@nat/yahoo/x-0e16783764f54e61)</li>
+ <li id="l-491" _a="Philip`" _r="hsivonen"><a href="#l-491">#</a> [13:09] &lt;Philip`&gt; hsivonen: You can correlate stuff with a text editor buffer manually just with the start location, and press your text editor's &quot;jump to closing angle bracket&quot; key to find the end location</li>
+ <li id="l-492" _a="Philip`" _r="hsivonen"><a href="#l-492">#</a> [13:12] &lt;Philip`&gt; hsivonen: &quot;The img elements of the page (if any) ...&quot; - you could remove the &quot;(if any)&quot;, and replace the image report with &quot;There are no img elements on the page.&quot; if there aren't any</li>
+ <li id="l-493" _a="Philip`"><a href="#l-493">#</a> [13:14] &lt;Philip`&gt; &quot;Please review that the images in the group match the definition all what kind of images should appear in that group.&quot; - s/all/of/, or maybe s/.*/Please review that the images in each group match that group's definition./ which hopefully says the same but more concise</li>
+ <li id="l-494" _a="Philip`"><a href="#l-494">#</a> [13:20] * Philip` wonders what happens if he pastes into IRC &lt;a ... title=&quot;ויקיפדיה:הבהרה משפטית&quot;&gt;הבהרה משפטית&lt;/a&gt;</li>
+ <li id="l-495" _a="Philip`" _r="Hmm"><a href="#l-495">#</a> [13:20] &lt;Philip`&gt; Hmm, doesn't give the intended effect in my client, but <a href="http://krijnhoetmer.nl/irc-logs/whatwg/20080418#l-494">http://krijnhoetmer.nl/irc-logs/whatwg/20080418#l-494</a> does</li>
+ <li id="l-496"><a href="#l-496">#</a> [13:20] * Quits: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-497" _a="Philip`"><a href="#l-497">#</a> [13:21] &lt;Philip`&gt; Don't Hebrew HTML authors get horribly confused by their markup getting rendered like &lt;a ... title=&quot;some text&lt;&quot;some text&lt;/a&gt; ?</li>
+ <li id="l-498"><a href="#l-498">#</a> [13:31] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-499" _a="Philip`"><a href="#l-499">#</a> [14:04] &lt;Philip`&gt; <a href="http://www.google.com/search?q=%221+comments%22">http://www.google.com/search?q=%221+comments%22</a> - grammar are hard</li>
+ <li id="l-500"><a href="#l-500">#</a> [14:07] * Joins: Camaban (n=alee@77-103-78-94.cable.ubr08.hawk.blueyonder.co.uk)</li>
+ <li id="l-501"><a href="#l-501">#</a> [14:11] * Quits: sverrej (n=sverrej@pat-tdc.opera.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-502"><a href="#l-502">#</a> [14:13] * Joins: sverrej (n=sverrej@pat-tdc.opera.com)</li>
+ <li id="l-503"><a href="#l-503">#</a> [14:13] * Quits: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-504" _a="hsivonen"><a href="#l-504">#</a> [14:18] &lt;hsivonen&gt; argh. while I'm away writing alt-related software and docs, the thread just keeps growing</li>
+ <li id="l-505"><a href="#l-505">#</a> [14:28] * Joins: webben (n=benh@nat/yahoo/x-99c83d8e1a57a0ff)</li>
+ <li id="l-506"><a href="#l-506">#</a> [14:36] * Quits: ROBOd (n=robod@89.122.216.38) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-507"><a href="#l-507">#</a> [14:43] * Joins: davidb (n=davidb@bas4-toronto06-1279311539.dsl.bell.ca)</li>
+ <li id="l-508" _a="hsivonen" _r="Philip`"><a href="#l-508">#</a> [14:54] &lt;hsivonen&gt; Philip`: fixed UI strings. thanks</li>
+ <li id="l-509"><a href="#l-509">#</a> [15:14] * Quits: virtuelv (n=virtuelv@pat-tdc.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-510"><a href="#l-510">#</a> [15:15] * Joins: virtuelv (n=virtuelv@213.236.208.247)</li>
+ <li id="l-511"><a href="#l-511">#</a> [15:27] * Joins: phsiao (n=shawn@c-71-233-78-251.hsd1.ma.comcast.net)</li>
+ <li id="l-512"><a href="#l-512">#</a> [15:28] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-513"><a href="#l-513">#</a> [15:28] * Quits: Lachy (n=Lachlan@pat-tdc.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-514" _a="hsivonen"><a href="#l-514">#</a> [15:46] &lt;hsivonen&gt; bad the link function in WordPress is sad. it doesn't escape &amp;</li>
+ <li id="l-515"><a href="#l-515">#</a> [15:46] * Joins: csarven (n=csarven@on-irc.csarven.ca)</li>
+ <li id="l-516"><a href="#l-516">#</a> [15:53] * Joins: ROBOd (n=robod@89.122.216.38)</li>
+ <li id="l-517"><a href="#l-517">#</a> [15:54] * Joins: Lachy (n=Lachlan@pat-tdc.opera.com)</li>
+ <li id="l-518"><a href="#l-518">#</a> [15:58] * Quits: phsiao (n=shawn@c-71-233-78-251.hsd1.ma.comcast.net)</li>
+ <li id="l-519" _a="hendry" _r="hsivonen"><a href="#l-519">#</a> [16:00] &lt;hendry&gt; hsivonen: use <a href="http://packages.qa.debian.org/i/ikiwiki.html">http://packages.qa.debian.org/i/ikiwiki.html</a> :)</li>
+ <li id="l-520"><a href="#l-520">#</a> [16:00] * Quits: KevinMarks (n=KevinMar@c-98-207-134-151.hsd1.ca.comcast.net) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-521" _a="hsivonen" _r="hendry"><a href="#l-521">#</a> [16:09] &lt;hsivonen&gt; hendry: Hixie only installs software that Dreamhost supports</li>
+ <li id="l-522"><a href="#l-522">#</a> [16:10] * Quits: virtuelv (n=virtuelv@213.236.208.247) (Read error: 113 (No route to host))</li>
+ <li id="l-523" _a="annevk" _r="hsivonen"><a href="#l-523">#</a> [16:15] &lt;annevk&gt; hsivonen, wow, long post</li>
+ <li id="l-524" _a="Philip`" _r="hsivonen"><a href="#l-524">#</a> [16:19] &lt;Philip`&gt; hsivonen: s/the market generator/the markup generator/ ?</li>
+ <li id="l-525" _a="hsivonen"><a href="#l-525">#</a> [16:19] &lt;hsivonen&gt; oops. I blame speech-to-text</li>
+ <li id="l-526" _a="Philip`"><a href="#l-526">#</a> [16:19] &lt;Philip`&gt; Also s/in// in &quot;pretend that in the case&quot;</li>
+ <li id="l-527" _a="hsivonen" _r="Philip`"><a href="#l-527">#</a> [16:20] &lt;hsivonen&gt; Philip`: thanks</li>
+ <li id="l-528"><a href="#l-528">#</a> [16:23] * Joins: billmason (n=billmaso@ip200.unival.com)</li>
+ <li id="l-529" _a="Philip`" _r="hsivonen"><a href="#l-529">#</a> [16:23] &lt;Philip`&gt; hsivonen: <a href="http://validator.nu/?doc=http%3A%2F%2Fwww.coalitionforjustice.net%2F">http://validator.nu/?doc=http%3A%2F%2Fwww.coalitionforjustice.net%2F</a> shows 4 messages but <a href="http://validator.nu/?doc=http%3A%2F%2Fwww.coalitionforjustice.net%2F&amp;showimagereport=yes">http://validator.nu/?doc=http%3A%2F%2Fwww.coalitionforjustice.net%2F&amp;showimagereport=yes</a> only shows 3, which seems odd</li>
+ <li id="l-530" _a="hsivonen" _r="Philip`"><a href="#l-530">#</a> [16:24] &lt;hsivonen&gt; Philip`: indeed. thanks. I'll investigate later.</li>
+ <li id="l-531" _a="Lachy" _r="hsivonen"><a href="#l-531">#</a> [16:26] &lt;Lachy&gt; hsivonen, the tables in the image report need visible borders and it would help if the table headers were left aligned or centred, rather than right aligned.</li>
+ <li id="l-532" _a="Lachy"><a href="#l-532">#</a> [16:27] &lt;Lachy&gt; and make the th's bold or something to distinguish them from td's</li>
+ <li id="l-533" _a="Lachy" _r="hsivonen"><a href="#l-533">#</a> [16:32] &lt;Lachy&gt; hsivonen, it seems to be quite usable, though I think the presentation needs some improvment.</li>
+ <li id="l-534" _a="Lachy"><a href="#l-534">#</a> [16:32] &lt;Lachy&gt; I wonder if it would be possible to have a feature that showed the images with some of their surrounding content to put them in context.</li>
+ <li id="l-535"><a href="#l-535">#</a> [16:33] * Joins: phsiao (n=shawn@nat/ibm/x-1423b97110830d7c)</li>
+ <li id="l-536"><a href="#l-536">#</a> [16:34] * Parts: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-537"><a href="#l-537">#</a> [16:34] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-538" _a="Lachy" _r="hsivonen"><a href="#l-538">#</a> [16:40] &lt;Lachy&gt; hsivonen, it might be good to either treat alt=&quot; &quot; the same as alt=&quot;&quot;, or somehow indicate that the value only contains whitespace</li>
+ <li id="l-539" _a="Lachy" _r="hsivonen"><a href="#l-539">#</a> [16:48] &lt;Lachy&gt; hsivonen, I think the description of Images with textual alternative should include something that says automated markup generated should not attempt to generate alternative text unless it has been obtained from a reliable (or at least human) source.</li>
+ <li id="l-540"><a href="#l-540">#</a> [16:50] * Joins: qwert666_ (n=qwert666@acbk110.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-541"><a href="#l-541">#</a> [16:50] * Joins: Star (i=beos@213-66-217-32-no30.tbcn.telia.com)</li>
+ <li id="l-542"><a href="#l-542">#</a> [16:55] * Quits: maikmerten__ (n=merten@ls5laptop14.cs.uni-dortmund.de) (&quot;Verlassend&quot;)</li>
+ <li id="l-543"><a href="#l-543">#</a> [16:55] * Joins: tommorris (n=tommorri@i-83-67-98-32.freedom2surf.net)</li>
+ <li id="l-544"><a href="#l-544">#</a> [16:56] * Joins: jdandrea (n=jdandrea@ool-44c09c49.dyn.optonline.net)</li>
+ <li id="l-545" _a="zcorpan" _r="hsivonen"><a href="#l-545">#</a> [16:57] &lt;zcorpan&gt; hsivonen: <a href="http://html5.validator.nu/?doc=http%3A%2F%2Fwww.accessify.com%2F&amp;showimagereport=yes&amp;showsource=yes">http://html5.validator.nu/?doc=http%3A%2F%2Fwww.accessify.com%2F&amp;showimagereport=yes&amp;showsource=yes</a> is not very helpful...</li>
+ <li id="l-546" _a="zcorpan" _r="hsivonen"><a href="#l-546">#</a> [16:59] &lt;zcorpan&gt; hsivonen: why does it need to reparse in that case?</li>
+ <li id="l-547"><a href="#l-547">#</a> [16:59] * Quits: starjive (i=beos@213-66-217-32-no30.tbcn.telia.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-548" _a="Lachy"><a href="#l-548">#</a> [17:00] &lt;Lachy&gt; maybe because the meta charset occured outside the limit of the preparse</li>
+ <li id="l-549" _a="Lachy"><a href="#l-549">#</a> [17:00] &lt;Lachy&gt; in any case, such error messages should probably include some quick way to say force override with this charset anyway</li>
+ <li id="l-550" _a="Lachy"><a href="#l-550">#</a> [17:01] &lt;Lachy&gt; and then have it revalidate</li>
+ <li id="l-551"><a href="#l-551">#</a> [17:02] * Joins: csarven- (n=csarven@on-irc.csarven.ca)</li>
+ <li id="l-552" _a="zcorpan"><a href="#l-552">#</a> [17:02] &lt;zcorpan&gt; or the validator should just reparse :P</li>
+ <li id="l-553" _a="Lachy"><a href="#l-553">#</a> [17:02] &lt;Lachy&gt; it would also be useful if there was a quick way to view the image in full size, without having to select view image from the context menu</li>
+ <li id="l-554" _a="Lachy" _r="zcorpan"><a href="#l-554">#</a> [17:03] &lt;Lachy&gt; zcorpan, no, fatal errors are great for forcing the author to fix the error :-)</li>
+ <li id="l-555" _a="zcorpan" _r="Lachy"><a href="#l-555">#</a> [17:04] &lt;zcorpan&gt; Lachy: well perhaps the author was only set out to check the alt text</li>
+ <li id="l-556" _a="Lachy" _r="ah"><a href="#l-556">#</a> [17:05] &lt;Lachy&gt; ah, so you want a way to view image report only without validation</li>
+ <li id="l-557"><a href="#l-557">#</a> [17:05] * Quits: qwert666_ (n=qwert666@acbk110.neoplus.adsl.tpnet.pl) (&quot;Leaving&quot;)</li>
+ <li id="l-558" _a="Lachy"><a href="#l-558">#</a> [17:06] &lt;Lachy&gt; forcing UTF-8 works. <a href="http://validator.nu/?doc=http%3A%2F%2Fwww.accessify.com%2F&amp;charset=UTF-8&amp;showimagereport=yes&amp;showsource=yes">http://validator.nu/?doc=http%3A%2F%2Fwww.accessify.com%2F&amp;charset=UTF-8&amp;showimagereport=yes&amp;showsource=yes</a></li>
+ <li id="l-559"><a href="#l-559">#</a> [17:06] * Joins: KevinMarks (n=KevinMar@191.sub-70-212-141.myvzw.com)</li>
+ <li id="l-560" _a="Lachy"><a href="#l-560">#</a> [17:06] &lt;Lachy&gt; it's intersting to see their incorrect use of alt text</li>
+ <li id="l-561" _a="zcorpan" _r="yeah"><a href="#l-561">#</a> [17:07] &lt;zcorpan&gt; yeah, although skipping over the validation messages is about as much work as unchecking a &quot;validate&quot; checkbox</li>
+ <li id="l-562"><a href="#l-562">#</a> [17:07] * Quits: qwert666 (n=qwert666@etu218.neoplus.adsl.tpnet.pl) (Success)</li>
+ <li id="l-563" _a="Lachy" _r="&quot;accessify.com&quot"><a href="#l-563">#</a> [17:07] &lt;Lachy&gt; &quot;accessify.com&quot; image has alt=&quot;Accessify home page - latest news&quot; is somewhat wrong. The image says nothing about news.</li>
+ <li id="l-564"><a href="#l-564">#</a> [17:08] * Joins: virtuelv (n=virtuelv@pat-tdc.opera.com)</li>
+ <li id="l-565" _a="Lachy"><a href="#l-565">#</a> [17:08] &lt;Lachy&gt; and the 1x1px transparent gif with alt=&quot;site statistics&quot; should have alt=&quot;&quot; instead</li>
+ <li id="l-566" _a="zcorpan"><a href="#l-566">#</a> [17:12] &lt;zcorpan&gt; <a href="http://html5.validator.nu/?doc=http%3A%2F%2Fflickr.com&amp;charset=UTF-8&amp;showimagereport=yes&amp;showsource=yes">http://html5.validator.nu/?doc=http%3A%2F%2Fflickr.com&amp;charset=UTF-8&amp;showimagereport=yes&amp;showsource=yes</a> looks reasonable</li>
+ <li id="l-567"><a href="#l-567">#</a> [17:22] * Joins: tantek (n=tantek@68.236.184.75)</li>
+ <li id="l-568" _a="hsivonen" _r="Lachy"><a href="#l-568">#</a> [17:22] &lt;hsivonen&gt; Lachy: why do the tables need borders?</li>
+ <li id="l-569" _a="hsivonen" _r="Lachy"><a href="#l-569">#</a> [17:23] &lt;hsivonen&gt; Lachy: Philip` suggested right-aligning the image th, and I think it makes sense that way</li>
+ <li id="l-570" _a="hsivonen" _r="Lachy"><a href="#l-570">#</a> [17:23] &lt;hsivonen&gt; Lachy: the th *is* bold</li>
+ <li id="l-571" _a="hsivonen" _r="Lachy"><a href="#l-571">#</a> [17:24] &lt;hsivonen&gt; Lachy: context would be useful, yes. However, in a validator, the source location is the surrogate for context</li>
+ <li id="l-572" _a="hsivonen" _r="Lachy"><a href="#l-572">#</a> [17:24] &lt;hsivonen&gt; Lachy: if you really want context, you need a browser extension</li>
+ <li id="l-573" _a="hsivonen" _r="Lachy"><a href="#l-573">#</a> [17:25] &lt;hsivonen&gt; Lachy: I think alt=' ' needs further investigation whether it already is taken to mean something special</li>
+ <li id="l-574" _a="hsivonen" _r="Lachy"><a href="#l-574">#</a> [17:25] &lt;hsivonen&gt; Lachy: the UI text is on a wiki :-)</li>
+ <li id="l-575" _a="annevk"><a href="#l-575">#</a> [17:26] &lt;annevk&gt; some light colored border and maybe some amount of padding would help though, I think</li>
+ <li id="l-576"><a href="#l-576">#</a> [17:26] * Quits: virtuelv (n=virtuelv@pat-tdc.opera.com) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-577" _a="annevk"><a href="#l-577">#</a> [17:27] &lt;annevk&gt; (not necessarily on the side of the table, though)</li>
+ <li id="l-578" _a="Philip`"><a href="#l-578">#</a> [17:28] &lt;Philip`&gt; <a href="http://validator.nu/?doc=http%3A%2F%2Fwww.google.com%2F&amp;showimagereport=yes#imagereport">http://validator.nu/?doc=http%3A%2F%2Fwww.google.com%2F&amp;showimagereport=yes#imagereport</a></li>
+ <li id="l-579" _a="Philip`"><a href="#l-579">#</a> [17:28] &lt;Philip`&gt; Is that a legitimate use of alt?</li>
+ <li id="l-580" _a="annevk"><a href="#l-580">#</a> [17:28] &lt;annevk&gt; why not?</li>
+ <li id="l-581" _a="Philip`"><a href="#l-581">#</a> [17:29] &lt;Philip`&gt; The alt text for each image is not an alternative to that image, though the concatenation of alt texts on the page is an alternative to the concatenation of images</li>
+ <li id="l-582" _a="annevk"><a href="#l-582">#</a> [17:30] &lt;annevk&gt; i suppose it would be weird if a single image failed to load</li>
+ <li id="l-583" _a="billmason"><a href="#l-583">#</a> [17:30] &lt;billmason&gt; I don't understand why when I'm actually looking at google.com, it's one integrated image, not a concatenation.</li>
+ <li id="l-584" _a="annevk"><a href="#l-584">#</a> [17:31] &lt;annevk&gt; prolly does browser sniffing</li>
+ <li id="l-585" _a="Philip`"><a href="#l-585">#</a> [17:31] &lt;Philip`&gt; Probably depends on cookies and logins and stuff too</li>
+ <li id="l-586" _a="Philip`"><a href="#l-586">#</a> [17:31] &lt;Philip`&gt; Also it does IP sniffing</li>
+ <li id="l-587" _a="Philip`"><a href="#l-587">#</a> [17:31] &lt;Philip`&gt; (so validator.nu gets google.fi)</li>
+ <li id="l-588" _a="billmason" _r="Ah"><a href="#l-588">#</a> [17:31] &lt;billmason&gt; Ah, that would make sense.</li>
+ <li id="l-589" _a="billmason"><a href="#l-589">#</a> [17:31] * billmason is sniffed out now</li>
+ <li id="l-590" _a="Philip`"><a href="#l-590">#</a> [17:32] * Philip` can't work out which part of the spec is relevant for alt text for images which themselves just contain text</li>
+ <li id="l-591" _a="annevk"><a href="#l-591">#</a> [17:33] &lt;annevk&gt; Google tries to save bytes with markup on the one hand, but on the other they could save quite a bit more if they really tried</li>
+ <li id="l-592" _a="Philip`"><a href="#l-592">#</a> [17:33] &lt;Philip`&gt; It's not the first case, since the text isn't more clearly stated when it's in the graphic</li>
+ <li id="l-593" _a="annevk"><a href="#l-593">#</a> [17:33] * annevk wonders what the deal is</li>
+ <li id="l-594" _a="Philip`"><a href="#l-594">#</a> [17:33] &lt;Philip`&gt; It's not the second since it's not an icon, it's not the third since it's not supplementary to surrounding text, it's not the fourth since it's not purely decorative</li>
+ <li id="l-595" _a="Philip`"><a href="#l-595">#</a> [17:33] &lt;Philip`&gt; It's not the fifth since it's not a critical part of the content</li>
+ <li id="l-596" _a="Philip`"><a href="#l-596">#</a> [17:34] &lt;Philip`&gt; It's not the sixth since it's not being emailed</li>
+ <li id="l-597" _a="Philip`"><a href="#l-597">#</a> [17:34] &lt;Philip`&gt; So the spec doesn't seem to tell me whether the image needs alt or what it should say</li>
+ <li id="l-598" _a="billmason"><a href="#l-598">#</a> [17:35] &lt;billmason&gt; The second includes discussion of logos, which would seem to have some relevance.</li>
+ <li id="l-599" _a="hsivonen" _r="Lachy"><a href="#l-599">#</a> [17:35] &lt;hsivonen&gt; Lachy: isn't the context menu easy enough for magnifying the image?</li>
+ <li id="l-600" _a="hsivonen" _r="zcorpan"><a href="#l-600">#</a> [17:35] &lt;hsivonen&gt; zcorpan: re: only checking alt: validation is the first step. :-p</li>
+ <li id="l-601" _a="Philip`" _r="billmason"><a href="#l-601">#</a> [17:35] &lt;Philip`&gt; billmason: None of the three cases for logos applies either</li>
+ <li id="l-602"><a href="#l-602">#</a> [17:35] * Quits: KevinMarks (n=KevinMar@191.sub-70-212-141.myvzw.com) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-603" _a="Philip`"><a href="#l-603">#</a> [17:36] &lt;Philip`&gt; The Google logo isn't representing Google (like if it was a list of lots of search engines, using their logos to make them easily identifiable) - it's just the page heading</li>
+ <li id="l-604" _a="Philip`"><a href="#l-604">#</a> [17:36] &lt;Philip`&gt; It's not being used next to the company's name</li>
+ <li id="l-605" _a="Philip`"><a href="#l-605">#</a> [17:37] &lt;Philip`&gt; and it's not just decorative, since if you removed it then you wouldn't know what site you were on</li>
+ <li id="l-606" _a="billmason"><a href="#l-606">#</a> [17:37] &lt;billmason&gt; I'm not sure I agree with your first statement.  Particualy in light of your third.</li>
+ <li id="l-607" _a="billmason"><a href="#l-607">#</a> [17:37] &lt;billmason&gt; If it's that critical, then its representative.</li>
+ <li id="l-608" _a="Philip`"><a href="#l-608">#</a> [17:38] &lt;Philip`&gt; I'm not sure I agree with your &quot;If&quot; statement</li>
+ <li id="l-609" _a="billmason" _r="Well"><a href="#l-609">#</a> [17:39] &lt;billmason&gt; Well, then you will have to explain how it's not decorative, but at the same time doesn't stand for anything to me....</li>
+ <li id="l-610" _a="annevk" _r="hsivonen"><a href="#l-610">#</a> [17:39] &lt;annevk&gt; hsivonen, &quot;Fatal Error: Changing encoding at this point would need non-streamable behavior.&quot; is an open issue right?</li>
+ <li id="l-611" _a="Philip`"><a href="#l-611">#</a> [17:39] &lt;Philip`&gt; The image is critical to the page, because it's part of the page's text; its purpose is to be heading text, and not to be representing the organisation Google</li>
+ <li id="l-612" _a="billmason"><a href="#l-612">#</a> [17:40] &lt;billmason&gt; Perhaps we have different definitions of &quot;representing&quot;.</li>
+ <li id="l-613" _a="Philip`"><a href="#l-613">#</a> [17:40] &lt;Philip`&gt; It's not &quot;being used to represent the entity ... such as a company, organisation, project, band, software package, country, or some such&quot;</li>
+ <li id="l-614" _a="billmason"><a href="#l-614">#</a> [17:41] &lt;billmason&gt; I think a marketing person would disagree that a logo doesn't represent the entity.  A logo is generally a carefully considered product designed to to just that.  Judging by the arguments over logo design I've experienced.</li>
+ <li id="l-615" _a="Philip`"><a href="#l-615">#</a> [17:42] &lt;Philip`&gt; Regardless of that, if they replaced it with black Comic Sans saying &quot;WE HACKED YOUR SERVERS&quot; then it certainly wouldn't be representing any such entity, and then there's still the problem that none of the cases mentioned in the spec seem to cover it</li>
+ <li id="l-616" _a="hsivonen" _r="annevk"><a href="#l-616">#</a> [17:44] &lt;hsivonen&gt; annevk: fatal error is a major design decision</li>
+ <li id="l-617" _a="hsivonen" _r="annevk"><a href="#l-617">#</a> [17:44] &lt;hsivonen&gt; annevk: making it more usable regardless is an open issue</li>
+ <li id="l-618" _a="hsivonen" _r="Lachy"><a href="#l-618">#</a> [17:45] &lt;hsivonen&gt; Lachy, annevk: is the problem not having a border between table rows?</li>
+ <li id="l-619" _a="hsivonen"><a href="#l-619">#</a> [17:45] &lt;hsivonen&gt; or columns, too</li>
+ <li id="l-620" _a="billmason"><a href="#l-620">#</a> [17:46] &lt;billmason&gt; Such a change would mean you no longer have a logo.  Right now I'm only asserting that the Google graphic is a logo.</li>
+ <li id="l-621" _a="billmason"><a href="#l-621">#</a> [17:47] &lt;billmason&gt; I would argue that your example fits the current definition of icon: 'WE HACKED YOUR SERVERS' is a short phrase with an alternative graphical representation.</li>
+ <li id="l-622" _a="Philip`"><a href="#l-622">#</a> [17:47] &lt;Philip`&gt; I'd have to agree that the Google logo graphic is a logo</li>
+ <li id="l-623"><a href="#l-623">#</a> [17:47] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-b2c9c65469cf4b17)</li>
+ <li id="l-624" _a="Philip`"><a href="#l-624">#</a> [17:49] &lt;Philip`&gt; but I think it's not so clear that the logo is &quot;being used to represent the entity&quot; - it's being used to tell people what site they're on and to make it prettier</li>
+ <li id="l-625" _a="Philip`"><a href="#l-625">#</a> [17:49] &lt;Philip`&gt; It does represent the entity, but it's not being used simply for that purpose</li>
+ <li id="l-626" _a="Philip`" _r="billmason"><a href="#l-626">#</a> [17:50] &lt;Philip`&gt; billmason: Which of the sub-cases in the 'icon' section would apply?</li>
+ <li id="l-627" _a="billmason" _r="Philip`"><a href="#l-627">#</a> [17:51] &lt;billmason&gt; Philip`: would apply to what?  The hypothetical 'hacked' graphic?</li>
+ <li id="l-628" _a="Philip`" _r="billmason"><a href="#l-628">#</a> [17:51] &lt;Philip`&gt; billmason: Yes</li>
+ <li id="l-629" _a="billmason"><a href="#l-629">#</a> [17:52] &lt;billmason&gt; Probably &quot;In other cases, the icon has no text next to it describing what it means; the icon is supposed to be self-explanatory. In those cases, an equivalent textual label must be given in the alt attribute.&quot;</li>
+ <li id="l-630"><a href="#l-630">#</a> [17:53] * Joins: hasather_ (n=hasather@90-231-107-133-no62.tbcn.telia.com)</li>
+ <li id="l-631" _a="billmason"><a href="#l-631">#</a> [17:53] &lt;billmason&gt; I'm starting to dislike the word 'icon' though.  It makes me leap to the assumption that the image will therefore be a little 16x16 image, or the like.</li>
+ <li id="l-632" _a="Philip`"><a href="#l-632">#</a> [17:53] &lt;Philip`&gt; That seems to me like an abuse of the spec's intent - that's supposed to apply to e.g. &lt;img src=magnifying-glass alt=Search&gt;</li>
+ <li id="l-633" _a="billmason" _r="Yes"><a href="#l-633">#</a> [17:54] &lt;billmason&gt; Yes, I agree.  This is why I don't like the word icon here.</li>
+ <li id="l-634" _a="Philip`"><a href="#l-634">#</a> [17:55] &lt;Philip`&gt; The whole spec section is far too long to bother reading to work out what you're meant to do in any given case anyway, even if it did actually say clearly what to do in every given case</li>
+ <li id="l-635" _a="billmason"><a href="#l-635">#</a> [17:58] &lt;billmason&gt; I would rather, I think answer that the 'hacked' image example is point 1 in the spec.  It is a 'A phrase or paragraph with an alternative graphical representation', but the following text pulls you away from that by saying the image 'more clearly' represents, when in this example it equally represents.</li>
+ <li id="l-636" _a="billmason"><a href="#l-636">#</a> [17:58] &lt;billmason&gt; So I'm finding the text a little blurry.</li>
+ <li id="l-637" _a="Philip`"><a href="#l-637">#</a> [17:58] * Philip` agrees</li>
+ <li id="l-638" _a="annevk" _r="hsivonen"><a href="#l-638">#</a> [17:59] &lt;annevk&gt; hsivonen, fatal error is incompatible with HTML5...</li>
+ <li id="l-639" _a="Dashiva"><a href="#l-639">#</a> [17:59] &lt;Dashiva&gt; But what if the vandals didn't change the alt?</li>
+ <li id="l-640" _a="billmason"><a href="#l-640">#</a> [17:59] &lt;billmason&gt; Then it's nonconforming?  :)</li>
+ <li id="l-641" _a="Philip`" _r="Dashiva"><a href="#l-641">#</a> [18:00] &lt;Philip`&gt; Dashiva: I'm assuming these are vandals who care about accessibility</li>
+ <li id="l-642" _a="hsivonen" _r="annevk"><a href="#l-642">#</a> [18:08] &lt;hsivonen&gt; annevk: actually, HTML5 permits fatal errors</li>
+ <li id="l-643" _a="annevk"><a href="#l-643">#</a> [18:12] &lt;annevk&gt; hmm true, does your parser allow the other variant too if you don't do the streaming model?</li>
+ <li id="l-644"><a href="#l-644">#</a> [18:12] * Joins: KevinMarks (n=KevinMar@sfs-wifi-aruba-dhcp-130-212-159-145.sfsu.edu)</li>
+ <li id="l-645" _a="hsivonen" _r="annevk"><a href="#l-645">#</a> [18:13] &lt;hsivonen&gt; annevk: yes, the parser supports non-fatal behavior if you accept losing streaming</li>
+ <li id="l-646" _a="Lachy" _r="hsivonen"><a href="#l-646">#</a> [18:14] &lt;Lachy&gt; hsivonen, the th's weren't bold. They are now. I assume the problem was the font-weight: inherit;, which now appears to be removed.</li>
+ <li id="l-647" _a="hsivonen"><a href="#l-647">#</a> [18:14] &lt;hsivonen&gt; I'm not sure if keeping V.nu streaming is a bad call, but I'm not ready give up on streaming</li>
+ <li id="l-648" _a="hsivonen" _r="Lachy"><a href="#l-648">#</a> [18:14] &lt;hsivonen&gt; Lachy: are you sure your browser cache is up-to-date?</li>
+ <li id="l-649" _a="Philip`"><a href="#l-649">#</a> [18:15] &lt;Philip`&gt; CSS5 should allow every element to have two parents, and if you set &quot;inherit&quot; then it chooses to inherit from one of the parents at random, with a small chance of inheriting from both mixed together, when the element is first created</li>
+ <li id="l-650" _a="Lachy"><a href="#l-650">#</a> [18:15] &lt;Lachy&gt; it seems to be now up to date now.  I wasn't getting the light yellow background on the middle column earlier. Now I am</li>
+ <li id="l-651" _a="hsivonen" _r="Lachy"><a href="#l-651">#</a> [18:15] &lt;hsivonen&gt; Lachy: I'm pretty sure I haven't changed the style sheet in the last hour</li>
+ <li id="l-652" _a="hsivonen" _r="Lachy"><a href="#l-652">#</a> [18:15] &lt;hsivonen&gt; Lachy: you had a *really* old cached copy of the style sheet, then</li>
+ <li id="l-653" _a="Lachy" _r="oh"><a href="#l-653">#</a> [18:15] &lt;Lachy&gt; oh, ok. Maybe mine was cached</li>
+ <li id="l-654" _a="Lachy"><a href="#l-654">#</a> [18:16] &lt;Lachy&gt; had you set and cache related http headers on them, which would have caused it to be cached for me?</li>
+ <li id="l-655"><a href="#l-655">#</a> [18:16] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-b2c9c65469cf4b17) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-656" _a="Lachy"><a href="#l-656">#</a> [18:16] &lt;Lachy&gt; like an Expires header</li>
+ <li id="l-657" _a="hsivonen" _r="Lachy"><a href="#l-657">#</a> [18:18] &lt;hsivonen&gt; Lachy: nope: <a href="http://web-sniffer.net/?url=http%3A%2F%2Fabout.validator.nu%2Fstyle.css&amp;submit=Submit&amp;http=1.1&amp;gzip=yes&amp;type=GET&amp;uak=0">http://web-sniffer.net/?url=http%3A%2F%2Fabout.validator.nu%2Fstyle.css&amp;submit=Submit&amp;http=1.1&amp;gzip=yes&amp;type=GET&amp;uak=0</a></li>
+ <li id="l-658" _a="annevk" _r="hsivonen"><a href="#l-658">#</a> [18:20] &lt;annevk&gt; hsivonen, ah ok, for some reason i assume the parser didn't use streaming</li>
+ <li id="l-659" _a="annevk"><a href="#l-659">#</a> [18:20] &lt;annevk&gt; maybe because of Schematron</li>
+ <li id="l-660" _a="annevk"><a href="#l-660">#</a> [18:20] &lt;annevk&gt; assumed*</li>
+ <li id="l-661" _a="annevk"><a href="#l-661">#</a> [18:21] &lt;annevk&gt; oops</li>
+ <li id="l-662" _a="hsivonen" _r="annevk"><a href="#l-662">#</a> [18:21] &lt;hsivonen&gt; annevk: Schematron will be gone at some point from HTML5 checking</li>
+ <li id="l-663"><a href="#l-663">#</a> [18:21] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-e4e55f2772a61e84)</li>
+ <li id="l-664" _a="hsivonen" _r="annevk"><a href="#l-664">#</a> [18:21] &lt;hsivonen&gt; annevk: but yeah, Schematron builds a private tree and doesn't stream</li>
+ <li id="l-665" _a="hsivonen"><a href="#l-665">#</a> [18:21] &lt;hsivonen&gt; looks really ugly in a perf profiler :-)</li>
+ <li id="l-666" _a="Lachy" _r="hsivonen"><a href="#l-666">#</a> [18:22] &lt;Lachy&gt; hsivonen, re magnifying images, it's not always immediately obvious which images are already shown full size, or which can be enlarged. So going to the context menu to view each image is time consuming</li>
+ <li id="l-667" _a="hsivonen" _r="Lachy"><a href="#l-667">#</a> [18:22] &lt;hsivonen&gt; Lachy: good point</li>
+ <li id="l-668" _a="hsivonen" _r="Lachy"><a href="#l-668">#</a> [18:22] &lt;hsivonen&gt; Lachy: I tried to pick a size that is large enough for an author to recognize photos</li>
+ <li id="l-669" _a="Lachy"><a href="#l-669">#</a> [18:23] &lt;Lachy&gt; would be nice to have some kind of zoom feature for significantly larger images</li>
+ <li id="l-670" _a="hsivonen"><a href="#l-670">#</a> [18:23] &lt;hsivonen&gt; it may suck if you aren't the author and you try to figure out a large diagram</li>
+ <li id="l-671" _a="Lachy"><a href="#l-671">#</a> [18:23] &lt;Lachy&gt; but I suppose, for an author familar with the page, it's not so bad</li>
+ <li id="l-672"><a href="#l-672">#</a> [18:24] * Joins: eseidel (n=eseidel@nat/google/x-870277eedd5ccba4)</li>
+ <li id="l-673" _a="hsivonen" _r="Lachy"><a href="#l-673">#</a> [18:24] &lt;hsivonen&gt; Lachy: I considered using CSS :hover and :focus but then I cut that feature from the first release, because I couldn't figure out a nice way to tell CSS to zoom from current dimensions by a factor</li>
+ <li id="l-674"><a href="#l-674">#</a> [18:25] * Joins: tndH__ (i=Rob@adsl-87-102-85-189.karoo.KCOM.COM)</li>
+ <li id="l-675" _a="Lachy"><a href="#l-675">#</a> [18:25] &lt;Lachy&gt; such a thing would have to be done with javascript</li>
+ <li id="l-676" _a="hsivonen"><a href="#l-676">#</a> [18:25] &lt;hsivonen&gt; yeah</li>
+ <li id="l-677" _a="hsivonen"><a href="#l-677">#</a> [18:29] &lt;hsivonen&gt; can JS query for the actual file dimensions?</li>
+ <li id="l-678" _a="Lachy" _r="hsivonen"><a href="#l-678">#</a> [18:29] &lt;Lachy&gt; hsivonen, can you turn the Group Messages feature on by default. It's so much better than the ungrouped</li>
+ <li id="l-679" _a="hsivonen"><a href="#l-679">#</a> [18:29] &lt;hsivonen&gt; the server size doesn't know the file dimensions and uses width/height from HTML</li>
+ <li id="l-680" _a="hsivonen" _r="Lachy"><a href="#l-680">#</a> [18:30] &lt;hsivonen&gt; Lachy: I can't. Grouping doesn't work during load</li>
+ <li id="l-681"><a href="#l-681">#</a> [18:32] * Quits: jacobolus (n=jacobolu@dhcp-0000036913-b5-5e.client.fas.harvard.edu) (Read error: 113 (No route to host))</li>
+ <li id="l-682" _a="Lachy"><a href="#l-682">#</a> [18:32] &lt;Lachy&gt; I wonder if you could somehow use the canvas APIs to determine the actual size of the image</li>
+ <li id="l-683" _a="Philip`" _r="Lachy"><a href="#l-683">#</a> [18:33] &lt;Philip`&gt; Lachy: You can't</li>
+ <li id="l-684" _a="Philip`"><a href="#l-684">#</a> [18:34] &lt;Philip`&gt; and when I last tried, it was impossible to find the image size on the client</li>
+ <li id="l-685"><a href="#l-685">#</a> [18:34] * Joins: jacobolus (n=jacobolu@dhcp-0000036913-b5-5e.client.fas.harvard.edu)</li>
+ <li id="l-686" _a="Philip`"><a href="#l-686">#</a> [18:34] &lt;Philip`&gt; (because img.width/height always returns the rendered size, or 0 if it's not in the document)</li>
+ <li id="l-687" _a="Lachy" _r="Philip`"><a href="#l-687">#</a> [18:34] &lt;Lachy&gt; Philip`, ok.</li>
+ <li id="l-688" _a="Philip`"><a href="#l-688">#</a> [18:34] &lt;Philip`&gt; (at least in the compatible intersection of all browsers)</li>
+ <li id="l-689" _a="Philip`"><a href="#l-689">#</a> [18:35] &lt;Philip`&gt; so I ended up calculating sizes on the server instead, and sending &lt;img _width=&quot;123&quot; _height=&quot;456&quot; style=&quot;max-width:100px&quot;&gt; so scripts could grab the real size</li>
+ <li id="l-690" _a="Philip`"><a href="#l-690">#</a> [18:36] &lt;Philip`&gt; (Can't use width=&quot;...&quot; because getAttribute('width') in IE is equivalent to .width and returns the rendered size)</li>
+ <li id="l-691"><a href="#l-691">#</a> [18:36] * Quits: csarven- (n=csarven@on-irc.csarven.ca) (Read error: 110 (Connection timed out))</li>
+ <li id="l-692" _a="Philip`"><a href="#l-692">#</a> [18:37] &lt;Philip`&gt; (Web development is great fun)</li>
+ <li id="l-693"><a href="#l-693">#</a> [18:38] * Quits: csarven (n=csarven@on-irc.csarven.ca) (Read error: 110 (Connection timed out))</li>
+ <li id="l-694" _a="Philip`"><a href="#l-694">#</a> [18:39] &lt;Philip`&gt; (Also I was putting the max-widthed images in a table, and Opera 9.2 does table layout as if the image was full size, which messes everything up, and I was having so much fun that I just gave up and let Opera have broken layout)</li>
+ <li id="l-695" _a="Lachy" _r="hsivonen"><a href="#l-695">#</a> [18:39] &lt;Lachy&gt; hsivonen, this works: <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%0A%3Cscript%3E%0Avar%20img%20%3D%20document.createElement(%22img%22)%3B%0Aimg.src%20%3D%20%22image%22%3B%0Aw(img.height)%3B%0Aw(img.width)%3B%0A%3C%2Fscript%3E">http://software.hixie.ch/utilities/js/live-dom-viewer/?%3C!DOCTYPE%20html%3E%0A%3Cscript%3E%0Avar%20img%20%3D%20document.createElement(%22img%22)%3B%0Aimg.src%20%3D%20%22image%22%3B%0Aw(img.height)%3B%0Aw(img.width)%3B%0A%3C%2Fscript%3E</a></li>
+ <li id="l-696"><a href="#l-696">#</a> [18:40] * Quits: webben (n=benh@nat/yahoo/x-99c83d8e1a57a0ff)</li>
+ <li id="l-697"><a href="#l-697">#</a> [18:41] * Quits: tndH (i=Rob@adsl-87-102-85-189.karoo.KCOM.COM) (Read error: 113 (No route to host))</li>
+ <li id="l-698" _a="Lachy"><a href="#l-698">#</a> [18:41] * Lachy has to go home now. Back soon.</li>
+ <li id="l-699"><a href="#l-699">#</a> [18:41] * Quits: Lachy (n=Lachlan@pat-tdc.opera.com) (&quot;Leaving&quot;)</li>
+ <li id="l-700" _a="Philip`"><a href="#l-700">#</a> [18:42] * Philip` wonders why that didn't seem to work when he tried this a while ago...</li>
+ <li id="l-701" _a="annevk"><a href="#l-701">#</a> [18:52] &lt;annevk&gt; (the example Lachy gave above only works for cached images)</li>
+ <li id="l-702" _a="Philip`"><a href="#l-702">#</a> [18:53] &lt;Philip`&gt; (That's easily fixable with onload)</li>
+ <li id="l-703"><a href="#l-703">#</a> [18:54] * Joins: weinig (n=weinig@17.203.15.172)</li>
+ <li id="l-704"><a href="#l-704">#</a> [18:56] * Parts: davidb (n=davidb@bas4-toronto06-1279311539.dsl.bell.ca)</li>
+ <li id="l-705"><a href="#l-705">#</a> [18:57] * Joins: Lachy (n=Lachlan@ti200710a340-2662.bb.online.no)</li>
+ <li id="l-706"><a href="#l-706">#</a> [19:06] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-e4e55f2772a61e84) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-707" _a="Lachy" _r="annevk"><a href="#l-707">#</a> [19:06] &lt;Lachy&gt; annevk, the example I gave would work for all images shown in the image report, if the function is executed onload, creates an image, and iteratively sets the src to that of each images in the report and retreives the dimensions.</li>
+ <li id="l-708"><a href="#l-708">#</a> [19:06] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-c6058592d41b31dd)</li>
+ <li id="l-709" _a="Philip`" _r="&quot;Iteratively&quot"><a href="#l-709">#</a> [19:07] &lt;Philip`&gt; &quot;Iteratively&quot; sounds bad for performance - you want to do them in parallel</li>
+ <li id="l-710" _a="Lachy" _r="ideally"><a href="#l-710">#</a> [19:08] &lt;Lachy&gt; ideally, you would catch the onload event for each individual image and retrive the dimensions imediately</li>
+ <li id="l-711" _a="Lachy"><a href="#l-711">#</a> [19:08] &lt;Lachy&gt; that will be possible with XBL, but no so easy now</li>
+ <li id="l-712" _a="Lachy"><a href="#l-712">#</a> [19:08] &lt;Lachy&gt; unless you can do &lt;img ... onload=&quot;getDimensions();&quot;&gt;</li>
+ <li id="l-713" _a="Lachy"><a href="#l-713">#</a> [19:08] &lt;Lachy&gt; for each image</li>
+ <li id="l-714" _a="Philip`"><a href="#l-714">#</a> [19:15] &lt;Philip`&gt; &lt;img onload&gt; won't work, since it'll give the rendered size and not the real size</li>
+ <li id="l-715" _a="Philip`"><a href="#l-715">#</a> [19:15] &lt;Philip`&gt; so you have to use createElement('img') or new Image()</li>
+ <li id="l-716" _a="Lachy" _r="Philip`"><a href="#l-716">#</a> [19:18] &lt;Lachy&gt; Philip`, yes, that's why my above explanation said to create an img, and iteratively set the src to that of each image in the page.</li>
+ <li id="l-717" _a="Philip`"><a href="#l-717">#</a> [19:19] &lt;Philip`&gt; You can just create multiple imgs and set the source of them all, instead of iterating on one img</li>
+ <li id="l-718" _a="Lachy"><a href="#l-718">#</a> [19:20] &lt;Lachy&gt; you still need to create and set each one sequentially, but creating new img elements would be less efficient than reusing the same one.</li>
+ <li id="l-719" _a="Lachy"><a href="#l-719">#</a> [19:23] &lt;Lachy&gt; I assume multiple onload events from several images would be executed sequentially, since it's single-threaded, so reusing the same img for each wouldn't cause a conflict</li>
+ <li id="l-720" _a="Philip`"><a href="#l-720">#</a> [19:23] &lt;Philip`&gt; Network latency is seven zillion times more significant than CPU/memory usage for a handful of DOM objects</li>
+ <li id="l-721" _a="Lachy" _r="yes"><a href="#l-721">#</a> [19:23] &lt;Lachy&gt; yes, but every bit counts</li>
+ <li id="l-722"><a href="#l-722">#</a> [19:23] * Quits: svl (n=me@ip565744a7.direct-adsl.nl) (&quot;And back he spurred like a madman, shrieking a curse to the sky.&quot;)</li>
+ <li id="l-723" _a="Philip`"><a href="#l-723">#</a> [19:23] &lt;Philip`&gt; Every bit of network latency counts more; and if you're downloading one image at a time, compared to downloading half a dozen in parallel, that's going to be really slow</li>
+ <li id="l-724" _a="Lachy"><a href="#l-724">#</a> [19:24] &lt;Lachy&gt; but the network latency is irrelevant here, since you can't do anything with the image until it's loaded, and once it is, the script for each takes an insignificant amount of time</li>
+ <li id="l-725" _a="Lachy"><a href="#l-725">#</a> [19:25] &lt;Lachy&gt; the browser can still download multiple images simultaneosly, and use various techniques to speed that up. There's nothing a javascript can do about that</li>
+ <li id="l-726" _a="Philip`"><a href="#l-726">#</a> [19:26] &lt;Philip`&gt; The browser can't download multiple images simultaneously if your script is waiting for the first to call onload before you update img.src and tell it to download the next</li>
+ <li id="l-727" _a="Lachy"><a href="#l-727">#</a> [19:27] &lt;Lachy&gt; I think your misunderstanding how I envision the script working</li>
+ <li id="l-728" _a="Philip`"><a href="#l-728">#</a> [19:27] &lt;Philip`&gt; Possibly :-)</li>
+ <li id="l-729" _a="Philip`"><a href="#l-729">#</a> [19:28] &lt;Philip`&gt; Since you said you're reusing the same img, I assume you mean &quot;var i = new Image(); i.src = '1'; i.onload = function () { process(i); i.src = '2'; i.onload = ... }&quot; (except setting src/onload in the right order and setting up the chain in a loop)</li>
+ <li id="l-730" _a="Lachy" _r="no"><a href="#l-730">#</a> [19:29] &lt;Lachy&gt; no, you got it wroing :-)</li>
+ <li id="l-731" _a="Philip`"><a href="#l-731">#</a> [19:29] &lt;Philip`&gt; I'll blame your description, then ;-)</li>
+ <li id="l-732" _a="eseidel"><a href="#l-732">#</a> [19:29] * eseidel is now known as webkit_eseidel</li>
+ <li id="l-733" _a="Lachy"><a href="#l-733">#</a> [19:34] &lt;Lachy&gt; I'm putting together an example page to show it working, give me a few minutes</li>
+ <li id="l-734"><a href="#l-734">#</a> [19:35] * Quits: zcorpan (n=zcorpan@pat.se.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-735"><a href="#l-735">#</a> [19:35] * Quits: aroben (n=aroben@unaffiliated/aroben) (&quot;Leaving&quot;)</li>
+ <li id="l-736"><a href="#l-736">#</a> [19:37] * Joins: qwert666 (n=qwert666@acbk110.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-737" _a="bkardell"><a href="#l-737">#</a> [19:37] &lt;bkardell&gt; I have a question about &lt;link&gt; in the working draft...</li>
+ <li id="l-738" _a="bkardell"><a href="#l-738">#</a> [19:38] &lt;bkardell&gt; There is a &quot;prefetch&quot;</li>
+ <li id="l-739" _a="bkardell"><a href="#l-739">#</a> [19:38] &lt;bkardell&gt; and you can specify type</li>
+ <li id="l-740" _a="bkardell"><a href="#l-740">#</a> [19:39] &lt;bkardell&gt; could it be used similarly to &lt;script src=&quot;xx&quot;&gt;</li>
+ <li id="l-741" _a="bkardell"><a href="#l-741">#</a> [19:39] &lt;bkardell&gt; to load script?</li>
+ <li id="l-742"><a href="#l-742">#</a> [19:39] * Joins: psa (n=yomode@71.93.19.66)</li>
+ <li id="l-743" _a="Philip`" _r="bkardell"><a href="#l-743">#</a> [19:40] &lt;Philip`&gt; bkardell: Why not just use &lt;script src=&quot;...&quot;&gt; instead?</li>
+ <li id="l-744" _a="bkardell"><a href="#l-744">#</a> [19:41] &lt;bkardell&gt; well - the reason isn't important for now</li>
+ <li id="l-745" _a="bkardell"><a href="#l-745">#</a> [19:41] &lt;bkardell&gt; the important part is that I don't understand from the text whether that is a valid case</li>
+ <li id="l-746" _a="bkardell"><a href="#l-746">#</a> [19:41] &lt;bkardell&gt; would it be?</li>
+ <li id="l-747" _a="bkardell"><a href="#l-747">#</a> [19:43] &lt;bkardell&gt; it allows type/media etc</li>
+ <li id="l-748" _a="Philip`"><a href="#l-748">#</a> [19:43] &lt;Philip`&gt; The spec doesn't tell UAs to do anything with &lt;link rel=prefetch&gt;, so (I think) they mustn't do anything that affects the document in any way (and so they can't e.g. run scripts)</li>
+ <li id="l-749" _a="bkardell"><a href="#l-749">#</a> [19:44] &lt;bkardell&gt; but they can attach stylesheets?</li>
+ <li id="l-750" _a="bkardell"><a href="#l-750">#</a> [19:44] &lt;bkardell&gt; which can attach via xbl?</li>
+ <li id="l-751" _a="annevk"><a href="#l-751">#</a> [19:44] &lt;annevk&gt; through rel=stylesheet</li>
+ <li id="l-752" _a="Philip`"><a href="#l-752">#</a> [19:44] &lt;Philip`&gt; That's rel=stylesheet, not rel=prefetch</li>
+ <li id="l-753" _a="Philip`"><a href="#l-753">#</a> [19:45] &lt;Philip`&gt; (prefetch is just meant to tell the UA to download and cache the data so it can be used in the future with less delay)</li>
+ <li id="l-754" _a="Philip`"><a href="#l-754">#</a> [19:45] * Philip` might be misunderstanding the question, though</li>
+ <li id="l-755" _a="bkardell"><a href="#l-755">#</a> [19:45] &lt;bkardell&gt; sure... it's kind of a complicated question I guess I may be having trouble expressing too</li>
+ <li id="l-756" _a="bkardell"><a href="#l-756">#</a> [19:46] &lt;bkardell&gt; let me try again.. I don't want to get hung up on the 'prefetch' piece</li>
+ <li id="l-757" _a="bkardell"><a href="#l-757">#</a> [19:46] &lt;bkardell&gt; I chose that one in my question because it specifies an &quot;external resource&quot;</li>
+ <li id="l-758" _a="bkardell"><a href="#l-758">#</a> [19:47] &lt;bkardell&gt; so I guess in simplest terms: could &lt;link&gt; not be used to load script?</li>
+ <li id="l-759"><a href="#l-759">#</a> [19:47] * Joins: aroben (n=aroben@unaffiliated/aroben)</li>
+ <li id="l-760" _a="Philip`"><a href="#l-760">#</a> [19:47] &lt;Philip`&gt; Like &lt;link rel=&quot;script&quot; href=&quot;example.js&quot;&gt;?</li>
+ <li id="l-761" _a="annevk" _r="&lt;link&gt"><a href="#l-761">#</a> [19:47] &lt;annevk&gt; &lt;link&gt; cannot atttach scripts like &lt;script&gt; can</li>
+ <li id="l-762" _a="bkardell"><a href="#l-762">#</a> [19:48] &lt;bkardell&gt; it seems syntactically very capable and as to why exactly one would want to - I'm just examining possibilities</li>
+ <li id="l-763" _a="bkardell"><a href="#l-763">#</a> [19:48] &lt;bkardell&gt; yes - precisely...</li>
+ <li id="l-764" _a="Philip`"><a href="#l-764">#</a> [19:48] &lt;Philip`&gt; There's not really anything to stop someone adding a &lt;link rel=script&gt; to HTML in the future, except that it would seem like a bad idea when there's already &lt;script&gt;</li>
+ <li id="l-765" _a="bkardell"><a href="#l-765">#</a> [19:49] &lt;bkardell&gt; does it really seem like a bad idea?</li>
+ <li id="l-766" _a="annevk"><a href="#l-766">#</a> [19:49] &lt;annevk&gt; yes</li>
+ <li id="l-767" _a="bkardell"><a href="#l-767">#</a> [19:49] &lt;bkardell&gt; lol :)</li>
+ <li id="l-768" _a="annevk"><a href="#l-768">#</a> [19:49] &lt;annevk&gt; (it's a rejected extension: <a href="http://wiki.whatwg.org/wiki/RelExtensions">http://wiki.whatwg.org/wiki/RelExtensions</a> )</li>
+ <li id="l-769" _a="bkardell"><a href="#l-769">#</a> [19:49] &lt;bkardell&gt; good deal Anne - that's exactly what I was looking for</li>
+ <li id="l-770" _a="bkardell"><a href="#l-770">#</a> [19:49] &lt;bkardell&gt; thanks!!</li>
+ <li id="l-771" _a="Philip`"><a href="#l-771">#</a> [19:50] &lt;Philip`&gt; It doesn't seem like a good idea (e.g. it doesn't allow interesting new features), and the default state for ideas is to be bad because otherwise the world would be flooded with too many things to implement :-)</li>
+ <li id="l-772" _a="annevk"><a href="#l-772">#</a> [19:50] &lt;annevk&gt; the default state for proposals is bad</li>
+ <li id="l-773" _a="annevk" _r="actually"><a href="#l-773">#</a> [19:50] &lt;annevk&gt; actually, the default state for proposals is rejection</li>
+ <li id="l-774" _a="bkardell"><a href="#l-774">#</a> [19:51] &lt;bkardell&gt; yeah - I agree with that philosophy the question was not to propose but to understand intent</li>
+ <li id="l-775" _a="Philip`" _r="annevk"><a href="#l-775">#</a> [19:52] &lt;Philip`&gt; annevk: That shouldn't be true - the default state for proposals should be to be awaiting consideration</li>
+ <li id="l-776" _a="bkardell"><a href="#l-776">#</a> [19:52] &lt;bkardell&gt; I was trying to figure out essentially if this would be an effort like one to say &lt;embed&gt;, &lt;object&gt; and &lt;applet&gt; are kind of redundant</li>
+ <li id="l-777" _a="bkardell"><a href="#l-777">#</a> [19:53] &lt;bkardell&gt; thanks though anne - that's exactly what I was looking for</li>
+ <li id="l-778" _a="annevk"><a href="#l-778">#</a> [19:53] &lt;annevk&gt; in general if a new feature does exactly the same as an existing feature it won't be introduced</li>
+ <li id="l-779" _a="annevk"><a href="#l-779">#</a> [19:53] &lt;annevk&gt; and since rel=script was not supported anywhere there's no reason to add it</li>
+ <li id="l-780" _a="annevk"><a href="#l-780">#</a> [19:54] &lt;annevk&gt; (as for &lt;embed&gt;, &lt;object&gt;, and &lt;applet&gt;; &lt;applet&gt; is obsoleted in favor of &lt;embed&gt; and &lt;embed&gt; and &lt;object&gt; are quite different)</li>
+ <li id="l-781" _a="annevk" _r="Philip`"><a href="#l-781">#</a> [19:57] &lt;annevk&gt; Philip`, i guess the default outcome of said consideration is rejection then :)</li>
+ <li id="l-782"><a href="#l-782">#</a> [19:57] * Quits: hasather_ (n=hasather@90-231-107-133-no62.tbcn.telia.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-783" _a="Lachy" _r="Philip`"><a href="#l-783">#</a> [20:00] &lt;Lachy&gt; Philip`, <a href="http://lachy.id.au/dev/2008/image-dimensions.html">http://lachy.id.au/dev/2008/image-dimensions.html</a></li>
+ <li id="l-784" _a="Lachy" _r="hsivonen"><a href="#l-784">#</a> [20:01] &lt;Lachy&gt; hsivonen, feel free to rip off that script for the validator</li>
+ <li id="l-785" _a="Lachy"><a href="#l-785">#</a> [20:01] &lt;Lachy&gt; ... if and when you want to implement the zoom feature</li>
+ <li id="l-786"><a href="#l-786">#</a> [20:04] * Joins: kingryan (n=ryan@c-24-5-77-167.hsd1.ca.comcast.net)</li>
+ <li id="l-787"><a href="#l-787">#</a> [20:06] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-c6058592d41b31dd) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-788"><a href="#l-788">#</a> [20:06] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-7ae4d52974ee4a41)</li>
+ <li id="l-789" _a="bkardell" _r="annevk"><a href="#l-789">#</a> [20:08] &lt;bkardell&gt; annevk: I must admit that I did not know &lt;embed&gt; and &lt;object&gt; - both still have recommended uses</li>
+ <li id="l-790" _a="bkardell"><a href="#l-790">#</a> [20:08] &lt;bkardell&gt; thought &lt;embed&gt; was out</li>
+ <li id="l-791" _a="bkardell"><a href="#l-791">#</a> [20:11] &lt;bkardell&gt; Don't have a lot of chance to use either so hopefully that doesn't seem too dreadfully stupid a comment</li>
+ <li id="l-792" _a="annevk"><a href="#l-792">#</a> [20:13] &lt;annevk&gt; np</li>
+ <li id="l-793"><a href="#l-793">#</a> [20:24] * Quits: tantek (n=tantek@68.236.184.75)</li>
+ <li id="l-794" _a="Philip`" _r="Oops"><a href="#l-794">#</a> [20:33] &lt;Philip`&gt; Oops, I think I contributed to the alt email pile</li>
+ <li id="l-795"><a href="#l-795">#</a> [20:40] * Joins: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-796"><a href="#l-796">#</a> [20:46] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-7ae4d52974ee4a41) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-797"><a href="#l-797">#</a> [20:49] * Quits: aroben (n=aroben@unaffiliated/aroben) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-798" _a="om_sleep"><a href="#l-798">#</a> [20:58] * om_sleep is now known as othermaciej</li>
+ <li id="l-799"><a href="#l-799">#</a> [21:05] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-23e330d04fa7044a)</li>
+ <li id="l-800"><a href="#l-800">#</a> [21:30] * Parts: BenMillard (i=cerbera@cpc1-flee1-0-0-cust285.glfd.cable.ntl.com)</li>
+ <li id="l-801"><a href="#l-801">#</a> [21:36] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-23e330d04fa7044a) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-802"><a href="#l-802">#</a> [21:46] * Quits: jdandrea (n=jdandrea@ool-44c09c49.dyn.optonline.net) (&quot;ciao&quot;)</li>
+ <li id="l-803"><a href="#l-803">#</a> [21:47] * Quits: gsnedders (n=gsnedder@host217-44-37-113.range217-44.btcentralplus.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-804"><a href="#l-804">#</a> [21:48] * Quits: sverrej (n=sverrej@pat-tdc.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-805"><a href="#l-805">#</a> [21:50] * Joins: gsnedders (n=gsnedder@host217-44-37-113.range217-44.btcentralplus.com)</li>
+ <li id="l-806"><a href="#l-806">#</a> [21:50] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-807" _a="Hixie"><a href="#l-807">#</a> [21:55] &lt;Hixie&gt; wow <a href="http://www.w3.org/mid/OF51C16334.62B43BA0-ON8625742F.004CBE78-8625742F.0051275D@us.ibm.com">http://www.w3.org/mid/OF51C16334.62B43BA0-ON8625742F.004CBE78-8625742F.0051275D@us.ibm.com</a></li>
+ <li id="l-808"><a href="#l-808">#</a> [22:09] * Quits: tommorris (n=tommorri@i-83-67-98-32.freedom2surf.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-809"><a href="#l-809">#</a> [22:30] * Joins: tommorris (n=tommorri@i-83-67-98-32.freedom2surf.net)</li>
+ <li id="l-810" _a="webkit_eseidel"><a href="#l-810">#</a> [22:32] * webkit_eseidel is now known as eseidel</li>
+ <li id="l-811" _a="Philip`" _r="Aha"><a href="#l-811">#</a> [22:32] &lt;Philip`&gt; Aha, I'm glad someone gave a specific example in response to my &quot;there are other more legitimate reasons for having several img elements representing a single piece of text&quot;, since I couldn't actually think of any</li>
+ <li id="l-812"><a href="#l-812">#</a> [22:37] * Joins: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-186b4b727e39af83)</li>
+ <li id="l-813"><a href="#l-813">#</a> [22:41] * Quits: bkardell (i=cc111a04@gateway/web/ajax/mibbit.com/x-186b4b727e39af83) (Client Quit)</li>
+ <li id="l-814"><a href="#l-814">#</a> [22:46] * Joins: epeus (n=KevinMar@60.sub-75-210-111.myvzw.com)</li>
+ <li id="l-815"><a href="#l-815">#</a> [22:52] * Quits: KevinMarks (n=KevinMar@sfs-wifi-aruba-dhcp-130-212-159-145.sfsu.edu) (Read error: 110 (Connection timed out))</li>
+ <li id="l-816"><a href="#l-816">#</a> [22:57] * Joins: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-817"><a href="#l-817">#</a> [22:57] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (Read error: 113 (No route to host))</li>
+ <li id="l-818"><a href="#l-818">#</a> [22:58] * Joins: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se)</li>
+ <li id="l-819" _a="zcorpan_"><a href="#l-819">#</a> [22:58] &lt;zcorpan_&gt; <a href="http://html5">http://html5</a>.dk/wordpress/2008/04/16/første-danske-bog-om-html-5/ -- danish book about html5</li>
+ <li id="l-820"><a href="#l-820">#</a> [23:02] * Joins: roc (n=roc@121-72-168-16.dsl.telstraclear.net)</li>
+ <li id="l-821"><a href="#l-821">#</a> [23:03] * Joins: othermaciej_ (n=mjs@17.255.97.214)</li>
+ <li id="l-822"><a href="#l-822">#</a> [23:03] * Quits: othermaciej (n=mjs@17.203.15.181) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-823"><a href="#l-823">#</a> [23:04] * Joins: othermaciej (n=mjs@17.203.15.181)</li>
+ <li id="l-824" _a="annevk"><a href="#l-824">#</a> [23:09] &lt;annevk&gt; if I interpret the Danish correctly there's no book yet but you can pre-order it or something?</li>
+ <li id="l-825"><a href="#l-825">#</a> [23:15] * Joins: virtuelv (n=virtuelv@225.80-203-100.nextgentel.com)</li>
+ <li id="l-826"><a href="#l-826">#</a> [23:20] * Quits: othermaciej_ (n=mjs@17.255.97.214) (Connection timed out)</li>
+ <li id="l-827"><a href="#l-827">#</a> [23:25] * Quits: zcorpan_ (n=zcorpan@c-cb21e353.1451-1-64736c12.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-828"><a href="#l-828">#</a> [23:27] * Quits: eseidel (n=eseidel@nat/google/x-870277eedd5ccba4)</li>
+ <li id="l-829"><a href="#l-829">#</a> [23:29] * Joins: KevinMarks (n=KevinMar@sfs-wifi-aruba-dhcp-130-212-159-145.sfsu.edu)</li>
+ <li id="l-830"><a href="#l-830">#</a> [23:30] * Quits: epeus (n=KevinMar@60.sub-75-210-111.myvzw.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-831" _a="Hixie"><a href="#l-831">#</a> [23:35] &lt;Hixie&gt; wtf are document.charset and document.defaultCharset</li>
+ <li id="l-832"><a href="#l-832">#</a> [23:36] * Quits: ROBOd (n=robod@89.122.216.38) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-833"><a href="#l-833">#</a> [23:39] * Joins: eseidel (n=eseidel@nat/google/x-5d113e55e1a397de)</li>
+ <li id="l-834" _a="othermaciej"><a href="#l-834">#</a> [23:39] &lt;othermaciej&gt; crazy XML things</li>
+ <li id="l-835" _a="Hixie"><a href="#l-835">#</a> [23:39] &lt;Hixie&gt; seems they're IE things for text/html</li>
+ <li id="l-836" _a="Hixie"><a href="#l-836">#</a> [23:39] &lt;Hixie&gt; i don't understand what they are supposed to do</li>
+ <li id="l-837" _a="Hixie"><a href="#l-837">#</a> [23:39] &lt;Hixie&gt; on setting in particular</li>
+ <li id="l-838" _a="Hixie"><a href="#l-838">#</a> [23:39] &lt;Hixie&gt; for .charset</li>
+ <li id="l-839" _a="othermaciej"><a href="#l-839">#</a> [23:39] &lt;othermaciej&gt; oh</li>
+ <li id="l-840" _a="othermaciej"><a href="#l-840">#</a> [23:40] &lt;othermaciej&gt; that's right</li>
+ <li id="l-841" _a="othermaciej"><a href="#l-841">#</a> [23:40] &lt;othermaciej&gt; we have those APIs marked as IE extensions and I don't remember what they do</li>
+ <li id="l-842" _a="Hixie"><a href="#l-842">#</a> [23:40] &lt;Hixie&gt; &quot;defaultCharset Property</li>
+ <li id="l-843" _a="Hixie"><a href="#l-843">#</a> [23:40] &lt;Hixie&gt; Gets the default character set from the current regional language settings.&quot;</li>
+ <li id="l-844" _a="Hixie"><a href="#l-844">#</a> [23:40] &lt;Hixie&gt; w.t.f.</li>
+ <li id="l-845" _a="othermaciej"><a href="#l-845">#</a> [23:40] &lt;othermaciej&gt; Mozilla instead has characterSet</li>
+ <li id="l-846" _a="othermaciej"><a href="#l-846">#</a> [23:41] &lt;othermaciej&gt; (which we also copied)</li>
+ <li id="l-847" _a="othermaciej"><a href="#l-847">#</a> [23:41] &lt;othermaciej&gt; defaultCharset is read-only in our DOM</li>
+ <li id="l-848" _a="othermaciej"><a href="#l-848">#</a> [23:41] &lt;othermaciej&gt; not sure that is the case for IE</li>
+ <li id="l-849" _a="Hixie"><a href="#l-849">#</a> [23:41] &lt;Hixie&gt; yeah i just looked at the patch that webkit uses</li>
+ <li id="l-850" _a="Hixie"><a href="#l-850">#</a> [23:41] &lt;Hixie&gt; to implement this</li>
+ <li id="l-851" _a="Hixie"><a href="#l-851">#</a> [23:41] &lt;Hixie&gt; didn't help much</li>
+ <li id="l-852" _a="Hixie"><a href="#l-852">#</a> [23:41] &lt;Hixie&gt; :-)</li>
+ <li id="l-853" _a="othermaciej"><a href="#l-853">#</a> [23:41] &lt;othermaciej&gt; the crazy XML things are inputEncoding and xmlEncoding</li>
+ <li id="l-854" _a="Hixie"><a href="#l-854">#</a> [23:41] &lt;Hixie&gt; (in terms of what setting .charset does)</li>
+ <li id="l-855" _a="othermaciej"><a href="#l-855">#</a> [23:42] &lt;othermaciej&gt; for a grand total of 5 attributes on Document relating to the document's character set</li>
+ <li id="l-856" _a="Hixie"><a href="#l-856">#</a> [23:42] &lt;Hixie&gt; first hit for [document.charset msdn] on google seems to be a security vulnerability report</li>
+ <li id="l-857" _a="othermaciej"><a href="#l-857">#</a> [23:42] &lt;othermaciej&gt; I think if you set it, it will affect the default charset assumed for linked resources</li>
+ <li id="l-858" _a="othermaciej"><a href="#l-858">#</a> [23:43] &lt;othermaciej&gt; and possibly also charset used for form submission and URL escaping</li>
+ <li id="l-859" _a="othermaciej"><a href="#l-859">#</a> [23:43] &lt;othermaciej&gt; not sure about the latter two though</li>
+ <li id="l-860" _a="Hixie"><a href="#l-860">#</a> [23:43] &lt;Hixie&gt; charset Property</li>
+ <li id="l-861" _a="Hixie"><a href="#l-861">#</a> [23:43] &lt;Hixie&gt; &quot;Sets or retrieves the character set used to encode the object.&quot;</li>
+ <li id="l-862" _a="Hixie"><a href="#l-862">#</a> [23:44] &lt;Hixie&gt; this documentation is worthless</li>
+ <li id="l-863" _a="othermaciej"><a href="#l-863">#</a> [23:44] &lt;othermaciej&gt; IE's vaunted docs for their JS APIs are often maddeningly vague</li>
+ <li id="l-864"><a href="#l-864">#</a> [23:49] * Quits: phsiao (n=shawn@nat/ibm/x-1423b97110830d7c)</li>
+ <li id="l-865"><a href="#l-865">#</a> [23:51] * Joins: othermaciej_ (n=mjs@17.255.97.214)</li>
+ <li id="l-866"><a href="#l-866">#</a> [23:56] * Joins: andersca_ (n=andersca@c-71-198-2-225.hsd1.ca.comcast.net)</li>
+ <li id="l-867" _a="annevk" _r="hmm"><a href="#l-867">#</a> [23:57] &lt;annevk&gt; hmm, you'd think that nonsense like charset shouldn't end up in the DOM</li>
+ <li id="l-868"><a href="#l-868">#</a> [23:58] * Joins: othermaciej__ (n=mjs@17.203.15.181)</li>
+ <li id="l-869"><a href="#l-869">#</a> [23:59] * Quits: othermaciej (n=mjs@17.203.15.181) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-870" _a="Hixie"><a href="#l-870">#</a> [23:59] &lt;Hixie&gt; so i wonder what a document like  &lt;script&gt;alert(document.charset)&lt;/script&gt;&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=iso-8859-2&quot;&gt;&lt;script&gt;alert(document.charset)&lt;/script&gt;  does</li>
+ <li id="l-871"><a href="#l-871">#</a> [23:59] * Joins: tantek (n=tantek@70-13-131-55.area2.spcsdns.net)</li>
+ <li id="l-872"><a href="#l-872">#</a> Session Close: Sat Apr 19 00:00:00 2008</li>
+</ol>
+<p id="end">The end :)

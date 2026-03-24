@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20120406</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20120406.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2012-04-06 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Fri Apr 06 00:00:01 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="jonlee"><a href="#l-3">#</a> [00:03] * jonlee is now known as jonlee|afk</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:05] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 246 seconds)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:09] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:12] * Quits: davidb (~davidb@65.93.94.10) (Remote host closed the connection)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:13] * Joins: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-8" _a="Hixie"><a href="#l-8">#</a> [00:14] &lt;Hixie&gt; i wonder what the default value of anchor-point should be</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:14] &lt;Hixie&gt; it could be 'auto'</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:14] &lt;Hixie&gt; but then i wonder what algorithm to use to determine the anchor point</li>
+ <li id="l-11" _a="Hixie"><a href="#l-11">#</a> [00:14] &lt;Hixie&gt; it could be something really clever...</li>
+ <li id="l-12" _a="TabAtkins"><a href="#l-12">#</a> [00:14] &lt;TabAtkins&gt; Where's spec/proposal for dialogs that explains anchor-point?</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:14] &lt;Hixie&gt; <a href="http://wiki.whatwg.org/wiki/Dialogs#Proposal">http://wiki.whatwg.org/wiki/Dialogs#Proposal</a></li>
+ <li id="l-14" _a="Hixie" _r="&quot;explains&quot"><a href="#l-14">#</a> [00:14] &lt;Hixie&gt; &quot;explains&quot; may be a bit strong though</li>
+ <li id="l-15" _a="TabAtkins"><a href="#l-15">#</a> [00:15] &lt;TabAtkins&gt; &quot;Proposes in a handwavey fashion&quot; is sufficient.</li>
+ <li id="l-16" _a="TabAtkins" _r="Urgh"><a href="#l-16">#</a> [00:16] &lt;TabAtkins&gt; Urgh, this *really* needs the &quot;position from an arbitrary box&quot; proposal.</li>
+ <li id="l-17" _a="TabAtkins"><a href="#l-17">#</a> [00:16] &lt;TabAtkins&gt; Maybe not the full one on my blog, but a simplified one.</li>
+ <li id="l-18" _a="Hixie"><a href="#l-18">#</a> [00:16] &lt;Hixie&gt; ignore the point where it says &quot;the anchor point is the center of the given element's first box&quot;, i want it to be &quot;the anchor point is the anchor point of the given element's first box&quot;</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:17] &lt;Hixie&gt; i'm fine with using something else if there's a spec i can point to or if i can spec something better than what i'm doing</li>
+ <li id="l-20"><a href="#l-20">#</a> [00:17] * Quits: esc_ (~esc_ape@178.115.249.58.wireless.dyn.drei.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:17] * Quits: ParadoX- (parad0x@hades.spexhost.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-22" _a="TabAtkins" _r="Ok"><a href="#l-22">#</a> [00:17] &lt;TabAtkins&gt; Ok, so your intention is that the dialog and the passed element just align their anchor points?</li>
+ <li id="l-23" _a="Hixie"><a href="#l-23">#</a> [00:18] &lt;Hixie&gt; yeah</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:18] * Joins: ParadoX- (parad0x@hades.spexhost.com)</li>
+ <li id="l-25" _a="Hixie"><a href="#l-25">#</a> [00:18] &lt;Hixie&gt; the idea being that you'd put the dialog's image border's &quot;&lt;&quot; bit at the anchor point of the dialog</li>
+ <li id="l-26" _a="TabAtkins" _r="Okay"><a href="#l-26">#</a> [00:19] &lt;TabAtkins&gt; Okay, hm.  I don't think you actually want to specify the two anchor points separately.  The positioning element should specify both of them.</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:19] &lt;Hixie&gt; happy to entertain proposals if you have any :-)</li>
+ <li id="l-28" _a="TabAtkins"><a href="#l-28">#</a> [00:23] &lt;TabAtkins&gt; Simplest method is to define &quot;position-root: auto | &lt;element-reference&gt;;&quot;, which changes the positioning container for the element.  'auto' is the standard behavior, based on the 'position' value.</li>
+ <li id="l-29" _a="TabAtkins"><a href="#l-29">#</a> [00:23] &lt;TabAtkins&gt; Then just use t/r/b/l as normal.</li>
+ <li id="l-30" _a="TabAtkins"><a href="#l-30">#</a> [00:23] &lt;TabAtkins&gt; You need some cycle detection, unfortunately.</li>
+ <li id="l-31" _a="Hixie"><a href="#l-31">#</a> [00:24] &lt;Hixie&gt; how do i align a dialog so that the point 10px down its left edge is 1em down the target's right edge, with that?</li>
+ <li id="l-32" _a="jonlee|afk"><a href="#l-32">#</a> [00:24] * jonlee|afk is now known as jonlee</li>
+ <li id="l-33" _a="TabAtkins" _r="Ah"><a href="#l-33">#</a> [00:24] &lt;TabAtkins&gt; Ah, if you want to get that fancy, you want the fuller model that I present in <a href="http://www.xanthir.com/blog/b48H0">http://www.xanthir.com/blog/b48H0</a></li>
+ <li id="l-34" _a="TabAtkins" _r="Or"><a href="#l-34">#</a> [00:25] &lt;TabAtkins&gt; Or, you may be able to get away with &quot;position-root: auto | [ &lt;element-reference&gt; &lt;position&gt;? ];&quot;</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:25] &lt;Hixie&gt; (with my proposal, you just say  &quot;anchor-point: right at 1em from top&quot;  on the target,  &quot;anchor-point: left at 10px from top&quot;  on the dialog, and you call  dialog.show(target) )</li>
+ <li id="l-36" _a="TabAtkins" _r="Hixie"><a href="#l-36">#</a> [00:25] &lt;TabAtkins&gt; Hixie: How do you hang multiple dialogs off a single element?</li>
+ <li id="l-37" _a="TabAtkins"><a href="#l-37">#</a> [00:26] &lt;TabAtkins&gt; That want different anchor-points on the target?</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:26] &lt;Hixie&gt; you don't</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:26] &lt;Hixie&gt; (nobody showed an example of that in the list of use cases i'm using to design this)</li>
+ <li id="l-40" _a="TabAtkins"><a href="#l-40">#</a> [00:26] &lt;TabAtkins&gt; What's with all your &quot;at&quot; and &quot;from&quot; keywords?  What do those do?</li>
+ <li id="l-41" _a="TabAtkins"><a href="#l-41">#</a> [00:26] &lt;TabAtkins&gt; You're just specifying a point.</li>
+ <li id="l-42" _a="TabAtkins"><a href="#l-42">#</a> [00:26] &lt;TabAtkins&gt; &quot;right 1em top&quot; works.</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [00:27] &lt;Hixie&gt; the syntax is  &lt;edge&gt; at [ &lt;length&gt; from ] &lt;edge-on-other-axis&gt;</li>
+ <li id="l-44" _a="TabAtkins"><a href="#l-44">#</a> [00:27] &lt;TabAtkins&gt; That's handled by the &lt;position&gt; type defined in V&amp;U.</li>
+ <li id="l-45" _a="TabAtkins"><a href="#l-45">#</a> [00:27] &lt;TabAtkins&gt; That seems like a silly way to define a point on a box.</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:27] &lt;Hixie&gt; how so?</li>
+ <li id="l-47" _a="Hixie"><a href="#l-47">#</a> [00:28] &lt;Hixie&gt; (it's a point on an edge, not a point on a box)</li>
+ <li id="l-48" _a="TabAtkins"><a href="#l-48">#</a> [00:28] &lt;TabAtkins&gt; Why are you restricting it to points on edge?</li>
+ <li id="l-49" _a="Hixie"><a href="#l-49">#</a> [00:28] &lt;Hixie&gt; because all the use cases are for aligning edges</li>
+ <li id="l-50"><a href="#l-50">#</a> [00:28] * Joins: jer|afk (~jernoble@c-67-188-109-7.hsd1.ca.comcast.net)</li>
+ <li id="l-51" _a="TabAtkins"><a href="#l-51">#</a> [00:29] &lt;TabAtkins&gt; It doesn't make things any simpler, and actually complicates things by not just using the &lt;position&gt; syntax.</li>
+ <li id="l-52" _a="TabAtkins"><a href="#l-52">#</a> [00:29] &lt;TabAtkins&gt; Using &lt;position&gt; handles edge-aligning exactly as easily, with slightly less typing, and also handles more general cases.</li>
+ <li id="l-53" _a="Hixie"><a href="#l-53">#</a> [00:32] &lt;Hixie&gt; how do you do the equivalent of &quot;right at 1em from bottom&quot; with &lt;position&gt;?</li>
+ <li id="l-54" _a="TabAtkins"><a href="#l-54">#</a> [00:32] &lt;TabAtkins&gt; &quot;right 1em bottom&quot;</li>
+ <li id="l-55" _a="TabAtkins" _r="Oh"><a href="#l-55">#</a> [00:32] &lt;TabAtkins&gt; Oh, sorry.</li>
+ <li id="l-56" _a="TabAtkins"><a href="#l-56">#</a> [00:32] &lt;TabAtkins&gt; &quot;right bottom 1em&quot;</li>
+ <li id="l-57" _a="TabAtkins"><a href="#l-57">#</a> [00:32] &lt;TabAtkins&gt; Misread your syntax because I'm so used to the ordering that &lt;position&gt; uses.  ^_^</li>
+ <li id="l-58"><a href="#l-58">#</a> [00:33] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Quit: RobbertAtWork)</li>
+ <li id="l-59" _a="Hixie"><a href="#l-59">#</a> [00:34] * Hixie finally manages to follow links to the right spec and mumbles (a) something about living standards and (b) something about spec quality</li>
+ <li id="l-60" _a="Hixie" _r="yeah"><a href="#l-60">#</a> [00:35] &lt;Hixie&gt; yeah, i guess &lt;position&gt; would work</li>
+ <li id="l-61" _a="Hixie"><a href="#l-61">#</a> [00:35] &lt;Hixie&gt; kinda ugly, but not fatally so</li>
+ <li id="l-62" _a="TabAtkins"><a href="#l-62">#</a> [00:35] &lt;TabAtkins&gt; Um. It's *exactly* your syntax, just without the useless extra keywords.</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:36] &lt;Hixie&gt; the &quot;useless extra keywords&quot; are what makes it usable :-)</li>
+ <li id="l-64"><a href="#l-64">#</a> [00:36] * Quits: jer|afk (~jernoble@c-67-188-109-7.hsd1.ca.comcast.net) (Quit: jer|afk)</li>
+ <li id="l-65"><a href="#l-65">#</a> [00:36] * Joins: jer|afk (~jernoble@2002:43bc:6d07:0:fcbe:2f85:4be1:48ca)</li>
+ <li id="l-66" _a="TabAtkins" _r="Disagree"><a href="#l-66">#</a> [00:37] &lt;TabAtkins&gt; Disagree, but whatever. ^_^  More importantly, &lt;position&gt; is used in several places, and having a new syntax for it, particularly one that orders the values differently, would be excessively confusing.</li>
+ <li id="l-67" _a="Hixie"><a href="#l-67">#</a> [00:38] &lt;Hixie&gt; i am already convinced :-)</li>
+ <li id="l-68" _a="TabAtkins"><a href="#l-68">#</a> [00:38] &lt;TabAtkins&gt; NO YOU MUST SUBMIT</li>
+ <li id="l-69" _a="Hixie" _r="man"><a href="#l-69">#</a> [00:38] &lt;Hixie&gt; man, the chain of specs to get to &lt;position&gt; is a poor story though</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:38] &lt;Hixie&gt; css3 values and units points to two different definitions, and the css3 background module's definition is just completely devoid of conformance criteria</li>
+ <li id="l-71" _a="TabAtkins"><a href="#l-71">#</a> [00:38] &lt;TabAtkins&gt; Hm? You go V&amp;U to B&amp;B.  I'd prefer defining it directly in V&amp;U, but whatever.</li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [00:39] &lt;Hixie&gt; V&amp;U points to CSS2.1 first, then B&amp;B in a second sentence.</li>
+ <li id="l-73" _a="TabAtkins" _r="Yeah"><a href="#l-73">#</a> [00:39] &lt;TabAtkins&gt; Yeah, that's to avoid gating our Rec on B&amp;B's status.</li>
+ <li id="l-74" _a="Hixie"><a href="#l-74">#</a> [00:39] &lt;Hixie&gt; and in fact the only normative chain is to 2.1, strictly speaking</li>
+ <li id="l-75" _a="Hixie"><a href="#l-75">#</a> [00:40] &lt;Hixie&gt; so i guess i'd have to reference b&amp;b if i wanted to do a strictly correct job here</li>
+ <li id="l-76" _a="TabAtkins" _r="No"><a href="#l-76">#</a> [00:40] &lt;TabAtkins&gt; No, you should reference V&amp;U.</li>
+ <li id="l-77" _a="Hixie"><a href="#l-77">#</a> [00:40] &lt;Hixie&gt; then i don't get the b&amp;b definition :-)</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:40] &lt;Hixie&gt; since i'm hoping this won't remain my problem for long, i don't much care though</li>
+ <li id="l-79" _a="jonlee"><a href="#l-79">#</a> [00:41] * jonlee is now known as jonlee|afk</li>
+ <li id="l-80" _a="TabAtkins" _r="Um"><a href="#l-80">#</a> [00:41] &lt;TabAtkins&gt; Um, I don't understand.  In V&amp;U it clearly says that the syntax for &lt;position&gt; is updated in B&amp;B, and UAs that support B&amp;B must interpret &lt;position&gt; as defined there.</li>
+ <li id="l-81" _a="Hixie"><a href="#l-81">#</a> [00:42] &lt;Hixie&gt; right</li>
+ <li id="l-82" _a="Hixie"><a href="#l-82">#</a> [00:42] &lt;Hixie&gt; but what if my ua doesn't support b&amp;b?</li>
+ <li id="l-83" _a="jonlee|afk"><a href="#l-83">#</a> [00:42] * jonlee|afk is now known as jonlee</li>
+ <li id="l-84" _a="Hixie" _r="also"><a href="#l-84">#</a> [00:43] &lt;Hixie&gt; also, it's kinda special to define something as X and then say that it must be interpreted as X'. :-)</li>
+ <li id="l-85" _a="TabAtkins"><a href="#l-85">#</a> [00:43] &lt;TabAtkins&gt; That's how you do modules!</li>
+ <li id="l-86" _a="Hixie"><a href="#l-86">#</a> [00:43] &lt;Hixie&gt; modules are dumb</li>
+ <li id="l-87" _a="Hixie"><a href="#l-87">#</a> [00:43] &lt;Hixie&gt; especially on the web</li>
+ <li id="l-88"><a href="#l-88">#</a> [00:43] * Joins: dbaron (~dbaron@nat/mozilla/x-bndsuswceijrmofj)</li>
+ <li id="l-89" _a="TabAtkins"><a href="#l-89">#</a> [00:43] &lt;TabAtkins&gt; Shrug.</li>
+ <li id="l-90" _a="TabAtkins"><a href="#l-90">#</a> [00:43] &lt;TabAtkins&gt; It's an alternate formulation of the living standard.</li>
+ <li id="l-91" _a="Hixie"><a href="#l-91">#</a> [00:44] &lt;Hixie&gt; it's clearly nothing like the living standard since there's not one canonical url which is updated over time, but that's not the issue</li>
+ <li id="l-92" _a="Hixie"><a href="#l-92">#</a> [00:44] &lt;Hixie&gt; modularisation is orthogonal to living vs snapshot</li>
+ <li id="l-93" _a="TabAtkins"><a href="#l-93">#</a> [00:45] &lt;TabAtkins&gt; Not quite.  I challenge you to produce a snapshot document that's not modularized without being drastically out-of-date.</li>
+ <li id="l-94" _a="TabAtkins"><a href="#l-94">#</a> [00:45] &lt;TabAtkins&gt; Your choices are either &quot;one document, living&quot;, or &quot;modules, living or snapshot&quot; if you want accurate specs.</li>
+ <li id="l-95" _a="Hixie"><a href="#l-95">#</a> [00:46] &lt;Hixie&gt; snapshot documents are always out of date</li>
+ <li id="l-96" _a="Hixie"><a href="#l-96">#</a> [00:46] &lt;Hixie&gt; that's the problem with snapshots :-)</li>
+ <li id="l-97" _a="TabAtkins" _r="Sure"><a href="#l-97">#</a> [00:46] &lt;TabAtkins&gt; Sure, but you require modules if you want the out-of-date-ness to be minimized.</li>
+ <li id="l-98"><a href="#l-98">#</a> [00:46] * Quits: nessy (~Adium@124-149-170-217.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-99"><a href="#l-99">#</a> [00:47] * Joins: cpearce (~cpearce@ip-118-90-36-173.xdsl.xnet.co.nz)</li>
+ <li id="l-100" _a="Hixie" _r="nah"><a href="#l-100">#</a> [00:47] &lt;Hixie&gt; nah, you can have rarely-updated living modules just like you can have frequently-updated monolithic RECs</li>
+ <li id="l-101" _a="Hixie"><a href="#l-101">#</a> [00:48] &lt;Hixie&gt; the rate of update is also orthogonal to living vs REC and module vs monolithic</li>
+ <li id="l-102" _a="TabAtkins"><a href="#l-102">#</a> [00:48] &lt;TabAtkins&gt; Frequently-updated monolithic RECs are a theoretical beast that's never been observed in reality.</li>
+ <li id="l-103" _a="Hixie"><a href="#l-103">#</a> [00:48] &lt;Hixie&gt; CSS 2.1 was a frequently-updated monolithic REC from about 2000 to 2006</li>
+ <li id="l-104" _a="Hixie"><a href="#l-104">#</a> [00:48] &lt;Hixie&gt; well</li>
+ <li id="l-105" _a="Hixie"><a href="#l-105">#</a> [00:48] &lt;Hixie&gt; frequently-updated monolithic CR</li>
+ <li id="l-106" _a="Hixie"><a href="#l-106">#</a> [00:49] &lt;Hixie&gt; not as frequent as you or i may wish these days, i'll grant you</li>
+ <li id="l-107"><a href="#l-107">#</a> [00:52] * Quits: cpearce (~cpearce@ip-118-90-36-173.xdsl.xnet.co.nz) (Ping timeout: 246 seconds)</li>
+ <li id="l-108" _a="jonlee"><a href="#l-108">#</a> [00:53] * jonlee is now known as jonlee|afk</li>
+ <li id="l-109" _a="jonlee|afk"><a href="#l-109">#</a> [00:53] * jonlee|afk is now known as jonlee</li>
+ <li id="l-110"><a href="#l-110">#</a> [01:07] * Quits: mven (~mven__@169.241.49.57) (Quit: Leaving)</li>
+ <li id="l-111"><a href="#l-111">#</a> [01:08] * Joins: ap_ (~ap@17.245.89.133)</li>
+ <li id="l-112"><a href="#l-112">#</a> [01:10] * Quits: rniwa (rniwa@nat/google/x-xnxfetmixqnnkbkc) (Quit: rniwa)</li>
+ <li id="l-113"><a href="#l-113">#</a> [01:11] * Quits: ap (~ap@2620:149:4:1b01:406f:d267:a0b8:bb76) (Ping timeout: 245 seconds)</li>
+ <li id="l-114" _a="ap_"><a href="#l-114">#</a> [01:11] * ap_ is now known as ap</li>
+ <li id="l-115"><a href="#l-115">#</a> [01:11] * Joins: mven (~mven__@169.241.49.57)</li>
+ <li id="l-116"><a href="#l-116">#</a> [01:14] * Joins: rniwa (rniwa@nat/google/x-izfpkyiiqdkyaqas)</li>
+ <li id="l-117"><a href="#l-117">#</a> [01:14] * Quits: rniwa (rniwa@nat/google/x-izfpkyiiqdkyaqas) (Client Quit)</li>
+ <li id="l-118"><a href="#l-118">#</a> [01:16] * Quits: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-119"><a href="#l-119">#</a> [01:18] * Quits: sedovsek (~robert.se@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-120"><a href="#l-120">#</a> [01:24] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-121" _a="Hixie"><a href="#l-121">#</a> [01:27] &lt;Hixie&gt; i wonder if we need an attribute a bit like &quot;disabled&quot; but that globally prevents a subtree from being focused or having anything within it activated, without actually making the descendants appear disabled</li>
+ <li id="l-122" _a="Hixie"><a href="#l-122">#</a> [01:28] &lt;Hixie&gt; so that semi-modal dialogs (dialogs that are locally modal but not across the entire web app) can be implemented</li>
+ <li id="l-123" _a="TabAtkins"><a href="#l-123">#</a> [01:28] &lt;TabAtkins&gt; Like &quot;pointer-events:none&quot;?</li>
+ <li id="l-124" _a="Hixie"><a href="#l-124">#</a> [01:28] &lt;Hixie&gt; but for tabbing and everything</li>
+ <li id="l-125" _a="TabAtkins"><a href="#l-125">#</a> [01:28] &lt;TabAtkins&gt; With more magic to prevent tabbing.</li>
+ <li id="l-126" _a="TabAtkins"><a href="#l-126">#</a> [01:28] &lt;TabAtkins&gt; &quot;inert&quot;</li>
+ <li id="l-127" _a="Hixie"><a href="#l-127">#</a> [01:28] &lt;Hixie&gt; and accesskey=&quot;&quot;, and ATs, and so on</li>
+ <li id="l-128" _a="Hixie"><a href="#l-128">#</a> [01:29] &lt;Hixie&gt; or maybe we should just have showModal() take an element relative to whom subtree the dialog should be modal</li>
+ <li id="l-129" _a="Hixie"><a href="#l-129">#</a> [01:29] &lt;Hixie&gt; to whose, rather</li>
+ <li id="l-130" _a="Hixie" _r="nah"><a href="#l-130">#</a> [01:34] &lt;Hixie&gt; nah, i think a global attribute is probably better</li>
+ <li id="l-131" _a="Hixie"><a href="#l-131">#</a> [01:34] &lt;Hixie&gt; there could be multiple subtrees to disable</li>
+ <li id="l-132" _a="TabAtkins"><a href="#l-132">#</a> [01:36] &lt;TabAtkins&gt; So the code that shows the dialog sprinkles some @inert aroudn the DOM, and the code that closes the dialog removes them?</li>
+ <li id="l-133"><a href="#l-133">#</a> [01:36] * Quits: jamesr_ (jamesr@nat/google/x-kayjgrykfshwtvyf) (Quit: jamesr_)</li>
+ <li id="l-134"><a href="#l-134">#</a> [01:36] * Joins: jamesr_ (jamesr@nat/google/x-yzeapybttaqxharu)</li>
+ <li id="l-135" _a="Hixie" _r="TabAtkins"><a href="#l-135">#</a> [01:37] &lt;Hixie&gt; TabAtkins: i guess, yeah</li>
+ <li id="l-136"><a href="#l-136">#</a> [01:37] * Quits: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com) (Quit: Leaving...)</li>
+ <li id="l-137" _a="TabAtkins"><a href="#l-137">#</a> [01:38] &lt;TabAtkins&gt; Do we expect UAs to offer their own ways to close non-modal dialogs?</li>
+ <li id="l-138" _a="Hixie" _r="TabAtkins"><a href="#l-138">#</a> [01:38] &lt;Hixie&gt; TabAtkins: might be useful for other scenarios too, e.g. i have an app with several mutually exclusive &lt;section&gt;s, but because I leave the inactive ones slightly visible in the background (when they have hidden=&quot;&quot;), instead of making them display:none, I still need a way to make them inert</li>
+ <li id="l-139" _a="Hixie"><a href="#l-139">#</a> [01:38] &lt;Hixie&gt; i don't think i'd want to use &lt;Dialog&gt; for those really</li>
+ <li id="l-140" _a="Hixie" _r="TabAtkins"><a href="#l-140">#</a> [01:38] &lt;Hixie&gt; TabAtkins: no</li>
+ <li id="l-141" _a="Hixie" _r="TabAtkins"><a href="#l-141">#</a> [01:39] &lt;Hixie&gt; TabAtkins: non-modal dialogs are basically just &lt;div&gt;s</li>
+ <li id="l-142" _a="TabAtkins" _r="Okay"><a href="#l-142">#</a> [01:42] &lt;TabAtkins&gt; Okay, then I'm okay with that.</li>
+ <li id="l-143" _a="TabAtkins"><a href="#l-143">#</a> [01:42] &lt;TabAtkins&gt; Since the only way to close a non-modal dialog would be through an author-provided function.</li>
+ <li id="l-144"><a href="#l-144">#</a> [01:43] * Quits: WeirdAl (~chatzilla@g2spf.ask.info) (Quit: ChatZilla 0.9.88.1 [Firefox 11.0/20120312181643])</li>
+ <li id="l-145" _a="Hixie"><a href="#l-145">#</a> [01:43] &lt;Hixie&gt; i wonder if there's some overlap between this inert=&quot;&quot;ness and the inertness we need in templates</li>
+ <li id="l-146" _a="TabAtkins"><a href="#l-146">#</a> [01:43] &lt;TabAtkins&gt; No.</li>
+ <li id="l-147" _a="Hixie"><a href="#l-147">#</a> [01:43] &lt;Hixie&gt; i'm guessing not (and that templates need much more)</li>
+ <li id="l-148" _a="TabAtkins"><a href="#l-148">#</a> [01:43] &lt;TabAtkins&gt; That &quot;inertness&quot; is more &quot;no parsing implications to the surrounding content&quot;.</li>
+ <li id="l-149" _a="TabAtkins"><a href="#l-149">#</a> [01:43] &lt;TabAtkins&gt; Plus &quot;no network activity&quot;.</li>
+ <li id="l-150" _a="TabAtkins"><a href="#l-150">#</a> [01:43] &lt;TabAtkins&gt; In addition to the inertness you want for this.</li>
+ <li id="l-151" _a="Hixie"><a href="#l-151">#</a> [01:51] &lt;Hixie&gt; yeah</li>
+ <li id="l-152" _a="zewt"><a href="#l-152">#</a> [01:52] &lt;zewt&gt; grr</li>
+ <li id="l-153" class="flagged" _a="zewt"><a href="#l-153">#</a> [01:52] &lt;zewt&gt; nothing is quite as frustrating as &quot;if we change this we'll break some tests, so let's not do it&quot;</li>
+ <li id="l-154" _a="TabAtkins"><a href="#l-154">#</a> [01:52] &lt;TabAtkins&gt; wtf</li>
+ <li id="l-155" _a="TabAtkins"><a href="#l-155">#</a> [01:52] &lt;TabAtkins&gt; Where?</li>
+ <li id="l-156" _a="zewt"><a href="#l-156">#</a> [01:52] &lt;zewt&gt; tests being used as an excuse not to improve something is pretty much the exact opposite to why tests exist</li>
+ <li id="l-157" _a="zewt" _r="Also"><a href="#l-157">#</a> [01:53] &lt;zewt&gt; Also, if the behavior is changed, the 1.0.1 conformance suite will no longer run on future WebGL implementations, because it tests passing null for WebGLObjects and expects that no exceptions are thrown.</li>
+ <li id="l-158" _a="zewt"><a href="#l-158">#</a> [01:53] &lt;zewt&gt; not a hard &quot;we can't do this because tests&quot;, but it shouldn't even be a consideration</li>
+ <li id="l-159"><a href="#l-159">#</a> [01:54] * Quits: KillerX (~anant@2620:101:8003:200:a410:ad6d:688d:3a8c) (Quit: KillerX)</li>
+ <li id="l-160"><a href="#l-160">#</a> [01:54] * Quits: ap (~ap@17.245.89.133) (Remote host closed the connection)</li>
+ <li id="l-161"><a href="#l-161">#</a> [01:54] * Joins: ap (~ap@17.212.155.203)</li>
+ <li id="l-162" _a="zewt" _r="also"><a href="#l-162">#</a> [01:55] &lt;zewt&gt; also, surprise, webgl returning null on error causes lots of bugs in user code</li>
+ <li id="l-163" _a="zewt"><a href="#l-163">#</a> [01:55] &lt;zewt&gt; also frustrating since the entire industry learned that C-style error handling is badly error prone a couple decades ago</li>
+ <li id="l-164"><a href="#l-164">#</a> [01:56] * Joins: sicking (~chatzilla@c-174-62-77-22.hsd1.ca.comcast.net)</li>
+ <li id="l-165" _a="jonlee"><a href="#l-165">#</a> [01:57] * jonlee is now known as jonlee|afk</li>
+ <li id="l-166"><a href="#l-166">#</a> [01:58] * Quits: tomasf (~tom@2002:55e5:dbb7:0:e4be:1c73:7b0f:bf0f) (Quit: tomasf)</li>
+ <li id="l-167"><a href="#l-167">#</a> [02:01] * Joins: jondong_ (~jondong@123.126.22.58)</li>
+ <li id="l-168"><a href="#l-168">#</a> [02:02] * Quits: drublic (~drublic@frbg-4d028612.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-169" _a="jonlee|afk"><a href="#l-169">#</a> [02:03] * jonlee|afk is now known as jonlee</li>
+ <li id="l-170"><a href="#l-170">#</a> [02:03] * Quits: jamesr_ (jamesr@nat/google/x-yzeapybttaqxharu) (Quit: jamesr_)</li>
+ <li id="l-171"><a href="#l-171">#</a> [02:05] * Quits: jondong (~jondong@123.126.22.58) (Ping timeout: 265 seconds)</li>
+ <li id="l-172"><a href="#l-172">#</a> [02:07] * Joins: jacobolu_ (~jacobolus@75-144-246-6-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-173"><a href="#l-173">#</a> [02:10] * Quits: jacobolus (~jacobolus@75-144-246-6-SFBA.hfc.comcastbusiness.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-174"><a href="#l-174">#</a> [02:10] * Quits: twisted` (~twisted@p5DDBA898.dip.t-dialin.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-175"><a href="#l-175">#</a> [02:10] * Joins: nattokirai (~nattokira@rtr.mozilla.or.jp)</li>
+ <li id="l-176"><a href="#l-176">#</a> [02:12] * Joins: twisted` (~twisted@p5DDBA7AE.dip.t-dialin.net)</li>
+ <li id="l-177" _a="jonlee"><a href="#l-177">#</a> [02:20] * jonlee is now known as jonlee|afk</li>
+ <li id="l-178" _a="toyoshim"><a href="#l-178">#</a> [02:21] * toyoshim is now known as toyoshiAw</li>
+ <li id="l-179"><a href="#l-179">#</a> [02:23] * Quits: sarro (~sarro@i5E865240.versanet.de) (Ping timeout: 260 seconds)</li>
+ <li id="l-180"><a href="#l-180">#</a> [02:24] * Joins: sarro (~sarro@i5E864AF8.versanet.de)</li>
+ <li id="l-181"><a href="#l-181">#</a> [02:29] * Quits: jamesr (jamesr@nat/google/x-fplsahcnyzxuqtuc) (Ping timeout: 250 seconds)</li>
+ <li id="l-182"><a href="#l-182">#</a> [02:35] * Quits: ap (~ap@17.212.155.203) (Quit: ap)</li>
+ <li id="l-183"><a href="#l-183">#</a> [02:39] * Quits: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net) (Quit: i'm out)</li>
+ <li id="l-184"><a href="#l-184">#</a> [02:39] * Joins: jamesr (jamesr@nat/google/x-kpqnummikxzvsozj)</li>
+ <li id="l-185"><a href="#l-185">#</a> [02:45] * Joins: necolas (~necolas@b0fbedcf.bb.sky.com)</li>
+ <li id="l-186"><a href="#l-186">#</a> [02:46] * Joins: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net)</li>
+ <li id="l-187"><a href="#l-187">#</a> [02:48] * Quits: timmywil (~timmywil@host-68-169-175-226.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-188"><a href="#l-188">#</a> [02:51] * Quits: Druid_ (~Druid@p5B05DFC1.dip.t-dialin.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-189"><a href="#l-189">#</a> [02:55] * Joins: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-190"><a href="#l-190">#</a> [02:56] * Joins: Druid_ (~Druid@p5B137C3B.dip.t-dialin.net)</li>
+ <li id="l-191"><a href="#l-191">#</a> [02:57] * Quits: pablof (~pablof@144.189.101.1) (Quit: ^z)</li>
+ <li id="l-192"><a href="#l-192">#</a> [03:02] * Quits: necolas (~necolas@b0fbedcf.bb.sky.com) (Remote host closed the connection)</li>
+ <li id="l-193"><a href="#l-193">#</a> [03:15] * Joins: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com)</li>
+ <li id="l-194"><a href="#l-194">#</a> [03:16] * Quits: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com) (Client Quit)</li>
+ <li id="l-195"><a href="#l-195">#</a> [03:19] * Joins: xbuzz (~chris@c-71-232-28-255.hsd1.ma.comcast.net)</li>
+ <li id="l-196"><a href="#l-196">#</a> [03:21] * Joins: KevinMarks (~KevinMark@nat-204-14-239-210-sfo.net.salesforce.com)</li>
+ <li id="l-197"><a href="#l-197">#</a> [03:26] * Joins: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net)</li>
+ <li id="l-198"><a href="#l-198">#</a> [03:27] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Client Quit)</li>
+ <li id="l-199"><a href="#l-199">#</a> [03:34] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-200"><a href="#l-200">#</a> [03:34] * Quits: plutoniix (~plutoniix@125.25.28.198.adsl.dynamic.totbb.net) (Quit: จรลี จรลา)</li>
+ <li id="l-201"><a href="#l-201">#</a> [03:34] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120216115618])</li>
+ <li id="l-202"><a href="#l-202">#</a> [03:40] * Quits: sicking (~chatzilla@c-174-62-77-22.hsd1.ca.comcast.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-203"><a href="#l-203">#</a> [03:40] * Quits: dbaron (~dbaron@nat/mozilla/x-bndsuswceijrmofj) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-204" _a="jonlee|afk"><a href="#l-204">#</a> [03:45] * jonlee|afk is now known as jonlee</li>
+ <li id="l-205"><a href="#l-205">#</a> [03:46] * Quits: jondong_ (~jondong@123.126.22.58) (Remote host closed the connection)</li>
+ <li id="l-206"><a href="#l-206">#</a> [03:46] * Joins: jondong (~jondong@123.126.22.58)</li>
+ <li id="l-207"><a href="#l-207">#</a> [04:00] * Quits: jacobolu_ (~jacobolus@75-144-246-6-SFBA.hfc.comcastbusiness.net) (Remote host closed the connection)</li>
+ <li id="l-208"><a href="#l-208">#</a> [04:03] * Joins: doublec (~doublec@cd.pn)</li>
+ <li id="l-209"><a href="#l-209">#</a> [04:04] * Quits: doublec (~doublec@cd.pn) (Changing host)</li>
+ <li id="l-210"><a href="#l-210">#</a> [04:04] * Joins: doublec (~doublec@unaffiliated/doublec)</li>
+ <li id="l-211"><a href="#l-211">#</a> [04:06] * Quits: xbuzz (~chris@c-71-232-28-255.hsd1.ma.comcast.net) (Quit: xbuzz)</li>
+ <li id="l-212"><a href="#l-212">#</a> [04:09] * Quits: dave_levin (dave_levin@nat/google/x-qbgaggkruleuquvc) (Quit: dave_levin)</li>
+ <li id="l-213" _a="jonlee"><a href="#l-213">#</a> [04:26] * jonlee is now known as jonlee|afk</li>
+ <li id="l-214"><a href="#l-214">#</a> [04:30] * Joins: jacobolus (~jacobolus@199.188.193.145)</li>
+ <li id="l-215"><a href="#l-215">#</a> [05:08] * Joins: xbuzz (~chris@c-71-232-28-255.hsd1.ma.comcast.net)</li>
+ <li id="l-216"><a href="#l-216">#</a> [05:13] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-217"><a href="#l-217">#</a> [05:22] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-218"><a href="#l-218">#</a> [05:34] * Joins: nessy (~Adium@124-149-170-217.dyn.iinet.net.au)</li>
+ <li id="l-219"><a href="#l-219">#</a> [05:41] * Joins: jonlee (~jonlee@c-71-202-46-113.hsd1.ca.comcast.net)</li>
+ <li id="l-220"><a href="#l-220">#</a> [05:51] * Quits: KevinMarks (~KevinMark@nat-204-14-239-210-sfo.net.salesforce.com) (Quit: The computer fell asleep)</li>
+ <li id="l-221"><a href="#l-221">#</a> [05:54] * Joins: izhak (~izhak@213.87.241.69)</li>
+ <li id="l-222"><a href="#l-222">#</a> [06:01] * Quits: linclark (~clark@c-67-186-35-246.hsd1.pa.comcast.net) (Quit: linclark)</li>
+ <li id="l-223"><a href="#l-223">#</a> [06:03] * Quits: xbuzz (~chris@c-71-232-28-255.hsd1.ma.comcast.net) (Quit: xbuzz)</li>
+ <li id="l-224"><a href="#l-224">#</a> [06:22] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-225"><a href="#l-225">#</a> [06:53] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-226"><a href="#l-226">#</a> [06:57] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-227"><a href="#l-227">#</a> [06:57] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-228"><a href="#l-228">#</a> [06:59] * Quits: scott_gonzalez (~gonzasi0@205.186.165.147) (Ping timeout: 245 seconds)</li>
+ <li id="l-229"><a href="#l-229">#</a> [06:59] * Quits: jzaefferer (~jzaeffere@205.186.165.147) (Ping timeout: 265 seconds)</li>
+ <li id="l-230"><a href="#l-230">#</a> [07:01] * Quits: paul_irish (~paul_iris@ve.hsh6wjwx.vesrv.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-231"><a href="#l-231">#</a> [07:09] * Quits: tantek (~tantek@70-36-139-112.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-232"><a href="#l-232">#</a> [07:11] * Joins: tantek (~tantek@70-36-139-112.dsl.dynamic.sonic.net)</li>
+ <li id="l-233"><a href="#l-233">#</a> [07:22] * Joins: pablof (~pablof@c-98-207-157-89.hsd1.ca.comcast.net)</li>
+ <li id="l-234"><a href="#l-234">#</a> [07:27] * Joins: Areks (~Areks@rs.gridnine.com)</li>
+ <li id="l-235"><a href="#l-235">#</a> [07:29] * Quits: pablof (~pablof@c-98-207-157-89.hsd1.ca.comcast.net) (Quit: ^z)</li>
+ <li id="l-236"><a href="#l-236">#</a> [07:34] * Quits: jacobolus (~jacobolus@199.188.193.145) (Remote host closed the connection)</li>
+ <li id="l-237"><a href="#l-237">#</a> [07:45] * Joins: sicking (~chatzilla@c-174-62-77-22.hsd1.ca.comcast.net)</li>
+ <li id="l-238"><a href="#l-238">#</a> [07:51] * Quits: sicking (~chatzilla@c-174-62-77-22.hsd1.ca.comcast.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-239"><a href="#l-239">#</a> [08:06] * Joins: dirkpennings (~dirkpenni@90-145-26-140.bbserv.nl)</li>
+ <li id="l-240"><a href="#l-240">#</a> [08:07] * Joins: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-241"><a href="#l-241">#</a> [08:09] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-242"><a href="#l-242">#</a> [08:25] * Quits: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-243"><a href="#l-243">#</a> [08:25] * Joins: Bass10 (Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-244"><a href="#l-244">#</a> [08:31] * Quits: j_wright (jamesw@ip70-173-184-17.lv.lv.cox.net) (Quit: [A] mirror, mirror on the wall ... true hope lies beyond the coast ...)</li>
+ <li id="l-245"><a href="#l-245">#</a> [08:32] * Joins: j_wright (jamesw@ip70-173-184-17.lv.lv.cox.net)</li>
+ <li id="l-246"><a href="#l-246">#</a> [08:48] * Joins: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net)</li>
+ <li id="l-247"><a href="#l-247">#</a> [09:09] * Joins: esc_ (~esc_ape@77.118.252.67.wireless.dyn.drei.com)</li>
+ <li id="l-248"><a href="#l-248">#</a> [09:19] * Quits: esc_ (~esc_ape@77.118.252.67.wireless.dyn.drei.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-249"><a href="#l-249">#</a> [09:29] * Joins: esc_ (~esc_ape@178.115.249.217.wireless.dyn.drei.com)</li>
+ <li id="l-250"><a href="#l-250">#</a> [09:50] * Quits: Bass10 (Bass10@c-76-113-194-7.hsd1.mn.comcast.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-251" _a="annevk"><a href="#l-251">#</a> [10:01] &lt;annevk&gt; in WebKit, document.body.setAttribute() creates undefined=&quot;undefined&quot;</li>
+ <li id="l-252" _a="annevk"><a href="#l-252">#</a> [10:01] &lt;annevk&gt; that's still not fixed?</li>
+ <li id="l-253" _a="annevk"><a href="#l-253">#</a> [10:04] &lt;annevk&gt; <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=315805">https://bugzilla.mozilla.org/show_bug.cgi?id=315805</a></li>
+ <li id="l-254" _a="AryehGregor" _r="annevk"><a href="#l-254">#</a> [10:05] &lt;AryehGregor&gt; annevk, that's a problem with their WebIDL bindings, right?  Don't all methods do that, pretty much?</li>
+ <li id="l-255" _a="AryehGregor"><a href="#l-255">#</a> [10:05] &lt;AryehGregor&gt; They don't throw on too few arguments being passed.</li>
+ <li id="l-256"><a href="#l-256">#</a> [10:06] * Joins: KillerX_ (~anant@70-36-146-62.dsl.dynamic.sonic.net)</li>
+ <li id="l-257" _a="annevk" _r="AryehGregor"><a href="#l-257">#</a> [10:07] &lt;annevk&gt; AryehGregor: f8dy fixed their IDL bindings, but I guess he never fixed the broken methods</li>
+ <li id="l-258"><a href="#l-258">#</a> [10:08] * Quits: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-259" _a="KillerX_"><a href="#l-259">#</a> [10:08] * KillerX_ is now known as KillerX</li>
+ <li id="l-260" _a="AryehGregor"><a href="#l-260">#</a> [10:09] &lt;AryehGregor&gt; If he fixed the IDL bindings, how could that not throw?  It would have to have the params declared as optional or something.</li>
+ <li id="l-261" _a="annevk"><a href="#l-261">#</a> [10:09] &lt;annevk&gt; right</li>
+ <li id="l-262" _a="annevk"><a href="#l-262">#</a> [10:09] &lt;annevk&gt; make for DOM takes almost 10 seconds?</li>
+ <li id="l-263" _a="annevk"><a href="#l-263">#</a> [10:09] &lt;annevk&gt; what is so difficult?</li>
+ <li id="l-264"><a href="#l-264">#</a> [10:14] * Joins: gwicke (~gabriel@212.255.28.33)</li>
+ <li id="l-265"><a href="#l-265">#</a> [10:23] * Joins: RobbertAtWork (~Robbert@212.238.236.229)</li>
+ <li id="l-266"><a href="#l-266">#</a> [10:40] * Joins: Ms2ger (~Ms2ger@91.181.161.196)</li>
+ <li id="l-267" _a="annevk"><a href="#l-267">#</a> [10:46] &lt;annevk&gt; the problem with the namespace algorithms in DOM seems to be that they do not account for multiple attributes</li>
+ <li id="l-268" _a="annevk"><a href="#l-268">#</a> [10:46] &lt;annevk&gt; I guess nobody looks at them and that's why we haven't noticed until now?</li>
+ <li id="l-269" _a="annevk"><a href="#l-269">#</a> [10:46] &lt;annevk&gt; <a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#locate-a-namespace-prefix">http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#locate-a-namespace-prefix</a></li>
+ <li id="l-270" _a="annevk"><a href="#l-270">#</a> [10:46] &lt;annevk&gt; you could have multiple attributes xmlns:test=&quot;x&quot; xmlns:test2=&quot;x&quot; etc.</li>
+ <li id="l-271" _a="annevk"><a href="#l-271">#</a> [10:46] &lt;annevk&gt; which local name you return is not defined</li>
+ <li id="l-272" _a="annevk"><a href="#l-272">#</a> [10:47] &lt;annevk&gt; then in <a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#locate-a-namespace">http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#locate-a-namespace</a> you have the same problem</li>
+ <li id="l-273" _a="annevk" _r="actually"><a href="#l-273">#</a> [10:47] &lt;annevk&gt; actually, in that case you can have only one such attribute I think</li>
+ <li id="l-274" _a="annevk"><a href="#l-274">#</a> [10:48] &lt;annevk&gt; other question</li>
+ <li id="l-275" _a="annevk"><a href="#l-275">#</a> [10:49] &lt;annevk&gt; should <a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-element-setattributens">http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-element-setattributens</a> have all those restrictions given that setAttribute() can be used to circumvent them?</li>
+ <li id="l-276"><a href="#l-276">#</a> [10:50] * Quits: nattokirai (~nattokira@rtr.mozilla.or.jp) (Quit: nattokirai)</li>
+ <li id="l-277"><a href="#l-277">#</a> [10:58] * Joins: Von_Davidicus (~IceChat7@173.210.203.196)</li>
+ <li id="l-278"><a href="#l-278">#</a> [10:58] * Joins: Von_Davidicus_ (~IceChat7@173.210.203.196)</li>
+ <li id="l-279" _a="Von_Davidicus"><a href="#l-279">#</a> [10:59] &lt;Von_Davidicus&gt; Hello...</li>
+ <li id="l-280" _a="Ms2ger"><a href="#l-280">#</a> [11:00] &lt;Ms2ger&gt; Or maybe add the restrictions to setAttribute? Or would that break facebook?</li>
+ <li id="l-281" _a="Ms2ger" _r="Also"><a href="#l-281">#</a> [11:01] &lt;Ms2ger&gt; Also, &lt;!doctype html&gt; on <a href="http://www.w3.org/TR/2012/WD-dom-20120405/">http://www.w3.org/TR/2012/WD-dom-20120405/</a> , I guess I'll have to believe that they mean it now</li>
+ <li id="l-282" _a="annevk" _r="Ms2ger"><a href="#l-282">#</a> [11:02] &lt;annevk&gt; Ms2ger: I just removed those</li>
+ <li id="l-283" _a="Ms2ger"><a href="#l-283">#</a> [11:02] &lt;Ms2ger&gt; Oh</li>
+ <li id="l-284" _a="annevk" _r="Ms2ger"><a href="#l-284">#</a> [11:02] &lt;annevk&gt; Ms2ger: nobody implements them</li>
+ <li id="l-285" _a="Ms2ger"><a href="#l-285">#</a> [11:02] &lt;Ms2ger&gt; Mm</li>
+ <li id="l-286"><a href="#l-286">#</a> [11:02] * Quits: globbot (~logbot@shell-staging.glob.com.au) (Ping timeout: 265 seconds)</li>
+ <li id="l-287" _a="annevk"><a href="#l-287">#</a> [11:02] &lt;annevk&gt; Simon argued for doing the simplest thing possible</li>
+ <li id="l-288" _a="Ms2ger"><a href="#l-288">#</a> [11:02] &lt;Ms2ger&gt; Wfm</li>
+ <li id="l-289" _a="Von_Davidicus"><a href="#l-289">#</a> [11:04] &lt;Von_Davidicus&gt; I have a question about HTML5:  Will it have a generic header element?  We've got &lt;h1&gt; - &lt;h6&gt;, but will there be an &lt;h&gt;?  For example, if you were writing a webpage on coding and wanted to give an example of coding a header?  Or, for some reason, you wanted a seventh-level header?</li>
+ <li id="l-290" _a="Ms2ger"><a href="#l-290">#</a> [11:04] &lt;Ms2ger&gt; There is one!</li>
+ <li id="l-291" _a="Ms2ger"><a href="#l-291">#</a> [11:04] &lt;Ms2ger&gt; It's called h1</li>
+ <li id="l-292"><a href="#l-292">#</a> [11:04] * Joins: globbot (~logbot@shell-staging.glob.com.au)</li>
+ <li id="l-293" _a="annevk" _r="Von_Davidicus"><a href="#l-293">#</a> [11:05] &lt;annevk&gt; Von_Davidicus: use &lt;section&gt; combined with &lt;h1&gt;</li>
+ <li id="l-294"><a href="#l-294">#</a> [11:06] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-295" _a="annevk"><a href="#l-295">#</a> [11:07] &lt;annevk&gt; <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742549">https://bugzilla.mozilla.org/show_bug.cgi?id=742549</a> o_O</li>
+ <li id="l-296"><a href="#l-296">#</a> [11:07] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-297" _a="Von_Davidicus"><a href="#l-297">#</a> [11:09] &lt;Von_Davidicus&gt; I thought &lt;h1&gt; was the top-level header.</li>
+ <li id="l-298" _a="annevk"><a href="#l-298">#</a> [11:10] &lt;annevk&gt; that changed with the introduction of &lt;section&gt;</li>
+ <li id="l-299" _a="Von_Davidicus"><a href="#l-299">#</a> [11:11] &lt;Von_Davidicus&gt; That seems a bit screwy with semantics, but then, I'm easily confuzzled.  :)</li>
+ <li id="l-300"><a href="#l-300">#</a> [11:11] * Quits: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley) (Read error: Operation timed out)</li>
+ <li id="l-301" _a="annevk"><a href="#l-301">#</a> [11:12] &lt;annevk&gt; HTML is not entirely logical either, so that's fine :)</li>
+ <li id="l-302" _a="Von_Davidicus" _r="Oh"><a href="#l-302">#</a> [11:14] &lt;Von_Davidicus&gt; Oh, don't I know it.  HTML seems really simple--right up until you try to -explain- it.</li>
+ <li id="l-303"><a href="#l-303">#</a> [11:15] * Quits: jer|afk (~jernoble@2002:43bc:6d07:0:fcbe:2f85:4be1:48ca) (Read error: Connection reset by peer)</li>
+ <li id="l-304"><a href="#l-304">#</a> [11:15] * Joins: jer|afk (~jernoble@c-67-188-109-7.hsd1.ca.comcast.net)</li>
+ <li id="l-305" _a="Von_Davidicus"><a href="#l-305">#</a> [11:17] &lt;Von_Davidicus&gt; So does &lt;section&gt; essentially reset the header numbering?  For example, I could have the headers in the main page, and then have, say, &lt;section class=&quot;code_example&quot;&gt; and start the example heading over at &lt;h1&gt;?</li>
+ <li id="l-306" _a="annevk"><a href="#l-306">#</a> [11:20] &lt;annevk&gt; yeah more or less</li>
+ <li id="l-307" _a="annevk" _r="Von_Davidicus"><a href="#l-307">#</a> [11:20] &lt;annevk&gt; Von_Davidicus: reading <a href="http://www.whatwg.org/C#outline">http://www.whatwg.org/C#outline</a> might help</li>
+ <li id="l-308" _a="Von_Davidicus"><a href="#l-308">#</a> [11:24] &lt;Von_Davidicus&gt; &lt;!DOCTYPE HTML PUBLIC &quot;ISO/IEC 15445:2000//DTD HyperText Markup Language//EN&quot;&gt;</li>
+ <li id="l-309" _a="Von_Davidicus"><a href="#l-309">#</a> [11:24] &lt;Von_Davidicus&gt;</li>
+ <li id="l-310" _a="Von_Davidicus" _r="&quot;"><a href="#l-310">#</a> [11:24] &lt;Von_Davidicus&gt; &quot;, will it still validate?</li>
+ <li id="l-311" _a="Von_Davidicus"><a href="#l-311">#</a> [11:24] &lt;Von_Davidicus&gt; And sorry for the linebrakes.</li>
+ <li id="l-312" _a="annevk"><a href="#l-312">#</a> [11:24] &lt;annevk&gt; don't think so</li>
+ <li id="l-313" _a="annevk"><a href="#l-313">#</a> [11:24] &lt;annevk&gt; try <a href="http://validator.nu/">http://validator.nu/</a> to be sure</li>
+ <li id="l-314" _a="Von_Davidicus"><a href="#l-314">#</a> [11:25] * Von_Davidicus was kidding.  :)</li>
+ <li id="l-315" _a="annevk"><a href="#l-315">#</a> [11:25] &lt;annevk&gt; I think we do allow some old doctypes</li>
+ <li id="l-316" _a="annevk"><a href="#l-316">#</a> [11:26] &lt;annevk&gt; but better to stick to &lt;!doctype html&gt;</li>
+ <li id="l-317" _a="annevk" _r="Ms2ger"><a href="#l-317">#</a> [11:27] &lt;annevk&gt; Ms2ger: about features strings, can you ping eseidel somehow about which he wants to support?</li>
+ <li id="l-318" _a="annevk" _r="Ms2ger"><a href="#l-318">#</a> [11:27] &lt;annevk&gt; Ms2ger: he was the one you were talking with this about that right?</li>
+ <li id="l-319" _a="annevk" _r="Ms2ger"><a href="#l-319">#</a> [11:28] &lt;annevk&gt; Ms2ger: and maybe ask Gecko too?</li>
+ <li id="l-320" _a="annevk" _r="Ms2ger"><a href="#l-320">#</a> [11:28] &lt;annevk&gt; Ms2ger: source code or otherwise :p</li>
+ <li id="l-321"><a href="#l-321">#</a> [11:29] * Joins: nonge_ (~nonge@p5B326D40.dip.t-dialin.net)</li>
+ <li id="l-322" _a="annevk"><a href="#l-322">#</a> [11:30] &lt;annevk&gt; ooh</li>
+ <li id="l-323" _a="annevk"><a href="#l-323">#</a> [11:30] &lt;annevk&gt; Mozilla just moved fullscreen to Element</li>
+ <li id="l-324" _a="annevk"><a href="#l-324">#</a> [11:30] &lt;annevk&gt; hmm</li>
+ <li id="l-325" _a="Von_Davidicus"><a href="#l-325">#</a> [11:30] &lt;Von_Davidicus&gt; Another question, more serious this time:  how will XHTML5 handle character entity references?  I tried it and got Firefox's Yellow Screen of Death.</li>
+ <li id="l-326"><a href="#l-326">#</a> [11:32] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-327"><a href="#l-327">#</a> [11:32] * Quits: nonge (~nonge@p50829BC9.dip.t-dialin.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-328"><a href="#l-328">#</a> [11:33] * Joins: tomasf (~tom@2002:55e5:dbb7:0:e4be:1c73:7b0f:bf0f)</li>
+ <li id="l-329" _a="annevk" _r="Von_Davidicus"><a href="#l-329">#</a> [11:33] &lt;annevk&gt; Von_Davidicus: <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-xhtml-syntax.html#the-xhtml-syntax">http://www.whatwg.org/specs/web-apps/current-work/multipage/the-xhtml-syntax.html#the-xhtml-syntax</a> has some details</li>
+ <li id="l-330" _a="annevk" _r="Von_Davidicus"><a href="#l-330">#</a> [11:33] &lt;annevk&gt; Von_Davidicus: best to just use HTML</li>
+ <li id="l-331" _a="annevk" _r="Von_Davidicus"><a href="#l-331">#</a> [11:34] &lt;annevk&gt; Von_Davidicus: or stay away from named entities</li>
+ <li id="l-332" _a="Von_Davidicus"><a href="#l-332">#</a> [11:36] &lt;Von_Davidicus&gt; Okay.</li>
+ <li id="l-333"><a href="#l-333">#</a> [11:36] * Joins: drublic (~drublic@frbg-5f732098.pool.mediaWays.net)</li>
+ <li id="l-334"><a href="#l-334">#</a> [11:39] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Quit: RobbertAtWork)</li>
+ <li id="l-335"><a href="#l-335">#</a> [11:40] * Joins: RobbertAtWork (~Robbert@212.238.236.229)</li>
+ <li id="l-336" _a="annevk"><a href="#l-336">#</a> [11:42] &lt;annevk&gt; <a href="http://trac.webkit.org/changeset/111028/trunk/Source/WebCore/dom/Document.idl">http://trac.webkit.org/changeset/111028/trunk/Source/WebCore/dom/Document.idl</a></li>
+ <li id="l-337" _a="annevk"><a href="#l-337">#</a> [11:42] &lt;annevk&gt; hmm</li>
+ <li id="l-338" _a="annevk"><a href="#l-338">#</a> [11:42] &lt;annevk&gt; both Mozilla and W3C version</li>
+ <li id="l-339" _a="annevk"><a href="#l-339">#</a> [11:42] &lt;annevk&gt; never mind that Fullscreen is not done at the W3C</li>
+ <li id="l-340" _a="annevk"><a href="#l-340">#</a> [11:42] &lt;annevk&gt; at least not that I know of</li>
+ <li id="l-341"><a href="#l-341">#</a> [11:44] * Joins: RobbertAtWork_ (~Robbert@212.238.236.229)</li>
+ <li id="l-342"><a href="#l-342">#</a> [11:45] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Ping timeout: 248 seconds)</li>
+ <li id="l-343" _a="RobbertAtWork_"><a href="#l-343">#</a> [11:45] * RobbertAtWork_ is now known as RobbertAtWork</li>
+ <li id="l-344"><a href="#l-344">#</a> [11:46] * Joins: tndrH (~Rob@adsl-94-72-216-110.karoo.kcom.com)</li>
+ <li id="l-345"><a href="#l-345">#</a> [12:03] * Joins: GPHemsley (~GPHemsley@209-23-243-49-ip-static.hfc.comcastbusiness.net)</li>
+ <li id="l-346"><a href="#l-346">#</a> [12:03] * Quits: GPHemsley (~GPHemsley@209-23-243-49-ip-static.hfc.comcastbusiness.net) (Changing host)</li>
+ <li id="l-347"><a href="#l-347">#</a> [12:03] * Joins: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley)</li>
+ <li id="l-348"><a href="#l-348">#</a> [12:04] * Quits: tantek (~tantek@70-36-139-112.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-349" _a="annevk"><a href="#l-349">#</a> [12:07] &lt;annevk&gt; haha</li>
+ <li id="l-350" _a="annevk"><a href="#l-350">#</a> [12:07] &lt;annevk&gt; <a href="http://www.alistapart">http://www.alistapart</a>.com/authors/�/tantekcelik</li>
+ <li id="l-351" _a="Von_Davidicus"><a href="#l-351">#</a> [12:11] * Von_Davidicus ponders whether or not to turn one of his pages from HTML 4.01 to HTML5</li>
+ <li id="l-352" _a="Philip`" _r="Von_Davidicus"><a href="#l-352">#</a> [12:17] &lt;Philip`&gt; Von_Davidicus: You shouldn't bother, unless it'll give any practical benefits to your page's users</li>
+ <li id="l-353" _a="Philip`"><a href="#l-353">#</a> [12:17] &lt;Philip`&gt; Better to spend the effort on more meaningful changes :-)</li>
+ <li id="l-354" _a="Von_Davidicus" _r="Well"><a href="#l-354">#</a> [12:18] &lt;Von_Davidicus&gt; Well, the page hasn't needed a change in a while.</li>
+ <li id="l-355" _a="Ms2ger" _r="annevk"><a href="#l-355">#</a> [12:24] &lt;Ms2ger&gt; annevk, I dunno if I talked to anybody at webkit</li>
+ <li id="l-356" _a="annevk" _r="Ms2ger"><a href="#l-356">#</a> [12:26] &lt;annevk&gt; Ms2ger: but I do</li>
+ <li id="l-357" _a="annevk" _r="Ms2ger"><a href="#l-357">#</a> [12:26] &lt;annevk&gt; Ms2ger: <a href="https://bugs.webkit.org/show_bug.cgi?id=76214#c5">https://bugs.webkit.org/show_bug.cgi?id=76214#c5</a></li>
+ <li id="l-358" _a="Ms2ger" _r="Ah"><a href="#l-358">#</a> [12:27] &lt;Ms2ger&gt; Ah, indeed</li>
+ <li id="l-359" _a="Von_Davidicus"><a href="#l-359">#</a> [12:28] &lt;Von_Davidicus&gt; Hmmm...  if the &quot;checked&quot; attribute isn't allowed, how DO I preselect a checkbox?</li>
+ <li id="l-360" _a="Von_Davidicus" _r="or"><a href="#l-360">#</a> [12:30] &lt;Von_Davidicus&gt; or, for that matter, &quot;readonly&quot;?</li>
+ <li id="l-361" _a="annevk"><a href="#l-361">#</a> [12:30] &lt;annevk&gt; it is allowed</li>
+ <li id="l-362" _a="Philip`" _r="Von_Davidicus"><a href="#l-362">#</a> [12:30] &lt;Philip`&gt; Von_Davidicus: Who says it's not allowed?</li>
+ <li id="l-363" _a="Von_Davidicus" _r="Well"><a href="#l-363">#</a> [12:31] &lt;Von_Davidicus&gt; Well, the W3C validator I just checked my page on.</li>
+ <li id="l-364" _a="nonge_"><a href="#l-364">#</a> [12:32] * nonge_ is now known as nonge</li>
+ <li id="l-365" _a="Philip`"><a href="#l-365">#</a> [12:32] &lt;Philip`&gt; It reports no error for me for e.g. &quot;&lt;!DOCTYPE html&gt;&lt;title&gt;&lt;/title&gt;&lt;input type=checkbox checked&gt;&quot;</li>
+ <li id="l-366" _a="Philip`"><a href="#l-366">#</a> [12:33] &lt;Philip`&gt; (though the spec doesn't allow readonly on checkboxes)</li>
+ <li id="l-367" _a="Von_Davidicus"><a href="#l-367">#</a> [12:34] &lt;Von_Davidicus&gt; The tags I'm having trouble with are:  &lt;input name=&quot;Rods_Count&quot; class=&quot;rod_count readonly&quot; type=&quot;hidden&quot; readonly=&quot;readonly&quot; value=&quot;0&quot;&gt;  and &lt;input name=&quot;Rods_Choose&quot; class=&quot;rod_check&quot; type=&quot;hidden&quot; checked=&quot;checked&quot;&gt;.</li>
+ <li id="l-368" _a="volkmar" _r="annevk"><a href="#l-368">#</a> [12:34] &lt;volkmar&gt; annevk: where is window.fullscreen spec'd?</li>
+ <li id="l-369" _a="Philip`" _r="Von_Davidicus"><a href="#l-369">#</a> [12:34] &lt;Philip`&gt; Von_Davidicus: checked is meaningless (hence not allowed) for type=hidden</li>
+ <li id="l-370" _a="Philip`"><a href="#l-370">#</a> [12:35] &lt;Philip`&gt; Same for readonly for type=hidden</li>
+ <li id="l-371" _a="Von_Davidicus"><a href="#l-371">#</a> [12:35] * Von_Davidicus will thus have to redo some of his PHP.</li>
+ <li id="l-372" _a="Philip`"><a href="#l-372">#</a> [12:35] &lt;Philip`&gt; (<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#hidden-state-(type=hidden">http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#hidden-state-(type=hidden</a>) gives the details)</li>
+ <li id="l-373"><a href="#l-373">#</a> [12:36] * Quits: danbri (~danbri@cable-146-255-148-108.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-374" _a="Von_Davidicus_" _r="And"><a href="#l-374">#</a> [12:36] &lt;Von_Davidicus_&gt; And, possible, some of my JavaScript.</li>
+ <li id="l-375" _a="Ms2ger" _r="annevk"><a href="#l-375">#</a> [12:36] &lt;Ms2ger&gt; annevk, <a href="http://wiki.whatwg.org/wiki/DOM_features">http://wiki.whatwg.org/wiki/DOM_features</a> should have all those that Gecko supports now</li>
+ <li id="l-376" _a="Philip`" _r="Von_Davidicus"><a href="#l-376">#</a> [12:36] &lt;Philip`&gt; Von_Davidicus: Why are you specifying those attributes here, when they don't make sense for hidden inputs?</li>
+ <li id="l-377" _a="volkmar" _r="annevk"><a href="#l-377">#</a> [12:38] &lt;volkmar&gt; annevk: forget the question... I realize it's not part of a spec...</li>
+ <li id="l-378" _a="annevk" _r="volkmar"><a href="#l-378">#</a> [12:38] &lt;annevk&gt; volkmar: that attribute does not exist; see <a href="http://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html">http://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html</a></li>
+ <li id="l-379" _a="volkmar" _r="annevk"><a href="#l-379">#</a> [12:39] &lt;volkmar&gt; annevk: <a href="https://developer.mozilla.org/en/DOM/window.fullScreen">https://developer.mozilla.org/en/DOM/window.fullScreen</a></li>
+ <li id="l-380" _a="Von_Davidicus_"><a href="#l-380">#</a> [12:39] &lt;Von_Davidicus_&gt; Because I need them there for my JavaScript to work.</li>
+ <li id="l-381" _a="annevk" _r="volkmar"><a href="#l-381">#</a> [12:39] &lt;annevk&gt; volkmar: do we need that attribute for something?</li>
+ <li id="l-382" _a="annevk" _r="volkmar"><a href="#l-382">#</a> [12:40] &lt;annevk&gt; volkmar: it seems you can already accomplish that using matchMedia and for element fullscreen you can check document.fullscreenElement</li>
+ <li id="l-383" _a="annevk"><a href="#l-383">#</a> [12:40] &lt;annevk&gt; it's also incorrectly cased</li>
+ <li id="l-384"><a href="#l-384">#</a> [12:41] * Quits: tomasf (~tom@2002:55e5:dbb7:0:e4be:1c73:7b0f:bf0f) (Ping timeout: 245 seconds)</li>
+ <li id="l-385" _a="volkmar" _r="annevk"><a href="#l-385">#</a> [12:41] &lt;volkmar&gt; annevk: sadly, seems like document.fullscreenEnabled is cased mozFullScreenEnabled in Gecko</li>
+ <li id="l-386" _a="annevk"><a href="#l-386">#</a> [12:41] &lt;annevk&gt; hopefully that's fixed when they unprefix</li>
+ <li id="l-387" _a="Ms2ger"><a href="#l-387">#</a> [12:41] &lt;Ms2ger&gt; Do we have a bug to unprefix?</li>
+ <li id="l-388" _a="annevk"><a href="#l-388">#</a> [12:42] &lt;annevk&gt; Firefox is standardizing on &quot;fullscreen&quot; after all and so is the rest of the world</li>
+ <li id="l-389" _a="annevk"><a href="#l-389">#</a> [12:42] &lt;annevk&gt; (in UI language)</li>
+ <li id="l-390"><a href="#l-390">#</a> [12:43] * Joins: tantek (~tantek@70-36-139-112.dsl.dynamic.sonic.net)</li>
+ <li id="l-391" _a="Von_Davidicus_" _r="Basically"><a href="#l-391">#</a> [12:45] &lt;Von_Davidicus_&gt; Basically, my code assumed that every table row would have those elements in it--and the inputs were hidden if they weren't actually needed.</li>
+ <li id="l-392" _a="annevk" _r="Ms2ger"><a href="#l-392">#</a> [12:49] &lt;annevk&gt; Ms2ger: haven't seen anything</li>
+ <li id="l-393" _a="annevk"><a href="#l-393">#</a> [12:50] &lt;annevk&gt; I'm having a hard time to not prematurely merge big5 and big5-hkscs</li>
+ <li id="l-394" _a="Ms2ger"><a href="#l-394">#</a> [12:50] &lt;Ms2ger&gt; I'll file</li>
+ <li id="l-395" _a="annevk"><a href="#l-395">#</a> [12:51] &lt;annevk&gt; cool</li>
+ <li id="l-396" _a="annevk"><a href="#l-396">#</a> [12:51] &lt;annevk&gt; hopefully Gecko can create some sanity in the all the Fullscreen code out there</li>
+ <li id="l-397" _a="annevk"><a href="#l-397">#</a> [12:52] &lt;annevk&gt; I haven't seen much community feedback btw; I guess it works good enough...</li>
+ <li id="l-398" _a="Ms2ger"><a href="#l-398">#</a> [12:52] &lt;Ms2ger&gt; Facebook uses it for photos, I hear</li>
+ <li id="l-399" _a="annevk" _r="youtube"><a href="#l-399">#</a> [12:52] &lt;annevk&gt; youtube, vimeo, etc. use it</li>
+ <li id="l-400" _a="annevk"><a href="#l-400">#</a> [12:53] &lt;annevk&gt; but all with lots of code paths because of the prefixes, prefixed events, etc.</li>
+ <li id="l-401" _a="annevk"><a href="#l-401">#</a> [12:53] &lt;annevk&gt; it's quite the mess</li>
+ <li id="l-402"><a href="#l-402">#</a> [12:53] * Joins: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se)</li>
+ <li id="l-403"><a href="#l-403">#</a> [12:54] * Quits: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se) (Read error: Connection reset by peer)</li>
+ <li id="l-404"><a href="#l-404">#</a> [12:55] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Quit: RobbertAtWork)</li>
+ <li id="l-405"><a href="#l-405">#</a> [12:55] * Joins: danbri (~danbri@cable-146-255-148-108.dynamic.telemach.ba)</li>
+ <li id="l-406" _a="volkmar" _r="annevk"><a href="#l-406">#</a> [12:58] &lt;volkmar&gt; annevk: fullscreen specs say &quot;HTML defines under what conditions the fullscreen enabled flag is set&quot;</li>
+ <li id="l-407" _a="volkmar"><a href="#l-407">#</a> [12:58] &lt;volkmar&gt; but I don't see anything in the html specs</li>
+ <li id="l-408" _a="annevk"><a href="#l-408">#</a> [12:59] &lt;annevk&gt; yeah HTML needs to be updated</li>
+ <li id="l-409" _a="annevk"><a href="#l-409">#</a> [12:59] &lt;annevk&gt; not sure if I filed a bug on that already</li>
+ <li id="l-410" _a="annevk"><a href="#l-410">#</a> [13:00] &lt;annevk&gt; but basically, I think the latest was that &lt;iframe allowfullscreen&gt; sets that flag</li>
+ <li id="l-411" _a="annevk"><a href="#l-411">#</a> [13:00] &lt;annevk&gt; for the document it contains</li>
+ <li id="l-412" _a="annevk"><a href="#l-412">#</a> [13:00] &lt;annevk&gt; and it's set automatically for the top-level browsing context's document</li>
+ <li id="l-413" _a="volkmar" _r="annevk"><a href="#l-413">#</a> [13:00] &lt;volkmar&gt; annevk: so, to know if a document is fullscreen, you have to do fullscreenElement != null, right?</li>
+ <li id="l-414" _a="annevk"><a href="#l-414">#</a> [13:01] &lt;annevk&gt; to know if an element is fullscreen you do that</li>
+ <li id="l-415"><a href="#l-415">#</a> [13:01] * Quits: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi) (Remote host closed the connection)</li>
+ <li id="l-416" _a="annevk"><a href="#l-416">#</a> [13:01] &lt;annevk&gt; if you want to know if the user used some kind of UI you would use media queries</li>
+ <li id="l-417"><a href="#l-417">#</a> [13:01] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-418"><a href="#l-418">#</a> [13:01] * Joins: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se)</li>
+ <li id="l-419" _a="volkmar" _r="so"><a href="#l-419">#</a> [13:02] &lt;volkmar&gt; so, a dev can't know if the page is currently fullscreen?</li>
+ <li id="l-420" _a="annevk"><a href="#l-420">#</a> [13:03] &lt;annevk&gt; I just said the opposite</li>
+ <li id="l-421"><a href="#l-421">#</a> [13:03] * Quits: annevk (~annevk@a82-161-179-17.adsl.xs4all.nl) (Remote host closed the connection)</li>
+ <li id="l-422" _a="volkmar"><a href="#l-422">#</a> [13:03] &lt;volkmar&gt; sorry</li>
+ <li id="l-423" _a="volkmar"><a href="#l-423">#</a> [13:03] &lt;volkmar&gt; i meant, with a js api</li>
+ <li id="l-424"><a href="#l-424">#</a> [13:03] * Joins: annevk (~annevk@a82-161-179-17.adsl.xs4all.nl)</li>
+ <li id="l-425" _a="Von_Davidicus"><a href="#l-425">#</a> [13:03] * Von_Davidicus heads offline.</li>
+ <li id="l-426" _a="annevk"><a href="#l-426">#</a> [13:03] &lt;annevk&gt; there's window.matchMedia</li>
+ <li id="l-427" _a="Von_Davidicus_"><a href="#l-427">#</a> [13:04] &lt;Von_Davidicus_&gt; Thanks for the header element info.  :)</li>
+ <li id="l-428" _a="annevk" _r="volkmar"><a href="#l-428">#</a> [13:04] &lt;annevk&gt; volkmar: <a href="http://dev.w3.org/csswg/cssom-view/#dom-window-matchmedia">http://dev.w3.org/csswg/cssom-view/#dom-window-matchmedia</a></li>
+ <li id="l-429"><a href="#l-429">#</a> [13:04] * Quits: Von_Davidicus_ (~IceChat7@173.210.203.196) (Quit: Say What?)</li>
+ <li id="l-430"><a href="#l-430">#</a> [13:04] * Quits: Von_Davidicus (~IceChat7@173.210.203.196) (Quit: Few women admit their age.  Few men act theirs.)</li>
+ <li id="l-431" _a="annevk"><a href="#l-431">#</a> [13:06] &lt;annevk&gt; yay foolip</li>
+ <li id="l-432" _a="annevk"><a href="#l-432">#</a> [13:06] &lt;annevk&gt; one interwebs for foolip please</li>
+ <li id="l-433" _a="Ms2ger"><a href="#l-433">#</a> [13:08] &lt;Ms2ger&gt; Granted</li>
+ <li id="l-434" _a="annevk"><a href="#l-434">#</a> [13:09] &lt;annevk&gt; seems I'm gonna take a break for a couple of hours</li>
+ <li id="l-435" _a="annevk"><a href="#l-435">#</a> [13:10] &lt;annevk&gt; big5 can wait a little</li>
+ <li id="l-436" _a="annevk" _r="volkmar"><a href="#l-436">#</a> [13:11] &lt;annevk&gt; volkmar: if you think fullscreen status of a document (other than fullscreen element) needs some kind of convenience attribute please email WHATWG</li>
+ <li id="l-437" _a="annevk" _r="volkmar"><a href="#l-437">#</a> [13:11] &lt;annevk&gt; volkmar: I personally think media queries combined wit the API for them are fine, especially since the majority case will be an element fullscreen</li>
+ <li id="l-438" _a="annevk"><a href="#l-438">#</a> [13:11] &lt;annevk&gt; with*</li>
+ <li id="l-439" _a="Ms2ger"><a href="#l-439">#</a> [13:12] &lt;Ms2ger&gt; What makes people even publish mixed-encoding pages?</li>
+ <li id="l-440"><a href="#l-440">#</a> [13:13] * Quits: tndrH (~Rob@adsl-94-72-216-110.karoo.kcom.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-441"><a href="#l-441">#</a> [13:17] * Quits: Areks (~Areks@rs.gridnine.com) (Ping timeout: 272 seconds)</li>
+ <li id="l-442"><a href="#l-442">#</a> [13:25] * Quits: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi) (Remote host closed the connection)</li>
+ <li id="l-443"><a href="#l-443">#</a> [13:25] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-444"><a href="#l-444">#</a> [13:27] * Joins: tndrH (~Rob@adsl-77-86-116-245.karoo.KCOM.COM)</li>
+ <li id="l-445"><a href="#l-445">#</a> [13:31] * Joins: Areks (~Areks@rs.gridnine.com)</li>
+ <li id="l-446"><a href="#l-446">#</a> [13:42] * Joins: RobbertAtWork (~Robbert@212.238.236.229)</li>
+ <li id="l-447"><a href="#l-447">#</a> [13:44] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-448"><a href="#l-448">#</a> [13:44] * Joins: sedovsek (~robert@93-103-90-17.dynamic.t-2.net)</li>
+ <li id="l-449"><a href="#l-449">#</a> [13:44] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-450"><a href="#l-450">#</a> [13:46] * Joins: dydx (~dydz@adsl-76-199-102-166.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-451"><a href="#l-451">#</a> [13:49] * Quits: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi) (Ping timeout: 244 seconds)</li>
+ <li id="l-452" _a="kennyluck"><a href="#l-452">#</a> [13:52] &lt;kennyluck&gt; Can someone give me some examples of invalid URL?</li>
+ <li id="l-453" _a="kennyluck"><a href="#l-453">#</a> [13:52] &lt;kennyluck&gt; I know &quot;%&quot; is invalid in IE for one.</li>
+ <li id="l-454" _a="gwicke"><a href="#l-454">#</a> [13:52] * gwicke is now known as gwicke_away</li>
+ <li id="l-455"><a href="#l-455">#</a> [13:53] * Quits: Areks (~Areks@rs.gridnine.com) (Read error: Connection reset by peer)</li>
+ <li id="l-456"><a href="#l-456">#</a> [13:57] * Quits: sedovsek (~robert@93-103-90-17.dynamic.t-2.net) (Quit: sedovsek)</li>
+ <li id="l-457"><a href="#l-457">#</a> [13:59] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-458"><a href="#l-458">#</a> [13:59] * Joins: shawn_dones (~shawn@mail3.webguys.biz)</li>
+ <li id="l-459"><a href="#l-459">#</a> [14:05] * Joins: shawn_dones_ (~shawn@mail3.webguys.biz)</li>
+ <li id="l-460"><a href="#l-460">#</a> [14:07] * Quits: shawn_dones (~shawn@mail3.webguys.biz) (Ping timeout: 244 seconds)</li>
+ <li id="l-461" _a="shawn_dones_"><a href="#l-461">#</a> [14:07] * shawn_dones_ is now known as shawn_dones</li>
+ <li id="l-462" _a="gwicke_away"><a href="#l-462">#</a> [14:14] * gwicke_away is now known as gwicke</li>
+ <li id="l-463"><a href="#l-463">#</a> [14:18] * Joins: erichynds (~ehynds@64.206.121.41)</li>
+ <li id="l-464"><a href="#l-464">#</a> [14:31] * Joins: jzaefferer (~jzaeffere@205.186.165.147)</li>
+ <li id="l-465"><a href="#l-465">#</a> [14:32] * Joins: scott_gonzalez (~gonzasi0@205.186.165.147)</li>
+ <li id="l-466"><a href="#l-466">#</a> [14:33] * Quits: dydx (~dydz@adsl-76-199-102-166.dsl.pltn13.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-467"><a href="#l-467">#</a> [14:42] * Joins: linclark (~clark@c-67-186-35-246.hsd1.pa.comcast.net)</li>
+ <li id="l-468"><a href="#l-468">#</a> [14:48] * Quits: shawn_dones (~shawn@mail3.webguys.biz) (Quit: shawn_dones)</li>
+ <li id="l-469"><a href="#l-469">#</a> [14:48] * Joins: [[zzz]] (~q@125.25.19.215.adsl.dynamic.totbb.net)</li>
+ <li id="l-470"><a href="#l-470">#</a> [14:52] * Quits: [[zz]] (~q@125.25.28.198.adsl.dynamic.totbb.net) (Ping timeout: 264 seconds)</li>
+ <li id="l-471"><a href="#l-471">#</a> [15:00] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-472"><a href="#l-472">#</a> [15:11] * Quits: esc_ (~esc_ape@178.115.249.217.wireless.dyn.drei.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-473"><a href="#l-473">#</a> [15:11] * Quits: izhak (~izhak@213.87.241.69) (Remote host closed the connection)</li>
+ <li id="l-474"><a href="#l-474">#</a> [15:12] * Quits: erichynds (~ehynds@64.206.121.41) (Ping timeout: 244 seconds)</li>
+ <li id="l-475"><a href="#l-475">#</a> [15:19] * Joins: nesta_ (~nesta_@143.99.219.87.dynamic.jazztel.es)</li>
+ <li id="l-476"><a href="#l-476">#</a> [15:19] * Joins: ryanlabouve (~ryanlabou@d-ip-129-15-84-102.cas.ou.edu)</li>
+ <li id="l-477"><a href="#l-477">#</a> [15:20] * Quits: ryanlabouve (~ryanlabou@d-ip-129-15-84-102.cas.ou.edu) (Client Quit)</li>
+ <li id="l-478" _a="annevk" _r="kennyluck"><a href="#l-478">#</a> [15:22] &lt;annevk&gt; kennyluck: http://a b/</li>
+ <li id="l-479" _a="annevk" _r="kennyluck"><a href="#l-479">#</a> [15:22] &lt;annevk&gt; kennyluck: note the space</li>
+ <li id="l-480" _a="annevk" _r="kennyluck"><a href="#l-480">#</a> [15:22] &lt;annevk&gt; kennyluck: however, we might make make it so that all URLs can be resolved</li>
+ <li id="l-481" _a="annevk" _r="kennyluck"><a href="#l-481">#</a> [15:22] &lt;annevk&gt; kennyluck: and that failures happen at the network layer instead</li>
+ <li id="l-482" _a="annevk" _r="kennyluck"><a href="#l-482">#</a> [15:23] &lt;annevk&gt; kennyluck: kind of depends on the URL work, which MikeSmith is working on and abarth is sometimes</li>
+ <li id="l-483" _a="annevk"><a href="#l-483">#</a> [15:23] &lt;annevk&gt; I might work on that after Encodings is done, dunno</li>
+ <li id="l-484"><a href="#l-484">#</a> [15:23] * Joins: graememcc (~chatzilla@host86-148-140-125.range86-148.btcentralplus.com)</li>
+ <li id="l-485"><a href="#l-485">#</a> [15:32] * Quits: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp) (Quit: Leaving...)</li>
+ <li id="l-486"><a href="#l-486">#</a> [15:35] * Joins: esc_ (~esc_ape@178.115.251.246.wireless.dyn.drei.com)</li>
+ <li id="l-487"><a href="#l-487">#</a> [15:36] * Joins: KillerX_ (~anant@70-36-146-62.dsl.dynamic.sonic.net)</li>
+ <li id="l-488"><a href="#l-488">#</a> [15:36] * Quits: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-489" _a="KillerX_"><a href="#l-489">#</a> [15:36] * KillerX_ is now known as KillerX</li>
+ <li id="l-490"><a href="#l-490">#</a> [15:43] * Joins: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-491"><a href="#l-491">#</a> [15:43] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 246 seconds)</li>
+ <li id="l-492"><a href="#l-492">#</a> [15:47] * Quits: drublic (~drublic@frbg-5f732098.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-493"><a href="#l-493">#</a> [15:51] * Quits: nessy (~Adium@124-149-170-217.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-494"><a href="#l-494">#</a> [15:52] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-495"><a href="#l-495">#</a> [15:53] * Joins: foolip_ (~foolip@h128n3-g-hn-a11.ias.bredband.telia.com)</li>
+ <li id="l-496" _a="annevk" _r="foolip_"><a href="#l-496">#</a> [15:53] &lt;annevk&gt; foolip_: hey</li>
+ <li id="l-497" _a="foolip_" _r="annevk"><a href="#l-497">#</a> [15:54] &lt;foolip_&gt; annevk, hi</li>
+ <li id="l-498"><a href="#l-498">#</a> [15:54] * Quits: mven (~mven__@169.241.49.57) (Read error: Connection reset by peer)</li>
+ <li id="l-499" _a="annevk" _r="foolip_"><a href="#l-499">#</a> [15:54] &lt;annevk&gt; foolip_: so those 22 pages where all the pages with bytes in the indicated ranges</li>
+ <li id="l-500" _a="annevk"><a href="#l-500">#</a> [15:54] &lt;annevk&gt; s/where/were/</li>
+ <li id="l-501" _a="annevk" _r="foolip_"><a href="#l-501">#</a> [15:55] &lt;annevk&gt; foolip_: all the pages with lead bytes under 0xA1 or in the 0xC6-0xC8 region</li>
+ <li id="l-502" _a="foolip_" _r="annevk"><a href="#l-502">#</a> [15:55] &lt;foolip_&gt; annevk, do you think that skews the results?</li>
+ <li id="l-503"><a href="#l-503">#</a> [15:56] * Joins: mven (~mven__@169.241.49.57)</li>
+ <li id="l-504" _a="annevk"><a href="#l-504">#</a> [15:56] &lt;annevk&gt; not really, those are the ranges for which browsers have incompatible mappings</li>
+ <li id="l-505" _a="annevk"><a href="#l-505">#</a> [15:56] &lt;annevk&gt; and for which big5 and big5-hkscs have incompatible mappings</li>
+ <li id="l-506" _a="annevk"><a href="#l-506">#</a> [15:56] &lt;annevk&gt; everything else they agree on so that does not really matter</li>
+ <li id="l-507" _a="annevk"><a href="#l-507">#</a> [15:57] &lt;annevk&gt; so I think that what you generated is fine</li>
+ <li id="l-508" _a="annevk"><a href="#l-508">#</a> [15:57] &lt;annevk&gt; and just default to FFFD for the rest</li>
+ <li id="l-509" _a="foolip_" _r="right"><a href="#l-509">#</a> [15:57] &lt;foolip_&gt; right, I was quite happy to see that the compatible intersection of big5 was a subset of the compatible intersection of big5-hkscs, save one mapping</li>
+ <li id="l-510" _a="annevk"><a href="#l-510">#</a> [15:57] &lt;annevk&gt; the multiple code point stuff seems hairy though</li>
+ <li id="l-511" _a="foolip_" _r="annevk"><a href="#l-511">#</a> [15:57] &lt;foolip_&gt; annevk, spec-wise or implementation-wise?</li>
+ <li id="l-512" _a="annevk"><a href="#l-512">#</a> [15:58] &lt;annevk&gt; I guess we can special case it if there's only four</li>
+ <li id="l-513" _a="foolip_"><a href="#l-513">#</a> [15:58] &lt;foolip_&gt; The alternative is</li>
+ <li id="l-514" _a="foolip_"><a href="#l-514">#</a> [15:58] &lt;foolip_&gt; PUA</li>
+ <li id="l-515" _a="Ms2ger"><a href="#l-515">#</a> [15:58] &lt;Ms2ger&gt; Go wash your mouth</li>
+ <li id="l-516" _a="annevk"><a href="#l-516">#</a> [15:59] &lt;annevk&gt; so</li>
+ <li id="l-517" _a="annevk" _r="&lt;U+00CA,U+0304&gt"><a href="#l-517">#</a> [15:59] &lt;annevk&gt; &lt;U+00CA,U+0304&gt; Ê̄</li>
+ <li id="l-518" _a="foolip_" _r="annevk"><a href="#l-518">#</a> [15:59] &lt;foolip_&gt; annevk, yes, the official hkscs-2008 mapping listed only those 4</li>
+ <li id="l-519" _a="annevk"><a href="#l-519">#</a> [15:59] &lt;annevk&gt; is there no NFC character for that?</li>
+ <li id="l-520" _a="foolip_" _r="annevk"><a href="#l-520">#</a> [15:59] &lt;foolip_&gt; annevk, nope, at least not according to python unicodedata</li>
+ <li id="l-521" _a="annevk"><a href="#l-521">#</a> [15:59] &lt;annevk&gt; we could also FFFD it given that we didn't find it in real usage</li>
+ <li id="l-522" _a="foolip_"><a href="#l-522">#</a> [16:00] &lt;foolip_&gt; It seems better to follow the spec when there is one, don't you think?</li>
+ <li id="l-523" _a="foolip_"><a href="#l-523">#</a> [16:00] &lt;foolip_&gt; or does it create other problems?</li>
+ <li id="l-524" _a="foolip_"><a href="#l-524">#</a> [16:00] &lt;foolip_&gt; I'll see what the surrounding characters were, these 4 seem a bit random...</li>
+ <li id="l-525" _a="annevk" _r="dunno"><a href="#l-525">#</a> [16:01] &lt;annevk&gt; dunno, I don't really have respect for legacy encoding standards and it makes both the encoder and decoder more complicated</li>
+ <li id="l-526" _a="foolip_" _r="annevk"><a href="#l-526">#</a> [16:01] &lt;foolip_&gt; annevk, the surrounding characters are also various latin letters with diacritics, so it seems about right</li>
+ <li id="l-527" _a="annevk"><a href="#l-527">#</a> [16:01] &lt;annevk&gt; so far all encoders work by just passing in one code point at a time and getting back some bytes</li>
+ <li id="l-528" _a="annevk"><a href="#l-528">#</a> [16:02] &lt;annevk&gt; for this it would need state</li>
+ <li id="l-529" _a="foolip_"><a href="#l-529">#</a> [16:02] &lt;foolip_&gt; can't it just return more bytes?</li>
+ <li id="l-530" _a="foolip_" _r="oh"><a href="#l-530">#</a> [16:02] &lt;foolip_&gt; oh, encoder?</li>
+ <li id="l-531"><a href="#l-531">#</a> [16:02] * Parts: fkm (~fkm@unaffiliated/fkm) (&quot;Leaving&quot;)</li>
+ <li id="l-532" _a="foolip_"><a href="#l-532">#</a> [16:03] &lt;foolip_&gt; why should we spec an encoder for big5?</li>
+ <li id="l-533" _a="annevk"><a href="#l-533">#</a> [16:03] &lt;annevk&gt; URLs and &lt;form&gt;</li>
+ <li id="l-534" _a="foolip_" _r="meh"><a href="#l-534">#</a> [16:03] &lt;foolip_&gt; meh, so that's already web-exposed?</li>
+ <li id="l-535" _a="annevk"><a href="#l-535">#</a> [16:03] &lt;annevk&gt; yes</li>
+ <li id="l-536"><a href="#l-536">#</a> [16:04] * Quits: twisted` (~twisted@p5DDBA7AE.dip.t-dialin.net) (Quit: [&quot;Textual IRC Client: www.textualapp.com&quot;])</li>
+ <li id="l-537" _a="foolip_"><a href="#l-537">#</a> [16:04] &lt;foolip_&gt; I'll see if the individual code points can be represented in Big5...</li>
+ <li id="l-538" _a="annevk"><a href="#l-538">#</a> [16:05] &lt;annevk&gt; we could also not support it in the encoder</li>
+ <li id="l-539" _a="annevk"><a href="#l-539">#</a> [16:05] &lt;annevk&gt; and if they're not in big5 they would turn into entities in the common case</li>
+ <li id="l-540" _a="annevk"><a href="#l-540">#</a> [16:05] &lt;annevk&gt; and support them as some kind of special path in the decoder</li>
+ <li id="l-541" _a="foolip_" _r="nope"><a href="#l-541">#</a> [16:05] &lt;foolip_&gt; nope, big5-hkscs has no combining characters it seems, but python does actually support encoding these properly</li>
+ <li id="l-542" _a="foolip_"><a href="#l-542">#</a> [16:06] &lt;foolip_&gt; I would suggest special-casing them and seeing if implementors complain</li>
+ <li id="l-543" _a="annevk"><a href="#l-543">#</a> [16:07] &lt;annevk&gt; does any browser implementation support them now though?</li>
+ <li id="l-544" _a="annevk"><a href="#l-544">#</a> [16:07] &lt;annevk&gt; because if they don't, I'm not sure it's worth adding</li>
+ <li id="l-545" _a="foolip_"><a href="#l-545">#</a> [16:09] &lt;foolip_&gt; they all use PUA</li>
+ <li id="l-546" _a="annevk"><a href="#l-546">#</a> [16:09] &lt;annevk&gt; oh right, except for Opera?</li>
+ <li id="l-547" _a="foolip_"><a href="#l-547">#</a> [16:09] &lt;foolip_&gt; right</li>
+ <li id="l-548" _a="foolip_"><a href="#l-548">#</a> [16:09] &lt;foolip_&gt; specing PUA seems worthwhile avoiding, IMHO</li>
+ <li id="l-549" _a="annevk"><a href="#l-549">#</a> [16:10] &lt;annevk&gt; fair enough</li>
+ <li id="l-550" _a="foolip_"><a href="#l-550">#</a> [16:10] &lt;foolip_&gt; decoding them correctly seems sensible, for the encoder I'm quite sure just dropping them would do</li>
+ <li id="l-551" _a="foolip_"><a href="#l-551">#</a> [16:11] &lt;foolip_&gt; or what do encoders do with code points that can't be represented?</li>
+ <li id="l-552" _a="annevk"><a href="#l-552">#</a> [16:11] &lt;annevk&gt; k</li>
+ <li id="l-553" _a="annevk"><a href="#l-553">#</a> [16:11] &lt;annevk&gt; depends I think</li>
+ <li id="l-554" _a="annevk"><a href="#l-554">#</a> [16:11] &lt;annevk&gt; form submission makes them entities</li>
+ <li id="l-555" _a="annevk"><a href="#l-555">#</a> [16:11] &lt;annevk&gt; URLs might use &quot;?&quot;</li>
+ <li id="l-556" _a="annevk"><a href="#l-556">#</a> [16:11] * annevk forgot</li>
+ <li id="l-557" _a="annevk"><a href="#l-557">#</a> [16:11] &lt;annevk&gt; I haven't really looked at encoders in detail yet</li>
+ <li id="l-558" _a="annevk"><a href="#l-558">#</a> [16:11] &lt;annevk&gt; there's lots of XXX for encoders</li>
+ <li id="l-559" _a="foolip_" _r="ok"><a href="#l-559">#</a> [16:11] &lt;foolip_&gt; ok, so encoding the first half and escaping the second as an entity might do the job</li>
+ <li id="l-560" _a="annevk"><a href="#l-560">#</a> [16:13] &lt;annevk&gt; where did you find the HKSCS standard btw?</li>
+ <li id="l-561" _a="annevk"><a href="#l-561">#</a> [16:13] &lt;annevk&gt; (agreed btw with the encoder suggestion)</li>
+ <li id="l-562" _a="foolip_" _r="annevk"><a href="#l-562">#</a> [16:13] &lt;foolip_&gt; annevk, <a href="http://www.ogcio.gov.hk/en/business/tech_promotion/ccli/download_area/mapping_table_2008.htm">http://www.ogcio.gov.hk/en/business/tech_promotion/ccli/download_area/mapping_table_2008.htm</a></li>
+ <li id="l-563" _a="foolip_"><a href="#l-563">#</a> [16:14] &lt;foolip_&gt; I also checked it into the git repo</li>
+ <li id="l-564"><a href="#l-564">#</a> [16:16] * Quits: esc_ (~esc_ape@178.115.251.246.wireless.dyn.drei.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-565" _a="annevk"><a href="#l-565">#</a> [16:16] &lt;annevk&gt; k sweet</li>
+ <li id="l-566" _a="annevk"><a href="#l-566">#</a> [16:16] &lt;annevk&gt; I'll take a stab at updating the big5 algorithm</li>
+ <li id="l-567"><a href="#l-567">#</a> [16:16] * Joins: KillerX_ (~anant@70-36-146-62.dsl.dynamic.sonic.net)</li>
+ <li id="l-568" _a="foolip_" _r="annevk"><a href="#l-568">#</a> [16:16] &lt;foolip_&gt; annevk, great, I'm quite sure this would be an improvement even with the missing mappings</li>
+ <li id="l-569" _a="annevk" _r="foolip_"><a href="#l-569">#</a> [16:17] &lt;annevk&gt; foolip_: 8862 =&gt; &lt;U+00CA,U+0304&gt; is that a big5.json like index? the 8862 number?</li>
+ <li id="l-570" _a="foolip_" _r="annevk"><a href="#l-570">#</a> [16:17] &lt;foolip_&gt; annevk, the bytes \x88\x62, I used the notation in the HKSCS-2008 mapping table there</li>
+ <li id="l-571" _a="annevk"><a href="#l-571">#</a> [16:17] &lt;annevk&gt; ah</li>
+ <li id="l-572" _a="foolip_"><a href="#l-572">#</a> [16:17] &lt;foolip_&gt; (and in list of missing mappings)</li>
+ <li id="l-573"><a href="#l-573">#</a> [16:17] * Joins: th3_Chr1s (~christoph@p54ABE16F.dip.t-dialin.net)</li>
+ <li id="l-574" _a="annevk"><a href="#l-574">#</a> [16:18] &lt;annevk&gt; right</li>
+ <li id="l-575"><a href="#l-575">#</a> [16:18] * Quits: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net) (Ping timeout: 276 seconds)</li>
+ <li id="l-576" _a="KillerX_"><a href="#l-576">#</a> [16:18] * KillerX_ is now known as KillerX</li>
+ <li id="l-577" _a="foolip_" _r="annevk"><a href="#l-577">#</a> [16:19] &lt;foolip_&gt; annevk, I'll have a look at trying to categorize the missing mappings and perhaps asking the Chinese HTML IG if they know more.</li>
+ <li id="l-578" _a="foolip_"><a href="#l-578">#</a> [16:19] &lt;foolip_&gt; happy easter!</li>
+ <li id="l-579" _a="annevk"><a href="#l-579">#</a> [16:20] &lt;annevk&gt; ah yeah, that might be a good idea</li>
+ <li id="l-580" _a="annevk"><a href="#l-580">#</a> [16:20] &lt;annevk&gt; you too!</li>
+ <li id="l-581" _a="foolip_"><a href="#l-581">#</a> [16:20] &lt;foolip_&gt; some of the missing mappings smell a lot like they could be de-facto big5 extensions or something</li>
+ <li id="l-582" _a="annevk"><a href="#l-582">#</a> [16:20] &lt;annevk&gt; oh and btw, we might standardize this through the W3C i18n WG at some point</li>
+ <li id="l-583" _a="foolip_"><a href="#l-583">#</a> [16:20] &lt;foolip_&gt; mkay</li>
+ <li id="l-584" _a="annevk"><a href="#l-584">#</a> [16:20] &lt;annevk&gt; there's a lot of big5 extensions</li>
+ <li id="l-585" _a="annevk"><a href="#l-585">#</a> [16:21] &lt;annevk&gt; <a href="http://en.wikipedia.org/wiki/Big5">http://en.wikipedia.org/wiki/Big5</a> has a bunch on that front</li>
+ <li id="l-586"><a href="#l-586">#</a> [16:21] * Joins: Areks (~Areks@rs.gridnine.com)</li>
+ <li id="l-587" _a="annevk"><a href="#l-587">#</a> [16:21] &lt;annevk&gt; <a href="http://coq.no/character-tables/chinese-traditional/en">http://coq.no/character-tables/chinese-traditional/en</a> too</li>
+ <li id="l-588"><a href="#l-588">#</a> [16:22] * Joins: timmywil (~timmywil@host-68-169-175-226.WISOLT2.epbfi.com)</li>
+ <li id="l-589"><a href="#l-589">#</a> [16:23] * Joins: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-590" _a="foolip_" _r="annevk"><a href="#l-590">#</a> [16:23] &lt;foolip_&gt; annevk, thanks, I'll have a look</li>
+ <li id="l-591"><a href="#l-591">#</a> [16:29] * Joins: plutoniix (~plutoniix@125.25.19.215.adsl.dynamic.totbb.net)</li>
+ <li id="l-592" _a="[[zzz]]"><a href="#l-592">#</a> [16:30] * [[zzz]] is now known as [[zz]]</li>
+ <li id="l-593"><a href="#l-593">#</a> [16:50] * Quits: foolip_ (~foolip@h128n3-g-hn-a11.ias.bredband.telia.com) (Ping timeout: 272 seconds)</li>
+ <li id="l-594"><a href="#l-594">#</a> [16:53] * Joins: KillerX_ (~anant@70-36-146-62.dsl.dynamic.sonic.net)</li>
+ <li id="l-595"><a href="#l-595">#</a> [16:53] * Joins: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com)</li>
+ <li id="l-596"><a href="#l-596">#</a> [16:54] * Quits: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-597" _a="KillerX_"><a href="#l-597">#</a> [16:54] * KillerX_ is now known as KillerX</li>
+ <li id="l-598" _a="annevk"><a href="#l-598">#</a> [16:54] &lt;annevk&gt; <a href="http://dvcs.w3.org/hg/encoding/raw-file/tip/Overview.html#big5">http://dvcs.w3.org/hg/encoding/raw-file/tip/Overview.html#big5</a></li>
+ <li id="l-599"><a href="#l-599">#</a> [16:58] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-600" _a="davidb"><a href="#l-600">#</a> [16:58] &lt;davidb&gt; at</li>
+ <li id="l-601" _a="Ms2ger"><a href="#l-601">#</a> [16:58] &lt;Ms2ger&gt; mozilla.com?</li>
+ <li id="l-602"><a href="#l-602">#</a> [16:58] * Quits: dirkpennings (~dirkpenni@90-145-26-140.bbserv.nl) (Ping timeout: 246 seconds)</li>
+ <li id="l-603" _a="annevk"><a href="#l-603">#</a> [16:59] &lt;annevk&gt; I guess I should fetch that script from foolip</li>
+ <li id="l-604" _a="annevk"><a href="#l-604">#</a> [17:00] &lt;annevk&gt; generate myself a big5 index</li>
+ <li id="l-605"><a href="#l-605">#</a> [17:05] * Quits: MacTed (~Thud@63.119.36.36) (Ping timeout: 244 seconds)</li>
+ <li id="l-606"><a href="#l-606">#</a> [17:05] * Quits: davidb (~davidb@65.93.94.10) (Quit: davidb)</li>
+ <li id="l-607" _a="gwicke"><a href="#l-607">#</a> [17:08] * gwicke is now known as gwicke_away</li>
+ <li id="l-608" _a="gwicke_away"><a href="#l-608">#</a> [17:20] * gwicke_away is now known as gwicke</li>
+ <li id="l-609" _a="Velmont" _r="Ms2ger"><a href="#l-609">#</a> [17:25] &lt;Velmont&gt; Ms2ger: Ohmy. :-) I should also test it again, -- but I've been on vacation for a while now (still am) -- so don't have my nice setup that I've got at the office.</li>
+ <li id="l-610" _a="Ms2ger" _r="Pff"><a href="#l-610">#</a> [17:25] &lt;Ms2ger&gt; Pff, vacations</li>
+ <li id="l-611" _a="Ms2ger"><a href="#l-611">#</a> [17:26] &lt;Ms2ger&gt; Those are good to get work done :)</li>
+ <li id="l-612" _a="Velmont"><a href="#l-612">#</a> [17:26] &lt;Velmont&gt; Hehe. -- Well, I managed to fsck up the only two lines I changed, missing a var and actually not doing what I said I should do in an older comment. :S</li>
+ <li id="l-613" _a="Ms2ger"><a href="#l-613">#</a> [17:27] &lt;Ms2ger&gt; That's better than messing up lines you didn't change</li>
+ <li id="l-614" _a="Velmont"><a href="#l-614">#</a> [17:27] &lt;Velmont&gt; Guess that's true ;}</li>
+ <li id="l-615"><a href="#l-615">#</a> [17:29] * Quits: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com) (Quit: Leaving...)</li>
+ <li id="l-616"><a href="#l-616">#</a> [17:39] * Joins: Areks|2 (~Areks@rs.gridnine.com)</li>
+ <li id="l-617"><a href="#l-617">#</a> [17:40] * Joins: erichynds (~ehynds@64.206.121.41)</li>
+ <li id="l-618"><a href="#l-618">#</a> [17:41] * Joins: esc_ (~esc_ape@178.115.251.173.wireless.dyn.drei.com)</li>
+ <li id="l-619"><a href="#l-619">#</a> [17:41] * Quits: Areks (~Areks@rs.gridnine.com) (Ping timeout: 272 seconds)</li>
+ <li id="l-620"><a href="#l-620">#</a> [17:45] * Quits: Areks|2 (~Areks@rs.gridnine.com) (Ping timeout: 272 seconds)</li>
+ <li id="l-621" _a="annevk"><a href="#l-621">#</a> [17:45] &lt;annevk&gt; hmm</li>
+ <li id="l-622" _a="annevk"><a href="#l-622">#</a> [17:45] &lt;annevk&gt; the first 900 or so positions have no mapping</li>
+ <li id="l-623" _a="annevk"><a href="#l-623">#</a> [17:45] &lt;annevk&gt; weird</li>
+ <li id="l-624" _a="annevk"><a href="#l-624">#</a> [17:46] &lt;annevk&gt; I now understand why foolip was wondering about that a little more</li>
+ <li id="l-625"><a href="#l-625">#</a> [17:46] * Quits: KillerX (~anant@70-36-146-62.dsl.dynamic.sonic.net) (Quit: KillerX)</li>
+ <li id="l-626"><a href="#l-626">#</a> [17:47] * Quits: eighty4 (~eighty4@unaffiliated/eighty4) (Excess Flood)</li>
+ <li id="l-627"><a href="#l-627">#</a> [17:50] * Joins: eighty4 (~eighty4@unaffiliated/eighty4)</li>
+ <li id="l-628"><a href="#l-628">#</a> [17:54] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-629"><a href="#l-629">#</a> [17:57] * Quits: nonge (~nonge@p5B326D40.dip.t-dialin.net) (Quit: Verlassend)</li>
+ <li id="l-630"><a href="#l-630">#</a> [17:58] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-631"><a href="#l-631">#</a> [17:58] * Quits: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi) (Client Quit)</li>
+ <li id="l-632"><a href="#l-632">#</a> [17:59] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-633"><a href="#l-633">#</a> [18:04] * Quits: tndrH (~Rob@adsl-77-86-116-245.karoo.KCOM.COM) (Ping timeout: 264 seconds)</li>
+ <li id="l-634"><a href="#l-634">#</a> [18:10] * Quits: jonlee (~jonlee@c-71-202-46-113.hsd1.ca.comcast.net) (Quit: jonlee)</li>
+ <li id="l-635"><a href="#l-635">#</a> [18:12] * Joins: fkm (~fkm@unaffiliated/fkm)</li>
+ <li id="l-636"><a href="#l-636">#</a> [18:17] * Joins: tndrH (~Rob@adsl-77-86-40-57.karoo.KCOM.COM)</li>
+ <li id="l-637" _a="fkm"><a href="#l-637">#</a> [18:20] &lt;fkm&gt; Hi there. I have a problem with the validator not accepting code that is valid according to the specs. The validator tells me that &quot;The text content of element time was not in the required format: The literal did not satisfy the date or time format. &lt;span&gt;&lt;time&gt;1991&lt;/time&gt; ...de la planète Mars&lt;/span&gt;&quot;. But according to the specs, the time element accepts &quot;A valid non-negative integer representing a year &lt;time&gt;2011&lt;/time&gt;&quot;.</li>
+ <li id="l-638" _a="fkm"><a href="#l-638">#</a> [18:20] &lt;fkm&gt; The page in question is <a href="http://dev.snemelk.ch/pages/bonfire/iam/artist.html">http://dev.snemelk.ch/pages/bonfire/iam/artist.html</a></li>
+ <li id="l-639" _a="fkm"><a href="#l-639">#</a> [18:20] &lt;fkm&gt; The specs I have consulted are <a href="http://www.w3.org/TR/html5/the-time-element.html">http://www.w3.org/TR/html5/the-time-element.html</a> and <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-time-element">http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-time-element</a></li>
+ <li id="l-640" _a="fkm"><a href="#l-640">#</a> [18:20] &lt;fkm&gt; Am I missing something or is this a bug in the validator? I tried validator.w3.org and also the underlying validator.nu to see if the problem is with the implementation by the W3C but both tell me the same thing.</li>
+ <li id="l-641" _a="Philip`" _r="fkm"><a href="#l-641">#</a> [18:23] &lt;Philip`&gt; fkm: <a href="http://bugzilla.validator.nu/show_bug.cgi?id=913">http://bugzilla.validator.nu/show_bug.cgi?id=913</a> sounds like it might be relevant</li>
+ <li id="l-642" _a="Philip`"><a href="#l-642">#</a> [18:23] &lt;Philip`&gt; MikeSmith may know</li>
+ <li id="l-643" _a="[tm]" _r="fkm"><a href="#l-643">#</a> [18:25] &lt;[tm]&gt; fkm: i think the validator code is not yup to date with the spec</li>
+ <li id="l-644" _a="fkm"><a href="#l-644">#</a> [18:26] &lt;fkm&gt; Ok. In that case, there is still hope for me yet :-)</li>
+ <li id="l-645" _a="fkm"><a href="#l-645">#</a> [18:26] &lt;fkm&gt; Thank you both for the feedback!</li>
+ <li id="l-646" _a="[tm]"><a href="#l-646">#</a> [18:26] &lt;[tm]&gt; either file a bug or comment on whatever existing one there might be</li>
+ <li id="l-647" _a="[tm]"><a href="#l-647">#</a> [18:27] &lt;[tm]&gt; time element should really just be dropped</li>
+ <li id="l-648" _a="fkm"><a href="#l-648">#</a> [18:27] &lt;fkm&gt; I have prepared an email to the W3C validator mailing-list. But I guess I could post it on the validator.nu bug-tracker.</li>
+ <li id="l-649" _a="[tm]"><a href="#l-649">#</a> [18:27] &lt;[tm]&gt; it was a mistake to add it to begin with</li>
+ <li id="l-650" _a="[tm]" _r="fkm"><a href="#l-650">#</a> [18:28] &lt;[tm]&gt; fkm:  yeah</li>
+ <li id="l-651" _a="fkm"><a href="#l-651">#</a> [18:28] &lt;fkm&gt; I kind of like the time element. At least more than the new b, i and, u elements ;-)</li>
+ <li id="l-652"><a href="#l-652">#</a> [18:29] * Joins: drublic (~drublic@frbg-5f732098.pool.mediaWays.net)</li>
+ <li id="l-653" _a="[tm]"><a href="#l-653">#</a> [18:29] &lt;[tm]&gt; yeah well</li>
+ <li id="l-654" _a="[tm]"><a href="#l-654">#</a> [18:29] &lt;[tm]&gt; those aren't new</li>
+ <li id="l-655" _a="Ms2ger" _r="annevk"><a href="#l-655">#</a> [18:29] &lt;Ms2ger&gt; annevk, so what are these code points supposed to map to now?</li>
+ <li id="l-656" _a="annevk" _r="Ms2ger"><a href="#l-656">#</a> [18:30] &lt;annevk&gt; Ms2ger: not in a map, they'll become U+FFFD</li>
+ <li id="l-657" _a="annevk" _r="Ms2ger"><a href="#l-657">#</a> [18:30] &lt;annevk&gt; Ms2ger: already implemented in Gecko</li>
+ <li id="l-658" _a="Ms2ger"><a href="#l-658">#</a> [18:30] &lt;Ms2ger&gt; Oh</li>
+ <li id="l-659" _a="Ms2ger"><a href="#l-659">#</a> [18:30] &lt;Ms2ger&gt; If I don't need to do anything, go ahead :)</li>
+ <li id="l-660" _a="annevk" _r="well"><a href="#l-660">#</a> [18:30] &lt;annevk&gt; well, not sure about trunk</li>
+ <li id="l-661" _a="annevk"><a href="#l-661">#</a> [18:30] &lt;annevk&gt; did you change encodings already?</li>
+ <li id="l-662" _a="Ms2ger"><a href="#l-662">#</a> [18:30] &lt;Ms2ger&gt; I haven't changed much lately</li>
+ <li id="l-663" _a="fkm" _r="[tm]"><a href="#l-663">#</a> [18:31] &lt;fkm&gt; [tm]: I know. But with HTML5 they have a new, &quot;semantic&quot; meaning. But it is not my place to question the HTML specs. I am too much of a rookie to go there.</li>
+ <li id="l-664" _a="Ms2ger"><a href="#l-664">#</a> [18:32] &lt;Ms2ger&gt; Hah</li>
+ <li id="l-665" _a="Ms2ger"><a href="#l-665">#</a> [18:32] &lt;Ms2ger&gt; It's the rookies that need to question the spec</li>
+ <li id="l-666" _a="Ms2ger"><a href="#l-666">#</a> [18:32] &lt;Ms2ger&gt; Because we all got used to it</li>
+ <li id="l-667" _a="fkm"><a href="#l-667">#</a> [18:32] &lt;fkm&gt; I will keep that in mind :-)</li>
+ <li id="l-668" _a="Ms2ger"><a href="#l-668">#</a> [18:33] &lt;Ms2ger&gt; (Not on the meaning of b and i, though... Those have been discussed to death :))</li>
+ <li id="l-669" _a="annevk" _r="fkm"><a href="#l-669">#</a> [18:34] &lt;annevk&gt; fkm: it's always best to question things, but beware that you might not find logic, especially with web standards</li>
+ <li id="l-670" _a="annevk"><a href="#l-670">#</a> [18:34] &lt;annevk&gt; I guess I could update my test</li>
+ <li id="l-671" _a="[tm]"><a href="#l-671">#</a> [18:40] &lt;[tm]&gt; if one of you in Belgium or Netherlands is interested in doing a three hour tutorial in Belgium this summer our fall, lemme know</li>
+ <li id="l-672" _a="[tm]"><a href="#l-672">#</a> [18:40] &lt;[tm]&gt; i doubt there is much money involved</li>
+ <li id="l-673" _a="[tm]"><a href="#l-673">#</a> [18:40] &lt;[tm]&gt; if any</li>
+ <li id="l-674" _a="[tm]"><a href="#l-674">#</a> [18:42] &lt;[tm]&gt; Benelux</li>
+ <li id="l-675"><a href="#l-675">#</a> [18:42] * Joins: pablof (~pablof@144.189.101.1)</li>
+ <li id="l-676" _a="[tm]"><a href="#l-676">#</a> [18:42] &lt;[tm]&gt; your Belgian villages have some crazy names</li>
+ <li id="l-677" _a="annevk"><a href="#l-677">#</a> [18:43] &lt;annevk&gt; Benelux is actually 3 countries</li>
+ <li id="l-678" _a="annevk"><a href="#l-678">#</a> [18:43] &lt;annevk&gt; not a place</li>
+ <li id="l-679" _a="[tm]"><a href="#l-679">#</a> [18:43] &lt;[tm]&gt; oh</li>
+ <li id="l-680" _a="[tm]"><a href="#l-680">#</a> [18:43] &lt;[tm]&gt; shows WTF i know</li>
+ <li id="l-681" _a="annevk"><a href="#l-681">#</a> [18:44] &lt;annevk&gt; BElgium/NEtherlands/LUXembourg</li>
+ <li id="l-682" _a="[tm]"><a href="#l-682">#</a> [18:44] &lt;[tm]&gt; ah</li>
+ <li id="l-683"><a href="#l-683">#</a> [18:45] * Quits: pablof (~pablof@144.189.101.1) (Remote host closed the connection)</li>
+ <li id="l-684" _a="[tm]"><a href="#l-684">#</a> [18:45] &lt;[tm]&gt; Hmm so i guess this is in the Netherlands</li>
+ <li id="l-685" _a="[tm]"><a href="#l-685">#</a> [18:46] &lt;[tm]&gt; +31</li>
+ <li id="l-686" _a="[tm]"><a href="#l-686">#</a> [18:47] &lt;[tm]&gt; man i can't super the crusade against alcohol</li>
+ <li id="l-687" _a="annevk"><a href="#l-687">#</a> [18:49] &lt;annevk&gt; yeah that's NL</li>
+ <li id="l-688" class="flagged" _a="[tm]"><a href="#l-688">#</a> [18:49] &lt;[tm]&gt; alcohol is the only thing that makes attending most of these meetings and conferences tolerable</li>
+ <li id="l-689" class="flagged" _a="[tm]"><a href="#l-689">#</a> [18:50] &lt;[tm]&gt; telcons too</li>
+ <li id="l-690" _a="TabAtkins"><a href="#l-690">#</a> [18:50] &lt;TabAtkins&gt; It does kinda suck when half the conf occurs in bars that are too loud to have good discussion in, but feeling excluded by drinking at all is venturing too far into the &quot;accomodate my personal preferences!&quot; territory.</li>
+ <li id="l-691"><a href="#l-691">#</a> [18:52] * Joins: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-692" _a="annevk"><a href="#l-692">#</a> [18:52] &lt;annevk&gt; solve all the social problems!</li>
+ <li id="l-693" _a="[tm]"><a href="#l-693">#</a> [18:55] &lt;[tm]&gt; the suggested alternative of after meetings at a coffee shop doesn't really cut it</li>
+ <li id="l-694" _a="fkm"><a href="#l-694">#</a> [18:55] &lt;fkm&gt; Concerning the problem with the validator. Should I add my example as a testcase or an additional comment?</li>
+ <li id="l-695" _a="TabAtkins"><a href="#l-695">#</a> [18:55] &lt;TabAtkins&gt; ...huh.  I have absolutely no idea what this &quot;Hypertext Layout, Reading Speed and Comprehension&quot; thread is about.</li>
+ <li id="l-696" _a="TabAtkins"><a href="#l-696">#</a> [18:55] &lt;TabAtkins&gt; (Also he doesnt' use serial comma ARGH)</li>
+ <li id="l-697" _a="TabAtkins"><a href="#l-697">#</a> [18:55] &lt;TabAtkins&gt; As far as I can tell, someone decided to just collect a bunch of articles and say &quot;Hey, these articles describe things vaguely related to what CSS3 Text cares about.  Enjoy!&quot;.</li>
+ <li id="l-698" _a="[tm]"><a href="#l-698">#</a> [18:55] &lt;[tm]&gt; that's like going to an AA meeting</li>
+ <li id="l-699"><a href="#l-699">#</a> [18:55] * Quits: sarro (~sarro@i5E864AF8.versanet.de) (Ping timeout: 250 seconds)</li>
+ <li id="l-700" _a="[tm]" _r="TabAtkins"><a href="#l-700">#</a> [18:55] &lt;[tm]&gt; TabAtkins: is that from the www-style list?</li>
+ <li id="l-701" _a="TabAtkins"><a href="#l-701">#</a> [18:55] &lt;TabAtkins&gt; Yes.</li>
+ <li id="l-702" _a="[tm]"><a href="#l-702">#</a> [18:56] &lt;[tm]&gt; i think you're the only one still subscribed to that list</li>
+ <li id="l-703" _a="TabAtkins"><a href="#l-703">#</a> [18:56] &lt;TabAtkins&gt; hahaha</li>
+ <li id="l-704" _a="hober"><a href="#l-704">#</a> [18:56] &lt;hober&gt; not the only one</li>
+ <li id="l-705"><a href="#l-705">#</a> [18:57] * Parts: th3_Chr1s (~christoph@p54ABE16F.dip.t-dialin.net)</li>
+ <li id="l-706" _a="[tm]"><a href="#l-706">#</a> [18:57] &lt;[tm]&gt; ok two of you</li>
+ <li id="l-707"><a href="#l-707">#</a> [18:58] * Joins: paul_irish (~paul_iris@ve.hsh6wjwx.vesrv.com)</li>
+ <li id="l-708"><a href="#l-708">#</a> [18:58] * Quits: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi) (Remote host closed the connection)</li>
+ <li id="l-709"><a href="#l-709">#</a> [18:58] * Joins: smaug____ (~chatzilla@YZKMMMCIV.gprs.sl-laajakaista.fi)</li>
+ <li id="l-710" _a="[tm]" _r="hober"><a href="#l-710">#</a> [18:59] &lt;[tm]&gt; hober: btw you rock mightily for fighting the good fight on html WG CPs</li>
+ <li id="l-711" _a="TabAtkins"><a href="#l-711">#</a> [18:59] &lt;TabAtkins&gt; Indeed.</li>
+ <li id="l-712" _a="TabAtkins"><a href="#l-712">#</a> [18:59] &lt;TabAtkins&gt; I gave up.</li>
+ <li id="l-713" _a="TabAtkins"><a href="#l-713">#</a> [18:59] &lt;TabAtkins&gt; Not worth the effort when it's a coin-toss anyway.</li>
+ <li id="l-714" _a="[tm]"><a href="#l-714">#</a> [19:00] &lt;[tm]&gt; no comment</li>
+ <li id="l-715" _a="[tm]"><a href="#l-715">#</a> [19:00] &lt;[tm]&gt; expletive deleted</li>
+ <li id="l-716" _a="hober" _r="[tm]"><a href="#l-716">#</a> [19:02] &lt;hober&gt; [tm]: thanks! sometimes i think i'm the only one who takes seriously the charter requirement to seek convergence with the whatwg</li>
+ <li id="l-717" _a="annevk" _r="Ms2ger"><a href="#l-717">#</a> [19:02] &lt;annevk&gt; Ms2ger: <a href="http://dump.testsuite.org/encoding/single-byte-test.html">http://dump.testsuite.org/encoding/single-byte-test.html</a> seems not much has landed</li>
+ <li id="l-718" _a="Ms2ger"><a href="#l-718">#</a> [19:04] &lt;Ms2ger&gt; Sounds right</li>
+ <li id="l-719" _a="eseidel" _r="Ms2ger"><a href="#l-719">#</a> [19:05] &lt;eseidel&gt; Ms2ger: what about feature strings?</li>
+ <li id="l-720"><a href="#l-720">#</a> [19:05] * Joins: jernoble (~jernoble@17.212.152.13)</li>
+ <li id="l-721"><a href="#l-721">#</a> [19:05] * Quits: drublic (~drublic@frbg-5f732098.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-722" _a="Ms2ger" _r="eseidel"><a href="#l-722">#</a> [19:06] &lt;Ms2ger&gt; eseidel, we'd like to put a static list in DOM4</li>
+ <li id="l-723" _a="Ms2ger"><a href="#l-723">#</a> [19:06] &lt;Ms2ger&gt; And then lock the door and throw away the key</li>
+ <li id="l-724"><a href="#l-724">#</a> [19:06] * Joins: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-725" _a="TabAtkins"><a href="#l-725">#</a> [19:06] &lt;TabAtkins&gt; Yes omg</li>
+ <li id="l-726" _a="annevk"><a href="#l-726">#</a> [19:07] &lt;annevk&gt; <a href="http://wiki.whatwg.org/wiki/DOM_features">http://wiki.whatwg.org/wiki/DOM_features</a> has a start</li>
+ <li id="l-727"><a href="#l-727">#</a> [19:07] * Quits: malcolmva (~malcolmva@pool-74-108-142-22.nycmny.fios.verizon.net) (Ping timeout: 276 seconds)</li>
+ <li id="l-728" _a="eseidel" _r="Ms2ger"><a href="#l-728">#</a> [19:08] &lt;eseidel&gt; Ms2ger: I support</li>
+ <li id="l-729"><a href="#l-729">#</a> [19:08] * Quits: nesta_ (~nesta_@143.99.219.87.dynamic.jazztel.es) (Quit: nesta_)</li>
+ <li id="l-730" _a="hober" _r="yes"><a href="#l-730">#</a> [19:08] &lt;hober&gt; yes, feature strings need to DIAF</li>
+ <li id="l-731" _a="eseidel" _r="TabAtkins"><a href="#l-731">#</a> [19:09] &lt;eseidel&gt; TabAtkins: ideally would like to only return YES for things which are requried for web compat</li>
+ <li id="l-732" _a="Ms2ger"><a href="#l-732">#</a> [19:09] &lt;Ms2ger&gt; Can either of you fill in the blanks for WebKit? :)</li>
+ <li id="l-733" _a="eseidel" _r="Ms2ger"><a href="#l-733">#</a> [19:09] &lt;eseidel&gt; Ms2ger: and NO for everythgin else</li>
+ <li id="l-734" _a="Ms2ger"><a href="#l-734">#</a> [19:09] &lt;Ms2ger&gt; Agreed</li>
+ <li id="l-735" _a="TabAtkins"><a href="#l-735">#</a> [19:09] &lt;TabAtkins&gt; Yeah.</li>
+ <li id="l-736"><a href="#l-736">#</a> [19:10] * Joins: malcolmva (~malcolmva@pool-74-108-142-22.nycmny.fios.verizon.net)</li>
+ <li id="l-737" _a="Ms2ger"><a href="#l-737">#</a> [19:10] &lt;Ms2ger&gt; But first, data! :)</li>
+ <li id="l-738" _a="eseidel" _r="Ms2ger"><a href="#l-738">#</a> [19:10] &lt;eseidel&gt; Ms2ger: <a href="http://trac.webkit.org/browser/trunk/Source/WebCore/dom/DOMImplementation.cpp#L220">http://trac.webkit.org/browser/trunk/Source/WebCore/dom/DOMImplementation.cpp#L220</a></li>
+ <li id="l-739" _a="Ms2ger"><a href="#l-739">#</a> [19:11] &lt;Ms2ger&gt; On the wiki! ;)</li>
+ <li id="l-740" _a="eseidel" _r="Ms2ger"><a href="#l-740">#</a> [19:11] &lt;eseidel&gt; Ms2ger: but it should be very very easy to write some simple js to test</li>
+ <li id="l-741" _a="eseidel" _r="Ms2ger"><a href="#l-741">#</a> [19:11] &lt;eseidel&gt; Ms2ger: sorry, wiki's and I don't get along :)</li>
+ <li id="l-742" _a="eseidel"><a href="#l-742">#</a> [19:11] &lt;eseidel&gt; I'm a reader, not a writer :p</li>
+ <li id="l-743"><a href="#l-743">#</a> [19:11] * Joins: sarro (~sarro@i5E864AF8.versanet.de)</li>
+ <li id="l-744"><a href="#l-744">#</a> [19:12] * Quits: jernoble (~jernoble@17.212.152.13) (Quit: jernoble)</li>
+ <li id="l-745" _a="annevk"><a href="#l-745">#</a> [19:12] &lt;annevk&gt; that is prolly sufficient</li>
+ <li id="l-746" _a="annevk"><a href="#l-746">#</a> [19:13] &lt;annevk&gt; i'll just dump the link in the wiki</li>
+ <li id="l-747"><a href="#l-747">#</a> [19:14] * Joins: jernoble (~jernoble@2620:149:4:1b01:fde9:545e:e1f7:c188)</li>
+ <li id="l-748" _a="Ms2ger" _r="eseidel"><a href="#l-748">#</a> [19:14] &lt;Ms2ger&gt; eseidel, I love how it builds a hashset in isEvents3Feature, for one string :)</li>
+ <li id="l-749" _a="annevk" _r="whoa"><a href="#l-749">#</a> [19:15] &lt;annevk&gt; whoa, SVG went nuclear with features</li>
+ <li id="l-750" _a="annevk"><a href="#l-750">#</a> [19:15] &lt;annevk&gt; what kind of code did they expect authors to write?</li>
+ <li id="l-751" _a="Ms2ger"><a href="#l-751">#</a> [19:16] &lt;Ms2ger&gt; Well</li>
+ <li id="l-752" _a="shepazu" _r="annevk"><a href="#l-752">#</a> [19:16] &lt;shepazu&gt; annevk: huh?</li>
+ <li id="l-753" _a="Ms2ger"><a href="#l-753">#</a> [19:16] &lt;Ms2ger&gt; You can use them from markup too, iirc</li>
+ <li id="l-754" _a="TabAtkins" _r="Yeah"><a href="#l-754">#</a> [19:16] &lt;TabAtkins&gt; Yeah, the feature strings are used in &lt;switch&gt;</li>
+ <li id="l-755" _a="eseidel" _r="Ms2ger"><a href="#l-755">#</a> [19:20] &lt;eseidel&gt; Ms2ger: this is performance critcal code you're readnig here</li>
+ <li id="l-756" _a="eseidel" _r="Ms2ger"><a href="#l-756">#</a> [19:20] &lt;eseidel&gt; Ms2ger: we have our best men on it</li>
+ <li id="l-757" _a="eseidel" _r="Ms2ger"><a href="#l-757">#</a> [19:20] &lt;eseidel&gt; Ms2ger: namely, me. :)  (I think I wrote that section)</li>
+ <li id="l-758" _a="Ms2ger" _r="Ah"><a href="#l-758">#</a> [19:21] &lt;Ms2ger&gt; Ah, so that's why we're winning the browser wars ;)</li>
+ <li id="l-759" _a="eseidel" _r="oh"><a href="#l-759">#</a> [19:21] &lt;eseidel&gt; oh, I just thought we were all singing kareoke at the local browser pub</li>
+ <li id="l-760" _a="eseidel"><a href="#l-760">#</a> [19:22] &lt;eseidel&gt; (and SVG was drunk in the corner, spouting about fonts and feature strings)</li>
+ <li id="l-761" class="flagged" _a="Ms2ger"><a href="#l-761">#</a> [19:22] &lt;Ms2ger&gt; Then I'd feel excluded :(</li>
+ <li id="l-762" class="flagged" _a="Ms2ger"><a href="#l-762">#</a> [19:22] &lt;Ms2ger&gt; They don't like letting AIs into bars...</li>
+ <li id="l-763" _a="TabAtkins"><a href="#l-763">#</a> [19:22] &lt;TabAtkins&gt; You and bz can go have AI fun somewhere.</li>
+ <li id="l-764" _a="TabAtkins"><a href="#l-764">#</a> [19:22] &lt;TabAtkins&gt; (Pretty sure the thing I met at SXSW was just a skinvelope controlled by bz.)</li>
+ <li id="l-765" _a="Ms2ger"><a href="#l-765">#</a> [19:23] &lt;Ms2ger&gt; We've done that enough when he was building me</li>
+ <li id="l-766" _a="Ms2ger" _r="Also"><a href="#l-766">#</a> [19:24] &lt;Ms2ger&gt; Also, TabAtkins, when are you going to write the box tree spec? :)</li>
+ <li id="l-767" _a="TabAtkins"><a href="#l-767">#</a> [19:25] &lt;TabAtkins&gt; After I write the parsing spec, which I'm in the middle of right now.</li>
+ <li id="l-768" _a="TabAtkins"><a href="#l-768">#</a> [19:25] &lt;TabAtkins&gt; Or actually, roughly in the beginning, but still.</li>
+ <li id="l-769" _a="[tm]"><a href="#l-769">#</a> [19:28] &lt;[tm]&gt; He refused to accept vice in exchange for his lulz</li>
+ <li id="l-770"><a href="#l-770">#</a> [19:28] * Quits: jernoble (~jernoble@2620:149:4:1b01:fde9:545e:e1f7:c188) (Quit: jernoble)</li>
+ <li id="l-771" _a="annevk" _r="shepazu"><a href="#l-771">#</a> [19:33] &lt;annevk&gt; shepazu: just that has so many</li>
+ <li id="l-772" _a="annevk" _r="TabAtkins"><a href="#l-772">#</a> [19:33] &lt;annevk&gt; TabAtkins: kind of jealous now</li>
+ <li id="l-773" _a="annevk"><a href="#l-773">#</a> [19:35] &lt;annevk&gt; &quot;WAI-Engage is an open forum for responsive development of material</li>
+ <li id="l-774" _a="annevk"><a href="#l-774">#</a> [19:35] &lt;annevk&gt; supporting web accessibility, including support for Web Accessibility</li>
+ <li id="l-775" _a="annevk"><a href="#l-775">#</a> [19:35] &lt;annevk&gt; Initiative (WAI) resources.&quot;</li>
+ <li id="l-776" _a="annevk"><a href="#l-776">#</a> [19:35] &lt;annevk&gt; I don't even know what that means...</li>
+ <li id="l-777"><a href="#l-777">#</a> [19:46] * Joins: teleject (~christoph@70.116.86.65)</li>
+ <li id="l-778" _a="Ms2ger" _r="TabAtkins"><a href="#l-778">#</a> [19:49] &lt;Ms2ger&gt; TabAtkins, including zcorpan's quirks stuff?</li>
+ <li id="l-779" _a="TabAtkins" _r="Ms2ger"><a href="#l-779">#</a> [19:50] &lt;TabAtkins&gt; Ms2ger: Um, sure!</li>
+ <li id="l-780" _a="TabAtkins"><a href="#l-780">#</a> [19:50] * TabAtkins has to actually look at that spec.</li>
+ <li id="l-781" _a="moo-_-"><a href="#l-781">#</a> [19:53] &lt;moo-_-&gt; I have this really ambitious idea: I'd like that sites could suggest color and background colour for tabs besides the site icon. I know it's not going to happen very easily, but if it were to happen how I should take this idea forward. creating chrome + ff add-ons supporting this, promoting them like mad and then hope it is adopted by the browsers themselves some point?</li>
+ <li id="l-782" _a="moo-_-"><a href="#l-782">#</a> [19:54] &lt;moo-_-&gt; this would be mostly for usability. add-ons like colorfultabs do this already, but you need to manually configure in the sites.</li>
+ <li id="l-783" _a="TabAtkins"><a href="#l-783">#</a> [19:54] &lt;TabAtkins&gt; That sounds like a bad idea that I would hate.</li>
+ <li id="l-784" _a="jamesr" _r="TabAtkins"><a href="#l-784">#</a> [19:55] &lt;jamesr&gt; TabAtkins: &quot;That's a bad idea. You should feel bad.&quot;</li>
+ <li id="l-785" _a="Philip`"><a href="#l-785">#</a> [19:55] &lt;Philip`&gt; Sounds like it should be as popular as IE's scrollbar colouring CSS</li>
+ <li id="l-786" _a="TabAtkins" _r="Well"><a href="#l-786">#</a> [19:55] &lt;TabAtkins&gt; Well, moo-_- shouldn't feel bad.  I'm just saying, I would hate it.</li>
+ <li id="l-787" _a="TabAtkins"><a href="#l-787">#</a> [19:55] &lt;TabAtkins&gt; And since I'm clearly representative of all users...</li>
+ <li id="l-788" _a="jamesr" _r="Philip`"><a href="#l-788">#</a> [19:55] &lt;jamesr&gt; Philip`, you mean WebKit's? IE has that too?</li>
+ <li id="l-789" _a="TabAtkins"><a href="#l-789">#</a> [19:55] &lt;TabAtkins&gt; Pretty sure we copied IE there.</li>
+ <li id="l-790" _a="moo-_-" _r="TabAtkins"><a href="#l-790">#</a> [19:56] &lt;moo-_-&gt; TabAtkins: ok, let me ask then is there anything we could do to make tabs / windows / bookmarks / etc. more distinctive besides their favicon?</li>
+ <li id="l-791" _a="Philip`" _r="jamesr"><a href="#l-791">#</a> [19:56] &lt;Philip`&gt; jamesr: <a href="http://www.javascriptkit.com/howto/scrollbarcolor.shtml">http://www.javascriptkit.com/howto/scrollbarcolor.shtml</a></li>
+ <li id="l-792" _a="moo-_-"><a href="#l-792">#</a> [19:56] &lt;moo-_-&gt; like all slashdot.org tabs would have (non-offending) green background</li>
+ <li id="l-793" _a="Philip`"><a href="#l-793">#</a> [19:56] * Philip` didn't realise WebKit had done it</li>
+ <li id="l-794" _a="jamesr" _r="Philip`"><a href="#l-794">#</a> [19:57] &lt;jamesr&gt; Philip`, WebKit has pseudoes</li>
+ <li id="l-795" _a="annevk" _r="moo-_-"><a href="#l-795">#</a> [19:57] &lt;annevk&gt; moo-_-: there are some extensions for that</li>
+ <li id="l-796" _a="jamesr"><a href="#l-796">#</a> [19:57] &lt;jamesr&gt; <a href="http://www.webkit.org/blog/363/styling-scrollbars/">http://www.webkit.org/blog/363/styling-scrollbars/</a>:</li>
+ <li id="l-797"><a href="#l-797">#</a> [19:57] * Quits: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-798" _a="annevk"><a href="#l-798">#</a> [19:57] &lt;annevk&gt; given that Apple tries to get rid of the scrollbar creating pseudos for that was a silly idea</li>
+ <li id="l-799" _a="moo-_-" _r="annevk"><a href="#l-799">#</a> [19:57] &lt;moo-_-&gt; annevk: I am aware of that</li>
+ <li id="l-800" _a="moo-_-" _r="annevk"><a href="#l-800">#</a> [19:57] &lt;moo-_-&gt; annevk: but my point was more like that websites themselves could suggest the colours</li>
+ <li id="l-801" _a="moo-_-"><a href="#l-801">#</a> [19:57] &lt;moo-_-&gt; hmm</li>
+ <li id="l-802" _a="annevk" _r="moo-_-"><a href="#l-802">#</a> [19:58] &lt;annevk&gt; moo-_-: <a href="http://wiki.whatwg.org/wiki/FAQ#Is_there_a_process_for_adding_new_features_to_a_specification.3F">http://wiki.whatwg.org/wiki/FAQ#Is_there_a_process_for_adding_new_features_to_a_specification.3F</a></li>
+ <li id="l-803" _a="annevk" _r="moo-_-"><a href="#l-803">#</a> [19:58] &lt;annevk&gt; moo-_-: might help</li>
+ <li id="l-804" _a="moo-_-" _r="annevk"><a href="#l-804">#</a> [19:58] &lt;moo-_-&gt; annevk: thanks</li>
+ <li id="l-805" _a="moo-_-"><a href="#l-805">#</a> [19:58] &lt;moo-_-&gt; this is a starting point, at least</li>
+ <li id="l-806" _a="moo-_-"><a href="#l-806">#</a> [19:58] &lt;moo-_-&gt; :)</li>
+ <li id="l-807" _a="annevk" _r="moo-_-"><a href="#l-807">#</a> [19:58] &lt;annevk&gt; moo-_-: if there's interest from authors, browser UI people, no phishing problems, no security problems, it might have a chance...</li>
+ <li id="l-808" _a="annevk" _r="moo-_-"><a href="#l-808">#</a> [19:59] &lt;annevk&gt; moo-_-: but I doubt it somewhat</li>
+ <li id="l-809" _a="annevk" _r="moo-_-"><a href="#l-809">#</a> [19:59] &lt;annevk&gt; moo-_-: the extension could use some information from the page as a hint for the color</li>
+ <li id="l-810" class="flagged" _a="dglazkov"><a href="#l-810">#</a> [20:00] &lt;dglazkov&gt; good ${time_of_day}, Whatwg!</li>
+ <li id="l-811" _a="moo-_-" _r="annevk"><a href="#l-811">#</a> [20:01] &lt;moo-_-&gt; annevk: yep. my first idea was to have (all) extension authors to agree on some way to extract this information from HTML &lt;head&gt; &lt;meta&gt;</li>
+ <li id="l-812" _a="jonlee|afk"><a href="#l-812">#</a> [20:02] * jonlee|afk is now known as jonlee</li>
+ <li id="l-813" _a="annevk" _r="moo-_-"><a href="#l-813">#</a> [20:05] &lt;annevk&gt; moo-_-: fwiw, Opera has this experimental thing with just having large tabs that show thumbnails of the pages</li>
+ <li id="l-814" _a="annevk"><a href="#l-814">#</a> [20:05] &lt;annevk&gt; I don't use it because I have a smallish screen, but it has some potential I think</li>
+ <li id="l-815"><a href="#l-815">#</a> [20:05] * Joins: rniwa (~rniwa@70-89-66-218-ca.sfba.hfc.comcastbusiness.net)</li>
+ <li id="l-816"><a href="#l-816">#</a> [20:05] * Quits: rniwa (~rniwa@70-89-66-218-ca.sfba.hfc.comcastbusiness.net) (Client Quit)</li>
+ <li id="l-817" _a="moo-_-" _r="annevk"><a href="#l-817">#</a> [20:05] &lt;moo-_-&gt; annevk: I tried that feature... nice but takes little screen estate</li>
+ <li id="l-818" _a="moo-_-" _r="annevk"><a href="#l-818">#</a> [20:06] &lt;moo-_-&gt; annevk: IE9 + Win8 also do this tab bar thumbnail thing</li>
+ <li id="l-819" _a="moo-_-"><a href="#l-819">#</a> [20:06] &lt;moo-_-&gt; but it is not good for visually grouping which pages came from which sites</li>
+ <li id="l-820" _a="moo-_-"><a href="#l-820">#</a> [20:06] &lt;moo-_-&gt; you still need to &quot;read&quot; thumbnails</li>
+ <li id="l-821"><a href="#l-821">#</a> [20:07] * Joins: sicking (~chatzilla@nat/mozilla/x-vpmbeflesdgtkjya)</li>
+ <li id="l-822"><a href="#l-822">#</a> [20:08] * Joins: jernoble (~jernoble@2620:149:4:1b01:20ac:cc68:6258:9d8b)</li>
+ <li id="l-823" _a="Ms2ger" _r="Good"><a href="#l-823">#</a> [20:09] &lt;Ms2ger&gt; Good, dglazkov</li>
+ <li id="l-824" _a="dglazkov"><a href="#l-824">#</a> [20:09] &lt;dglazkov&gt; ${time_of_day | &quot;morning&quot;}</li>
+ <li id="l-825"><a href="#l-825">#</a> [20:10] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Quit: RobbertAtWork)</li>
+ <li id="l-826"><a href="#l-826">#</a> [20:10] * Joins: RobbertAtWork (~Robbert@212.238.236.229)</li>
+ <li id="l-827"><a href="#l-827">#</a> [20:10] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Client Quit)</li>
+ <li id="l-828"><a href="#l-828">#</a> [20:11] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-829"><a href="#l-829">#</a> [20:11] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-830"><a href="#l-830">#</a> [20:13] * Joins: dbaron (~dbaron@nat/mozilla/x-xtgwebqznnpprufq)</li>
+ <li id="l-831"><a href="#l-831">#</a> [20:14] * Joins: jacobolus (~jacobolus@adsl-99-25-40-28.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-832"><a href="#l-832">#</a> [20:22] * Quits: jacobolus (~jacobolus@adsl-99-25-40-28.dsl.pltn13.sbcglobal.net) (Remote host closed the connection)</li>
+ <li id="l-833" _a="annevk" _r="hsivonen"><a href="#l-833">#</a> [20:23] &lt;annevk&gt; hsivonen: I like how it says &quot;Note: I’ve also added the prefixes versions –moz, –webkit &amp; –o for Mozilla, Webkit &amp; Opera to be compatible with the other browsers. Never forget to do the same!&quot; and then continues to just do that</li>
+ <li id="l-834" _a="annevk" _r="hsivonen"><a href="#l-834">#</a> [20:24] &lt;annevk&gt; hsivonen: but it's better than most browser advocacy</li>
+ <li id="l-835"><a href="#l-835">#</a> [20:26] * Joins: dave_levin (dave_levin@nat/google/x-gpqqdrguqeaetvah)</li>
+ <li id="l-836" _a="TabAtkins"><a href="#l-836">#</a> [20:30] &lt;TabAtkins&gt; Hrm.  I always forget what the \237 indicates in the CSS syntax definition of &quot;non-ascii&quot;.</li>
+ <li id="l-837" _a="TabAtkins"><a href="#l-837">#</a> [20:30] &lt;TabAtkins&gt; (Defined as [^\0-\237].)</li>
+ <li id="l-838" _a="annevk"><a href="#l-838">#</a> [20:30] &lt;annevk&gt; octal</li>
+ <li id="l-839" _a="annevk"><a href="#l-839">#</a> [20:31] &lt;annevk&gt; which is 159 or 0x9F</li>
+ <li id="l-840" _a="annevk"><a href="#l-840">#</a> [20:31] &lt;annevk&gt; iirc</li>
+ <li id="l-841" _a="TabAtkins"><a href="#l-841">#</a> [20:32] &lt;TabAtkins&gt; Yeah it is.  I just don't understand what the significance of 0x9f is.</li>
+ <li id="l-842" _a="TabAtkins" _r="Oh"><a href="#l-842">#</a> [20:32] &lt;TabAtkins&gt; Oh, I was looking at an extended ascii chart, not at unicode.</li>
+ <li id="l-843" _a="TabAtkins"><a href="#l-843">#</a> [20:32] &lt;TabAtkins&gt; A0 is where the real characters start again.</li>
+ <li id="l-844" _a="annevk"><a href="#l-844">#</a> [20:33] &lt;annevk&gt; it should be 0x7F</li>
+ <li id="l-845" _a="annevk"><a href="#l-845">#</a> [20:33] &lt;annevk&gt; well dunno</li>
+ <li id="l-846" _a="annevk"><a href="#l-846">#</a> [20:33] &lt;annevk&gt; CSS is weird</li>
+ <li id="l-847" _a="TabAtkins"><a href="#l-847">#</a> [20:33] &lt;TabAtkins&gt; 0x80 to 0x9F are all non-printable control characters.</li>
+ <li id="l-848" _a="TabAtkins"><a href="#l-848">#</a> [20:33] &lt;TabAtkins&gt; So I guess it's sensical to cut those out too.</li>
+ <li id="l-849" _a="TabAtkins"><a href="#l-849">#</a> [20:33] &lt;TabAtkins&gt; But it's not really &quot;non-ascii&quot; then.  ^_^</li>
+ <li id="l-850" _a="annevk"><a href="#l-850">#</a> [20:34] &lt;annevk&gt; well yeah, and there's a ton of other code points that are not actually &quot;usable&quot;</li>
+ <li id="l-851" _a="TabAtkins"><a href="#l-851">#</a> [20:34] &lt;TabAtkins&gt; Yeah.</li>
+ <li id="l-852" _a="TabAtkins"><a href="#l-852">#</a> [20:34] &lt;TabAtkins&gt; I'm guessing it was just a useful block to cut out, since it's adjacent to the ascii block.</li>
+ <li id="l-853" _a="annevk"><a href="#l-853">#</a> [20:34] &lt;annevk&gt; I can already see them discussing this in a committee meeting</li>
+ <li id="l-854" _a="annevk"><a href="#l-854">#</a> [20:35] &lt;annevk&gt; that's actually a rather funny thought</li>
+ <li id="l-855"><a href="#l-855">#</a> [20:35] * Joins: nesta_ (~nesta_@153.82.219.87.dynamic.jazztel.es)</li>
+ <li id="l-856" _a="TabAtkins"><a href="#l-856">#</a> [20:36] &lt;TabAtkins&gt; hehe</li>
+ <li id="l-857" _a="annevk"><a href="#l-857">#</a> [20:37] &lt;annevk&gt; only one decoder to go</li>
+ <li id="l-858" _a="annevk"><a href="#l-858">#</a> [20:37] &lt;annevk&gt; never imagined it would take this long, but it's starting to look pretty neat</li>
+ <li id="l-859"><a href="#l-859">#</a> [20:37] * Quits: nesta_ (~nesta_@153.82.219.87.dynamic.jazztel.es) (Client Quit)</li>
+ <li id="l-860"><a href="#l-860">#</a> [20:41] * Quits: sarro (~sarro@i5E864AF8.versanet.de) (Ping timeout: 260 seconds)</li>
+ <li id="l-861"><a href="#l-861">#</a> [20:41] * Joins: sarro (~sarro@i5E8647E3.versanet.de)</li>
+ <li id="l-862" _a="TabAtkins"><a href="#l-862">#</a> [20:41] &lt;TabAtkins&gt; Huh.  Why is parsing so complicated?</li>
+ <li id="l-863" _a="Hixie"><a href="#l-863">#</a> [20:41] &lt;Hixie&gt; dialog.show()/showModal() or dialog.open()/openModal()? I was going to use show() but the convention is to have a close() method and onclose handler</li>
+ <li id="l-864" _a="TabAtkins"><a href="#l-864">#</a> [20:41] &lt;TabAtkins&gt; It looks a lot easier when you use a grammar.</li>
+ <li id="l-865" _a="TabAtkins"><a href="#l-865">#</a> [20:41] &lt;TabAtkins&gt; Using &quot;open&quot; has an interesting parallel with &lt;details open&gt;</li>
+ <li id="l-866" _a="Hixie"><a href="#l-866">#</a> [20:42] &lt;Hixie&gt; we are going to have &lt;dialog open&gt;</li>
+ <li id="l-867" _a="Hixie"><a href="#l-867">#</a> [20:42] &lt;Hixie&gt; maybe that's a good reason not to use open()</li>
+ <li id="l-868" _a="Hixie"><a href="#l-868">#</a> [20:42] &lt;Hixie&gt; it would clash with the IDL attribute reflecting open=&quot;&quot;</li>
+ <li id="l-869" _a="Hixie"><a href="#l-869">#</a> [20:42] &lt;Hixie&gt; looks like most APIs use showModal()</li>
+ <li id="l-870" _a="Hixie"><a href="#l-870">#</a> [20:42] &lt;Hixie&gt; as opposed to openModal()</li>
+ <li id="l-871" _a="Hixie"><a href="#l-871">#</a> [20:42] * Hixie decides to stick with show</li>
+ <li id="l-872" _a="annevk" _r="TabAtkins"><a href="#l-872">#</a> [20:43] &lt;annevk&gt; TabAtkins: yeah, CSS parsing is vastly more complicated than it needs to be</li>
+ <li id="l-873"><a href="#l-873">#</a> [20:43] * Quits: erichynds (~ehynds@64.206.121.41)</li>
+ <li id="l-874" _a="annevk" _r="TabAtkins"><a href="#l-874">#</a> [20:43] &lt;annevk&gt; TabAtkins: mostly because of the grammar and nobody looking at handwriting a tokenizer</li>
+ <li id="l-875" _a="Hixie"><a href="#l-875">#</a> [20:44] &lt;Hixie&gt; css parsing is also complicated because the grammar didn't define any of the error handling</li>
+ <li id="l-876" _a="Hixie"><a href="#l-876">#</a> [20:44] &lt;Hixie&gt; so the error handling became semi-random, like html's</li>
+ <li id="l-877" _a="Hixie" _r="(well"><a href="#l-877">#</a> [20:45] &lt;Hixie&gt; (well, it defined some error handling, but only within the &quot;forward-compatible grammar&quot; set)</li>
+ <li id="l-878" _a="TabAtkins" _r="annevk"><a href="#l-878">#</a> [20:45] &lt;TabAtkins&gt; annevk: Really, the complication is just that it's an ad-hoc grammar with lots of options at a lot of points, rather than the relatively simply HTML grammar (ignoring quirks and scripts).</li>
+ <li id="l-879" _a="Hixie"><a href="#l-879">#</a> [20:46] &lt;Hixie&gt; good thing i wasn't drinking anything when i read _that_</li>
+ <li id="l-880" _a="TabAtkins" _r="Hixie"><a href="#l-880">#</a> [20:46] &lt;TabAtkins&gt; Hixie: Dude, go look at your description of the types of tokens.  There's, like, 5 of them.</li>
+ <li id="l-881" _a="Hixie"><a href="#l-881">#</a> [20:47] &lt;Hixie&gt; ignoring quirks and scripts it's pretty simple, i agree :-)</li>
+ <li id="l-882"><a href="#l-882">#</a> [20:47] * Joins: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com)</li>
+ <li id="l-883" _a="annevk"><a href="#l-883">#</a> [20:49] &lt;annevk&gt; I especially hate that escapes can occur everywhere</li>
+ <li id="l-884" _a="annevk"><a href="#l-884">#</a> [20:50] &lt;annevk&gt; I would have removed that in 2000, if I was smarter back then</li>
+ <li id="l-885" _a="Ms2ger"><a href="#l-885">#</a> [20:52] &lt;Ms2ger&gt; Oh man</li>
+ <li id="l-886" _a="Ms2ger"><a href="#l-886">#</a> [20:52] &lt;Ms2ger&gt; If I had a time machine...</li>
+ <li id="l-887" _a="Ms2ger"><a href="#l-887">#</a> [20:53] &lt;Ms2ger&gt; Killing Hitler? Nah, I'd lock Bert and howcome in a room for a few hours</li>
+ <li id="l-888"><a href="#l-888">#</a> [20:53] * Joins: RobbertAtWork (~Robbert@212.238.236.229)</li>
+ <li id="l-889" _a="TabAtkins"><a href="#l-889">#</a> [20:53] &lt;TabAtkins&gt; ...I'd create a Turing oracle and break open computation levels, brute-forcing my way to immediate godlike-AI.</li>
+ <li id="l-890" _a="Hixie"><a href="#l-890">#</a> [20:53] &lt;Hixie&gt; hah</li>
+ <li id="l-891" _a="TabAtkins"><a href="#l-891">#</a> [20:53] &lt;TabAtkins&gt; (And then be killed by it, because its value system doesn't recognize life as a useful thing.)</li>
+ <li id="l-892" _a="TabAtkins"><a href="#l-892">#</a> [20:54] &lt;TabAtkins&gt; (Or as a &quot;thing&quot; at all.)</li>
+ <li id="l-893" _a="Hixie"><a href="#l-893">#</a> [21:01] &lt;Hixie&gt; options for aligning these dialogs... use aps pos and define the static position as one that happens to result in the alignment i want; define that the element is in a positioning regime that ignores 'position' and 'float'; invent a new 'position' keyword that works like 'relative' but starts with the appropriate alignment rather than the static position (that one is harder since from CSS the new keyword would be useless without a way to define the link from one el</li>
+ <li id="l-894"><a href="#l-894">#</a> [21:04] * Quits: sedovsek (~robert@93-103-104-107.dynamic.t-2.net) (Quit: sedovsek)</li>
+ <li id="l-895"><a href="#l-895">#</a> [21:04] * Joins: sedovsek (~robert.se@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-896" _a="Hixie"><a href="#l-896">#</a> [21:05] &lt;Hixie&gt; hmm</li>
+ <li id="l-897" _a="TabAtkins"><a href="#l-897">#</a> [21:06] &lt;TabAtkins&gt; That cut off at &quot;from one el&quot; for me.</li>
+ <li id="l-898" _a="Hixie"><a href="#l-898">#</a> [21:08] &lt;Hixie&gt; from one element to another</li>
+ <li id="l-899"><a href="#l-899">#</a> [21:08] * Quits: sarro (~sarro@i5E8647E3.versanet.de) (Ping timeout: 252 seconds)</li>
+ <li id="l-900" _a="Hixie"><a href="#l-900">#</a> [21:09] &lt;Hixie&gt; should it be possible to turn a &lt;dialog&gt; that's already open into a modal dialog? or should .showModal() do nothing or throw an exception if it is already open?</li>
+ <li id="l-901" _a="TabAtkins" _r="So"><a href="#l-901">#</a> [21:09] &lt;TabAtkins&gt; So, the element() function provides a way to link one element to another. But right now it's defined to only take an id selector.</li>
+ <li id="l-902" _a="Hixie"><a href="#l-902">#</a> [21:09] &lt;Hixie&gt; (and should the answer be different if it's open and modal or open and not modal?)</li>
+ <li id="l-903" _a="Hixie" _r="TabAtkins"><a href="#l-903">#</a> [21:10] &lt;Hixie&gt; TabAtkins: the link between the elements is given by the argument to the show() method, it's not in CSS</li>
+ <li id="l-904" _a="TabAtkins" _r="Hixie"><a href="#l-904">#</a> [21:10] &lt;TabAtkins&gt; Hixie: Okay, so it's magic from CSS's perspective.  That's fine.</li>
+ <li id="l-905" _a="Hixie"><a href="#l-905">#</a> [21:10] &lt;Hixie&gt; right</li>
+ <li id="l-906" _a="Hixie"><a href="#l-906">#</a> [21:10] &lt;Hixie&gt; i'm just saying a new keyword would be kinda silly since there'd be no good way to use it in other contexts</li>
+ <li id="l-907" _a="Hixie"><a href="#l-907">#</a> [21:11] &lt;Hixie&gt; new position keyword</li>
+ <li id="l-908" _a="Hixie"><a href="#l-908">#</a> [21:11] &lt;Hixie&gt; i'm thinking either these elements should be forced into a new regime, or i should just use abs pos with a redefined static position</li>
+ <li id="l-909" _a="TabAtkins" _r="Actually"><a href="#l-909">#</a> [21:11] &lt;TabAtkins&gt; Actually, I think you should just define a new position value.</li>
+ <li id="l-910" _a="Hixie"><a href="#l-910">#</a> [21:11] &lt;Hixie&gt; what would it mean if used on a random div?</li>
+ <li id="l-911" _a="TabAtkins"><a href="#l-911">#</a> [21:11] &lt;TabAtkins&gt; It's just as magic, but it can be picked up by CSS later.</li>
+ <li id="l-912" _a="TabAtkins"><a href="#l-912">#</a> [21:12] &lt;TabAtkins&gt; I'm thinking it woudl be equivalent to 'relative'.</li>
+ <li id="l-913"><a href="#l-913">#</a> [21:12] * Joins: jacobolus (~jacobolus@70-36-236-249.dsl.static.sonic.net)</li>
+ <li id="l-914" _a="Hixie"><a href="#l-914">#</a> [21:13] &lt;Hixie&gt; could work</li>
+ <li id="l-915" _a="Hixie"><a href="#l-915">#</a> [21:14] &lt;Hixie&gt; hmm</li>
+ <li id="l-916" _a="Hixie"><a href="#l-916">#</a> [21:14] &lt;Hixie&gt; how do i have a different rule for dialogs that were given an alignment system and dialogs that should just center themselves?</li>
+ <li id="l-917" _a="Hixie"><a href="#l-917">#</a> [21:14] &lt;Hixie&gt; could be magic, i suppose</li>
+ <li id="l-918" _a="TabAtkins"><a href="#l-918">#</a> [21:14] &lt;TabAtkins&gt; Magic for now.</li>
+ <li id="l-919" _a="TabAtkins"><a href="#l-919">#</a> [21:14] &lt;TabAtkins&gt; I'll review after you lay down some text.</li>
+ <li id="l-920" _a="TabAtkins"><a href="#l-920">#</a> [21:14] &lt;TabAtkins&gt; To make sure it's not hostile to what I want to do with 'position'.</li>
+ <li id="l-921" _a="TabAtkins"><a href="#l-921">#</a> [21:15] &lt;TabAtkins&gt; Lunch now to grab an interview candidate.</li>
+ <li id="l-922" _a="Hixie"><a href="#l-922">#</a> [21:15] &lt;Hixie&gt; hehe</li>
+ <li id="l-923" _a="Hixie"><a href="#l-923">#</a> [21:15] &lt;Hixie&gt; later</li>
+ <li id="l-924" class="flagged" _a="annevk"><a href="#l-924">#</a> [21:23] &lt;annevk&gt; <a href="http://www.w3.org/2012/02/timed-text-wg-charter">http://www.w3.org/2012/02/timed-text-wg-charter</a></li>
+ <li id="l-925" _a="annevk"><a href="#l-925">#</a> [21:23] &lt;annevk&gt; o_O</li>
+ <li id="l-926"><a href="#l-926">#</a> [21:23] * Joins: erichynds (~ehynds@64.206.121.41)</li>
+ <li id="l-927" _a="Ms2ger"><a href="#l-927">#</a> [21:23] &lt;Ms2ger&gt; Wow</li>
+ <li id="l-928" _a="annevk"><a href="#l-928">#</a> [21:23] &lt;annevk&gt; &quot;A Section Edition of the Timed Text Markup Language (TTML) 1.0 Recommendation&quot;</li>
+ <li id="l-929" _a="Ms2ger" _r="LC"><a href="#l-929">#</a> [21:23] &lt;Ms2ger&gt; LC: N/A</li>
+ <li id="l-930" _a="Ms2ger" _r="CR"><a href="#l-930">#</a> [21:23] &lt;Ms2ger&gt; CR: N/A</li>
+ <li id="l-931" _a="Ms2ger" _r="PR"><a href="#l-931">#</a> [21:24] &lt;Ms2ger&gt; PR: N/A</li>
+ <li id="l-932" _a="Ms2ger" _r="Rec"><a href="#l-932">#</a> [21:24] &lt;Ms2ger&gt; Rec: November 2012</li>
+ <li id="l-933" _a="annevk"><a href="#l-933">#</a> [21:24] &lt;annevk&gt; boom</li>
+ <li id="l-934" _a="annevk"><a href="#l-934">#</a> [21:24] &lt;annevk&gt; headshot</li>
+ <li id="l-935" _a="Hixie"><a href="#l-935">#</a> [21:24] &lt;Hixie&gt; why &quot;o_O&quot; ?</li>
+ <li id="l-936" _a="Hixie"><a href="#l-936">#</a> [21:24] &lt;Hixie&gt; it's pretty normal for wgs to have their charters extended like this...</li>
+ <li id="l-937" class="flagged" _a="Hixie"><a href="#l-937">#</a> [21:25] &lt;Hixie&gt; (by &quot;normal&quot; i mean &quot;common place&quot; not &quot;sensible&quot;)</li>
+ <li id="l-938" _a="Ms2ger" _r="Well"><a href="#l-938">#</a> [21:25] &lt;Ms2ger&gt; Well, charters</li>
+ <li id="l-939" _a="Ms2ger"><a href="#l-939">#</a> [21:25] &lt;Ms2ger&gt; The former was already ruled out</li>
+ <li id="l-940" _a="annevk"><a href="#l-940">#</a> [21:26] &lt;annevk&gt; given <a href="https://www.w3.org/2000/09/dbwg/details?group=34314">https://www.w3.org/2000/09/dbwg/details?group=34314</a> it's highly surprising this is being extended</li>
+ <li id="l-941" _a="annevk"><a href="#l-941">#</a> [21:26] &lt;annevk&gt; the o_O was for W3C continuing to put effort into something the community is not really behind</li>
+ <li id="l-942" _a="Hixie"><a href="#l-942">#</a> [21:26] &lt;Hixie&gt; um...</li>
+ <li id="l-943" _a="Hixie"><a href="#l-943">#</a> [21:26] &lt;Hixie&gt; the w3c does that all the time</li>
+ <li id="l-944" _a="Hixie"><a href="#l-944">#</a> [21:26] &lt;Hixie&gt; for some definition of &quot;community&quot;</li>
+ <li id="l-945" _a="Hixie"><a href="#l-945">#</a> [21:26] &lt;Hixie&gt; e.g. rdf...</li>
+ <li id="l-946"><a href="#l-946">#</a> [21:27] * Joins: sarro (~sarro@i5E8647E3.versanet.de)</li>
+ <li id="l-947" _a="Ms2ger" _r="Heh"><a href="#l-947">#</a> [21:27] &lt;Ms2ger&gt; Heh, I don't think I've seen &quot;not in good standing&quot; before</li>
+ <li id="l-948" _a="annevk" _r="Hixie"><a href="#l-948">#</a> [21:28] &lt;annevk&gt; Hixie: true, this feels a bit different, more like another XHTML 2.0 group</li>
+ <li id="l-949" _a="annevk"><a href="#l-949">#</a> [21:29] &lt;annevk&gt; maybe I should reply with some comments</li>
+ <li id="l-950" _a="Hixie"><a href="#l-950">#</a> [21:30] &lt;Hixie&gt; xhtml2 lasted years past the point of the community not being really behind it</li>
+ <li id="l-951" class="flagged" _a="Hixie"><a href="#l-951">#</a> [21:30] &lt;Hixie&gt; xforms' charter only ran out last month</li>
+ <li id="l-952" _a="Hixie"><a href="#l-952">#</a> [21:31] &lt;Hixie&gt; (and their timeline has dates until september 2012, so i doubt they'll be closed)</li>
+ <li id="l-953" _a="Hixie"><a href="#l-953">#</a> [21:31] &lt;Hixie&gt; just let the group do it's stuff, the alternative is they come and try to force their ideas into our stuff :-P</li>
+ <li id="l-954" _a="Hixie"><a href="#l-954">#</a> [21:31] &lt;Hixie&gt; its</li>
+ <li id="l-955" _a="Ms2ger" _r="(Also"><a href="#l-955">#</a> [21:33] &lt;Ms2ger&gt; (Also, for the interested people without member access: <a href="https://www.w3.org/2000/09/dbwg/details?group=34314&amp;public=1">https://www.w3.org/2000/09/dbwg/details?group=34314&amp;public=1</a>)</li>
+ <li id="l-956" _a="annevk"><a href="#l-956">#</a> [21:33] &lt;annevk&gt; ah thanks Ms2ger, didn't know that was available</li>
+ <li id="l-957" _a="Ms2ger"><a href="#l-957">#</a> [21:34] &lt;Ms2ger&gt; &quot;The participants list is available publicly&quot;</li>
+ <li id="l-958" _a="Ms2ger"><a href="#l-958">#</a> [21:34] &lt;Ms2ger&gt; 4th bullet</li>
+ <li id="l-959" _a="annevk" _r="Hixie"><a href="#l-959">#</a> [21:34] &lt;annevk&gt; Hixie: fair enough</li>
+ <li id="l-960" _a="annevk" _r="Ms2ger"><a href="#l-960">#</a> [21:35] &lt;annevk&gt; Ms2ger: fascinating</li>
+ <li id="l-961" _a="Ms2ger"><a href="#l-961">#</a> [21:35] &lt;Ms2ger&gt; No kidding</li>
+ <li id="l-962"><a href="#l-962">#</a> [21:35] * Quits: erichynds (~ehynds@64.206.121.41)</li>
+ <li id="l-963" _a="jonlee"><a href="#l-963">#</a> [21:36] * jonlee is now known as jonlee|afk</li>
+ <li id="l-964"><a href="#l-964">#</a> [21:37] * Joins: drublic (~drublic@frbg-5f732098.pool.mediaWays.net)</li>
+ <li id="l-965"><a href="#l-965">#</a> [21:37] * Joins: pablof (~pablof@144.189.101.1)</li>
+ <li id="l-966"><a href="#l-966">#</a> [21:38] * Quits: sicking (~chatzilla@nat/mozilla/x-vpmbeflesdgtkjya) (Ping timeout: 244 seconds)</li>
+ <li id="l-967"><a href="#l-967">#</a> [21:45] * Quits: tndrH (~Rob@adsl-77-86-40-57.karoo.KCOM.COM) (Ping timeout: 246 seconds)</li>
+ <li id="l-968"><a href="#l-968">#</a> [21:46] * Joins: temp02 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-969"><a href="#l-969">#</a> [21:46] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 260 seconds)</li>
+ <li id="l-970" _a="fkm"><a href="#l-970">#</a> [21:52] &lt;fkm&gt; I have another question about the validator. I am not sure if I understood the concept of flow and phrasing content correctly. The way I understand it, flow content is the same as block elements and phrasing content is the same as inline elements or innerHTML. Following this reasoning having inline elements as direct descendants of the body should not be valid. But the validator does not complain.</li>
+ <li id="l-971" _a="fkm"><a href="#l-971">#</a> [21:52] &lt;fkm&gt; Here's an example: <a href="http://dev.snemelk.ch/tests/html5-content_model.html">http://dev.snemelk.ch/tests/html5-content_model.html</a></li>
+ <li id="l-972" _a="fkm"><a href="#l-972">#</a> [21:52] &lt;fkm&gt; Is there a flaw with my reasoning or is this another bug (out of sync problem) in the validator?</li>
+ <li id="l-973" _a="annevk"><a href="#l-973">#</a> [21:54] &lt;annevk&gt; you should read the definitions more carefully probably</li>
+ <li id="l-974" _a="fkm"><a href="#l-974">#</a> [21:54] &lt;fkm&gt; Ok. I will do that :-) Thank you!</li>
+ <li id="l-975"><a href="#l-975">#</a> [21:55] * Quits: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com) (Quit: Leaving...)</li>
+ <li id="l-976" _a="annevk"><a href="#l-976">#</a> [21:55] &lt;annevk&gt; and try to forget about block/inline-level</li>
+ <li id="l-977" _a="fkm"><a href="#l-977">#</a> [21:56] &lt;fkm&gt; I will try. But old habits die hard ;-)</li>
+ <li id="l-978"><a href="#l-978">#</a> [21:57] * Joins: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com)</li>
+ <li id="l-979"><a href="#l-979">#</a> [21:57] * Quits: jryans (~jryans@cpe-70-124-81-135.austin.res.rr.com) (Client Quit)</li>
+ <li id="l-980"><a href="#l-980">#</a> [21:58] * Joins: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90)</li>
+ <li id="l-981"><a href="#l-981">#</a> [21:58] * Joins: tndrH (~Rob@adsl-178-78-80-61.karoo.kcom.com)</li>
+ <li id="l-982" _a="Hixie" _r="fkm"><a href="#l-982">#</a> [21:59] &lt;Hixie&gt; fkm: to find out what is allowed in &lt;body&gt;, go to the body element's definition in the spec, and check it's &quot;content model&quot; description</li>
+ <li id="l-983" _a="Hixie" _r="fkm"><a href="#l-983">#</a> [21:59] &lt;Hixie&gt; fkm: follow the links from that to see what the terms mean</li>
+ <li id="l-984" _a="fkm"><a href="#l-984">#</a> [22:00] &lt;fkm&gt; Ok</li>
+ <li id="l-985" _a="fkm"><a href="#l-985">#</a> [22:00] * fkm has much to learn :-)</li>
+ <li id="l-986" _a="fkm"><a href="#l-986">#</a> [22:00] &lt;fkm&gt; Thank you both for the pointers!</li>
+ <li id="l-987"><a href="#l-987">#</a> [22:00] * Quits: danbri (~danbri@cable-146-255-148-108.dynamic.telemach.ba) (Remote host closed the connection)</li>
+ <li id="l-988"><a href="#l-988">#</a> [22:06] * Joins: othermaciej (~mjs@17.245.90.207)</li>
+ <li id="l-989"><a href="#l-989">#</a> [22:07] * Quits: othermaciej (~mjs@17.245.90.207) (Client Quit)</li>
+ <li id="l-990"><a href="#l-990">#</a> [22:12] * Quits: jacobolus (~jacobolus@70-36-236-249.dsl.static.sonic.net) (Read error: Connection reset by peer)</li>
+ <li id="l-991"><a href="#l-991">#</a> [22:20] * Quits: tantek (~tantek@70-36-139-112.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-992" _a="jonlee|afk"><a href="#l-992">#</a> [22:20] * jonlee|afk is now known as jonlee</li>
+ <li id="l-993"><a href="#l-993">#</a> [22:25] * Quits: sedovsek (~robert.se@93-103-104-107.dynamic.t-2.net) (Read error: Connection reset by peer)</li>
+ <li id="l-994"><a href="#l-994">#</a> [22:25] * Quits: teleject (~christoph@70.116.86.65) (Read error: Operation timed out)</li>
+ <li id="l-995"><a href="#l-995">#</a> [22:25] * Joins: sedovsek (~robert@93-103-90-17.dynamic.t-2.net)</li>
+ <li id="l-996"><a href="#l-996">#</a> [22:26] * Joins: foolip_ (~foolip@h128n3-g-hn-a11.ias.bredband.telia.com)</li>
+ <li id="l-997"><a href="#l-997">#</a> [22:26] * Quits: Ms2ger (~Ms2ger@91.181.161.196) (Quit: nn)</li>
+ <li id="l-998"><a href="#l-998">#</a> [22:27] * Joins: sicking (~chatzilla@nat/mozilla/x-yowifjstdpkrqmet)</li>
+ <li id="l-999"><a href="#l-999">#</a> [22:27] * Quits: sedovsek (~robert@93-103-90-17.dynamic.t-2.net) (Client Quit)</li>
+ <li id="l-1000"><a href="#l-1000">#</a> [22:29] * Quits: jamesr (jamesr@nat/google/x-kpqnummikxzvsozj) (Quit: Ex-Chat)</li>
+ <li id="l-1001"><a href="#l-1001">#</a> [22:38] * Quits: pablof (~pablof@144.189.101.1) (Remote host closed the connection)</li>
+ <li id="l-1002"><a href="#l-1002">#</a> [22:39] * Parts: fkm (~fkm@unaffiliated/fkm) (&quot;Leaving&quot;)</li>
+ <li id="l-1003"><a href="#l-1003">#</a> [22:49] * Joins: jacobolus (~jacobolus@99-7-170-126.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-1004"><a href="#l-1004">#</a> [22:49] * Joins: jamesr (jamesr@nat/google/x-obwecsomfipcfsdz)</li>
+ <li id="l-1005"><a href="#l-1005">#</a> [22:53] * Quits: kennyluck (~kennyluck@114-43-124-199.dynamic.hinet.net) (Remote host closed the connection)</li>
+ <li id="l-1006"><a href="#l-1006">#</a> [22:53] * Joins: kennyluck (~kennyluck@114-43-124-199.dynamic.hinet.net)</li>
+ <li id="l-1007"><a href="#l-1007">#</a> [22:55] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-1008"><a href="#l-1008">#</a> [22:57] * Joins: rniwa (rniwa@nat/google/x-wdmznpeqgotlqsay)</li>
+ <li id="l-1009"><a href="#l-1009">#</a> [23:07] * Quits: RobbertAtWork (~Robbert@212.238.236.229) (Quit: RobbertAtWork)</li>
+ <li id="l-1010"><a href="#l-1010">#</a> [23:07] * Quits: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-1011"><a href="#l-1011">#</a> [23:16] * Joins: othermaciej (~mjs@17.244.11.237)</li>
+ <li id="l-1012"><a href="#l-1012">#</a> [23:17] * Joins: yoshu (~josh@150.135.119.40)</li>
+ <li id="l-1013"><a href="#l-1013">#</a> [23:24] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-1014" _a="jonlee"><a href="#l-1014">#</a> [23:28] * jonlee is now known as jonlee|afk</li>
+ <li id="l-1015"><a href="#l-1015">#</a> [23:34] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120216115618])</li>
+ <li id="l-1016"><a href="#l-1016">#</a> [23:35] * Joins: pablof (~pablof@144.189.101.1)</li>
+ <li id="l-1017" _a="jonlee|afk"><a href="#l-1017">#</a> [23:35] * jonlee|afk is now known as jonlee</li>
+ <li id="l-1018" _a="jonlee"><a href="#l-1018">#</a> [23:45] * jonlee is now known as jonlee|afk</li>
+ <li id="l-1019"><a href="#l-1019">#</a> [23:47] * Quits: Necrathex (~Necrathex@82-170-160-25.ip.telfort.nl) (Remote host closed the connection)</li>
+ <li id="l-1020"><a href="#l-1020">#</a> [23:50] * Joins: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90)</li>
+ <li id="l-1021"><a href="#l-1021">#</a> [23:55] * Quits: linclark (~clark@c-67-186-35-246.hsd1.pa.comcast.net) (Quit: linclark)</li>
+ <li id="l-1022"><a href="#l-1022">#</a> [23:57] * Joins: nonge (~nonge@p5B326D40.dip.t-dialin.net)</li>
+ <li id="l-1023"><a href="#l-1023">#</a> [23:59] * Quits: timmywil (~timmywil@host-68-169-175-226.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-1024"><a href="#l-1024">#</a> Session Close: Sat Apr 07 00:00:01 2012</li>
+</ol>
+<p id="end">The end :)

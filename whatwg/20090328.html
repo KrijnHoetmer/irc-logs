@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20090328</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20090328.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2009-03-28 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Mar 28 00:00:00 2009</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:01] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:03] * Parts: ojan (n=ojan@72.14.229.81)</li>
+ <li id="l-5" _a="sicking_" _r="Hixie"><a href="#l-5">#</a> [00:15] &lt;sicking_&gt; Hixie, ping</li>
+ <li id="l-6" _a="sicking_"><a href="#l-6">#</a> [00:16] * sicking_ is now known as sicking</li>
+ <li id="l-7" _a="Hixie" _r="sicking"><a href="#l-7">#</a> [00:16] &lt;Hixie&gt; sicking: here</li>
+ <li id="l-8" _a="sicking" _r="Hixie"><a href="#l-8">#</a> [00:16] &lt;sicking&gt; Hixie, re CDATA</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:16] &lt;Hixie&gt; yes?</li>
+ <li id="l-10" _a="sicking" _r="Hixie"><a href="#l-10">#</a> [00:16] &lt;sicking&gt; Hixie, was there anything that was unclear in my latest email on the subject to the HTML list?</li>
+ <li id="l-11" _a="Hixie"><a href="#l-11">#</a> [00:17] &lt;Hixie&gt; uri?</li>
+ <li id="l-12" _a="Hixie"><a href="#l-12">#</a> [00:17] &lt;Hixie&gt; <a href="http://lists.w3.org/Archives/Public/public-html/2009Mar/0511.html">http://lists.w3.org/Archives/Public/public-html/2009Mar/0511.html</a> ?</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:18] * Quits: dglazkov (n=dglazkov@nat/google/x-07cc00c20f701a00)</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:18] &lt;Hixie&gt; insofar as i don't understand what the proposal exactly is, yes</li>
+ <li id="l-15" _a="annevk3" _r="sicking"><a href="#l-15">#</a> [00:19] &lt;annevk3&gt; sicking, could you please post your redirect proposal? Talked with ap from WebKit and he thinks the current spec module 303 for preflight request makes sense.</li>
+ <li id="l-16" _a="Hixie"><a href="#l-16">#</a> [00:19] &lt;Hixie&gt; s/module/modulo/?</li>
+ <li id="l-17" _a="annevk3"><a href="#l-17">#</a> [00:19] &lt;annevk3&gt; yes</li>
+ <li id="l-18" _a="annevk3" _r="Hixie"><a href="#l-18">#</a> [00:20] &lt;annevk3&gt; Hixie, I think the idea is to parse the data as CDATA, then if it starts with &lt;![CDATA[ and ends with ]]&gt; you strip that (ignoring whitespace) before handing it of to the style or script engine</li>
+ <li id="l-19"><a href="#l-19">#</a> [00:21] * Quits: jwalden (n=waldo@c-76-102-160-171.hsd1.ca.comcast.net) (&quot;ChatZilla 0.9.82.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-20" _a="annevk3" _r="Hixie"><a href="#l-20">#</a> [00:21] &lt;annevk3&gt; Hixie, for both HTML and SVG &lt;script&gt; and &lt;style&gt; elements</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:21] * Quits: mpilgrim (n=mark@67.217.134.48) (Read error: 113 (No route to host))</li>
+ <li id="l-22" _a="Hixie"><a href="#l-22">#</a> [00:21] &lt;Hixie&gt; in xml or in html? how do you deal with &lt;!-- magic? what about &lt;![CDATA[ ]]&gt; elsewhere? are the svgwg really ok with us not achieving their sole goal?</li>
+ <li id="l-23" _a="annevk3" _r="HTML"><a href="#l-23">#</a> [00:22] &lt;annevk3&gt; HTML; you do not deal with &lt;!-- magic. I.e. when that is there you would not do the stripping; they say they think this solution is fine</li>
+ <li id="l-24" _a="annevk3" _r="oh"><a href="#l-24">#</a> [00:24] &lt;annevk3&gt; oh, and &lt;![CDATA[ ]]&gt; elsewhere would also not be stripped or handled (so if you have a double block you'd run into issues)</li>
+ <li id="l-25" _a="Hixie"><a href="#l-25">#</a> [00:25] &lt;Hixie&gt; so uh</li>
+ <li id="l-26" _a="slightlyoff_afk"><a href="#l-26">#</a> [00:25] * slightlyoff_afk is now known as slightlyoff</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:25] &lt;Hixie&gt; why did they list one goal is they don't actually care about that goal</li>
+ <li id="l-28" _a="Hixie"><a href="#l-28">#</a> [00:25] &lt;Hixie&gt; i've been evaluating things based on the requirements they listed</li>
+ <li id="l-29" _a="annevk3"><a href="#l-29">#</a> [00:26] &lt;annevk3&gt; apparently it's not a black/white thing</li>
+ <li id="l-30" _a="annevk3"><a href="#l-30">#</a> [00:26] &lt;annevk3&gt; and this would still work for most copy/paste scenarios; just like the other solutions work for most copy/paste scenarios, but not all</li>
+ <li id="l-31" _a="annevk3"><a href="#l-31">#</a> [00:26] &lt;annevk3&gt; Simon had a different solution by the way: <a href="http://lists.w3.org/Archives/Public/public-html/2009Mar/0624.html">http://lists.w3.org/Archives/Public/public-html/2009Mar/0624.html</a></li>
+ <li id="l-32" _a="sicking" _r="Hixie"><a href="#l-32">#</a> [00:29] &lt;sicking&gt; Hixie, <a href="http://lists.w3.org/Archives/Public/public-html/2009Mar/0634.html">http://lists.w3.org/Archives/Public/public-html/2009Mar/0634.html</a></li>
+ <li id="l-33" _a="Hixie"><a href="#l-33">#</a> [00:30] &lt;Hixie&gt; oh i haven't replied to that. but no, you are incorrect; making d.w() async doesn't make it not work</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:31] &lt;Hixie&gt; it just means the parser isn't invoked reentrantly while the script is running</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:32] &lt;Hixie&gt; it's the same thing as what happens in normal &lt;script&gt; in html when you do document.write(&quot;&lt;script src=a&gt;&lt;/script&gt;...&quot;): the ... isn't parsed until after the original outer script is finished and the &quot;a&quot; script is downloaded and run.</li>
+ <li id="l-36" _a="sicking" _r="Hixie"><a href="#l-36">#</a> [00:32] &lt;sicking&gt; Hixie, and from i haven't heard anyone from the svg WG has objected to having entities inside &lt;script&gt; not work. The theory being that the far vast majority uses &lt;![CDATA[]]&gt;</li>
+ <li id="l-37" _a="sicking" _r="Hixie"><a href="#l-37">#</a> [00:33] &lt;sicking&gt; Hixie, i can find pointers to agreement that that is ok if that helps</li>
+ <li id="l-38" _a="sicking" _r="Hixie"><a href="#l-38">#</a> [00:33] &lt;sicking&gt; Hixie, ok, wasn't sure which interpreation of how d.w() was gonna work was the correct one. Spec isn't very clear.</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:34] &lt;Hixie&gt; these are two separate issues</li>
+ <li id="l-40" _a="Hixie"><a href="#l-40">#</a> [00:34] &lt;Hixie&gt; so let's start with the cdata one</li>
+ <li id="l-41" _a="sicking"><a href="#l-41">#</a> [00:34] &lt;sicking&gt; indeed</li>
+ <li id="l-42" _a="sicking"><a href="#l-42">#</a> [00:34] &lt;sicking&gt; fwiw i do treat the issues separately in the mail</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [00:35] &lt;Hixie&gt; the proposal is to remove 8.2.4.36 CDATA section state, along with all the branch that leads to that state, and then to make &lt;script&gt; amd &lt;style&gt; in SVG use the &quot;generic CDATA element parsing algorithm&quot;</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:36] &lt;Hixie&gt; and then to strip leading and trailing &lt;![CDATA[ ]]&gt; text somehow</li>
+ <li id="l-45" _a="Hixie"><a href="#l-45">#</a> [00:36] &lt;Hixie&gt; right?</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:36] &lt;Hixie&gt; or not?</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:37] * Joins: jwalden (n=waldo@c-76-102-160-171.hsd1.ca.comcast.net)</li>
+ <li id="l-48" _a="slightlyoff"><a href="#l-48">#</a> [00:40] * slightlyoff is now known as slightlyoff_afk</li>
+ <li id="l-49" _a="sicking" _r="Hixie"><a href="#l-49">#</a> [00:46] &lt;sicking&gt; Hixie, would that remove the ability to have &lt;![CDATA[]]&gt; outside of &lt;script&gt; and &lt;style&gt;?</li>
+ <li id="l-50" _a="Hixie"><a href="#l-50">#</a> [00:47] &lt;Hixie&gt; yes</li>
+ <li id="l-51" _a="sicking"><a href="#l-51">#</a> [00:47] &lt;sicking&gt; that does not seem acceptable</li>
+ <li id="l-52" _a="sicking"><a href="#l-52">#</a> [00:47] &lt;sicking&gt; why would you do that?</li>
+ <li id="l-53" _a="Hixie"><a href="#l-53">#</a> [00:47] &lt;Hixie&gt; that's what anne said you had proposed</li>
+ <li id="l-54" _a="sicking"><a href="#l-54">#</a> [00:47] &lt;sicking&gt; that was wrong :)</li>
+ <li id="l-55" _a="Hixie"><a href="#l-55">#</a> [00:47] &lt;Hixie&gt; i recommend sending an e-mail with a clear statement of the proposal</li>
+ <li id="l-56" _a="sicking" _r="Hixie"><a href="#l-56">#</a> [00:47] &lt;sicking&gt; Hixie, what is not clear in <a href="http://lists.w3.org/Archives/Public/public-html/2009Mar/0634.html">http://lists.w3.org/Archives/Public/public-html/2009Mar/0634.html</a> ?</li>
+ <li id="l-57" _a="Hixie"><a href="#l-57">#</a> [00:48] &lt;Hixie&gt; oh i didn't realise that also talked about cdata parsing</li>
+ <li id="l-58" _a="sicking" _r="Hixie"><a href="#l-58">#</a> [00:48] &lt;sicking&gt; Hixie, see the part starting with &quot;Instead, I propose the following behavior&quot;</li>
+ <li id="l-59" _a="Hixie"><a href="#l-59">#</a> [00:48] &lt;Hixie&gt; i haven't gotten to that e-mail yet</li>
+ <li id="l-60"><a href="#l-60">#</a> [00:48] * Quits: kangax (n=kangax@157.130.31.226)</li>
+ <li id="l-61" _a="sicking" _r="Hixie"><a href="#l-61">#</a> [00:48] &lt;sicking&gt; Hixie, it talks about both issues. Separately</li>
+ <li id="l-62" _a="sicking" _r="Hixie"><a href="#l-62">#</a> [00:49] &lt;sicking&gt; Hixie, except I just spotted one error</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:49] &lt;Hixie&gt; so wait, they want to make &lt;script&gt; and &lt;style&gt; work like html but everything else not work like html?</li>
+ <li id="l-64" _a="Hixie"><a href="#l-64">#</a> [00:49] &lt;Hixie&gt; i'm really confused now</li>
+ <li id="l-65" _a="Hixie"><a href="#l-65">#</a> [00:49] &lt;Hixie&gt; what's the goal here?</li>
+ <li id="l-66" _a="sicking"><a href="#l-66">#</a> [00:49] &lt;sicking&gt; i can only speak for my goals:</li>
+ <li id="l-67" _a="sicking"><a href="#l-67">#</a> [00:50] &lt;sicking&gt; 1. Make everything that exists both in HTML and SVG work the same in HTML and SVG</li>
+ <li id="l-68" _a="sicking"><a href="#l-68">#</a> [00:50] &lt;sicking&gt; 2. Make the rest of SVG work as similar as it makes sense to HTML</li>
+ <li id="l-69" _a="sicking"><a href="#l-69">#</a> [00:50] &lt;sicking&gt; 3. Eat cookies</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:51] &lt;Hixie&gt; ok well that's basically completely incompatible with the goal the svgwg have conveyed</li>
+ <li id="l-71" _a="Hixie"><a href="#l-71">#</a> [00:51] &lt;Hixie&gt; it would mean doing things like making tags that are known to never have children be void elements, and not support the /&gt; syntax, and not support cdata at all, and so on</li>
+ <li id="l-72" _a="sicking" _r="oh"><a href="#l-72">#</a> [00:51] &lt;sicking&gt; oh, also: 2.5 Make it possible for as much as possible of XML-SVG content to be copyable into HTML</li>
+ <li id="l-73" _a="Hixie"><a href="#l-73">#</a> [00:52] &lt;Hixie&gt; your goals are incompatible with themselves</li>
+ <li id="l-74" _a="sicking"><a href="#l-74">#</a> [00:53] &lt;sicking&gt; there's some &quot;as much *as possible*&quot; and &quot;as similar as it *makes sense*&quot; in there that makes it compatible</li>
+ <li id="l-75" _a="sicking"><a href="#l-75">#</a> [00:53] &lt;sicking&gt; there's no absolutes</li>
+ <li id="l-76" _a="sicking"><a href="#l-76">#</a> [00:53] &lt;sicking&gt; it's all about tradeoffs</li>
+ <li id="l-77" _a="sicking"><a href="#l-77">#</a> [00:54] &lt;sicking&gt; i'd imagine there's no one goal that is absolute. Ever. It's all relative</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:54] &lt;Hixie&gt; as similar as possible and as copyable as possible are not compatible goals</li>
+ <li id="l-79" _a="Hixie"><a href="#l-79">#</a> [00:54] &lt;Hixie&gt; i don't know how to evaluate when to do one and when to do the other</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [00:54] &lt;Hixie&gt; what is the criteria by which we know how much to not address each goal?</li>
+ <li id="l-81" _a="sicking"><a href="#l-81">#</a> [00:54] &lt;sicking&gt; that's why we have conversations</li>
+ <li id="l-82" _a="Hixie"><a href="#l-82">#</a> [00:54] &lt;Hixie&gt; how do conversations help us evaluate how far to go?</li>
+ <li id="l-83" _a="sicking"><a href="#l-83">#</a> [00:55] &lt;sicking&gt; when it comes to tradeoffs between making it similar to HTML and making it possible to copy, i'd judge it by how much existing content would we have to make not copyable, compared to how much extra compatibility would we get with HTML</li>
+ <li id="l-84" _a="sicking"><a href="#l-84">#</a> [00:55] &lt;sicking&gt; that's why i say it's all tradeoffs</li>
+ <li id="l-85" _a="sicking"><a href="#l-85">#</a> [00:56] &lt;sicking&gt; isn't that how it is with everything else in HTML5?</li>
+ <li id="l-86" _a="Hixie" _r="aha"><a href="#l-86">#</a> [00:56] &lt;Hixie&gt; aha, basing it on data</li>
+ <li id="l-87" _a="Hixie"><a href="#l-87">#</a> [00:56] &lt;Hixie&gt; ok</li>
+ <li id="l-88" _a="Hixie"><a href="#l-88">#</a> [00:56] &lt;Hixie&gt; do we have that data?</li>
+ <li id="l-89" _a="Hixie"><a href="#l-89">#</a> [00:56] &lt;Hixie&gt; i don't have an svg corpus</li>
+ <li id="l-90" _a="sicking"><a href="#l-90">#</a> [00:56] &lt;sicking&gt; very little. Just have the judgements of the SVG people</li>
+ <li id="l-91" _a="Hixie"><a href="#l-91">#</a> [00:56] &lt;Hixie&gt; if the judgements of the svg people are anything like the judgements of the html people, they're wildly off :-)</li>
+ <li id="l-92" _a="sicking"><a href="#l-92">#</a> [00:56] &lt;sicking&gt; so basically the SVG they have seen and authored</li>
+ <li id="l-93" _a="Hixie"><a href="#l-93">#</a> [00:56] &lt;Hixie&gt; ok there has to be better data than that, surely</li>
+ <li id="l-94" _a="Hixie"><a href="#l-94">#</a> [00:57] &lt;Hixie&gt; i wonder where we can get a good svg corpus</li>
+ <li id="l-95" _a="sicking" _r="yeah"><a href="#l-95">#</a> [00:57] &lt;sicking&gt; yeah, that would be great indeed</li>
+ <li id="l-96" _a="Hixie"><a href="#l-96">#</a> [00:57] &lt;Hixie&gt; Philip` had some svgs from wikipedia, i wonder if that is representative</li>
+ <li id="l-97" _a="gsnedders"><a href="#l-97">#</a> [00:57] * gsnedders waves a crazed lunatic</li>
+ <li id="l-98" _a="Philip`"><a href="#l-98">#</a> [00:57] &lt;Philip`&gt; They're not representative</li>
+ <li id="l-99" _a="Philip`"><a href="#l-99">#</a> [00:58] &lt;Philip`&gt; particularly because they (almost?) never have scripting</li>
+ <li id="l-100" _a="Hixie"><a href="#l-100">#</a> [00:58] &lt;Hixie&gt; bummer</li>
+ <li id="l-101" _a="Philip`"><a href="#l-101">#</a> [00:58] &lt;Philip`&gt; (seeing as they're designed to be flattened into PNGs by Wikipedia's thumbnailer)</li>
+ <li id="l-102"><a href="#l-102">#</a> [00:58] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-103" _a="sicking" _r="Philip`"><a href="#l-103">#</a> [00:59] &lt;sicking&gt; Philip`, is there a reason to believe that other SVG has more scripting?</li>
+ <li id="l-104" _a="Hixie"><a href="#l-104">#</a> [00:59] &lt;Hixie&gt; are there sites like for flash games where people upload their animated or scripted svgs or something?</li>
+ <li id="l-105" _a="sicking" _r="Philip`"><a href="#l-105">#</a> [00:59] &lt;sicking&gt; Philip`, though i guess the wikipedia ones have absolutely no scripts</li>
+ <li id="l-106" _a="Philip`"><a href="#l-106">#</a> [00:59] &lt;Philip`&gt; To be more precise, I should say the sample of SVGs from Wikipedia is representative of all the SVGs on Wikipedia</li>
+ <li id="l-107" _a="sicking" _r="Philip`"><a href="#l-107">#</a> [01:00] &lt;sicking&gt; Philip`, but in general i would expect SVG in general to have far less scripts</li>
+ <li id="l-108" _a="gsnedders"><a href="#l-108">#</a> [01:00] * gsnedders hopes Hixie saw his latest tweet (from six hours ago), seeming he made it just for him :P</li>
+ <li id="l-109" _a="Philip`"><a href="#l-109">#</a> [01:00] &lt;Philip`&gt; but probably not representative of all other sane collections of SVGs that one might imagine</li>
+ <li id="l-110" _a="Philip`"><a href="#l-110">#</a> [01:00] &lt;Philip`&gt; (I tried looking for SVGs on the web via 130K pages from dmoz.org, but found a grand total of about 1, so that's not a good way of getting a different sample)</li>
+ <li id="l-111" _a="Hixie" _r="gsnedders"><a href="#l-111">#</a> [01:00] &lt;Hixie&gt; gsnedders: i don't watch twitter closely</li>
+ <li id="l-112" _a="gsnedders" _r="Hixie"><a href="#l-112">#</a> [01:01] &lt;gsnedders&gt; Hixie: &quot;At a station with semaphores.&quot;</li>
+ <li id="l-113" _a="Hixie" _r="Philip`"><a href="#l-113">#</a> [01:01] &lt;Hixie&gt; Philip`: yeah my own research for svg using the google corpus didn't find a useful set of files</li>
+ <li id="l-114" _a="Hixie" _r="gsnedders"><a href="#l-114">#</a> [01:01] &lt;Hixie&gt; gsnedders: heh, britain. how quaint. :-P</li>
+ <li id="l-115" _a="gsnedders"><a href="#l-115">#</a> [01:02] &lt;gsnedders&gt; (The station I got off had electric signals!11!!!!eleventy!!!)</li>
+ <li id="l-116" _a="Philip`" _r="sicking"><a href="#l-116">#</a> [01:03] &lt;Philip`&gt; sicking: My sample of 300 from Wikipedia has zero with scripting; <a href="http://codedread.com/">http://codedread.com/</a> has one SVG with scripting; therefore SVGs outside Wikipedia definitely have more scripting than those on Wikipedia :-)</li>
+ <li id="l-117"><a href="#l-117">#</a> [01:03] * Quits: Kuruma (n=Kuruman@www1664.sakura.ne.jp) (Remote closed the connection)</li>
+ <li id="l-118" _a="sicking" _r="Philip`"><a href="#l-118">#</a> [01:03] &lt;sicking&gt; Philip`, indeed</li>
+ <li id="l-119" _a="sicking" _r="Philip`"><a href="#l-119">#</a> [01:03] &lt;sicking&gt; Philip`, though technically speaking not statistically significant difference. I think</li>
+ <li id="l-120" _a="sicking"><a href="#l-120">#</a> [01:03] &lt;sicking&gt; :)</li>
+ <li id="l-121" _a="Philip`" _r="sicking"><a href="#l-121">#</a> [01:04] &lt;Philip`&gt; sicking: The difference between 0 and 1 is infinity percent, so it must be significant!</li>
+ <li id="l-122"><a href="#l-122">#</a> [01:07] * Quits: Maurice (n=copyman@5ED548D4.cable.ziggo.nl) (&quot;Disconnected...&quot;)</li>
+ <li id="l-123"><a href="#l-123">#</a> [01:08] * Quits: svl (n=me@ip565744a7.direct-adsl.nl) (&quot;And back he spurred like a madman, shrieking a curse to the sky.&quot;)</li>
+ <li id="l-124" _a="sicking" _r="Hixie"><a href="#l-124">#</a> [01:10] &lt;sicking&gt; Hixie, btw, I also suggest that we support &lt;!CDATA[ ]]&gt; everwhere where we parse PCDATA and RCDATA. Due to goal 2 above. Sounded like Operas experiment in this area is that it doesn't break the web. But it's an orthogonal discussion to the one we're having now so I wasn't going to raise it until after</li>
+ <li id="l-125"><a href="#l-125">#</a> [01:12] * Joins: bgalbraith (n=bgalbrai@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-126" _a="annevk3" _r="sicking"><a href="#l-126">#</a> [01:14] &lt;annevk3&gt; sicking, actually, we encountered issues with supporting &lt;![CDATA[</li>
+ <li id="l-127" _a="sicking" _r="annevk3"><a href="#l-127">#</a> [01:14] &lt;sicking&gt; annevk3, big enough that you removed the support?</li>
+ <li id="l-128" _a="annevk3" _r="sicking"><a href="#l-128">#</a> [01:14] &lt;annevk3&gt; sicking, I don't think we have yet, but I think we should</li>
+ <li id="l-129"><a href="#l-129">#</a> [01:15] * Joins: Kuruma (n=Kuruman@www1664.sakura.ne.jp)</li>
+ <li id="l-130" _a="sicking" _r="annevk3"><a href="#l-130">#</a> [01:15] &lt;sicking&gt; annevk3, why not, and why?</li>
+ <li id="l-131"><a href="#l-131">#</a> [01:15] * Joins: ginger (n=nessy@124-171-38-148.dyn.iinet.net.au)</li>
+ <li id="l-132" _a="annevk3"><a href="#l-132">#</a> [01:15] &lt;annevk3&gt; because it causes issues and supporting CDATA has no real benefit</li>
+ <li id="l-133" _a="Philip`"><a href="#l-133">#</a> [01:15] * Philip` hopes that if Opera doesn't remove CDATA support, they at least make it less insane</li>
+ <li id="l-134" _a="sicking" _r="annevk3"><a href="#l-134">#</a> [01:16] &lt;sicking&gt; annevk3, i doubt you'll ever find a feature that you can deploy without any issues. The most recent example we had was a site breaking because we implemented document.readyState</li>
+ <li id="l-135" _a="annevk3" _r="sicking"><a href="#l-135">#</a> [01:16] &lt;annevk3&gt; sicking, but CDATA is not a feature, it's near useless</li>
+ <li id="l-136" _a="sicking" _r="annevk3"><a href="#l-136">#</a> [01:16] &lt;sicking&gt; annevk3, since we'll have to support &lt;![CDATA[]]&gt; inside SVG, I think the consistency would be nice</li>
+ <li id="l-137" _a="annevk3" _r="maybe"><a href="#l-137">#</a> [01:17] &lt;annevk3&gt; maybe, I'd rather remove it there too</li>
+ <li id="l-138" _a="annevk3"><a href="#l-138">#</a> [01:17] &lt;annevk3&gt; (also Opera's current CDATA support doesn't match the HTML5 spec)</li>
+ <li id="l-139" _a="sicking" _r="annevk3"><a href="#l-139">#</a> [01:18] &lt;sicking&gt; annevk3, i'd be supportive of that if we think there isn't much existing SVG content that uses it. In other words, if we don't think it'd affect the ability to copy SVG into HTML</li>
+ <li id="l-140" _a="annevk3"><a href="#l-140">#</a> [01:20] &lt;annevk3&gt; there's very little SVG so that's pretty hard to tell</li>
+ <li id="l-141" _a="annevk3"><a href="#l-141">#</a> [01:21] &lt;annevk3&gt; I don't recall ever needing it in any SVG content I've created, but then I mostly do simple things</li>
+ <li id="l-142" _a="Philip`"><a href="#l-142">#</a> [01:22] &lt;Philip`&gt; <a href="http://philip.html5.org/misc/spec-links-anim.svgz">http://philip.html5.org/misc/spec-links-anim.svgz</a></li>
+ <li id="l-143" _a="Philip`"><a href="#l-143">#</a> [01:22] &lt;Philip`&gt; That's got a script, but doesn't use CDATA</li>
+ <li id="l-144"><a href="#l-144">#</a> [01:23] * Quits: nessy (n=nessy@124-168-165-203.dyn.iinet.net.au) (Read error: 101 (Network is unreachable))</li>
+ <li id="l-145" _a="Philip`" _r="Hmm"><a href="#l-145">#</a> [01:24] &lt;Philip`&gt; Hmm, why does View Source in Firefox 3 go unbelievably slowly on that SVG file?</li>
+ <li id="l-146"><a href="#l-146">#</a> [01:24] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-147" _a="Philip`"><a href="#l-147">#</a> [01:24] &lt;Philip`&gt; If the script had to use &lt; or &amp; then I probably would have put it in &lt;![CDATA[]]&gt;</li>
+ <li id="l-148" _a="Philip`"><a href="#l-148">#</a> [01:24] &lt;Philip`&gt; but it didn't so I didn't</li>
+ <li id="l-149" _a="sicking"><a href="#l-149">#</a> [01:25] &lt;sicking&gt; have a good weekend people</li>
+ <li id="l-150" _a="Philip`" _r="Yikes"><a href="#l-150">#</a> [01:25] &lt;Philip`&gt; Yikes, FF3 uses about 400MB of RAM to view-source on that page :-/</li>
+ <li id="l-151" _a="olliej"><a href="#l-151">#</a> [01:26] * olliej opens in S4</li>
+ <li id="l-152" _a="olliej"><a href="#l-152">#</a> [01:26] * olliej wonders how badly it will fair</li>
+ <li id="l-153" _a="sicking" _r="Philip`"><a href="#l-153">#</a> [01:26] &lt;sicking&gt; Philip`, view-source will always use more memory than the actual page</li>
+ <li id="l-154"><a href="#l-154">#</a> [01:27] * Quits: ginger (n=nessy@124-171-38-148.dyn.iinet.net.au) (Read error: 60 (Operation timed out))</li>
+ <li id="l-155" _a="olliej"><a href="#l-155">#</a> [01:27] &lt;olliej&gt; memory seems to have peaked at ~600mb :-O</li>
+ <li id="l-156" _a="olliej"><a href="#l-156">#</a> [01:27] * olliej wonders wtf is happening</li>
+ <li id="l-157" _a="sicking" _r="Philip`"><a href="#l-157">#</a> [01:27] &lt;sicking&gt; Philip`, it doesn't use any entities either though, so should work find</li>
+ <li id="l-158" _a="sicking"><a href="#l-158">#</a> [01:27] &lt;sicking&gt; fine even</li>
+ <li id="l-159"><a href="#l-159">#</a> [01:28] * Quits: sicking (n=chatzill@corp-241.mountainview.mozilla.com) (&quot;ChatZilla 0.9.84 [Firefox 3.5b4pre/20090317114959]&quot;)</li>
+ <li id="l-160" _a="annevk3"><a href="#l-160">#</a> [01:28] &lt;annevk3&gt; what's the advantage of toTempURL over toDataURL? working around IE bugs?</li>
+ <li id="l-161" _a="Dashiva"><a href="#l-161">#</a> [01:29] &lt;Dashiva&gt; That's how I understood it</li>
+ <li id="l-162" _a="annevk3"><a href="#l-162">#</a> [01:29] &lt;annevk3&gt; feature design 101: don't propose a new feature to work around UA bugs in an existing feature</li>
+ <li id="l-163" _a="Dashiva"><a href="#l-163">#</a> [01:29] &lt;Dashiva&gt; Not sure why supporting toTempURL would be easier than fixing data urls</li>
+ <li id="l-164" _a="Philip`"><a href="#l-164">#</a> [01:30] &lt;Philip`&gt; I think the idea is that you should be able to say img.src = canvas.toSomeKindOfThingThatWorksInImgSrc() and have it work in browsers that don't support data URIs</li>
+ <li id="l-165" _a="annevk3" _r="Philip`"><a href="#l-165">#</a> [01:30] &lt;annevk3&gt; Philip`, right, see above</li>
+ <li id="l-166" _a="annevk3"><a href="#l-166">#</a> [01:31] &lt;annevk3&gt; nn</li>
+ <li id="l-167" _a="Philip`" _r="Dashiva"><a href="#l-167">#</a> [01:31] &lt;Philip`&gt; Dashiva: Because you can't fix data URIs in IE6</li>
+ <li id="l-168" _a="Philip`"><a href="#l-168">#</a> [01:31] &lt;Philip`&gt; (I assume)</li>
+ <li id="l-169" _a="Dashiva"><a href="#l-169">#</a> [01:32] &lt;Dashiva&gt; But can you fix toTempURL in IE6?</li>
+ <li id="l-170"><a href="#l-170">#</a> [01:32] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-171" _a="Philip`"><a href="#l-171">#</a> [01:32] &lt;Philip`&gt; If you're writing a plugin or add-on or whatever it is, then you presumably can</li>
+ <li id="l-172" _a="Philip`"><a href="#l-172">#</a> [01:33] &lt;Philip`&gt; since you can save the canvas data to disk and then use file:/// to refer to it</li>
+ <li id="l-173" _a="Philip`"><a href="#l-173">#</a> [01:33] &lt;Philip`&gt; or you can register a protocol handler for customHandler://</li>
+ <li id="l-174" _a="Dashiva"><a href="#l-174">#</a> [01:34] &lt;Dashiva&gt; Register a protocol handler for data:, feed the contents?</li>
+ <li id="l-175" _a="Philip`"><a href="#l-175">#</a> [01:34] &lt;Philip`&gt; I've got no idea whether you can do that</li>
+ <li id="l-176" _a="Philip`"><a href="#l-176">#</a> [01:34] &lt;Philip`&gt; (If you could, it'd be bad in terms of IE-compatibility with other sites that uses data: URIs)</li>
+ <li id="l-177"><a href="#l-177">#</a> [01:47] * Quits: bgalbraith (n=bgalbrai@corp-241.mountainview.mozilla.com)</li>
+ <li id="l-178" _a="hdh"><a href="#l-178">#</a> [01:50] &lt;hdh&gt; (defun last-heading () (search-backward-regexp &quot;C-x C-f&quot;) (match-string 0)) (setq mode-line-format '(:eval (last-heading)))</li>
+ <li id="l-179" _a="hdh"><a href="#l-179">#</a> [01:50] &lt;hdh&gt; idk how to plug the eval part into the existing modeline</li>
+ <li id="l-180" _a="hdh"><a href="#l-180">#</a> [01:50] &lt;hdh&gt; the text seems to keep its formatting in the matched buffer</li>
+ <li id="l-181"><a href="#l-181">#</a> [01:51] * Quits: erlehmann (n=erlehman@86.59.25.121) (Remote closed the connection)</li>
+ <li id="l-182"><a href="#l-182">#</a> [01:54] * Quits: davidb (n=davidb@bas4-toronto06-1279310263.dsl.bell.ca)</li>
+ <li id="l-183"><a href="#l-183">#</a> [02:00] * Quits: jwalden (n=waldo@c-76-102-160-171.hsd1.ca.comcast.net) (&quot;ChatZilla 0.9.82.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-184"><a href="#l-184">#</a> [02:01] * Quits: dave_levin (n=dave_lev@72.14.227.1)</li>
+ <li id="l-185"><a href="#l-185">#</a> [02:04] * Joins: nessy (n=nessy@124-171-28-204.dyn.iinet.net.au)</li>
+ <li id="l-186"><a href="#l-186">#</a> [02:06] * Quits: dimich (n=dimich@72.14.227.1)</li>
+ <li id="l-187" _a="Hixie" _r="hdh"><a href="#l-187">#</a> [02:10] &lt;Hixie&gt; hdh: interesting</li>
+ <li id="l-188"><a href="#l-188">#</a> [02:16] * Quits: tndH (n=Rob@adsl-77-86-107-105.karoo.KCOM.COM) (&quot;ChatZilla 0.9.84-rdmsoft [XULRunner 1.9.0.1/2008072406]&quot;)</li>
+ <li id="l-189"><a href="#l-189">#</a> [02:18] * Quits: atw (n=atwilson@74.125.59.1) (Read error: 110 (Connection timed out))</li>
+ <li id="l-190"><a href="#l-190">#</a> [02:28] * Joins: craigbass1976 (n=craig@64.223.240.104)</li>
+ <li id="l-191"><a href="#l-191">#</a> [02:37] * Joins: azazul (n=azazul@zelli-kojas.lanet.lv)</li>
+ <li id="l-192"><a href="#l-192">#</a> [02:37] * Parts: craigbass1976 (n=craig@64.223.240.104) (&quot;Leaving&quot;)</li>
+ <li id="l-193" _a="slightlyoff_afk"><a href="#l-193">#</a> [02:38] * slightlyoff_afk is now known as slightlyoff</li>
+ <li id="l-194" _a="slightlyoff"><a href="#l-194">#</a> [03:14] * slightlyoff is now known as slightlyoff_afk</li>
+ <li id="l-195"><a href="#l-195">#</a> [03:15] * Joins: erlehmann (n=erlehman@86.59.25.121)</li>
+ <li id="l-196" _a="slightlyoff_afk"><a href="#l-196">#</a> [03:26] * slightlyoff_afk is now known as slightlyoff</li>
+ <li id="l-197"><a href="#l-197">#</a> [03:31] * Quits: weinig (n=weinig@17.246.18.97)</li>
+ <li id="l-198"><a href="#l-198">#</a> [03:45] * Joins: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-199"><a href="#l-199">#</a> [03:49] * Quits: Andrii (n=Miranda@91.200.180.19) (&quot;Miranda IM! Smaller, Faster, Easier. <a href="http://miranda-im.org">http://miranda-im.org</a>&quot;)</li>
+ <li id="l-200"><a href="#l-200">#</a> [03:53] * Joins: doublec (n=doublec@118.93.172.205)</li>
+ <li id="l-201"><a href="#l-201">#</a> [04:01] * Joins: slightlyoff_ (n=slightly@67.218.107.254)</li>
+ <li id="l-202"><a href="#l-202">#</a> [04:12] * Quits: slightlyoff (n=slightly@nat/google/x-d83a107a121c5731) (Read error: 110 (Connection timed out))</li>
+ <li id="l-203"><a href="#l-203">#</a> [04:19] * Joins: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-204"><a href="#l-204">#</a> [04:28] * Joins: roc (n=roc@121-72-187-98.dsl.telstraclear.net)</li>
+ <li id="l-205"><a href="#l-205">#</a> [04:35] * Joins: sid0_ (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-206"><a href="#l-206">#</a> [04:38] * Joins: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-207"><a href="#l-207">#</a> [04:40] * Joins: roc_ (n=roc@121-72-187-98.dsl.telstraclear.net)</li>
+ <li id="l-208"><a href="#l-208">#</a> [04:46] * Quits: sid0 (n=sid0@unaffiliated/sid0) (Remote closed the connection)</li>
+ <li id="l-209"><a href="#l-209">#</a> [04:47] * Quits: slightlyoff_ (n=slightly@67.218.107.254)</li>
+ <li id="l-210"><a href="#l-210">#</a> [04:48] * Quits: roc (n=roc@121-72-187-98.dsl.telstraclear.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-211"><a href="#l-211">#</a> [04:56] * Quits: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-212"><a href="#l-212">#</a> [05:01] * Parts: erlehmann (n=erlehman@86.59.25.121)</li>
+ <li id="l-213"><a href="#l-213">#</a> [05:22] * Quits: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-214"><a href="#l-214">#</a> [05:49] * Joins: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-215"><a href="#l-215">#</a> [05:51] * Joins: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-216"><a href="#l-216">#</a> [05:53] * Quits: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-217"><a href="#l-217">#</a> [05:57] * Joins: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-218"><a href="#l-218">#</a> [06:19] * Quits: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-219"><a href="#l-219">#</a> [06:48] * Joins: dimich (n=dimich@72.14.224.1)</li>
+ <li id="l-220"><a href="#l-220">#</a> [06:58] * Joins: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu)</li>
+ <li id="l-221"><a href="#l-221">#</a> [07:05] * Quits: roc_ (n=roc@121-72-187-98.dsl.telstraclear.net)</li>
+ <li id="l-222"><a href="#l-222">#</a> [07:19] * Quits: annodomini (n=lambda@wikipedia/lambda)</li>
+ <li id="l-223"><a href="#l-223">#</a> [07:45] * Joins: mlpug (n=mlpug@a91-156-60-13.elisa-laajakaista.fi)</li>
+ <li id="l-224"><a href="#l-224">#</a> [07:47] * Quits: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-225"><a href="#l-225">#</a> [07:51] * Joins: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-226"><a href="#l-226">#</a> [08:11] * Quits: doublec (n=doublec@118.93.172.205) (&quot;Leaving&quot;)</li>
+ <li id="l-227"><a href="#l-227">#</a> [08:17] * Joins: olliej_ (n=oliver@c-67-164-125-23.hsd1.ca.comcast.net)</li>
+ <li id="l-228"><a href="#l-228">#</a> [08:35] * Quits: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu) (Read error: 110 (Connection timed out))</li>
+ <li id="l-229"><a href="#l-229">#</a> [08:35] * Joins: taf2_ (n=taf2@static-71-127-149-10.bltmmd.fios.verizon.net)</li>
+ <li id="l-230"><a href="#l-230">#</a> [08:36] * Quits: taf2 (n=taf2@static-71-127-149-10.bltmmd.fios.verizon.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-231"><a href="#l-231">#</a> [08:37] * Joins: zdobersek (n=zan@cpe-92-37-76-170.dynamic.amis.net)</li>
+ <li id="l-232"><a href="#l-232">#</a> [08:42] * Quits: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-233"><a href="#l-233">#</a> [08:51] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-234"><a href="#l-234">#</a> [08:55] * Quits: sid0_ (n=sid0@unaffiliated/sid0) (Remote closed the connection)</li>
+ <li id="l-235"><a href="#l-235">#</a> [08:55] * Joins: sid0 (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-236"><a href="#l-236">#</a> [08:59] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-237"><a href="#l-237">#</a> [09:09] * Quits: hdh (n=hdh@58.187.20.174) (&quot;Leaving.&quot;)</li>
+ <li id="l-238"><a href="#l-238">#</a> [09:47] * Joins: Maurice (n=copyman@5ED548D4.cable.ziggo.nl)</li>
+ <li id="l-239"><a href="#l-239">#</a> [09:51] * Quits: gavin_ (n=gavin@firefox/developer/gavin) (Remote closed the connection)</li>
+ <li id="l-240"><a href="#l-240">#</a> [09:52] * Joins: gavin_ (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-241"><a href="#l-241">#</a> [09:55] * Quits: dimich (n=dimich@72.14.224.1)</li>
+ <li id="l-242"><a href="#l-242">#</a> [09:58] * Joins: jwalden (n=waldo@c-24-6-169-169.hsd1.ca.comcast.net)</li>
+ <li id="l-243"><a href="#l-243">#</a> [10:01] * Joins: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu)</li>
+ <li id="l-244"><a href="#l-244">#</a> [10:04] * Quits: nessy (n=nessy@124-171-28-204.dyn.iinet.net.au) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-245"><a href="#l-245">#</a> [10:08] * Joins: dimich (n=dimich@c-98-203-230-54.hsd1.wa.comcast.net)</li>
+ <li id="l-246"><a href="#l-246">#</a> [10:34] * Joins: danbri (n=danbri@s55927ef8.adsl.wanadoo.nl)</li>
+ <li id="l-247"><a href="#l-247">#</a> [10:34] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-248"><a href="#l-248">#</a> [10:48] * Joins: mat_t (n=mattomas@ppp-1-128.edin-a-1.access.uk.tiscali.com)</li>
+ <li id="l-249"><a href="#l-249">#</a> [10:59] * Quits: olliej_ (n=oliver@c-67-164-125-23.hsd1.ca.comcast.net) (Read error: 60 (Operation timed out))</li>
+ <li id="l-250"><a href="#l-250">#</a> [10:59] * Quits: mat_t (n=mattomas@ppp-1-128.edin-a-1.access.uk.tiscali.com) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-251"><a href="#l-251">#</a> [10:59] * Quits: dimich (n=dimich@c-98-203-230-54.hsd1.wa.comcast.net)</li>
+ <li id="l-252"><a href="#l-252">#</a> [11:00] * Joins: nessy (n=nessy@124-171-28-204.dyn.iinet.net.au)</li>
+ <li id="l-253"><a href="#l-253">#</a> [11:10] * Joins: ROBOd (n=robod@89.122.216.38)</li>
+ <li id="l-254"><a href="#l-254">#</a> [11:35] * Joins: mstange (n=markus@pD9579181.dip0.t-ipconnect.de)</li>
+ <li id="l-255"><a href="#l-255">#</a> [11:53] * Joins: mat_t (n=mattomas@ppp-1-128.edin-a-1.access.uk.tiscali.com)</li>
+ <li id="l-256"><a href="#l-256">#</a> [11:54] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-257"><a href="#l-257">#</a> [11:55] * Quits: Amorphous (i=jan@unaffiliated/amorphous) (&quot;shutdown&quot;)</li>
+ <li id="l-258"><a href="#l-258">#</a> [11:56] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-259"><a href="#l-259">#</a> [12:00] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com) (Client Quit)</li>
+ <li id="l-260"><a href="#l-260">#</a> [12:04] * Quits: mlpug (n=mlpug@a91-156-60-13.elisa-laajakaista.fi) (Read error: 110 (Connection timed out))</li>
+ <li id="l-261"><a href="#l-261">#</a> [12:11] * Joins: Amorphous (i=jan@unaffiliated/amorphous)</li>
+ <li id="l-262"><a href="#l-262">#</a> [12:18] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-263"><a href="#l-263">#</a> [12:19] * Joins: sid0_ (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-264"><a href="#l-264">#</a> [12:23] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com) (Client Quit)</li>
+ <li id="l-265"><a href="#l-265">#</a> [12:24] * Joins: svl (n=me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-266"><a href="#l-266">#</a> [12:25] * Joins: myakura (n=myakura@p1063-ipbf3305marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-267"><a href="#l-267">#</a> [12:27] * Joins: benh_ (n=benh@91.85.204.41)</li>
+ <li id="l-268" _a="benh_"><a href="#l-268">#</a> [12:29] &lt;benh_&gt; Historical question: does anyone know why HTML4 deprecated u, s, strike, but not b/i/big/small, even though it discouraged the later? What was special about u/s/strike?</li>
+ <li id="l-269"><a href="#l-269">#</a> [12:30] * Quits: mat_t (n=mattomas@ppp-1-128.edin-a-1.access.uk.tiscali.com) (Remote closed the connection)</li>
+ <li id="l-270" _a="benh_"><a href="#l-270">#</a> [12:31] * benh_ is now known as webben</li>
+ <li id="l-271"><a href="#l-271">#</a> [12:31] * Quits: sid0 (n=sid0@unaffiliated/sid0) (Nick collision from services.)</li>
+ <li id="l-272" _a="sid0_"><a href="#l-272">#</a> [12:31] * sid0_ is now known as sid0</li>
+ <li id="l-273"><a href="#l-273">#</a> [12:32] * Joins: zdobersek1 (n=zan@cpe-92-37-65-36.dynamic.amis.net)</li>
+ <li id="l-274"><a href="#l-274">#</a> [12:34] * Quits: sid0 (n=sid0@unaffiliated/sid0) (&quot;Leaving&quot;)</li>
+ <li id="l-275"><a href="#l-275">#</a> [12:36] * Joins: zdobersek2 (n=zan@cpe-92-37-67-227.dynamic.amis.net)</li>
+ <li id="l-276"><a href="#l-276">#</a> [12:39] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-277"><a href="#l-277">#</a> [12:39] * Joins: tndH (n=Rob@adsl-77-86-107-105.karoo.KCOM.COM)</li>
+ <li id="l-278"><a href="#l-278">#</a> [12:43] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com) (Client Quit)</li>
+ <li id="l-279"><a href="#l-279">#</a> [12:46] * Quits: zdobersek (n=zan@cpe-92-37-76-170.dynamic.amis.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-280"><a href="#l-280">#</a> [12:51] * Quits: zdobersek1 (n=zan@cpe-92-37-65-36.dynamic.amis.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-281"><a href="#l-281">#</a> [13:02] * Joins: webben_ (n=benh@dip5-fw.corp.ukl.yahoo.com)</li>
+ <li id="l-282"><a href="#l-282">#</a> [13:07] * Quits: webben (n=benh@91.85.204.41) (Read error: 60 (Operation timed out))</li>
+ <li id="l-283"><a href="#l-283">#</a> [13:13] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-284"><a href="#l-284">#</a> [13:32] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-285"><a href="#l-285">#</a> [13:32] * Joins: mlpug (n=mlpug@a91-156-60-13.elisa-laajakaista.fi)</li>
+ <li id="l-286"><a href="#l-286">#</a> [13:32] * Joins: pauld (n=pauld@86.133.17.49)</li>
+ <li id="l-287"><a href="#l-287">#</a> [13:33] * Quits: pauld (n=pauld@86.133.17.49) (Client Quit)</li>
+ <li id="l-288"><a href="#l-288">#</a> [13:53] * Joins: Andrii (n=Miranda@91.200.180.78)</li>
+ <li id="l-289"><a href="#l-289">#</a> [13:59] * Quits: Andrii (n=Miranda@91.200.180.78) (&quot;Miranda IM! Smaller, Faster, Easier. <a href="http://miranda-im.org">http://miranda-im.org</a>&quot;)</li>
+ <li id="l-290" class="flagged" _a="annevk3" _r="Hixie"><a href="#l-290">#</a> [14:03] &lt;annevk3&gt; Hixie, s/buu can/but can/</li>
+ <li id="l-291" class="flagged" _a="annevk3" _r="Hixie"><a href="#l-291">#</a> [14:03] &lt;annevk3&gt; Hixie, s/is can be/can be/</li>
+ <li id="l-292" class="flagged" _a="annevk3" _r="Hixie"><a href="#l-292">#</a> [14:05] &lt;annevk3&gt; Hixie, s/sections that cause/sections cause/ (I think, the sentence does not seem correct otherwise)</li>
+ <li id="l-293" class="flagged" _a="annevk3" _r="Hixie"><a href="#l-293">#</a> [14:07] &lt;annevk3&gt; Hixie, &quot;For each &lt;span&gt;cache host&lt;/span&gt; associated with an &lt;span&gt;application cache&lt;/span&gt;&quot; Isn't a cache host always associated with one?</li>
+ <li id="l-294"><a href="#l-294">#</a> [14:07] * Joins: Andrii (n=Miranda@91.200.180.78)</li>
+ <li id="l-295"><a href="#l-295">#</a> [14:07] * Joins: sid0 (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-296"><a href="#l-296">#</a> [14:17] * Quits: jcranmer (n=jcranmer@remote.csl.tjhsst.edu) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-297"><a href="#l-297">#</a> [14:24] * Joins: mpilgrim (n=mark@67.217.134.48)</li>
+ <li id="l-298"><a href="#l-298">#</a> [14:32] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-299"><a href="#l-299">#</a> [14:37] * Joins: annodomini (n=lambda@wikipedia/lambda)</li>
+ <li id="l-300"><a href="#l-300">#</a> [14:42] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-301"><a href="#l-301">#</a> [14:42] * Joins: pauld_ (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-302"><a href="#l-302">#</a> [15:05] * Quits: annodomini (n=lambda@wikipedia/lambda)</li>
+ <li id="l-303"><a href="#l-303">#</a> [15:13] * Quits: nessy (n=nessy@124-171-28-204.dyn.iinet.net.au) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-304"><a href="#l-304">#</a> [15:21] * Quits: pauld_ (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-305"><a href="#l-305">#</a> [15:25] * Joins: jcranmer (n=jcranmer@remote.csl.tjhsst.edu)</li>
+ <li id="l-306"><a href="#l-306">#</a> [15:59] * Quits: tndH (n=Rob@adsl-77-86-107-105.karoo.KCOM.COM) (&quot;ChatZilla 0.9.84-rdmsoft [XULRunner 1.9.0.1/2008072406]&quot;)</li>
+ <li id="l-307" _a="annevk3"><a href="#l-307">#</a> [16:10] &lt;annevk3&gt; Gmail on a message I sent: &quot;4:06 PM (-1 minutes ago)&quot;</li>
+ <li id="l-308"><a href="#l-308">#</a> [16:14] * Joins: Morphous (i=jan@unaffiliated/amorphous)</li>
+ <li id="l-309"><a href="#l-309">#</a> [16:15] * Joins: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-310"><a href="#l-310">#</a> [16:21] * Quits: Amorphous (i=jan@unaffiliated/amorphous) (Nick collision from services.)</li>
+ <li id="l-311" _a="Morphous"><a href="#l-311">#</a> [16:21] * Morphous is now known as Amorphous</li>
+ <li id="l-312"><a href="#l-312">#</a> [16:23] * Quits: mpilgrim (n=mark@67.217.134.48) (Read error: 113 (No route to host))</li>
+ <li id="l-313"><a href="#l-313">#</a> [16:42] * Joins: sid0_ (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-314"><a href="#l-314">#</a> [16:57] * Quits: sid0 (n=sid0@unaffiliated/sid0) (Read error: 110 (Connection timed out))</li>
+ <li id="l-315"><a href="#l-315">#</a> [16:57] * Quits: mstange (n=markus@pD9579181.dip0.t-ipconnect.de) (&quot;ChatZilla 0.9.84-2009030221 [Firefox 3.6a1pre/20090327031146]&quot;)</li>
+ <li id="l-316" _a="Andrii" _r="annevk3"><a href="#l-316">#</a> [16:58] &lt;Andrii&gt; annevk3: google invented the time machine, cutting edge technology</li>
+ <li id="l-317"><a href="#l-317">#</a> [17:05] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-318"><a href="#l-318">#</a> [17:12] * Joins: mpilgrim (n=mark@67.217.134.48)</li>
+ <li id="l-319"><a href="#l-319">#</a> [17:13] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-320"><a href="#l-320">#</a> [17:18] * Joins: pauld (n=pauld@86.133.17.49)</li>
+ <li id="l-321"><a href="#l-321">#</a> [17:21] * Quits: pauld (n=pauld@86.133.17.49) (Client Quit)</li>
+ <li id="l-322"><a href="#l-322">#</a> [17:29] * Quits: webben_ (n=benh@dip5-fw.corp.ukl.yahoo.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-323"><a href="#l-323">#</a> [17:40] * Quits: mpilgrim (n=mark@67.217.134.48) (Read error: 60 (Operation timed out))</li>
+ <li id="l-324"><a href="#l-324">#</a> [17:45] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-325"><a href="#l-325">#</a> [17:47] * Joins: dglazkov_ (n=dglazkov@72.14.224.1)</li>
+ <li id="l-326"><a href="#l-326">#</a> [17:49] * Joins: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net)</li>
+ <li id="l-327"><a href="#l-327">#</a> [17:49] * Quits: weinig (n=weinig@c-67-180-35-124.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-328"><a href="#l-328">#</a> [17:58] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-329" _a="Hixie" _r="annevk3"><a href="#l-329">#</a> [17:59] &lt;Hixie&gt; annevk3: please send mail for feedback, pleeeeease. :-)</li>
+ <li id="l-330"><a href="#l-330">#</a> [18:01] * Joins: maikmerten (n=maikmert@Lb37b.l.pppool.de)</li>
+ <li id="l-331"><a href="#l-331">#</a> [18:03] * Quits: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-332"><a href="#l-332">#</a> [18:03] * Joins: shepazutoo (n=schepers@adsl-221-7-163.rmo.bellsouth.net)</li>
+ <li id="l-333"><a href="#l-333">#</a> [18:04] * Quits: shepazu (n=schepers@adsl-221-119-243.rmo.bellsouth.net) (Read error: 60 (Operation timed out))</li>
+ <li id="l-334"><a href="#l-334">#</a> [18:08] * Joins: dimich (n=dimich@72.14.224.1)</li>
+ <li id="l-335"><a href="#l-335">#</a> [18:14] * Joins: webben (n=benh@dip5-fw.corp.ukl.yahoo.com)</li>
+ <li id="l-336"><a href="#l-336">#</a> [18:19] * Quits: shepazutoo (n=schepers@adsl-221-7-163.rmo.bellsouth.net) (&quot;Core Breach&quot;)</li>
+ <li id="l-337"><a href="#l-337">#</a> [18:20] * Joins: shepazu (n=schepers@adsl-221-7-163.rmo.bellsouth.net)</li>
+ <li id="l-338"><a href="#l-338">#</a> [18:27] * Joins: shepazutoo (n=schepers@adsl-221-38-51.rmo.bellsouth.net)</li>
+ <li id="l-339"><a href="#l-339">#</a> [18:30] * Joins: listoflights (n=kilgore@78.26.4.53)</li>
+ <li id="l-340" _a="annevk3" _r="Hixie"><a href="#l-340">#</a> [18:33] &lt;annevk3&gt; Hixie, next time or also for those four lines?</li>
+ <li id="l-341" _a="annevk3"><a href="#l-341">#</a> [18:33] &lt;annevk3&gt; IRC is convenient, there's less UI involved</li>
+ <li id="l-342" _a="Dashiva"><a href="#l-342">#</a> [18:34] &lt;Dashiva&gt; I'm betting he wants the paper trail</li>
+ <li id="l-343" class="flagged" _a="Philip`"><a href="#l-343">#</a> [18:36] &lt;Philip`&gt; He prints out emails?</li>
+ <li id="l-344"><a href="#l-344">#</a> [18:37] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-345" _a="Philip`"><a href="#l-345">#</a> [18:37] &lt;Philip`&gt; Someone needs to make an IRC bot which lets you say &quot;!feedback s/buu can/but can/&quot; and it will automatically send an email to Hixie</li>
+ <li id="l-346"><a href="#l-346">#</a> [18:41] * Quits: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-347"><a href="#l-347">#</a> [18:42] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-348"><a href="#l-348">#</a> [18:42] * Quits: shepazu (n=schepers@adsl-221-7-163.rmo.bellsouth.net) (Read error: 113 (No route to host))</li>
+ <li id="l-349" class="flagged" _a="krijnh"><a href="#l-349">#</a> [18:43] &lt;krijnh&gt; Doesn't need to be an IRC bot, since all the logs are available as HTML as well :)</li>
+ <li id="l-350" class="flagged" _a="Philip`" _r="krijnh"><a href="#l-350">#</a> [18:44] &lt;Philip`&gt; krijnh: Good point :-)</li>
+ <li id="l-351" _a="Philip`" _r="krijnh"><a href="#l-351">#</a> [18:45] &lt;Philip`&gt; krijnh: If you could change your log processor to let us embed RDF in our IRC messages that will get translated into RDFa in the logs, then we could write a simple RDFa-based tool to automatically extract all the feedback and email it</li>
+ <li id="l-352" _a="annevk3" _r="yeah"><a href="#l-352">#</a> [18:45] &lt;annevk3&gt; yeah, and with enough annotation everything gets done automatically</li>
+ <li id="l-353" _a="Dashiva"><a href="#l-353">#</a> [18:46] &lt;Dashiva&gt; That reminds me of joel's post about spec writing</li>
+ <li id="l-354" _a="Dashiva"><a href="#l-354">#</a> [18:47] &lt;Dashiva&gt; &quot;And then some people go into a dark place where they imagine automatically generating implementations from specs, and think they have invented a way to program without programming&quot; (by memory)</li>
+ <li id="l-355" _a="gsnedders"><a href="#l-355">#</a> [18:47] * gsnedders starts implementing parse errors in html5lib php</li>
+ <li id="l-356" _a="takkaria"><a href="#l-356">#</a> [18:48] &lt;takkaria&gt; parse errors are overrated</li>
+ <li id="l-357"><a href="#l-357">#</a> [18:49] * Quits: myakura (n=myakura@p1063-ipbf3305marunouchi.tokyo.ocn.ne.jp) (&quot;Leaving...&quot;)</li>
+ <li id="l-358" _a="annevk3" _r="gsnedders"><a href="#l-358">#</a> [19:00] &lt;annevk3&gt; gsnedders, why do you need parse errors? isn't a treebuilder more useful?</li>
+ <li id="l-359" _a="gsnedders" _r="annevk3"><a href="#l-359">#</a> [19:00] &lt;gsnedders&gt; annevk3: Trying to finish Tokenizer first before moving on</li>
+ <li id="l-360"><a href="#l-360">#</a> [19:02] * Joins: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-361" _a="gsnedders"><a href="#l-361">#</a> [19:07] * gsnedders returns to the point where more than 50% of tests pass</li>
+ <li id="l-362"><a href="#l-362">#</a> [19:16] * Quits: dglazkov_ (n=dglazkov@72.14.224.1) (Read error: 110 (Connection timed out))</li>
+ <li id="l-363"><a href="#l-363">#</a> [19:29] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-364"><a href="#l-364">#</a> [19:30] * Quits: Andrii (n=Miranda@91.200.180.78) (&quot;Miranda IM! Smaller, Faster, Easier. <a href="http://miranda-im.org">http://miranda-im.org</a>&quot;)</li>
+ <li id="l-365"><a href="#l-365">#</a> [19:35] * Quits: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-366"><a href="#l-366">#</a> [19:42] * Joins: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-367"><a href="#l-367">#</a> [19:42] * Joins: dglazkov_ (n=dglazkov@72.14.224.1)</li>
+ <li id="l-368"><a href="#l-368">#</a> [19:44] * Quits: dglazkov (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-369"><a href="#l-369">#</a> [19:44] * Joins: dglazkov__ (n=dglazkov@c-98-207-88-44.hsd1.ca.comcast.net)</li>
+ <li id="l-370" _a="gsnedders"><a href="#l-370">#</a> [19:48] &lt;gsnedders&gt; Weeee… 23 tests failing now</li>
+ <li id="l-371" _a="Philip`"><a href="#l-371">#</a> [19:49] &lt;Philip`&gt; Delete those tests, then you'll pass 100%</li>
+ <li id="l-372"><a href="#l-372">#</a> [19:51] * Joins: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-373"><a href="#l-373">#</a> [19:53] * Quits: dglazkov_ (n=dglazkov@72.14.224.1) (Read error: 145 (Connection timed out))</li>
+ <li id="l-374" _a="gsnedders"><a href="#l-374">#</a> [19:54] &lt;gsnedders&gt; 14% perf. regression from throwing parse errors</li>
+ <li id="l-375" _a="Philip`"><a href="#l-375">#</a> [19:55] &lt;Philip`&gt; In a document that has no parse errors?</li>
+ <li id="l-376" _a="gsnedders"><a href="#l-376">#</a> [19:55] &lt;gsnedders&gt; Yeah</li>
+ <li id="l-377" _a="gsnedders" _r="(i.e."><a href="#l-377">#</a> [19:55] &lt;gsnedders&gt; (i.e., the spec)</li>
+ <li id="l-378" _a="takkaria"><a href="#l-378">#</a> [19:56] &lt;takkaria&gt; ouch</li>
+ <li id="l-379"><a href="#l-379">#</a> [19:57] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-380" _a="takkaria"><a href="#l-380">#</a> [19:57] &lt;takkaria&gt; I'm not sure hubbub is ever going to have parse error reporting</li>
+ <li id="l-381" _a="gsnedders"><a href="#l-381">#</a> [19:58] &lt;gsnedders&gt; 12.0s is still a massive improvement over the 48s it was a week ago</li>
+ <li id="l-382" _a="takkaria"><a href="#l-382">#</a> [19:58] &lt;takkaria&gt; sure :)</li>
+ <li id="l-383" _a="gsnedders"><a href="#l-383">#</a> [20:00] * gsnedders runs with profiler</li>
+ <li id="l-384" _a="gsnedders"><a href="#l-384">#</a> [20:00] &lt;gsnedders&gt; (This takes it back to around 50s :P)</li>
+ <li id="l-385" _a="Philip`"><a href="#l-385">#</a> [20:02] &lt;Philip`&gt; You need to multithread your tokeniser</li>
+ <li id="l-386" _a="gsnedders"><a href="#l-386">#</a> [20:03] &lt;gsnedders&gt; Multi-threading in PHP? :P</li>
+ <li id="l-387" _a="Philip`"><a href="#l-387">#</a> [20:03] &lt;Philip`&gt; Shouldn't be too hard to just split the input document into n pieces, and speculatively parse the last n-1, and discards any results that are invalidated by the tokeniser state at the end of the previous section</li>
+ <li id="l-388" _a="jgraham" _r="Philip`"><a href="#l-388">#</a> [20:08] &lt;jgraham&gt; Philip`: presumably you would end up being wrong a lot of the time</li>
+ <li id="l-389" _a="jgraham"><a href="#l-389">#</a> [20:08] &lt;jgraham&gt; Which seems bad</li>
+ <li id="l-390" _a="Philip`" _r="jgraham"><a href="#l-390">#</a> [20:09] &lt;Philip`&gt; jgraham: You could scan forwards to the next '&gt;' and assume you're now going to be in the data state, which is likely to be right quite often</li>
+ <li id="l-391" _a="takkaria"><a href="#l-391">#</a> [20:10] &lt;takkaria&gt; is it?</li>
+ <li id="l-392" _a="Philip`"><a href="#l-392">#</a> [20:10] &lt;Philip`&gt; and if you were in a &lt;script&gt; or something then you make sure you've kept enough state so you can sync up once you've reached the &lt;/script&gt;</li>
+ <li id="l-393" _a="jgraham"><a href="#l-393">#</a> [20:10] &lt;jgraham&gt; Hmm. You're making this sound surprisingly reasonable</li>
+ <li id="l-394" _a="Philip`"><a href="#l-394">#</a> [20:10] &lt;Philip`&gt; Really?</li>
+ <li id="l-395" _a="Philip`"><a href="#l-395">#</a> [20:10] &lt;Philip`&gt; That wasn't my intent</li>
+ <li id="l-396" _a="jgraham"><a href="#l-396">#</a> [20:10] &lt;jgraham&gt; Which suggests that you're misleading me somehow</li>
+ <li id="l-397"><a href="#l-397">#</a> [20:11] * Joins: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-398"><a href="#l-398">#</a> [20:12] * Quits: kangax (n=kangax@ool-182f8118.dyn.optonline.net)</li>
+ <li id="l-399" _a="Philip`" _r="takkaria"><a href="#l-399">#</a> [20:13] &lt;Philip`&gt; takkaria: I suppose it should be fairly easy to instrument a tokeniser to report how often it sees '&gt;' when it's in the data state (and PCDATA, and no escape flag)</li>
+ <li id="l-400"><a href="#l-400">#</a> [20:17] * Quits: pauld (n=pauld@host86-133-17-49.range86-133.btcentralplus.com)</li>
+ <li id="l-401" _a="Philip`"><a href="#l-401">#</a> [20:17] &lt;Philip`&gt; Does Python have a multiprocessing thing nowadays that isn't unbearably hard to use efficiently?</li>
+ <li id="l-402" _a="gsnedders" _r="Philip`"><a href="#l-402">#</a> [20:17] &lt;gsnedders&gt; Philip`: Yes, multiprocessing</li>
+ <li id="l-403" _a="Philip`" _r="Ah"><a href="#l-403">#</a> [20:17] &lt;Philip`&gt; Ah, sounds good</li>
+ <li id="l-404" _a="Philip`"><a href="#l-404">#</a> [20:17] &lt;Philip`&gt; Maybe html5lib should do this! :-)</li>
+ <li id="l-405" _a="gsnedders"><a href="#l-405">#</a> [20:18] &lt;gsnedders&gt; Will all zero users of php-html5lib kill me if I make 23 test cases fail?</li>
+ <li id="l-406" _a="annevk3"><a href="#l-406">#</a> [20:19] &lt;annevk3&gt; we should make error reporting optional in the tests</li>
+ <li id="l-407" _a="annevk3"><a href="#l-407">#</a> [20:19] &lt;annevk3&gt; or flag tests that rely on error reporting</li>
+ <li id="l-408" _a="Philip`"><a href="#l-408">#</a> [20:19] &lt;Philip`&gt; That's easy</li>
+ <li id="l-409" _a="Philip`"><a href="#l-409">#</a> [20:19] &lt;Philip`&gt; if 'ParseError' in expected_tokens: it relies on error reporting</li>
+ <li id="l-410" _a="annevk3"><a href="#l-410">#</a> [20:19] &lt;annevk3&gt; it seems to me that the PHP parser is not intended for building a validator so it should just not do it and be fast :)</li>
+ <li id="l-411" _a="Philip`"><a href="#l-411">#</a> [20:20] &lt;Philip`&gt; and you could just strip out all the ParseErrors when comparing your tokeniser against the test result</li>
+ <li id="l-412" _a="annevk3" _r="yeah"><a href="#l-412">#</a> [20:20] &lt;annevk3&gt; yeah, I guess that's the best way</li>
+ <li id="l-413" _a="annevk3"><a href="#l-413">#</a> [20:20] &lt;annevk3&gt; you still want to test error handling</li>
+ <li id="l-414" _a="gsnedders" _r="Yeah"><a href="#l-414">#</a> [20:21] &lt;gsnedders&gt; Yeah, that's what it currently does, for a few more minutes at least</li>
+ <li id="l-415"><a href="#l-415">#</a> [20:21] * Quits: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu) (&quot;KVIrc 3.4.0 Virgo <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>&quot;)</li>
+ <li id="l-416" _a="gsnedders" _r="annevk3"><a href="#l-416">#</a> [20:22] &lt;gsnedders&gt; annevk3: I'd disagree that it is irrelevant. You might want to only allow valid comments on my blog. Oh, wait, you already do.</li>
+ <li id="l-417" _a="annevk3"><a href="#l-417">#</a> [20:23] &lt;annevk3&gt; i wouldn't mind syntax errors actually</li>
+ <li id="l-418" class="flagged" _a="takkaria" _r="gsnedders"><a href="#l-418">#</a> [20:23] &lt;takkaria&gt; gsnedders: testcases failing is bad, mmkay</li>
+ <li id="l-419" _a="annevk3"><a href="#l-419">#</a> [20:23] &lt;annevk3&gt; i'd just validate the tree</li>
+ <li id="l-420"><a href="#l-420">#</a> [20:23] * Joins: maikmerten_ (n=maikmert@L977a.l.pppool.de)</li>
+ <li id="l-421" _a="annevk3"><a href="#l-421">#</a> [20:23] &lt;annevk3&gt; validate the tree based on some whitelists</li>
+ <li id="l-422" _a="Philip`"><a href="#l-422">#</a> [20:23] &lt;Philip`&gt; Someone should make a blog comment CAPTCHA system which presents you with a random word (just in plain text) and requires you to use it in a grammatically-correct sentence in your comment</li>
+ <li id="l-423" _a="gsnedders" _r="takkaria"><a href="#l-423">#</a> [20:24] &lt;gsnedders&gt; takkaria: All failures are due to the parse errors, and one of them is somewhat questionable (I'd argue that the test case relies on impl. specific behaviour)</li>
+ <li id="l-424"><a href="#l-424">#</a> [20:35] * Joins: erlehmann (n=erlehman@86.59.25.121)</li>
+ <li id="l-425"><a href="#l-425">#</a> [20:39] * Quits: maikmerten (n=maikmert@Lb37b.l.pppool.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-426"><a href="#l-426">#</a> [20:39] * Joins: mstange (n=markus@pD9579181.dip0.t-ipconnect.de)</li>
+ <li id="l-427"><a href="#l-427">#</a> [20:42] * Quits: mlpug (n=mlpug@a91-156-60-13.elisa-laajakaista.fi) (Remote closed the connection)</li>
+ <li id="l-428" _a="olliej" _r="Philip`"><a href="#l-428">#</a> [20:46] &lt;olliej&gt; Philip`: heheh</li>
+ <li id="l-429" _a="gsnedders" _r="Philip`"><a href="#l-429">#</a> [20:47] &lt;gsnedders&gt; Philip`: How do you determine whether a sentence is grammatically correct?</li>
+ <li id="l-430" _a="Philip`" _r="gsnedders"><a href="#l-430">#</a> [20:52] &lt;Philip`&gt; gsnedders: Mechanical Turk</li>
+ <li id="l-431"><a href="#l-431">#</a> [20:54] * Joins: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu)</li>
+ <li id="l-432" _a="Niictar"><a href="#l-432">#</a> [21:01] &lt;Niictar&gt; But... couldm</li>
+ <li id="l-433" _a="Niictar"><a href="#l-433">#</a> [21:02] &lt;Niictar&gt; But... couldn't a bot be programmed to generate a non-sensicial but grammatically correct sentence after doing a dictionary lookup of the word in question?</li>
+ <li id="l-434"><a href="#l-434">#</a> [21:02] * Joins: hdh (n=hdh@118.71.77.44)</li>
+ <li id="l-435" _a="Niictar" _r="Or"><a href="#l-435">#</a> [21:03] &lt;Niictar&gt; Or, just quote a sentence example straight out of said dictionary? :P</li>
+ <li id="l-436" _a="olliej" _r="Niictar"><a href="#l-436">#</a> [21:08] &lt;olliej&gt; Niictar: sssh</li>
+ <li id="l-437" _a="olliej" _r="Niictar"><a href="#l-437">#</a> [21:08] &lt;olliej&gt; Niictar: although that captcha might be fairly good for filtering out most reddit/digg/youtube commenters :D</li>
+ <li id="l-438" _a="Niictar"><a href="#l-438">#</a> [21:09] &lt;Niictar&gt; =D</li>
+ <li id="l-439"><a href="#l-439">#</a> [21:23] * Joins: mpilgrim (n=mark@67.217.134.48)</li>
+ <li id="l-440" _a="dglazkov__"><a href="#l-440">#</a> [21:26] * dglazkov__ is now known as dglazkov</li>
+ <li id="l-441"><a href="#l-441">#</a> [21:41] * Joins: annodomini (n=lambda@wikipedia/lambda)</li>
+ <li id="l-442"><a href="#l-442">#</a> [21:41] * Joins: nessy (n=nessy@124-171-28-204.dyn.iinet.net.au)</li>
+ <li id="l-443" _a="gsnedders"><a href="#l-443">#</a> [21:43] &lt;gsnedders&gt; &quot;It quite clearly shows that Humbert Hubmert does \emph{not} love Lolita.&quot; — Discuss.</li>
+ <li id="l-444" _a="gsnedders"><a href="#l-444">#</a> [21:43] &lt;gsnedders&gt; :P</li>
+ <li id="l-445" _a="Philip`"><a href="#l-445">#</a> [21:44] &lt;Philip`&gt; s/Hubmert/Humbert/</li>
+ <li id="l-446" _a="gsnedders"><a href="#l-446">#</a> [21:44] * gsnedders is typing quickly damnit!</li>
+ <li id="l-447" _a="Dashiva"><a href="#l-447">#</a> [21:46] &lt;Dashiva&gt; If you reversed the grammar captcha, it could work well for sites where real users are inable to write properly, whereas a bot would be too successful</li>
+ <li id="l-448"><a href="#l-448">#</a> [21:50] * Quits: annodomini (n=lambda@wikipedia/lambda)</li>
+ <li id="l-449"><a href="#l-449">#</a> [21:51] * Parts: erlehmann (n=erlehman@86.59.25.121)</li>
+ <li id="l-450"><a href="#l-450">#</a> [21:55] * Quits: zalan (n=kvirc@catv-80-99-193-98.catv.broadband.hu) (&quot;KVIrc 3.4.0 Virgo <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>&quot;)</li>
+ <li id="l-451"><a href="#l-451">#</a> [21:57] * Joins: sid0 (n=sid0@unaffiliated/sid0)</li>
+ <li id="l-452"><a href="#l-452">#</a> [21:57] * Joins: webben_ (n=benh@91.85.204.41)</li>
+ <li id="l-453"><a href="#l-453">#</a> [22:03] * Quits: taf2_ (n=taf2@static-71-127-149-10.bltmmd.fios.verizon.net)</li>
+ <li id="l-454" _a="gsnedders"><a href="#l-454">#</a> [22:05] * gsnedders makes another tweet exactly 140 characters long</li>
+ <li id="l-455" class="flagged" _a="gsnedders"><a href="#l-455">#</a> [22:05] &lt;gsnedders&gt; (And 142 bytes)</li>
+ <li id="l-456"><a href="#l-456">#</a> [22:06] * Quits: webben (n=benh@dip5-fw.corp.ukl.yahoo.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-457"><a href="#l-457">#</a> [22:09] * Quits: sid0_ (n=sid0@unaffiliated/sid0) (Remote closed the connection)</li>
+ <li id="l-458"><a href="#l-458">#</a> [22:13] * Joins: mpilgrim_ (n=mark@67.217.134.48)</li>
+ <li id="l-459" _a="jwalden" _r="gsnedders"><a href="#l-459">#</a> [22:18] &lt;jwalden&gt; gsnedders: is the limit 140 characters or 140 code points?</li>
+ <li id="l-460" _a="gsnedders" _r="jwalden"><a href="#l-460">#</a> [22:20] &lt;gsnedders&gt; jwalden: It appears to apply NFC</li>
+ <li id="l-461" _a="mpilgrim"><a href="#l-461">#</a> [22:20] * mpilgrim is now known as Guest96328</li>
+ <li id="l-462" _a="mpilgrim_"><a href="#l-462">#</a> [22:21] * mpilgrim_ is now known as mpilgrim</li>
+ <li id="l-463" _a="gsnedders"><a href="#l-463">#</a> [22:21] &lt;gsnedders&gt; (So my first test failed)</li>
+ <li id="l-464"><a href="#l-464">#</a> [22:21] * Quits: Guest96328 (n=mark@67.217.134.48) (Read error: 113 (No route to host))</li>
+ <li id="l-465"><a href="#l-465">#</a> Session Close: Sun Mar 29 00:00:00 2009</li>
+</ol>
+<p id="end">The end :)

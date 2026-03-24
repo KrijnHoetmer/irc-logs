@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20111206</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20111206.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2011-12-06 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Tue Dec 06 00:00:00 2011</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:02] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:04] * Quits: thedjpetersen (~deploy@li111-58.members.linode.com) (Quit: leaving)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:05] * Joins: sicking (~chatzilla@nat/mozilla/x-gpupfqeppthleztd)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:06] * Joins: jacobolus (~jacobolus@c-24-5-85-179.hsd1.ca.comcast.net)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:06] * Joins: thedjpetersen (~deploy@ridezap.com)</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:10] * Joins: duehley (~tester@e177060111.adsl.alicedsl.de)</li>
+ <li id="l-9" _a="rniwa" _r="annevk"><a href="#l-9">#</a> [00:13] &lt;rniwa&gt; annevk: hm... but it's just some IDL attributes, right?</li>
+ <li id="l-10" _a="rniwa" _r="annevk"><a href="#l-10">#</a> [00:13] &lt;rniwa&gt; annevk: doesn't seem like a big deal to have a few extra properties</li>
+ <li id="l-11" _a="annevk"><a href="#l-11">#</a> [00:15] &lt;annevk&gt; just doesn't seem very clean</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:19] * Quits: martndemus (~martndemu@h254064.upc-h.chello.nl) (Quit: Lost terminal)</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:22] * Quits: diraol (~diraol@187.35.136.161) (Quit: Leaving.)</li>
+ <li id="l-14"><a href="#l-14">#</a> [00:23] * Quits: Telling (~unknown@80-71-135-15.u.parknet.dk) (Quit: ...)</li>
+ <li id="l-15"><a href="#l-15">#</a> [00:26] * Quits: Morphous (jan@unaffiliated/amorphous) (Ping timeout: 240 seconds)</li>
+ <li id="l-16" _a="annevk" _r="zewt"><a href="#l-16">#</a> [00:28] &lt;annevk&gt; zewt: we're gonna solve the problem by not making UTF-32 an encoding label</li>
+ <li id="l-17" class="flagged" _a="annevk" _r="zewt"><a href="#l-17">#</a> [00:29] &lt;annevk&gt; zewt: i.e. &quot;utf-32&quot; is the same as &quot;abacadabra&quot;</li>
+ <li id="l-18"><a href="#l-18">#</a> [00:29] * Quits: jacobolus (~jacobolus@c-24-5-85-179.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-19" _a="zewt" _r="annevk"><a href="#l-19">#</a> [00:30] &lt;zewt&gt; annevk: that doesn't help unless WebKit and IE are willing to drop UTF-32 support (whether at the autodetect level or entirely)</li>
+ <li id="l-20" _a="zewt"><a href="#l-20">#</a> [00:31] &lt;zewt&gt; if they are, then it's easy</li>
+ <li id="l-21" _a="annevk"><a href="#l-21">#</a> [00:32] &lt;annevk&gt; there's not much we can do about proprietary extensions</li>
+ <li id="l-22" _a="zewt"><a href="#l-22">#</a> [00:34] &lt;zewt&gt; but if they won't remove that, then there's not much point to the spec shaking its fist more loudly at utf-32</li>
+ <li id="l-23" _a="zewt"><a href="#l-23">#</a> [00:34] &lt;zewt&gt; either way the spec and implementations will differ</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:35] * Quits: michaelrtm (~michaelrt@193.299.dsl.mel.iprimus.net.au) (Ping timeout: 244 seconds)</li>
+ <li id="l-25" _a="annevk"><a href="#l-25">#</a> [00:36] &lt;annevk&gt; the spec just makes some recommendations because we're in a transition</li>
+ <li id="l-26" _a="annevk"><a href="#l-26">#</a> [00:36] &lt;annevk&gt; and because encodings are poorly defined at best</li>
+ <li id="l-27" _a="annevk"><a href="#l-27">#</a> [00:36] &lt;annevk&gt; I have some ideas on how to do better, but I haven't written down an actual spec yet</li>
+ <li id="l-28" _a="zewt"><a href="#l-28">#</a> [00:37] &lt;zewt&gt; i mean, currently ie and webkit differ from the spec at step 4 (step 4--if you get there--says utf-32 must be detected as utf-16, those browsers don't do that); explicitly forbidding utf-32 as a supported encoding would just change where those browsers differ from the spec</li>
+ <li id="l-29" _a="zewt"><a href="#l-29">#</a> [00:37] &lt;zewt&gt; (step 4 being the BOM header step)</li>
+ <li id="l-30" _a="zewt"><a href="#l-30">#</a> [00:38] &lt;zewt&gt; nothing wrong with being more explicit, of course (it's a lateral move, not a step back)</li>
+ <li id="l-31"><a href="#l-31">#</a> [00:39] * Quits: micheil (~micheil@92.40.253.47.threembb.co.uk) (Read error: Connection reset by peer)</li>
+ <li id="l-32" _a="annevk"><a href="#l-32">#</a> [00:40] &lt;annevk&gt; UTF-32 is pretty much forbidden</li>
+ <li id="l-33" _a="nunnun"><a href="#l-33">#</a> [00:40] * nunnun is now known as nunnun_away</li>
+ <li id="l-34" _a="annevk"><a href="#l-34">#</a> [00:40] &lt;annevk&gt; unless you have a very good reason to support</li>
+ <li id="l-35" _a="zewt"><a href="#l-35">#</a> [00:40] &lt;zewt&gt; but in practice, that's not the case :(</li>
+ <li id="l-36" _a="zewt"><a href="#l-36">#</a> [00:41] &lt;zewt&gt; (webkit + ie)</li>
+ <li id="l-37" _a="annevk"><a href="#l-37">#</a> [00:41] &lt;annevk&gt; I don't really expect implementations to catch up with all the details of the specification within a couple of years after it was introduced</li>
+ <li id="l-38" _a="annevk"><a href="#l-38">#</a> [00:41] &lt;annevk&gt; that almost never happens</li>
+ <li id="l-39"><a href="#l-39">#</a> [00:41] * Joins: Morphous (jan@unaffiliated/amorphous)</li>
+ <li id="l-40" _a="annevk"><a href="#l-40">#</a> [00:42] &lt;annevk&gt; it took half a decade for the HTML5 parser to gain some support</li>
+ <li id="l-41" _a="zewt" _r="sure"><a href="#l-41">#</a> [00:42] &lt;zewt&gt; sure, if you think that they'll eventually be willing to remove utf-32 outright, that's fine (even if it takes a few years)</li>
+ <li id="l-42"><a href="#l-42">#</a> [00:42] * Joins: micheil (~micheil@92.40.253.47.threembb.co.uk)</li>
+ <li id="l-43" class="flagged" _a="annevk"><a href="#l-43">#</a> [00:42] &lt;annevk&gt; pretty close to a decade now for &lt;input type=date&gt; and that's still in its infancy</li>
+ <li id="l-44" _a="annevk"><a href="#l-44">#</a> [00:43] &lt;annevk&gt; oh yeah, I expect them to remove support for it eventually</li>
+ <li id="l-45" _a="zewt"><a href="#l-45">#</a> [00:43] &lt;zewt&gt; i don't know if the utf-32 support is purely &quot;we implemented it with everything else and don't really need it&quot; or actual legacy compat</li>
+ <li id="l-46" _a="zewt"><a href="#l-46">#</a> [00:43] &lt;zewt&gt; which is the real question there, of course</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:43] * Joins: michaelrtm (madcow@193.299.dsl.mel.iprimus.net.au)</li>
+ <li id="l-48"><a href="#l-48">#</a> [00:44] * Quits: jwalden (~waldo@pool-74-96-0-132.washdc.east.verizon.net) (Quit: ChatZilla 0.9.87-3.1450hg.fc15 [XULRunner 7.0.1/20110930134335])</li>
+ <li id="l-49" class="flagged" _a="annevk"><a href="#l-49">#</a> [00:44] &lt;annevk&gt; just like I thought in 2008 that Microsoft would turn around eventually and implement XHR + CORS</li>
+ <li id="l-50" _a="zewt"><a href="#l-50">#</a> [00:44] &lt;zewt&gt; eventually implementing something and eventually removing something are different beasts, though, as you know better than I :P</li>
+ <li id="l-51"><a href="#l-51">#</a> [00:45] * Quits: tantek_ (~tantek@2620:101:8003:200:714e:1360:9841:fe3c) (Quit: tantek_)</li>
+ <li id="l-52" _a="Philip`"><a href="#l-52">#</a> [00:45] &lt;Philip`&gt; Or &quot;we don't know if there's actual legacy compat, but the tiny possibility of problems outweighs the tinier gains of removing support&quot;</li>
+ <li id="l-53" _a="erlehmann"><a href="#l-53">#</a> [00:47] &lt;erlehmann&gt; gains of removing support?</li>
+ <li id="l-54" _a="annevk"><a href="#l-54">#</a> [00:47] &lt;annevk&gt; in the end Microsoft will want to comply with the standards of the platform</li>
+ <li id="l-55" _a="annevk"><a href="#l-55">#</a> [00:47] &lt;annevk&gt; and if the standards say that &quot;utf-32&quot; does not mean shit, they will play</li>
+ <li id="l-56" _a="erlehmann"><a href="#l-56">#</a> [00:47] &lt;erlehmann&gt; you are a very optimistic fellow.</li>
+ <li id="l-57" _a="zewt" _r="interop"><a href="#l-57">#</a> [00:47] &lt;zewt&gt; interop, closer to consistency of encoding detection between browsers (as long as you don't hit the heuristic/locale steps), helping utf-32 die</li>
+ <li id="l-58" _a="AryehGregor"><a href="#l-58">#</a> [00:48] &lt;AryehGregor&gt; Is *anyone* trying to implement the encoding detection spec?  Does anyone know if it's actually implementable?</li>
+ <li id="l-59" _a="annevk" _r="erlehmann"><a href="#l-59">#</a> [00:48] &lt;annevk&gt; erlehmann: it's what has happened in the decade I've been involved time and again, but sure, nothing is certain</li>
+ <li id="l-60" _a="annevk" _r="AryehGregor"><a href="#l-60">#</a> [00:48] &lt;annevk&gt; AryehGregor: Opera implemented it, I believe</li>
+ <li id="l-61" _a="erlehmann" _r="annevk"><a href="#l-61">#</a> [00:49] &lt;erlehmann&gt; annevk, i'm looking forward to vorbis support then. in 2017, when i don't need it anymore, because the mp3 patents … hmm. probably are still going to be out there somewhere, lurking.</li>
+ <li id="l-62" _a="zewt"><a href="#l-62">#</a> [00:50] &lt;zewt&gt; time for mickey mp3 laws</li>
+ <li id="l-63" class="flagged" _a="annevk"><a href="#l-63">#</a> [00:50] &lt;annevk&gt; in the end Microsoft ships a browser like anyone else, and browsers are driven a lot by what developers want, and they want browsers to work the same way</li>
+ <li id="l-64" _a="erlehmann" _r="annevk"><a href="#l-64">#</a> [00:50] &lt;erlehmann&gt; annevk, if large inconsistencies like CSS weirdness and media formats happen to work for them, i do not believe small inconsistencies have any chance unless they actually drive it.</li>
+ <li id="l-65" class="flagged" _a="annevk"><a href="#l-65">#</a> [00:51] &lt;annevk&gt; they might not move as fast as the others, but they have &lt;canvas&gt; now, they have full CSS 2.1 support, etc.</li>
+ <li id="l-66" _a="zewt" _r="well"><a href="#l-66">#</a> [00:51] &lt;zewt&gt; well, at least there's some evidence that they're willing to make breaking changes to their own legacy compat (eg. read-only event objects)</li>
+ <li id="l-67" class="flagged" _a="erlehmann" _r="funny"><a href="#l-67">#</a> [00:51] &lt;erlehmann&gt; funny, developers i know constantly tell me browsers are driven by what browser companies want. that is some nice loop ;D</li>
+ <li id="l-68" class="flagged" _a="annevk"><a href="#l-68">#</a> [00:51] &lt;annevk&gt; all the things we thought were not going to happen back when we started with the WHATWG in 2004</li>
+ <li id="l-69" _a="erlehmann"><a href="#l-69">#</a> [00:51] &lt;erlehmann&gt; IE has &lt;canvas&gt;? wow. long time no see.</li>
+ <li id="l-70" _a="annevk"><a href="#l-70">#</a> [00:51] &lt;annevk&gt; so maybe I'm pretty optimistic, but there's some history to support it</li>
+ <li id="l-71" _a="zewt" _r="annevk"><a href="#l-71">#</a> [00:52] &lt;zewt&gt; annevk: supporting new features and breaking existing ones are different classes, though; i don't think adding support for Canvas is evidence for making breaking changes (though as I said, there's at least some evidence for that)</li>
+ <li id="l-72" _a="erlehmann" _r="annevk"><a href="#l-72">#</a> [00:52] &lt;erlehmann&gt; annevk, you may be right after all, because killing off UTF-32 slowly is almost as good as killing it off fast.</li>
+ <li id="l-73" class="flagged" _a="WeirdAl"><a href="#l-73">#</a> [00:53] &lt;WeirdAl&gt; it's been 7 years of WHATWG?  That deserves a &quot;wow&quot; of its own. :)</li>
+ <li id="l-74" _a="erlehmann"><a href="#l-74">#</a> [00:53] &lt;erlehmann&gt; so it might not matter if they care much, if they do at all.</li>
+ <li id="l-75" class="flagged" _a="annevk" _r="zewt"><a href="#l-75">#</a> [00:53] &lt;annevk&gt; zewt: the HTML parser was a breaking change</li>
+ <li id="l-76" class="flagged" _a="annevk" _r="zewt"><a href="#l-76">#</a> [00:53] &lt;annevk&gt; zewt: CSS 2.1 was a breaking change</li>
+ <li id="l-77" class="flagged" _a="annevk" _r="zewt"><a href="#l-77">#</a> [00:53] &lt;annevk&gt; zewt: a lot of things were breaking changes, for pretty much every browser we've had those</li>
+ <li id="l-78" _a="zewt"><a href="#l-78">#</a> [00:54] &lt;zewt&gt; modulo quirks mode, though (though I pretty much ignore the details of that, being fortunate enough to not have horrible legacy stuff to maintain)</li>
+ <li id="l-79" class="flagged" _a="annevk"><a href="#l-79">#</a> [00:54] &lt;annevk&gt; ah yeah, IE10 breaks its own quirks mode!</li>
+ <li id="l-80" class="flagged" _a="annevk"><a href="#l-80">#</a> [00:54] &lt;annevk&gt; to be more compatible with the other browsers</li>
+ <li id="l-81" _a="annevk"><a href="#l-81">#</a> [00:54] &lt;annevk&gt; that should be a good sign that UTF-32 will go away :)</li>
+ <li id="l-82" _a="zewt" _r="dunno"><a href="#l-82">#</a> [00:55] &lt;zewt&gt; dunno, as always we'll see :)</li>
+ <li id="l-83"><a href="#l-83">#</a> [00:55] * Quits: duehley (~tester@e177060111.adsl.alicedsl.de) (Quit: Leaving.)</li>
+ <li id="l-84" _a="zewt"><a href="#l-84">#</a> [00:55] &lt;zewt&gt; far from the biggest problem plaguing charsets, so I'm not chewing my fingernails over it either way</li>
+ <li id="l-85" _a="AryehGregor"><a href="#l-85">#</a> [00:55] &lt;AryehGregor&gt; IE10 implements appcache?  I thought that was broken and no one wants to use it.</li>
+ <li id="l-86" _a="annevk"><a href="#l-86">#</a> [00:59] &lt;annevk&gt; I think everyone just wants more out of it</li>
+ <li id="l-87" _a="annevk"><a href="#l-87">#</a> [00:59] &lt;annevk&gt; (to put it somewhat simply)</li>
+ <li id="l-88"><a href="#l-88">#</a> [01:01] * Quits: WeirdAl (~chatzilla@g2spf.ask.info) (Quit: ChatZilla 0.9.87 [Firefox 8.0/20111104165243])</li>
+ <li id="l-89"><a href="#l-89">#</a> [01:02] * Joins: agektmr (~Adium@p2067-ipbf1606marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-90"><a href="#l-90">#</a> [01:03] * Joins: jacobolus (~jacobolus@75-144-255-214-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-91" _a="bga"><a href="#l-91">#</a> [01:05] &lt;bga&gt; <a href="http://code.google.com/chrome/extensions/trunk/experimental.socket.html">http://code.google.com/chrome/extensions/trunk/experimental.socket.html</a></li>
+ <li id="l-92"><a href="#l-92">#</a> [01:05] * Quits: agektmr (~Adium@p2067-ipbf1606marunouchi.tokyo.ocn.ne.jp) (Client Quit)</li>
+ <li id="l-93" _a="AryehGregor"><a href="#l-93">#</a> [01:06] &lt;AryehGregor&gt; :( <a href="http://src.chromium.org/viewvc/chrome/trunk/src/webkit/glue/webkit_glue.cc?r1=111877&amp;r2=111876&amp;pathrev=111877">http://src.chromium.org/viewvc/chrome/trunk/src/webkit/glue/webkit_glue.cc?r1=111877&amp;r2=111876&amp;pathrev=111877</a></li>
+ <li id="l-94" _a="AryehGregor"><a href="#l-94">#</a> [01:09] &lt;AryehGregor&gt; I love open-source: <a href="https://bugs.webkit.org/show_bug.cgi?id=73182">https://bugs.webkit.org/show_bug.cgi?id=73182</a></li>
+ <li id="l-95" _a="zewt"><a href="#l-95">#</a> [01:10] &lt;zewt&gt; would spoofing as &quot;User-Agent: you're an idiot&quot; be acceptable</li>
+ <li id="l-96"><a href="#l-96">#</a> [01:10] * Joins: cgcardona (~cgcardona@unaffiliated/cgcardona)</li>
+ <li id="l-97" _a="zewt"><a href="#l-97">#</a> [01:10] &lt;zewt&gt; perhaps it would help get the message across</li>
+ <li id="l-98" _a="erlehmann" _r="zewt"><a href="#l-98">#</a> [01:13] &lt;erlehmann&gt; zewt, i like your style and wish to subscribe to your newsletter.</li>
+ <li id="l-99" _a="annevk"><a href="#l-99">#</a> [01:14] &lt;annevk&gt; I think it's right here, in #whatwg :)</li>
+ <li id="l-100" _a="erlehmann"><a href="#l-100">#</a> [01:15] &lt;erlehmann&gt; // Pretend to be Firefox. Silverlight doesn't support Win Safari.</li>
+ <li id="l-101" _a="annevk"><a href="#l-101">#</a> [01:15] &lt;annevk&gt; someone please patch WebKit to remove UTF-32 for me tonight</li>
+ <li id="l-102" _a="erlehmann"><a href="#l-102">#</a> [01:15] &lt;erlehmann&gt; ahaha oh wow</li>
+ <li id="l-103" _a="annevk"><a href="#l-103">#</a> [01:15] &lt;annevk&gt; nn</li>
+ <li id="l-104" _a="Hixie"><a href="#l-104">#</a> [01:16] &lt;Hixie&gt; nn</li>
+ <li id="l-105" _a="erlehmann"><a href="#l-105">#</a> [01:16] &lt;erlehmann&gt; nn?</li>
+ <li id="l-106" _a="AryehGregor"><a href="#l-106">#</a> [01:17] &lt;AryehGregor&gt; Two nymphs next to a scroll.</li>
+ <li id="l-107" _a="AryehGregor"><a href="#l-107">#</a> [01:17] * AryehGregor uses magic missile to knock them both off from a distance</li>
+ <li id="l-108" _a="Hixie" _r="erlehmann"><a href="#l-108">#</a> [01:17] &lt;Hixie&gt; erlehmann: &quot;night night&quot;</li>
+ <li id="l-109" _a="AryehGregor"><a href="#l-109">#</a> [01:17] &lt;AryehGregor&gt; Those things can be really annoying.</li>
+ <li id="l-110" class="flagged" _a="AryehGregor"><a href="#l-110">#</a> [01:18] * AryehGregor used to play NetHack a bunch, and sometimes still randomly associates strings of characters with monsters and treasure</li>
+ <li id="l-111" _a="AryehGregor"><a href="#l-111">#</a> [01:18] &lt;AryehGregor&gt; Particularly in fixed-width fonts.</li>
+ <li id="l-112" _a="erlehmann"><a href="#l-112">#</a> [01:21] &lt;erlehmann&gt; i use variable width</li>
+ <li id="l-113" _a="erlehmann"><a href="#l-113">#</a> [01:21] &lt;erlehmann&gt; you insensitive clod</li>
+ <li id="l-114" _a="erlehmann"><a href="#l-114">#</a> [01:21] &lt;erlehmann&gt; (p.s. hot grits)</li>
+ <li id="l-115"><a href="#l-115">#</a> [01:21] * Joins: nattokirai (~nattokira@rtr.mozilla.or.jp)</li>
+ <li id="l-116" _a="paul_irish"><a href="#l-116">#</a> [01:21] * paul_irish is now known as paul_irish_</li>
+ <li id="l-117"><a href="#l-117">#</a> [01:22] * Joins: tantek_ (~tantek@nat/mozilla/x-voiescnsyzibtmys)</li>
+ <li id="l-118"><a href="#l-118">#</a> [01:25] * Joins: agektmr (~Adium@p2067-ipbf1606marunouchi.tokyo.ocn.ne.jp)</li>
+ <li id="l-119"><a href="#l-119">#</a> [01:26] * Quits: KillerX_ (~anant@nat/mozilla/x-idssptdwuiutdpyt) (Quit: KillerX_)</li>
+ <li id="l-120"><a href="#l-120">#</a> [01:27] * Quits: agektmr (~Adium@p2067-ipbf1606marunouchi.tokyo.ocn.ne.jp) (Client Quit)</li>
+ <li id="l-121"><a href="#l-121">#</a> [01:30] * Quits: MikeSmith (~MikeSmith@211.177.245.3) (Quit: MikeSmith)</li>
+ <li id="l-122"><a href="#l-122">#</a> [01:30] * Quits: erichynds (~ehynds@venkman.brightcove.com)</li>
+ <li id="l-123"><a href="#l-123">#</a> [01:33] * Quits: micheil (~micheil@92.40.253.47.threembb.co.uk) (Read error: Connection reset by peer)</li>
+ <li id="l-124"><a href="#l-124">#</a> [01:42] * Quits: erlehmann (~erlehmann@89.204.153.101) (Ping timeout: 240 seconds)</li>
+ <li id="l-125"><a href="#l-125">#</a> [01:48] * Joins: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-126"><a href="#l-126">#</a> [01:56] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-127"><a href="#l-127">#</a> [02:17] * Quits: TabAtkins_ (tabatkins@nat/google/x-eshgzcudxsibxpsy) (Ping timeout: 252 seconds)</li>
+ <li id="l-128"><a href="#l-128">#</a> [02:20] * Quits: tantek_ (~tantek@nat/mozilla/x-voiescnsyzibtmys) (Read error: Connection reset by peer)</li>
+ <li id="l-129"><a href="#l-129">#</a> [02:21] * Joins: tantek_ (~tantek@2620:101:8003:200:e83c:7ff9:bc4:a9f3)</li>
+ <li id="l-130"><a href="#l-130">#</a> [02:24] * Quits: cgcardona (~cgcardona@unaffiliated/cgcardona) (Ping timeout: 244 seconds)</li>
+ <li id="l-131"><a href="#l-131">#</a> [02:29] * Joins: micheil (~micheil@92.40.253.47.threembb.co.uk)</li>
+ <li id="l-132"><a href="#l-132">#</a> [02:30] * Joins: jamesr (jamesr@nat/google/x-ucycvsrozievosrg)</li>
+ <li id="l-133"><a href="#l-133">#</a> [02:30] * Quits: ehsan (~ehsan@66.207.208.98) (Remote host closed the connection)</li>
+ <li id="l-134"><a href="#l-134">#</a> [02:30] * Quits: ap_ (~ap@2620:149:4:1b01:4465:6c58:31a9:3597) (Quit: ap_)</li>
+ <li id="l-135"><a href="#l-135">#</a> [02:31] * Quits: rillian_ (~rillian@184.71.166.126) (Remote host closed the connection)</li>
+ <li id="l-136"><a href="#l-136">#</a> [02:34] * Quits: Lachy (~Lachy@cm-84.215.59.50.getinternet.no) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-137"><a href="#l-137">#</a> [02:48] * Quits: tndH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-138"><a href="#l-138">#</a> [02:48] * Quits: jacobolus (~jacobolus@75-144-255-214-SFBA.hfc.comcastbusiness.net) (Remote host closed the connection)</li>
+ <li id="l-139"><a href="#l-139">#</a> [02:55] * Joins: ryanseddon (u1832@gateway/web/irccloud.com/x-estzjjjshzgbyqen)</li>
+ <li id="l-140" _a="nunnun_away"><a href="#l-140">#</a> [02:56] * nunnun_away is now known as nunnun</li>
+ <li id="l-141"><a href="#l-141">#</a> [03:03] * Joins: Evanescence (~Evanescen@122.237.2.84)</li>
+ <li id="l-142"><a href="#l-142">#</a> [03:04] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-143"><a href="#l-143">#</a> [03:04] * Quits: ehsan (~ehsan@209.29.21.241) (Read error: Connection reset by peer)</li>
+ <li id="l-144"><a href="#l-144">#</a> [03:04] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-145"><a href="#l-145">#</a> [03:07] * Joins: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net)</li>
+ <li id="l-146"><a href="#l-146">#</a> [03:10] * Quits: dbaron (~dbaron@nat/mozilla/x-qwkeeixcfvmxwnhx) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-147"><a href="#l-147">#</a> [03:12] * Quits: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net) (Read error: Operation timed out)</li>
+ <li id="l-148"><a href="#l-148">#</a> [03:14] * Quits: astearns (~anonymous@192.150.22.5) (Ping timeout: 244 seconds)</li>
+ <li id="l-149"><a href="#l-149">#</a> [03:19] * Joins: plutoniix (~plutoniix@ppp-110-168-71-247.revip5.asianet.co.th)</li>
+ <li id="l-150"><a href="#l-150">#</a> [03:21] * Quits: tantek (~tantek@nat/mozilla/x-fcvzozxbfzzmfmnx) (Quit: tantek)</li>
+ <li id="l-151" _a="tantek_"><a href="#l-151">#</a> [03:21] * tantek_ is now known as tantek</li>
+ <li id="l-152"><a href="#l-152">#</a> [03:23] * Quits: tantek (~tantek@2620:101:8003:200:e83c:7ff9:bc4:a9f3) (Quit: tantek)</li>
+ <li id="l-153" _a="heycam"><a href="#l-153">#</a> [03:24] * heycam is now known as heycam|away</li>
+ <li id="l-154" class="flagged" _a="jcranmer"><a href="#l-154">#</a> [03:24] &lt;jcranmer&gt; sigh @ the UTF-8 thread</li>
+ <li id="l-155"><a href="#l-155">#</a> [03:32] * Joins: agektmr (~Adium@74.125.56.33)</li>
+ <li id="l-156"><a href="#l-156">#</a> [03:38] * Joins: dbaron (~dbaron@173-228-28-129.dsl.dynamic.sonic.net)</li>
+ <li id="l-157"><a href="#l-157">#</a> [03:41] * Quits: agektmr (~Adium@74.125.56.33) (Quit: Leaving.)</li>
+ <li id="l-158"><a href="#l-158">#</a> [03:46] * Joins: agektmr (~Adium@74.125.56.33)</li>
+ <li id="l-159"><a href="#l-159">#</a> [03:47] * Joins: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net)</li>
+ <li id="l-160" _a="heycam|away"><a href="#l-160">#</a> [03:50] * heycam|away is now known as heycam</li>
+ <li id="l-161"><a href="#l-161">#</a> [03:52] * Joins: cgcardona (~cgcardona@c-24-5-113-12.hsd1.ca.comcast.net)</li>
+ <li id="l-162"><a href="#l-162">#</a> [03:52] * Quits: cgcardona (~cgcardona@c-24-5-113-12.hsd1.ca.comcast.net) (Changing host)</li>
+ <li id="l-163"><a href="#l-163">#</a> [03:52] * Joins: cgcardona (~cgcardona@unaffiliated/cgcardona)</li>
+ <li id="l-164"><a href="#l-164">#</a> [03:53] * Quits: ehsan (~ehsan@209.29.21.241) (Ping timeout: 252 seconds)</li>
+ <li id="l-165"><a href="#l-165">#</a> [03:53] * Quits: kennyluck (~kennyluck@114-43-125-198.dynamic.hinet.net) (Remote host closed the connection)</li>
+ <li id="l-166"><a href="#l-166">#</a> [03:53] * Joins: kennyluck (~kennyluck@114-43-125-198.dynamic.hinet.net)</li>
+ <li id="l-167"><a href="#l-167">#</a> [03:53] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-168"><a href="#l-168">#</a> [03:54] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-169"><a href="#l-169">#</a> [03:54] * Quits: jdong_ (~quassel@222.126.155.250) (Remote host closed the connection)</li>
+ <li id="l-170"><a href="#l-170">#</a> [03:59] * Joins: ehsan (~ehsan@nat/mozilla/x-nbmehmhmfrqcsyyv)</li>
+ <li id="l-171"><a href="#l-171">#</a> [03:59] * Quits: dave_levin (dave_levin@nat/google/x-idwgkmeivlrcjerj) (Quit: dave_levin)</li>
+ <li id="l-172"><a href="#l-172">#</a> [04:01] * Quits: jamesr (jamesr@nat/google/x-ucycvsrozievosrg) (Quit: jamesr)</li>
+ <li id="l-173"><a href="#l-173">#</a> [04:01] * Quits: Evanescence (~Evanescen@122.237.2.84) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-174"><a href="#l-174">#</a> [04:22] * Joins: Evanescence (~Evanescen@122.237.2.84)</li>
+ <li id="l-175"><a href="#l-175">#</a> [04:22] * Joins: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net)</li>
+ <li id="l-176"><a href="#l-176">#</a> [04:25] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-177"><a href="#l-177">#</a> [04:25] * Quits: smaug____ (~chatzilla@ZYYYMKDCLXXXVII.gprs.sl-laajakaista.fi) (Ping timeout: 248 seconds)</li>
+ <li id="l-178"><a href="#l-178">#</a> [04:25] * Quits: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net) (Remote host closed the connection)</li>
+ <li id="l-179"><a href="#l-179">#</a> [04:26] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-180"><a href="#l-180">#</a> [04:27] * Joins: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net)</li>
+ <li id="l-181"><a href="#l-181">#</a> [04:29] * Quits: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net) (Ping timeout: 268 seconds)</li>
+ <li id="l-182"><a href="#l-182">#</a> [04:30] * Joins: tantek (~tantek@c-69-181-124-60.hsd1.ca.comcast.net)</li>
+ <li id="l-183"><a href="#l-183">#</a> [04:30] * Quits: agektmr (~Adium@74.125.56.33) (Quit: Leaving.)</li>
+ <li id="l-184"><a href="#l-184">#</a> [04:31] * Quits: cpearce (~chatzilla@60.234.54.74) (Ping timeout: 240 seconds)</li>
+ <li id="l-185"><a href="#l-185">#</a> [04:36] * Joins: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net)</li>
+ <li id="l-186"><a href="#l-186">#</a> [04:37] * Joins: rillian_ (~rillian@mist.thaumas.net)</li>
+ <li id="l-187"><a href="#l-187">#</a> [04:42] * Joins: deanedridge (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-188"><a href="#l-188">#</a> [04:43] * Quits: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net) (Remote host closed the connection)</li>
+ <li id="l-189"><a href="#l-189">#</a> [04:45] * Quits: rillian_ (~rillian@mist.thaumas.net) (Remote host closed the connection)</li>
+ <li id="l-190"><a href="#l-190">#</a> [04:56] * Joins: agektmr (~Adium@74.125.56.33)</li>
+ <li id="l-191"><a href="#l-191">#</a> [05:03] * Quits: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-192"><a href="#l-192">#</a> [05:04] * Quits: rniwa (rniwa@nat/google/x-zuvcpjhnjwxkzlfe) (Quit: rniwa)</li>
+ <li id="l-193"><a href="#l-193">#</a> [05:09] * Joins: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com)</li>
+ <li id="l-194" _a="JonathanNeal"><a href="#l-194">#</a> [05:10] &lt;JonathanNeal&gt; Is this style still relevant? <a href="http://www.iecss.com/whatwg.css">http://www.iecss.com/whatwg.css</a> - I compiled it from the spec, but I think it had imaginary properties like :any(dl, menu, ol, ul) :any(dl, menu, ul) etc</li>
+ <li id="l-195"><a href="#l-195">#</a> [05:15] * Joins: nonge_ (~nonge@p508293E8.dip.t-dialin.net)</li>
+ <li id="l-196"><a href="#l-196">#</a> [05:16] * Joins: cpearce (~chatzilla@ip-118-90-50-128.xdsl.xnet.co.nz)</li>
+ <li id="l-197"><a href="#l-197">#</a> [05:16] * Quits: Evanescence (~Evanescen@122.237.2.84) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-198"><a href="#l-198">#</a> [05:17] * Joins: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net)</li>
+ <li id="l-199"><a href="#l-199">#</a> [05:19] * Quits: nonge (~nonge@p508296D4.dip.t-dialin.net) (Ping timeout: 268 seconds)</li>
+ <li id="l-200"><a href="#l-200">#</a> [05:21] * Joins: jacobolus (~jacobolus@c-69-181-104-35.hsd1.ca.comcast.net)</li>
+ <li id="l-201"><a href="#l-201">#</a> [05:27] * Joins: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net)</li>
+ <li id="l-202"><a href="#l-202">#</a> [05:27] * Quits: jacobolus (~jacobolus@c-69-181-104-35.hsd1.ca.comcast.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-203"><a href="#l-203">#</a> [05:31] * Quits: tantek (~tantek@c-69-181-124-60.hsd1.ca.comcast.net) (Quit: tantek)</li>
+ <li id="l-204"><a href="#l-204">#</a> [05:33] * Quits: temp02 (~temp01@unaffiliated/temp01) (Read error: Connection reset by peer)</li>
+ <li id="l-205"><a href="#l-205">#</a> [05:35] * Quits: roc (~chatzilla@60.234.54.74) (Ping timeout: 240 seconds)</li>
+ <li id="l-206"><a href="#l-206">#</a> [05:43] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-207"><a href="#l-207">#</a> [05:45] * Joins: MikeSmith (~MikeSmith@210.206.248.208)</li>
+ <li id="l-208" _a="zewt"><a href="#l-208">#</a> [05:51] &lt;zewt&gt; commending boris's endurance in the utf-8 thread</li>
+ <li id="l-209" _a="paul_irish_"><a href="#l-209">#</a> [05:53] * paul_irish_ is now known as paul_irish</li>
+ <li id="l-210" _a="zewt"><a href="#l-210">#</a> [05:54] &lt;zewt&gt; will i be strung and quartered if i point out that missing language declarations have the exact same problem as missing encoding declarations (even if the cases it matters are fewer)</li>
+ <li id="l-211" _a="zewt"><a href="#l-211">#</a> [05:54] &lt;zewt&gt; also drawn (need a refresher on my midieval execution methods)</li>
+ <li id="l-212" _a="zewt"><a href="#l-212">#</a> [05:55] &lt;zewt&gt; (also medieval; striking out tonight)</li>
+ <li id="l-213"><a href="#l-213">#</a> [05:56] * Joins: jacobolus (~jacobolus@c-69-181-104-35.hsd1.ca.comcast.net)</li>
+ <li id="l-214"><a href="#l-214">#</a> [05:59] * Quits: jacobolus (~jacobolus@c-69-181-104-35.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-215"><a href="#l-215">#</a> [05:59] * Quits: MikeSmith (~MikeSmith@210.206.248.208) (Ping timeout: 252 seconds)</li>
+ <li id="l-216"><a href="#l-216">#</a> [06:04] * Quits: TabAtkins_ (~tabatkins@206-80-17-29.static.twtelecom.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-217"><a href="#l-217">#</a> [06:05] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-218"><a href="#l-218">#</a> [06:11] * Joins: herbnerder1 (~herb@207-255-154-079-dhcp.clf.pa.atlanticbb.net)</li>
+ <li id="l-219"><a href="#l-219">#</a> [06:18] * Parts: herbnerder1 (~herb@207-255-154-079-dhcp.clf.pa.atlanticbb.net)</li>
+ <li id="l-220"><a href="#l-220">#</a> [06:18] * Quits: ehsan (~ehsan@nat/mozilla/x-nbmehmhmfrqcsyyv) (Remote host closed the connection)</li>
+ <li id="l-221"><a href="#l-221">#</a> [06:19] * Joins: MikeSmith (~MikeSmith@211.210.76.2)</li>
+ <li id="l-222"><a href="#l-222">#</a> [06:23] * Quits: MikeSmith (~MikeSmith@211.210.76.2) (Ping timeout: 252 seconds)</li>
+ <li id="l-223"><a href="#l-223">#</a> [06:24] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-224"><a href="#l-224">#</a> [06:29] * Joins: graememcc (~chatzilla@host109-151-240-187.range109-151.btcentralplus.com)</li>
+ <li id="l-225"><a href="#l-225">#</a> [06:32] * Quits: micheil (~micheil@92.40.253.47.threembb.co.uk) (Read error: Connection reset by peer)</li>
+ <li id="l-226"><a href="#l-226">#</a> [06:34] * Joins: rillian_ (~rillian@mist.thaumas.net)</li>
+ <li id="l-227"><a href="#l-227">#</a> [06:42] * Joins: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net)</li>
+ <li id="l-228"><a href="#l-228">#</a> [06:44] * Joins: mendota (~mendota@c-24-21-213-45.hsd1.or.comcast.net)</li>
+ <li id="l-229"><a href="#l-229">#</a> [06:45] * Quits: dbaron (~dbaron@173-228-28-129.dsl.dynamic.sonic.net) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-230" _a="mendota"><a href="#l-230">#</a> [06:47] &lt;mendota&gt; can i ask a question about arcs in canvas?</li>
+ <li id="l-231"><a href="#l-231">#</a> [06:48] * Quits: jacobolus (~jacobolus@199-83-220-131.PUBLIC.monkeybrains.net) (Remote host closed the connection)</li>
+ <li id="l-232"><a href="#l-232">#</a> [06:53] * Quits: plutoniix (~plutoniix@ppp-110-168-71-247.revip5.asianet.co.th) (Ping timeout: 240 seconds)</li>
+ <li id="l-233" _a="Hixie" _r="mendota"><a href="#l-233">#</a> [06:54] &lt;Hixie&gt; mendota: sure</li>
+ <li id="l-234"><a href="#l-234">#</a> [06:55] * Joins: jer|afk (~jernoble@2002:43bc:6d07:0:fe:78a0:3b2:19f9)</li>
+ <li id="l-235"><a href="#l-235">#</a> [06:56] * Joins: Margle (~margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-236"><a href="#l-236">#</a> [06:56] * Joins: LBP (~Mirc@pD9EB1797.dip0.t-ipconnect.de)</li>
+ <li id="l-237"><a href="#l-237">#</a> [06:58] * Joins: ezoe (~ezoe@203-140-90-58f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-238"><a href="#l-238">#</a> [07:00] * Parts: deanedridge (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-239"><a href="#l-239">#</a> [07:02] * Quits: rillian_ (~rillian@mist.thaumas.net) (Remote host closed the connection)</li>
+ <li id="l-240"><a href="#l-240">#</a> [07:03] * Joins: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net)</li>
+ <li id="l-241"><a href="#l-241">#</a> [07:06] * Joins: plutoniix (~plutoniix@ppp-110-168-101-65.revip5.asianet.co.th)</li>
+ <li id="l-242"><a href="#l-242">#</a> [07:06] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-243"><a href="#l-243">#</a> [07:06] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-244"><a href="#l-244">#</a> [07:12] * Joins: deane_ (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-245"><a href="#l-245">#</a> [07:15] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-246" _a="heycam"><a href="#l-246">#</a> [07:30] * heycam is now known as heycam|away</li>
+ <li id="l-247" _a="abarth" _r="Hixie"><a href="#l-247">#</a> [07:36] &lt;abarth&gt; Hixie: do you know how to subscribe to public-html ?  I used to be subscribed, but I don't seem to be anymore.  <a href="http://lists.w3.org/Archives/Public/public-html/">http://lists.w3.org/Archives/Public/public-html/</a> doesn't have the usual subscription instructions</li>
+ <li id="l-248" _a="Hixie"><a href="#l-248">#</a> [07:37] &lt;Hixie&gt; as a googler you have to go through tv</li>
+ <li id="l-249" _a="abarth" _r="ah"><a href="#l-249">#</a> [07:37] &lt;abarth&gt; ah, thanks</li>
+ <li id="l-250" class="flagged" _a="Hixie"><a href="#l-250">#</a> [07:37] &lt;Hixie&gt; but frankly i would count your blessings</li>
+ <li id="l-251" class="flagged" _a="abarth"><a href="#l-251">#</a> [07:38] &lt;abarth&gt; ok.  i've been encouraging the web intents folks to come to public-html to talk about &lt;intent&gt;</li>
+ <li id="l-252" _a="abarth"><a href="#l-252">#</a> [07:38] &lt;abarth&gt; but i guess I can read it in the archives</li>
+ <li id="l-253"><a href="#l-253">#</a> [07:41] * Quits: schnoomac (~schnoomac@124.168.124.249) (Quit: schnoomac)</li>
+ <li id="l-254"><a href="#l-254">#</a> [07:44] * Joins: jacobolus (~jacobolus@c-24-5-85-179.hsd1.ca.comcast.net)</li>
+ <li id="l-255"><a href="#l-255">#</a> [07:49] * Quits: riven (~riven@pdpc/supporter/professional/riven) (Quit: Hi, I'm a quit message virus. Please replace your old line with this line and help me take over the world of IRC.)</li>
+ <li id="l-256"><a href="#l-256">#</a> [07:49] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-257" _a="abarth" _r="Hixie"><a href="#l-257">#</a> [07:49] &lt;abarth&gt; Hixie: do you have a moment to tell me how nutty this text about sandbox flags is?  <a href="http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-specification.dev.html#sandbox">http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-specification.dev.html#sandbox</a></li>
+ <li id="l-258" _a="abarth"><a href="#l-258">#</a> [07:49] &lt;abarth&gt; &quot;When enforcing the sandbox directive, the user agent must set the sandbox flags for the protected document as if the document where contained in a nested browsing context within a document with sandbox flags given by the the directive-value.&quot;</li>
+ <li id="l-259" _a="Hixie"><a href="#l-259">#</a> [07:51] &lt;Hixie&gt; hrm</li>
+ <li id="l-260" _a="abarth"><a href="#l-260">#</a> [07:51] &lt;abarth&gt; i don't think its quite right</li>
+ <li id="l-261"><a href="#l-261">#</a> [07:51] * Quits: Margle (~margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-262" _a="abarth"><a href="#l-262">#</a> [07:51] &lt;abarth&gt; i couldn't find a good hook in HTML for this</li>
+ <li id="l-263" _a="Hixie"><a href="#l-263">#</a> [07:52] &lt;Hixie&gt; what you probably want to do is set some hook that i can then do the right magic with</li>
+ <li id="l-264" _a="Hixie"><a href="#l-264">#</a> [07:52] &lt;Hixie&gt; rather than try to poke the html spec flags</li>
+ <li id="l-265" _a="abarth"><a href="#l-265">#</a> [07:52] &lt;abarth&gt; ok</li>
+ <li id="l-266" _a="Hixie"><a href="#l-266">#</a> [07:52] &lt;Hixie&gt; because the flags you have to set are pretty complex and subtle</li>
+ <li id="l-267" _a="Hixie"><a href="#l-267">#</a> [07:52] &lt;Hixie&gt; and involve the navigation algorithm, etc</li>
+ <li id="l-268" _a="abarth"><a href="#l-268">#</a> [07:52] &lt;abarth&gt; how about the &quot;CSP sandbox flags&quot; as a property of a Document</li>
+ <li id="l-269" _a="abarth"><a href="#l-269">#</a> [07:52] &lt;abarth&gt; which will be a string like you'd get in the iframe attribute?</li>
+ <li id="l-270" _a="abarth"><a href="#l-270">#</a> [07:52] &lt;abarth&gt; so HTML handles the parsing</li>
+ <li id="l-271" _a="Hixie"><a href="#l-271">#</a> [07:52] &lt;Hixie&gt; has to be on a browsing context, not a document</li>
+ <li id="l-272" _a="Hixie"><a href="#l-272">#</a> [07:52] &lt;Hixie&gt; doesn't make sense to sandbox a document</li>
+ <li id="l-273" _a="abarth"><a href="#l-273">#</a> [07:53] &lt;abarth&gt; why not?</li>
+ <li id="l-274" _a="abarth" _r="sorry"><a href="#l-274">#</a> [07:53] &lt;abarth&gt; sorry, let me ask a different question</li>
+ <li id="l-275" _a="abarth"><a href="#l-275">#</a> [07:53] &lt;abarth&gt; is a browsing context preserved across navigations?</li>
+ <li id="l-276" _a="Hixie"><a href="#l-276">#</a> [07:53] &lt;Hixie&gt; yes</li>
+ <li id="l-277" _a="Hixie"><a href="#l-277">#</a> [07:54] &lt;Hixie&gt; but the flags can change during the lifetime of the browsing context</li>
+ <li id="l-278" _a="abarth"><a href="#l-278">#</a> [07:54] &lt;abarth&gt; ah</li>
+ <li id="l-279" _a="abarth"><a href="#l-279">#</a> [07:54] &lt;abarth&gt; ok</li>
+ <li id="l-280" _a="Hixie"><a href="#l-280">#</a> [07:54] &lt;Hixie&gt; what matters to all teh security stuff is the state when the browsing context was last navigated</li>
+ <li id="l-281" _a="Hixie"><a href="#l-281">#</a> [07:55] &lt;Hixie&gt; e.g. &quot;if... its browsing context had its sandboxed forms browsing context flag set when the Document was created ...&quot;</li>
+ <li id="l-282" _a="abarth"><a href="#l-282">#</a> [07:55] &lt;abarth&gt; i see</li>
+ <li id="l-283"><a href="#l-283">#</a> [07:55] * Joins: Margle (~margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-284" _a="Hixie"><a href="#l-284">#</a> [07:55] &lt;Hixie&gt; but the net result is that you have to set the flags before the document is created</li>
+ <li id="l-285" _a="abarth"><a href="#l-285">#</a> [07:55] &lt;abarth&gt; do we have the response headers when the document is created?</li>
+ <li id="l-286" _a="Hixie" _r="er"><a href="#l-286">#</a> [07:55] &lt;Hixie&gt; er, before the Document is created</li>
+ <li id="l-287" _a="Hixie"><a href="#l-287">#</a> [07:55] &lt;Hixie&gt; sure</li>
+ <li id="l-288" _a="Hixie"><a href="#l-288">#</a> [07:55] &lt;Hixie&gt; assuming it came over HTTP</li>
+ <li id="l-289" _a="abarth" _r="ok"><a href="#l-289">#</a> [07:56] &lt;abarth&gt; ok, so when the document is created, HTML needs to ask about the CSP policy for the document</li>
+ <li id="l-290" _a="abarth"><a href="#l-290">#</a> [07:56] &lt;abarth&gt; or for the response</li>
+ <li id="l-291" _a="Hixie"><a href="#l-291">#</a> [07:56] &lt;Hixie&gt; we get the headers by navigate step 19 or so (type sniffing step), we create the document as a side-effect of step 20 (the switch statement that relies on the sniffed type)</li>
+ <li id="l-292" _a="abarth"><a href="#l-292">#</a> [07:57] &lt;abarth&gt; Upon receiving an HTTP response containing ...</li>
+ <li id="l-293" _a="abarth"><a href="#l-293">#</a> [07:57] &lt;abarth&gt; that's when the CSP policy starts getting enforced</li>
+ <li id="l-294" _a="abarth"><a href="#l-294">#</a> [07:57] &lt;abarth&gt; &quot;Upon receiving an HTTP response containing at least one Content-Security-Policy header field, the user agent must enforce the combination of all the policies contained in these header fields.&quot;</li>
+ <li id="l-295" _a="Hixie"><a href="#l-295">#</a> [07:58] &lt;Hixie&gt; so... what happens if the page navigates itself to a page without the CSP?</li>
+ <li id="l-296"><a href="#l-296">#</a> [07:58] * Joins: maikmerten (~merten@ls5dhcp200.cs.uni-dortmund.de)</li>
+ <li id="l-297" _a="Hixie"><a href="#l-297">#</a> [07:58] &lt;Hixie&gt; or does a history.back() to a accomplice page that isn't sandboxed?</li>
+ <li id="l-298" _a="abarth"><a href="#l-298">#</a> [07:58] &lt;abarth&gt; that's fine</li>
+ <li id="l-299" _a="abarth"><a href="#l-299">#</a> [07:59] &lt;abarth&gt; consider the unique-origin sandbox bits</li>
+ <li id="l-300" _a="abarth"><a href="#l-300">#</a> [07:59] &lt;abarth&gt; or the disable-script</li>
+ <li id="l-301" _a="Hixie"><a href="#l-301">#</a> [07:59] &lt;Hixie&gt; k</li>
+ <li id="l-302" _a="abarth"><a href="#l-302">#</a> [07:59] &lt;abarth&gt; those make sense on a per-document basisi</li>
+ <li id="l-303" _a="Hixie"><a href="#l-303">#</a> [07:59] &lt;Hixie&gt; so when do we reset the flags?</li>
+ <li id="l-304" _a="abarth"><a href="#l-304">#</a> [07:59] &lt;abarth&gt; each navigation</li>
+ <li id="l-305" _a="abarth"><a href="#l-305">#</a> [08:00] &lt;abarth&gt; what actually happens in the implementation is that we copy the sandbox flags from the Frame to the Document when the document is created</li>
+ <li id="l-306" _a="abarth"><a href="#l-306">#</a> [08:00] &lt;abarth&gt; because we're supposed to freeze the sandbox flags</li>
+ <li id="l-307" _a="abarth"><a href="#l-307">#</a> [08:00] &lt;abarth&gt; we enquire about the CSP policy at that time</li>
+ <li id="l-308" _a="abarth"><a href="#l-308">#</a> [08:00] &lt;abarth&gt; that happens each time a new document is loaded into a Frame</li>
+ <li id="l-309" _a="Hixie"><a href="#l-309">#</a> [08:00] &lt;Hixie&gt; hmm... the document is created before the session history change happens</li>
+ <li id="l-310"><a href="#l-310">#</a> [08:00] * Quits: espadrine (~thaddee_t@acces2091.res.insa-lyon.fr) (Ping timeout: 252 seconds)</li>
+ <li id="l-311" _a="Hixie"><a href="#l-311">#</a> [08:01] &lt;Hixie&gt; so we'd have to reset the flags before the old document is removed...</li>
+ <li id="l-312" _a="Hixie"><a href="#l-312">#</a> [08:01] &lt;Hixie&gt; might make sense to just set the flags temporarily while the document is being created or something</li>
+ <li id="l-313" _a="Hixie"><a href="#l-313">#</a> [08:01] &lt;Hixie&gt; how is this supposed to interact with the sandbox attribute? union?</li>
+ <li id="l-314" _a="abarth"><a href="#l-314">#</a> [08:01] &lt;abarth&gt; can we not just set them on the document when we copy the state to the document?</li>
+ <li id="l-315" _a="abarth" _r="Hixie"><a href="#l-315">#</a> [08:02] &lt;abarth&gt; Hixie: its the same combination operator that happens when you have nested iframes</li>
+ <li id="l-316" _a="abarth"><a href="#l-316">#</a> [08:02] &lt;abarth&gt; that each contribute a sandbox attribute</li>
+ <li id="l-317"><a href="#l-317">#</a> [08:02] * Joins: riven (~riven@53518387.cm-6-2c.dynamic.ziggo.nl)</li>
+ <li id="l-318"><a href="#l-318">#</a> [08:02] * Quits: riven (~riven@53518387.cm-6-2c.dynamic.ziggo.nl) (Changing host)</li>
+ <li id="l-319"><a href="#l-319">#</a> [08:02] * Joins: riven (~riven@pdpc/supporter/professional/riven)</li>
+ <li id="l-320" _a="Hixie"><a href="#l-320">#</a> [08:03] &lt;Hixie&gt; hmmm</li>
+ <li id="l-321" _a="Hixie"><a href="#l-321">#</a> [08:04] &lt;Hixie&gt; so the way it works for nested iframes is that setting the flag on an iframe just forces it on for all descendants iframes</li>
+ <li id="l-322" _a="abarth" _r="yeah"><a href="#l-322">#</a> [08:04] &lt;abarth&gt; yeah, so the union</li>
+ <li id="l-323" _a="abarth"><a href="#l-323">#</a> [08:04] &lt;abarth&gt; (assuming the items are things like &quot;sandboxed scripts browsing context flag&quot;)</li>
+ <li id="l-324" _a="Hixie"><a href="#l-324">#</a> [08:05] &lt;Hixie&gt; the precise text right now is &quot;In addition, any browsing contexts nested within an iframe, either directly or indirectly, must have all the flags set on them as were set on the iframe's Document's browsing context when the iframe's Document was created.&quot;</li>
+ <li id="l-325" _a="Hixie"><a href="#l-325">#</a> [08:05] &lt;Hixie&gt; so i guess i'd just change that to &quot;nested within a browsing context&quot;</li>
+ <li id="l-326" _a="Hixie"><a href="#l-326">#</a> [08:05] &lt;Hixie&gt; and change the other &quot;iframe&quot;s to &quot;browsing context&quot;</li>
+ <li id="l-327" _a="abarth"><a href="#l-327">#</a> [08:05] &lt;abarth&gt; yes</li>
+ <li id="l-328" _a="abarth"><a href="#l-328">#</a> [08:06] &lt;abarth&gt; &quot;iframe's Document's browsing context when the iframe's Document was created&quot;</li>
+ <li id="l-329" _a="abarth"><a href="#l-329">#</a> [08:06] &lt;abarth&gt; that state gets represented in the implementation</li>
+ <li id="l-330" _a="abarth"><a href="#l-330">#</a> [08:06] &lt;abarth&gt; explicitly as a property of the document</li>
+ <li id="l-331" _a="Hixie" _r="sigh"><a href="#l-331">#</a> [08:06] &lt;Hixie&gt; sigh, probably makes sense to just hoist all this stuff up to a generic section</li>
+ <li id="l-332" _a="Hixie"><a href="#l-332">#</a> [08:06] &lt;Hixie&gt; and then invoke it from iframe creation and from navigation</li>
+ <li id="l-333" _a="Hixie"><a href="#l-333">#</a> [08:06] &lt;Hixie&gt; or something</li>
+ <li id="l-334" _a="Hixie"><a href="#l-334">#</a> [08:06] &lt;Hixie&gt; and maybe do your &quot;freeze on document&quot; thing at the same time</li>
+ <li id="l-335" _a="Hixie"><a href="#l-335">#</a> [08:06] &lt;Hixie&gt; for clarity</li>
+ <li id="l-336" _a="abarth"><a href="#l-336">#</a> [08:06] &lt;abarth&gt; sorry to make work for you :(</li>
+ <li id="l-337" _a="Hixie"><a href="#l-337">#</a> [08:06] &lt;Hixie&gt; no worries</li>
+ <li id="l-338" _a="Hixie"><a href="#l-338">#</a> [08:07] &lt;Hixie&gt; tis my job</li>
+ <li id="l-339" _a="Hixie"><a href="#l-339">#</a> [08:07] &lt;Hixie&gt; can you file a bug or send mail about it? reference this irc log if you can</li>
+ <li id="l-340" _a="abarth"><a href="#l-340">#</a> [08:07] &lt;abarth&gt; sure</li>
+ <li id="l-341" _a="Hixie"><a href="#l-341">#</a> [08:07] &lt;Hixie&gt; probably won't happen until early next year</li>
+ <li id="l-342" _a="abarth" _r="yeah"><a href="#l-342">#</a> [08:07] &lt;abarth&gt; yeah, there's no rush</li>
+ <li id="l-343" _a="Hixie"><a href="#l-343">#</a> [08:07] &lt;Hixie&gt; k</li>
+ <li id="l-344" _a="abarth"><a href="#l-344">#</a> [08:07] &lt;abarth&gt; thanks</li>
+ <li id="l-345"><a href="#l-345">#</a> [08:09] * Joins: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net)</li>
+ <li id="l-346" _a="Hixie"><a href="#l-346">#</a> [08:10] &lt;Hixie&gt; my pleasure</li>
+ <li id="l-347" _a="zewt" _r="ew"><a href="#l-347">#</a> [08:27] &lt;zewt&gt; ew, IVS characters are outside of the BMP, so if they were ever actually supported and used, they'd never work reliably in JS (since nobody pays attention to surrogate pairs)</li>
+ <li id="l-348" _a="jamesr"><a href="#l-348">#</a> [08:30] &lt;jamesr&gt; what's IVS?</li>
+ <li id="l-349" _a="zewt"><a href="#l-349">#</a> [08:30] &lt;zewt&gt; combining characters for glyph variations in unicode</li>
+ <li id="l-350" _a="zewt"><a href="#l-350">#</a> [08:30] &lt;zewt&gt; (an alternate approach to language tagging for the han unification problem)</li>
+ <li id="l-351"><a href="#l-351">#</a> [08:31] * Joins: teatimer (~teatimer@167.30.37.236)</li>
+ <li id="l-352" _a="zewt"><a href="#l-352">#</a> [08:31] &lt;zewt&gt; never heard of it actually being used, though</li>
+ <li id="l-353" _a="zewt"><a href="#l-353">#</a> [08:31] &lt;zewt&gt; (and it doesn't seem very practical, in general)</li>
+ <li id="l-354"><a href="#l-354">#</a> [08:32] * Quits: mendota (~mendota@c-24-21-213-45.hsd1.or.comcast.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-355" _a="jamesr"><a href="#l-355">#</a> [08:32] * jamesr wonders if non-BMP chars are something we'll ever address on the web</li>
+ <li id="l-356" _a="jamesr"><a href="#l-356">#</a> [08:33] &lt;jamesr&gt; and if the people cooking up unicode are aware of the issues</li>
+ <li id="l-357" _a="Hixie"><a href="#l-357">#</a> [08:33] &lt;Hixie&gt; the people cooking up unicode don't have much choice in the matter</li>
+ <li id="l-358" _a="Hixie"><a href="#l-358">#</a> [08:33] &lt;Hixie&gt; the BMP is close to full</li>
+ <li id="l-359"><a href="#l-359">#</a> [08:33] * Joins: diraol (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-360"><a href="#l-360">#</a> [08:33] * Quits: cgcardona (~cgcardona@unaffiliated/cgcardona) (Quit: cgcardona)</li>
+ <li id="l-361" _a="jamesr"><a href="#l-361">#</a> [08:34] &lt;jamesr&gt; so they shouldn't wait for us, obviously, unicode solves problems for things other than the web</li>
+ <li id="l-362" _a="jamesr"><a href="#l-362">#</a> [08:35] &lt;jamesr&gt; but at some point we have to deal with this, or just say that there are types of content that you can't use 99% of the web platform and libraries for</li>
+ <li id="l-363" _a="zewt"><a href="#l-363">#</a> [08:35] &lt;zewt&gt; a set of content that will grow to less trivial levels over time</li>
+ <li id="l-364" _a="zcorpan"><a href="#l-364">#</a> [08:36] &lt;zcorpan&gt; have somebody extracted IDLs from specs and put them somewhere?</li>
+ <li id="l-365" _a="Hixie"><a href="#l-365">#</a> [08:36] &lt;Hixie&gt; dom's widl checker can extract idls from spec</li>
+ <li id="l-366" _a="jamesr"><a href="#l-366">#</a> [08:36] &lt;jamesr&gt; either the world ignores that content (unlikely and seems bad), we extend the platform, or platforms other than the web grow to deal with this content</li>
+ <li id="l-367"><a href="#l-367">#</a> [08:37] * Joins: FlorianX (~Dimitri@p4FCF702D.dip.t-dialin.net)</li>
+ <li id="l-368"><a href="#l-368">#</a> [08:37] * Quits: diraol (~diraol@201.20.213.107.user.ajato.com.br) (Client Quit)</li>
+ <li id="l-369"><a href="#l-369">#</a> [08:38] * Joins: diraol (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-370" _a="zewt"><a href="#l-370">#</a> [08:38] &lt;zewt&gt; platforms other than the web don't need to grow--they already deal with it (well, some of them)</li>
+ <li id="l-371" _a="zewt"><a href="#l-371">#</a> [08:39] &lt;zewt&gt; so it'll become &quot;everyone can display these characters except for the web&quot; (or rather, &quot;it'll display on the web but things will break randomly&quot;)</li>
+ <li id="l-372" _a="zewt"><a href="#l-372">#</a> [08:39] &lt;zewt&gt; (we're not *that* far off; win32 is UTF-16 too and I'm sure lots of Windows software doesn't deal with it at all)</li>
+ <li id="l-373"><a href="#l-373">#</a> [08:42] * Joins: brucel (~brucel@cpc5-smal11-2-0-cust151.perr.cable.virginmedia.com)</li>
+ <li id="l-374"><a href="#l-374">#</a> [08:48] * Quits: teatimer (~teatimer@167.30.37.236)</li>
+ <li id="l-375"><a href="#l-375">#</a> [08:52] * Quits: deane_ (~deanedrid@124-197-11-114.callplus.net.nz) (Read error: Connection reset by peer)</li>
+ <li id="l-376"><a href="#l-376">#</a> [08:53] * Parts: brucel (~brucel@cpc5-smal11-2-0-cust151.perr.cable.virginmedia.com)</li>
+ <li id="l-377"><a href="#l-377">#</a> [08:53] * Joins: benjoffe (~benjoffe@123.208.163.110)</li>
+ <li id="l-378"><a href="#l-378">#</a> [08:56] * Joins: brucel (~brucel@cpc5-smal11-2-0-cust151.perr.cable.virginmedia.com)</li>
+ <li id="l-379"><a href="#l-379">#</a> [08:58] * Joins: deane_ (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-380"><a href="#l-380">#</a> [09:02] * Quits: abarth (~abarth@173-164-128-209-SFBA.hfc.comcastbusiness.net) (Quit: abarth)</li>
+ <li id="l-381" _a="zcorpan"><a href="#l-381">#</a> [09:03] &lt;zcorpan&gt; <a href="http://widl.webvm.net/">http://widl.webvm.net/</a> is .... unhelpful</li>
+ <li id="l-382"><a href="#l-382">#</a> [09:04] * Quits: deane_ (~deanedrid@124-197-11-114.callplus.net.nz) (Read error: No route to host)</li>
+ <li id="l-383" _a="zcorpan"><a href="#l-383">#</a> [09:05] * zcorpan gives up</li>
+ <li id="l-384"><a href="#l-384">#</a> [09:07] * Joins: mendota (~mendota@c-24-21-213-45.hsd1.or.comcast.net)</li>
+ <li id="l-385"><a href="#l-385">#</a> [09:09] * Quits: Margle (~margle@41-133-196-64.dsl.mweb.co.za) (Quit: Textual IRC Client: <a href="http://www.textualapp.com/">http://www.textualapp.com/</a>)</li>
+ <li id="l-386" _a="jgraham"><a href="#l-386">#</a> [09:11] * jgraham wonders what zcorpan is trying to do</li>
+ <li id="l-387" class="flagged" _a="jgraham" _r="Also"><a href="#l-387">#</a> [09:12] &lt;jgraham&gt; Also, it seems like we shipped the HTML5 parser in an actual final release build</li>
+ <li id="l-388" class="flagged" _a="jgraham"><a href="#l-388">#</a> [09:12] &lt;jgraham&gt; Take that site-compatibility bugs!</li>
+ <li id="l-389" _a="Hixie"><a href="#l-389">#</a> [09:14] &lt;Hixie&gt; no more weird text nodes with css?</li>
+ <li id="l-390" _a="zcorpan" _r="jgraham"><a href="#l-390">#</a> [09:15] &lt;zcorpan&gt; jgraham: i just wanted to find examples of overloading to form an opinion on what the conversion behavior should be</li>
+ <li id="l-391" _a="Hixie"><a href="#l-391">#</a> [09:15] &lt;Hixie&gt; nn</li>
+ <li id="l-392" _a="zcorpan" _r="jgraham"><a href="#l-392">#</a> [09:15] &lt;zcorpan&gt; jgraham: turned out to be simpler to search for &quot;};&quot;</li>
+ <li id="l-393" _a="jgraham"><a href="#l-393">#</a> [09:15] &lt;jgraham&gt; gn</li>
+ <li id="l-394" _a="jgraham" _r="zcorpan"><a href="#l-394">#</a> [09:16] &lt;jgraham&gt; zcorpan: Ah :)</li>
+ <li id="l-395" _a="zcorpan"><a href="#l-395">#</a> [09:16] &lt;zcorpan&gt; first example is options.add()</li>
+ <li id="l-396"><a href="#l-396">#</a> [09:22] * Joins: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl)</li>
+ <li id="l-397"><a href="#l-397">#</a> [09:25] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-398"><a href="#l-398">#</a> [09:25] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-399"><a href="#l-399">#</a> [09:26] * Joins: PalleZingmark (~Adium@217.13.228.226)</li>
+ <li id="l-400"><a href="#l-400">#</a> [09:27] * Joins: deane_ (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-401" _a="jamesr"><a href="#l-401">#</a> [09:29] &lt;jamesr&gt; hmm</li>
+ <li id="l-402" _a="jamesr"><a href="#l-402">#</a> [09:29] &lt;jamesr&gt; any opera peeps here? i'm looking at <a href="http://dev.opera.com/articles/view/efficient-javascript/?page=3#stylechanges">http://dev.opera.com/articles/view/efficient-javascript/?page=3#stylechanges</a> and scratching my head</li>
+ <li id="l-403" _a="jamesr"><a href="#l-403">#</a> [09:31] &lt;jamesr&gt; it seems like either opera's doing things that are definitely invalid or there's some interaction here that escapes me. how could you have intermediate repaints in that example?</li>
+ <li id="l-404"><a href="#l-404">#</a> [09:31] * Joins: MikeSmith (~MikeSmith@211.177.245.3)</li>
+ <li id="l-405" _a="jgraham" _r="jamesr"><a href="#l-405">#</a> [09:34] &lt;jgraham&gt; jamesr: Haven'tlooked at the article (have to go), but we repaint on a timer during script execution. It is supposed to help on slow devices where script might take a long time</li>
+ <li id="l-406" _a="jamesr"><a href="#l-406">#</a> [09:34] &lt;jamesr&gt; so you paint while script is still running?</li>
+ <li id="l-407" _a="jgraham"><a href="#l-407">#</a> [09:34] &lt;jgraham&gt; If that's not what it's about, I will have to read the article</li>
+ <li id="l-408" _a="jamesr"><a href="#l-408">#</a> [09:34] &lt;jamesr&gt; yes that's what it's about</li>
+ <li id="l-409" _a="jamesr"><a href="#l-409">#</a> [09:34] &lt;jamesr&gt; or this section, anyway</li>
+ <li id="l-410" _a="jamesr"><a href="#l-410">#</a> [09:34] &lt;jamesr&gt; and you're OK with painting intermediate results?</li>
+ <li id="l-411" _a="jgraham"><a href="#l-411">#</a> [09:35] &lt;jgraham&gt; Well it depends who you ask :)</li>
+ <li id="l-412" _a="jgraham"><a href="#l-412">#</a> [09:35] &lt;jgraham&gt; There is a tradeoff</li>
+ <li id="l-413" _a="zcorpan"><a href="#l-413">#</a> [09:36] &lt;zcorpan&gt; the article says &quot;That approach could mean multiple reflows and repaints.&quot;. this is not the case (anymore, at least)</li>
+ <li id="l-414" _a="zcorpan"><a href="#l-414">#</a> [09:36] &lt;zcorpan&gt; unless the script takes a very long time</li>
+ <li id="l-415" _a="jamesr" _r="well"><a href="#l-415">#</a> [09:36] &lt;jamesr&gt; well, if opera decides to repaint after every .style assignment it will</li>
+ <li id="l-416" _a="jgraham"><a href="#l-416">#</a> [09:36] &lt;jgraham&gt; On desktop if your script is so long running that it will paint intermediate results in Opera it will block the UI thread in other browsers</li>
+ <li id="l-417" _a="jgraham"><a href="#l-417">#</a> [09:36] &lt;jgraham&gt; So it's not a good UX anywhere</li>
+ <li id="l-418" _a="jamesr"><a href="#l-418">#</a> [09:37] &lt;jamesr&gt; if the script is replacing a significant part of the UI with something different then it's much better to not show a half-built thing</li>
+ <li id="l-419" _a="jamesr"><a href="#l-419">#</a> [09:37] &lt;jamesr&gt; unless you're talking about hung script dialog sorts of delays</li>
+ <li id="l-420" _a="jamesr"><a href="#l-420">#</a> [09:37] &lt;jamesr&gt; there's also standards language around this behavior, although it is somewhat weak</li>
+ <li id="l-421"><a href="#l-421">#</a> [09:38] * Quits: jernoble (~jernoble@2620:149:4:1b01:a994:965c:b748:5f5e) (Read error: Connection reset by peer)</li>
+ <li id="l-422" _a="zcorpan" _r="right"><a href="#l-422">#</a> [09:38] &lt;zcorpan&gt; right, we don't conform to the html spec</li>
+ <li id="l-423" _a="jamesr" _r="anyway"><a href="#l-423">#</a> [09:38] &lt;jamesr&gt; anyway, if you feel that's the UX you want i'll try to keep it in mind when advising web devs on what to do (probably by telling them to ignore opera since there is no way for them to build a reasonable experience with that going on)</li>
+ <li id="l-424"><a href="#l-424">#</a> [09:38] * Joins: jernoble (~jernoble@2620:149:4:1b01:bd15:df6b:307a:2593)</li>
+ <li id="l-425"><a href="#l-425">#</a> [09:39] * Joins: xec (~xec@2a00:10b0:1:1002:5ab0:35ff:fef8:6a01)</li>
+ <li id="l-426"><a href="#l-426">#</a> [09:39] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-427" _a="zcorpan" _r="jamesr"><a href="#l-427">#</a> [09:39] &lt;zcorpan&gt; jamesr: i hope you don't advice web devs to block the UI thread :)</li>
+ <li id="l-428" _a="jamesr" _r="well"><a href="#l-428">#</a> [09:40] &lt;jamesr&gt; well, i do advise them not to write any javascript to avoid doing that</li>
+ <li id="l-429" _a="jamesr"><a href="#l-429">#</a> [09:40] &lt;jamesr&gt; but sometimes they don't listen and write some script anyway</li>
+ <li id="l-430" _a="jamesr"><a href="#l-430">#</a> [09:41] &lt;jamesr&gt; and authors don't have much control over how much wall clock time their JS takes given GC pauses, thread preemption, and native code choices</li>
+ <li id="l-431"><a href="#l-431">#</a> [09:45] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-432"><a href="#l-432">#</a> [09:45] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-433"><a href="#l-433">#</a> [09:45] * Quits: Druid_ (~Druid@p5B137354.dip.t-dialin.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-434"><a href="#l-434">#</a> [09:46] * Joins: JonathanNeal1 (~Jonathan@cpe-67-49-64-18.socal.res.rr.com)</li>
+ <li id="l-435"><a href="#l-435">#</a> [09:46] * Quits: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-436"><a href="#l-436">#</a> [09:50] * Joins: Druid_ (~Druid@p5B136AB1.dip.t-dialin.net)</li>
+ <li id="l-437"><a href="#l-437">#</a> [09:50] * Joins: tantek_ (~tantek@70-36-139-219.dsl.dynamic.sonic.net)</li>
+ <li id="l-438"><a href="#l-438">#</a> [09:52] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-439"><a href="#l-439">#</a> [09:53] * Parts: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-440"><a href="#l-440">#</a> [09:54] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-441"><a href="#l-441">#</a> [09:54] * Quits: agektmr (~Adium@74.125.56.33) (Quit: Leaving.)</li>
+ <li id="l-442"><a href="#l-442">#</a> [09:54] * Joins: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e)</li>
+ <li id="l-443"><a href="#l-443">#</a> [09:54] * Joins: tomasf (~tomasf@77.72.97.5.c.fiberdirekt.net)</li>
+ <li id="l-444"><a href="#l-444">#</a> [09:55] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-445"><a href="#l-445">#</a> [09:57] * Quits: nattokirai (~nattokira@rtr.mozilla.or.jp) (Quit: nattokirai)</li>
+ <li id="l-446"><a href="#l-446">#</a> [09:57] * Quits: tantek_ (~tantek@70-36-139-219.dsl.dynamic.sonic.net) (Quit: tantek_)</li>
+ <li id="l-447"><a href="#l-447">#</a> [09:59] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-448"><a href="#l-448">#</a> [09:59] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-449" _a="jgraham" _r="jamesr_"><a href="#l-449">#</a> [10:05] &lt;jgraham&gt; jamesr_: Code that takes hundreds of ms to run is bad any way you cut it</li>
+ <li id="l-450"><a href="#l-450">#</a> [10:15] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-451"><a href="#l-451">#</a> [10:20] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-452" _a="oal"><a href="#l-452">#</a> [10:21] &lt;oal&gt; Shouldn't the section tag be styled in any way? And are there other tags that should be treated the same way?</li>
+ <li id="l-453"><a href="#l-453">#</a> [10:22] * Joins: richt (~richt@c83-249-28-214.bredband.comhem.se)</li>
+ <li id="l-454" _a="jgraham"><a href="#l-454">#</a> [10:23] &lt;jgraham&gt; Giving tags default styling often makes people unhappy</li>
+ <li id="l-455"><a href="#l-455">#</a> [10:24] * Quits: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-456"><a href="#l-456">#</a> [10:25] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 210 seconds.)</li>
+ <li id="l-457"><a href="#l-457">#</a> [10:25] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-458" _a="oal" _r="jgraham"><a href="#l-458">#</a> [10:27] &lt;oal&gt; jgraham: <a href="http://www.aniketpant.com/article/html5-semantics-and-good-coding-practices">http://www.aniketpant.com/article/html5-semantics-and-good-coding-practices</a> says &quot;Not: The section element should not be used for styling. A div should be preferred.&quot; Why is that?</li>
+ <li id="l-459"><a href="#l-459">#</a> [10:28] * Joins: david_carlisle (~chatzilla@86.188.197.189)</li>
+ <li id="l-460" _a="michel_v_"><a href="#l-460">#</a> [10:29] * michel_v_ is now known as michel_v</li>
+ <li id="l-461"><a href="#l-461">#</a> [10:29] * Quits: michel_v (~tofu@desav.eu) (Changing host)</li>
+ <li id="l-462"><a href="#l-462">#</a> [10:29] * Joins: michel_v (~tofu@unaffiliated/michelv/x-000000001)</li>
+ <li id="l-463" _a="zcorpan" _r="oal"><a href="#l-463">#</a> [10:29] &lt;zcorpan&gt; oal: same reason you shouldn't use &lt;h1&gt; if you want big text but don't mean heading</li>
+ <li id="l-464" _a="zcorpan" _r="oal"><a href="#l-464">#</a> [10:30] &lt;zcorpan&gt; oal: &lt;section&gt; means section, not fancy box with rounded corners and drop shadow :)</li>
+ <li id="l-465" _a="oal" _r="Yeah"><a href="#l-465">#</a> [10:30] &lt;oal&gt; Yeah, but I mean, if you have a section, isn't it ok to set a width, color and background color for it? Or should there be an &lt;article&gt; or &lt;div&gt; inside with those set?</li>
+ <li id="l-466" _a="zcorpan" _r="sure"><a href="#l-466">#</a> [10:31] &lt;zcorpan&gt; sure, it's fine to style sections</li>
+ <li id="l-467"><a href="#l-467">#</a> [10:31] * Joins: Neocortex (~nectop@82-170-160-25.ip.telfort.nl)</li>
+ <li id="l-468" _a="zcorpan"><a href="#l-468">#</a> [10:32] &lt;zcorpan&gt; it's fine to style any element</li>
+ <li id="l-469" _a="zcorpan"><a href="#l-469">#</a> [10:32] &lt;zcorpan&gt; it's not fine to use any element *for styling*</li>
+ <li id="l-470" _a="jgraham"><a href="#l-470">#</a> [10:34] &lt;jgraham&gt; Right. That sentence is a bit misleading. It means you shouldn't use &lt;section&gt; if the only reason you need an element is as a wrapper to hook some styling on. You should only use &lt;section&gt; if you are actually marking up a section of content. But if you are using &lt;section&gt; correctly, it is fine to apply any style you like to it</li>
+ <li id="l-471" _a="jgraham"><a href="#l-471">#</a> [10:34] &lt;jgraham&gt; If you just need a styling hook, use a &lt;div&gt; element instead</li>
+ <li id="l-472" _a="oal"><a href="#l-472">#</a> [10:35] &lt;oal&gt; That makes sense. Thanks jgraham and zcorpan :-)</li>
+ <li id="l-473"><a href="#l-473">#</a> [10:38] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-474"><a href="#l-474">#</a> [10:38] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-475"><a href="#l-475">#</a> [10:42] * Quits: benjoffe (~benjoffe@123.208.163.110) (Read error: Connection reset by peer)</li>
+ <li id="l-476"><a href="#l-476">#</a> [10:42] * Quits: ezoe (~ezoe@203-140-90-58f1.kyt1.eonet.ne.jp) (Quit: And Now for Something Completely Different.)</li>
+ <li id="l-477"><a href="#l-477">#</a> [10:45] * Joins: Lachy (~Lachy@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-478"><a href="#l-478">#</a> [10:50] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-479"><a href="#l-479">#</a> [10:51] * Quits: cpearce (~chatzilla@ip-118-90-50-128.xdsl.xnet.co.nz) (Ping timeout: 240 seconds)</li>
+ <li id="l-480"><a href="#l-480">#</a> [10:52] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 252 seconds)</li>
+ <li id="l-481"><a href="#l-481">#</a> [10:53] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-482"><a href="#l-482">#</a> [10:53] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-483"><a href="#l-483">#</a> [10:55] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-484"><a href="#l-484">#</a> [10:57] * Quits: jdong_ (~quassel@222.126.155.250) (Client Quit)</li>
+ <li id="l-485"><a href="#l-485">#</a> [10:57] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-486"><a href="#l-486">#</a> [11:01] * Quits: jdong_ (~quassel@222.126.155.250) (Client Quit)</li>
+ <li id="l-487"><a href="#l-487">#</a> [11:01] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-488"><a href="#l-488">#</a> [11:01] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 240 seconds)</li>
+ <li id="l-489"><a href="#l-489">#</a> [11:03] * Quits: kinetik (~kinetik@121.98.132.55) (Ping timeout: 252 seconds)</li>
+ <li id="l-490"><a href="#l-490">#</a> [11:06] * Joins: kinetik (~kinetik@121.98.132.55)</li>
+ <li id="l-491"><a href="#l-491">#</a> [11:09] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-492"><a href="#l-492">#</a> [11:10] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-493"><a href="#l-493">#</a> [11:10] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-494"><a href="#l-494">#</a> [11:12] * Joins: gwicke (~gabriel@212.255.39.236)</li>
+ <li id="l-495"><a href="#l-495">#</a> [11:15] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-496"><a href="#l-496">#</a> [11:21] * Joins: benjoffe (~benjoffe@123.208.163.110)</li>
+ <li id="l-497"><a href="#l-497">#</a> [11:21] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 240 seconds)</li>
+ <li id="l-498"><a href="#l-498">#</a> [11:22] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-499"><a href="#l-499">#</a> [11:22] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-500"><a href="#l-500">#</a> [11:22] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-501"><a href="#l-501">#</a> [11:30] * Quits: jdaggett (~jdaggett@ad009033.dynamic.ppp.asahi-net.or.jp) (Quit: jdaggett)</li>
+ <li id="l-502"><a href="#l-502">#</a> [11:31] * Quits: agektmr (~Adium@2401:fa00:4:1012:fa1e:dfff:fee6:d74e) (Quit: Leaving.)</li>
+ <li id="l-503"><a href="#l-503">#</a> [11:32] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Remote host closed the connection)</li>
+ <li id="l-504"><a href="#l-504">#</a> [11:32] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-505"><a href="#l-505">#</a> [11:33] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 240 seconds)</li>
+ <li id="l-506"><a href="#l-506">#</a> [11:34] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Remote host closed the connection)</li>
+ <li id="l-507"><a href="#l-507">#</a> [11:35] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-508"><a href="#l-508">#</a> [11:35] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-509"><a href="#l-509">#</a> [11:35] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-510" _a="annevk" _r="heycam|away"><a href="#l-510">#</a> [11:38] &lt;annevk&gt; heycam|away: did you add the warning to const?</li>
+ <li id="l-511"><a href="#l-511">#</a> [11:41] * Quits: jernoble (~jernoble@2620:149:4:1b01:bd15:df6b:307a:2593) (Read error: Connection reset by peer)</li>
+ <li id="l-512"><a href="#l-512">#</a> [11:41] * Joins: jernoble (~jernoble@17.212.152.13)</li>
+ <li id="l-513"><a href="#l-513">#</a> [11:43] * Quits: kennyluck (~kennyluck@114-43-125-198.dynamic.hinet.net) (Quit: kennyluck)</li>
+ <li id="l-514"><a href="#l-514">#</a> [11:46] * Quits: diraol (~diraol@201.20.213.107.user.ajato.com.br) (Ping timeout: 240 seconds)</li>
+ <li id="l-515"><a href="#l-515">#</a> [11:47] * Parts: deane_ (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-516"><a href="#l-516">#</a> [11:53] * Quits: Rubennn (~quassel@2a02:348:33:5823::1) (Quit: <a href="http://quassel-irc.org">http://quassel-irc.org</a> - Chat comfortably. Anywhere.)</li>
+ <li id="l-517"><a href="#l-517">#</a> [11:53] * Joins: Rubennn (~Rubennn@apher.gewooniets.nl)</li>
+ <li id="l-518" _a="jernoble"><a href="#l-518">#</a> [11:54] * jernoble is now known as jernoble|afk</li>
+ <li id="l-519"><a href="#l-519">#</a> [11:58] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-520"><a href="#l-520">#</a> [12:00] * Joins: adactio (~adactio@host213-123-197-180.in-addr.btopenworld.com)</li>
+ <li id="l-521"><a href="#l-521">#</a> [12:04] * Joins: diraol (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-522"><a href="#l-522">#</a> [12:04] * Quits: diraol (~diraol@201.20.213.107.user.ajato.com.br) (Client Quit)</li>
+ <li id="l-523"><a href="#l-523">#</a> [12:04] * Joins: diraol (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-524"><a href="#l-524">#</a> [12:06] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 240 seconds)</li>
+ <li id="l-525"><a href="#l-525">#</a> [12:12] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-526"><a href="#l-526">#</a> [12:17] * Joins: deane (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-527"><a href="#l-527">#</a> [12:17] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 240 seconds)</li>
+ <li id="l-528"><a href="#l-528">#</a> [12:18] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-529"><a href="#l-529">#</a> [12:25] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 255 seconds)</li>
+ <li id="l-530"><a href="#l-530">#</a> [12:25] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-531"><a href="#l-531">#</a> [12:25] * Joins: danbri (~danbri@note-danbri.few.vu.nl)</li>
+ <li id="l-532" class="flagged" _a="annevk"><a href="#l-532">#</a> [12:33] &lt;annevk&gt; geez HTTP WG is taking its time</li>
+ <li id="l-533" class="flagged" _a="annevk"><a href="#l-533">#</a> [12:33] &lt;annevk&gt; and forgetting about my issues after saying they'll handle it</li>
+ <li id="l-534"><a href="#l-534">#</a> [12:38] * Quits: Lachy (~Lachy@cm-84.215.59.50.getinternet.no) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-535"><a href="#l-535">#</a> [12:43] * Quits: diraol (~diraol@201.20.213.107.user.ajato.com.br) (Ping timeout: 240 seconds)</li>
+ <li id="l-536"><a href="#l-536">#</a> [12:45] * Quits: plutoniix (~plutoniix@ppp-110-168-101-65.revip5.asianet.co.th) (Quit: Leaving)</li>
+ <li id="l-537"><a href="#l-537">#</a> [12:51] * Joins: diraol (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-538"><a href="#l-538">#</a> [12:52] * Quits: diraol (~diraol@201.20.213.107.user.ajato.com.br) (Client Quit)</li>
+ <li id="l-539"><a href="#l-539">#</a> [12:52] * Joins: diraol1 (~diraol@201.20.213.107.user.ajato.com.br)</li>
+ <li id="l-540"><a href="#l-540">#</a> [12:54] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 240 seconds)</li>
+ <li id="l-541"><a href="#l-541">#</a> [12:55] * Joins: Obvious (tachikoma@188.226.74.2)</li>
+ <li id="l-542"><a href="#l-542">#</a> [12:56] * Quits: Obvious_MkII (tachikoma@188.226.74.2) (Ping timeout: 255 seconds)</li>
+ <li id="l-543"><a href="#l-543">#</a> [12:56] * Quits: diraol1 (~diraol@201.20.213.107.user.ajato.com.br) (Ping timeout: 252 seconds)</li>
+ <li id="l-544" _a="annevk" _r="Hixie"><a href="#l-544">#</a> [13:00] &lt;annevk&gt; Hixie: in r6843 you updated WebVTT but <a href="http://dev.w3.org/html5/webvtt/">http://dev.w3.org/html5/webvtt/</a> is not updated</li>
+ <li id="l-545"><a href="#l-545">#</a> [13:09] * Joins: erlehmann (~erlehmann@82.113.99.18)</li>
+ <li id="l-546"><a href="#l-546">#</a> [13:11] * Joins: Margle (~margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-547"><a href="#l-547">#</a> [13:12] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-548"><a href="#l-548">#</a> [13:12] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-549"><a href="#l-549">#</a> [13:13] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-550"><a href="#l-550">#</a> [13:14] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-551"><a href="#l-551">#</a> [13:16] * Quits: jdong_ (~quassel@222.126.155.250) (Client Quit)</li>
+ <li id="l-552"><a href="#l-552">#</a> [13:16] * Joins: andrewjbaker (~ajb@ip-81-23-63-2.ask4internet.com)</li>
+ <li id="l-553"><a href="#l-553">#</a> [13:16] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-554"><a href="#l-554">#</a> [13:17] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Remote host closed the connection)</li>
+ <li id="l-555"><a href="#l-555">#</a> [13:17] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-556"><a href="#l-556">#</a> [13:18] * Joins: diraol (~diraol@200-170-114-119.user.ajato.com.br)</li>
+ <li id="l-557"><a href="#l-557">#</a> [13:19] * Quits: Druid_ (~Druid@p5B136AB1.dip.t-dialin.net)</li>
+ <li id="l-558"><a href="#l-558">#</a> [13:22] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Remote host closed the connection)</li>
+ <li id="l-559"><a href="#l-559">#</a> [13:22] * Quits: erlehmann (~erlehmann@82.113.99.18) (Ping timeout: 255 seconds)</li>
+ <li id="l-560"><a href="#l-560">#</a> [13:22] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-561"><a href="#l-561">#</a> [13:24] * Parts: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-562"><a href="#l-562">#</a> [13:24] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-563"><a href="#l-563">#</a> [13:27] * Joins: ezoe (~ezoe@203-140-90-58f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-564"><a href="#l-564">#</a> [13:44] * Joins: erlehmann (~erlehmann@82.113.98.205)</li>
+ <li id="l-565"><a href="#l-565">#</a> [13:44] * Quits: erlehmann (~erlehmann@82.113.98.205) (Read error: Connection reset by peer)</li>
+ <li id="l-566"><a href="#l-566">#</a> [13:49] * Quits: jacobolus (~jacobolus@c-24-5-85-179.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-567"><a href="#l-567">#</a> [14:06] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-568"><a href="#l-568">#</a> [14:07] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-569"><a href="#l-569">#</a> [14:09] * Joins: Lachy (~Lachy@pat-tdc.opera.com)</li>
+ <li id="l-570"><a href="#l-570">#</a> [14:09] * Joins: Druid_ (~Druid@p5B136AB1.dip.t-dialin.net)</li>
+ <li id="l-571"><a href="#l-571">#</a> [14:10] * Quits: jdong_ (~quassel@222.126.155.250) (Client Quit)</li>
+ <li id="l-572"><a href="#l-572">#</a> [14:10] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-573"><a href="#l-573">#</a> [14:13] * Quits: diraol (~diraol@200-170-114-119.user.ajato.com.br) (Ping timeout: 252 seconds)</li>
+ <li id="l-574"><a href="#l-574">#</a> [14:18] * Quits: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp) (Quit: Leaving...)</li>
+ <li id="l-575"><a href="#l-575">#</a> [14:21] * Quits: brucel (~brucel@cpc5-smal11-2-0-cust151.perr.cable.virginmedia.com) (Quit: brucel)</li>
+ <li id="l-576"><a href="#l-576">#</a> [14:23] * Quits: benjoffe (~benjoffe@123.208.163.110) (Remote host closed the connection)</li>
+ <li id="l-577"><a href="#l-577">#</a> [14:28] * Quits: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl) (Read error: Connection reset by peer)</li>
+ <li id="l-578"><a href="#l-578">#</a> [14:32] * Joins: erichynds (~ehynds@venkman.brightcove.com)</li>
+ <li id="l-579"><a href="#l-579">#</a> [14:40] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-580"><a href="#l-580">#</a> [14:47] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Quit: zcorpan)</li>
+ <li id="l-581"><a href="#l-581">#</a> [14:50] * Joins: jwalden (~waldo@64.202.138.67)</li>
+ <li id="l-582"><a href="#l-582">#</a> [14:54] * Quits: Neocortex (~nectop@82-170-160-25.ip.telfort.nl) (Ping timeout: 244 seconds)</li>
+ <li id="l-583"><a href="#l-583">#</a> [14:55] * Joins: danbri_ (~danbri@dhcp-020-246.public.vu.nl)</li>
+ <li id="l-584"><a href="#l-584">#</a> [14:55] * Quits: danbri_ (~danbri@dhcp-020-246.public.vu.nl) (Remote host closed the connection)</li>
+ <li id="l-585"><a href="#l-585">#</a> [14:57] * Joins: kzzx (~nickv@static-173-73-3-108.washdc.fios.verizon.net)</li>
+ <li id="l-586"><a href="#l-586">#</a> [14:58] * Quits: jochen__ (jochen@nat/google/x-bupsbarkxlagaprb) (Remote host closed the connection)</li>
+ <li id="l-587"><a href="#l-587">#</a> [14:58] * Joins: jochen__ (jochen@nat/google/x-qxdqsqattdoacgho)</li>
+ <li id="l-588"><a href="#l-588">#</a> [14:58] * Quits: danbri (~danbri@note-danbri.few.vu.nl) (Ping timeout: 244 seconds)</li>
+ <li id="l-589"><a href="#l-589">#</a> [15:03] * Joins: Neocortex (~nectop@ip4da11daf.direct-adsl.nl)</li>
+ <li id="l-590"><a href="#l-590">#</a> [15:05] * Joins: davidb (~davidb@66.207.208.98)</li>
+ <li id="l-591"><a href="#l-591">#</a> [15:05] * Joins: miketaylr (~miketaylr@206.217.92.186)</li>
+ <li id="l-592"><a href="#l-592">#</a> [15:06] * Joins: kennyluck (~kennyluck@114-43-125-198.dynamic.hinet.net)</li>
+ <li id="l-593"><a href="#l-593">#</a> [15:16] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-594"><a href="#l-594">#</a> [15:17] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-595"><a href="#l-595">#</a> [15:19] * Joins: ehsan (~ehsan@nat/mozilla/x-hbjfuybaqxvvdraz)</li>
+ <li id="l-596"><a href="#l-596">#</a> [15:20] * Quits: tomasf (~tomasf@77.72.97.5.c.fiberdirekt.net) (Quit: tomasf)</li>
+ <li id="l-597" _a="annevk"><a href="#l-597">#</a> [15:20] &lt;annevk&gt; Live WebVTT Validator should match the specification again</li>
+ <li id="l-598" _a="annevk"><a href="#l-598">#</a> [15:20] &lt;annevk&gt; <a href="https://bitbucket.org/annevk/webvtt">https://bitbucket.org/annevk/webvtt</a></li>
+ <li id="l-599" _a="annevk"><a href="#l-599">#</a> [15:20] &lt;annevk&gt; <a href="http://quuz.org/webvtt/">http://quuz.org/webvtt/</a></li>
+ <li id="l-600" _a="annevk" _r="hsivonen"><a href="#l-600">#</a> [15:21] &lt;annevk&gt; hsivonen: is it an idea to host an instance on webvtt.validator.nu?</li>
+ <li id="l-601"><a href="#l-601">#</a> [15:23] * Quits: Areks (~Areks@rs.gridnine.com) (Ping timeout: 268 seconds)</li>
+ <li id="l-602"><a href="#l-602">#</a> [15:31] * Quits: ezoe (~ezoe@203-140-90-58f1.kyt1.eonet.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-603"><a href="#l-603">#</a> [15:33] * Joins: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl)</li>
+ <li id="l-604"><a href="#l-604">#</a> [15:33] * Joins: drublic (~drublic@frbg-5f733728.pool.mediaWays.net)</li>
+ <li id="l-605"><a href="#l-605">#</a> [15:35] * Quits: gavin_ (~gavin@76.14.70.183) (*.net *.split)</li>
+ <li id="l-606"><a href="#l-606">#</a> [15:35] * Quits: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net) (*.net *.split)</li>
+ <li id="l-607"><a href="#l-607">#</a> [15:35] * Quits: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley) (*.net *.split)</li>
+ <li id="l-608"><a href="#l-608">#</a> [15:38] * Joins: gavin_ (~gavin@76.14.70.183)</li>
+ <li id="l-609"><a href="#l-609">#</a> [15:38] * Joins: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net)</li>
+ <li id="l-610"><a href="#l-610">#</a> [15:38] * Joins: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley)</li>
+ <li id="l-611"><a href="#l-611">#</a> [15:38] * Quits: FlorianX (~Dimitri@p4FCF702D.dip.t-dialin.net) (Read error: Connection reset by peer)</li>
+ <li id="l-612"><a href="#l-612">#</a> [15:39] * Quits: Neocortex (~nectop@ip4da11daf.direct-adsl.nl) (Ping timeout: 240 seconds)</li>
+ <li id="l-613"><a href="#l-613">#</a> [15:42] * Joins: DrewBarfield (ae6d7232@gateway/web/freenode/ip.174.109.114.50)</li>
+ <li id="l-614"><a href="#l-614">#</a> [15:42] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-615"><a href="#l-615">#</a> [15:43] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-616" _a="DrewBarfield"><a href="#l-616">#</a> [15:45] &lt;DrewBarfield&gt; Hello everyone! I'm interested in writing demos for the WHATWG site (HTML living standard) and need suggestions. What kinds of demos would you like to see?</li>
+ <li id="l-617"><a href="#l-617">#</a> [15:46] * Quits: JonathanNeal1 (~Jonathan@cpe-67-49-64-18.socal.res.rr.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-618"><a href="#l-618">#</a> [15:46] * Joins: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com)</li>
+ <li id="l-619" _a="annevk" _r="DrewBarfield"><a href="#l-619">#</a> [15:46] &lt;annevk&gt; DrewBarfield: did you look at <a href="http://www.whatwg.org/demos/">http://www.whatwg.org/demos/</a> ?</li>
+ <li id="l-620" _a="annevk" _r="DrewBarfield"><a href="#l-620">#</a> [15:47] &lt;annevk&gt; DrewBarfield: it can basically be anything that's defined in the HTML standard</li>
+ <li id="l-621"><a href="#l-621">#</a> [15:49] * Joins: nielsle (~nielsle@3239059-cl69.boa.fiberby.dk)</li>
+ <li id="l-622" _a="DrewBarfield"><a href="#l-622">#</a> [15:49] &lt;DrewBarfield&gt; Are there topics that are lacking demos or could use them more than others? If not, I can just iterate over the topics at <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/">http://www.whatwg.org/specs/web-apps/current-work/multipage/</a></li>
+ <li id="l-623" _a="jgraham"><a href="#l-623">#</a> [15:51] &lt;jgraham&gt; I don't recall seeing any EventSource demos</li>
+ <li id="l-624" _a="annevk" _r="DrewBarfield"><a href="#l-624">#</a> [15:51] &lt;annevk&gt; DrewBarfield: I think currently we lack demos for most things, but there are other sites that have created demos too, such as <a href="http://html5demos.com/">http://html5demos.com/</a></li>
+ <li id="l-625" _a="annevk" _r="DrewBarfield"><a href="#l-625">#</a> [15:52] &lt;annevk&gt; DrewBarfield: basically though, everything is welcome; start with what you know best I'd say :)</li>
+ <li id="l-626" _a="jgraham"><a href="#l-626">#</a> [15:52] &lt;jgraham&gt; Yes</li>
+ <li id="l-627"><a href="#l-627">#</a> [15:52] * Quits: Druid_ (~Druid@p5B136AB1.dip.t-dialin.net)</li>
+ <li id="l-628"><a href="#l-628">#</a> [15:53] * Joins: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-629"><a href="#l-629">#</a> [15:53] * Joins: danbri_ (~danbri@ip176-48-210-87.adsl2.static.versatel.nl)</li>
+ <li id="l-630"><a href="#l-630">#</a> [15:54] * Joins: Neocortex (~nectop@82-170-160-25.ip.telfort.nl)</li>
+ <li id="l-631" _a="annevk" _r="DrewBarfield"><a href="#l-631">#</a> [15:54] &lt;annevk&gt; DrewBarfield: Hixie can probably help set you up, but depending on your timezone you might have to email him</li>
+ <li id="l-632" _a="DrewBarfield"><a href="#l-632">#</a> [15:55] &lt;DrewBarfield&gt; Thank you all. I think I will start with the Communication chapter and work my way out from there.</li>
+ <li id="l-633" _a="DrewBarfield"><a href="#l-633">#</a> [15:55] &lt;DrewBarfield&gt; I have emailed Ian and he suggested that I ask everyone here for suggestions.</li>
+ <li id="l-634" _a="annevk"><a href="#l-634">#</a> [15:55] &lt;annevk&gt; ah okay, cool</li>
+ <li id="l-635"><a href="#l-635">#</a> [15:56] * Joins: tndH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com)</li>
+ <li id="l-636"><a href="#l-636">#</a> [15:56] * Quits: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl) (Ping timeout: 240 seconds)</li>
+ <li id="l-637"><a href="#l-637">#</a> [15:58] * Parts: deane (~deanedrid@124-197-11-114.callplus.net.nz)</li>
+ <li id="l-638"><a href="#l-638">#</a> [15:59] * Joins: Druid_ (~Druid@p5B136AB1.dip.t-dialin.net)</li>
+ <li id="l-639"><a href="#l-639">#</a> [15:59] * Joins: ehsan_ (~ehsan@66.207.208.98)</li>
+ <li id="l-640"><a href="#l-640">#</a> [16:01] * Quits: jwalden (~waldo@64.202.138.67) (Quit: ChatZilla 0.9.87-3.1450hg.fc15 [XULRunner 7.0.1/20110930134335])</li>
+ <li id="l-641"><a href="#l-641">#</a> [16:02] * Joins: gkellogg (~gregg@c-98-248-150-91.hsd1.ca.comcast.net)</li>
+ <li id="l-642"><a href="#l-642">#</a> [16:02] * Quits: ehsan (~ehsan@nat/mozilla/x-hbjfuybaqxvvdraz) (Ping timeout: 240 seconds)</li>
+ <li id="l-643"><a href="#l-643">#</a> [16:05] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 252 seconds)</li>
+ <li id="l-644"><a href="#l-644">#</a> [16:05] * Joins: temp02 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-645"><a href="#l-645">#</a> [16:05] * Joins: rillian_ (~rillian@mist.thaumas.net)</li>
+ <li id="l-646"><a href="#l-646">#</a> [16:08] * Quits: temp02 (~temp01@unaffiliated/temp01) (Read error: Connection reset by peer)</li>
+ <li id="l-647" _a="danbri_"><a href="#l-647">#</a> [16:15] * danbri_ is now known as danbri</li>
+ <li id="l-648"><a href="#l-648">#</a> [16:15] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-649"><a href="#l-649">#</a> [16:15] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-650"><a href="#l-650">#</a> [16:18] * Quits: DrewBarfield (ae6d7232@gateway/web/freenode/ip.174.109.114.50) (Quit: Page closed)</li>
+ <li id="l-651"><a href="#l-651">#</a> [16:19] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-652"><a href="#l-652">#</a> [16:22] * Joins: jochen___ (jochen@nat/google/x-etkkhxryxfvsdcio)</li>
+ <li id="l-653"><a href="#l-653">#</a> [16:23] * Quits: jdong_ (~quassel@222.126.155.250) (Quit: No Ping reply in 180 seconds.)</li>
+ <li id="l-654"><a href="#l-654">#</a> [16:23] * Quits: jochen__ (jochen@nat/google/x-qxdqsqattdoacgho) (Ping timeout: 268 seconds)</li>
+ <li id="l-655" _a="jochen___"><a href="#l-655">#</a> [16:23] * jochen___ is now known as jochen__</li>
+ <li id="l-656"><a href="#l-656">#</a> [16:23] * Joins: jdong_ (~quassel@222.126.155.250)</li>
+ <li id="l-657"><a href="#l-657">#</a> [16:26] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-658"><a href="#l-658">#</a> [16:27] * Quits: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl) (Read error: No route to host)</li>
+ <li id="l-659"><a href="#l-659">#</a> [16:28] * Joins: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl)</li>
+ <li id="l-660"><a href="#l-660">#</a> [16:28] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-661"><a href="#l-661">#</a> [16:30] * Quits: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl) (Ping timeout: 248 seconds)</li>
+ <li id="l-662"><a href="#l-662">#</a> [16:30] * Joins: Wilto (u2821@gateway/web/irccloud.com/x-siiyhtiygdehukzm)</li>
+ <li id="l-663"><a href="#l-663">#</a> [16:34] * Joins: FrankParent (~fparent@64.34.146.254)</li>
+ <li id="l-664"><a href="#l-664">#</a> [16:34] * Joins: diraol (~diraol@143.107.96.126)</li>
+ <li id="l-665"><a href="#l-665">#</a> [16:34] * Quits: Obvious (tachikoma@188.226.74.2) (Read error: Connection reset by peer)</li>
+ <li id="l-666" class="flagged" _a="Wilto"><a href="#l-666">#</a> [16:35] &lt;Wilto&gt; I heard someone in this joint was using the phrase “responsive images,” which summons me like saying “Beetlejuice” three times.</li>
+ <li id="l-667" _a="Wilto" _r="Hm"><a href="#l-667">#</a> [16:38] &lt;Wilto&gt; Hm, maybe not. You’ve broken my heart once again, miketaylr.</li>
+ <li id="l-668" _a="miketaylr"><a href="#l-668">#</a> [16:38] &lt;miketaylr&gt; &lt;/3</li>
+ <li id="l-669"><a href="#l-669">#</a> [16:39] * Joins: Obvious (tachikoma@188.226.74.2)</li>
+ <li id="l-670"><a href="#l-670">#</a> [16:40] * Quits: PalleZingmark (~Adium@217.13.228.226) (Quit: Leaving.)</li>
+ <li id="l-671"><a href="#l-671">#</a> [16:42] * Quits: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl) (Remote host closed the connection)</li>
+ <li id="l-672"><a href="#l-672">#</a> [16:43] * Quits: sicking (~chatzilla@nat/mozilla/x-gpupfqeppthleztd) (Ping timeout: 244 seconds)</li>
+ <li id="l-673" _a="JonathanNeal"><a href="#l-673">#</a> [16:51] &lt;JonathanNeal&gt; Goodmorning!</li>
+ <li id="l-674"><a href="#l-674">#</a> [16:54] * Quits: rillian_ (~rillian@mist.thaumas.net) (Remote host closed the connection)</li>
+ <li id="l-675"><a href="#l-675">#</a> [16:55] * Quits: Obvious (tachikoma@188.226.74.2) (Read error: Connection reset by peer)</li>
+ <li id="l-676"><a href="#l-676">#</a> [16:57] * Joins: Obvious (tachikoma@188.226.74.2)</li>
+ <li id="l-677"><a href="#l-677">#</a> [17:00] * Quits: maikmerten (~merten@ls5dhcp200.cs.uni-dortmund.de) (Remote host closed the connection)</li>
+ <li id="l-678"><a href="#l-678">#</a> [17:03] * Joins: necolas (~necolas@5e0c7fb2.bb.sky.com)</li>
+ <li id="l-679"><a href="#l-679">#</a> [17:04] * Quits: mendota (~mendota@c-24-21-213-45.hsd1.or.comcast.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-680"><a href="#l-680">#</a> [17:12] * Joins: Obvious_MkII (tachikoma@188.226.74.2)</li>
+ <li id="l-681"><a href="#l-681">#</a> [17:13] * Quits: Obvious (tachikoma@188.226.74.2) (Ping timeout: 268 seconds)</li>
+ <li id="l-682"><a href="#l-682">#</a> [17:23] * Joins: jwalden (~waldo@63.68.157.173)</li>
+ <li id="l-683"><a href="#l-683">#</a> [17:24] * Joins: martndemus (~martndemu@h254064.upc-h.chello.nl)</li>
+ <li id="l-684"><a href="#l-684">#</a> [17:25] * Quits: Lachy (~Lachy@pat-tdc.opera.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-685"><a href="#l-685">#</a> [17:26] * Quits: xec (~xec@2a00:10b0:1:1002:5ab0:35ff:fef8:6a01) (Remote host closed the connection)</li>
+ <li id="l-686"><a href="#l-686">#</a> [17:35] * Joins: rillian_ (~rillian@184.71.166.126)</li>
+ <li id="l-687"><a href="#l-687">#</a> [17:38] * Joins: erlehmann (~erlehmann@89.204.130.9)</li>
+ <li id="l-688"><a href="#l-688">#</a> [17:40] * Parts: kzzx (~nickv@static-173-73-3-108.washdc.fios.verizon.net)</li>
+ <li id="l-689"><a href="#l-689">#</a> [17:42] * Joins: xec (~xec@2a00:10b0:1:1002:5ab0:35ff:fef8:6a01)</li>
+ <li id="l-690"><a href="#l-690">#</a> [17:50] * Joins: smaug____ (~chatzilla@193-64-22-131-nat.elisa-mobile.fi)</li>
+ <li id="l-691"><a href="#l-691">#</a> [17:55] * Quits: nonge_ (~nonge@p508293E8.dip.t-dialin.net) (Quit: Verlassend)</li>
+ <li id="l-692"><a href="#l-692">#</a> [17:55] * Joins: ap (~ap@c-98-248-236-36.hsd1.ca.comcast.net)</li>
+ <li id="l-693"><a href="#l-693">#</a> [17:58] * Quits: erlehmann (~erlehmann@89.204.130.9) (Ping timeout: 240 seconds)</li>
+ <li id="l-694"><a href="#l-694">#</a> [17:59] * Joins: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net)</li>
+ <li id="l-695"><a href="#l-695">#</a> [18:03] * Quits: astearns (~anonymous@c-50-132-63-33.hsd1.wa.comcast.net) (Quit: astearns)</li>
+ <li id="l-696"><a href="#l-696">#</a> [18:03] * Quits: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com) (Quit: Leaving.)</li>
+ <li id="l-697"><a href="#l-697">#</a> [18:03] * Quits: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net) (Quit: WolfieZero)</li>
+ <li id="l-698"><a href="#l-698">#</a> [18:09] * Joins: Telling (~unknown@80-71-135-15.u.parknet.dk)</li>
+ <li id="l-699"><a href="#l-699">#</a> [18:09] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-700"><a href="#l-700">#</a> [18:11] * Joins: erlehmann (~erlehmann@89.204.130.9)</li>
+ <li id="l-701"><a href="#l-701">#</a> [18:14] * Joins: Ms2ger (~Ms2ger@91.181.55.40)</li>
+ <li id="l-702"><a href="#l-702">#</a> [18:16] * Quits: erlehmann (~erlehmann@89.204.130.9) (Ping timeout: 240 seconds)</li>
+ <li id="l-703"><a href="#l-703">#</a> [18:22] * Joins: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-704"><a href="#l-704">#</a> [18:26] * Joins: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-705"><a href="#l-705">#</a> [18:26] * Joins: kinetik_ (~kinetik@121.98.132.55)</li>
+ <li id="l-706"><a href="#l-706">#</a> [18:27] * Joins: gwicke_ (~gabriel@212.255.39.236)</li>
+ <li id="l-707"><a href="#l-707">#</a> [18:29] * Quits: kinetik (~kinetik@121.98.132.55) (Ping timeout: 240 seconds)</li>
+ <li id="l-708"><a href="#l-708">#</a> [18:29] * Quits: gwicke (~gabriel@212.255.39.236) (Ping timeout: 240 seconds)</li>
+ <li id="l-709"><a href="#l-709">#</a> [18:29] * Quits: graememcc (~chatzilla@host109-151-240-187.range109-151.btcentralplus.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-710"><a href="#l-710">#</a> [18:29] * Joins: graememcc (~chatzilla@host109-151-240-187.range109-151.btcentralplus.com)</li>
+ <li id="l-711"><a href="#l-711">#</a> [18:29] * Quits: diraol (~diraol@143.107.96.126) (Read error: No route to host)</li>
+ <li id="l-712"><a href="#l-712">#</a> [18:30] * Joins: cgcardona (~cgcardona@69.38.221.130)</li>
+ <li id="l-713"><a href="#l-713">#</a> [18:30] * Quits: cgcardona (~cgcardona@69.38.221.130) (Changing host)</li>
+ <li id="l-714"><a href="#l-714">#</a> [18:30] * Joins: cgcardona (~cgcardona@unaffiliated/cgcardona)</li>
+ <li id="l-715"><a href="#l-715">#</a> [18:30] * Quits: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl) (Ping timeout: 244 seconds)</li>
+ <li id="l-716"><a href="#l-716">#</a> [18:33] * Joins: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se)</li>
+ <li id="l-717"><a href="#l-717">#</a> [18:38] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-718"><a href="#l-718">#</a> [18:43] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Ping timeout: 240 seconds)</li>
+ <li id="l-719"><a href="#l-719">#</a> [18:44] * Joins: mendota (~mendota@c-67-168-209-164.hsd1.wa.comcast.net)</li>
+ <li id="l-720"><a href="#l-720">#</a> [18:45] * Quits: eric_carlson (~eric@2620:149:4:1b01:154f:ad4d:ce42:afca) (Quit: eric_carlson)</li>
+ <li id="l-721"><a href="#l-721">#</a> [18:48] * Joins: jacobolus (~jacobolus@c-24-5-85-179.hsd1.ca.comcast.net)</li>
+ <li id="l-722"><a href="#l-722">#</a> [18:49] * Quits: andrewjbaker (~ajb@ip-81-23-63-2.ask4internet.com) (Quit: Leaving)</li>
+ <li id="l-723"><a href="#l-723">#</a> [18:49] * Quits: david_carlisle (~chatzilla@86.188.197.189) (Ping timeout: 252 seconds)</li>
+ <li id="l-724"><a href="#l-724">#</a> [18:52] * Quits: rillian_ (~rillian@184.71.166.126) (Remote host closed the connection)</li>
+ <li id="l-725"><a href="#l-725">#</a> [18:52] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: Freedom - to walk free and own no superior.)</li>
+ <li id="l-726"><a href="#l-726">#</a> [18:52] * Joins: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com)</li>
+ <li id="l-727" _a="JonathanNeal"><a href="#l-727">#</a> [18:52] &lt;JonathanNeal&gt; howdy</li>
+ <li id="l-728"><a href="#l-728">#</a> [18:53] * Joins: rillian_ (~rillian@184.71.166.126)</li>
+ <li id="l-729"><a href="#l-729">#</a> [18:54] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-730"><a href="#l-730">#</a> [18:59] * Joins: abarth (~abarth@173-164-128-209-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-731"><a href="#l-731">#</a> [19:01] * Quits: adactio (~adactio@host213-123-197-180.in-addr.btopenworld.com) (Quit: adactio)</li>
+ <li id="l-732"><a href="#l-732">#</a> [19:04] * Joins: astearns (~anonymous@192.150.22.5)</li>
+ <li id="l-733"><a href="#l-733">#</a> [19:05] * Joins: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-734"><a href="#l-734">#</a> [19:06] * Joins: KillerX (~anant@nat/mozilla/x-utfaakofumsrrbmf)</li>
+ <li id="l-735" _a="Wilto"><a href="#l-735">#</a> [19:08] &lt;Wilto&gt; How goes, JonathanNeal?</li>
+ <li id="l-736"><a href="#l-736">#</a> [19:08] * Joins: micheil (~micheil@94.197.127.125.threembb.co.uk)</li>
+ <li id="l-737"><a href="#l-737">#</a> [19:09] * Quits: ap (~ap@c-98-248-236-36.hsd1.ca.comcast.net) (Quit: ap)</li>
+ <li id="l-738" _a="JonathanNeal"><a href="#l-738">#</a> [19:09] &lt;JonathanNeal&gt; I'm looking to update <a href="https://github.com/jonathantneal/html5css">https://github.com/jonathantneal/html5css</a> Wilto. It's been almost a year!</li>
+ <li id="l-739" _a="JonathanNeal"><a href="#l-739">#</a> [19:10] &lt;JonathanNeal&gt; It's a css document of the presentation guidelines from the html5 spec.</li>
+ <li id="l-740" _a="JonathanNeal"><a href="#l-740">#</a> [19:11] &lt;JonathanNeal&gt; basically it's the user agent style sheet the spec recommends.</li>
+ <li id="l-741" _a="Wilto" _r="Huh"><a href="#l-741">#</a> [19:12] &lt;Wilto&gt; Huh, interesting.</li>
+ <li id="l-742"><a href="#l-742">#</a> [19:12] * Joins: dbaron (~dbaron@nat/mozilla/x-gsmenthpvuyygsyk)</li>
+ <li id="l-743"><a href="#l-743">#</a> [19:15] * Joins: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net)</li>
+ <li id="l-744" _a="JonathanNeal"><a href="#l-744">#</a> [19:17] &lt;JonathanNeal&gt; I think so. I think it's important to maintain a document like this.</li>
+ <li id="l-745"><a href="#l-745">#</a> [19:18] * Quits: richt (~richt@c83-249-28-214.bredband.comhem.se) (Remote host closed the connection)</li>
+ <li id="l-746"><a href="#l-746">#</a> [19:18] * Joins: cpearce (~chatzilla@ip-118-90-50-128.xdsl.xnet.co.nz)</li>
+ <li id="l-747"><a href="#l-747">#</a> [19:19] * Quits: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-748"><a href="#l-748">#</a> [19:22] * Quits: jwalden (~waldo@63.68.157.173) (Quit: lining up to board, back later)</li>
+ <li id="l-749"><a href="#l-749">#</a> [19:24] * Joins: WeirdAl (~chatzilla@g2spf.ask.info)</li>
+ <li id="l-750"><a href="#l-750">#</a> [19:25] * Quits: tantek (~tantek@70-36-139-219.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-751"><a href="#l-751">#</a> [19:28] * Quits: Margle (~margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-752"><a href="#l-752">#</a> [19:28] * Quits: rillian_ (~rillian@184.71.166.126) (Remote host closed the connection)</li>
+ <li id="l-753"><a href="#l-753">#</a> [19:30] * Joins: J_Voracek (~J_Voracek@71.21.195.70)</li>
+ <li id="l-754"><a href="#l-754">#</a> [19:31] * Quits: J_Voracek (~J_Voracek@71.21.195.70) (Client Quit)</li>
+ <li id="l-755"><a href="#l-755">#</a> [19:31] * Quits: micheil (~micheil@94.197.127.125.threembb.co.uk) (Quit: micheil)</li>
+ <li id="l-756"><a href="#l-756">#</a> [19:34] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-757"><a href="#l-757">#</a> [19:40] * Joins: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl)</li>
+ <li id="l-758"><a href="#l-758">#</a> [19:44] * Joins: FlorianX (~Dimitri@p4FCF7B65.dip.t-dialin.net)</li>
+ <li id="l-759"><a href="#l-759">#</a> [19:47] * Joins: dave_levin (dave_levin@nat/google/x-mkyodctjgqrimtej)</li>
+ <li id="l-760"><a href="#l-760">#</a> [19:47] * Joins: eric_carlson_ (~eric@17.212.152.104)</li>
+ <li id="l-761"><a href="#l-761">#</a> [19:48] * Quits: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net) (Quit: eric_carlson)</li>
+ <li id="l-762" _a="eric_carlson_"><a href="#l-762">#</a> [19:48] * eric_carlson_ is now known as eric_carlson</li>
+ <li id="l-763"><a href="#l-763">#</a> [19:48] * Parts: eric_carlson (~eric@17.212.152.104)</li>
+ <li id="l-764"><a href="#l-764">#</a> [19:55] * Joins: saba (~foo@unaffiliated/saba)</li>
+ <li id="l-765"><a href="#l-765">#</a> [19:57] * Joins: Lachy (~Lachy@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-766"><a href="#l-766">#</a> [19:57] * Joins: tantek (~tantek@nat/mozilla/x-hakhnoanfpxpqmvb)</li>
+ <li id="l-767"><a href="#l-767">#</a> [19:58] * Joins: Margle (~margle@41-133-196-64.dsl.mweb.co.za)</li>
+ <li id="l-768"><a href="#l-768">#</a> [20:00] * Quits: dbaron (~dbaron@nat/mozilla/x-gsmenthpvuyygsyk) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-769"><a href="#l-769">#</a> [20:01] * Joins: rniwa (rniwa@nat/google/x-lfhbxtquhxsfapcs)</li>
+ <li id="l-770"><a href="#l-770">#</a> [20:01] * Joins: dbaron (~dbaron@nat/mozilla/x-fldduuhguqpvlrew)</li>
+ <li id="l-771"><a href="#l-771">#</a> [20:01] * Joins: tantek_ (~tantek@nat/mozilla/x-ylxvgqrqpjxpazkg)</li>
+ <li id="l-772"><a href="#l-772">#</a> [20:01] * Quits: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl) (Read error: Connection reset by peer)</li>
+ <li id="l-773"><a href="#l-773">#</a> [20:03] * Joins: eric_carlson_ (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-774"><a href="#l-774">#</a> [20:13] * Joins: jamesr (~jamesr@216.239.45.18)</li>
+ <li id="l-775"><a href="#l-775">#</a> [20:16] * Quits: drublic (~drublic@frbg-5f733728.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-776" _a="zewt"><a href="#l-776">#</a> [20:19] &lt;zewt&gt; in principle, it's possible for a busy-looping task queue to starve out all events in other task queues, right?</li>
+ <li id="l-777" _a="zewt"><a href="#l-777">#</a> [20:20] &lt;zewt&gt; since the event loop doesn't require any kind of fairness across queues</li>
+ <li id="l-778" _a="jamesr_" _r="zewt"><a href="#l-778">#</a> [20:21] &lt;jamesr_&gt; zewt, it's organized by task source</li>
+ <li id="l-779" _a="jamesr_"><a href="#l-779">#</a> [20:21] &lt;jamesr_&gt; a UA can schedule from any task source</li>
+ <li id="l-780" _a="zewt" _r="right"><a href="#l-780">#</a> [20:21] &lt;zewt&gt; right, but if one queue is busy looping, there's no requirement that other task queues are able to run</li>
+ <li id="l-781" class="flagged" _a="dglazkov"><a href="#l-781">#</a> [20:21] &lt;dglazkov&gt; good morning, Whatwg!</li>
+ <li id="l-782" _a="jamesr_" _r="no"><a href="#l-782">#</a> [20:21] &lt;jamesr_&gt; no, i think that'd fall into QoI</li>
+ <li id="l-783" _a="zewt"><a href="#l-783">#</a> [20:22] &lt;zewt&gt; right</li>
+ <li id="l-784" _a="zewt"><a href="#l-784">#</a> [20:22] &lt;zewt&gt; was wondering, since it seems like a wrong assumption that <a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/setImmediate/Overview.html">https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/setImmediate/Overview.html</a> is making</li>
+ <li id="l-785" _a="zewt"><a href="#l-785">#</a> [20:22] &lt;zewt&gt; (if you use this, in principle things like MessageChannels might get starved out)</li>
+ <li id="l-786" _a="jamesr_" _r="oh"><a href="#l-786">#</a> [20:22] &lt;jamesr_&gt; oh, hah</li>
+ <li id="l-787" _a="jamesr_"><a href="#l-787">#</a> [20:23] &lt;jamesr_&gt; yeah that spec is full of poo-brain</li>
+ <li id="l-788" _a="zewt"><a href="#l-788">#</a> [20:23] &lt;zewt&gt; (though I suspect there are deeper issues with the UI being able to run)</li>
+ <li id="l-789" _a="zewt"><a href="#l-789">#</a> [20:23] &lt;zewt&gt; i suppose that's a more blunt way of putting it :P</li>
+ <li id="l-790" _a="jamesr_"><a href="#l-790">#</a> [20:23] &lt;jamesr_&gt; i don't think anyone will implement it</li>
+ <li id="l-791"><a href="#l-791">#</a> [20:23] * Joins: tomasf_ (~tomasf@2002:55e5:dbb7:0:114f:55b:fe16:2c92)</li>
+ <li id="l-792" _a="zewt"><a href="#l-792">#</a> [20:23] &lt;zewt&gt; given that you can do that with just MessageChannel already, there's really no need (re: <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=15007">https://www.w3.org/Bugs/Public/show_bug.cgi?id=15007</a>)</li>
+ <li id="l-793" _a="jamesr_"><a href="#l-793">#</a> [20:23] &lt;jamesr_&gt; (i mean i think IE did in a PP)</li>
+ <li id="l-794"><a href="#l-794">#</a> [20:23] * Quits: tomasf_ (~tomasf@2002:55e5:dbb7:0:114f:55b:fe16:2c92) (Client Quit)</li>
+ <li id="l-795" _a="jamesr_" _r="right"><a href="#l-795">#</a> [20:24] &lt;jamesr_&gt; right, we told them that</li>
+ <li id="l-796"><a href="#l-796">#</a> [20:24] * Quits: cgcardona (~cgcardona@unaffiliated/cgcardona) (Read error: Connection reset by peer)</li>
+ <li id="l-797"><a href="#l-797">#</a> [20:24] * Joins: cgcardona_ (~cgcardona@69.38.221.130)</li>
+ <li id="l-798"><a href="#l-798">#</a> [20:24] * Quits: cgcardona_ (~cgcardona@69.38.221.130) (Changing host)</li>
+ <li id="l-799"><a href="#l-799">#</a> [20:24] * Joins: cgcardona_ (~cgcardona@unaffiliated/cgcardona)</li>
+ <li id="l-800" _a="zewt"><a href="#l-800">#</a> [20:24] &lt;zewt&gt; also although being able to queue a task without setTimeout's delays is nice, I don't like the basic premise of how that's written (as if it's meant to be used to allow CPU-intensive work in the UI thread--ugh no)</li>
+ <li id="l-801" _a="gwicke_"><a href="#l-801">#</a> [20:26] * gwicke_ is now known as gwicke</li>
+ <li id="l-802" _a="jamesr_"><a href="#l-802">#</a> [20:36] &lt;jamesr_&gt; the only reason we clamp setTimeout is because pages are dumb and flood it</li>
+ <li id="l-803" _a="jamesr_"><a href="#l-803">#</a> [20:36] &lt;jamesr_&gt; if authors weren't abusive, we wouldn't need any clamp</li>
+ <li id="l-804"><a href="#l-804">#</a> [20:36] * Quits: dbaron (~dbaron@nat/mozilla/x-fldduuhguqpvlrew) (Ping timeout: 240 seconds)</li>
+ <li id="l-805"><a href="#l-805">#</a> [20:37] * Quits: tantek_ (~tantek@nat/mozilla/x-ylxvgqrqpjxpazkg) (Quit: tantek_)</li>
+ <li id="l-806" _a="Ms2ger"><a href="#l-806">#</a> [20:38] &lt;Ms2ger&gt; And there's only clamping inside nested setTimeouts, so you can queue a task without delays already</li>
+ <li id="l-807"><a href="#l-807">#</a> [20:39] * Joins: ap_ (~ap@2620:149:4:1b01:da:d93d:1fbd:628d)</li>
+ <li id="l-808"><a href="#l-808">#</a> [20:41] * Quits: FlorianX (~Dimitri@p4FCF7B65.dip.t-dialin.net) (Quit: Leaving.)</li>
+ <li id="l-809"><a href="#l-809">#</a> [20:42] * Quits: cpearce (~chatzilla@ip-118-90-50-128.xdsl.xnet.co.nz) (Ping timeout: 240 seconds)</li>
+ <li id="l-810"><a href="#l-810">#</a> [20:43] * Quits: reggna_ (~reggna@godis.olf.sgsnet.se) (Quit: leaving)</li>
+ <li id="l-811" _a="jamesr_"><a href="#l-811">#</a> [20:43] &lt;jamesr_&gt; also if you're doing non-trivial work you can avoid the clamp by calling setTimeout() before the work rather than at the end</li>
+ <li id="l-812"><a href="#l-812">#</a> [20:44] * Joins: reggna (~reggna@godis.olf.sgsnet.se)</li>
+ <li id="l-813"><a href="#l-813">#</a> [20:48] * Joins: tantek_ (~tantek@nat/mozilla/x-uyltwxjhhndqrryi)</li>
+ <li id="l-814"><a href="#l-814">#</a> [20:48] * Joins: dbaron (~dbaron@nat/mozilla/x-pszqzamlgelhmfni)</li>
+ <li id="l-815"><a href="#l-815">#</a> [20:50] * Joins: catphive (~brenmill@nat/cisco/x-qeppfdcnhpvvvkeb)</li>
+ <li id="l-816" class="flagged" _a="catphive"><a href="#l-816">#</a> [20:50] &lt;catphive&gt; does anyone know if there are any planned standards for browser based presence?</li>
+ <li id="l-817" _a="tantek_"><a href="#l-817">#</a> [20:51] &lt;tantek_&gt; which meaning of &quot;presence&quot;?</li>
+ <li id="l-818" _a="catphive"><a href="#l-818">#</a> [20:51] &lt;catphive&gt; like for an IM client</li>
+ <li id="l-819" _a="catphive"><a href="#l-819">#</a> [20:51] &lt;catphive&gt; detecting if the user is available</li>
+ <li id="l-820"><a href="#l-820">#</a> [20:52] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-821" _a="tantek"><a href="#l-821">#</a> [20:56] &lt;tantek&gt; catphive - sounds like a useful WebAPI</li>
+ <li id="l-822"><a href="#l-822">#</a> [21:03] * Joins: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net)</li>
+ <li id="l-823" _a="martndemus"><a href="#l-823">#</a> [21:04] &lt;martndemus&gt; doesnt chrome have something that keeps track if the actual tab the app is in is active?</li>
+ <li id="l-824"><a href="#l-824">#</a> [21:06] * Quits: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se) (Quit: tomasf)</li>
+ <li id="l-825"><a href="#l-825">#</a> [21:07] * Quits: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-826"><a href="#l-826">#</a> [21:11] * Joins: bencc (~user@bzq-84-111-74-191.red.bezeqint.net)</li>
+ <li id="l-827" _a="bencc"><a href="#l-827">#</a> [21:11] &lt;bencc&gt; in websocket who should send pings to keep the connection alive, the client or the server?</li>
+ <li id="l-828" _a="bencc"><a href="#l-828">#</a> [21:11] &lt;bencc&gt; or maybe the browser does this automatically for me?</li>
+ <li id="l-829"><a href="#l-829">#</a> [21:13] * Joins: rillian_ (~rillian@184.71.166.126)</li>
+ <li id="l-830"><a href="#l-830">#</a> [21:22] * Joins: drublic (~drublic@frbg-5f733728.pool.mediaWays.net)</li>
+ <li id="l-831"><a href="#l-831">#</a> [21:26] * Quits: catphive (~brenmill@nat/cisco/x-qeppfdcnhpvvvkeb) (Remote host closed the connection)</li>
+ <li id="l-832"><a href="#l-832">#</a> [21:28] * Joins: catphive (~brenmill@nat/cisco/x-smkkwkhueskleksi)</li>
+ <li id="l-833"><a href="#l-833">#</a> [21:28] * Joins: cpearce (~chatzilla@60.234.54.74)</li>
+ <li id="l-834" _a="jgraham" _r="bencc"><a href="#l-834">#</a> [21:29] &lt;jgraham&gt; bencc: The browser should send the ping frames AIUI</li>
+ <li id="l-835"><a href="#l-835">#</a> [21:30] * Quits: kennyluck (~kennyluck@114-43-125-198.dynamic.hinet.net) (Read error: Connection reset by peer)</li>
+ <li id="l-836"><a href="#l-836">#</a> [21:30] * Joins: kennyluck_ (~kennyluck@114.43.118.197)</li>
+ <li id="l-837" _a="kennyluck_"><a href="#l-837">#</a> [21:30] * kennyluck_ is now known as kennyluck</li>
+ <li id="l-838" _a="jgraham"><a href="#l-838">#</a> [21:30] &lt;jgraham&gt; Bu I haven't read the spec text there closely so I don't know if there are any hard requirements</li>
+ <li id="l-839"><a href="#l-839">#</a> [21:30] * Quits: kennyluck (~kennyluck@114.43.118.197) (Excess Flood)</li>
+ <li id="l-840" _a="bencc"><a href="#l-840">#</a> [21:30] &lt;bencc&gt; AIUI?</li>
+ <li id="l-841" _a="jgraham"><a href="#l-841">#</a> [21:31] &lt;jgraham&gt; &quot;As I Understand It&quot;</li>
+ <li id="l-842" _a="jgraham" _r="Nope"><a href="#l-842">#</a> [21:31] &lt;jgraham&gt; Nope, jut meaningless gloop</li>
+ <li id="l-843" _a="bencc" _r="jgraham"><a href="#l-843">#</a> [21:31] &lt;bencc&gt; jgraham: so when I'm creating a websocket in FF or Chrome, the application shouldn't worry about it?</li>
+ <li id="l-844" _a="jgraham"><a href="#l-844">#</a> [21:31] &lt;jgraham&gt; Well the spec says</li>
+ <li id="l-845" _a="jgraham"><a href="#l-845">#</a> [21:31] &lt;jgraham&gt; &quot;An endpoint MAY send a Ping frame any time after the connection is established and before the connection is closed.  NOTE: A ping frame may serve either as a keepalive, or to verify that the remote endpoint is still responsive.</li>
+ <li id="l-846" _a="bencc"><a href="#l-846">#</a> [21:31] &lt;bencc&gt; and also the server shouldn't worry about it?</li>
+ <li id="l-847" _a="jgraham"><a href="#l-847">#</a> [21:31] &lt;jgraham&gt; &quot;</li>
+ <li id="l-848" _a="jgraham"><a href="#l-848">#</a> [21:32] &lt;jgraham&gt; Well the server is required to respond to a ping frame with a pong frame</li>
+ <li id="l-849"><a href="#l-849">#</a> [21:32] * Quits: rillian_ (~rillian@184.71.166.126) (Remote host closed the connection)</li>
+ <li id="l-850" _a="bencc"><a href="#l-850">#</a> [21:32] &lt;bencc&gt; I don't see ping function in the websocket object</li>
+ <li id="l-851" _a="annevk"><a href="#l-851">#</a> [21:32] &lt;annevk&gt; oh lol</li>
+ <li id="l-852" _a="jgraham" _r="Sure"><a href="#l-852">#</a> [21:32] &lt;jgraham&gt; Sure, it isn't API exposed</li>
+ <li id="l-853"><a href="#l-853">#</a> [21:32] * Joins: rillian_ (~rillian@184.71.166.126)</li>
+ <li id="l-854" _a="annevk"><a href="#l-854">#</a> [21:32] &lt;annevk&gt; did they just propose the &lt;intent&gt; tag using DTD syntax</li>
+ <li id="l-855" _a="Hixie"><a href="#l-855">#</a> [21:32] &lt;Hixie&gt; the browser will take care of ping from the client if it's needed</li>
+ <li id="l-856" _a="jgraham"><a href="#l-856">#</a> [21:32] &lt;jgraham&gt; The browser is supposed to do it</li>
+ <li id="l-857" _a="Hixie"><a href="#l-857">#</a> [21:32] &lt;Hixie&gt; the server should take care of ping from the server if the server needs it</li>
+ <li id="l-858" _a="annevk"><a href="#l-858">#</a> [21:32] &lt;annevk&gt; that's pretty funny considering it's 2011</li>
+ <li id="l-859" _a="jgraham"><a href="#l-859">#</a> [21:32] &lt;jgraham&gt; But it's conforming to never send one</li>
+ <li id="l-860" _a="jgraham"><a href="#l-860">#</a> [21:32] &lt;jgraham&gt; So it's a QoI issue</li>
+ <li id="l-861" _a="jgraham"><a href="#l-861">#</a> [21:33] &lt;jgraham&gt; One hopes there will not be any braindead implementations</li>
+ <li id="l-862" _a="Hixie"><a href="#l-862">#</a> [21:33] &lt;Hixie&gt; in some situations, sending pings is actually really bad</li>
+ <li id="l-863"><a href="#l-863">#</a> [21:33] * Joins: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl)</li>
+ <li id="l-864" _a="jgraham"><a href="#l-864">#</a> [21:33] &lt;jgraham&gt; But that is not a safe assumption</li>
+ <li id="l-865" _a="Hixie"><a href="#l-865">#</a> [21:33] &lt;Hixie&gt; e.g. if you have a flaky network connection, every ping is a chance of the connection dropping</li>
+ <li id="l-866" _a="Hixie"><a href="#l-866">#</a> [21:33] &lt;Hixie&gt; whereas if you just didnt' send anything it might survive fine</li>
+ <li id="l-867"><a href="#l-867">#</a> [21:33] * Joins: david_carlisle (~chatzilla@dcarlisle.demon.co.uk)</li>
+ <li id="l-868" _a="Hixie"><a href="#l-868">#</a> [21:33] &lt;Hixie&gt; e.g. sometimes at home i'm on wifi and the neighbours turn their microwave on and the wifi goes down for 3 minutes</li>
+ <li id="l-869" _a="jgraham"><a href="#l-869">#</a> [21:33] &lt;jgraham&gt; If you have a really flaky connection you are probably screwed anyway</li>
+ <li id="l-870" _a="Hixie"><a href="#l-870">#</a> [21:34] &lt;Hixie&gt; if i notice this happen, i can just stop using the network, and all the apps i use that don't do keepalive survive with no probelms whatsoever</li>
+ <li id="l-871" _a="Hixie"><a href="#l-871">#</a> [21:34] &lt;Hixie&gt; but the apps that think they're clever and do keepalive all die</li>
+ <li id="l-872"><a href="#l-872">#</a> [21:34] * Joins: rillian__ (~rillian@184.71.166.126)</li>
+ <li id="l-873" _a="bencc"><a href="#l-873">#</a> [21:34] &lt;bencc&gt; but sending a ping is the only way the server can check if the client is alive, isn't it?</li>
+ <li id="l-874" _a="jgraham"><a href="#l-874">#</a> [21:34] &lt;jgraham&gt; I mean I don't imagine that web authors are going to design with your neighbourgh's microwave in mind</li>
+ <li id="l-875" _a="Hixie" _r="jgraham"><a href="#l-875">#</a> [21:34] &lt;Hixie&gt; jgraham: it's just an example, the problem is far worse e.g. on mobile</li>
+ <li id="l-876" _a="bencc"><a href="#l-876">#</a> [21:34] &lt;bencc&gt; in a chat, you want users to know if someone is offline</li>
+ <li id="l-877" _a="Hixie" _r="jgraham"><a href="#l-877">#</a> [21:35] &lt;Hixie&gt; jgraham: where you might be going past a big building that blocks the signal, or whatever</li>
+ <li id="l-878" _a="bencc"><a href="#l-878">#</a> [21:35] &lt;bencc&gt; without pings, you can have zombie sessions</li>
+ <li id="l-879" _a="jgraham" _r="Right"><a href="#l-879">#</a> [21:35] &lt;jgraham&gt; Right, I understand that the connection can be flaky. But authors are going to assume that it isn't</li>
+ <li id="l-880" _a="jgraham"><a href="#l-880">#</a> [21:35] &lt;jgraham&gt; So it's not at all clear that pings make it worse</li>
+ <li id="l-881" _a="bencc"><a href="#l-881">#</a> [21:36] &lt;bencc&gt; in the server the logic is a bit tricky</li>
+ <li id="l-882" _a="Hixie"><a href="#l-882">#</a> [21:36] &lt;Hixie&gt; well it seems clear that in the two examples i gave, pings are worse than no pings</li>
+ <li id="l-883" _a="Hixie"><a href="#l-883">#</a> [21:36] &lt;Hixie&gt; but i agree that there are use cases for pings</li>
+ <li id="l-884" _a="bencc"><a href="#l-884">#</a> [21:37] &lt;bencc&gt; Let's that if the client is idle for 1 mintue, I'm sending a ping</li>
+ <li id="l-885" _a="Hixie"><a href="#l-885">#</a> [21:37] &lt;Hixie&gt; i'm just saying it's not a given that sending a ping is better than not sending one</li>
+ <li id="l-886" _a="bencc" _r="now"><a href="#l-886">#</a> [21:37] &lt;bencc&gt; now, the first response might not be the pong but a new message</li>
+ <li id="l-887" _a="jgraham"><a href="#l-887">#</a> [21:37] &lt;jgraham&gt; In any case the protocol-level pings are not something that the author can control</li>
+ <li id="l-888"><a href="#l-888">#</a> [21:37] * Quits: rillian_ (~rillian@184.71.166.126) (Ping timeout: 240 seconds)</li>
+ <li id="l-889" _a="jgraham"><a href="#l-889">#</a> [21:37] &lt;jgraham&gt; But you can always build something identical into your application</li>
+ <li id="l-890" _a="bencc"><a href="#l-890">#</a> [21:37] &lt;bencc&gt; the server author should implement it</li>
+ <li id="l-891" _a="jgraham"><a href="#l-891">#</a> [21:38] &lt;jgraham&gt; If you need it for some reason</li>
+ <li id="l-892"><a href="#l-892">#</a> [21:38] * Joins: micheil (~micheil@94.197.127.125.threembb.co.uk)</li>
+ <li id="l-893"><a href="#l-893">#</a> [21:38] * Quits: drublic (~drublic@frbg-5f733728.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-894" _a="bencc"><a href="#l-894">#</a> [21:38] &lt;bencc&gt; I want to know if the user is offline in a 1 minute window</li>
+ <li id="l-895" _a="bencc"><a href="#l-895">#</a> [21:38] &lt;bencc&gt; for a chat app</li>
+ <li id="l-896" _a="Hixie"><a href="#l-896">#</a> [21:38] &lt;Hixie&gt; define &quot;offline&quot;</li>
+ <li id="l-897" _a="bencc"><a href="#l-897">#</a> [21:38] &lt;bencc&gt; dead</li>
+ <li id="l-898" _a="bencc"><a href="#l-898">#</a> [21:38] &lt;bencc&gt; wolfs eating his body</li>
+ <li id="l-899" _a="Hixie"><a href="#l-899">#</a> [21:38] &lt;Hixie&gt; am i offline if i happen to be in the middle of a conversation but the car i'm in goes through a tunnel for 61 seconds?</li>
+ <li id="l-900" _a="bencc"><a href="#l-900">#</a> [21:38] &lt;bencc&gt; eagles are circling in the skies</li>
+ <li id="l-901"><a href="#l-901">#</a> [21:39] * Joins: drublic (~drublic@frbg-5f733728.pool.mediaWays.net)</li>
+ <li id="l-902" _a="bencc"><a href="#l-902">#</a> [21:39] &lt;bencc&gt; if that's the case, increase the window to 3 minutes</li>
+ <li id="l-903" _a="Hixie"><a href="#l-903">#</a> [21:39] &lt;Hixie&gt; am i offline if i happen to be in the middle of a conversation but the car i'm in goes through a tunnel for 181 seconds?</li>
+ <li id="l-904" _a="bencc"><a href="#l-904">#</a> [21:39] &lt;bencc&gt; are you familiar with tunnels that long?</li>
+ <li id="l-905" _a="bencc"><a href="#l-905">#</a> [21:39] &lt;bencc&gt; yes</li>
+ <li id="l-906" _a="Hixie"><a href="#l-906">#</a> [21:39] &lt;Hixie&gt; yes</li>
+ <li id="l-907" _a="bencc"><a href="#l-907">#</a> [21:40] &lt;bencc&gt; am I offline if I'm dead and suddenly a miracle happened and I'm alive again?</li>
+ <li id="l-908" _a="Hixie"><a href="#l-908">#</a> [21:40] &lt;Hixie&gt; are you offline if you're dead at all?</li>
+ <li id="l-909" _a="bencc"><a href="#l-909">#</a> [21:40] &lt;bencc&gt; good question</li>
+ <li id="l-910" _a="bencc"><a href="#l-910">#</a> [21:41] &lt;bencc&gt; so it's 1 minute for 99.99% of the people</li>
+ <li id="l-911" _a="bencc"><a href="#l-911">#</a> [21:41] &lt;bencc&gt; and 3 minutes for you because of the washing machine and your long tunnel</li>
+ <li id="l-912" _a="annevk"><a href="#l-912">#</a> [21:42] &lt;annevk&gt; why would you use ping for that at all...</li>
+ <li id="l-913" _a="bencc"><a href="#l-913">#</a> [21:43] &lt;bencc&gt; now I need to handle users without a computer...</li>
+ <li id="l-914" _a="annevk"><a href="#l-914">#</a> [21:43] &lt;annevk&gt; if the other person doesn't say anything, clearly he's away</li>
+ <li id="l-915" _a="annevk"><a href="#l-915">#</a> [21:43] &lt;annevk&gt; doesn't really matter what the reason is</li>
+ <li id="l-916" _a="bencc"><a href="#l-916">#</a> [21:43] &lt;bencc&gt; in IM you can be online but quiet</li>
+ <li id="l-917" _a="annevk"><a href="#l-917">#</a> [21:44] &lt;annevk&gt; you can also be offline but still appear online</li>
+ <li id="l-918" _a="annevk"><a href="#l-918">#</a> [21:44] &lt;annevk&gt; Gmail seems to work that way</li>
+ <li id="l-919" _a="annevk"><a href="#l-919">#</a> [21:44] &lt;annevk&gt; Gmail chat that is</li>
+ <li id="l-920" _a="annevk"><a href="#l-920">#</a> [21:45] &lt;annevk&gt; doesn't really matter</li>
+ <li id="l-921" _a="bencc"><a href="#l-921">#</a> [21:45] &lt;bencc&gt; in Gmail you suppose to appear online only if you are logged in</li>
+ <li id="l-922" _a="bencc"><a href="#l-922">#</a> [21:45] &lt;bencc&gt; if you see someone is online and send him a message he is supposed to see the message right away</li>
+ <li id="l-923"><a href="#l-923">#</a> [21:47] * Quits: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl) (Remote host closed the connection)</li>
+ <li id="l-924"><a href="#l-924">#</a> [21:48] * Joins: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-925"><a href="#l-925">#</a> [21:48] * Joins: JonathanNeal1 (~Jonathan@cpe-67-49-64-18.socal.res.rr.com)</li>
+ <li id="l-926"><a href="#l-926">#</a> [21:49] * Quits: JonathanNeal (~Jonathan@cpe-67-49-64-18.socal.res.rr.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-927"><a href="#l-927">#</a> [21:49] * Quits: JonathanNeal1 (~Jonathan@cpe-67-49-64-18.socal.res.rr.com) (Read error: Connection reset by peer)</li>
+ <li id="l-928" _a="jgraham" _r="bencc"><a href="#l-928">#</a> [21:54] &lt;jgraham&gt; bencc: That is such a bad assumption. e.g. my connection here is maintained all the time. Sometimes I am asleep or not at a computer</li>
+ <li id="l-929" _a="Hixie"><a href="#l-929">#</a> [21:54] &lt;Hixie&gt; same here</li>
+ <li id="l-930" _a="Hixie"><a href="#l-930">#</a> [21:55] &lt;Hixie&gt; same with all my IM clients actually. I proxy them all through a computer that is always online, regardless of where I am, and I connect to that proxy remotely when I'm really online, to collect my messages.</li>
+ <li id="l-931" _a="bencc"><a href="#l-931">#</a> [21:55] &lt;bencc&gt; that's a question of user experience</li>
+ <li id="l-932" _a="jgraham" _r="annevk"><a href="#l-932">#</a> [21:56] &lt;jgraham&gt; annevk: Yeah, presenting stuff with a DTD in 2011 is very funny</li>
+ <li id="l-933" _a="jgraham"><a href="#l-933">#</a> [21:56] &lt;jgraham&gt; It's like the last 10 years didn't happen</li>
+ <li id="l-934" _a="bencc"><a href="#l-934">#</a> [21:56] &lt;bencc&gt; you might turn the user to 'busy' if he is not using the UI for 10 mintues</li>
+ <li id="l-935" _a="jgraham"><a href="#l-935">#</a> [21:56] * jgraham just finds the busy/away/etc stuff confusing</li>
+ <li id="l-936" _a="Hixie"><a href="#l-936">#</a> [21:57] &lt;Hixie&gt; my /away status rarely has any bearing on my actual status</li>
+ <li id="l-937" _a="bencc"><a href="#l-937">#</a> [21:57] &lt;bencc&gt; that's a question of user experience</li>
+ <li id="l-938" _a="bencc"><a href="#l-938">#</a> [21:57] &lt;bencc&gt; you are still &quot;online&quot;</li>
+ <li id="l-939" _a="jgraham"><a href="#l-939">#</a> [21:57] &lt;jgraham&gt; I never know if the person is really busy or if they are really around but the computer decided that they were budy for some reason</li>
+ <li id="l-940" _a="bencc"><a href="#l-940">#</a> [21:57] &lt;bencc&gt; gmail chat works perfect for me</li>
+ <li id="l-941" _a="bencc"><a href="#l-941">#</a> [21:57] &lt;bencc&gt; when I see a friend online he is available to chat with me</li>
+ <li id="l-942"><a href="#l-942">#</a> [21:58] * Quits: saba (~foo@unaffiliated/saba) (Quit: leaving)</li>
+ <li id="l-943"><a href="#l-943">#</a> [22:04] * Quits: Margle (~margle@41-133-196-64.dsl.mweb.co.za) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-944" _a="Hixie"><a href="#l-944">#</a> [22:04] &lt;Hixie&gt; does anyone actually implement nested workers and message channels yet?</li>
+ <li id="l-945" _a="annevk"><a href="#l-945">#</a> [22:04] &lt;annevk&gt; you mean shared workers?</li>
+ <li id="l-946" _a="annevk"><a href="#l-946">#</a> [22:04] &lt;annevk&gt; Opera and WebKit I believe</li>
+ <li id="l-947" _a="Hixie" _r="no"><a href="#l-947">#</a> [22:04] &lt;Hixie&gt; no, not shared workers</li>
+ <li id="l-948" _a="Hixie"><a href="#l-948">#</a> [22:05] &lt;Hixie&gt; the Worker() and MessageChannel() constructors, in a worker</li>
+ <li id="l-949"><a href="#l-949">#</a> [22:06] * Parts: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-950"><a href="#l-950">#</a> [22:06] * Joins: annevk (~annevk@5355737B.cm-6-6b.dynamic.ziggo.nl)</li>
+ <li id="l-951" _a="Hixie"><a href="#l-951">#</a> [22:07] &lt;Hixie&gt; looks like firefox doesn't implement MessageChannel</li>
+ <li id="l-952" _a="Hixie"><a href="#l-952">#</a> [22:09] &lt;Hixie&gt; opera throws an INVALID_STATE_ERR exception from postMessage(), which is impossible per spec as far as i can tell</li>
+ <li id="l-953" _a="Hixie"><a href="#l-953">#</a> [22:09] &lt;Hixie&gt; webkit doesn't support Worker() inside workers</li>
+ <li id="l-954"><a href="#l-954">#</a> [22:11] * Quits: david_carlisle (~chatzilla@dcarlisle.demon.co.uk) (Ping timeout: 252 seconds)</li>
+ <li id="l-955" _a="tantek_"><a href="#l-955">#</a> [22:13] &lt;tantek_&gt; Hixie - what would that be, the middle management feature?</li>
+ <li id="l-956" _a="Hixie"><a href="#l-956">#</a> [22:13] &lt;Hixie&gt; -_-</li>
+ <li id="l-957" _a="tantek_"><a href="#l-957">#</a> [22:13] &lt;tantek_&gt; or would you need more than one level of hierarchy for that</li>
+ <li id="l-958" _a="Hixie"><a href="#l-958">#</a> [22:14] &lt;Hixie&gt; more like the subcontractor feature, if we're going to go with this metaphor</li>
+ <li id="l-959" _a="Hixie"><a href="#l-959">#</a> [22:14] &lt;Hixie&gt; anyone actually got IE10 around?</li>
+ <li id="l-960" _a="tantek_"><a href="#l-960">#</a> [22:14] &lt;tantek_&gt; subcontractor would mean cross-origin though</li>
+ <li id="l-961" _a="zewt" _r="bencc"><a href="#l-961">#</a> [22:15] &lt;zewt&gt; bencc: sounds like false negatives; gmail knows the user is around if he's moving the mouse around a gmail tab, but if the user isn't using gmail it has no idea whether the user is there or not</li>
+ <li id="l-962"><a href="#l-962">#</a> [22:15] * Quits: GlitchMr (~glitchmr@178-36-8-15.adsl.inetia.pl) (Read error: Connection reset by peer)</li>
+ <li id="l-963" _a="zewt"><a href="#l-963">#</a> [22:16] &lt;zewt&gt; eg. if it says the user is there he probably is, but if it says he isn't, it doesn't actually know at all</li>
+ <li id="l-964" _a="tantek_"><a href="#l-964">#</a> [22:16] &lt;tantek_&gt; so presence is tab-specific? that seems to make sense</li>
+ <li id="l-965" _a="tantek_" _r="as"><a href="#l-965">#</a> [22:16] &lt;tantek_&gt; as, in you'd want to know if the user is present in the page's context, not just on the machine somewhere</li>
+ <li id="l-966" _a="zewt"><a href="#l-966">#</a> [22:16] &lt;zewt&gt; i'm just talking about gmail in browsers; certainly it should not be able to tell whether i'm active in another tab (privacy)</li>
+ <li id="l-967" _a="jgraham" _r="tantek_"><a href="#l-967">#</a> [22:16] &lt;jgraham&gt; tantek_: It means that G+ tells me that annevk is away when he is talking here</li>
+ <li id="l-968" _a="tantek_"><a href="#l-968">#</a> [22:17] &lt;tantek_&gt; I suppose both could be useful</li>
+ <li id="l-969" _a="tantek_"><a href="#l-969">#</a> [22:17] &lt;tantek_&gt; is the user active on the machine</li>
+ <li id="l-970" _a="tantek_"><a href="#l-970">#</a> [22:17] &lt;tantek_&gt; is the user active on this page</li>
+ <li id="l-971" _a="annevk"><a href="#l-971">#</a> [22:17] &lt;annevk&gt; I'd rather not reveal any of that</li>
+ <li id="l-972" _a="annevk"><a href="#l-972">#</a> [22:17] &lt;annevk&gt; as a user</li>
+ <li id="l-973" _a="jgraham"><a href="#l-973">#</a> [22:17] &lt;jgraham&gt; Me too, but it isn't really possible to stop</li>
+ <li id="l-974" _a="zewt"><a href="#l-974">#</a> [22:18] &lt;zewt&gt; how so?</li>
+ <li id="l-975" _a="tantek_"><a href="#l-975">#</a> [22:18] &lt;tantek_&gt; annevk - that's why it makes sense as a WebAPI - it's a permissions like thing similar to Geo etc</li>
+ <li id="l-976" _a="jgraham" _r="zewt"><a href="#l-976">#</a> [22:18] &lt;jgraham&gt; zewt: Well the &quot;on this machine&quot; thing is since that doesn't work at all at present</li>
+ <li id="l-977" _a="jgraham"><a href="#l-977">#</a> [22:18] &lt;jgraham&gt; but the &quot;on this page&quot; isn't</li>
+ <li id="l-978" _a="zewt"><a href="#l-978">#</a> [22:19] &lt;zewt&gt; i don't care if pages know i'm using the page, but they shouldn't be able to tell that I'm active otherwise (without extra permission)</li>
+ <li id="l-979" _a="jgraham"><a href="#l-979">#</a> [22:19] &lt;jgraham&gt; Or &quot;on any page that has the same user identifier&quot;</li>
+ <li id="l-980" _a="jgraham"><a href="#l-980">#</a> [22:19] &lt;jgraham&gt; (so facebook could know that you are active on any site that uses facebook login for example)</li>
+ <li id="l-981" _a="zewt"><a href="#l-981">#</a> [22:20] &lt;zewt&gt; i was just responding to above &lt;bencc&gt; gmail chat works perfect for me</li>
+ <li id="l-982" _a="zewt"><a href="#l-982">#</a> [22:20] &lt;zewt&gt; his &quot;perfect&quot; seemed to be flawed</li>
+ <li id="l-983" _a="jgraham" _r="Yeah"><a href="#l-983">#</a> [22:20] &lt;jgraham&gt; Yeah, I agree. It's not possible to make it perfect</li>
+ <li id="l-984" _a="zewt"><a href="#l-984">#</a> [22:21] &lt;zewt&gt; i mean, his evaluation of &quot;perfect&quot;</li>
+ <li id="l-985" _a="jgraham"><a href="#l-985">#</a> [22:21] &lt;jgraham&gt; &quot;do I want to chat right now&quot; isn't realy something that you can infer automatically</li>
+ <li id="l-986" _a="zewt" _r="&lt;bencc&gt"><a href="#l-986">#</a> [22:21] &lt;zewt&gt; &lt;bencc&gt; when I see a friend online he is available to chat with me</li>
+ <li id="l-987" _a="annevk" _r="jgraham"><a href="#l-987">#</a> [22:21] &lt;annevk&gt; jgraham: fwiw, I'm permanently marked &quot;Away&quot;, but usually when the music track changes I'm actually there :)</li>
+ <li id="l-988" _a="zewt"><a href="#l-988">#</a> [22:21] &lt;zewt&gt; my point was that the reverse is not going to be true--people are available to chat, even though gmail says they're not (i expect)</li>
+ <li id="l-989"><a href="#l-989">#</a> [22:21] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-990" _a="jgraham" _r="annevk"><a href="#l-990">#</a> [22:21] &lt;jgraham&gt; annevk: It's OK I never intend to contact you through google plus. And don't really have that much interest in stalking you</li>
+ <li id="l-991" _a="jgraham"><a href="#l-991">#</a> [22:22] &lt;jgraham&gt; Although people do think you're a girl so maybe you will get stalkers</li>
+ <li id="l-992" _a="jgraham"><a href="#l-992">#</a> [22:22] &lt;jgraham&gt; s/plus/chat/</li>
+ <li id="l-993" _a="annevk"><a href="#l-993">#</a> [22:23] &lt;annevk&gt; only girls get stalkers?</li>
+ <li id="l-994" _a="zewt"><a href="#l-994">#</a> [22:23] &lt;zewt&gt; not exclusively, but i expect there's a great bias in that direction</li>
+ <li id="l-995" _a="annevk" _r="anyway"><a href="#l-995">#</a> [22:23] &lt;annevk&gt; anyway, not going to add anyone to Google Chat I don't like :)</li>
+ <li id="l-996" _a="zewt"><a href="#l-996">#</a> [22:24] &lt;zewt&gt; at least in technical corners of the internet, with the usual gender ratios :P</li>
+ <li id="l-997" _a="jgraham"><a href="#l-997">#</a> [22:25] &lt;jgraham&gt; In the technical corners of the internet p(man|called anne) &gt; p(woman|called anne)</li>
+ <li id="l-998" _a="jgraham"><a href="#l-998">#</a> [22:25] &lt;jgraham&gt; :(</li>
+ <li id="l-999" _a="jgraham" _r="(note"><a href="#l-999">#</a> [22:25] &lt;jgraham&gt; (note: this is almost certianly not true)</li>
+ <li id="l-1000" _a="zewt" _r="yeah"><a href="#l-1000">#</a> [22:25] &lt;zewt&gt; yeah, it says something that i just assumed from the start that anne was probably a guy</li>
+ <li id="l-1001"><a href="#l-1001">#</a> [22:26] * Quits: drublic (~drublic@frbg-5f733728.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-1002"><a href="#l-1002">#</a> [22:26] * Quits: davidb (~davidb@66.207.208.98) (Quit: davidb)</li>
+ <li id="l-1003" _a="zewt"><a href="#l-1003">#</a> [22:27] &lt;zewt&gt; i couldn't quite make that leap with Silvia, though</li>
+ <li id="l-1004" _a="wilhelm"><a href="#l-1004">#</a> [22:28] &lt;wilhelm&gt; How do Safari / WebKit version numbers work? What does 534.51.22, 7534.48.3 or 6533.18.5 correspond to? (Those numbers are from UA strings.)</li>
+ <li id="l-1005" _a="zewt"><a href="#l-1005">#</a> [22:28] &lt;zewt&gt; magic</li>
+ <li id="l-1006" _a="zewt"><a href="#l-1006">#</a> [22:29] &lt;zewt&gt; am I the only person in the world that Firefox save dialogs ignore? heh</li>
+ <li id="l-1007" _a="zewt"><a href="#l-1007">#</a> [22:29] &lt;zewt&gt; for years, over endless versions of FF and different versions of Windows, i've had to hit alt-s 2-3 times to get the save dialog to go</li>
+ <li id="l-1008"><a href="#l-1008">#</a> [22:30] * Parts: bencc (~user@bzq-84-111-74-191.red.bezeqint.net)</li>
+ <li id="l-1009"><a href="#l-1009">#</a> [22:30] * Joins: sicking (~chatzilla@nat/mozilla/x-xjcyllnsmgvuzcvm)</li>
+ <li id="l-1010" _a="sicking" _r="annevk"><a href="#l-1010">#</a> [22:31] &lt;sicking&gt; annevk: ping</li>
+ <li id="l-1011" _a="annevk"><a href="#l-1011">#</a> [22:31] &lt;annevk&gt; hey sicking</li>
+ <li id="l-1012" _a="sicking" _r="annevk"><a href="#l-1012">#</a> [22:31] &lt;sicking&gt; annevk: I'm really interested to hear your take on supporting non UTF8 encoded HTML documents in XHR</li>
+ <li id="l-1013" _a="annevk"><a href="#l-1013">#</a> [22:32] &lt;annevk&gt; I actually think that maybe we should limit that to UTF-8 too</li>
+ <li id="l-1014" _a="sicking" _r="annevk"><a href="#l-1014">#</a> [22:32] &lt;sicking&gt; annevk: HUH?!?</li>
+ <li id="l-1015" _a="sicking" _r="annevk"><a href="#l-1015">#</a> [22:33] &lt;sicking&gt; annevk: that excludes some 50% of the worlds HTML</li>
+ <li id="l-1016" _a="zewt" _r="annevk"><a href="#l-1016">#</a> [22:33] &lt;zewt&gt; annevk: I'm really interested to hear your take on supporting non UTF8 encoded HTML documents in XHR, as long as you agree with me</li>
+ <li id="l-1017" _a="sicking" _r="zewt"><a href="#l-1017">#</a> [22:33] &lt;sicking&gt; zewt: no, i was very intersted in hearing dissenting opinions too. That doesn't mean i agree with them</li>
+ <li id="l-1018" _a="zewt"><a href="#l-1018">#</a> [22:33] &lt;zewt&gt; i know :P</li>
+ <li id="l-1019" _a="zewt" _r="sicking"><a href="#l-1019">#</a> [22:34] &lt;zewt&gt; sicking: what about only supporting validly-tagged HTML documents, rejecting the fuzzy parts (heuristics and locale-specific defaults)? that's where the *real* evil is</li>
+ <li id="l-1020" _a="sicking" _r="annevk"><a href="#l-1020">#</a> [22:34] &lt;sicking&gt; annevk: have you talked to anyone in CJK countries about this?</li>
+ <li id="l-1021" _a="annevk" _r="sicking"><a href="#l-1021">#</a> [22:34] &lt;annevk&gt; sicking: not sure existing documents will be the primary use case, but I'm happy with what hsivonen implemented</li>
+ <li id="l-1022" _a="sicking" _r="annevk"><a href="#l-1022">#</a> [22:34] &lt;sicking&gt; annevk: have you talked to anyone in CJK countries about this?</li>
+ <li id="l-1023" _a="sicking" _r="annevk"><a href="#l-1023">#</a> [22:35] &lt;sicking&gt; annevk: and why do you think new content is the primary use case?</li>
+ <li id="l-1024" _a="zewt"><a href="#l-1024">#</a> [22:35] &lt;zewt&gt; people in cjk countries (especially japan) seem to live under serious misunderstandings of utf-8 (not that saying that changes it)</li>
+ <li id="l-1025" _a="annevk" _r="sicking"><a href="#l-1025">#</a> [22:35] &lt;annevk&gt; sicking: I haven't, though I did suggest pinging myakura last time you brought this up</li>
+ <li id="l-1026" _a="sicking" _r="annevk"><a href="#l-1026">#</a> [22:36] &lt;sicking&gt; annevk: sigh, ok</li>
+ <li id="l-1027" _a="annevk" _r="sicking"><a href="#l-1027">#</a> [22:36] &lt;annevk&gt; sicking: I'm not really worried about shipping a more restrictive feature and then have people complain and we adapt</li>
+ <li id="l-1028" _a="annevk" _r="sicking"><a href="#l-1028">#</a> [22:36] &lt;annevk&gt; sicking: I'm more worried about getting in the same mess we got in with CORS</li>
+ <li id="l-1029" _a="sicking" _r="annevk"><a href="#l-1029">#</a> [22:36] &lt;sicking&gt; annevk: we get basically no feedback from that part of the world. I wouldn't take a lack of complaint to mean anything</li>
+ <li id="l-1030" _a="annevk"><a href="#l-1030">#</a> [22:36] &lt;annevk&gt; where we have something very complex that's hard to use for people</li>
+ <li id="l-1031" _a="annevk" _r="sicking"><a href="#l-1031">#</a> [22:36] &lt;annevk&gt; sicking: this feature is not really deployed</li>
+ <li id="l-1032" _a="sicking" _r="annevk"><a href="#l-1032">#</a> [22:36] &lt;sicking&gt; annevk: yeah, the fact that it's header based is a bigger problem than I had thought</li>
+ <li id="l-1033" _a="annevk" _r="sicking"><a href="#l-1033">#</a> [22:37] &lt;annevk&gt; sicking: when I'm next in Tokyo I'll ask</li>
+ <li id="l-1034" _a="sicking" _r="annevk"><a href="#l-1034">#</a> [22:37] &lt;sicking&gt; annevk: the deployment cycle is probably at least a year or two for something like this. Waiting for deployment before we see what the use cases are will create a 4 year cycle</li>
+ <li id="l-1035" _a="sicking" _r="annevk"><a href="#l-1035">#</a> [22:38] &lt;sicking&gt; annevk: i'll email some of our mozilla-japan people and cc you</li>
+ <li id="l-1036" _a="annevk"><a href="#l-1036">#</a> [22:38] &lt;annevk&gt; just let them email public-webapps</li>
+ <li id="l-1037" _a="annevk"><a href="#l-1037">#</a> [22:38] &lt;annevk&gt; that seems better</li>
+ <li id="l-1038" _a="zewt" _r="annevk"><a href="#l-1038">#</a> [22:39] &lt;zewt&gt; annevk: i don't think it needs to be complex; take &quot;determining the character encoding&quot; and throw away the last three steps (replace with utf-8)</li>
+ <li id="l-1039" _a="annevk"><a href="#l-1039">#</a> [22:39] &lt;annevk&gt; the use case to me is primarily that it's easy to get a DOM out of some HTML on the server</li>
+ <li id="l-1040" _a="zewt"><a href="#l-1040">#</a> [22:39] &lt;zewt&gt; (or rather, any new complexity)</li>
+ <li id="l-1041" _a="sicking" _r="annevk"><a href="#l-1041">#</a> [22:39] &lt;sicking&gt; annevk: we're still really bad at getting the community to speak up on that list</li>
+ <li id="l-1042" _a="sicking" _r="annevk"><a href="#l-1042">#</a> [22:39] &lt;sicking&gt; annevk: and that's the english speaking community</li>
+ <li id="l-1043" _a="annevk"><a href="#l-1043">#</a> [22:39] &lt;annevk&gt; that you have to maybe fix that HTML first is not really a big concern to me, things need to adapt over time to meet new requirements</li>
+ <li id="l-1044" _a="sicking" _r="annevk"><a href="#l-1044">#</a> [22:40] &lt;sicking&gt; annevk: i didn't understand that</li>
+ <li id="l-1045"><a href="#l-1045">#</a> [22:40] * Quits: LBP (~Mirc@pD9EB1797.dip0.t-ipconnect.de) (Quit: Bye, bye!)</li>
+ <li id="l-1046" _a="annevk" _r="sicking"><a href="#l-1046">#</a> [22:40] &lt;annevk&gt; sicking: myakura chairs a Japenese interest group and is involved in the Japenese HTML5 user group (or some such) with over 2000 developers involved</li>
+ <li id="l-1047"><a href="#l-1047">#</a> [22:41] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: Freedom - to walk free and own no superior.)</li>
+ <li id="l-1048"><a href="#l-1048">#</a> [22:42] * Quits: nielsle (~nielsle@3239059-cl69.boa.fiberby.dk) (Quit: Ex-Chat)</li>
+ <li id="l-1049" _a="sicking" _r="annevk"><a href="#l-1049">#</a> [22:43] &lt;sicking&gt; annevk: is this myakura.web@gmail.com?</li>
+ <li id="l-1050" _a="sicking" _r="annevk"><a href="#l-1050">#</a> [22:44] &lt;sicking&gt; annevk: i see very little feedback from him</li>
+ <li id="l-1051" _a="sicking" _r="annevk"><a href="#l-1051">#</a> [22:44] &lt;sicking&gt; annevk: which either means that the user group is happy with everything we do, or that the communication channel isn't working that great yet</li>
+ <li id="l-1052"><a href="#l-1052">#</a> [22:45] * Joins: FlorianX (~Dimitri@p4FCF7B65.dip.t-dialin.net)</li>
+ <li id="l-1053"><a href="#l-1053">#</a> [22:45] * Quits: FlorianX (~Dimitri@p4FCF7B65.dip.t-dialin.net) (Client Quit)</li>
+ <li id="l-1054" _a="annevk"><a href="#l-1054">#</a> [22:46] &lt;annevk&gt; I very much doubt this is a big problem; if you run the kind of site that uses XMLHttpRequest you will very soon run into encodings and adapt appropriately</li>
+ <li id="l-1055" _a="annevk"><a href="#l-1055">#</a> [22:47] &lt;annevk&gt; e.g. most things transmitted towards the server will be in UTF-8</li>
+ <li id="l-1056" _a="zewt"><a href="#l-1056">#</a> [22:47] &lt;zewt&gt; a lot of people in japan don't &quot;like&quot; utf-8 and use sjis on purpose</li>
+ <li id="l-1057" _a="sicking" _r="annevk"><a href="#l-1057">#</a> [22:47] &lt;sicking&gt; annevk: if you're submitting stuff yeah</li>
+ <li id="l-1058" _a="annevk"><a href="#l-1058">#</a> [22:48] &lt;annevk&gt; if you're reading with responseText too</li>
+ <li id="l-1059" _a="annevk"><a href="#l-1059">#</a> [22:48] &lt;annevk&gt; it's fairly limited what responseText does</li>
+ <li id="l-1060" _a="annevk"><a href="#l-1060">#</a> [22:48] &lt;annevk&gt; (more broad than I'd like, but still limited)</li>
+ <li id="l-1061"><a href="#l-1061">#</a> [22:49] * Joins: kborchers (~kborchers@unaffiliated/kborchers)</li>
+ <li id="l-1062" _a="annevk" _r="zewt"><a href="#l-1062">#</a> [22:51] &lt;annevk&gt; zewt: not really sure that's still the case</li>
+ <li id="l-1063"><a href="#l-1063">#</a> [22:52] * Joins: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net)</li>
+ <li id="l-1064" _a="jgraham"><a href="#l-1064">#</a> [22:52] &lt;jgraham&gt; I heard it was still the case recently, but I don't think I have data</li>
+ <li id="l-1065" _a="zewt"><a href="#l-1065">#</a> [22:52] &lt;zewt&gt; hard to gather real data on, it's a social/perception thing</li>
+ <li id="l-1066" _a="annevk" _r="anyway"><a href="#l-1066">#</a> [22:52] &lt;annevk&gt; anyway, using shift_jis is not really problematic</li>
+ <li id="l-1067" _a="zewt"><a href="#l-1067">#</a> [22:55] &lt;zewt&gt; (... as long as it's declared correctly)</li>
+ <li id="l-1068" _a="annevk"><a href="#l-1068">#</a> [22:55] &lt;annevk&gt; the only problem with shift_jis is that we haven't really defined all its details</li>
+ <li id="l-1069"><a href="#l-1069">#</a> [22:56] * Quits: WolfieZero (~wolfiezer@jennie-en0.manor.fubra.net.manor.fubra.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-1070" _a="annevk"><a href="#l-1070">#</a> [22:56] &lt;annevk&gt; IE that &quot;shift_jis&quot; actually maps to Microsoft Code Page 932 with error handling that is probably not even defined in that Code Page</li>
+ <li id="l-1071" _a="annevk"><a href="#l-1071">#</a> [22:56] &lt;annevk&gt; s/IE/i.e./</li>
+ <li id="l-1072"><a href="#l-1072">#</a> [22:57] * Quits: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-1073"><a href="#l-1073">#</a> [22:58] * Quits: martndemus (~martndemu@h254064.upc-h.chello.nl) (Quit: Lost terminal)</li>
+ <li id="l-1074" _a="zewt"><a href="#l-1074">#</a> [22:58] &lt;zewt&gt; trying to fully specify the legacy encodings doesn't exactly seem worth it</li>
+ <li id="l-1075" _a="annevk"><a href="#l-1075">#</a> [22:59] &lt;annevk&gt; every now and then we still hit compat issues and it makes it harder for people writing software that interprets legacy content</li>
+ <li id="l-1076" _a="annevk"><a href="#l-1076">#</a> [22:59] &lt;annevk&gt; seems totally worth it</li>
+ <li id="l-1077" _a="annevk"><a href="#l-1077">#</a> [23:00] &lt;annevk&gt; it's a bit of work, but a lot can be automated</li>
+ <li id="l-1078" _a="zewt"><a href="#l-1078">#</a> [23:00] &lt;zewt&gt; seems like another lever to get more people to stop perpetuating legacy encodings :P</li>
+ <li id="l-1079" _a="zewt"><a href="#l-1079">#</a> [23:01] &lt;zewt&gt; at least most encodings are simpler and tiny compared to the CJK ones</li>
+ <li id="l-1080" _a="annevk"><a href="#l-1080">#</a> [23:01] &lt;annevk&gt; I did a bunch of work on the 8bit encodings already <a href="http://annevankesteren.nl/2010/8-bit-labels">http://annevankesteren.nl/2010/8-bit-labels</a></li>
+ <li id="l-1081" _a="annevk"><a href="#l-1081">#</a> [23:02] &lt;annevk&gt; just need to make some decisions on who is right, and update everything for today's implementations</li>
+ <li id="l-1082" _a="annevk"><a href="#l-1082">#</a> [23:02] &lt;annevk&gt; Opera and Gecko made a few changes</li>
+ <li id="l-1083"><a href="#l-1083">#</a> [23:03] * Quits: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-1084"><a href="#l-1084">#</a> [23:04] * Joins: ezoe (~ezoe@61-205-124-165f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-1085"><a href="#l-1085">#</a> [23:06] * Joins: jarek (~jarek@bdb231.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-1086"><a href="#l-1086">#</a> [23:06] * Quits: jarek (~jarek@bdb231.neoplus.adsl.tpnet.pl) (Changing host)</li>
+ <li id="l-1087"><a href="#l-1087">#</a> [23:06] * Joins: jarek (~jarek@unaffiliated/jarek)</li>
+ <li id="l-1088"><a href="#l-1088">#</a> [23:09] * Quits: miketaylr (~miketaylr@206.217.92.186) (Ping timeout: 240 seconds)</li>
+ <li id="l-1089"><a href="#l-1089">#</a> [23:13] * Quits: Telling (~unknown@80-71-135-15.u.parknet.dk) (Quit: ...)</li>
+ <li id="l-1090" _a="sicking" _r="annevk"><a href="#l-1090">#</a> [23:13] &lt;sicking&gt; annevk: by the way, we can totally &quot;fix&quot; CORS though</li>
+ <li id="l-1091" _a="sicking" _r="annevk"><a href="#l-1091">#</a> [23:14] &lt;sicking&gt; annevk: adding back the in-document access indicator that we used to have for XML would do the trick</li>
+ <li id="l-1092"><a href="#l-1092">#</a> [23:14] * Parts: catphive (~brenmill@nat/cisco/x-smkkwkhueskleksi)</li>
+ <li id="l-1093" _a="sicking" _r="annevk"><a href="#l-1093">#</a> [23:14] &lt;sicking&gt; annevk: but not for XML of course</li>
+ <li id="l-1094" _a="sicking" _r="annevk"><a href="#l-1094">#</a> [23:15] &lt;sicking&gt; annevk: adding a in-line for JSON would be huge</li>
+ <li id="l-1095" _a="zewt"><a href="#l-1095">#</a> [23:15] &lt;zewt&gt; but images :(</li>
+ <li id="l-1096" _a="sicking"><a href="#l-1096">#</a> [23:15] &lt;sicking&gt; s/in-line/in-line access descriptor/</li>
+ <li id="l-1097" _a="sicking" _r="zewt"><a href="#l-1097">#</a> [23:15] &lt;sicking&gt; zewt: i don't see how you could do those without using headers</li>
+ <li id="l-1098" _a="zewt"><a href="#l-1098">#</a> [23:15] &lt;zewt&gt; (not *personally* worried; I'd never willingly work in an environment where I can't set headers)</li>
+ <li id="l-1099" _a="jgraham" _r="Hmm"><a href="#l-1099">#</a> [23:16] &lt;jgraham&gt; Hmm, how would one add it to JSON?</li>
+ <li id="l-1100" _a="zewt"><a href="#l-1100">#</a> [23:16] &lt;zewt&gt; though I guess that's not enough, since what matters is whether the service I'm using can set it, not what I can do :(</li>
+ <li id="l-1101" _a="jgraham"><a href="#l-1101">#</a> [23:16] * jgraham might be misunderstanding</li>
+ <li id="l-1102" _a="zewt"><a href="#l-1102">#</a> [23:17] &lt;zewt&gt; you could add it in a non-conforming-to-JSON way with a Javascript header, though that'd be evil</li>
+ <li id="l-1103" _a="annevk" _r="sicking"><a href="#l-1103">#</a> [23:17] &lt;annevk&gt; sicking: your definition of fixing it is adding yet more bloat; I'm intrigued :)</li>
+ <li id="l-1104" _a="sicking" _r="annevk"><a href="#l-1104">#</a> [23:17] &lt;sicking&gt; annevk: i think we would have needed the headers no matter what</li>
+ <li id="l-1105" _a="sicking" _r="annevk"><a href="#l-1105">#</a> [23:18] &lt;sicking&gt; annevk: features != bloat</li>
+ <li id="l-1106" _a="sicking" _r="annevk"><a href="#l-1106">#</a> [23:18] &lt;sicking&gt; annevk: unused features == bloat</li>
+ <li id="l-1107" _a="sicking"><a href="#l-1107">#</a> [23:18] &lt;sicking&gt; or &quot;unneeded&quot; more accurately</li>
+ <li id="l-1108"><a href="#l-1108">#</a> [23:19] * Quits: ezoe (~ezoe@61-205-124-165f1.kyt1.eonet.ne.jp) (Quit: And Now for Something Completely Different.)</li>
+ <li id="l-1109"><a href="#l-1109">#</a> [23:19] * Quits: gwicke (~gabriel@212.255.39.236) (Quit: Bye!)</li>
+ <li id="l-1110" _a="zewt"><a href="#l-1110">#</a> [23:20] &lt;zewt&gt; wonder if there are security implications to inline declarations (eg. upload file to github or a pastebin or something, use the &quot;raw text&quot; link to serve remote files with the access grant inline)</li>
+ <li id="l-1111"><a href="#l-1111">#</a> [23:21] * Joins: Echoes2 (echoes@195.191.156.25)</li>
+ <li id="l-1112" class="flagged" _a="tantek" _r="Hixie"><a href="#l-1112">#</a> [23:21] &lt;tantek&gt; Hixie, per our discussion a few days ago on permit space instead of &quot;T&quot; in the date-and-time microsyntax, where you said &quot;tantek: if we can collect evidence e.g. showing that there are common parsers that support a nicer format, i'm certainly all for it, fwiw&quot; - I've now collected that evidence and think we have enough to go on.</li>
+ <li id="l-1113" class="flagged" _a="tantek"><a href="#l-1113">#</a> [23:21] &lt;tantek&gt; <a href="http://wiki.whatwg.org/wiki/Time_element#permit_space_instead_of_T_in_datetimes">http://wiki.whatwg.org/wiki/Time_element#permit_space_instead_of_T_in_datetimes</a></li>
+ <li id="l-1114" _a="tantek" _r="cc"><a href="#l-1114">#</a> [23:22] &lt;tantek&gt; cc: TabAtkins, mkanat, kennyluck</li>
+ <li id="l-1115" _a="zewt" _r="tantek"><a href="#l-1115">#</a> [23:23] &lt;zewt&gt; tantek: fyi, i think i was mistaken about IE8 (may have mixed up my browser windows or something)</li>
+ <li id="l-1116" _a="tantek"><a href="#l-1116">#</a> [23:23] &lt;tantek&gt; zewt - noted in the research :)</li>
+ <li id="l-1117" _a="zewt"><a href="#l-1117">#</a> [23:23] &lt;zewt&gt; so you may as well remove the reference :)</li>
+ <li id="l-1118" _a="tantek"><a href="#l-1118">#</a> [23:24] &lt;tantek&gt; well it helps to say if it supports it or not one way or the other</li>
+ <li id="l-1119" _a="tantek"><a href="#l-1119">#</a> [23:24] &lt;tantek&gt; do you have it in front of you?</li>
+ <li id="l-1120" _a="tantek"><a href="#l-1120">#</a> [23:24] &lt;tantek&gt; can you check:</li>
+ <li id="l-1121" _a="tantek"><a href="#l-1121">#</a> [23:24] &lt;tantek&gt; data:text/html,&lt;!doctype html&gt;&lt;script&gt;alert(Date.parse(&quot;2011-11-11 11:11:11&quot;))&lt;/script&gt;</li>
+ <li id="l-1122" _a="zewt"><a href="#l-1122">#</a> [23:24] &lt;zewt&gt; pretty sure the second half of that sentence is the correct one (its own toString format)</li>
+ <li id="l-1123" _a="tantek"><a href="#l-1123">#</a> [23:24] &lt;tantek&gt; if we can say for sure it returns NaN - that's another useful data point</li>
+ <li id="l-1124" _a="zewt"><a href="#l-1124">#</a> [23:24] &lt;zewt&gt; ie8 != data:</li>
+ <li id="l-1125" _a="tantek"><a href="#l-1125">#</a> [23:24] &lt;tantek&gt; ah thanks</li>
+ <li id="l-1126" _a="zewt"><a href="#l-1126">#</a> [23:25] &lt;zewt&gt; and yes, returns NaN</li>
+ <li id="l-1127" _a="zewt"><a href="#l-1127">#</a> [23:25] &lt;zewt&gt; returns NaN for &quot;2011-11-11T11:11:11&quot; as well--useful to include both (if an implementation doesn't support *T*, it doesn't matter if it doesn't support * * either)</li>
+ <li id="l-1128" _a="tantek"><a href="#l-1128">#</a> [23:27] &lt;tantek&gt; oh that's interesting, yes.</li>
+ <li id="l-1129" _a="tantek"><a href="#l-1129">#</a> [23:27] &lt;tantek&gt; I wonder if that's the same for IE9 and IE10 also</li>
+ <li id="l-1130" _a="heycam|away"><a href="#l-1130">#</a> [23:27] * heycam|away is now known as heycam</li>
+ <li id="l-1131" _a="zewt"><a href="#l-1131">#</a> [23:28] &lt;zewt&gt; &quot;it does help readability, incrementally&quot; i think it's at least marginally stronger than that; it's a natural, human format, where *T* really isn't</li>
+ <li id="l-1132" _a="zewt" _r="fwiw"><a href="#l-1132">#</a> [23:28] &lt;zewt&gt; fwiw, anyway</li>
+ <li id="l-1133" _a="heycam" _r="annevk"><a href="#l-1133">#</a> [23:31] &lt;heycam&gt; annevk, I did not add a warning about const, but I am happy to. wording suggestions welcome.</li>
+ <li id="l-1134" _a="annevk" _r="heycam"><a href="#l-1134">#</a> [23:33] &lt;annevk&gt; heycam: I added something in the bug</li>
+ <li id="l-1135" _a="heycam"><a href="#l-1135">#</a> [23:33] &lt;heycam&gt; thanks</li>
+ <li id="l-1136" _a="annevk" _r="heycam"><a href="#l-1136">#</a> [23:33] &lt;annevk&gt; heycam: preferably .warning has a red border and such :)</li>
+ <li id="l-1137" _a="heycam"><a href="#l-1137">#</a> [23:33] &lt;heycam&gt; that's perhaps a good idea</li>
+ <li id="l-1138" _a="zewt" _r="tantek"><a href="#l-1138">#</a> [23:33] &lt;zewt&gt; tantek, fyi postgresql also accepts that format, and its commandline omits T by default as well (2011-12-06 15:27:00.706385-07)</li>
+ <li id="l-1139" _a="zewt"><a href="#l-1139">#</a> [23:34] &lt;zewt&gt; (minor data point)</li>
+ <li id="l-1140"><a href="#l-1140">#</a> [23:35] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-1141"><a href="#l-1141">#</a> [23:38] * Joins: martndemus (~martndemu@h254064.upc-h.chello.nl)</li>
+ <li id="l-1142" _a="Hixie" _r="tantek"><a href="#l-1142">#</a> [23:38] &lt;Hixie&gt; tantek: k, i'll update the proposal in the spec</li>
+ <li id="l-1143"><a href="#l-1143">#</a> [23:43] * Quits: Ms2ger (~Ms2ger@91.181.55.40) (Quit: nn)</li>
+ <li id="l-1144"><a href="#l-1144">#</a> [23:45] * Quits: reuben_ (~Seta00@seta00.com) (Quit: ZNC - <a href="http://znc.in">http://znc.in</a>)</li>
+ <li id="l-1145"><a href="#l-1145">#</a> [23:46] * Quits: dbaron (~dbaron@nat/mozilla/x-pszqzamlgelhmfni) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-1146"><a href="#l-1146">#</a> [23:46] * Joins: dbaron (~dbaron@nat/mozilla/x-yswkxhonlalaebvy)</li>
+ <li id="l-1147"><a href="#l-1147">#</a> [23:51] * Joins: davidb_ (~davidb@bas1-toronto06-2925212153.dsl.bell.ca)</li>
+ <li id="l-1148"><a href="#l-1148">#</a> [23:52] * Quits: davidb_ (~davidb@bas1-toronto06-2925212153.dsl.bell.ca) (Client Quit)</li>
+ <li id="l-1149"><a href="#l-1149">#</a> Session Close: Wed Dec 07 00:00:00 2011</li>
+</ol>
+<p id="end">The end :)

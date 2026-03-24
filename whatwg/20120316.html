@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20120316</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20120316.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2012-03-16 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Fri Mar 16 00:00:01 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Hixie"><a href="#l-3">#</a> [00:01] &lt;Hixie&gt; i'm thinking people are going to want zero-length on dashes too though, for dotted lines...</li>
+ <li id="l-4" _a="TabAtkins_"><a href="#l-4">#</a> [00:02] &lt;TabAtkins_&gt; I do think that zero-length on dashes are useful (it's hacky to have to do a .01 length on dash).</li>
+ <li id="l-5" _a="Hixie"><a href="#l-5">#</a> [00:02] &lt;Hixie&gt; what should happen if the dash is 1 0 0 0 0 0 0 0 0 0 ?</li>
+ <li id="l-6" _a="Hixie"><a href="#l-6">#</a> [00:02] &lt;Hixie&gt; i wonder if there's even any way to tell...</li>
+ <li id="l-7" _a="TabAtkins_"><a href="#l-7">#</a> [00:03] &lt;TabAtkins_&gt; Depends on the drawing library.</li>
+ <li id="l-8" _a="TabAtkins_"><a href="#l-8">#</a> [00:03] &lt;TabAtkins_&gt; If they draw each segment individually, you can tell with semi-transparent colors.</li>
+ <li id="l-9" _a="TabAtkins_"><a href="#l-9">#</a> [00:03] &lt;TabAtkins_&gt; If they draw them all at the same time, you can't.</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:03] &lt;Hixie&gt; canvas draws it at the same time</li>
+ <li id="l-11" _a="TabAtkins_"><a href="#l-11">#</a> [00:06] &lt;TabAtkins_&gt; Then you can't tell.  The multiple 0-length dash segments overwrite each other, and are then overwritten by the 1-length dash when it comes around again.</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:07] * Quits: rniwa (rniwa@nat/google/x-wtfnkecrcaepvbqz) (Quit: rniwa)</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:07] * Joins: ap_ (~ap@17.245.90.141)</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:07] &lt;Hixie&gt; ok 1 40 0 0 0 0 0 40</li>
+ <li id="l-15"><a href="#l-15">#</a> [00:07] * Quits: Ms2ger (~Ms2ger@91.181.21.107) (Quit: nn)</li>
+ <li id="l-16"><a href="#l-16">#</a> [00:08] * Joins: weinig_ (~weinig@17.245.90.191)</li>
+ <li id="l-17" _a="Hixie"><a href="#l-17">#</a> [00:08] &lt;Hixie&gt; i guess i should remove pairs of zeros that follow pairs of zeros</li>
+ <li id="l-18"><a href="#l-18">#</a> [00:09] * Quits: weinig (~weinig@17.212.155.45) (Read error: Operation timed out)</li>
+ <li id="l-19" _a="weinig_"><a href="#l-19">#</a> [00:09] * weinig_ is now known as weinig</li>
+ <li id="l-20" _a="TabAtkins_" _r="Yes"><a href="#l-20">#</a> [00:09] &lt;TabAtkins_&gt; Yes, in that example you'll see a 1-dash, 40 space, 0-dash, 40 space.</li>
+ <li id="l-21" _a="TabAtkins_"><a href="#l-21">#</a> [00:10] &lt;TabAtkins_&gt; So removing pairs following the first pair should work, as you say.</li>
+ <li id="l-22"><a href="#l-22">#</a> [00:10] * Quits: ap (~ap@2620:149:4:1b01:95e4:878b:8997:2d0d) (Ping timeout: 245 seconds)</li>
+ <li id="l-23" _a="ap_"><a href="#l-23">#</a> [00:10] * ap_ is now known as ap</li>
+ <li id="l-24" _a="Hixie"><a href="#l-24">#</a> [00:11] &lt;Hixie&gt; actually i think what i should remove is any sequence of a zero off segment followed by a zero on segment</li>
+ <li id="l-25" _a="TabAtkins_" _r="Yeah"><a href="#l-25">#</a> [00:12] &lt;TabAtkins_&gt; Yeah, that should work.</li>
+ <li id="l-26" _a="Hixie"><a href="#l-26">#</a> [00:12] &lt;Hixie&gt; including removing a leading zero / trailing zero pair</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:12] &lt;Hixie&gt; (after doubling for for lengths)</li>
+ <li id="l-28" _a="Hixie"><a href="#l-28">#</a> [00:12] &lt;Hixie&gt; for odd</li>
+ <li id="l-29" _a="TabAtkins_"><a href="#l-29">#</a> [00:14] &lt;TabAtkins_&gt; Removing a leading zero pair works if the third segment is non-zero.</li>
+ <li id="l-30" _a="TabAtkins_"><a href="#l-30">#</a> [00:14] &lt;TabAtkins_&gt; Or rather, if there is *a* non-zero &quot;on&quot; segment.</li>
+ <li id="l-31" _a="TabAtkins_"><a href="#l-31">#</a> [00:15] &lt;TabAtkins_&gt; 0 0 0 10 should collapse to 0 10.</li>
+ <li id="l-32" _a="Hixie"><a href="#l-32">#</a> [00:15] &lt;Hixie&gt; if there's no non-zero on segments then the whole thing doesn't much matter</li>
+ <li id="l-33" _a="Hixie"><a href="#l-33">#</a> [00:16] &lt;Hixie&gt; oh wait right</li>
+ <li id="l-34" _a="TabAtkins_"><a href="#l-34">#</a> [00:16] &lt;TabAtkins_&gt; Not true!  All 0s still draws a single dot.</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:16] &lt;Hixie&gt; i meant if there's no non-zero segments at all</li>
+ <li id="l-36" _a="TabAtkins_"><a href="#l-36">#</a> [00:16] &lt;TabAtkins_&gt; The algorithm goes degenerate in that case, I guess.</li>
+ <li id="l-37" _a="TabAtkins_"><a href="#l-37">#</a> [00:16] &lt;TabAtkins_&gt; SVG chooses to just treat that as no dashing at all, and draws it solid.</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:16] &lt;Hixie&gt; it treats it as 'none'</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:17] &lt;Hixie&gt; whatever that means (solid?)</li>
+ <li id="l-40" _a="Hixie"><a href="#l-40">#</a> [00:17] &lt;Hixie&gt; (that's... unintuitive)</li>
+ <li id="l-41" _a="TabAtkins_"><a href="#l-41">#</a> [00:17] &lt;TabAtkins_&gt; no dashes!</li>
+ <li id="l-42" _a="Hixie"><a href="#l-42">#</a> [00:17] &lt;Hixie&gt; mmmm</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [00:19] &lt;Hixie&gt; what do you call the values in an array</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:19] &lt;Hixie&gt; members of the array?</li>
+ <li id="l-45" _a="TabAtkins_"><a href="#l-45">#</a> [00:20] &lt;TabAtkins_&gt; values works.</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:20] &lt;Hixie&gt; values is the actual numbers</li>
+ <li id="l-47" _a="Hixie"><a href="#l-47">#</a> [00:20] &lt;Hixie&gt; i mean the buckets for the numbers</li>
+ <li id="l-48" _a="Hixie"><a href="#l-48">#</a> [00:20] &lt;Hixie&gt; i guess values still works</li>
+ <li id="l-49" _a="Hixie"><a href="#l-49">#</a> [00:20] &lt;Hixie&gt; nevermind</li>
+ <li id="l-50" _a="TabAtkins_" _r="Hey"><a href="#l-50">#</a> [00:21] &lt;TabAtkins_&gt; Hey, are you planning on adding markers a-la-SVG at some point?</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:21] &lt;Hixie&gt; not currently</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [00:21] &lt;Hixie&gt; (haven't had any requests for them)</li>
+ <li id="l-53" _a="TabAtkins_"><a href="#l-53">#</a> [00:21] &lt;TabAtkins_&gt; Ok.  Just asking, because markers depend on the subpaths, and if your dashing chops up the subpaths it'll make it harder for you.</li>
+ <li id="l-54" _a="Hixie"><a href="#l-54">#</a> [00:23] &lt;Hixie&gt; i'd just do the markers before the chopping</li>
+ <li id="l-55" _a="Hixie"><a href="#l-55">#</a> [00:23] &lt;Hixie&gt; that's not a big deal :-)</li>
+ <li id="l-56" _a="TabAtkins_"><a href="#l-56">#</a> [00:24] &lt;TabAtkins_&gt; I think markers are still drawn on chopped-out segments, but if you meant just *placing* them before the chopping, then sure.</li>
+ <li id="l-57" _a="Hixie"><a href="#l-57">#</a> [00:25] &lt;Hixie&gt; markers are just filled shapes that are overlapped over the line when it is stroked right?</li>
+ <li id="l-58" _a="TabAtkins_"><a href="#l-58">#</a> [00:25] &lt;TabAtkins_&gt; Yeah.</li>
+ <li id="l-59" _a="Hixie"><a href="#l-59">#</a> [00:25] &lt;Hixie&gt; so i would just take note of the direction and position that all the markers would have to be, then chop the line, then merge the two pieces of information into one path, then return that.</li>
+ <li id="l-60" _a="TabAtkins_"><a href="#l-60">#</a> [00:25] &lt;TabAtkins_&gt; kk</li>
+ <li id="l-61"><a href="#l-61">#</a> [00:26] * Joins: jonlee (~jonlee@2620:149:4:1b01:8866:bb23:9274:660f)</li>
+ <li id="l-62" _a="Hixie"><a href="#l-62">#</a> [00:27] &lt;Hixie&gt; when removing the last value if it's zero and the first value if it's zero, i need to make sure to then move the new last value to the front</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:27] &lt;Hixie&gt; or move the new front value to the back</li>
+ <li id="l-64" _a="Hixie"><a href="#l-64">#</a> [00:27] &lt;Hixie&gt; any preference?</li>
+ <li id="l-65" _a="TabAtkins_"><a href="#l-65">#</a> [00:27] &lt;TabAtkins_&gt; front to the back!</li>
+ <li id="l-66" _a="Hixie"><a href="#l-66">#</a> [00:28] &lt;Hixie&gt; actually...</li>
+ <li id="l-67" _a="Hixie"><a href="#l-67">#</a> [00:28] &lt;Hixie&gt; 0 40 40 0 drawn to a short line</li>
+ <li id="l-68" _a="Hixie"><a href="#l-68">#</a> [00:28] &lt;Hixie&gt; short = 50</li>
+ <li id="l-69" _a="Hixie"><a href="#l-69">#</a> [00:28] &lt;Hixie&gt; would be a dot then a 40 gap then a 10 line</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:28] &lt;Hixie&gt; so we're wrong, we can't do that removal</li>
+ <li id="l-71" _a="Hixie"><a href="#l-71">#</a> [00:29] &lt;Hixie&gt; so i have to deal with this case anyway in the stroking code</li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [00:29] &lt;Hixie&gt; so nevermind</li>
+ <li id="l-73" _a="TabAtkins_"><a href="#l-73">#</a> [00:29] &lt;TabAtkins_&gt; You said you'd only remove 0 pairs in the beginning.</li>
+ <li id="l-74" _a="TabAtkins_"><a href="#l-74">#</a> [00:29] &lt;TabAtkins_&gt; Not all zeros.</li>
+ <li id="l-75"><a href="#l-75">#</a> [00:30] * Joins: benschwarz (u2121@gateway/web/irccloud.com/x-amnzrxcfamcwesya)</li>
+ <li id="l-76" _a="Hixie"><a href="#l-76">#</a> [00:36] &lt;Hixie&gt; ?</li>
+ <li id="l-77" _a="Hixie"><a href="#l-77">#</a> [00:37] &lt;Hixie&gt; &quot;actually i think what i should remove is any sequence of a zero off segment followed by a zero on segment&quot; is what i was referring to</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:37] &lt;Hixie&gt; followed by the idea of extending that to wrap around</li>
+ <li id="l-79" _a="TabAtkins_" _r="Oh"><a href="#l-79">#</a> [00:37] &lt;TabAtkins_&gt; Oh, I didn't realize you were referring to a wraparound pair.</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [00:37] &lt;Hixie&gt; but i can't do the extended case for wrap around, since it matters at the start of the stroke</li>
+ <li id="l-81" _a="TabAtkins_" _r="Yeah"><a href="#l-81">#</a> [00:37] &lt;TabAtkins_&gt; Yeah, don't do the wraparound.</li>
+ <li id="l-82" _a="Hixie"><a href="#l-82">#</a> [00:37] &lt;Hixie&gt; but if i don't do that, i need to deal with that case in the stroking code</li>
+ <li id="l-83" _a="Hixie"><a href="#l-83">#</a> [00:37] &lt;Hixie&gt; at which point, i don't need to remove any</li>
+ <li id="l-84" _a="Hixie"><a href="#l-84">#</a> [00:37] &lt;Hixie&gt; since it doesn't gain me anything</li>
+ <li id="l-85" _a="TabAtkins_"><a href="#l-85">#</a> [00:38] &lt;TabAtkins_&gt; Note - it *doesn't* matter when you offset the dashes.</li>
+ <li id="l-86" _a="Hixie"><a href="#l-86">#</a> [00:38] &lt;Hixie&gt; right</li>
+ <li id="l-87" _a="Hixie"><a href="#l-87">#</a> [00:38] &lt;Hixie&gt; well</li>
+ <li id="l-88" _a="Hixie"><a href="#l-88">#</a> [00:38] &lt;Hixie&gt; right</li>
+ <li id="l-89" _a="TabAtkins_"><a href="#l-89">#</a> [00:38] &lt;TabAtkins_&gt; Modulo some specific cases, sure.</li>
+ <li id="l-90" _a="TabAtkins_"><a href="#l-90">#</a> [00:40] &lt;TabAtkins_&gt; The problem is that the stroke isn't treated as an infinite line.  If it were, you could safely remove wraparound pairs and just let the natural wrapping-around behavior work.</li>
+ <li id="l-91" _a="TabAtkins_"><a href="#l-91">#</a> [00:40] &lt;TabAtkins_&gt; You'd get the cap of the off-screen segment that just touches the dash origin.</li>
+ <li id="l-92" _a="Hixie"><a href="#l-92">#</a> [00:42] &lt;Hixie&gt; yeah</li>
+ <li id="l-93" _a="Hixie"><a href="#l-93">#</a> [00:42] &lt;Hixie&gt; ok</li>
+ <li id="l-94" _a="Hixie"><a href="#l-94">#</a> [00:42] &lt;Hixie&gt; that's fine</li>
+ <li id="l-95" _a="Hixie"><a href="#l-95">#</a> [00:42] &lt;Hixie&gt; makes setting the dash list easy</li>
+ <li id="l-96" _a="Hixie"><a href="#l-96">#</a> [00:42] &lt;Hixie&gt; but now i have to deal with some szeros</li>
+ <li id="l-97"><a href="#l-97">#</a> [00:43] * Quits: jonlee (~jonlee@2620:149:4:1b01:8866:bb23:9274:660f) (Quit: jonlee)</li>
+ <li id="l-98"><a href="#l-98">#</a> [00:44] * Quits: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se) (Quit: tomasf)</li>
+ <li id="l-99" _a="Hixie"><a href="#l-99">#</a> [01:04] &lt;Hixie&gt; hmmm</li>
+ <li id="l-100"><a href="#l-100">#</a> [01:07] * Quits: plutoniix (~plutoniix@125.25.230.125.adsl.dynamic.totbb.net) (Quit: Leaving)</li>
+ <li id="l-101" _a="TabAtkins_" _r="Phew"><a href="#l-101">#</a> [01:16] &lt;TabAtkins_&gt; Phew, that was a pretty difficult set of edits.</li>
+ <li id="l-102" _a="TabAtkins_"><a href="#l-102">#</a> [01:16] &lt;TabAtkins_&gt; Still got a few more until I'm caught up with Images issues. :/</li>
+ <li id="l-103"><a href="#l-103">#</a> [01:19] * Quits: weinig (~weinig@17.245.90.191) (Quit: weinig)</li>
+ <li id="l-104"><a href="#l-104">#</a> [01:20] * Joins: weinig (~weinig@17.245.90.191)</li>
+ <li id="l-105"><a href="#l-105">#</a> [01:21] * Quits: weinig (~weinig@17.245.90.191) (Client Quit)</li>
+ <li id="l-106"><a href="#l-106">#</a> [01:21] * Quits: ap (~ap@17.245.90.141) (Remote host closed the connection)</li>
+ <li id="l-107"><a href="#l-107">#</a> [01:21] * Joins: ap (~ap@17.212.155.203)</li>
+ <li id="l-108"><a href="#l-108">#</a> [01:22] * Joins: othermaciej (~mjs@17.245.91.252)</li>
+ <li id="l-109"><a href="#l-109">#</a> [01:23] * Quits: sicking (~chatzilla@c-98-210-152-4.hsd1.ca.comcast.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-110"><a href="#l-110">#</a> [01:23] * Quits: othermaciej (~mjs@17.245.91.252) (Client Quit)</li>
+ <li id="l-111"><a href="#l-111">#</a> [01:24] * Quits: drublic (~drublic@frbg-5f7329bf.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-112"><a href="#l-112">#</a> [01:26] * Joins: jonlee (~jonlee@65.50.219.144)</li>
+ <li id="l-113"><a href="#l-113">#</a> [01:26] * Joins: othermaciej (~mjs@17.245.91.252)</li>
+ <li id="l-114"><a href="#l-114">#</a> [01:28] * Quits: ap (~ap@17.212.155.203) (Quit: ap)</li>
+ <li id="l-115"><a href="#l-115">#</a> [01:35] * Quits: chriseppstein (~chrisepps@209.119.65.162) (Quit: chriseppstein)</li>
+ <li id="l-116"><a href="#l-116">#</a> [01:44] * Quits: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-117"><a href="#l-117">#</a> [01:47] * Quits: aklein (u4454@gateway/web/irccloud.com/x-gmbcdfetwngyzakn)</li>
+ <li id="l-118"><a href="#l-118">#</a> [01:47] * Joins: weinig (~weinig@17.212.155.45)</li>
+ <li id="l-119"><a href="#l-119">#</a> [01:49] * Quits: othermaciej (~mjs@17.245.91.252) (Quit: othermaciej)</li>
+ <li id="l-120"><a href="#l-120">#</a> [01:51] * Quits: Druid_ (~Druid@p5B1352CC.dip.t-dialin.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-121"><a href="#l-121">#</a> [01:55] * Joins: Druid_ (~Druid@p5B05DF87.dip.t-dialin.net)</li>
+ <li id="l-122"><a href="#l-122">#</a> [01:57] * Quits: pablof (~pablof@144.189.101.1) (Quit: ^z)</li>
+ <li id="l-123"><a href="#l-123">#</a> [02:02] * Joins: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-124" _a="heycam|away"><a href="#l-124">#</a> [02:11] * heycam|away is now known as heycam</li>
+ <li id="l-125"><a href="#l-125">#</a> [02:12] * Quits: smaug____ (~chatzilla@193-64-21-168-nat.elisa-mobile.fi) (Ping timeout: 260 seconds)</li>
+ <li id="l-126"><a href="#l-126">#</a> [02:24] * Quits: jonlee (~jonlee@65.50.219.144) (Quit: jonlee)</li>
+ <li id="l-127"><a href="#l-127">#</a> [02:30] * Quits: sarro (~sarro@i5E8647C8.versanet.de) (Ping timeout: 260 seconds)</li>
+ <li id="l-128"><a href="#l-128">#</a> [02:31] * Joins: sarro (~sarro@i5E8655FA.versanet.de)</li>
+ <li id="l-129" _a="jernoble"><a href="#l-129">#</a> [02:33] * jernoble is now known as jernoble|afk</li>
+ <li id="l-130"><a href="#l-130">#</a> [02:43] * Joins: smaug____ (~chatzilla@212-226-64-70-nat.elisa-mobile.fi)</li>
+ <li id="l-131"><a href="#l-131">#</a> [02:48] * Joins: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net)</li>
+ <li id="l-132"><a href="#l-132">#</a> [02:49] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 250 seconds)</li>
+ <li id="l-133"><a href="#l-133">#</a> [02:49] * Joins: temp02 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-134"><a href="#l-134">#</a> [02:51] * Joins: danbri (~danbri@12.157.84.6)</li>
+ <li id="l-135"><a href="#l-135">#</a> [02:57] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-136"><a href="#l-136">#</a> [02:58] * Quits: temp02 (~temp01@unaffiliated/temp01) (Ping timeout: 252 seconds)</li>
+ <li id="l-137"><a href="#l-137">#</a> [03:01] * Quits: necolas (~necolas@host-92-12-160-162.as43234.net) (Remote host closed the connection)</li>
+ <li id="l-138"><a href="#l-138">#</a> [03:05] * Quits: weinig (~weinig@17.212.155.45) (Quit: weinig)</li>
+ <li id="l-139"><a href="#l-139">#</a> [03:13] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-140"><a href="#l-140">#</a> [03:13] * Quits: scor (~scor@drupal.org/user/52142/view) (Excess Flood)</li>
+ <li id="l-141"><a href="#l-141">#</a> [03:13] * Joins: jonlee (~jonlee@c-71-202-46-113.hsd1.ca.comcast.net)</li>
+ <li id="l-142"><a href="#l-142">#</a> [03:14] * Quits: jamesr (~jamesr@216.239.45.19) (Quit: jamesr)</li>
+ <li id="l-143"><a href="#l-143">#</a> [03:17] * Joins: nattokirai (~nattokira@rtr.mozilla.or.jp)</li>
+ <li id="l-144"><a href="#l-144">#</a> [03:24] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Quit: snowfox)</li>
+ <li id="l-145" _a="heycam"><a href="#l-145">#</a> [03:24] * heycam is now known as heycam|away</li>
+ <li id="l-146"><a href="#l-146">#</a> [03:25] * Joins: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net)</li>
+ <li id="l-147"><a href="#l-147">#</a> [03:25] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-148"><a href="#l-148">#</a> [03:28] * Quits: jonlee (~jonlee@c-71-202-46-113.hsd1.ca.comcast.net) (Quit: jonlee)</li>
+ <li id="l-149"><a href="#l-149">#</a> [03:28] * Joins: jonlee (~jonlee@2620:149:4:1b01:f15b:8ff0:b698:66dd)</li>
+ <li id="l-150"><a href="#l-150">#</a> [03:32] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-151"><a href="#l-151">#</a> [03:33] * Quits: davidb (~davidb@65.93.94.10) (Client Quit)</li>
+ <li id="l-152"><a href="#l-152">#</a> [03:33] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-153"><a href="#l-153">#</a> [03:42] * Quits: smaug____ (~chatzilla@212-226-64-70-nat.elisa-mobile.fi) (Ping timeout: 272 seconds)</li>
+ <li id="l-154"><a href="#l-154">#</a> [04:04] * Quits: dave_levin (dave_levin@nat/google/x-mpcoxohkyveeqmhz) (Quit: dave_levin)</li>
+ <li id="l-155" _a="heycam|away"><a href="#l-155">#</a> [04:12] * heycam|away is now known as heycam</li>
+ <li id="l-156"><a href="#l-156">#</a> [04:13] * Quits: davidb (~davidb@65.93.94.10) (Quit: davidb)</li>
+ <li id="l-157"><a href="#l-157">#</a> [04:15] * Quits: cpearce (~cpearce@60.234.54.74) (Ping timeout: 264 seconds)</li>
+ <li id="l-158"><a href="#l-158">#</a> [04:16] * Joins: karega (karega@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-159"><a href="#l-159">#</a> [04:22] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-160"><a href="#l-160">#</a> [04:33] * Joins: boblet (u1921@gateway/web/irccloud.com/x-eojhyypdvpakdivs)</li>
+ <li id="l-161"><a href="#l-161">#</a> [04:33] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-162"><a href="#l-162">#</a> [04:33] * Quits: davidb (~davidb@65.93.94.10) (Quit: davidb)</li>
+ <li id="l-163"><a href="#l-163">#</a> [04:37] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-164"><a href="#l-164">#</a> [04:43] * Joins: chriseppstein (~chrisepps@99-6-85-4.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-165"><a href="#l-165">#</a> [05:05] * Joins: austincheney (~IceChat77@108.72.77.136)</li>
+ <li id="l-166" _a="austincheney"><a href="#l-166">#</a> [05:05] &lt;austincheney&gt; what is the difference between the w3c &quot;shadow dom&quot; and the whatwg &quot;scoped stylesheets&quot; ?</li>
+ <li id="l-167" _a="austincheney"><a href="#l-167">#</a> [05:06] &lt;austincheney&gt; and why is one confined to one group and the other to a different group but neither appear to be in work together?</li>
+ <li id="l-168"><a href="#l-168">#</a> [05:07] * Quits: ezoe (~ezoe@203-140-88-224f1.kyt1.eonet.ne.jp) (Read error: Connection reset by peer)</li>
+ <li id="l-169" _a="austincheney"><a href="#l-169">#</a> [05:07] &lt;austincheney&gt; further more, why is it that both of these technologies appear to be coming primarily from Google employees and simulatenously entering into separate unrelated specs and separate groups without any collusion?</li>
+ <li id="l-170" _a="austincheney"><a href="#l-170">#</a> [05:10] &lt;austincheney&gt; what is the primary motivation is that driving the need to slice up a dom into islands for presentation only, but doing so at parse time?</li>
+ <li id="l-171" _a="austincheney"><a href="#l-171">#</a> [05:10] &lt;austincheney&gt; are these two technologies attempt to meet different objectives?</li>
+ <li id="l-172"><a href="#l-172">#</a> [05:16] * Joins: ezoe (~ezoe@203-140-89-87f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-173"><a href="#l-173">#</a> [05:17] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120216115618])</li>
+ <li id="l-174"><a href="#l-174">#</a> [05:21] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-175"><a href="#l-175">#</a> [05:23] * Joins: izhak (~izhak@213.87.240.85)</li>
+ <li id="l-176"><a href="#l-176">#</a> [05:32] * Joins: Transformer (~Transform@ool-4a59e397.dyn.optonline.net)</li>
+ <li id="l-177"><a href="#l-177">#</a> [05:33] * Quits: Transformer (~Transform@ool-4a59e397.dyn.optonline.net) (Excess Flood)</li>
+ <li id="l-178"><a href="#l-178">#</a> [05:33] * Joins: jwalden (~waldo@c-71-202-165-226.hsd1.ca.comcast.net)</li>
+ <li id="l-179"><a href="#l-179">#</a> [05:34] * Quits: nattokirai (~nattokira@rtr.mozilla.or.jp) (Quit: nattokirai)</li>
+ <li id="l-180"><a href="#l-180">#</a> [05:36] * Joins: sicking (~chatzilla@c-98-210-152-4.hsd1.ca.comcast.net)</li>
+ <li id="l-181"><a href="#l-181">#</a> [05:42] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-182"><a href="#l-182">#</a> [05:45] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-183"><a href="#l-183">#</a> [06:01] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-184"><a href="#l-184">#</a> [06:18] * Quits: sicking (~chatzilla@c-98-210-152-4.hsd1.ca.comcast.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-185"><a href="#l-185">#</a> [06:19] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-186"><a href="#l-186">#</a> [06:22] * Joins: Areks|2 (~Areks@rs.gridnine.com)</li>
+ <li id="l-187" _a="heycam"><a href="#l-187">#</a> [06:40] * heycam is now known as heycam|away</li>
+ <li id="l-188"><a href="#l-188">#</a> [06:45] * Joins: skylamer` (cgskylamer@78.90.213.55)</li>
+ <li id="l-189"><a href="#l-189">#</a> [06:47] * Quits: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net) (Quit: i'm out)</li>
+ <li id="l-190"><a href="#l-190">#</a> [06:50] * Quits: twisted` (~anonymous@p5DDBAE96.dip.t-dialin.net) (Quit: twisted`)</li>
+ <li id="l-191"><a href="#l-191">#</a> [06:50] * Joins: twisted` (~anonymous@p5DDBAE96.dip.t-dialin.net)</li>
+ <li id="l-192"><a href="#l-192">#</a> [06:55] * Joins: wookiehangover (~wookiehan@c-67-161-138-118.hsd1.co.comcast.net)</li>
+ <li id="l-193"><a href="#l-193">#</a> [06:55] * Quits: twisted` (~anonymous@p5DDBAE96.dip.t-dialin.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-194"><a href="#l-194">#</a> [07:04] * Quits: skylamer` (cgskylamer@78.90.213.55) (Remote host closed the connection)</li>
+ <li id="l-195" _a="heycam|away"><a href="#l-195">#</a> [07:13] * heycam|away is now known as heycam</li>
+ <li id="l-196"><a href="#l-196">#</a> [07:42] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-197"><a href="#l-197">#</a> [07:44] * Joins: mainerror (u4521@gateway/web/irccloud.com/x-lfxbxgyzlentldoi)</li>
+ <li id="l-198"><a href="#l-198">#</a> [07:45] * Quits: schnoomac (~schnoomac@melbourne.99cluster.com) (Quit: schnoomac)</li>
+ <li id="l-199"><a href="#l-199">#</a> [07:46] * Joins: schnoomac (~schnoomac@melbourne.99cluster.com)</li>
+ <li id="l-200"><a href="#l-200">#</a> [07:46] * Quits: schnoomac (~schnoomac@melbourne.99cluster.com) (Client Quit)</li>
+ <li id="l-201"><a href="#l-201">#</a> [07:47] * Quits: jwalden (~waldo@c-71-202-165-226.hsd1.ca.comcast.net) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120216115618])</li>
+ <li id="l-202"><a href="#l-202">#</a> [07:50] * Joins: niloy (~niloy@61.12.96.242)</li>
+ <li id="l-203"><a href="#l-203">#</a> [07:50] * Joins: Ducki (~Ducki@pD9E3941F.dip0.t-ipconnect.de)</li>
+ <li id="l-204"><a href="#l-204">#</a> [07:51] * Joins: PalleZingmark (~Adium@217.13.228.226)</li>
+ <li id="l-205"><a href="#l-205">#</a> [08:01] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-206"><a href="#l-206">#</a> [08:01] * Joins: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-207"><a href="#l-207">#</a> [08:02] * Joins: LBP (~Mirc@pD9EB1970.dip0.t-ipconnect.de)</li>
+ <li id="l-208"><a href="#l-208">#</a> [08:06] * Joins: maikmerten (~merten@ls5dhcp200.cs.uni-dortmund.de)</li>
+ <li id="l-209"><a href="#l-209">#</a> [08:10] * Quits: mpt (~mpt@canonical/mpt) (Max SendQ exceeded)</li>
+ <li id="l-210"><a href="#l-210">#</a> [08:21] * Joins: sicking (~chatzilla@c-98-210-152-4.hsd1.ca.comcast.net)</li>
+ <li id="l-211"><a href="#l-211">#</a> [08:23] * Quits: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net) (Quit: Leaving)</li>
+ <li id="l-212"><a href="#l-212">#</a> [08:28] * Quits: chriseppstein (~chrisepps@99-6-85-4.lightspeed.sntcca.sbcglobal.net) (Quit: chriseppstein)</li>
+ <li id="l-213" _a="jernoble|afk"><a href="#l-213">#</a> [08:31] * jernoble|afk is now known as jernoble</li>
+ <li id="l-214" _a="jonlee"><a href="#l-214">#</a> [08:37] * jonlee is now known as jonlee|afk</li>
+ <li id="l-215"><a href="#l-215">#</a> [08:42] * Quits: sarro (~sarro@i5E8655FA.versanet.de)</li>
+ <li id="l-216" _a="zcorpan"><a href="#l-216">#</a> [08:50] &lt;zcorpan&gt; still haven't published?</li>
+ <li id="l-217" _a="jonlee|afk"><a href="#l-217">#</a> [08:52] * jonlee|afk is now known as jonlee</li>
+ <li id="l-218" _a="annevk"><a href="#l-218">#</a> [08:53] &lt;annevk&gt; postponed until somewhere next week now I believe</li>
+ <li id="l-219" _a="annevk"><a href="#l-219">#</a> [08:53] &lt;annevk&gt; there was an email</li>
+ <li id="l-220" _a="zcorpan"><a href="#l-220">#</a> [08:53] &lt;zcorpan&gt; sigh</li>
+ <li id="l-221" _a="zcorpan"><a href="#l-221">#</a> [08:53] &lt;zcorpan&gt; what's taking so long</li>
+ <li id="l-222" _a="annevk"><a href="#l-222">#</a> [08:55] &lt;annevk&gt; <a href="http://www.smosh.com/sites/default/files/bloguploads/ancient-aliens-th_0.jpg">http://www.smosh.com/sites/default/files/bloguploads/ancient-aliens-th_0.jpg</a></li>
+ <li id="l-223" _a="annevk"><a href="#l-223">#</a> [08:55] &lt;annevk&gt; not sure why it was so hard to find a good picture of that</li>
+ <li id="l-224" _a="zcorpan" _r="CfC"><a href="#l-224">#</a> [08:57] &lt;zcorpan&gt; CfC: &quot;As a Working Draft publication, the document does not need not be complete, to meet all technical requirements, or to have consensus on the contents.&quot;</li>
+ <li id="l-225" _a="zcorpan"><a href="#l-225">#</a> [08:57] &lt;zcorpan&gt; frank's latest email: &quot;The goal of heartbeat publications is to show progress and increasing consensus.&quot;</li>
+ <li id="l-226" _a="zcorpan"><a href="#l-226">#</a> [08:59] &lt;zcorpan&gt; the chairs could just decide to publish a revision of the canvas spec that was before the path addition if they don't want it</li>
+ <li id="l-227" _a="zcorpan"><a href="#l-227">#</a> [08:59] &lt;zcorpan&gt; oh well</li>
+ <li id="l-228"><a href="#l-228">#</a> [09:00] * Joins: gwicke (~gabriel@212.255.32.204)</li>
+ <li id="l-229" _a="heycam"><a href="#l-229">#</a> [09:01] * heycam is now known as heycam|away</li>
+ <li id="l-230" _a="annevk"><a href="#l-230">#</a> [09:03] &lt;annevk&gt; do you have a pointer to the CfC email?</li>
+ <li id="l-231" _a="zcorpan"><a href="#l-231">#</a> [09:04] &lt;zcorpan&gt; <a href="http://lists.w3.org/Archives/Public/public-html/2012Feb/0247.html">http://lists.w3.org/Archives/Public/public-html/2012Feb/0247.html</a></li>
+ <li id="l-232"><a href="#l-232">#</a> [09:06] * Quits: sicking (~chatzilla@c-98-210-152-4.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-233" _a="jernoble"><a href="#l-233">#</a> [09:08] * jernoble is now known as jernoble|afk</li>
+ <li id="l-234" _a="zcorpan"><a href="#l-234">#</a> [09:08] &lt;zcorpan&gt; maybe i should reply to frank</li>
+ <li id="l-235"><a href="#l-235">#</a> [09:08] * Joins: woef (~woef@91.183.84.141)</li>
+ <li id="l-236" _a="annevk"><a href="#l-236">#</a> [09:10] &lt;annevk&gt; oh I just replied</li>
+ <li id="l-237" _a="annevk"><a href="#l-237">#</a> [09:10] &lt;annevk&gt; but feel free</li>
+ <li id="l-238" _a="zcorpan"><a href="#l-238">#</a> [09:10] &lt;zcorpan&gt; ah</li>
+ <li id="l-239"><a href="#l-239">#</a> [09:15] * Joins: graememcc (~chatzilla@host31-53-74-16.range31-53.btcentralplus.com)</li>
+ <li id="l-240"><a href="#l-240">#</a> [09:18] * Joins: [[zzz]] (~q@182.53.53.84)</li>
+ <li id="l-241"><a href="#l-241">#</a> [09:22] * Quits: [[zz]] (~q@125.25.230.125.adsl.dynamic.totbb.net) (Ping timeout: 260 seconds)</li>
+ <li id="l-242" _a="[[zzz]]"><a href="#l-242">#</a> [09:33] * [[zzz]] is now known as [[zz]]</li>
+ <li id="l-243"><a href="#l-243">#</a> [09:39] * Joins: tomasf (~tomasf@77.72.97.5.c.fiberdirekt.net)</li>
+ <li id="l-244" _a="jonlee"><a href="#l-244">#</a> [09:52] * jonlee is now known as jonlee|afk</li>
+ <li id="l-245" _a="annevk"><a href="#l-245">#</a> [09:59] &lt;annevk&gt; <a href="http://krijnhoetmer.nl/irc-logs/developers/20120316#l-1328">http://krijnhoetmer.nl/irc-logs/developers/20120316#l-1328</a> :)</li>
+ <li id="l-246"><a href="#l-246">#</a> [10:11] * Quits: karega (karega@cpe-76-184-236-100.tx.res.rr.com) (Ping timeout: 246 seconds)</li>
+ <li id="l-247" _a="zcorpan" _r="&quot;But"><a href="#l-247">#</a> [10:19] &lt;zcorpan&gt; &quot;But, in CSS 2.1, it is undefined whether the decoration propagates into block-level tables.&quot;</li>
+ <li id="l-248" _a="zcorpan"><a href="#l-248">#</a> [10:19] &lt;zcorpan&gt; looooool</li>
+ <li id="l-249" _a="zcorpan"><a href="#l-249">#</a> [10:19] &lt;zcorpan&gt; not only do i need to define how quirks mode differs from the spec, i need to patch the spec as well</li>
+ <li id="l-250" _a="zcorpan"><a href="#l-250">#</a> [10:25] &lt;zcorpan&gt; &quot;Note that text decorations are not propagated to floating and absolutely positioned descendants, nor to the contents of atomic inline-level descendants such as inline blocks and inline tables.&quot;</li>
+ <li id="l-251" _a="zcorpan"><a href="#l-251">#</a> [10:25] &lt;zcorpan&gt; it propagates into inline blocks and inline tables in opera/firefox/chrome</li>
+ <li id="l-252" _a="zcorpan"><a href="#l-252">#</a> [10:31] * zcorpan checks css3-text</li>
+ <li id="l-253" _a="niftylettuce_"><a href="#l-253">#</a> [10:35] * niftylettuce_ is now known as niftylettuce</li>
+ <li id="l-254" _a="zcorpan"><a href="#l-254">#</a> [10:38] &lt;zcorpan&gt; oh wait, i must have done something wrong in my testing. spec is right about inline-block and inline-table</li>
+ <li id="l-255"><a href="#l-255">#</a> [10:45] * Joins: Ms2ger (~Ms2ger@91.181.21.107)</li>
+ <li id="l-256"><a href="#l-256">#</a> [10:46] * Quits: graememcc (~chatzilla@host31-53-74-16.range31-53.btcentralplus.com) (Read error: Connection reset by peer)</li>
+ <li id="l-257"><a href="#l-257">#</a> [10:49] * Joins: graememcc (~chatzilla@host31-53-74-16.range31-53.btcentralplus.com)</li>
+ <li id="l-258"><a href="#l-258">#</a> [11:06] * Joins: necolas (~necolas@host-92-12-160-162.as43234.net)</li>
+ <li id="l-259"><a href="#l-259">#</a> [11:17] * Quits: graememcc (~chatzilla@host31-53-74-16.range31-53.btcentralplus.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-260"><a href="#l-260">#</a> [11:17] * Joins: MattAntWest (~mattwest@host81-149-171-23.in-addr.btopenworld.com)</li>
+ <li id="l-261"><a href="#l-261">#</a> [11:24] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-262"><a href="#l-262">#</a> [11:25] * Joins: richt (richt@nat/opera/x-ubyxlttxaxikyshd)</li>
+ <li id="l-263"><a href="#l-263">#</a> [11:35] * Joins: miketaylr (~miketaylr@guest.opera.com)</li>
+ <li id="l-264"><a href="#l-264">#</a> [11:37] * Joins: drublic (~drublic@frbg-5d84f7bf.pool.mediaWays.net)</li>
+ <li id="l-265"><a href="#l-265">#</a> [11:39] * Quits: miketaylr (~miketaylr@guest.opera.com) (Client Quit)</li>
+ <li id="l-266"><a href="#l-266">#</a> [11:42] * Joins: Evanescence (~Evanescen@60.183.223.254)</li>
+ <li id="l-267"><a href="#l-267">#</a> [11:42] * Quits: jondong (~jondong@123.126.22.58) (Remote host closed the connection)</li>
+ <li id="l-268" _a="charlvn"><a href="#l-268">#</a> [11:47] &lt;charlvn&gt; gah sorry, irssi is acting up</li>
+ <li id="l-269"><a href="#l-269">#</a> [11:49] * Joins: miketaylr (~miketaylr@guest.opera.com)</li>
+ <li id="l-270" _a="Ms2ger" _r="annevk"><a href="#l-270">#</a> [11:52] &lt;Ms2ger&gt; annevk, reading #developers logs now? :)</li>
+ <li id="l-271" _a="Ms2ger"><a href="#l-271">#</a> [11:53] &lt;Ms2ger&gt; &quot;publish new revisions of the following documents in accordance with the Working Group Heartbeat requirements.&quot;</li>
+ <li id="l-272" _a="Ms2ger"><a href="#l-272">#</a> [11:53] &lt;Ms2ger&gt; If it's been a year, it's not in accordance with heartbeat requirements, sorry</li>
+ <li id="l-273"><a href="#l-273">#</a> [11:54] * Quits: ehsan (~ehsan@209.29.21.241) (Read error: Connection reset by peer)</li>
+ <li id="l-274"><a href="#l-274">#</a> [11:55] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-275" _a="jgraham"><a href="#l-275">#</a> [12:04] &lt;jgraham&gt; You and your &quot;process&quot;</li>
+ <li id="l-276"><a href="#l-276">#</a> [12:11] * Joins: nonge (~nonge@p5082AE39.dip.t-dialin.net)</li>
+ <li id="l-277"><a href="#l-277">#</a> [12:13] * Quits: abarth (~abarth@173-164-128-209-SFBA.hfc.comcastbusiness.net) (Read error: Connection reset by peer)</li>
+ <li id="l-278"><a href="#l-278">#</a> [12:14] * Joins: abarth (~abarth@173-164-128-209-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-279"><a href="#l-279">#</a> [12:17] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Quit: tzing)</li>
+ <li id="l-280"><a href="#l-280">#</a> [12:17] * Quits: austincheney (~IceChat77@108.72.77.136) (Quit: For Sale: Parachute. Only used once, never opened, small stain.)</li>
+ <li id="l-281"><a href="#l-281">#</a> [12:19] * Quits: miketaylr (~miketaylr@guest.opera.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-282"><a href="#l-282">#</a> [12:27] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-283"><a href="#l-283">#</a> [12:30] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-284"><a href="#l-284">#</a> [12:33] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-285"><a href="#l-285">#</a> [12:39] * Joins: jdong_bot_ (~jdong_bot@117.79.233.223)</li>
+ <li id="l-286"><a href="#l-286">#</a> [12:39] * Quits: riven (~riven@pdpc/supporter/professional/riven) (Ping timeout: 276 seconds)</li>
+ <li id="l-287"><a href="#l-287">#</a> [12:41] * Quits: PalleZingmark (~Adium@217.13.228.226) (Quit: Leaving.)</li>
+ <li id="l-288"><a href="#l-288">#</a> [12:41] * Joins: PalleZingmark (~Adium@217.13.228.226)</li>
+ <li id="l-289"><a href="#l-289">#</a> [12:45] * Quits: davidb (~davidb@65.93.94.10) (Quit: davidb)</li>
+ <li id="l-290"><a href="#l-290">#</a> [12:45] * Joins: riven (~riven@53518387.cm-6-2c.dynamic.ziggo.nl)</li>
+ <li id="l-291"><a href="#l-291">#</a> [12:45] * Quits: riven (~riven@53518387.cm-6-2c.dynamic.ziggo.nl) (Changing host)</li>
+ <li id="l-292"><a href="#l-292">#</a> [12:45] * Joins: riven (~riven@pdpc/supporter/professional/riven)</li>
+ <li id="l-293"><a href="#l-293">#</a> [12:53] * Joins: erichynds (~ehynds@venkman.brightcove.com)</li>
+ <li id="l-294"><a href="#l-294">#</a> [12:57] * Joins: miketaylr (~miketaylr@guest.opera.com)</li>
+ <li id="l-295"><a href="#l-295">#</a> [13:07] * Joins: Lachy (Lachy@nat/opera/x-isihuwwwpwtbgxhu)</li>
+ <li id="l-296"><a href="#l-296">#</a> [13:08] * Joins: smaug____ (~chatzilla@212-226-67-130-nat.elisa-mobile.fi)</li>
+ <li id="l-297"><a href="#l-297">#</a> [13:10] * Joins: tog22 (~tomash@87.194.173.122)</li>
+ <li id="l-298"><a href="#l-298">#</a> [13:11] * Quits: tog22 (~tomash@87.194.173.122) (Client Quit)</li>
+ <li id="l-299"><a href="#l-299">#</a> [13:11] * Quits: MattAntWest (~mattwest@host81-149-171-23.in-addr.btopenworld.com) (Quit: Lost terminal)</li>
+ <li id="l-300"><a href="#l-300">#</a> [13:15] * Quits: danbri (~danbri@12.157.84.6) (Remote host closed the connection)</li>
+ <li id="l-301"><a href="#l-301">#</a> [13:18] * Quits: FireFly (~firefly@firefly.xen.prgmr.com) (Changing host)</li>
+ <li id="l-302"><a href="#l-302">#</a> [13:18] * Joins: FireFly (~firefly@unaffiliated/firefly)</li>
+ <li id="l-303"><a href="#l-303">#</a> [13:21] * Quits: erichynds (~ehynds@venkman.brightcove.com) (Ping timeout: 260 seconds)</li>
+ <li id="l-304"><a href="#l-304">#</a> [13:23] * Quits: ezoe (~ezoe@203-140-89-87f1.kyt1.eonet.ne.jp) (Ping timeout: 244 seconds)</li>
+ <li id="l-305"><a href="#l-305">#</a> [13:25] * Quits: izhak (~izhak@213.87.240.85) (Remote host closed the connection)</li>
+ <li id="l-306"><a href="#l-306">#</a> [13:28] * Joins: eric_carlson_ (~eric@2620:149:4:1b01:bd7a:18b2:e9d6:9c1e)</li>
+ <li id="l-307"><a href="#l-307">#</a> [13:30] * Quits: eric_carlson (~eric@2620:149:4:1b01:bd7a:18b2:e9d6:9c1e) (Ping timeout: 260 seconds)</li>
+ <li id="l-308" _a="eric_carlson_"><a href="#l-308">#</a> [13:30] * eric_carlson_ is now known as eric_carlson</li>
+ <li id="l-309"><a href="#l-309">#</a> [13:33] * Joins: erichynds (~ehynds@venkman.brightcove.com)</li>
+ <li id="l-310"><a href="#l-310">#</a> [13:41] * Joins: karega (~karegaani@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-311"><a href="#l-311">#</a> [13:43] * Quits: eric_carlson (~eric@2620:149:4:1b01:bd7a:18b2:e9d6:9c1e) (Read error: Connection reset by peer)</li>
+ <li id="l-312"><a href="#l-312">#</a> [13:43] * Joins: eric_carlson (~eric@2620:149:4:1b01:bd7a:18b2:e9d6:9c1e)</li>
+ <li id="l-313"><a href="#l-313">#</a> [13:45] * Joins: jochen___ (jochen@nat/google/x-okhpmmxbmecntewa)</li>
+ <li id="l-314"><a href="#l-314">#</a> [13:45] * Quits: karega (~karegaani@cpe-76-184-236-100.tx.res.rr.com) (Ping timeout: 264 seconds)</li>
+ <li id="l-315"><a href="#l-315">#</a> [13:47] * Quits: jochen__ (jochen@nat/google/x-sjuuxwkajuyeaipt) (Ping timeout: 272 seconds)</li>
+ <li id="l-316" _a="jochen___"><a href="#l-316">#</a> [13:47] * jochen___ is now known as jochen__</li>
+ <li id="l-317"><a href="#l-317">#</a> [14:01] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Remote host closed the connection)</li>
+ <li id="l-318"><a href="#l-318">#</a> [14:05] * Joins: pocopina (u5310@gateway/web/irccloud.com/x-dyhtcljwpsjbsozy)</li>
+ <li id="l-319"><a href="#l-319">#</a> [14:05] * Joins: karega (~karegaani@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-320"><a href="#l-320">#</a> [14:06] * Quits: miketaylr (~miketaylr@guest.opera.com) (Quit: Leaving...)</li>
+ <li id="l-321"><a href="#l-321">#</a> [14:07] * Quits: smaug____ (~chatzilla@212-226-67-130-nat.elisa-mobile.fi) (Ping timeout: 272 seconds)</li>
+ <li id="l-322"><a href="#l-322">#</a> [14:08] * Quits: Ducki (~Ducki@pD9E3941F.dip0.t-ipconnect.de) (Read error: Connection reset by peer)</li>
+ <li id="l-323"><a href="#l-323">#</a> [14:09] * Quits: karega (~karegaani@cpe-76-184-236-100.tx.res.rr.com) (Read error: Connection reset by peer)</li>
+ <li id="l-324"><a href="#l-324">#</a> [14:10] * Joins: karega (karega@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-325"><a href="#l-325">#</a> [14:15] * Joins: miketaylr (~miketaylr@guest.opera.com)</li>
+ <li id="l-326"><a href="#l-326">#</a> [14:17] * Quits: yuuki (~kobayashi@58x158x182x50.ap58.ftth.ucom.ne.jp) (Quit: Leaving...)</li>
+ <li id="l-327"><a href="#l-327">#</a> [14:20] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-328"><a href="#l-328">#</a> [14:20] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Remote host closed the connection)</li>
+ <li id="l-329"><a href="#l-329">#</a> [14:29] * Joins: smaug____ (~chatzilla@GGYYKMDCCIII.gprs.sl-laajakaista.fi)</li>
+ <li id="l-330"><a href="#l-330">#</a> [14:30] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-331"><a href="#l-331">#</a> [14:33] * Joins: izhak (1000@188.168.76.63)</li>
+ <li id="l-332"><a href="#l-332">#</a> [14:34] * Quits: PalleZingmark (~Adium@217.13.228.226) (Quit: Leaving.)</li>
+ <li id="l-333"><a href="#l-333">#</a> [14:34] * Joins: schnoomac (~schnoomac@27-32-229-194.static.tpgi.com.au)</li>
+ <li id="l-334"><a href="#l-334">#</a> [14:38] * Joins: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-335"><a href="#l-335">#</a> [14:38] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-336"><a href="#l-336">#</a> [14:40] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-337"><a href="#l-337">#</a> [14:41] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Remote host closed the connection)</li>
+ <li id="l-338"><a href="#l-338">#</a> [14:47] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-339"><a href="#l-339">#</a> [14:47] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Remote host closed the connection)</li>
+ <li id="l-340"><a href="#l-340">#</a> [14:52] * Quits: niloy (~niloy@61.12.96.242) (Remote host closed the connection)</li>
+ <li id="l-341"><a href="#l-341">#</a> [14:52] * Quits: smaug____ (~chatzilla@GGYYKMDCCIII.gprs.sl-laajakaista.fi) (Ping timeout: 246 seconds)</li>
+ <li id="l-342"><a href="#l-342">#</a> [15:01] * Joins: timmywil (~timmywil@c-68-53-252-115.hsd1.ga.comcast.net)</li>
+ <li id="l-343"><a href="#l-343">#</a> [15:02] * Quits: schnoomac (~schnoomac@27-32-229-194.static.tpgi.com.au) (Quit: schnoomac)</li>
+ <li id="l-344"><a href="#l-344">#</a> [15:07] * Joins: dydx (~dydz@adsl-76-199-101-60.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-345" _a="annevk" _r="MikeSmith"><a href="#l-345">#</a> [15:08] &lt;annevk&gt; MikeSmith: should I update the html5-diff date again?</li>
+ <li id="l-346" _a="annevk" _r="MikeSmith"><a href="#l-346">#</a> [15:08] &lt;annevk&gt; MikeSmith: or are we not changing the URL and such?</li>
+ <li id="l-347"><a href="#l-347">#</a> [15:09] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-348"><a href="#l-348">#</a> [15:13] * Joins: timeless (u4015@firefox/developer/timeless)</li>
+ <li id="l-349"><a href="#l-349">#</a> [15:15] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Remote host closed the connection)</li>
+ <li id="l-350"><a href="#l-350">#</a> [15:16] * Joins: twisted` (~anonymous@p5DDBAA2C.dip.t-dialin.net)</li>
+ <li id="l-351"><a href="#l-351">#</a> [15:19] * Joins: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-352"><a href="#l-352">#</a> [15:19] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-353"><a href="#l-353">#</a> [15:20] * Quits: tomasf (~tomasf@77.72.97.5.c.fiberdirekt.net) (Quit: tomasf)</li>
+ <li id="l-354"><a href="#l-354">#</a> [15:21] * Quits: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net) (Max SendQ exceeded)</li>
+ <li id="l-355"><a href="#l-355">#</a> [15:22] * Joins: Bass10 (Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-356"><a href="#l-356">#</a> [15:23] * Joins: plutoniix (~plutoniix@182.53.53.84)</li>
+ <li id="l-357"><a href="#l-357">#</a> [15:23] * Joins: tndrH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com)</li>
+ <li id="l-358"><a href="#l-358">#</a> [15:24] * Quits: dydx (~dydz@adsl-76-199-101-60.dsl.pltn13.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-359"><a href="#l-359">#</a> [15:28] * Quits: Areks|2 (~Areks@rs.gridnine.com) (Ping timeout: 272 seconds)</li>
+ <li id="l-360"><a href="#l-360">#</a> [15:28] * Quits: drublic (~drublic@frbg-5d84f7bf.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-361"><a href="#l-361">#</a> [15:31] * Quits: jdong_bot_ (~jdong_bot@117.79.233.223) (Remote host closed the connection)</li>
+ <li id="l-362"><a href="#l-362">#</a> [15:33] * Joins: chriseppstein (~chrisepps@209.119.65.162)</li>
+ <li id="l-363"><a href="#l-363">#</a> [15:34] * Quits: abarth (~abarth@173-164-128-209-SFBA.hfc.comcastbusiness.net) (Quit: abarth)</li>
+ <li id="l-364" _a="[tm]" _r="annevk"><a href="#l-364">#</a> [15:39] &lt;[tm]&gt; annevk:  please do change the date</li>
+ <li id="l-365" _a="annevk"><a href="#l-365">#</a> [15:40] &lt;annevk&gt; done</li>
+ <li id="l-366" _a="annevk"><a href="#l-366">#</a> [15:40] &lt;annevk&gt; also has new URLs</li>
+ <li id="l-367"><a href="#l-367">#</a> [15:42] * Joins: ksweeney (~Kevin_Swe@nyv-exweb.iac.com)</li>
+ <li id="l-368" _a="[tm]"><a href="#l-368">#</a> [15:44] &lt;[tm]&gt; tak</li>
+ <li id="l-369"><a href="#l-369">#</a> [15:46] * Joins: tomasf (~tomasf@static-88.131.62.36.addr.tdcsong.se)</li>
+ <li id="l-370" _a="annevk"><a href="#l-370">#</a> [15:49] &lt;annevk&gt; so I guess I should move away from the fatal flag and instead have a &quot;decoder error handler&quot; and an &quot;encoder error handler&quot;</li>
+ <li id="l-371" _a="annevk"><a href="#l-371">#</a> [15:50] &lt;annevk&gt; for the decoder it's mostly to pick between fatal and U+FFFD</li>
+ <li id="l-372" _a="annevk"><a href="#l-372">#</a> [15:50] &lt;annevk&gt; for the encoder it's to allow inserting character references or some such instead</li>
+ <li id="l-373" _a="scott_gonzalez" _r="Hixie"><a href="#l-373">#</a> [15:53] &lt;scott_gonzalez&gt; Hixie: Do you know if there has been any more discussion of autocapitilize=&quot;off&quot; and related ideas?</li>
+ <li id="l-374" _a="scott_gonzalez"><a href="#l-374">#</a> [15:53] &lt;scott_gonzalez&gt; <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=12409">https://www.w3.org/Bugs/Public/show_bug.cgi?id=12409</a></li>
+ <li id="l-375" _a="scott_gonzalez"><a href="#l-375">#</a> [15:53] &lt;scott_gonzalez&gt; This wiki page is still pretty empty, so I'm assuming there hasn't been: <a href="http://wiki.whatwg.org/wiki/Text_input_keyboard_mode_control">http://wiki.whatwg.org/wiki/Text_input_keyboard_mode_control</a></li>
+ <li id="l-376" _a="annevk"><a href="#l-376">#</a> [15:54] &lt;annevk&gt; correct</li>
+ <li id="l-377" _a="annevk" _r="also"><a href="#l-377">#</a> [15:54] &lt;annevk&gt; also, Hixie's asleep; I hope!</li>
+ <li id="l-378" _a="annevk" _r="scott_gonzalez"><a href="#l-378">#</a> [15:55] &lt;annevk&gt; scott_gonzalez: it's going to happen sooner or later; sooner if someone other than Hixie does the research probably ;)</li>
+ <li id="l-379" _a="scott_gonzalez"><a href="#l-379">#</a> [15:55] &lt;scott_gonzalez&gt; That's what I figured. Thanks.</li>
+ <li id="l-380"><a href="#l-380">#</a> [15:56] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-381"><a href="#l-381">#</a> [16:03] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-382"><a href="#l-382">#</a> [16:05] * Quits: malcolmva (~malcolmva@pool-74-108-142-22.nycmny.fios.verizon.net) (Quit: Leaving)</li>
+ <li id="l-383"><a href="#l-383">#</a> [16:06] * Joins: malcolmva (~malcolmva@pool-74-108-142-22.nycmny.fios.verizon.net)</li>
+ <li id="l-384"><a href="#l-384">#</a> [16:08] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-385"><a href="#l-385">#</a> [16:08] * Quits: scor (~scor@drupal.org/user/52142/view) (Excess Flood)</li>
+ <li id="l-386"><a href="#l-386">#</a> [16:08] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-387"><a href="#l-387">#</a> [16:13] * Quits: woef (~woef@91.183.84.141) (Ping timeout: 272 seconds)</li>
+ <li id="l-388" _a="zcorpan" _r="annevk"><a href="#l-388">#</a> [16:13] &lt;zcorpan&gt; annevk: i made a style tweak to html5-diff (removed font-size-adjust since i hadn't checked properly in browsers that support it, it seems)</li>
+ <li id="l-389"><a href="#l-389">#</a> [16:17] * Joins: xbuzz (~chris@c-71-232-28-255.hsd1.ma.comcast.net)</li>
+ <li id="l-390" _a="annevk"><a href="#l-390">#</a> [16:21] &lt;annevk&gt; <a href="http://dvcs.w3.org/hg/encoding/raw-file/tip/Overview.html#legacy-multi-byte-japanese-encodings">http://dvcs.w3.org/hg/encoding/raw-file/tip/Overview.html#legacy-multi-byte-japanese-encodings</a> now has indexes</li>
+ <li id="l-391" _a="annevk"><a href="#l-391">#</a> [16:21] * annevk goes to fix typo</li>
+ <li id="l-392" _a="annevk" _r="zcorpan"><a href="#l-392">#</a> [16:22] &lt;annevk&gt; zcorpan: fixored</li>
+ <li id="l-393"><a href="#l-393">#</a> [16:23] * Joins: ehsan (~ehsan@66.207.208.98)</li>
+ <li id="l-394" _a="zcorpan"><a href="#l-394">#</a> [16:27] &lt;zcorpan&gt; thx. hmm. still tiny fonts in chrome and firefox...</li>
+ <li id="l-395" _a="zcorpan" _r="annevk"><a href="#l-395">#</a> [16:29] &lt;zcorpan&gt; annevk: can you regen again?</li>
+ <li id="l-396" _a="annevk"><a href="#l-396">#</a> [16:29] &lt;annevk&gt; hmm</li>
+ <li id="l-397" _a="annevk"><a href="#l-397">#</a> [16:29] &lt;annevk&gt; I don't like all those separate files in the encoding spec</li>
+ <li id="l-398" _a="annevk"><a href="#l-398">#</a> [16:30] &lt;annevk&gt; but I don't really see a better way</li>
+ <li id="l-399" _a="annevk"><a href="#l-399">#</a> [16:30] &lt;annevk&gt; done</li>
+ <li id="l-400" _a="zcorpan"><a href="#l-400">#</a> [16:31] &lt;zcorpan&gt; thanks</li>
+ <li id="l-401" _a="zcorpan"><a href="#l-401">#</a> [16:32] &lt;zcorpan&gt; now the &quot;Extensions to Document&quot; heading looks weird but i guess that's fine</li>
+ <li id="l-402"><a href="#l-402">#</a> [16:32] * Quits: maikmerten (~merten@ls5dhcp200.cs.uni-dortmund.de) (Remote host closed the connection)</li>
+ <li id="l-403" _a="hsivonen"><a href="#l-403">#</a> [16:33] * hsivonen wonders if Opera has a contingency plan for enabling H.264/AAC on desktop including XP</li>
+ <li id="l-404" _a="charlvn"><a href="#l-404">#</a> [16:36] &lt;charlvn&gt; windows xp reaches end of support on 8 april 2014...</li>
+ <li id="l-405" _a="Ms2ger"><a href="#l-405">#</a> [16:37] &lt;Ms2ger&gt; It's reached eol already a few years back, no?</li>
+ <li id="l-406" _a="charlvn" _r="nope"><a href="#l-406">#</a> [16:37] &lt;charlvn&gt; nope, still has another two years to go</li>
+ <li id="l-407" _a="Ms2ger"><a href="#l-407">#</a> [16:37] &lt;Ms2ger&gt; If you've got some number of users, it doesn't matter, though</li>
+ <li id="l-408" _a="charlvn"><a href="#l-408">#</a> [16:38] &lt;charlvn&gt; well when they stop critical bugfixes/security fixes (hard to think there could be any left to be discovered), it does bring strong discouragement</li>
+ <li id="l-409" _a="charlvn"><a href="#l-409">#</a> [16:38] &lt;charlvn&gt; also for third-party software companies to continue to support a platform that microsoft itself don't even want to support</li>
+ <li id="l-410" _a="charlvn"><a href="#l-410">#</a> [16:38] &lt;charlvn&gt; s/platform/operating system version/</li>
+ <li id="l-411"><a href="#l-411">#</a> [16:39] * Quits: zcorpan (~zcorpan@c-699de355.410-6-64736c14.cust.bredbandsbolaget.se) (Quit: zcorpan)</li>
+ <li id="l-412"><a href="#l-412">#</a> [16:45] * Quits: ksweeney (~Kevin_Swe@nyv-exweb.iac.com) (Quit: Leaving.)</li>
+ <li id="l-413"><a href="#l-413">#</a> [16:47] * Joins: ksweeney (~Kevin_Swe@nyv-exweb.iac.com)</li>
+ <li id="l-414"><a href="#l-414">#</a> [16:47] * Joins: snowfox (~benschaaf@50-77-199-197-static.hfc.comcastbusiness.net)</li>
+ <li id="l-415" _a="hsivonen" _r="charlvn"><a href="#l-415">#</a> [16:51] &lt;hsivonen&gt; charlvn: Opera and Firefox run on Windows 2000 still, even though it has been EOLed</li>
+ <li id="l-416" _a="hsivonen"><a href="#l-416">#</a> [16:51] &lt;hsivonen&gt; Firefox is about to stop running on Windows 2000 though</li>
+ <li id="l-417" _a="charlvn"><a href="#l-417">#</a> [16:53] &lt;charlvn&gt; i'm sure that</li>
+ <li id="l-418" _a="charlvn"><a href="#l-418">#</a> [16:53] &lt;charlvn&gt; \ that's the case for a lot of software</li>
+ <li id="l-419"><a href="#l-419">#</a> [16:55] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 244 seconds)</li>
+ <li id="l-420"><a href="#l-420">#</a> [16:56] * Joins: temp02 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-421" _a="hsivonen" _r="charlvn"><a href="#l-421">#</a> [17:00] &lt;hsivonen&gt; charlvn: not for IE, Chrome and Safari</li>
+ <li id="l-422"><a href="#l-422">#</a> [17:12] * Joins: shepazu (~shepazu@108-70-132-46.lightspeed.rlghnc.sbcglobal.net)</li>
+ <li id="l-423"><a href="#l-423">#</a> [17:13] * Quits: Evanescence (~Evanescen@60.183.223.254) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-424"><a href="#l-424">#</a> [17:13] * Quits: izhak (1000@188.168.76.63) (Ping timeout: 260 seconds)</li>
+ <li id="l-425" _a="gwicke"><a href="#l-425">#</a> [17:17] * gwicke is now known as gwicke_away</li>
+ <li id="l-426"><a href="#l-426">#</a> [17:18] * Quits: miketaylr (~miketaylr@guest.opera.com) (Quit: Leaving...)</li>
+ <li id="l-427"><a href="#l-427">#</a> [17:19] * Quits: karega (karega@cpe-76-184-236-100.tx.res.rr.com) (Ping timeout: 245 seconds)</li>
+ <li id="l-428"><a href="#l-428">#</a> [17:19] * Quits: hsivonen (~hsivonen@srv-e205.esp.mediateam.fi) (Ping timeout: 248 seconds)</li>
+ <li id="l-429"><a href="#l-429">#</a> [17:21] * Quits: shepazu (~shepazu@108-70-132-46.lightspeed.rlghnc.sbcglobal.net) (Quit: shepazu)</li>
+ <li id="l-430"><a href="#l-430">#</a> [17:21] * Joins: shepazu (~shepazu@108-70-132-46.lightspeed.rlghnc.sbcglobal.net)</li>
+ <li id="l-431"><a href="#l-431">#</a> [17:23] * Quits: eric_carlson (~eric@2620:149:4:1b01:bd7a:18b2:e9d6:9c1e) (Quit: eric_carlson)</li>
+ <li id="l-432"><a href="#l-432">#</a> [17:23] * Joins: eric_carlson (~ericc@adsl-67-112-12-110.dsl.anhm01.pacbell.net)</li>
+ <li id="l-433"><a href="#l-433">#</a> [17:23] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: :tiuQ tiuq sah woclrak)</li>
+ <li id="l-434"><a href="#l-434">#</a> [17:26] * Joins: hsivonen (~hsivonen@srv-e205.esp.mediateam.fi)</li>
+ <li id="l-435"><a href="#l-435">#</a> [17:28] * Joins: miketaylr (~miketaylr@guest.opera.com)</li>
+ <li id="l-436" _a="jgraham" _r="Hmm"><a href="#l-436">#</a> [17:38] &lt;jgraham&gt; Hmm, I feel like this string decoding API is getting too low-level</li>
+ <li id="l-437"><a href="#l-437">#</a> [17:38] * Joins: jacobg1 (~jacobg@sjfw1-a.adobe.com)</li>
+ <li id="l-438" _a="Ms2ger"><a href="#l-438">#</a> [17:38] &lt;Ms2ger&gt; Getting?</li>
+ <li id="l-439" _a="zewt"><a href="#l-439">#</a> [17:39] &lt;zewt&gt; it's an inherently low-level operation</li>
+ <li id="l-440" _a="jgraham" _r="Well"><a href="#l-440">#</a> [17:39] &lt;jgraham&gt; Well, &quot;failing to stop be&quot;</li>
+ <li id="l-441" _a="jgraham"><a href="#l-441">#</a> [17:39] &lt;jgraham&gt; s/stop/not/?</li>
+ <li id="l-442" _a="zewt"><a href="#l-442">#</a> [17:39] &lt;zewt&gt; also it's heading in a direction that makes it simpler for common cases</li>
+ <li id="l-443" _a="jgraham" _r="zewt"><a href="#l-443">#</a> [17:40] &lt;jgraham&gt; zewt: It's not that low level. Or at least in Python it doesn't require all this complexity afaict</li>
+ <li id="l-444"><a href="#l-444">#</a> [17:41] * Quits: miketaylr (~miketaylr@guest.opera.com) (Ping timeout: 260 seconds)</li>
+ <li id="l-445" _a="zewt"><a href="#l-445">#</a> [17:41] &lt;zewt&gt; i guess i don't see it as complex</li>
+ <li id="l-446" _a="zewt" _r="also"><a href="#l-446">#</a> [17:42] &lt;zewt&gt; also, python doesn't let you encode into existing buffers</li>
+ <li id="l-447" _a="jgraham"><a href="#l-447">#</a> [17:42] &lt;jgraham&gt; I mean use cases like &quot;split an array buffer into multiple null-terminated strings&quot; don't seem like they should be part of the decode API, but the combination of an API for selecting a view from an offset to some byte and a string decoding API</li>
+ <li id="l-448" _a="zewt"><a href="#l-448">#</a> [17:43] &lt;zewt&gt; the &quot;find null terminators&quot; is a separate function because of that</li>
+ <li id="l-449" _a="zewt"><a href="#l-449">#</a> [17:43] &lt;zewt&gt; it used to be a length sentinel on decode() before i pushed them away from that</li>
+ <li id="l-450" _a="jgraham"><a href="#l-450">#</a> [17:44] &lt;jgraham&gt; What's the use case for encoding into an existing buffer?</li>
+ <li id="l-451" _a="Ms2ger"><a href="#l-451">#</a> [17:44] &lt;Ms2ger&gt; Emscripten?</li>
+ <li id="l-452" _a="zewt"><a href="#l-452">#</a> [17:44] &lt;zewt&gt; not quite following what you're saying, though--that's exactly how you do it (call stringLength to find the terminator, create a sub-view, and pass that to decode)</li>
+ <li id="l-453" _a="jgraham"><a href="#l-453">#</a> [17:45] &lt;jgraham&gt; I'm saying that stringLenght shouldn't be considered part of the string API</li>
+ <li id="l-454" _a="zewt" _r="well"><a href="#l-454">#</a> [17:45] &lt;zewt&gt; well, the alternative if you're eg. creating a ZIP directory would be to encode into a new buffer then copy it</li>
+ <li id="l-455" _a="zewt" _r="well"><a href="#l-455">#</a> [17:45] &lt;zewt&gt; well, i don't care where stringLength lives, as long as it's there</li>
+ <li id="l-456" _a="jgraham"><a href="#l-456">#</a> [17:46] &lt;jgraham&gt; It should be a use case that could motivate a general function to find the next byte of some specific value(s) in an array buffer</li>
+ <li id="l-457"><a href="#l-457">#</a> [17:46] * Joins: karega (~karegaani@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-458" _a="zewt"><a href="#l-458">#</a> [17:46] &lt;zewt&gt; maybe the cost of creating a new buffer and copying it to the destination is minor enough that it's not worth having the output buffer parameter; dunno</li>
+ <li id="l-459" _a="jgraham"><a href="#l-459">#</a> [17:47] &lt;jgraham&gt; I have difficulty imagining these operations being the critical bottlenecks in (m)any web apps</li>
+ <li id="l-460" _a="jgraham"><a href="#l-460">#</a> [17:47] &lt;jgraham&gt; I could be wrong of course</li>
+ <li id="l-461" _a="zewt"><a href="#l-461">#</a> [17:48] &lt;zewt&gt; with the approach I'm nudging it towards, the output buffer option could easily be removed and then added later if there's demand</li>
+ <li id="l-462" _a="jgraham"><a href="#l-462">#</a> [17:48] &lt;jgraham&gt; Sure. I endorse doing that</li>
+ <li id="l-463"><a href="#l-463">#</a> [17:48] * Quits: timmywil (~timmywil@c-68-53-252-115.hsd1.ga.comcast.net) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-464" _a="zewt"><a href="#l-464">#</a> [17:48] &lt;zewt&gt; (without making the API weird if we do do that)</li>
+ <li id="l-465" _a="jgraham"><a href="#l-465">#</a> [17:49] &lt;jgraham&gt; Better to start small than wish we didn't have almost-unused (but not quite) complexity in a few years</li>
+ <li id="l-466"><a href="#l-466">#</a> [17:50] * Quits: tomasf (~tomasf@static-88.131.62.36.addr.tdcsong.se) (Quit: tomasf)</li>
+ <li id="l-467" _a="dglazkov"><a href="#l-467">#</a> [17:50] &lt;dglazkov&gt; good morning, Whatwg!</li>
+ <li id="l-468" _a="zewt"><a href="#l-468">#</a> [17:51] &lt;zewt&gt; though it would mean that decode() would only have one meaningful return value</li>
+ <li id="l-469" _a="zewt"><a href="#l-469">#</a> [17:51] &lt;zewt&gt; because the &quot;input consumed&quot; and &quot;output bytes written&quot; return values wouldn't be useful</li>
+ <li id="l-470" _a="zewt"><a href="#l-470">#</a> [17:51] &lt;zewt&gt; having it return an object that only has one field (so we have somewhere to put those other two later if needed) would be weird</li>
+ <li id="l-471" _a="zewt"><a href="#l-471">#</a> [17:53] &lt;zewt&gt; not sure what to recommend there</li>
+ <li id="l-472" _a="jgraham"><a href="#l-472">#</a> [17:53] &lt;jgraham&gt; Well it could return a different type if you pass a buffer to decode into</li>
+ <li id="l-473" _a="jgraham"><a href="#l-473">#</a> [17:53] &lt;jgraham&gt; Or it could be a different method name</li>
+ <li id="l-474" _a="zewt"><a href="#l-474">#</a> [17:53] &lt;zewt&gt; that's the &quot;eventual API weirdness&quot; i was talking about before, though</li>
+ <li id="l-475" _a="jgraham"><a href="#l-475">#</a> [17:53] &lt;jgraham&gt; decodeInto()</li>
+ <li id="l-476" _a="jgraham"><a href="#l-476">#</a> [17:54] &lt;jgraham&gt; Returning an object to support what is likely to be by far the uncommon case is also pretty weird</li>
+ <li id="l-477" _a="zewt"><a href="#l-477">#</a> [17:54] &lt;zewt&gt; sometimes i sort of wish there was a clean way of having output parameters in JS</li>
+ <li id="l-478" _a="zewt"><a href="#l-478">#</a> [17:55] &lt;zewt&gt; you can do it by passing in an object, but that's not really a common paradigm in this language</li>
+ <li id="l-479"><a href="#l-479">#</a> [17:55] * Joins: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-480"><a href="#l-480">#</a> [17:56] * Joins: ap (~ap@2620:149:4:1b01:a8cb:de8:bd55:a7a5)</li>
+ <li id="l-481"><a href="#l-481">#</a> [18:06] * Joins: hij1nx (~hij1nx@76-253-79-11.lightspeed.austtx.sbcglobal.net)</li>
+ <li id="l-482"><a href="#l-482">#</a> [18:09] * Joins: KillerX (~anant@2620:101:8003:200:4d0:f63e:d6e6:5424)</li>
+ <li id="l-483"><a href="#l-483">#</a> [18:10] * Quits: jernoble|afk (~jernoble@2620:149:4:1b01:f84b:fe6a:fd03:e256) (Quit: jernoble|afk)</li>
+ <li id="l-484"><a href="#l-484">#</a> [18:13] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-485" _a="jonlee|afk"><a href="#l-485">#</a> [18:15] * jonlee|afk is now known as jonlee</li>
+ <li id="l-486" _a="gwicke_away"><a href="#l-486">#</a> [18:19] * gwicke_away is now known as gwicke</li>
+ <li id="l-487"><a href="#l-487">#</a> [18:20] * Joins: dave_levin (dave_levin@nat/google/x-wxlglcchcoivxczk)</li>
+ <li id="l-488" _a="AryehGregor"><a href="#l-488">#</a> [18:24] &lt;AryehGregor&gt; Is there a way to set up a handler to catch all resource load failures in the page?</li>
+ <li id="l-489"><a href="#l-489">#</a> [18:27] * Quits: nonge (~nonge@p5082AE39.dip.t-dialin.net) (Quit: Verlassend)</li>
+ <li id="l-490" _a="annevk" _r="window.addEventListener(&quot;error&quot;"><a href="#l-490">#</a> [18:28] &lt;annevk&gt; window.addEventListener(&quot;error&quot;, ..., false) might get you somewhere, but error is also used for other stuff...</li>
+ <li id="l-491" _a="annevk"><a href="#l-491">#</a> [18:29] &lt;annevk&gt; and that wouldn't catch CSS resources</li>
+ <li id="l-492" _a="annevk"><a href="#l-492">#</a> [18:29] &lt;annevk&gt; or even @import loads</li>
+ <li id="l-493"><a href="#l-493">#</a> [18:29] * Quits: gwicke (~gabriel@212.255.32.204) (Quit: Bye!)</li>
+ <li id="l-494"><a href="#l-494">#</a> [18:29] * Quits: jonlee (~jonlee@2620:149:4:1b01:f15b:8ff0:b698:66dd) (Quit: jonlee)</li>
+ <li id="l-495" _a="zewt"><a href="#l-495">#</a> [18:29] &lt;zewt&gt; i'd use a capturing listener for that</li>
+ <li id="l-496"><a href="#l-496">#</a> [18:29] * Joins: aklein (u4454@gateway/web/irccloud.com/x-fccjuymmpiydecli)</li>
+ <li id="l-497"><a href="#l-497">#</a> [18:30] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Remote host closed the connection)</li>
+ <li id="l-498" _a="annevk" _r="ooh"><a href="#l-498">#</a> [18:30] &lt;annevk&gt; ooh, I meant to do that</li>
+ <li id="l-499" _a="annevk"><a href="#l-499">#</a> [18:30] &lt;annevk&gt; boolean arguments...</li>
+ <li id="l-500"><a href="#l-500">#</a> [18:32] * Joins: jonlee (~jonlee@2620:149:4:1b01:68e0:5e1c:f833:393f)</li>
+ <li id="l-501"><a href="#l-501">#</a> [18:39] * Parts: jacobg1 (~jacobg@sjfw1-a.adobe.com)</li>
+ <li id="l-502"><a href="#l-502">#</a> [18:41] * Joins: smaug____ (~chatzilla@212-226-65-55-nat.elisa-mobile.fi)</li>
+ <li id="l-503" _a="AryehGregor"><a href="#l-503">#</a> [18:42] &lt;AryehGregor&gt; How would the caputuring listener work?  Put a capturing onerror handler on the window/document?</li>
+ <li id="l-504" _a="AryehGregor"><a href="#l-504">#</a> [18:42] &lt;AryehGregor&gt; This is actually for Mozilla's mochitests; there's already a window.onerror handler to catch unexpected exceptions.</li>
+ <li id="l-505"><a href="#l-505">#</a> [18:43] * Quits: snowfox (~benschaaf@50-77-199-197-static.hfc.comcastbusiness.net) (Quit: snowfox)</li>
+ <li id="l-506"><a href="#l-506">#</a> [18:43] * Joins: pablof (~pablof@144.189.101.1)</li>
+ <li id="l-507"><a href="#l-507">#</a> [18:44] * Parts: bga (bga@2001:41d0:1:8d75::)</li>
+ <li id="l-508" _a="annevk" _r="AryehGregor"><a href="#l-508">#</a> [18:47] &lt;annevk&gt; AryehGregor: you can register a listener for events too</li>
+ <li id="l-509" _a="annevk" _r="AryehGregor"><a href="#l-509">#</a> [18:47] &lt;annevk&gt; AryehGregor: window.onerror is special</li>
+ <li id="l-510" _a="annevk"><a href="#l-510">#</a> [18:50] &lt;annevk&gt; hmm</li>
+ <li id="l-511" _a="annevk"><a href="#l-511">#</a> [18:50] &lt;annevk&gt; compared to the Japanese stuff, big5 is a giant mess</li>
+ <li id="l-512" _a="smaug____" _r="aklein"><a href="#l-512">#</a> [18:51] &lt;smaug____&gt; aklein: great MutationObserver tests</li>
+ <li id="l-513" _a="smaug____" _r="aklein"><a href="#l-513">#</a> [18:51] &lt;smaug____&gt; aklein: say thanks to rafael</li>
+ <li id="l-514" _a="smaug____"><a href="#l-514">#</a> [18:52] &lt;smaug____&gt; (hard to understand those tests though, since they use all sorts of strange Google closure stuff)</li>
+ <li id="l-515" _a="aklein" _r="smaug____"><a href="#l-515">#</a> [18:52] &lt;aklein&gt; smaug____: will do, it's pretty awesome that those tests, originally written for a prototype JS implementation of this API, now pass on two actual browser impls</li>
+ <li id="l-516" _a="smaug____"><a href="#l-516">#</a> [18:53] &lt;smaug____&gt; yup</li>
+ <li id="l-517" _a="smaug____"><a href="#l-517">#</a> [18:53] &lt;smaug____&gt; I need to do still some minor tweaks, and then ask sicking to review it all</li>
+ <li id="l-518" _a="smaug____"><a href="#l-518">#</a> [18:54] &lt;smaug____&gt; I haven't yet tested performance much, but for example attribute change notifications are 7x faster than DOMAttrModified</li>
+ <li id="l-519" _a="smaug____"><a href="#l-519">#</a> [18:54] &lt;smaug____&gt; (looks like webkit doesn't support DOMAttrModified so couldn't compare there)</li>
+ <li id="l-520" _a="smaug____"><a href="#l-520">#</a> [18:55] &lt;smaug____&gt; (ask sicking to review it... do I live in utopia :p )</li>
+ <li id="l-521" _a="annevk" _r="fwiw"><a href="#l-521">#</a> [18:59] &lt;annevk&gt; fwiw, cleaning up the spec will prolly have to wait a little bit; maybe end of next week, otherwise week after</li>
+ <li id="l-522" _a="smaug____" _r="annevk"><a href="#l-522">#</a> [19:00] &lt;smaug____&gt; annevk: DOM4 ?</li>
+ <li id="l-523" _a="annevk"><a href="#l-523">#</a> [19:00] &lt;annevk&gt; yeah</li>
+ <li id="l-524" _a="annevk"><a href="#l-524">#</a> [19:00] &lt;annevk&gt; at least if I'm to edit it</li>
+ <li id="l-525" _a="smaug____" _r="FYI"><a href="#l-525">#</a> [19:00] &lt;smaug____&gt; FYI, I'm mainly interested in DocumentFragment behavior</li>
+ <li id="l-526" _a="smaug____"><a href="#l-526">#</a> [19:01] &lt;smaug____&gt; and textContent</li>
+ <li id="l-527" _a="annevk"><a href="#l-527">#</a> [19:01] &lt;annevk&gt; doesn't really change my estimate :)</li>
+ <li id="l-528" _a="smaug____" _r="yup"><a href="#l-528">#</a> [19:01] &lt;smaug____&gt; yup, doesn't matter</li>
+ <li id="l-529"><a href="#l-529">#</a> [19:04] * Quits: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-530"><a href="#l-530">#</a> [19:08] * Quits: hij1nx (~hij1nx@76-253-79-11.lightspeed.austtx.sbcglobal.net) (Quit: hij1nx)</li>
+ <li id="l-531"><a href="#l-531">#</a> [19:13] * Quits: KillerX (~anant@2620:101:8003:200:4d0:f63e:d6e6:5424) (Ping timeout: 245 seconds)</li>
+ <li id="l-532"><a href="#l-532">#</a> [19:15] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-533"><a href="#l-533">#</a> [19:23] * Joins: jsbell (jsbell@nat/google/x-pacnetyhddwijlrm)</li>
+ <li id="l-534"><a href="#l-534">#</a> [19:26] * Joins: maikmerten (~maikmerte@port-92-201-96-163.dynamic.qsc.de)</li>
+ <li id="l-535"><a href="#l-535">#</a> [19:36] * Joins: sarro (~sarro@i5E8655FA.versanet.de)</li>
+ <li id="l-536"><a href="#l-536">#</a> [19:43] * Joins: WeirdAl (~chatzilla@g2spf.ask.info)</li>
+ <li id="l-537"><a href="#l-537">#</a> [19:44] * Quits: TabAtkins_ (tabatkins@nat/google/x-qtyhpaygdjzucpzq) (Quit: Lost terminal)</li>
+ <li id="l-538"><a href="#l-538">#</a> [19:47] * Parts: ksweeney (~Kevin_Swe@nyv-exweb.iac.com)</li>
+ <li id="l-539"><a href="#l-539">#</a> [19:48] * Joins: TabAtkins (tabatkins@nat/google/x-jbmyfxrnomjgargo)</li>
+ <li id="l-540"><a href="#l-540">#</a> [19:49] * Quits: Neocortex (~niels@82-170-160-25.ip.telfort.nl) (Remote host closed the connection)</li>
+ <li id="l-541"><a href="#l-541">#</a> [19:49] * Joins: KillerX (~anant@nat/mozilla/x-kfiomlrhblsthwqr)</li>
+ <li id="l-542"><a href="#l-542">#</a> [19:52] * Joins: dbaron (~dbaron@nat/mozilla/x-ntxahojiccbjataa)</li>
+ <li id="l-543" _a="jonlee"><a href="#l-543">#</a> [20:00] * jonlee is now known as jonlee|afk</li>
+ <li id="l-544"><a href="#l-544">#</a> [20:03] * Joins: jamesr (jamesr@nat/google/x-wnujrrqnpovusbtq)</li>
+ <li id="l-545" _a="TabAtkins" _r="Welp"><a href="#l-545">#</a> [20:08] &lt;TabAtkins&gt; Welp, I've confirmed that talking to Foliot about the DRM stuff is useless.</li>
+ <li id="l-546" _a="TabAtkins"><a href="#l-546">#</a> [20:09] &lt;TabAtkins&gt; He still thinks that if we just ratchet up enforcement more the problem will go away (because the previous 15 times we've done so in the last three decades were just for practice, I guess).</li>
+ <li id="l-547"><a href="#l-547">#</a> [20:19] * Quits: richt (richt@nat/opera/x-ubyxlttxaxikyshd) (Remote host closed the connection)</li>
+ <li id="l-548"><a href="#l-548">#</a> [20:21] * Quits: jamesr (jamesr@nat/google/x-wnujrrqnpovusbtq) (Quit: jamesr)</li>
+ <li id="l-549"><a href="#l-549">#</a> [20:24] * Joins: sicking (~chatzilla@adsl-63-204-27-202.dsl.snfc21.pacbell.net)</li>
+ <li id="l-550" _a="Ms2ger"><a href="#l-550">#</a> [20:25] &lt;Ms2ger&gt; s/about the DRM stuff//</li>
+ <li id="l-551" _a="Ms2ger" _r="sicking"><a href="#l-551">#</a> [20:26] &lt;Ms2ger&gt; sicking, oh, and you want to schedule some time to review Mutation Observers ;)</li>
+ <li id="l-552"><a href="#l-552">#</a> [20:27] * Joins: timmywil (~timmywil@host-68-169-175-226.WISOLT2.epbfi.com)</li>
+ <li id="l-553"><a href="#l-553">#</a> [20:29] * Joins: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90)</li>
+ <li id="l-554"><a href="#l-554">#</a> [20:30] * Joins: drublic (~drublic@frbg-5d84f7bf.pool.mediaWays.net)</li>
+ <li id="l-555" _a="jsbell" _r="zewt"><a href="#l-555">#</a> [20:40] &lt;jsbell&gt; zewt: You're glenn@ ?</li>
+ <li id="l-556" _a="sicking" _r="Ms2ger"><a href="#l-556">#</a> [20:41] &lt;sicking&gt; Ms2ger: in what sense? The spec or the implementation?</li>
+ <li id="l-557"><a href="#l-557">#</a> [20:43] * Quits: maikmerten (~maikmerte@port-92-201-96-163.dynamic.qsc.de) (Quit: Leaving)</li>
+ <li id="l-558" _a="zewt"><a href="#l-558">#</a> [20:45] &lt;zewt&gt; i'm one of them</li>
+ <li id="l-559" _a="smaug____" _r="sicking"><a href="#l-559">#</a> [20:45] &lt;smaug____&gt; sicking: implementation</li>
+ <li id="l-560" _a="smaug____" _r="jsbell"><a href="#l-560">#</a> [20:46] &lt;smaug____&gt; jsbell: zewt is one of the nicer Glenns</li>
+ <li id="l-561" _a="zewt" _r="TabAtkins"><a href="#l-561">#</a> [20:46] &lt;zewt&gt; TabAtkins: well, a lot of the time DRM isn't there to keep people out; it's to trigger things like the DMCA</li>
+ <li id="l-562"><a href="#l-562">#</a> [20:46] * Joins: scor_ (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-563"><a href="#l-563">#</a> [20:46] * Quits: scor_ (~scor@drupal.org/user/52142/view) (Excess Flood)</li>
+ <li id="l-564" _a="ojan"><a href="#l-564">#</a> [20:46] * ojan is now known as ojan_lunch</li>
+ <li id="l-565"><a href="#l-565">#</a> [20:47] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-566"><a href="#l-566">#</a> [20:48] * Quits: erichynds (~ehynds@venkman.brightcove.com) (Ping timeout: 265 seconds)</li>
+ <li id="l-567"><a href="#l-567">#</a> [20:50] * Joins: jamesr (jamesr@nat/google/x-jcjshgruolemmffu)</li>
+ <li id="l-568"><a href="#l-568">#</a> [20:53] * Joins: ezoe (~ezoe@203-140-88-221f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-569"><a href="#l-569">#</a> [20:54] * Quits: smaug____ (~chatzilla@212-226-65-55-nat.elisa-mobile.fi) (Ping timeout: 252 seconds)</li>
+ <li id="l-570"><a href="#l-570">#</a> [20:59] * Joins: othermaciej (~mjs@17.245.90.69)</li>
+ <li id="l-571" _a="TabAtkins" _r="zewt"><a href="#l-571">#</a> [21:07] &lt;TabAtkins&gt; zewt: Yeah, I know. But that's *definitely* unethical. ^_^</li>
+ <li id="l-572" _a="StoneCypher"><a href="#l-572">#</a> [21:08] &lt;StoneCypher&gt; in what way is it unethical to choose to encrypt your own content for sale</li>
+ <li id="l-573" _a="StoneCypher"><a href="#l-573">#</a> [21:08] &lt;StoneCypher&gt; that seems like a knee-jerk reaction</li>
+ <li id="l-574" _a="TabAtkins"><a href="#l-574">#</a> [21:08] &lt;TabAtkins&gt; That's not what I said.</li>
+ <li id="l-575" _a="StoneCypher" _r="okay"><a href="#l-575">#</a> [21:08] &lt;StoneCypher&gt; okay, so, in what way is it unethical to use digital rights management, and back it up with the law</li>
+ <li id="l-576" _a="StoneCypher"><a href="#l-576">#</a> [21:08] &lt;StoneCypher&gt; specifically</li>
+ <li id="l-577" _a="TabAtkins"><a href="#l-577">#</a> [21:08] &lt;TabAtkins&gt; You trigger the DMCA, specifically the digital locks clause that prevents circumvention entirely, so that you can prevent people from exercising their fair use rights.</li>
+ <li id="l-578" _a="StoneCypher"><a href="#l-578">#</a> [21:09] &lt;StoneCypher&gt; i'm a little confused.</li>
+ <li id="l-579" _a="StoneCypher"><a href="#l-579">#</a> [21:09] &lt;StoneCypher&gt; the law says that isn't a right.</li>
+ <li id="l-580" _a="StoneCypher"><a href="#l-580">#</a> [21:09] &lt;StoneCypher&gt; otherwise it wouldn't apply here.</li>
+ <li id="l-581" _a="StoneCypher"><a href="#l-581">#</a> [21:09] &lt;StoneCypher&gt; so</li>
+ <li id="l-582" _a="TabAtkins"><a href="#l-582">#</a> [21:09] &lt;TabAtkins&gt; That's the entire point of that clause, and why it didn't specifically make it legal to circumvent for legal reasons.</li>
+ <li id="l-583" _a="StoneCypher"><a href="#l-583">#</a> [21:09] &lt;StoneCypher&gt; uh huh?</li>
+ <li id="l-584" _a="StoneCypher"><a href="#l-584">#</a> [21:10] &lt;StoneCypher&gt; so why are you saying you haev the right otherwise?</li>
+ <li id="l-585" _a="jonlee|afk"><a href="#l-585">#</a> [21:10] * jonlee|afk is now known as jonlee</li>
+ <li id="l-586" _a="StoneCypher"><a href="#l-586">#</a> [21:10] &lt;StoneCypher&gt; the law seems to disagree</li>
+ <li id="l-587" _a="StoneCypher"><a href="#l-587">#</a> [21:10] &lt;StoneCypher&gt; am i missing something?</li>
+ <li id="l-588" _a="StoneCypher"><a href="#l-588">#</a> [21:10] &lt;StoneCypher&gt; what fair use right, specifically, is being violated here in any way which is inconsistent with the law?</li>
+ <li id="l-589" _a="TabAtkins" _r="Um"><a href="#l-589">#</a> [21:10] &lt;TabAtkins&gt; Um, what? I have the right to violate copyright for purposes of education, criticism, parody, and a few other little bits.</li>
+ <li id="l-590" _a="Hixie"><a href="#l-590">#</a> [21:10] &lt;Hixie&gt; moral rights aren't necessarily legal rights</li>
+ <li id="l-591" _a="StoneCypher" _r="yes"><a href="#l-591">#</a> [21:10] &lt;StoneCypher&gt; yes, and if you show one of those circumstances, you get that exception</li>
+ <li id="l-592" _a="TabAtkins"><a href="#l-592">#</a> [21:10] &lt;TabAtkins&gt; DRM prevents me from doing that, but I can circumvent.  However, the DMCA makes it *illegal* to circumvent, even if it was for a legal purpose.</li>
+ <li id="l-593" _a="Hixie"><a href="#l-593">#</a> [21:10] &lt;Hixie&gt; sometimes the law is immoral</li>
+ <li id="l-594" _a="StoneCypher"><a href="#l-594">#</a> [21:11] &lt;StoneCypher&gt; it's not a blanket exception because you imagine it might be wrong at some given point</li>
+ <li id="l-595" _a="TabAtkins" _r="StoneCypher"><a href="#l-595">#</a> [21:11] &lt;TabAtkins&gt; StoneCypher: You seem somewhat confused.  If I circumvent DRM, it's illegal *even if* I was using the copyrighted content in legal ways.</li>
+ <li id="l-596" _a="StoneCypher" _r="Hixie"><a href="#l-596">#</a> [21:11] &lt;StoneCypher&gt; Hixie: moral rights don't exist merely because someone asserts them</li>
+ <li id="l-597" _a="StoneCypher" _r="TabAtkins"><a href="#l-597">#</a> [21:11] &lt;StoneCypher&gt; TabAtkins: case law disagrees.  can you show any evidence of that belief?</li>
+ <li id="l-598" _a="Hixie"><a href="#l-598">#</a> [21:11] &lt;Hixie&gt; what moral rights one has is a matter of opinion</li>
+ <li id="l-599" _a="StoneCypher" _r="Hixie"><a href="#l-599">#</a> [21:12] &lt;StoneCypher&gt; Hixie: opinion is not a valid basis for defying the law, even when someone pretties it up with a phrase like &quot;moral rights&quot;</li>
+ <li id="l-600" _a="TabAtkins" _r="StoneCypher"><a href="#l-600">#</a> [21:12] &lt;TabAtkins&gt; StoneCypher: I have to go look it up.</li>
+ <li id="l-601" _a="StoneCypher" _r="Hixie"><a href="#l-601">#</a> [21:12] &lt;StoneCypher&gt; Hixie: which is why nobody pays attention when NAMBLA talks about their moral rights</li>
+ <li id="l-602" _a="StoneCypher" _r="Hixie"><a href="#l-602">#</a> [21:12] &lt;StoneCypher&gt; Hixie: nor the pirate bay</li>
+ <li id="l-603" _a="Hixie" _r="StoneCypher"><a href="#l-603">#</a> [21:12] &lt;Hixie&gt; StoneCypher: not sure what you're arguing. i didn't suggest you should defy law. i suggested the law is wrong.</li>
+ <li id="l-604" _a="TabAtkins" _r="StoneCypher"><a href="#l-604">#</a> [21:12] &lt;TabAtkins&gt; StoneCypher: Do you have a pointer to case-law that makes it legal to circumvent DRM for fair-use reason?</li>
+ <li id="l-605" _a="StoneCypher"><a href="#l-605">#</a> [21:13] &lt;StoneCypher&gt; are you really asking me to prove your undefended claim wrong</li>
+ <li id="l-606" _a="TabAtkins" _r="Rather"><a href="#l-606">#</a> [21:13] &lt;TabAtkins&gt; Rather, that shows a court making that decision.</li>
+ <li id="l-607" _a="TabAtkins"><a href="#l-607">#</a> [21:13] &lt;TabAtkins&gt; At this point, both our claims are undefended.</li>
+ <li id="l-608" _a="StoneCypher" _r="uh"><a href="#l-608">#</a> [21:13] &lt;StoneCypher&gt; uh, no</li>
+ <li id="l-609" _a="TabAtkins" _r="Uh"><a href="#l-609">#</a> [21:13] &lt;TabAtkins&gt; Uh, yes.</li>
+ <li id="l-610" _a="StoneCypher"><a href="#l-610">#</a> [21:13] &lt;StoneCypher&gt; you're making a bunch of claims about ethics supported by claims about the law</li>
+ <li id="l-611" _a="StoneCypher"><a href="#l-611">#</a> [21:13] &lt;StoneCypher&gt; i'm asking you to explain them</li>
+ <li id="l-612" _a="StoneCypher"><a href="#l-612">#</a> [21:13] &lt;StoneCypher&gt; i have nothing to defend</li>
+ <li id="l-613" _a="TabAtkins"><a href="#l-613">#</a> [21:13] &lt;TabAtkins&gt; Wait wait wait. Go back and read what I said.</li>
+ <li id="l-614" _a="StoneCypher"><a href="#l-614">#</a> [21:13] &lt;StoneCypher&gt; i did.</li>
+ <li id="l-615" _a="StoneCypher"><a href="#l-615">#</a> [21:13] &lt;StoneCypher&gt; and i asked for further explanation and did not get it.</li>
+ <li id="l-616" _a="StoneCypher"><a href="#l-616">#</a> [21:13] &lt;StoneCypher&gt; and i asked for reference and i did not get it.</li>
+ <li id="l-617" _a="StoneCypher"><a href="#l-617">#</a> [21:13] &lt;StoneCypher&gt; now you're claiming that i have something to prove.</li>
+ <li id="l-618" _a="TabAtkins"><a href="#l-618">#</a> [21:14] &lt;TabAtkins&gt; My statement was that the DMCA's digital lock provision makes it illegal to circumvent DRM even if you were doing so for legal reasons (fair use).</li>
+ <li id="l-619" _a="TabAtkins"><a href="#l-619">#</a> [21:14] &lt;TabAtkins&gt; You said this was untrue.</li>
+ <li id="l-620" _a="StoneCypher"><a href="#l-620">#</a> [21:14] &lt;StoneCypher&gt; oy.</li>
+ <li id="l-621" _a="TabAtkins"><a href="#l-621">#</a> [21:14] &lt;TabAtkins&gt; If you're arguing about a *different* statement of mine, I didn't realize that.</li>
+ <li id="l-622" _a="StoneCypher"><a href="#l-622">#</a> [21:14] &lt;StoneCypher&gt; so here we go in the standard &quot;oh, you want me to prove my claim?  it's on you to prove otherwise!&quot; loop</li>
+ <li id="l-623" _a="zewt" _r="TabAtkins"><a href="#l-623">#</a> [21:14] &lt;zewt&gt; TabAtkins: sure, but it's common</li>
+ <li id="l-624" _a="zewt" _r="TabAtkins"><a href="#l-624">#</a> [21:14] &lt;zewt&gt; TabAtkins: iirc it's been macrovision's strategy, at least at points</li>
+ <li id="l-625" _a="TabAtkins" _r="StoneCypher"><a href="#l-625">#</a> [21:15] &lt;TabAtkins&gt; StoneCypher: You're asserting that I'm wrong, and it's legal to circumvent DRM for fair-use purposes.</li>
+ <li id="l-626" _a="StoneCypher"><a href="#l-626">#</a> [21:15] &lt;StoneCypher&gt; that's not what an assertion is.</li>
+ <li id="l-627" _a="StoneCypher"><a href="#l-627">#</a> [21:15] &lt;StoneCypher&gt; an assertion is a statement of fact, not a counter-claim.</li>
+ <li id="l-628" _a="TabAtkins"><a href="#l-628">#</a> [21:15] &lt;TabAtkins&gt; I don't think either of us are making extraordinary claims.</li>
+ <li id="l-629" _a="StoneCypher"><a href="#l-629">#</a> [21:15] &lt;StoneCypher&gt; i'm not making *any* claims.</li>
+ <li id="l-630" _a="TabAtkins"><a href="#l-630">#</a> [21:15] &lt;TabAtkins&gt; That's nice.</li>
+ <li id="l-631" _a="StoneCypher"><a href="#l-631">#</a> [21:15] &lt;StoneCypher&gt; saying &quot;i don't see any reason to believe you&quot; is not a claim.</li>
+ <li id="l-632" _a="StoneCypher"><a href="#l-632">#</a> [21:15] &lt;StoneCypher&gt; and i mean yes</li>
+ <li id="l-633" _a="StoneCypher"><a href="#l-633">#</a> [21:15] &lt;StoneCypher&gt; there's ample decision from the court about this</li>
+ <li id="l-634" _a="StoneCypher"><a href="#l-634">#</a> [21:15] &lt;StoneCypher&gt; but i want you to focus more on how this actually works</li>
+ <li id="l-635" _a="StoneCypher"><a href="#l-635">#</a> [21:16] &lt;StoneCypher&gt; you made the claim; you should be substantiating it, not challenging others to do otherwise</li>
+ <li id="l-636" _a="StoneCypher"><a href="#l-636">#</a> [21:16] &lt;StoneCypher&gt; for example</li>
+ <li id="l-637" _a="StoneCypher"><a href="#l-637">#</a> [21:16] &lt;StoneCypher&gt; apple tried to stop jailbreaking with dmca</li>
+ <li id="l-638" _a="StoneCypher"><a href="#l-638">#</a> [21:16] &lt;StoneCypher&gt; they failed</li>
+ <li id="l-639" _a="StoneCypher"><a href="#l-639">#</a> [21:16] &lt;StoneCypher&gt; on fair use.</li>
+ <li id="l-640" _a="StoneCypher"><a href="#l-640">#</a> [21:16] &lt;StoneCypher&gt; look it up</li>
+ <li id="l-641" _a="StoneCypher"><a href="#l-641">#</a> [21:16] &lt;StoneCypher&gt; but again</li>
+ <li id="l-642" _a="StoneCypher"><a href="#l-642">#</a> [21:16] &lt;StoneCypher&gt; the burden of proof is on /you/, because /you/ made the claim.</li>
+ <li id="l-643" _a="StoneCypher"><a href="#l-643">#</a> [21:16] &lt;StoneCypher&gt; the library of congress is another standing exception to all drm, and the learning company sued them three times to put a stop to that</li>
+ <li id="l-644" _a="StoneCypher"><a href="#l-644">#</a> [21:16] &lt;StoneCypher&gt; failed every time</li>
+ <li id="l-645" _a="TabAtkins"><a href="#l-645">#</a> [21:16] &lt;TabAtkins&gt; Chilling Effects supports my assertion: <a href="http://chillingeffects.org/anticircumvention/faq.cgi">http://chillingeffects.org/anticircumvention/faq.cgi</a></li>
+ <li id="l-646"><a href="#l-646">#</a> [21:17] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Quit: tzing)</li>
+ <li id="l-647" _a="StoneCypher"><a href="#l-647">#</a> [21:17] &lt;StoneCypher&gt; where specifically</li>
+ <li id="l-648" _a="StoneCypher"><a href="#l-648">#</a> [21:17] &lt;StoneCypher&gt; that's a complete faq</li>
+ <li id="l-649" _a="TabAtkins"><a href="#l-649">#</a> [21:17] &lt;TabAtkins&gt; I'm aware that there is a specific, enumerated list of exceptions to the digital locks clause.</li>
+ <li id="l-650" _a="StoneCypher"><a href="#l-650">#</a> [21:17] &lt;StoneCypher&gt; pointing vaguely to a gigantic document and saying &quot;this agrees&quot; is not purposeful</li>
+ <li id="l-651" _a="StoneCypher"><a href="#l-651">#</a> [21:17] &lt;StoneCypher&gt; where</li>
+ <li id="l-652" _a="StoneCypher"><a href="#l-652">#</a> [21:17] &lt;StoneCypher&gt; your certainty is not valid defense of a claim</li>
+ <li id="l-653" _a="TabAtkins"><a href="#l-653">#</a> [21:17] &lt;TabAtkins&gt; The third and fourth question.</li>
+ <li id="l-654" _a="StoneCypher"><a href="#l-654">#</a> [21:18] &lt;StoneCypher&gt; i don't see the third or fourth questions supporting you.  all they do is define terms and discuss &quot;the controversy.&quot;</li>
+ <li id="l-655" _a="zewt"><a href="#l-655">#</a> [21:18] &lt;zewt&gt; uh.</li>
+ <li id="l-656" _a="Ms2ger"><a href="#l-656">#</a> [21:18] * Ms2ger yawns</li>
+ <li id="l-657" _a="TabAtkins" _r="Yeah"><a href="#l-657">#</a> [21:18] &lt;TabAtkins&gt; Yeah, sure, I'm done.</li>
+ <li id="l-658" _a="StoneCypher"><a href="#l-658">#</a> [21:19] &lt;StoneCypher&gt; of course.  why support your claim when you can just say &quot;i'm done?&quot;</li>
+ <li id="l-659" _a="StoneCypher"><a href="#l-659">#</a> [21:19] &lt;StoneCypher&gt; clearly this is the level of discussion that should support decisions for recommendations</li>
+ <li id="l-660" _a="StoneCypher"><a href="#l-660">#</a> [21:19] &lt;StoneCypher&gt; vague unsubstantiable claims</li>
+ <li id="l-661" _a="zewt"><a href="#l-661">#</a> [21:19] &lt;zewt&gt; you're sort of annoying. fyi</li>
+ <li id="l-662" _a="TabAtkins"><a href="#l-662">#</a> [21:19] &lt;TabAtkins&gt; All right, so how about them specs?</li>
+ <li id="l-663" _a="StoneCypher" _r="zewt"><a href="#l-663">#</a> [21:19] &lt;StoneCypher&gt; zewt: awesome, thanks for contributing</li>
+ <li id="l-664" _a="zewt"><a href="#l-664">#</a> [21:19] &lt;zewt&gt; np</li>
+ <li id="l-665" _a="Hixie" _r="StoneCypher"><a href="#l-665">#</a> [21:19] &lt;Hixie&gt; StoneCypher: do you agree that it is illegal to decrypt the contents of a DVD for the purpose of watching it on my linux box?</li>
+ <li id="l-666" _a="StoneCypher" _r="Hixie"><a href="#l-666">#</a> [21:21] &lt;StoneCypher&gt; Hixie: with respect that I am not a lawyer, what you would have to do is spend the five dollars to purchase a legal player, or have an actual legitimate exception, such as commentary.  I agree that it's a stupid business model, I agree that it's throttling innovation, and I agree that it's a violation of basic ownership ethics and smart business.  Unfortunately, yes, it is currently illegal,</li>
+ <li id="l-667" _a="StoneCypher"><a href="#l-667">#</a> [21:21] &lt;StoneCypher&gt; as it is essentially a piracy of the decoder.</li>
+ <li id="l-668" _a="TabAtkins"><a href="#l-668">#</a> [21:21] &lt;TabAtkins&gt; So is that a &quot;yes&quot;?</li>
+ <li id="l-669" _a="StoneCypher" _r="Hixie"><a href="#l-669">#</a> [21:21] &lt;StoneCypher&gt; Hixie: One example of that being done the way the law wants it to be done is TiVo, which is a linux box with a legal decoder.</li>
+ <li id="l-670" _a="Hixie" _r="StoneCypher"><a href="#l-670">#</a> [21:21] &lt;Hixie&gt; StoneCypher: do you agree that &quot;watching content legally purchased&quot; is something that, in the absence of drm, i am legally allowed to do?</li>
+ <li id="l-671" _a="StoneCypher" _r="Hixie"><a href="#l-671">#</a> [21:22] &lt;StoneCypher&gt; Hixie: I do not believe that is a valid question.  That is entirely defined by the context which is avoided in that question.  Examples that have nothing to do with technology include snuff, child pornography, and illegally taken videotapes in other people's homes.</li>
+ <li id="l-672" _a="TabAtkins"><a href="#l-672">#</a> [21:23] &lt;TabAtkins&gt; Let's pretend the content is legal as well.</li>
+ <li id="l-673" _a="TabAtkins"><a href="#l-673">#</a> [21:23] &lt;TabAtkins&gt; Now can you answer the question?</li>
+ <li id="l-674" _a="Hixie" _r="StoneCypher"><a href="#l-674">#</a> [21:23] &lt;Hixie&gt; StoneCypher: do you agree that &quot;just me watching a star trek episode legally purchased on my own&quot; is something that, in the absence of drm, i am legally allowed to do?</li>
+ <li id="l-675" _a="StoneCypher" _r="Hixie"><a href="#l-675">#</a> [21:23] &lt;StoneCypher&gt; Hixie: I do believe that the context is important here.  However, what I believe is that in order for us to move forward legitimately, we *must* allow content owners to choose what they do with their content.  We do not have the privilege of determining other people's business models for them, and this is a function of business model.</li>
+ <li id="l-676" _a="StoneCypher" _r="Hixie"><a href="#l-676">#</a> [21:23] &lt;StoneCypher&gt; Hixie: If the publisher allows that model, yes.  I don't actually know what Paramount allows, and historically, they've been one of the dumber dinosaurs in the market.</li>
+ <li id="l-677" _a="TabAtkins" _r="StoneCypher"><a href="#l-677">#</a> [21:23] &lt;TabAtkins&gt; StoneCypher: Do you believe that IKEA has a legitimate right to control what I do with my shelf?</li>
+ <li id="l-678" _a="zewt"><a href="#l-678">#</a> [21:23] &lt;zewt&gt; content authors don't have the privilege of telling everyone else that they must implement proprietary copy protection.</li>
+ <li id="l-679" _a="Hixie" _r="StoneCypher"><a href="#l-679">#</a> [21:24] &lt;Hixie&gt; StoneCypher: you assert that it is the publisher that legally controls whether or not i am allowed to watch content i legally purchase (not license) from them, in the absence of drm?</li>
+ <li id="l-680" _a="StoneCypher"><a href="#l-680">#</a> [21:24] &lt;StoneCypher&gt; In most cases you haven't purchased it.  You've licensed it.</li>
+ <li id="l-681" _a="StoneCypher" _r="Look"><a href="#l-681">#</a> [21:25] &lt;StoneCypher&gt; Look, I don't want to be asked to defend your indignance towards bad businesspeople</li>
+ <li id="l-682" _a="Hixie" _r="StoneCypher"><a href="#l-682">#</a> [21:25] &lt;Hixie&gt; StoneCypher: i am only asking about hte case of purchasing it.</li>
+ <li id="l-683" _a="StoneCypher"><a href="#l-683">#</a> [21:25] &lt;StoneCypher&gt; I don't like their choices any more than you do</li>
+ <li id="l-684" _a="StoneCypher"><a href="#l-684">#</a> [21:25] &lt;StoneCypher&gt; but that is not the way I look at this at all</li>
+ <li id="l-685" _a="StoneCypher"><a href="#l-685">#</a> [21:25] &lt;StoneCypher&gt; Asking me these heavily loaded questions while ignoring that my viewpoint comes from a fundamentally different approach just structures this so that you aren't able to see the way I look at it</li>
+ <li id="l-686" _a="StoneCypher"><a href="#l-686">#</a> [21:25] &lt;StoneCypher&gt; Why is it that the people who generated the work don't have rights?</li>
+ <li id="l-687" _a="StoneCypher"><a href="#l-687">#</a> [21:25] &lt;StoneCypher&gt; You say &quot;do I have the right to watch this&quot;</li>
+ <li id="l-688" _a="StoneCypher"><a href="#l-688">#</a> [21:26] &lt;StoneCypher&gt; caveat emptor, dude.  just pay attention.  most vendors have woken up.</li>
+ <li id="l-689" _a="TabAtkins" _r="StoneCypher"><a href="#l-689">#</a> [21:26] &lt;TabAtkins&gt; StoneCypher: Why is it that the IKEA store that generated my shelf don't have rights?</li>
+ <li id="l-690" _a="zewt" _r="tip"><a href="#l-690">#</a> [21:26] &lt;zewt&gt; tip: learning to state your viewpoint in less than three pages increases the odds of people understanding it</li>
+ <li id="l-691" _a="StoneCypher"><a href="#l-691">#</a> [21:26] &lt;StoneCypher&gt; there's a really, really different business landscape out there for DRM protected things and unprotected things</li>
+ <li id="l-692" _a="StoneCypher"><a href="#l-692">#</a> [21:26] &lt;StoneCypher&gt; holding vendors will let you try things in DRM that they won't let you try open, or which they want radically different prices for, often which make the endeavor uncompletable</li>
+ <li id="l-693" _a="zewt" _r="read"><a href="#l-693">#</a> [21:26] &lt;zewt&gt; read: &quot;we've lost the DRM war, give it up, you've lost your rights and they're not coming back&quot;</li>
+ <li id="l-694" _a="Hixie" _r="StoneCypher"><a href="#l-694">#</a> [21:27] &lt;Hixie&gt; StoneCypher: i'm still just asking a simple question, whether or not i have the right to watch content that i purchased, not licensed, and that has no drm. A book, on paper, for example. Or a star trek episode, on a laser disc.</li>
+ <li id="l-695" _a="TabAtkins" _r="Personally"><a href="#l-695">#</a> [21:27] &lt;TabAtkins&gt; Personally, I just love the mental disconnect where people insist that copyright infringment is &quot;just like stealing!&quot; but then claim that IP is magical in all sorts of ways that physical stuff isn't.</li>
+ <li id="l-696" _a="Hixie" _r="StoneCypher"><a href="#l-696">#</a> [21:27] &lt;Hixie&gt; StoneCypher: (legal right)</li>
+ <li id="l-697" _a="StoneCypher" _r="Hixie"><a href="#l-697">#</a> [21:27] &lt;StoneCypher&gt; Hixie: yes, and I've answered you several times.  &quot;I don't believe that question can be answered in the general.  I believe that that's a contextual issue which has to do with the choices the publisher made at the time of sale.&quot;</li>
+ <li id="l-698" _a="StoneCypher"><a href="#l-698">#</a> [21:27] &lt;StoneCypher&gt; it's like asking if you have the right to knock out a wall</li>
+ <li id="l-699" _a="TabAtkins" _r="StoneCypher"><a href="#l-699">#</a> [21:27] &lt;TabAtkins&gt; StoneCypher: Why is that question answereable in general for shelves?</li>
+ <li id="l-700" _a="TabAtkins"><a href="#l-700">#</a> [21:27] &lt;TabAtkins&gt; But not for movies?</li>
+ <li id="l-701" _a="StoneCypher" _r="depends"><a href="#l-701">#</a> [21:27] &lt;StoneCypher&gt; depends: do you rent or own?  is it a landmark?  is it safe?  et cetera.</li>
+ <li id="l-702" _a="StoneCypher"><a href="#l-702">#</a> [21:28] &lt;StoneCypher&gt; not all questions have simple answerws.</li>
+ <li id="l-703" _a="Hixie" _r="StoneCypher"><a href="#l-703">#</a> [21:28] &lt;Hixie&gt; StoneCypher: ok let's ask a non-general question. If I were to buy (not license) a laserdisc of a star trek episode, would i legally be allowed to watch it?</li>
+ <li id="l-704" _a="TabAtkins"><a href="#l-704">#</a> [21:28] &lt;TabAtkins&gt; I buy a shelf from Ikea.  If my shelf was a movie, IKEA apparently has the right to control what I put on it.</li>
+ <li id="l-705" _a="StoneCypher" _r="Hixie"><a href="#l-705">#</a> [21:28] &lt;StoneCypher&gt; Hixie: i already answered that.  &quot;I don't know what Paramount's policies are.  Probably.&quot;</li>
+ <li id="l-706" _a="StoneCypher"><a href="#l-706">#</a> [21:28] &lt;StoneCypher&gt; Most movies these days, yes</li>
+ <li id="l-707" _a="StoneCypher"><a href="#l-707">#</a> [21:28] &lt;StoneCypher&gt; it says on the box</li>
+ <li id="l-708" _a="StoneCypher"><a href="#l-708">#</a> [21:28] &lt;StoneCypher&gt; it says on the amazon page.</li>
+ <li id="l-709" _a="StoneCypher"><a href="#l-709">#</a> [21:29] &lt;StoneCypher&gt; some of them even brag about it on the commercials these days.</li>
+ <li id="l-710" _a="TabAtkins" _r="StoneCypher"><a href="#l-710">#</a> [21:29] &lt;TabAtkins&gt; StoneCypher: Do you realize how insane your position is?  I buy things, but I have to be intimiately familiar with Paramount's policies before I know whether I can *legally watch them*?</li>
+ <li id="l-711" _a="Hixie" _r="StoneCypher"><a href="#l-711">#</a> [21:29] &lt;Hixie&gt; StoneCypher: so to clarify, you assert that paramount have a legal right to decide whether i can legally watch a laserdisc of a star trek episode that i purchased?</li>
+ <li id="l-712" _a="zewt"><a href="#l-712">#</a> [21:29] &lt;zewt&gt; (you also don't convince people of your position by hedging on simple questions like this; if you buy a movie, you have the right to watch it. period)</li>
+ <li id="l-713" _a="StoneCypher" _r="Hixie"><a href="#l-713">#</a> [21:29] &lt;StoneCypher&gt; Hixie: I assert 1) that that is a license, not a purchase; 2) that what rights you have are clearly written on the box, and 3) if you don't like it, vote with your dollars, not by crippling the web</li>
+ <li id="l-714" _a="StoneCypher"><a href="#l-714">#</a> [21:30] &lt;StoneCypher&gt; you know what the rights are before the purchase</li>
+ <li id="l-715" _a="StoneCypher"><a href="#l-715">#</a> [21:30] &lt;StoneCypher&gt; that's good enough</li>
+ <li id="l-716" _a="Hixie" _r="StoneCypher"><a href="#l-716">#</a> [21:30] &lt;Hixie&gt; StoneCypher: ok. since you are now making an assertion, please prove it.</li>
+ <li id="l-717" _a="StoneCypher"><a href="#l-717">#</a> [21:30] &lt;StoneCypher&gt; oy.</li>
+ <li id="l-718" _a="StoneCypher" _r="no"><a href="#l-718">#</a> [21:30] &lt;StoneCypher&gt; no, answering your question is not an assertion</li>
+ <li id="l-719" _a="StoneCypher"><a href="#l-719">#</a> [21:30] &lt;StoneCypher&gt; and when TabAtkins gets held to that standard, so may i be</li>
+ <li id="l-720" _a="TabAtkins" _r="Haha"><a href="#l-720">#</a> [21:30] &lt;TabAtkins&gt; Haha, sure.</li>
+ <li id="l-721" _a="StoneCypher"><a href="#l-721">#</a> [21:30] &lt;StoneCypher&gt; i don't understand why you lot are so hostile</li>
+ <li id="l-722" _a="StoneCypher"><a href="#l-722">#</a> [21:30] &lt;StoneCypher&gt; i just asked you to explain your position</li>
+ <li id="l-723" _a="StoneCypher"><a href="#l-723">#</a> [21:30] &lt;StoneCypher&gt; i didn't say your position was wrong</li>
+ <li id="l-724" _a="Hixie" _r="StoneCypher"><a href="#l-724">#</a> [21:31] &lt;Hixie&gt; StoneCypher: you said &quot;I assert...&quot;</li>
+ <li id="l-725" _a="Hixie" _r="StoneCypher"><a href="#l-725">#</a> [21:31] &lt;Hixie&gt; StoneCypher: that is not an assertion?</li>
+ <li id="l-726" _a="TabAtkins"><a href="#l-726">#</a> [21:31] &lt;TabAtkins&gt; Because you're holding an insane position, spamming the room with *tons* of text unnecessarily, and being extraordinarily cagey with simple questions.</li>
+ <li id="l-727" _a="StoneCypher"><a href="#l-727">#</a> [21:31] &lt;StoneCypher&gt; oh for christ's sake</li>
+ <li id="l-728" _a="StoneCypher"><a href="#l-728">#</a> [21:31] &lt;StoneCypher&gt; i was parroting you for emphasis.</li>
+ <li id="l-729" _a="StoneCypher"><a href="#l-729">#</a> [21:31] &lt;StoneCypher&gt; you're being obstinant</li>
+ <li id="l-730" _a="Hixie"><a href="#l-730">#</a> [21:31] &lt;Hixie&gt; so you don't assert it?</li>
+ <li id="l-731" _a="StoneCypher" _r="TabAtkins"><a href="#l-731">#</a> [21:31] &lt;StoneCypher&gt; TabAtkins: hush</li>
+ <li id="l-732" _a="StoneCypher" _r="Hixie"><a href="#l-732">#</a> [21:31] &lt;StoneCypher&gt; Hixie: stop micro-focussing on non-issues, please.  it doesn't matter.  nobody gets held to proving their claims here.</li>
+ <li id="l-733" _a="StoneCypher" _r="Hixie"><a href="#l-733">#</a> [21:32] &lt;StoneCypher&gt; Hixie: you're responding to &quot;explain your position&quot; with &quot;no you explain yours&quot;</li>
+ <li id="l-734" _a="StoneCypher"><a href="#l-734">#</a> [21:32] &lt;StoneCypher&gt; you know perfectly well what that means.</li>
+ <li id="l-735" _a="zewt"><a href="#l-735">#</a> [21:32] &lt;zewt&gt; zzz</li>
+ <li id="l-736" _a="StoneCypher" _r="Hixie"><a href="#l-736">#</a> [21:32] &lt;StoneCypher&gt; Hixie: the fact of the matter is simple: you lot are debating whether a tool should be available to people who want to build things using it</li>
+ <li id="l-737" _a="Hixie" _r="StoneCypher"><a href="#l-737">#</a> [21:33] &lt;Hixie&gt; StoneCypher: when i ask you concrete questions, you say &quot;stop micro-focussing on non-issues&quot;. When I ask you general question, you say &quot;I don't believe that question can be answered in the general&quot;.</li>
+ <li id="l-738" _a="Hixie"><a href="#l-738">#</a> [21:33] &lt;Hixie&gt; i'm not debating anything currently</li>
+ <li id="l-739" _a="StoneCypher" _r="Hixie"><a href="#l-739">#</a> [21:33] &lt;StoneCypher&gt; Hixie: and to shoot it down there are these claims being made about rights, morals and ethics which do not hold up to even basic request for explanation</li>
+ <li id="l-740" _a="StoneCypher"><a href="#l-740">#</a> [21:33] &lt;StoneCypher&gt; that is frankly dishonest</li>
+ <li id="l-741" _a="Hixie"><a href="#l-741">#</a> [21:33] &lt;Hixie&gt; i'm just trying to ask you questions to see what you believe the law is</li>
+ <li id="l-742" _a="StoneCypher"><a href="#l-742">#</a> [21:33] &lt;StoneCypher&gt; you're cutting away 80% of the answer</li>
+ <li id="l-743" _a="StoneCypher"><a href="#l-743">#</a> [21:33] &lt;StoneCypher&gt; to make it look like the answer wasn't there</li>
+ <li id="l-744" _a="StoneCypher"><a href="#l-744">#</a> [21:33] &lt;StoneCypher&gt; i am disappointed in you.</li>
+ <li id="l-745" _a="Ms2ger"><a href="#l-745">#</a> [21:33] &lt;Ms2ger&gt; Oh no!</li>
+ <li id="l-746" _a="jgraham"><a href="#l-746">#</a> [21:33] &lt;jgraham&gt; I'm going to have to use /ignore, sorry</li>
+ <li id="l-747" _a="Hixie"><a href="#l-747">#</a> [21:33] &lt;Hixie&gt; let me know when you're willing to answer my questions :-)</li>
+ <li id="l-748" _a="StoneCypher"><a href="#l-748">#</a> [21:34] &lt;StoneCypher&gt; i did.  repeatedly.</li>
+ <li id="l-749" _a="TabAtkins"><a href="#l-749">#</a> [21:34] &lt;TabAtkins&gt; Me too, jgraham .</li>
+ <li id="l-750" _a="StoneCypher"><a href="#l-750">#</a> [21:34] &lt;StoneCypher&gt; here's what i actually said</li>
+ <li id="l-751" _a="StoneCypher"><a href="#l-751">#</a> [21:34] &lt;StoneCypher&gt; [16:19] &lt;StoneCypher&gt; Hixie: yes, and I've answered you several times.  &quot;I don't believe that question can be answered in the general.  I believe that that's a contextual issue which has to do with the choices the publisher made at the time of sale.&quot;</li>
+ <li id="l-752" _a="StoneCypher"><a href="#l-752">#</a> [21:34] &lt;StoneCypher&gt; that isn't what you claim i said at all.</li>
+ <li id="l-753" _a="StoneCypher"><a href="#l-753">#</a> [21:34] &lt;StoneCypher&gt; i was repeatedly very clear.  &quot;the answer to that question hinges on the specific sale.&quot;</li>
+ <li id="l-754" _a="Hixie"><a href="#l-754">#</a> [21:34] &lt;Hixie&gt; &quot;I don't believe that question can be answered&quot; isn't an answer, it's specifically a non-answer.</li>
+ <li id="l-755" _a="Hixie"><a href="#l-755">#</a> [21:34] &lt;Hixie&gt; when i asked abotu a specific sale, you told me it wasn't a sale. also not an answer.</li>
+ <li id="l-756" _a="StoneCypher" _r="actually"><a href="#l-756">#</a> [21:35] &lt;StoneCypher&gt; actually, it's one sentence from the middle of a valid answer that you're cherry picking in the fashion of a bad politically active newscaster.</li>
+ <li id="l-757" _a="StoneCypher"><a href="#l-757">#</a> [21:35] &lt;StoneCypher&gt; this is what i really said: [16:19] &lt;StoneCypher&gt; Hixie: yes, and I've answered you several times.  &quot;I don't believe that question can be answered in the general.  I believe that that's a contextual issue which has to do with the choices the publisher made at the time of sale.&quot;</li>
+ <li id="l-758" _a="StoneCypher"><a href="#l-758">#</a> [21:35] &lt;StoneCypher&gt; that is not what you're currently claiming.</li>
+ <li id="l-759" _a="StoneCypher"><a href="#l-759">#</a> [21:35] &lt;StoneCypher&gt; this is flat out dishonesty.</li>
+ <li id="l-760" _a="WeirdAl"><a href="#l-760">#</a> [21:35] * WeirdAl snores</li>
+ <li id="l-761" _a="Hixie" _r="StoneCypher"><a href="#l-761">#</a> [21:35] &lt;Hixie&gt; StoneCypher: you said it was too general and wanted a specific, i gave you a specific and you said my specific was wrong.</li>
+ <li id="l-762" _a="StoneCypher"><a href="#l-762">#</a> [21:35] &lt;StoneCypher&gt; that is not correct.</li>
+ <li id="l-763" _a="Hixie" _r="&lt;StoneCypher&gt"><a href="#l-763">#</a> [21:35] &lt;Hixie&gt; &lt;StoneCypher&gt; Hixie: I assert 1) that that is a license, not a purchase</li>
+ <li id="l-764" _a="Hixie" _r="&lt;StoneCypher&gt"><a href="#l-764">#</a> [21:36] &lt;Hixie&gt; &lt;StoneCypher&gt; no, answering your question is not an assertion</li>
+ <li id="l-765" _a="StoneCypher"><a href="#l-765">#</a> [21:36] * StoneCypher sighs</li>
+ <li id="l-766" _a="StoneCypher"><a href="#l-766">#</a> [21:36] &lt;StoneCypher&gt; keep editing it down to bare twigs to hide the pieces you want to pretend aren't there</li>
+ <li id="l-767" _a="Hixie"><a href="#l-767">#</a> [21:36] &lt;Hixie&gt; i'm happy to start over if you like</li>
+ <li id="l-768" _a="StoneCypher"><a href="#l-768">#</a> [21:36] &lt;StoneCypher&gt; why bother, you'll just do the same thing</li>
+ <li id="l-769" _a="WeirdAl"><a href="#l-769">#</a> [21:36] &lt;WeirdAl&gt; starting over might be best for both</li>
+ <li id="l-770" _a="zewt" _r="StoneCypher"><a href="#l-770">#</a> [21:36] &lt;zewt&gt; StoneCypher: don't /msg me; not interested</li>
+ <li id="l-771" _a="StoneCypher" _r="WeirdAl"><a href="#l-771">#</a> [21:36] &lt;StoneCypher&gt; WeirdAl: meta isn't helpful.</li>
+ <li id="l-772" _a="WeirdAl"><a href="#l-772">#</a> [21:36] &lt;WeirdAl&gt; neither is stubbornness :)</li>
+ <li id="l-773" _a="WeirdAl"><a href="#l-773">#</a> [21:37] &lt;WeirdAl&gt; take a break, try again</li>
+ <li id="l-774" _a="StoneCypher" _r="Hixie"><a href="#l-774">#</a> [21:37] &lt;StoneCypher&gt; Hixie: i gave you answers in four different fashions.  you're pretending none are there.  i responded to your open cases; i responded to your specific cases.  i gave you an answer by metaphor with buildings, and i answered flat out.</li>
+ <li id="l-775" _a="Hixie" _r="StoneCypher"><a href="#l-775">#</a> [21:37] &lt;Hixie&gt; StoneCypher: if i buy a laserdisc of a star trek episode, can i legally watch it?</li>
+ <li id="l-776" _a="Hixie" _r="StoneCypher"><a href="#l-776">#</a> [21:38] &lt;Hixie&gt; StoneCypher: not a license, a purchase</li>
+ <li id="l-777" _a="StoneCypher"><a href="#l-777">#</a> [21:38] &lt;StoneCypher&gt; for example, when you asked me about paramount on laserdisc, i responded &quot;i don't know paramount's policies; probably.&quot;  that's a clear indication that i find that to be a sensible specific case of the question.</li>
+ <li id="l-778" _a="StoneCypher"><a href="#l-778">#</a> [21:38] &lt;StoneCypher&gt; dude</li>
+ <li id="l-779" _a="StoneCypher"><a href="#l-779">#</a> [21:38] &lt;StoneCypher&gt; why do you keep asking that</li>
+ <li id="l-780" _a="StoneCypher"><a href="#l-780">#</a> [21:38] &lt;StoneCypher&gt; i've already answered three times</li>
+ <li id="l-781" _a="StoneCypher"><a href="#l-781">#</a> [21:38] &lt;StoneCypher&gt; &quot;i don't know paramount's policies; probably&quot;</li>
+ <li id="l-782" _a="StoneCypher"><a href="#l-782">#</a> [21:38] &lt;StoneCypher&gt; what part of that isn't an answer, to you</li>
+ <li id="l-783" _a="Hixie"><a href="#l-783">#</a> [21:38] &lt;Hixie&gt; you said that their policies only applied to licensing the content, not purchasing</li>
+ <li id="l-784" _a="StoneCypher"><a href="#l-784">#</a> [21:38] &lt;StoneCypher&gt; that's close to what i said</li>
+ <li id="l-785" _a="Hixie"><a href="#l-785">#</a> [21:38] &lt;Hixie&gt; you think it applies to puchasing also?</li>
+ <li id="l-786" _a="StoneCypher"><a href="#l-786">#</a> [21:38] &lt;StoneCypher&gt; what i actually said was i believe that paramount doesn't offer star trek for purchase</li>
+ <li id="l-787" _a="StoneCypher"><a href="#l-787">#</a> [21:38] &lt;StoneCypher&gt; purchase means you can re-sell</li>
+ <li id="l-788" _a="TabAtkins"><a href="#l-788">#</a> [21:39] &lt;TabAtkins&gt; I... I *am* allowed to resell a star trek dvd.</li>
+ <li id="l-789" _a="StoneCypher"><a href="#l-789">#</a> [21:39] &lt;StoneCypher&gt; it's what you do when you're getting stock footage</li>
+ <li id="l-790" _a="StoneCypher" _r="TabAtkins"><a href="#l-790">#</a> [21:39] &lt;StoneCypher&gt; TabAtkins: no, not the object, the license</li>
+ <li id="l-791" _a="StoneCypher" _r="TabAtkins"><a href="#l-791">#</a> [21:39] &lt;StoneCypher&gt; TabAtkins: like you could make your own star trek dvd series and put them in best buy</li>
+ <li id="l-792" _a="StoneCypher"><a href="#l-792">#</a> [21:39] &lt;StoneCypher&gt; and as far as i know paramount doesn't offer that for star trek</li>
+ <li id="l-793" _a="TabAtkins"><a href="#l-793">#</a> [21:39] &lt;TabAtkins&gt; Bwuh?  what are you talking about now?</li>
+ <li id="l-794" _a="StoneCypher"><a href="#l-794">#</a> [21:39] &lt;StoneCypher&gt; it seems very unlikely</li>
+ <li id="l-795" _a="StoneCypher"><a href="#l-795">#</a> [21:39] &lt;StoneCypher&gt; ugh</li>
+ <li id="l-796" _a="TabAtkins"><a href="#l-796">#</a> [21:39] &lt;TabAtkins&gt; I don't want the rights to the star trek franchise.</li>
+ <li id="l-797" _a="TabAtkins"><a href="#l-797">#</a> [21:40] &lt;TabAtkins&gt; Hixie's talkinga bout buying a *DVD*. How does movie production enter into things?</li>
+ <li id="l-798" _a="StoneCypher" _r="TabAtkins"><a href="#l-798">#</a> [21:40] &lt;StoneCypher&gt; TabAtkins: nobody said you did.  stop getting confused about who's saying what.  i was talking to hixie and you asked a question.</li>
+ <li id="l-799" _a="StoneCypher"><a href="#l-799">#</a> [21:40] * StoneCypher facepalm</li>
+ <li id="l-800" _a="WeirdAl" _r="OK"><a href="#l-800">#</a> [21:40] &lt;WeirdAl&gt; OK, hold up. What is the ORIGINAL question?</li>
+ <li id="l-801" _a="Hixie"><a href="#l-801">#</a> [21:40] &lt;Hixie&gt; actually i'm talking about buying a laserdisc</li>
+ <li id="l-802" _a="TabAtkins" _r="Hixie"><a href="#l-802">#</a> [21:40] &lt;TabAtkins&gt; Hixie: We'll pretend you're not stuck in the 80s.</li>
+ <li id="l-803" _a="Hixie"><a href="#l-803">#</a> [21:40] &lt;Hixie&gt; (dvds are more complicated because they have drm)</li>
+ <li id="l-804" _a="TabAtkins" _r="Oh"><a href="#l-804">#</a> [21:40] &lt;TabAtkins&gt; Oh, heh, kk.</li>
+ <li id="l-805" _a="TabAtkins"><a href="#l-805">#</a> [21:40] * TabAtkins didn't realize laserdiscs were DRM-less.</li>
+ <li id="l-806" _a="StoneCypher" _r="WeirdAl"><a href="#l-806">#</a> [21:40] &lt;StoneCypher&gt; WeirdAl: why TabAtkins thinks using the DMCA to back up DRM is &quot;*definitely* unethical&quot;</li>
+ <li id="l-807" _a="WeirdAl"><a href="#l-807">#</a> [21:41] &lt;WeirdAl&gt; that's the original question?</li>
+ <li id="l-808" _a="StoneCypher"><a href="#l-808">#</a> [21:41] &lt;StoneCypher&gt; yep</li>
+ <li id="l-809" _a="TabAtkins"><a href="#l-809">#</a> [21:41] &lt;TabAtkins&gt; The answer to which is, apparently, &quot;You weren't buying the rights to the franchise!&quot;</li>
+ <li id="l-810" _a="jgraham"><a href="#l-810">#</a> [21:41] &lt;jgraham&gt; Laserdiscs have natural DRM; no one has the hardware to read them</li>
+ <li id="l-811" _a="WeirdAl"><a href="#l-811">#</a> [21:41] &lt;WeirdAl&gt; bikeshedding!</li>
+ <li id="l-812" _a="WeirdAl"><a href="#l-812">#</a> [21:41] &lt;WeirdAl&gt; this is pointless for the WhatWG discussions</li>
+ <li id="l-813" _a="TabAtkins"><a href="#l-813">#</a> [21:41] &lt;TabAtkins&gt; So back to laserdiscs.</li>
+ <li id="l-814" _a="Hixie" _r="WeirdAl"><a href="#l-814">#</a> [21:41] &lt;Hixie&gt; WeirdAl: the original question is StoneCypher argued that the dmca doesn't reduce one's fair use rights, and i believe that statement is incorrect, because fair use says i'm legally allowed to watch something without drm, but not break drm to watch it, even if i have legally acquired it.</li>
+ <li id="l-815" _a="StoneCypher"><a href="#l-815">#</a> [21:41] &lt;StoneCypher&gt; what?</li>
+ <li id="l-816" _a="StoneCypher"><a href="#l-816">#</a> [21:41] &lt;StoneCypher&gt; i never said that</li>
+ <li id="l-817" _a="WeirdAl"><a href="#l-817">#</a> [21:42] &lt;WeirdAl&gt; we're getting amped up over something not remotely relevant to WHATWG's work :)</li>
+ <li id="l-818" _a="StoneCypher"><a href="#l-818">#</a> [21:42] &lt;StoneCypher&gt; i said the dmca doesn't take away specific fair use exemptions.  that's a *very* different statement.</li>
+ <li id="l-819" _a="TabAtkins" _r="Apologies"><a href="#l-819">#</a> [21:42] &lt;TabAtkins&gt; Apologies; I still have no idea why you brought up the franchise rights in the first place, so I can't really interpret what you actually meant by the statement.</li>
+ <li id="l-820" _a="Hixie" _r="StoneCypher"><a href="#l-820">#</a> [21:43] &lt;Hixie&gt; StoneCypher: the specific fair use exemption i was talking about is &quot;copying the data into my computer's ram to watch it&quot;</li>
+ <li id="l-821" _a="Hixie" _r="StoneCypher"><a href="#l-821">#</a> [21:43] &lt;Hixie&gt; StoneCypher: which the dmca takes away</li>
+ <li id="l-822" _a="StoneCypher"><a href="#l-822">#</a> [21:43] &lt;StoneCypher&gt; that's fair use, not a fair use exception.  quite different.</li>
+ <li id="l-823" _a="Hixie"><a href="#l-823">#</a> [21:43] &lt;Hixie&gt; _O</li>
+ <li id="l-824" _a="StoneCypher"><a href="#l-824">#</a> [21:43] &lt;StoneCypher&gt; a fair use exception is when fair use overrides other usage restrictions, like the criticism, newscasting or satire exceptions.</li>
+ <li id="l-825" _a="Hixie"><a href="#l-825">#</a> [21:43] &lt;Hixie&gt; come again?</li>
+ <li id="l-826" _a="zewt" _r="Hixie"><a href="#l-826">#</a> [21:43] &lt;zewt&gt; Hixie: the original thing he argued was a confused response to a statement he didn't understand</li>
+ <li id="l-827" _a="StoneCypher"><a href="#l-827">#</a> [21:43] &lt;StoneCypher&gt; fair use is when you just leverage your fair use</li>
+ <li id="l-828" _a="TabAtkins"><a href="#l-828">#</a> [21:43] &lt;TabAtkins&gt; If this whole thing turns out to be &quot;I meant something subtly different that makes me technically correct!&quot; I'm going to be pissed.</li>
+ <li id="l-829" _a="jgraham"><a href="#l-829">#</a> [21:43] * jgraham once read a book where a plot point was the ability to pause a laserdisc on an exact frame in a way that isn't possible with VHS. IIRC this was important to one of the characters when consuming pornography. It was a satire of corporatism</li>
+ <li id="l-830" _a="Hixie"><a href="#l-830">#</a> [21:44] &lt;Hixie&gt; oh crap, it's late. i gotta get lunch. bbiab.</li>
+ <li id="l-831" _a="zewt"><a href="#l-831">#</a> [21:44] &lt;zewt&gt; which is that &quot;copy protection&quot; often makes no serious attempt at being technically effective, and only exists for DMCA purposes</li>
+ <li id="l-832" _a="zewt"><a href="#l-832">#</a> [21:45] &lt;zewt&gt; (and tab's statement that that's unethical)</li>
+ <li id="l-833" _a="TabAtkins"><a href="#l-833">#</a> [21:45] &lt;TabAtkins&gt; Sigh. Back to ignoring.  Not worth even trying.</li>
+ <li id="l-834" _a="StoneCypher"><a href="#l-834">#</a> [21:45] &lt;StoneCypher&gt; hooray</li>
+ <li id="l-835" _a="TabAtkins"><a href="#l-835">#</a> [21:47] &lt;TabAtkins&gt; I'm going to assume it was the &quot;I'm correct on a technicality!&quot; defense and be happy.</li>
+ <li id="l-836" _a="ojan_lunch"><a href="#l-836">#</a> [21:47] * ojan_lunch is now known as ojan</li>
+ <li id="l-837" _a="StoneCypher"><a href="#l-837">#</a> [21:47] &lt;StoneCypher&gt; of course you will</li>
+ <li id="l-838" _a="StoneCypher"><a href="#l-838">#</a> [21:47] &lt;StoneCypher&gt; that makes you feel correct without having actually explained yourself in any way</li>
+ <li id="l-839" _a="Ms2ger" _r="Kids"><a href="#l-839">#</a> [21:48] &lt;Ms2ger&gt; Kids, let's stop it here</li>
+ <li id="l-840" _a="WeirdAl" _r="amen"><a href="#l-840">#</a> [21:48] &lt;WeirdAl&gt; amen, Ms2</li>
+ <li id="l-841" _a="StoneCypher" _r="Ms2ger"><a href="#l-841">#</a> [21:48] &lt;StoneCypher&gt; Ms2ger: these are the people who make the recommendations, are they not?</li>
+ <li id="l-842" _a="WeirdAl" _r="Ms2ger"><a href="#l-842">#</a> [21:49] &lt;WeirdAl&gt; Ms2ger: on another note... DOM4</li>
+ <li id="l-843" _a="WeirdAl"><a href="#l-843">#</a> [21:49] &lt;WeirdAl&gt; Andreas gal's domjs project has an interesting idea, leaf nodes.</li>
+ <li id="l-844" _a="WeirdAl" _r="bah"><a href="#l-844">#</a> [21:49] &lt;WeirdAl&gt; bah, &quot;Gal&quot;</li>
+ <li id="l-845" _a="WeirdAl"><a href="#l-845">#</a> [21:50] &lt;WeirdAl&gt; if we split up the Node interface into nodes that could have kids and nodes that couldn't...</li>
+ <li id="l-846" _a="WeirdAl"><a href="#l-846">#</a> [21:50] &lt;WeirdAl&gt; it might mean cleaner code</li>
+ <li id="l-847" _a="Ms2ger"><a href="#l-847">#</a> [21:51] &lt;Ms2ger&gt; How about splitting it up in nodes that can have a parent node, and nodes that can't? :)</li>
+ <li id="l-848" _a="WeirdAl"><a href="#l-848">#</a> [21:51] &lt;WeirdAl&gt; Node would inherit from LeafNode and have all those child-related methods, properties</li>
+ <li id="l-849" _a="TabAtkins" _r="WeirdAl"><a href="#l-849">#</a> [21:51] &lt;TabAtkins&gt; WeirdAl: But all nodes can have children, no?  Or do you mean like text/comment vs element?</li>
+ <li id="l-850" _a="WeirdAl" _r="TabAtkins"><a href="#l-850">#</a> [21:51] &lt;WeirdAl&gt; TabAtkins: exactly on the latter</li>
+ <li id="l-851" _a="TabAtkins"><a href="#l-851">#</a> [21:51] &lt;TabAtkins&gt; kk</li>
+ <li id="l-852" _a="Ms2ger"><a href="#l-852">#</a> [21:51] &lt;Ms2ger&gt; LeafNode from Node, I hope</li>
+ <li id="l-853" _a="WeirdAl" _r="Ms2ger"><a href="#l-853">#</a> [21:52] &lt;WeirdAl&gt; Ms2ger: almost every node can have a parent (Document and DocumentFragment being I believe the exceptions)</li>
+ <li id="l-854" _a="TabAtkins" _r="Ms2ger"><a href="#l-854">#</a> [21:52] &lt;TabAtkins&gt; Ms2ger: Inheritance is dumb.</li>
+ <li id="l-855" _a="Ms2ger"><a href="#l-855">#</a> [21:52] &lt;Ms2ger&gt; (That's the distinction Gecko makes, accidentally)</li>
+ <li id="l-856" _a="WeirdAl" _r="Ms2ger"><a href="#l-856">#</a> [21:52] &lt;WeirdAl&gt; Ms2ger: I recommend the other way because LeafNode wouldn't need .childNodes, .firstChild, etc.</li>
+ <li id="l-857" _a="Ms2ger"><a href="#l-857">#</a> [21:53] &lt;Ms2ger&gt; I dunno if it's worthwhile</li>
+ <li id="l-858" _a="jsbell" _r="zewt"><a href="#l-858">#</a> [21:53] &lt;jsbell&gt; zewt: re: string encoding - when you wrote &quot;If UTF-16 or UTF-32 are supported, decoding to them should return Uint16Array and Uint32Array, respectively&quot; did you mean in addition to e.g. &quot;utf-16le&quot; / &quot;utf-16be&quot; (and, since &quot;utf-16&quot; is an alias for &quot;utf-16le&quot;, implicitly some other way of naming it) ?</li>
+ <li id="l-859" _a="WeirdAl" _r="Ms2ger"><a href="#l-859">#</a> [21:53] &lt;WeirdAl&gt; Ms2ger: it's just a suggestion.  I'm asking for the idea to be considered among the WG, that's all.</li>
+ <li id="l-860" _a="Ms2ger"><a href="#l-860">#</a> [21:54] &lt;Ms2ger&gt; File a bug, please :)</li>
+ <li id="l-861" _a="WeirdAl" _r="hm"><a href="#l-861">#</a> [21:54] &lt;WeirdAl&gt; hm, where?</li>
+ <li id="l-862" _a="TabAtkins"><a href="#l-862">#</a> [21:54] &lt;TabAtkins&gt; w3c bugzilla</li>
+ <li id="l-863" _a="Ms2ger" _r="jsbell"><a href="#l-863">#</a> [21:54] &lt;Ms2ger&gt; jsbell, Make that &quot;If UTF-32 is supported, you're wrong.&quot;</li>
+ <li id="l-864" _a="Ms2ger" _r="WeirdAl"><a href="#l-864">#</a> [21:54] &lt;Ms2ger&gt; WeirdAl, link at the top of the spec, under &quot;participate&quot;</li>
+ <li id="l-865" _a="WeirdAl"><a href="#l-865">#</a> [21:55] &lt;WeirdAl&gt; ok</li>
+ <li id="l-866" _a="zewt" _r="jsbell"><a href="#l-866">#</a> [21:55] &lt;zewt&gt; jsbell: no, I mean that if you encode(&quot;foo&quot;, &quot;utf-16-whatever&quot;), it should return a Uint16Array, not a Uint8Array</li>
+ <li id="l-867" _a="zewt"><a href="#l-867">#</a> [21:55] &lt;zewt&gt; rather than always returning a Uint8Array</li>
+ <li id="l-868" _a="aklein"><a href="#l-868">#</a> [21:56] &lt;aklein&gt; anyone familiar enough with HTML parsing to know if there's a case where the parser could associate a form control with a &lt;form&gt; that comes _after_ it in tree order?</li>
+ <li id="l-869" _a="jsbell" _r="zewt"><a href="#l-869">#</a> [21:56] &lt;jsbell&gt; zewt: hrm. My initial reaction is that would either that would expose the platform's endianness and make the -whatever redundant, or be somewhat useless.</li>
+ <li id="l-870" _a="zewt"><a href="#l-870">#</a> [21:56] &lt;zewt&gt; hmm</li>
+ <li id="l-871" _a="Ms2ger" _r="aklein"><a href="#l-871">#</a> [21:57] &lt;Ms2ger&gt; aklein, how about if you run script and that moves the form around?</li>
+ <li id="l-872"><a href="#l-872">#</a> [21:57] * Quits: othermaciej (~mjs@17.245.90.69) (Quit: othermaciej)</li>
+ <li id="l-873" _a="jsbell"><a href="#l-873">#</a> [21:57] &lt;jsbell&gt; e.g. if encode(&quot;\uFFFD&quot;, &quot;UTF-16&quot;).view[1] == 0xFFFD</li>
+ <li id="l-874" _a="zewt" _r="yuck"><a href="#l-874">#</a> [21:57] &lt;zewt&gt; yuck, are there only native-endian views for 16-bit/32-bit values?</li>
+ <li id="l-875" _a="jsbell"><a href="#l-875">#</a> [21:57] &lt;jsbell&gt; if true, then the underlying buffer is platform-endian</li>
+ <li id="l-876"><a href="#l-876">#</a> [21:57] * Quits: sicking (~chatzilla@adsl-63-204-27-202.dsl.snfc21.pacbell.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-877" _a="zewt"><a href="#l-877">#</a> [21:57] &lt;zewt&gt; there should be LE and BE views and no &quot;native&quot; type at all</li>
+ <li id="l-878" _a="jsbell"><a href="#l-878">#</a> [21:57] &lt;jsbell&gt; if platform dependent, that statement is weird</li>
+ <li id="l-879" _a="aklein" _r="Ms2ger"><a href="#l-879">#</a> [21:57] &lt;aklein&gt; Ms2ger: hmm, that probably depends on the bugs of the particular browser :). I think Gecko resets the form owner in that case, but I don't believe WebKit does.</li>
+ <li id="l-880" _a="Ms2ger"><a href="#l-880">#</a> [21:58] &lt;Ms2ger&gt; There will be a &quot;native&quot; type that's actually LE</li>
+ <li id="l-881" _a="jsbell"><a href="#l-881">#</a> [21:58] &lt;jsbell&gt; DataView lets you specify endianness in the getXXX() functions</li>
+ <li id="l-882" _a="zewt" _r="encode(&quot;foo&quot;"><a href="#l-882">#</a> [21:58] &lt;zewt&gt; encode(&quot;foo&quot;, &quot;UTF-16LE&quot;) should return a LittleEndianUint16Array, but on a quick look, such a thing doesn't exist</li>
+ <li id="l-883" _a="Ms2ger" _r="aklein"><a href="#l-883">#</a> [21:58] &lt;Ms2ger&gt; aklein, what does the spec say? :)</li>
+ <li id="l-884" _a="Ms2ger"><a href="#l-884">#</a> [21:58] &lt;Ms2ger&gt; And can you submit a test?</li>
+ <li id="l-885" _a="zewt"><a href="#l-885">#</a> [21:58] &lt;zewt&gt; (on a quick search, the only place I see mentions of endianness in the typed array spec is inside DataView)</li>
+ <li id="l-886" _a="jsbell" _r="right"><a href="#l-886">#</a> [21:59] &lt;jsbell&gt; right; the rest of the spec is intentionally endianness agnostic</li>
+ <li id="l-887" _a="zewt"><a href="#l-887">#</a> [21:59] &lt;zewt&gt; what does that mean? heh</li>
+ <li id="l-888"><a href="#l-888">#</a> [21:59] * Quits: jonlee (~jonlee@2620:149:4:1b01:68e0:5e1c:f833:393f) (Quit: jonlee)</li>
+ <li id="l-889" _a="jsbell"><a href="#l-889">#</a> [21:59] &lt;jsbell&gt; it means on a BE machine you can shove the typed array into your GPU without byte twiddling so your WebGL game is fast</li>
+ <li id="l-890" _a="zewt"><a href="#l-890">#</a> [21:59] &lt;zewt&gt; you must specify whether Uint16Array treats the underlying data as big or little endian (or massive compatibility problems in the future)</li>
+ <li id="l-891" _a="aklein" _r="Ms2ger"><a href="#l-891">#</a> [22:00] &lt;aklein&gt; Ms2ger: I actually filed a bug about _that_ case (removing a form) yesterday: <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=16394">https://www.w3.org/Bugs/Public/show_bug.cgi?id=16394</a></li>
+ <li id="l-892" _a="zewt"><a href="#l-892">#</a> [22:00] &lt;zewt&gt; and that aside, surely there needs to be BE and LE versions of each of the 16, 32 and 64-bit integer view types</li>
+ <li id="l-893" _a="zewt"><a href="#l-893">#</a> [22:00] &lt;zewt&gt; (for obvious reasons, like reading an array of little endian 32-bit numbers from a data file)</li>
+ <li id="l-894" _a="Ms2ger" _r="aklein"><a href="#l-894">#</a> [22:01] &lt;Ms2ger&gt; aklein, and how about if you move the form control?</li>
+ <li id="l-895" _a="jsbell"><a href="#l-895">#</a> [22:01] &lt;jsbell&gt; for parsing data files, you use DataView and specify endianness</li>
+ <li id="l-896" _a="aklein" _r="Ms2ger"><a href="#l-896">#</a> [22:01] &lt;aklein&gt; Ms2ger: that's already mostly specced: moving the form control or its ancestor change always causes a reset.</li>
+ <li id="l-897" _a="zewt"><a href="#l-897">#</a> [22:01] &lt;zewt&gt; what? no</li>
+ <li id="l-898" _a="jsbell"><a href="#l-898">#</a> [22:01] &lt;jsbell&gt; (and a read is either a no-op or it does byte swapping)</li>
+ <li id="l-899" _a="gsnedders" _r="zewt"><a href="#l-899">#</a> [22:01] &lt;gsnedders&gt; zewt: There were huge long arguments about this before on the webgl mailing list.</li>
+ <li id="l-900" _a="zewt"><a href="#l-900">#</a> [22:02] &lt;zewt&gt; you *can* use it, but if you have a big array of input data you want to deal with, that's what views are for</li>
+ <li id="l-901" _a="gsnedders"><a href="#l-901">#</a> [22:02] &lt;gsnedders&gt; There again, almost all browsers are on little-endian hardware nowadays.</li>
+ <li id="l-902" _a="zewt" _r="gsnedders"><a href="#l-902">#</a> [22:02] &lt;zewt&gt; gsnedders: i don't have much trust in results on that list from before I was there, so let's have it again :)</li>
+ <li id="l-903"><a href="#l-903">#</a> [22:02] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-904" _a="jgraham" _r="gsnedders"><a href="#l-904">#</a> [22:02] &lt;jgraham&gt; gsnedders: Not all though</li>
+ <li id="l-905" _a="jsbell"><a href="#l-905">#</a> [22:02] &lt;jsbell&gt; the discussion (trying to dig up a link) ended up with e.g. people making their XHR calls to fetch data specifying the machine endianness so the right version could be served</li>
+ <li id="l-906" _a="jgraham" _r="Or"><a href="#l-906">#</a> [22:02] &lt;jgraham&gt; Or, at least if the MIPS variants are BE</li>
+ <li id="l-907" _a="jsbell"><a href="#l-907">#</a> [22:03] &lt;jsbell&gt; no point in having this discussion without kbr...</li>
+ <li id="l-908" _a="zewt"><a href="#l-908">#</a> [22:03] &lt;zewt&gt; there's a lot of stuff in webgl that violates web api principles; those need to be aligned when those APIs start leaking out of webgl and turn into infrastructure (as typed arrays have)</li>
+ <li id="l-909" _a="Ms2ger" _r="WeirdAl"><a href="#l-909">#</a> [22:04] &lt;Ms2ger&gt; WeirdAl, thx</li>
+ <li id="l-910" _a="WeirdAl"><a href="#l-910">#</a> [22:04] &lt;WeirdAl&gt; yw</li>
+ <li id="l-911" _a="Ms2ger" _r="zewt"><a href="#l-911">#</a> [22:04] &lt;Ms2ger&gt; zewt, you mean, &quot;webgl&quot;</li>
+ <li id="l-912" _a="zewt"><a href="#l-912">#</a> [22:04] &lt;zewt&gt; er?</li>
+ <li id="l-913" _a="Ms2ger"><a href="#l-913">#</a> [22:04] &lt;Ms2ger&gt; &quot;a lot of stuff in webgl that violates web api principles&quot;</li>
+ <li id="l-914" _a="zewt" _r="jsbell"><a href="#l-914">#</a> [22:05] &lt;zewt&gt; jsbell: the ugly endianness thing aside, adding endian-specific view types should really be completely noncontroversial</li>
+ <li id="l-915" _a="gsnedders" _r="jgraham"><a href="#l-915">#</a> [22:05] &lt;gsnedders&gt; jgraham: Not all, no. MIPS is mostly LE nowadays.</li>
+ <li id="l-916" _a="zewt"><a href="#l-916">#</a> [22:05] &lt;zewt&gt; the ugly unspecified-endianness thing, I mean</li>
+ <li id="l-917" _a="gsnedders"><a href="#l-917">#</a> [22:05] &lt;gsnedders&gt; Probably what makes sense is to spec typed arrays to be LE, even though it'll hurt perf on devices where perf matters most</li>
+ <li id="l-918" _a="jsbell" _r="FWIW"><a href="#l-918">#</a> [22:05] &lt;jsbell&gt; FWIW, relevant reference post on the mailing (which apparently is mostly quotes me for some reason): <a href="http://www.khronos.org/webgl/public-mailing-list/archives/1009/msg00251.html">http://www.khronos.org/webgl/public-mailing-list/archives/1009/msg00251.html</a></li>
+ <li id="l-919" _a="zewt" _r="gsnedders"><a href="#l-919">#</a> [22:06] &lt;zewt&gt; gsnedders: that's what'll end up happening anyway</li>
+ <li id="l-920" _a="gsnedders" _r="zewt"><a href="#l-920">#</a> [22:06] &lt;gsnedders&gt; zewt: Indeed.</li>
+ <li id="l-921" _a="zewt"><a href="#l-921">#</a> [22:06] &lt;zewt&gt; the &quot;make them machine-endian-specific as an optimization&quot; will never work in practice</li>
+ <li id="l-922" _a="gsnedders"><a href="#l-922">#</a> [22:06] * gsnedders should try some WebGL demos on BE hardware…</li>
+ <li id="l-923"><a href="#l-923">#</a> [22:07] * Joins: jonlee (~jonlee@2620:149:4:1b01:9ce2:9422:7e5d:d13d)</li>
+ <li id="l-924" _a="jsbell"><a href="#l-924">#</a> [22:07] &lt;jsbell&gt; at any rate, this clears my question re: the encoding thread. The underlying array buffer's byte order should be le/be depending on the selected encoding. The view type is TBD.</li>
+ <li id="l-925" _a="zewt"><a href="#l-925">#</a> [22:07] &lt;zewt&gt; right</li>
+ <li id="l-926" _a="zewt"><a href="#l-926">#</a> [22:08] &lt;zewt&gt; agree with that?</li>
+ <li id="l-927"><a href="#l-927">#</a> [22:09] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-928" _a="jsbell"><a href="#l-928">#</a> [22:09] &lt;jsbell&gt; yes</li>
+ <li id="l-929" _a="jgraham"><a href="#l-929">#</a> [22:09] &lt;jgraham&gt; Yeah it only makes sense as an optimisation if you know that you are specifically targetting BE hardware. Which you hopefully never know on the web</li>
+ <li id="l-930" _a="gsnedders"><a href="#l-930">#</a> [22:09] &lt;gsnedders&gt; Also I'm sure annevk would argue it's more fingerprinting surface</li>
+ <li id="l-931" _a="zewt" _r="jgraham"><a href="#l-931">#</a> [22:10] &lt;zewt&gt; jgraham: it would make sense as an optimization if you're creating data in JS to send to WebGL, both your CPU and your GPU are big-endian, and no other data fiddling has to be done by the drivers anyway</li>
+ <li id="l-932"><a href="#l-932">#</a> [22:10] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-933" _a="zewt"><a href="#l-933">#</a> [22:10] &lt;zewt&gt; those are fairly unlikely in combination, though</li>
+ <li id="l-934" _a="jgraham"><a href="#l-934">#</a> [22:10] &lt;jgraham&gt; Yeah I guess</li>
+ <li id="l-935" _a="jsbell"><a href="#l-935">#</a> [22:10] &lt;jsbell&gt; Even if we had Uint16LE/BE views I'm not sure those should be the view type returned, though. Seems a bit surprising. But I can be swayed.</li>
+ <li id="l-936" _a="zewt"><a href="#l-936">#</a> [22:10] &lt;zewt&gt; thought you said you agreed :)</li>
+ <li id="l-937" _a="jsbell"><a href="#l-937">#</a> [22:11] &lt;jsbell&gt; agreed the view type was TBD. That includes Uint8Array as a possibility :)</li>
+ <li id="l-938" _a="jgraham" _r="gsnedders"><a href="#l-938">#</a> [22:11] &lt;jgraham&gt; gsnedders: Well you if you are one of the 3 people running a BE device it is quite a useful piece of fingerprinting data :)</li>
+ <li id="l-939" _a="zewt"><a href="#l-939">#</a> [22:11] &lt;zewt&gt; seems the obvious thing to do when you're converting to a wide encoding</li>
+ <li id="l-940" _a="jgraham"><a href="#l-940">#</a> [22:11] &lt;jgraham&gt; Well useful to someone</li>
+ <li id="l-941" _a="Ms2ger" _r="jgraham"><a href="#l-941">#</a> [22:11] &lt;Ms2ger&gt; jgraham, we're waiting for operamemes.tumblr.com</li>
+ <li id="l-942" _a="Hixie"><a href="#l-942">#</a> [22:12] &lt;Hixie&gt; anyone want to answer some questions about HTML for a podcast on TheServerSide.com?</li>
+ <li id="l-943" _a="jgraham" _r="Ms2ger"><a href="#l-943">#</a> [22:13] &lt;jgraham&gt; Ms2ger: And you think I am the right person to start that why?</li>
+ <li id="l-944" _a="Ms2ger"><a href="#l-944">#</a> [22:14] &lt;Ms2ger&gt; You were the Opera person who last said something in this room</li>
+ <li id="l-945" _a="Ms2ger" _r="Also"><a href="#l-945">#</a> [22:14] &lt;Ms2ger&gt; Also, people are wondering if Opera had it first</li>
+ <li id="l-946"><a href="#l-946">#</a> [22:14] * Quits: jonlee (~jonlee@2620:149:4:1b01:9ce2:9422:7e5d:d13d) (Remote host closed the connection)</li>
+ <li id="l-947" _a="jgraham"><a href="#l-947">#</a> [22:14] &lt;jgraham&gt; Heh</li>
+ <li id="l-948" _a="jgraham"><a href="#l-948">#</a> [22:14] * jgraham fails to find an Opera devrel person in the room</li>
+ <li id="l-949"><a href="#l-949">#</a> [22:15] * Joins: othermaciej (~mjs@17.244.8.236)</li>
+ <li id="l-950" _a="jgraham"><a href="#l-950">#</a> [22:16] &lt;jgraham&gt; So I will point you at gsnedders. He is a student and therefore the core audience of internet memes</li>
+ <li id="l-951"><a href="#l-951">#</a> [22:16] * Joins: jonlee (~jonlee@2620:149:4:1b01:9ce2:9422:7e5d:d13d)</li>
+ <li id="l-952" _a="Ms2ger" _r="aklein"><a href="#l-952">#</a> [22:19] &lt;Ms2ger&gt; aklein, no new memes on webkitmemes today, that's unacceptable!</li>
+ <li id="l-953"><a href="#l-953">#</a> [22:22] * Quits: MacTed (~Thud@63.119.36.36)</li>
+ <li id="l-954" _a="gsnedders" _r="jgraham"><a href="#l-954">#</a> [22:24] &lt;gsnedders&gt; jgraham: I may follow Glasgow University Memes, but not that much else</li>
+ <li id="l-955"><a href="#l-955">#</a> [22:25] * Quits: dbaron (~dbaron@nat/mozilla/x-ntxahojiccbjataa) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-956" _a="Ms2ger"><a href="#l-956">#</a> [22:26] &lt;Ms2ger&gt; <a href="https://fbcdn-sphotos-a.akamaihd.net/hphotos-ak-snc7/s320x320/417831_2857781077365_1044755363_32776894_133982226_n.jpg">https://fbcdn-sphotos-a.akamaihd.net/hphotos-ak-snc7/s320x320/417831_2857781077365_1044755363_32776894_133982226_n.jpg</a></li>
+ <li id="l-957"><a href="#l-957">#</a> [22:26] * Quits: jonlee (~jonlee@2620:149:4:1b01:9ce2:9422:7e5d:d13d) (Quit: jonlee)</li>
+ <li id="l-958"><a href="#l-958">#</a> [22:26] * Joins: dbaron (~dbaron@nat/mozilla/x-pafjowpnjxoclyvc)</li>
+ <li id="l-959"><a href="#l-959">#</a> [22:28] * Joins: jonlee (~jonlee@2620:149:4:1b01:9905:c7f3:47ec:d964)</li>
+ <li id="l-960"><a href="#l-960">#</a> [22:29] * Joins: tomasf (~tom@2002:55e5:dbb7:0:7177:411e:a82a:a1a3)</li>
+ <li id="l-961"><a href="#l-961">#</a> [22:29] * Joins: sicking (~chatzilla@c-174-62-77-22.hsd1.ca.comcast.net)</li>
+ <li id="l-962"><a href="#l-962">#</a> [22:35] * Quits: timmywil (~timmywil@host-68-169-175-226.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-963" _a="Ms2ger"><a href="#l-963">#</a> [22:35] &lt;Ms2ger&gt; If anyone in browser QA wants to feel like it's 2001, <a href="http://www.crownhill.com/">http://www.crownhill.com/</a></li>
+ <li id="l-964" _a="abarth_"><a href="#l-964">#</a> [22:36] * abarth_ is now known as abarth</li>
+ <li id="l-965" _a="TabAtkins"><a href="#l-965">#</a> [22:37] &lt;TabAtkins&gt; yaaaay</li>
+ <li id="l-966" _a="TabAtkins"><a href="#l-966">#</a> [22:37] &lt;TabAtkins&gt; My favorite bar has a site that's roughly as bad.</li>
+ <li id="l-967" _a="TabAtkins"><a href="#l-967">#</a> [22:37] &lt;TabAtkins&gt; I've begged them to let me redesign it for free, but no dice. ;_;</li>
+ <li id="l-968"><a href="#l-968">#</a> [22:40] * Joins: inkbase (inkbase@nat/ibm/x-owxkknwaltrekdws)</li>
+ <li id="l-969" _a="annevk" _r="gsnedders"><a href="#l-969">#</a> [22:42] &lt;annevk&gt; gsnedders: I guess WebGL already made that possible</li>
+ <li id="l-970" _a="annevk" _r="Ms2ger"><a href="#l-970">#</a> [22:43] &lt;annevk&gt; Ms2ger: that's a great site :)</li>
+ <li id="l-971" _a="annevk"><a href="#l-971">#</a> [22:43] &lt;annevk&gt; <a href="http://www.crownhill.com/logomedbut.jpg">http://www.crownhill.com/logomedbut.jpg</a> prolly doesn't apply to the site</li>
+ <li id="l-972" _a="Ms2ger"><a href="#l-972">#</a> [22:43] &lt;Ms2ger&gt; I broke it :)</li>
+ <li id="l-973" _a="annevk"><a href="#l-973">#</a> [22:44] &lt;annevk&gt; what does it rely on?</li>
+ <li id="l-974" _a="Ms2ger"><a href="#l-974">#</a> [22:44] &lt;Ms2ger&gt; img.x/y</li>
+ <li id="l-975" _a="Ms2ger"><a href="#l-975">#</a> [22:44] &lt;Ms2ger&gt; But only in NS6</li>
+ <li id="l-976" _a="Ms2ger"><a href="#l-976">#</a> [22:45] &lt;Ms2ger&gt; (Where NS6 is any browser where !document.all&amp;&amp;document.getElementById is truthy)</li>
+ <li id="l-977" _a="jgraham" _r="annevk"><a href="#l-977">#</a> [22:47] &lt;jgraham&gt; annevk: It's very impressive web design for 1968</li>
+ <li id="l-978" _a="TabAtkins"><a href="#l-978">#</a> [22:48] &lt;TabAtkins&gt; lol</li>
+ <li id="l-979" _a="Ms2ger"><a href="#l-979">#</a> [22:48] &lt;Ms2ger&gt; Does the topmost menu work in Opera?</li>
+ <li id="l-980" _a="annevk" _r="jgraham"><a href="#l-980">#</a> [22:48] &lt;annevk&gt; jgraham: point</li>
+ <li id="l-981"><a href="#l-981">#</a> [22:48] * Quits: LBP (~Mirc@pD9EB1970.dip0.t-ipconnect.de) (Quit: Bye, bye! See you on <a href="http://leanbackplayer.com">http://leanbackplayer.com</a>)</li>
+ <li id="l-982" _a="annevk" _r="Ms2ger"><a href="#l-982">#</a> [22:48] &lt;annevk&gt; Ms2ger: looks like it</li>
+ <li id="l-983"><a href="#l-983">#</a> [22:49] * Joins: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-984"><a href="#l-984">#</a> [22:51] * Quits: manu-db (~msporny@digitalbazaar.com) (Ping timeout: 264 seconds)</li>
+ <li id="l-985"><a href="#l-985">#</a> [22:52] * Joins: manu-db (~msporny@digitalbazaar.com)</li>
+ <li id="l-986"><a href="#l-986">#</a> [22:55] * Joins: jacobolus (~jacobolus@75-144-246-6-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-987" _a="annevk"><a href="#l-987">#</a> [23:05] &lt;annevk&gt; similar to the endianness thing; have people ever adjusted their canvas code to work with the high resolution screens of the iPhone and now the iPad?</li>
+ <li id="l-988"><a href="#l-988">#</a> [23:05] * Quits: othermaciej (~mjs@17.244.8.236) (Quit: othermaciej)</li>
+ <li id="l-989" _a="annevk"><a href="#l-989">#</a> [23:06] &lt;annevk&gt; the ImageData object that is</li>
+ <li id="l-990"><a href="#l-990">#</a> [23:07] * Quits: jonlee (~jonlee@2620:149:4:1b01:9905:c7f3:47ec:d964) (Quit: jonlee)</li>
+ <li id="l-991"><a href="#l-991">#</a> [23:07] * Joins: othermaciej (~mjs@17.244.8.236)</li>
+ <li id="l-992" _a="TabAtkins"><a href="#l-992">#</a> [23:07] &lt;TabAtkins&gt; Do those devices use high-res stores yet?</li>
+ <li id="l-993" _a="TabAtkins"><a href="#l-993">#</a> [23:08] * TabAtkins always uses ImageData.width/height, but that's because he's very aware of the issue.</li>
+ <li id="l-994" _a="annevk" _r="dunno"><a href="#l-994">#</a> [23:09] &lt;annevk&gt; dunno; I only remember olliej being very concerned about ImageData staying the way it was before all those gadgets were released</li>
+ <li id="l-995"><a href="#l-995">#</a> [23:09] * Joins: jonlee (~jonlee@2620:149:4:1b01:35d3:e7ba:f760:a4f5)</li>
+ <li id="l-996" _a="annevk"><a href="#l-996">#</a> [23:09] &lt;annevk&gt; I guess that came out wrong; he wanted the highres backing store to remain an option</li>
+ <li id="l-997" _a="TabAtkins" _r="Yeah"><a href="#l-997">#</a> [23:09] &lt;TabAtkins&gt; Yeah, definitely.</li>
+ <li id="l-998" _a="Hixie"><a href="#l-998">#</a> [23:10] &lt;Hixie&gt; i expect we'll introduce a new api for high-res imagedata, sadly</li>
+ <li id="l-999"><a href="#l-999">#</a> [23:11] * Parts: StoneCypher (~no@pool-71-191-249-112.washdc.fios.verizon.net) (&quot;oh well&quot;)</li>
+ <li id="l-1000"><a href="#l-1000">#</a> [23:15] * Quits: inkbase (inkbase@nat/ibm/x-owxkknwaltrekdws) (Quit: inkbase)</li>
+ <li id="l-1001"><a href="#l-1001">#</a> [23:16] * Joins: tantek (~tantek@12.14.132.2)</li>
+ <li id="l-1002" _a="TabAtkins"><a href="#l-1002">#</a> [23:16] &lt;TabAtkins&gt; iphone 4 was retina, right?</li>
+ <li id="l-1003"><a href="#l-1003">#</a> [23:18] * Quits: jonlee (~jonlee@2620:149:4:1b01:35d3:e7ba:f760:a4f5) (Quit: jonlee)</li>
+ <li id="l-1004"><a href="#l-1004">#</a> [23:18] * Quits: tantek (~tantek@12.14.132.2) (Client Quit)</li>
+ <li id="l-1005" _a="TabAtkins"><a href="#l-1005">#</a> [23:19] &lt;TabAtkins&gt; If so, it uses a normal-res backing store for canvas.</li>
+ <li id="l-1006"><a href="#l-1006">#</a> [23:20] * Joins: jonlee (~jonlee@2620:149:4:1b01:8d6:c911:986f:bd17)</li>
+ <li id="l-1007"><a href="#l-1007">#</a> [23:22] * Quits: Ms2ger (~Ms2ger@91.181.21.107) (Quit: nn)</li>
+ <li id="l-1008"><a href="#l-1008">#</a> [23:25] * Quits: isherman (isherman@nat/google/x-lzvxzpkrowyheoqd) (Quit: Leaving.)</li>
+ <li id="l-1009"><a href="#l-1009">#</a> [23:26] * Joins: isherman (isherman@nat/google/x-yghgapuzdcmvctzs)</li>
+ <li id="l-1010"><a href="#l-1010">#</a> [23:26] * Joins: tantek (~tantek@12.14.132.2)</li>
+ <li id="l-1011" _a="hober" _r="Hixie"><a href="#l-1011">#</a> [23:28] &lt;hober&gt; Hixie: i'll be emailing whatwg@ about such a new api soon :)</li>
+ <li id="l-1012" _a="annevk"><a href="#l-1012">#</a> [23:29] &lt;annevk&gt; ah guess it did indeed fail then</li>
+ <li id="l-1013" _a="TabAtkins" _r="Sigh"><a href="#l-1013">#</a> [23:29] &lt;TabAtkins&gt; Sigh, yeah.</li>
+ <li id="l-1014" _a="TabAtkins"><a href="#l-1014">#</a> [23:29] &lt;TabAtkins&gt; ;_;</li>
+ <li id="l-1015" _a="annevk"><a href="#l-1015">#</a> [23:29] &lt;annevk&gt; I guess the upside is that I was right many years ago this would fail</li>
+ <li id="l-1016" _a="annevk"><a href="#l-1016">#</a> [23:29] &lt;annevk&gt; that*</li>
+ <li id="l-1017" _a="TabAtkins"><a href="#l-1017">#</a> [23:30] &lt;TabAtkins&gt; What's a simple visual demo that would be clearly different if I extracted a low-res backing store and painted it into another canvas?</li>
+ <li id="l-1018" _a="TabAtkins"><a href="#l-1018">#</a> [23:30] &lt;TabAtkins&gt; I guess it's anti-aliasing and such that look better on high-res devices.</li>
+ <li id="l-1019" _a="hober"><a href="#l-1019">#</a> [23:30] &lt;hober&gt; right</li>
+ <li id="l-1020" _a="eric_carlson"><a href="#l-1020">#</a> [23:30] * eric_carlson is now known as ericc|afk</li>
+ <li id="l-1021" _a="annevk"><a href="#l-1021">#</a> [23:31] &lt;annevk&gt; filters</li>
+ <li id="l-1022" _a="TabAtkins"><a href="#l-1022">#</a> [23:31] &lt;TabAtkins&gt; I don't have a high-res device, so I can't make a demo and be sure of its correctness.</li>
+ <li id="l-1023" _a="zewt"><a href="#l-1023">#</a> [23:32] &lt;zewt&gt; the whole &quot;backing store at a different resolution&quot; thing just seems to create incompatibilities that nobody tests for</li>
+ <li id="l-1024"><a href="#l-1024">#</a> [23:39] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-1025" _a="roc" _r="ahaha"><a href="#l-1025">#</a> [23:39] &lt;roc&gt; ahaha: <a href="http://27.media.tumblr.com/tumblr_m0zzf8Gx1N1rrf1eeo1_400.jpg">http://27.media.tumblr.com/tumblr_m0zzf8Gx1N1rrf1eeo1_400.jpg</a></li>
+ <li id="l-1026" _a="TabAtkins" _r="roc"><a href="#l-1026">#</a> [23:39] &lt;TabAtkins&gt; roc: Hehehe</li>
+ <li id="l-1027"><a href="#l-1027">#</a> [23:40] * Quits: othermaciej (~mjs@17.244.8.236) (Quit: othermaciej)</li>
+ <li id="l-1028" _a="roc"><a href="#l-1028">#</a> [23:40] &lt;roc&gt; I'm crying inside</li>
+ <li id="l-1029" _a="TabAtkins"><a href="#l-1029">#</a> [23:41] &lt;TabAtkins&gt; ;_;</li>
+ <li id="l-1030" _a="TabAtkins"><a href="#l-1030">#</a> [23:42] &lt;TabAtkins&gt; A lot of Chrome engineers on Wednesday didn't believe me when I said we were still planning to drop it. T_T</li>
+ <li id="l-1031" _a="annevk"><a href="#l-1031">#</a> [23:43] &lt;annevk&gt; at Opera we plan to be bug free at some point</li>
+ <li id="l-1032"><a href="#l-1032">#</a> [23:45] * Quits: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-1033"><a href="#l-1033">#</a> [23:45] * Quits: tantek (~tantek@12.14.132.2) (Quit: tantek)</li>
+ <li id="l-1034"><a href="#l-1034">#</a> [23:45] * Quits: drublic (~drublic@frbg-5d84f7bf.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-1035" _a="Hixie"><a href="#l-1035">#</a> [23:53] &lt;Hixie&gt; so if i move lineWidth to a separate object that you pass to strokePath()</li>
+ <li id="l-1036" _a="Hixie"><a href="#l-1036">#</a> [23:53] &lt;Hixie&gt; er</li>
+ <li id="l-1037" _a="Hixie"><a href="#l-1037">#</a> [23:53] &lt;Hixie&gt; so if i move lineWidth to a separate object that you pass to addPathByStrokingPath()</li>
+ <li id="l-1038" _a="Hixie"><a href="#l-1038">#</a> [23:54] &lt;Hixie&gt; does that mean i should also move .font to a separate object that you pass to addText() ?</li>
+ <li id="l-1039" _a="Hixie"><a href="#l-1039">#</a> [23:54] &lt;Hixie&gt; and then you have to pass both a FontStyles and a LineStyles object to addTextByStrokingPath() ?</li>
+ <li id="l-1040"><a href="#l-1040">#</a> [23:54] * Quits: ehsan (~ehsan@66.207.208.98) (Remote host closed the connection)</li>
+ <li id="l-1041"><a href="#l-1041">#</a> [23:57] * Quits: JohnAlbin (~JohnAlbin@114-42-54-208.dynamic.hinet.net) (Quit: HTTP/1.1 404 JohnAlbin Not Found)</li>
+ <li id="l-1042"><a href="#l-1042">#</a> [23:57] * Quits: broquaint (~dbrook@78.47.79.137) (Quit: Lost terminal)</li>
+ <li id="l-1043"><a href="#l-1043">#</a> [23:59] * Joins: broquaint (~dbrook@78.47.79.137)</li>
+ <li id="l-1044"><a href="#l-1044">#</a> Session Close: Sat Mar 17 00:00:00 2012</li>
+</ol>
+<p id="end">The end :)

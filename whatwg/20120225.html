@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20120225</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20120225.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2012-02-25 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Feb 25 00:00:00 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Hixie"><a href="#l-3">#</a> [00:04] &lt;Hixie&gt; so to introduce path primitives, i think i need to split CanvasRenderingContext2D into two interfaces Path and CanvasRenderingContext2D, where CanvasRenderingContext2D inherits from Path</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:05] * Parts: ksweeney (~Kevin_Swe@nyv-exweb.iac.com)</li>
+ <li id="l-5" _a="Hixie"><a href="#l-5">#</a> [00:05] &lt;Hixie&gt; that way you can do pretty much everything you want to a path that you can to a canvas, short of doing anything with colour or shadows</li>
+ <li id="l-6" _a="TabAtkins"><a href="#l-6">#</a> [00:06] &lt;TabAtkins&gt; OO - ruining everything since the 80s or whatever.</li>
+ <li id="l-7" _a="Hixie"><a href="#l-7">#</a> [00:06] &lt;Hixie&gt; heh</li>
+ <li id="l-8" _a="TabAtkins"><a href="#l-8">#</a> [00:06] &lt;TabAtkins&gt; Does WebIDL make mixins easy?</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:07] &lt;Hixie&gt; whether we do it as a mixin or inheritance is a detail</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:07] &lt;Hixie&gt; i don't really care either way</li>
+ <li id="l-11" _a="TabAtkins"><a href="#l-11">#</a> [00:07] &lt;TabAtkins&gt; Sure.  Until you want to abstract something else out of Canvas.</li>
+ <li id="l-12" _a="Hixie"><a href="#l-12">#</a> [00:07] &lt;Hixie&gt; sure</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:07] &lt;Hixie&gt; i'm just talking high level here</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:08] &lt;Hixie&gt; hmm.... maybe it should be a separate interface anyway, since path.fill(path) and context.fill(path) would do rather different things</li>
+ <li id="l-15" _a="Hixie"><a href="#l-15">#</a> [00:08] &lt;Hixie&gt; adding one path to another path, and drawing colour to the canvas, respectively</li>
+ <li id="l-16" _a="Hixie"><a href="#l-16">#</a> [00:08] &lt;Hixie&gt; hmm</li>
+ <li id="l-17" _a="TabAtkins"><a href="#l-17">#</a> [00:08] &lt;TabAtkins&gt; ...that sounds like a weird behaviro for path.fill(path).</li>
+ <li id="l-18" _a="Hixie"><a href="#l-18">#</a> [00:08] &lt;Hixie&gt; it would be called something else if we did it that way</li>
+ <li id="l-19" _a="TabAtkins"><a href="#l-19">#</a> [00:09] &lt;TabAtkins&gt; I don't understand how you can fill a path with a path, unless it's in the layering way, like &lt;pattern&gt; in SVG.</li>
+ <li id="l-20" _a="Hixie"><a href="#l-20">#</a> [00:09] &lt;Hixie&gt; i don't want to define arcTo() etc twice... maybe the right structure is for Path and Context to both inherit/mixin something of an AbstractPath</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:09] * Joins: ksweeney (~Kevin_Swe@nyv-exweb.iac.com)</li>
+ <li id="l-22" _a="Hixie" _r="TabAtkins"><a href="#l-22">#</a> [00:09] &lt;Hixie&gt; TabAtkins: path.add(path) if you prefer</li>
+ <li id="l-23" _a="TabAtkins" _r="Yeah"><a href="#l-23">#</a> [00:10] &lt;TabAtkins&gt; Yeah, that's definitely better. ^_^</li>
+ <li id="l-24" _a="Hixie" _r="TabAtkins"><a href="#l-24">#</a> [00:10] &lt;Hixie&gt; TabAtkins: as opposed to path.addStroke(path), which outlines the path with a particular line width and adds that</li>
+ <li id="l-25" _a="TabAtkins" _r="Though"><a href="#l-25">#</a> [00:10] &lt;TabAtkins&gt; Though, keeping path.fill(foo) is useful.  If we're going retained, you can use that to get better AA behavior.</li>
+ <li id="l-26" _a="Philip`"><a href="#l-26">#</a> [00:10] &lt;Philip`&gt; Maybe it'd be cleaner to have a totally independent Path object, and have a CanvasRenderingContext2D.globalPath property (which is a Path), and have CanRenCon2D.arcTo() etc be defined as delegating to globalPath.arcTo(...)</li>
+ <li id="l-27" _a="Hixie" _r="Philip`"><a href="#l-27">#</a> [00:11] &lt;Hixie&gt; Philip`: yeah, i was thinking of doing that too. and have .fill(), etc, default to the .globalPath object if there's not an explicit argument saying which to use.</li>
+ <li id="l-28"><a href="#l-28">#</a> [00:11] * Quits: Maurice` (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-29" _a="Hixie" _r="Philip`"><a href="#l-29">#</a> [00:11] &lt;Hixie&gt; Philip`: seems weird to actually expose .globalPath though</li>
+ <li id="l-30" _a="Hixie"><a href="#l-30">#</a> [00:11] &lt;Hixie&gt; since it wouldn't add anything</li>
+ <li id="l-31" _a="Philip`"><a href="#l-31">#</a> [00:12] &lt;Philip`&gt; (Using some kind of explicit delegation (instead of inheritance etc) would also make it possible for Path to have a slightly different API to CRC2D, if there was any desire for that (to clean up things without compat concerns, or something), and CRC2D can define whatever mapping is needed)</li>
+ <li id="l-32" _a="Hixie" _r="yeah"><a href="#l-32">#</a> [00:14] &lt;Hixie&gt; yeah, though having two different sets of path api is a bit ugly</li>
+ <li id="l-33" _a="Hixie"><a href="#l-33">#</a> [00:14] &lt;Hixie&gt; is there anything to clean up?</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:14] &lt;Hixie&gt; if not i'd much rather keep them identical</li>
+ <li id="l-35" _a="Philip`"><a href="#l-35">#</a> [00:14] &lt;Philip`&gt; I don't remember</li>
+ <li id="l-36" _a="Philip`"><a href="#l-36">#</a> [00:14] * Philip` has forgotten most of the API currently</li>
+ <li id="l-37" _a="Hixie"><a href="#l-37">#</a> [00:15] &lt;Hixie&gt; also it's kind of weird to have the transform be on context.globalPath yet affect the context's own methods (even those not delegating to the globalPath object)</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:15] &lt;Hixie&gt; (we'd want transforms on path objects so you can do things like add text pointing in various directions to a single path)</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:15] &lt;Hixie&gt; (same reason we'd want the font properties on the path object)</li>
+ <li id="l-40" _a="paul_irish_"><a href="#l-40">#</a> [00:15] * paul_irish_ is now known as paul_irish</li>
+ <li id="l-41"><a href="#l-41">#</a> [00:20] * Quits: othermaciej (~mjs@2620:149:4:1b01:38e2:1137:ebb5:d5e6) (Quit: othermaciej)</li>
+ <li id="l-42" _a="paul_irish"><a href="#l-42">#</a> [00:25] * paul_irish is now known as paul_irish_</li>
+ <li id="l-43"><a href="#l-43">#</a> [00:28] * Quits: ksweeney (~Kevin_Swe@nyv-exweb.iac.com) (Quit: Leaving.)</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:33] &lt;Hixie&gt; hmmmmmm</li>
+ <li id="l-45" _a="Hixie"><a href="#l-45">#</a> [00:33] &lt;Hixie&gt; how to make isPointInPath() useful when applied to a path you use to stamp out a bunch of things in different places</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:34] &lt;Hixie&gt; it doesn't work just to have a  path = context.transformPath(path)  feature, because you might want just to have the translate and rotation transforms applied but not the scale</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:34] * Joins: othermaciej (~mjs@17.245.89.114)</li>
+ <li id="l-48" _a="Hixie"><a href="#l-48">#</a> [00:34] &lt;Hixie&gt; you really want &quot;transformPathUsingOnlyTheTransformsImGoingToUndoBeforeCallingIsPointInPath(path)&quot;</li>
+ <li id="l-49" _a="Hixie"><a href="#l-49">#</a> [00:34] &lt;Hixie&gt; hmmm</li>
+ <li id="l-50"><a href="#l-50">#</a> [00:36] * Quits: drublic (~drublic@p54AE0E24.dip0.t-ipconnect.de) (Remote host closed the connection)</li>
+ <li id="l-51"><a href="#l-51">#</a> [00:36] * Joins: unomi (~unomi@unaffiliated/unomi)</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [00:45] &lt;Hixie&gt; how else can we make hit testing easier on canvas without making it retained-mode...</li>
+ <li id="l-53" _a="TabAtkins"><a href="#l-53">#</a> [00:45] &lt;TabAtkins&gt; Optional set of transforms you can pass to isPointInPath along with the path itself?</li>
+ <li id="l-54" _a="TabAtkins"><a href="#l-54">#</a> [00:46] &lt;TabAtkins&gt; Something like, I dunno, isPointInPath(path, {offset:[x,y], transform:&lt;string&gt;})</li>
+ <li id="l-55" _a="Hixie"><a href="#l-55">#</a> [00:46] &lt;Hixie&gt; it would be sad to have to have two ways to express transforms in one api</li>
+ <li id="l-56" _a="TabAtkins"><a href="#l-56">#</a> [00:46] &lt;TabAtkins&gt; Sure.</li>
+ <li id="l-57" _a="Hixie"><a href="#l-57">#</a> [00:46] &lt;Hixie&gt; we could have a way to register a callback for a path on the canvas, and have the UA be responsible for discarding callbacks that relate to paths that have been entirely overlapped</li>
+ <li id="l-58" _a="TabAtkins"><a href="#l-58">#</a> [00:47] &lt;TabAtkins&gt; Make a transform object?</li>
+ <li id="l-59" _a="Hixie"><a href="#l-59">#</a> [00:47] &lt;Hixie&gt; (and have clearRect() clear the callbacks from the given region)</li>
+ <li id="l-60" _a="Hixie"><a href="#l-60">#</a> [00:47] &lt;Hixie&gt; could have some kind of transform object</li>
+ <li id="l-61" _a="Hixie"><a href="#l-61">#</a> [00:48] &lt;Hixie&gt; though i don't really see how it would work</li>
+ <li id="l-62" _a="TabAtkins"><a href="#l-62">#</a> [00:48] &lt;TabAtkins&gt; I presume that other drawing libraries, particularly ones built on canvas, have run into this problem.</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:48] &lt;Hixie&gt; (i mean, a transform object is essentially what &quot;path = context.transformPath(path)&quot; gives you, and that fails as described above)</li>
+ <li id="l-64" _a="Hixie"><a href="#l-64">#</a> [00:51] &lt;Hixie&gt; <a href="http://stackoverflow.com/questions/3146424/html5-canvas-hittesting">http://stackoverflow.com/questions/3146424/html5-canvas-hittesting</a> suggests two things, one, be retained (scene graph) and two, basically what i suggest above, have a way to register a callback for a path and have the UA throw away the paths once overlapped</li>
+ <li id="l-65" _a="Hixie"><a href="#l-65">#</a> [00:51] &lt;Hixie&gt; (they give a particular implementation strategy for case two)</li>
+ <li id="l-66" _a="TabAtkins" _r="Oh"><a href="#l-66">#</a> [00:52] &lt;TabAtkins&gt; Oh, I see what you were asking about.</li>
+ <li id="l-67" _a="TabAtkins"><a href="#l-67">#</a> [00:52] &lt;TabAtkins&gt; Yeah.</li>
+ <li id="l-68" _a="TabAtkins"><a href="#l-68">#</a> [00:53] &lt;TabAtkins&gt; Using those color hacks for picking is pretty awesome.</li>
+ <li id="l-69" _a="Hixie"><a href="#l-69">#</a> [00:53] &lt;Hixie&gt; <a href="http://simonsarris.com/blog/510-making-html5-canvas-useful">http://simonsarris.com/blog/510-making-html5-canvas-useful</a> basically says scene graph</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:54] &lt;Hixie&gt; <a href="http://atomicrobotdesign.com/blog/htmlcss/build-a-vertical-scrolling-shooter-game-with-html5-canvas-part-3/">http://atomicrobotdesign.com/blog/htmlcss/build-a-vertical-scrolling-shooter-game-with-html5-canvas-part-3/</a> says scene graph</li>
+ <li id="l-71"><a href="#l-71">#</a> [00:55] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [00:55] &lt;Hixie&gt; if we do a ua-maintained stack of data, i wonder if we should use structured-cloned data that's made available in the mouse events on the canvas, or whether we should use callbacks</li>
+ <li id="l-73" _a="Hixie"><a href="#l-73">#</a> [00:55] &lt;Hixie&gt; i'm thinking the former is probably more useful</li>
+ <li id="l-74" _a="Hixie"><a href="#l-74">#</a> [00:56] &lt;Hixie&gt; since then you can do this for mouse down, move, up, wheel events, etc</li>
+ <li id="l-75" _a="TabAtkins"><a href="#l-75">#</a> [00:56] &lt;TabAtkins&gt; What do you mean by &quot;structured-cloned data&quot;?</li>
+ <li id="l-76" _a="Hixie"><a href="#l-76">#</a> [00:58] &lt;Hixie&gt; arbitrary JS object that has gone through <a href="http://www.whatwg.org/specs/web-apps/current-work/#structured-clone">http://www.whatwg.org/specs/web-apps/current-work/#structured-clone</a></li>
+ <li id="l-77" _a="TabAtkins" _r="Yeah"><a href="#l-77">#</a> [00:58] &lt;TabAtkins&gt; Yeah, I know that.  ^_^  I meant what data are you expecting to pass?</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:58] &lt;Hixie&gt; oh</li>
+ <li id="l-79" _a="Hixie"><a href="#l-79">#</a> [00:59] &lt;Hixie&gt; index of the space ship, stuff like that</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [00:59] &lt;Hixie&gt; whatever info you need to be able to process the click</li>
+ <li id="l-81" _a="TabAtkins"><a href="#l-81">#</a> [00:59] &lt;TabAtkins&gt; Hm.  For large scenes, doing picking directly from teh scene graph is slow. It becomes a linear search through the tree.</li>
+ <li id="l-82" _a="Hixie"><a href="#l-82">#</a> [01:00] &lt;Hixie&gt; well the advantage of having the UA do it is that the UA can do lots of optimisations that a JS author might not bother with</li>
+ <li id="l-83" _a="TabAtkins" _r="Yeah"><a href="#l-83">#</a> [01:00] &lt;TabAtkins&gt; Yeah, definitely.</li>
+ <li id="l-84" _a="TabAtkins"><a href="#l-84">#</a> [01:00] &lt;TabAtkins&gt; The UA should be the one in charge of picking.</li>
+ <li id="l-85" _a="Hixie"><a href="#l-85">#</a> [01:00] &lt;Hixie&gt; (there are plenty of ways to optimise a hit test like this)</li>
+ <li id="l-86" _a="Hixie"><a href="#l-86">#</a> [01:00] &lt;Hixie&gt; (even without using a backing coloured bitmap)</li>
+ <li id="l-87"><a href="#l-87">#</a> [01:01] * Quits: marcoos (~marcoos@81-186-224-1.cityconnect.pl) (Quit: marcoos)</li>
+ <li id="l-88" _a="TabAtkins"><a href="#l-88">#</a> [01:01] &lt;TabAtkins&gt; (though from what I understand sitting next to some game devs, the backing colored bitmap is pretty much state-of-the-art)</li>
+ <li id="l-89" _a="Hixie"><a href="#l-89">#</a> [01:01] &lt;Hixie&gt; it's certainly going to be the fastest</li>
+ <li id="l-90" _a="Hixie"><a href="#l-90">#</a> [01:01] &lt;Hixie&gt; not the most memory efficient though</li>
+ <li id="l-91" _a="TabAtkins"><a href="#l-91">#</a> [01:01] &lt;TabAtkins&gt; True.</li>
+ <li id="l-92" _a="Hixie"><a href="#l-92">#</a> [01:01] &lt;Hixie&gt; maybe we don't bother with structured clone, and only do an index</li>
+ <li id="l-93" _a="Hixie"><a href="#l-93">#</a> [01:02] &lt;Hixie&gt; since you wouldn't want authors to clone parts of their scene graph accidentally</li>
+ <li id="l-94" _a="TabAtkins" _r="So"><a href="#l-94">#</a> [01:02] &lt;TabAtkins&gt; So, if you're talking about the UA still doing this, what is this data for?  Who's getting it?</li>
+ <li id="l-95" _a="TabAtkins"><a href="#l-95">#</a> [01:02] * TabAtkins is behind your thinking.</li>
+ <li id="l-96" _a="Hixie" _r="addHitRegion(path"><a href="#l-96">#</a> [01:02] &lt;Hixie&gt; addHitRegion(path, mySpaceShipObjectThatReferencesMyEntireGameState)</li>
+ <li id="l-97" _a="Hixie"><a href="#l-97">#</a> [01:02] &lt;Hixie&gt; i'd add it to the click event MouseEvent object</li>
+ <li id="l-98" _a="Hixie"><a href="#l-98">#</a> [01:03] &lt;Hixie&gt; so &lt;canvas onclick=&quot;processClickOn(event.hitTargetID)&quot;&gt;</li>
+ <li id="l-99" _a="TabAtkins" _r="Ah"><a href="#l-99">#</a> [01:03] &lt;TabAtkins&gt; Ah, and paths have some accessible index that you can store on your own objects?</li>
+ <li id="l-100" _a="Hixie"><a href="#l-100">#</a> [01:04] &lt;Hixie&gt; i was imagining you'd do something like addHitRegion(path, spaceship.id);</li>
+ <li id="l-101" _a="Hixie"><a href="#l-101">#</a> [01:04] &lt;Hixie&gt; where spaceship is your internal state object for the thing you are drawing with path</li>
+ <li id="l-102" _a="TabAtkins" _r="Ah"><a href="#l-102">#</a> [01:04] &lt;TabAtkins&gt; Ah, the opposite direction.  Sure, either way works.</li>
+ <li id="l-103" _a="TabAtkins"><a href="#l-103">#</a> [01:05] &lt;TabAtkins&gt; Unfortunately JS isn't quite ready yet for having the Path return a unique object for its id.</li>
+ <li id="l-104" _a="Hixie"><a href="#l-104">#</a> [01:05] &lt;Hixie&gt; that would also allow addHitRegion(path, 'text label', ariaRole); or addHitRegion(path, myButtonElement);</li>
+ <li id="l-105" _a="Hixie"><a href="#l-105">#</a> [01:06] &lt;Hixie&gt; which would enable haptic feedback AT features for devices with touch screens where the user brushes the screen to find what's on it, with audible descriptions</li>
+ <li id="l-106" _a="Hixie"><a href="#l-106">#</a> [01:06] &lt;Hixie&gt; which right now totally fail for canvas</li>
+ <li id="l-107" _a="TabAtkins" _r="Okay"><a href="#l-107">#</a> [01:07] &lt;TabAtkins&gt; Okay, so the author has to have some way to produce unique ids for their objects that they want to attach paths to.</li>
+ <li id="l-108" _a="TabAtkins"><a href="#l-108">#</a> [01:07] &lt;TabAtkins&gt; Right?</li>
+ <li id="l-109" _a="Hixie"><a href="#l-109">#</a> [01:07] &lt;Hixie&gt; right</li>
+ <li id="l-110" _a="Hixie"><a href="#l-110">#</a> [01:08] &lt;Hixie&gt; typically they have them already, since their objects will typically be in arrays they're walking over</li>
+ <li id="l-111" _a="TabAtkins"><a href="#l-111">#</a> [01:08] &lt;TabAtkins&gt; Yeah.</li>
+ <li id="l-112" _a="Hixie"><a href="#l-112">#</a> [01:08] &lt;Hixie&gt; but in any case generating IDs is trivial</li>
+ <li id="l-113" _a="TabAtkins"><a href="#l-113">#</a> [01:08] &lt;TabAtkins&gt; Note that there is a use-case for wanting to get the set of all objects with a given point inside them.</li>
+ <li id="l-114" _a="Hixie"><a href="#l-114">#</a> [01:08] &lt;Hixie&gt; yeah that's a harder problem</li>
+ <li id="l-115" _a="TabAtkins"><a href="#l-115">#</a> [01:09] &lt;TabAtkins&gt; That one is generally going to be slow unless you have custom solutions.</li>
+ <li id="l-116" _a="TabAtkins"><a href="#l-116">#</a> [01:09] &lt;TabAtkins&gt; Like doing searches on a k-tree or something.</li>
+ <li id="l-117" _a="Hixie"><a href="#l-117">#</a> [01:09] &lt;Hixie&gt; the a11y use case and the normal click hit testing use case don't need it, so i'm not too worried about it</li>
+ <li id="l-118" _a="TabAtkins" _r="Yeah"><a href="#l-118">#</a> [01:09] &lt;TabAtkins&gt; Yeah, can be added later.</li>
+ <li id="l-119" _a="TabAtkins"><a href="#l-119">#</a> [01:09] &lt;TabAtkins&gt; Without impacting the top-object use-case.</li>
+ <li id="l-120"><a href="#l-120">#</a> [01:09] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-121"><a href="#l-121">#</a> [01:11] * Joins: plutoniix (~plutoniix@101.108.121.123)</li>
+ <li id="l-122" _a="Hixie"><a href="#l-122">#</a> [01:13] &lt;Hixie&gt; if we add a way to addHitRegion() a path giving that region a label to read out when an AT brings the AT cursor to that part of the canvas</li>
+ <li id="l-123" _a="Hixie"><a href="#l-123">#</a> [01:13] &lt;Hixie&gt; should we just make fillText() and strokeText() always imply such a call?</li>
+ <li id="l-124" _a="TabAtkins"><a href="#l-124">#</a> [01:14] &lt;TabAtkins&gt; With a path equal to the bounding box of the text or something?</li>
+ <li id="l-125" _a="Hixie"><a href="#l-125">#</a> [01:14] &lt;Hixie&gt; yeah</li>
+ <li id="l-126" _a="Hixie"><a href="#l-126">#</a> [01:14] &lt;Hixie&gt; or something</li>
+ <li id="l-127" _a="TabAtkins"><a href="#l-127">#</a> [01:14] &lt;TabAtkins&gt; Off the top of my head, I don't see why not.  Seems nice.</li>
+ <li id="l-128" _a="Hixie"><a href="#l-128">#</a> [01:14] &lt;Hixie&gt; (not bounding box given fillText() along a path)</li>
+ <li id="l-129" _a="TabAtkins" _r="Yeah"><a href="#l-129">#</a> [01:14] &lt;TabAtkins&gt; Yeah, sure.</li>
+ <li id="l-130" _a="TabAtkins"><a href="#l-130">#</a> [01:14] &lt;TabAtkins&gt; Suitably mutated was-a-rectangle-before-following-the-path.</li>
+ <li id="l-131" _a="Hixie"><a href="#l-131">#</a> [01:14] &lt;Hixie&gt; it wouldn't survive a drawImage() from one canvas to another, probably, which would be unfortunate</li>
+ <li id="l-132" _a="TabAtkins"><a href="#l-132">#</a> [01:15] &lt;TabAtkins&gt; *none* of the hit-testing would.</li>
+ <li id="l-133" _a="Hixie"><a href="#l-133">#</a> [01:15] &lt;Hixie&gt; right</li>
+ <li id="l-134" _a="TabAtkins"><a href="#l-134">#</a> [01:15] &lt;TabAtkins&gt; You need retained-mode if you want that.</li>
+ <li id="l-135" _a="Hixie"><a href="#l-135">#</a> [01:15] &lt;Hixie&gt; also would probably not survive drawing text onto a path then drawing the path</li>
+ <li id="l-136" _a="TabAtkins"><a href="#l-136">#</a> [01:15] &lt;TabAtkins&gt; Hm.  That's not necessarily ture.</li>
+ <li id="l-137" _a="TabAtkins"><a href="#l-137">#</a> [01:15] &lt;TabAtkins&gt; UAs could retain the information alongside the path.</li>
+ <li id="l-138" _a="Hixie"><a href="#l-138">#</a> [01:16] &lt;Hixie&gt; and would be kinda annoying if you were to draw many layers of one piece of text, e.g. doing a motion blur effect</li>
+ <li id="l-139" _a="TabAtkins"><a href="#l-139">#</a> [01:16] &lt;TabAtkins&gt; True.</li>
+ <li id="l-140" _a="Hixie"><a href="#l-140">#</a> [01:16] &lt;Hixie&gt; actually that one is probably the most serious</li>
+ <li id="l-141"><a href="#l-141">#</a> [01:17] * Quits: ehsan (~ehsan@66.207.208.98) (Remote host closed the connection)</li>
+ <li id="l-142" _a="Hixie"><a href="#l-142">#</a> [01:17] &lt;Hixie&gt; also it would make it annoying to use fillText() to draw pictograms and things from custom fonts</li>
+ <li id="l-143" _a="Hixie"><a href="#l-143">#</a> [01:17] &lt;Hixie&gt; hmm</li>
+ <li id="l-144" _a="Hixie"><a href="#l-144">#</a> [01:17] &lt;Hixie&gt; maybe best to leave it to explicit calls</li>
+ <li id="l-145" _a="TabAtkins"><a href="#l-145">#</a> [01:17] &lt;TabAtkins&gt; Hm. Yeah, might want something explicit.</li>
+ <li id="l-146" _a="TabAtkins"><a href="#l-146">#</a> [01:17] &lt;TabAtkins&gt; Though extending *Text to make it easier might be good too.</li>
+ <li id="l-147" _a="TabAtkins"><a href="#l-147">#</a> [01:17] &lt;TabAtkins&gt; Just not by default.</li>
+ <li id="l-148" _a="Hixie"><a href="#l-148">#</a> [01:18] &lt;Hixie&gt; add an optional ariaRole argument, maybe</li>
+ <li id="l-149" _a="Hixie"><a href="#l-149">#</a> [01:18] &lt;Hixie&gt; (what's the appropriate aria role for a graph label, anyone know?)</li>
+ <li id="l-150" _a="TabAtkins"><a href="#l-150">#</a> [01:18] &lt;TabAtkins&gt; Is there a good role for just 'text' or 'label' or something?</li>
+ <li id="l-151" _a="TabAtkins" _r="Heh"><a href="#l-151">#</a> [01:18] &lt;TabAtkins&gt; Heh, lemme check.</li>
+ <li id="l-152" _a="Hixie"><a href="#l-152">#</a> [01:19] &lt;Hixie&gt; looks like there's neither</li>
+ <li id="l-153" _a="Hixie" _r="&lt;label&gt"><a href="#l-153">#</a> [01:19] &lt;Hixie&gt; &lt;label&gt; defaults to No Role</li>
+ <li id="l-154" _a="Hixie"><a href="#l-154">#</a> [01:19] &lt;Hixie&gt; that's unfortunate</li>
+ <li id="l-155" _a="TabAtkins" _r="Yes"><a href="#l-155">#</a> [01:20] &lt;TabAtkins&gt; Yes, reading the list of them in /TR/wai-aria/roles, I see nothing appropriate.</li>
+ <li id="l-156"><a href="#l-156">#</a> [01:20] * Joins: dcheng (~dcheng@74.125.59.65)</li>
+ <li id="l-157" _a="Hixie"><a href="#l-157">#</a> [01:21] &lt;Hixie&gt; ok. i'm gonna go to tgif, and will pick up this canvas stuff again next week.</li>
+ <li id="l-158" _a="TabAtkins"><a href="#l-158">#</a> [01:22] &lt;TabAtkins&gt; Lemme know if anything cool happens - we're doing board games today.</li>
+ <li id="l-159"><a href="#l-159">#</a> [01:31] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Quit: tzing)</li>
+ <li id="l-160"><a href="#l-160">#</a> [01:35] * Quits: karega (~karegaani@64.124.202.222) (Ping timeout: 265 seconds)</li>
+ <li id="l-161"><a href="#l-161">#</a> [01:36] * Quits: davidb (~davidb@65.93.94.10) (Quit: davidb)</li>
+ <li id="l-162"><a href="#l-162">#</a> [01:50] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-163"><a href="#l-163">#</a> [01:52] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-164"><a href="#l-164">#</a> [02:07] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-165"><a href="#l-165">#</a> [02:14] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-166"><a href="#l-166">#</a> [02:17] * Quits: necolas (~necolas@5e0c715f.bb.sky.com) (Remote host closed the connection)</li>
+ <li id="l-167"><a href="#l-167">#</a> [02:28] * Quits: ap (~ap@2620:149:4:1b01:6428:37c:46e8:5091) (Quit: ap)</li>
+ <li id="l-168"><a href="#l-168">#</a> [02:33] * Quits: ehsan (~ehsan@209.29.21.241) (Read error: Connection reset by peer)</li>
+ <li id="l-169"><a href="#l-169">#</a> [02:34] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-170"><a href="#l-170">#</a> [02:35] * Quits: othermaciej (~mjs@17.245.89.114) (Quit: othermaciej)</li>
+ <li id="l-171"><a href="#l-171">#</a> [02:36] * Quits: chriseppstein (~chrisepps@209.119.65.162) (Quit: chriseppstein)</li>
+ <li id="l-172"><a href="#l-172">#</a> [02:41] * Quits: ehsan (~ehsan@209.29.21.241) (Read error: Connection reset by peer)</li>
+ <li id="l-173"><a href="#l-173">#</a> [02:41] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-174"><a href="#l-174">#</a> [03:02] * Quits: unomi (~unomi@unaffiliated/unomi) (Ping timeout: 240 seconds)</li>
+ <li id="l-175" _a="paul_irish_"><a href="#l-175">#</a> [03:07] * paul_irish_ is now known as paul_irish</li>
+ <li id="l-176"><a href="#l-176">#</a> [03:09] * Joins: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr)</li>
+ <li id="l-177"><a href="#l-177">#</a> [03:09] * Quits: gkellogg (~gregg@c-98-248-150-91.hsd1.ca.comcast.net) (Quit: gkellogg)</li>
+ <li id="l-178"><a href="#l-178">#</a> [03:13] * Quits: ehsan (~ehsan@209.29.21.241) (Read error: Connection reset by peer)</li>
+ <li id="l-179"><a href="#l-179">#</a> [03:14] * Joins: ehsan_ (~ehsan@209.29.21.241)</li>
+ <li id="l-180"><a href="#l-180">#</a> [03:16] * Joins: unomi (~unomi@unaffiliated/unomi)</li>
+ <li id="l-181"><a href="#l-181">#</a> [03:18] * Quits: rniwa (rniwa@nat/google/x-iyjthqytbysqbsls) (Quit: rniwa)</li>
+ <li id="l-182"><a href="#l-182">#</a> [03:32] * Joins: N0000B (~quassel@adsl-98-68-176-92.cha.bellsouth.net)</li>
+ <li id="l-183"><a href="#l-183">#</a> [03:33] * Joins: miketaylr (~miketaylr@cpe-68-203-0-108.austin.res.rr.com)</li>
+ <li id="l-184"><a href="#l-184">#</a> [03:39] * Quits: LBP (~Mirc@pD9EB165F.dip0.t-ipconnect.de) (Ping timeout: 240 seconds)</li>
+ <li id="l-185"><a href="#l-185">#</a> [03:39] * Joins: LBP (~Mirc@pD9EB0A24.dip0.t-ipconnect.de)</li>
+ <li id="l-186"><a href="#l-186">#</a> [03:45] * Quits: tomasf (~tom@2002:55e5:dbb7:0:d97d:6ab:8fa0:9d4d) (Quit: tomasf)</li>
+ <li id="l-187"><a href="#l-187">#</a> [03:52] * Joins: jacobolus (~jacobolus@199.188.193.6)</li>
+ <li id="l-188"><a href="#l-188">#</a> [04:00] * Quits: jacobolus (~jacobolus@199.188.193.6) (Remote host closed the connection)</li>
+ <li id="l-189"><a href="#l-189">#</a> [04:13] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-190"><a href="#l-190">#</a> [04:20] * Quits: tndrH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com) (Quit: ChatZilla 0.9.88-rdmsoft [XULRunner 1.9.0.1/2008072406])</li>
+ <li id="l-191"><a href="#l-191">#</a> [04:30] * Joins: myakura (~myakura@FL1-110-233-178-43.tky.mesh.ad.jp)</li>
+ <li id="l-192"><a href="#l-192">#</a> [04:38] * Quits: dbaron (~dbaron@nat/mozilla/x-rsgfuanvlghweshj) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-193"><a href="#l-193">#</a> [05:05] * Quits: plutoniix (~plutoniix@101.108.121.123) (Ping timeout: 260 seconds)</li>
+ <li id="l-194"><a href="#l-194">#</a> [05:06] * Joins: niloy (~niloy@42.104.64.56)</li>
+ <li id="l-195"><a href="#l-195">#</a> [05:17] * Joins: jcranmer_ (~jcranmer@ltsp2.csl.tjhsst.edu)</li>
+ <li id="l-196"><a href="#l-196">#</a> [05:18] * Joins: othree_ (~othree@admin39.ct.ntust.edu.tw)</li>
+ <li id="l-197"><a href="#l-197">#</a> [05:20] * Quits: LBP (~Mirc@pD9EB0A24.dip0.t-ipconnect.de) (Read error: Connection reset by peer)</li>
+ <li id="l-198"><a href="#l-198">#</a> [05:20] * Quits: jcranmer (~jcranmer@ltsp2.csl.tjhsst.edu) (Ping timeout: 260 seconds)</li>
+ <li id="l-199"><a href="#l-199">#</a> [05:20] * Quits: othree (~othree@admin39.ct.ntust.edu.tw) (Ping timeout: 260 seconds)</li>
+ <li id="l-200"><a href="#l-200">#</a> [05:21] * Joins: LBP (~Mirc@pD9EB0A24.dip0.t-ipconnect.de)</li>
+ <li id="l-201"><a href="#l-201">#</a> [05:22] * Quits: jamesr (jamesr@nat/google/x-spqlrvzzgniplhth) (Quit: jamesr)</li>
+ <li id="l-202"><a href="#l-202">#</a> [05:26] * Quits: unomi (~unomi@unaffiliated/unomi) (Ping timeout: 245 seconds)</li>
+ <li id="l-203"><a href="#l-203">#</a> [05:27] * Quits: shepazu (~shepazu@108-70-132-46.lightspeed.rlghnc.sbcglobal.net) (Read error: Connection reset by peer)</li>
+ <li id="l-204"><a href="#l-204">#</a> [05:28] * Joins: shepazu (~shepazu@108-70-132-46.lightspeed.rlghnc.sbcglobal.net)</li>
+ <li id="l-205"><a href="#l-205">#</a> Session Close: Sat Feb 25 05:35:49 2012</li>
+ <li id="l-206"><a href="#l-206">#</a> </li>
+ <li id="l-207"><a href="#l-207">#</a> Session Start: Sat Feb 25 05:35:49 2012</li>
+ <li id="l-208"><a href="#l-208">#</a> Session Ident: #whatwg</li>
+ <li id="l-209"><a href="#l-209">#</a> [05:35] * Disconnected</li>
+ <li id="l-210" _a="Attempting"><a href="#l-210">#</a> [05:36] * Attempting to rejoin channel #whatwg</li>
+ <li id="l-211" _a="Rejoined"><a href="#l-211">#</a> [05:36] * Rejoined channel #whatwg</li>
+ <li id="l-212" _a="Topic"><a href="#l-212">#</a> [05:36] * Topic is 'WHATWG: <a href="http://www.whatwg.org/">http://www.whatwg.org/</a> -- logs: <a href="http://krijnhoetmer.nl/irc-logs/">http://krijnhoetmer.nl/irc-logs/</a> -- stats: <a href="http://gavinsharp.com/irc/whatwg.html">http://gavinsharp.com/irc/whatwg.html</a> -- Please leave your sense of logic at the door, thanks!'</li>
+ <li id="l-213" _a="Set"><a href="#l-213">#</a> [05:36] * Set by annevk42 on Mon Oct 19 22:03:06</li>
+ <li id="l-214"><a href="#l-214">#</a> [05:38] * Quits: ParadoX- (parad0x@hades.spexhost.com) (Quit: ZNC - <a href="http://znc.sourceforge.net">http://znc.sourceforge.net</a>)</li>
+ <li id="l-215"><a href="#l-215">#</a> [05:39] * Joins: ParadoX- (parad0x@69.42.220.194)</li>
+ <li id="l-216"><a href="#l-216">#</a> [05:40] * Joins: unomi (~unomi@unaffiliated/unomi)</li>
+ <li id="l-217" _a="heycam|away"><a href="#l-217">#</a> [05:44] * heycam|away is now known as heycam</li>
+ <li id="l-218" _a="heycam"><a href="#l-218">#</a> [05:49] * heycam is now known as heycam|away</li>
+ <li id="l-219"><a href="#l-219">#</a> [05:59] * Joins: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net)</li>
+ <li id="l-220"><a href="#l-220">#</a> [06:11] * Quits: temp01 (~temp01@unaffiliated/temp01) (Read error: Connection reset by peer)</li>
+ <li id="l-221"><a href="#l-221">#</a> [06:13] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-222"><a href="#l-222">#</a> [06:16] * Joins: dbaron (~dbaron@70-36-140-19.dsl.dynamic.sonic.net)</li>
+ <li id="l-223"><a href="#l-223">#</a> [06:17] * Quits: niloy (~niloy@42.104.64.56) (Ping timeout: 240 seconds)</li>
+ <li id="l-224"><a href="#l-224">#</a> [06:20] * Joins: timmywil_ (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-225"><a href="#l-225">#</a> [06:21] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Ping timeout: 260 seconds)</li>
+ <li id="l-226" _a="timmywil_"><a href="#l-226">#</a> [06:21] * timmywil_ is now known as timmywil</li>
+ <li id="l-227"><a href="#l-227">#</a> [06:22] * Quits: hsivonen (~hsivonen@srv-e205.esp.mediateam.fi) (Ping timeout: 252 seconds)</li>
+ <li id="l-228"><a href="#l-228">#</a> [06:22] * Joins: hsivonen (~hsivonen@srv-e205.esp.mediateam.fi)</li>
+ <li id="l-229"><a href="#l-229">#</a> [06:28] * Quits: othree_ (~othree@admin39.ct.ntust.edu.tw) (Ping timeout: 240 seconds)</li>
+ <li id="l-230"><a href="#l-230">#</a> [06:31] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 244 seconds)</li>
+ <li id="l-231"><a href="#l-231">#</a> [06:36] * Quits: miketaylr (~miketaylr@cpe-68-203-0-108.austin.res.rr.com) (Quit: Leaving...)</li>
+ <li id="l-232"><a href="#l-232">#</a> [06:36] * Quits: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr) (Ping timeout: 245 seconds)</li>
+ <li id="l-233"><a href="#l-233">#</a> [06:38] * Joins: miketaylr (~miketaylr@cpe-68-203-0-108.austin.res.rr.com)</li>
+ <li id="l-234"><a href="#l-234">#</a> [06:48] * Joins: niloy (~niloy@1.39.23.159)</li>
+ <li id="l-235"><a href="#l-235">#</a> [06:49] * Quits: ezoe (~ezoe@203-140-89-103f1.kyt1.eonet.ne.jp) (Ping timeout: 260 seconds)</li>
+ <li id="l-236"><a href="#l-236">#</a> [06:49] * Joins: davidwalsh (~davidwals@75-135-74-55.dhcp.mdsn.wi.charter.com)</li>
+ <li id="l-237"><a href="#l-237">#</a> [06:50] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-238"><a href="#l-238">#</a> [06:57] * Quits: miketaylr (~miketaylr@cpe-68-203-0-108.austin.res.rr.com) (Quit: dflk;adfslkj;alsiekfj;laiskdf)</li>
+ <li id="l-239"><a href="#l-239">#</a> [07:11] * Quits: davidwalsh (~davidwals@75-135-74-55.dhcp.mdsn.wi.charter.com) (Quit: davidwalsh)</li>
+ <li id="l-240"><a href="#l-240">#</a> [07:16] * Quits: jernoble (~jernoble@17.212.152.13) (Quit: jernoble)</li>
+ <li id="l-241"><a href="#l-241">#</a> [07:26] * Joins: ezoe (~ezoe@112-68-244-135f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-242"><a href="#l-242">#</a> [07:34] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120213092145])</li>
+ <li id="l-243"><a href="#l-243">#</a> [07:43] * Joins: Evanescence (~Evanescen@60.183.208.142)</li>
+ <li id="l-244"><a href="#l-244">#</a> [07:44] * Quits: N0000B (~quassel@adsl-98-68-176-92.cha.bellsouth.net) (Remote host closed the connection)</li>
+ <li id="l-245"><a href="#l-245">#</a> [07:45] * Joins: skylamer` (cgskylamer@78.90.213.55)</li>
+ <li id="l-246"><a href="#l-246">#</a> [08:23] * Joins: jwalden (~waldo@c-71-202-165-226.hsd1.ca.comcast.net)</li>
+ <li id="l-247"><a href="#l-247">#</a> [08:43] * Quits: dbaron (~dbaron@70-36-140-19.dsl.dynamic.sonic.net) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-248"><a href="#l-248">#</a> [09:09] * Quits: jwalden (~waldo@c-71-202-165-226.hsd1.ca.comcast.net) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 10.0.1/20120213092145])</li>
+ <li id="l-249"><a href="#l-249">#</a> [09:22] * Joins: madcow (madcow@202.296.dsl.mel.iprimus.net.au)</li>
+ <li id="l-250"><a href="#l-250">#</a> [09:28] * Quits: MikeSmith (~MikeSmith@p15181-obmd01.tokyo.ocn.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-251"><a href="#l-251">#</a> [09:28] * Joins: jochen___ (jochen@nat/google/x-zigstclenffaouei)</li>
+ <li id="l-252"><a href="#l-252">#</a> [09:31] * Quits: madcow (madcow@202.296.dsl.mel.iprimus.net.au)</li>
+ <li id="l-253"><a href="#l-253">#</a> [09:32] * Quits: jochen__ (jochen@nat/google/x-hvjvlzukyvceelql) (Ping timeout: 272 seconds)</li>
+ <li id="l-254" _a="jochen___"><a href="#l-254">#</a> [09:32] * jochen___ is now known as jochen__</li>
+ <li id="l-255"><a href="#l-255">#</a> [09:35] * Quits: temp01 (~temp01@unaffiliated/temp01) (Read error: Connection reset by peer)</li>
+ <li id="l-256"><a href="#l-256">#</a> [09:35] * Joins: Onderhond (onderhond@d54C61C40.access.telenet.be)</li>
+ <li id="l-257" _a="Onderhond"><a href="#l-257">#</a> [09:36] &lt;Onderhond&gt; Quick question: is it just me or was there some kind of proposition for a &lt;template&gt; element in html5?</li>
+ <li id="l-258"><a href="#l-258">#</a> [09:39] * Joins: carlosantonio (~benway@173.230.152.21)</li>
+ <li id="l-259" _a="carlosantonio"><a href="#l-259">#</a> [09:39] * carlosantonio is now known as carlos_antonio</li>
+ <li id="l-260"><a href="#l-260">#</a> [09:40] * Quits: carlos_antonio (~benway@173.230.152.21) (Client Quit)</li>
+ <li id="l-261"><a href="#l-261">#</a> [09:44] * Quits: myakura (~myakura@FL1-110-233-178-43.tky.mesh.ad.jp) (Remote host closed the connection)</li>
+ <li id="l-262"><a href="#l-262">#</a> [09:47] * Joins: carlos_antonio (~benway@173.230.152.21)</li>
+ <li id="l-263" _a="carlos_antonio"><a href="#l-263">#</a> [09:50] * carlos_antonio is now known as beans</li>
+ <li id="l-264" _a="beans"><a href="#l-264">#</a> [09:53] * beans is now known as carlos_antonio</li>
+ <li id="l-265" _a="carlos_antonio"><a href="#l-265">#</a> [09:53] * carlos_antonio is now known as disusered</li>
+ <li id="l-266" _a="disusered"><a href="#l-266">#</a> [09:53] * disusered is now known as carlos_antonio</li>
+ <li id="l-267"><a href="#l-267">#</a> [09:56] * Quits: niloy (~niloy@1.39.23.159) (Read error: Connection reset by peer)</li>
+ <li id="l-268"><a href="#l-268">#</a> [09:57] * Quits: carlos_antonio (~benway@173.230.152.21) (Quit: leaving)</li>
+ <li id="l-269"><a href="#l-269">#</a> [10:00] * Quits: ezoe (~ezoe@112-68-244-135f1.kyt1.eonet.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-270"><a href="#l-270">#</a> [10:07] * Joins: lar_zzz (~lar_zzz@p4FE2527E.dip.t-dialin.net)</li>
+ <li id="l-271"><a href="#l-271">#</a> [10:07] * Parts: lar_zzz (~lar_zzz@p4FE2527E.dip.t-dialin.net)</li>
+ <li id="l-272"><a href="#l-272">#</a> [10:08] * Joins: plutoniix (~plutoniix@101.108.121.123)</li>
+ <li id="l-273"><a href="#l-273">#</a> [10:17] * Joins: lar_zzz (~lar_zzz@p4FE2527E.dip.t-dialin.net)</li>
+ <li id="l-274"><a href="#l-274">#</a> [10:17] * Quits: pablof (~pablof@c-98-207-157-89.hsd1.ca.comcast.net) (Quit: ^z)</li>
+ <li id="l-275"><a href="#l-275">#</a> [10:17] * Joins: carlos_antonio (~benway@173.230.152.21)</li>
+ <li id="l-276"><a href="#l-276">#</a> [10:18] * Joins: Ms2ger (~Ms2ger@91.181.18.122)</li>
+ <li id="l-277"><a href="#l-277">#</a> [10:19] * Joins: pablof (~pablof@c-98-207-157-89.hsd1.ca.comcast.net)</li>
+ <li id="l-278"><a href="#l-278">#</a> [10:30] * Quits: pablof (~pablof@c-98-207-157-89.hsd1.ca.comcast.net) (Quit: ^z)</li>
+ <li id="l-279" _a="annevk" _r="Onderhond"><a href="#l-279">#</a> [10:39] &lt;annevk&gt; Onderhond: there is</li>
+ <li id="l-280" _a="annevk"><a href="#l-280">#</a> [10:43] &lt;annevk&gt; sigh Microsoft does not want to remove constants from Indexed DB?</li>
+ <li id="l-281" _a="annevk"><a href="#l-281">#</a> [10:43] &lt;annevk&gt; consider it for v2?</li>
+ <li id="l-282" _a="annevk"><a href="#l-282">#</a> [10:43] &lt;annevk&gt; euh</li>
+ <li id="l-283"><a href="#l-283">#</a> [10:46] * Joins: hober2 (~ted@unaffiliated/hober)</li>
+ <li id="l-284"><a href="#l-284">#</a> [10:48] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-285"><a href="#l-285">#</a> [10:48] * Quits: hober (~ted@unaffiliated/hober) (Ping timeout: 260 seconds)</li>
+ <li id="l-286"><a href="#l-286">#</a> [10:50] * Quits: Bass10 (Bass10@c-76-113-194-7.hsd1.mn.comcast.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-287" _a="annevk"><a href="#l-287">#</a> [10:50] &lt;annevk&gt; oh lol</li>
+ <li id="l-288" _a="annevk" _r="drm"><a href="#l-288">#</a> [10:50] &lt;annevk&gt; drm, no drm, it's like https versus http</li>
+ <li id="l-289" _a="annevk"><a href="#l-289">#</a> [10:51] &lt;annevk&gt; public-html turning into a comedy list does seem positive</li>
+ <li id="l-290" _a="Ms2ger"><a href="#l-290">#</a> [10:52] &lt;Ms2ger&gt; Better than a tragedy?</li>
+ <li id="l-291" _a="annevk" _r="well"><a href="#l-291">#</a> [10:53] &lt;annevk&gt; well, public-html is not good tragedy, so yes</li>
+ <li id="l-292"><a href="#l-292">#</a> [10:55] * Joins: drublic (~drublic@p54AE14C4.dip0.t-ipconnect.de)</li>
+ <li id="l-293"><a href="#l-293">#</a> [11:02] * Joins: necolas (~necolas@5e0c715f.bb.sky.com)</li>
+ <li id="l-294"><a href="#l-294">#</a> [11:05] * Joins: maikmerten (~maikmerte@port-92-201-211-62.dynamic.qsc.de)</li>
+ <li id="l-295"><a href="#l-295">#</a> [11:11] * Joins: [[zzz]] (~q@125.25.232.18.adsl.dynamic.totbb.net)</li>
+ <li id="l-296"><a href="#l-296">#</a> [11:11] * Joins: plutoniiix (~plutoniix@125.25.232.18.adsl.dynamic.totbb.net)</li>
+ <li id="l-297"><a href="#l-297">#</a> [11:14] * Quits: [[zz]] (~q@101.108.121.123) (Ping timeout: 245 seconds)</li>
+ <li id="l-298"><a href="#l-298">#</a> [11:15] * Joins: svl (~me@89.128.148.64)</li>
+ <li id="l-299"><a href="#l-299">#</a> [11:15] * Quits: plutoniix (~plutoniix@101.108.121.123) (Ping timeout: 260 seconds)</li>
+ <li id="l-300" _a="plutoniiix"><a href="#l-300">#</a> [11:19] * plutoniiix is now known as plutoniix</li>
+ <li id="l-301" _a="[[zzz]]"><a href="#l-301">#</a> [11:19] * [[zzz]] is now known as [[zz]]</li>
+ <li id="l-302"><a href="#l-302">#</a> [11:21] * Joins: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net)</li>
+ <li id="l-303"><a href="#l-303">#</a> [11:23] * Joins: nonge_ (~nonge@p50829B90.dip.t-dialin.net)</li>
+ <li id="l-304" _a="Onderhond" _r="annevk"><a href="#l-304">#</a> [11:24] &lt;Onderhond&gt; annevk: where can I read up on the &lt;template&gt; element? Google isn't very helpful.</li>
+ <li id="l-305" _a="Ms2ger"><a href="#l-305">#</a> [11:25] &lt;Ms2ger&gt; XBL2 or Web Components.</li>
+ <li id="l-306" _a="Ms2ger"><a href="#l-306">#</a> [11:25] &lt;Ms2ger&gt; ?</li>
+ <li id="l-307"><a href="#l-307">#</a> [11:26] * Quits: nonge (~nonge@p5082A522.dip.t-dialin.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-308"><a href="#l-308">#</a> [11:26] * Joins: tomasf (~tom@2002:55e5:dbb7:0:d97d:6ab:8fa0:9d4d)</li>
+ <li id="l-309" _a="hsivonen"><a href="#l-309">#</a> [11:33] &lt;hsivonen&gt; I wonder why Gmail thinks emails from Mark Watson (@netflix.com) would be spam if I didn't have a filter telling Gmail never to mark them as spam</li>
+ <li id="l-310"><a href="#l-310">#</a> [11:36] * Quits: svl (~me@89.128.148.64) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-311"><a href="#l-311">#</a> [11:36] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-312"><a href="#l-312">#</a> [11:38] * Joins: eric_carlson (~eric@2620:149:4:1b01:c4de:b6c:671d:add9)</li>
+ <li id="l-313"><a href="#l-313">#</a> [11:40] * Quits: ericc|away (~eric@2620:149:4:1b01:d5ab:37b:50d3:a11d) (Ping timeout: 245 seconds)</li>
+ <li id="l-314" _a="Dashiva" _r="hsivonen"><a href="#l-314">#</a> [12:08] &lt;Dashiva&gt; hsivonen: I think you can hover over some part of it to see why it was marked</li>
+ <li id="l-315" _a="Dashiva"><a href="#l-315">#</a> [12:08] &lt;Dashiva&gt; Or maybe that's priority inbox</li>
+ <li id="l-316"><a href="#l-316">#</a> [12:32] * Quits: annevk (~annevk@guest.opera.com) (Remote host closed the connection)</li>
+ <li id="l-317"><a href="#l-317">#</a> [12:32] * Joins: annevk (annevk@nat/opera/x-thmbvwxjibcixwhp)</li>
+ <li id="l-318"><a href="#l-318">#</a> [12:32] * Quits: rektide (~rektide@deneb.eldergods.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-319"><a href="#l-319">#</a> [12:39] * Joins: mhausenblas (~mhausenbl@188.141.67.15)</li>
+ <li id="l-320"><a href="#l-320">#</a> [12:44] * Joins: othree (~othree@140.118.5.39)</li>
+ <li id="l-321"><a href="#l-321">#</a> [12:46] * Joins: tndrH (~Rob@cpc16-seac19-2-0-cust234.7-2.cable.virginmedia.com)</li>
+ <li id="l-322" _a="annevk"><a href="#l-322">#</a> [12:47] &lt;annevk&gt; fyi <a href="https://plus.google.com/107429617152575897589/posts/NZBJe6Jjt1f">https://plus.google.com/107429617152575897589/posts/NZBJe6Jjt1f</a></li>
+ <li id="l-323"><a href="#l-323">#</a> [12:49] * Joins: Kingdutch (~kingdutch@188.200.149.217)</li>
+ <li id="l-324"><a href="#l-324">#</a> [12:55] * Joins: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr)</li>
+ <li id="l-325"><a href="#l-325">#</a> [13:00] * Joins: rektide (~rektide@deneb.eldergods.com)</li>
+ <li id="l-326"><a href="#l-326">#</a> [13:10] * Parts: lar_zzz (~lar_zzz@p4FE2527E.dip.t-dialin.net)</li>
+ <li id="l-327"><a href="#l-327">#</a> [13:11] * Quits: mhausenblas (~mhausenbl@188.141.67.15) (Quit: mhausenblas)</li>
+ <li id="l-328" _a="annevk"><a href="#l-328">#</a> [13:15] &lt;annevk&gt; there's a &lt;!-- XXX WTF? --&gt; in DOM4</li>
+ <li id="l-329" _a="annevk"><a href="#l-329">#</a> [13:15] &lt;annevk&gt; about the traverse siblings algorithm it seems</li>
+ <li id="l-330"><a href="#l-330">#</a> [13:16] * Quits: LBP (~Mirc@pD9EB0A24.dip0.t-ipconnect.de) (Quit: Bye, bye! See you on <a href="http://leanbackplayer.com">http://leanbackplayer.com</a>)</li>
+ <li id="l-331" _a="Velmont" _r="annevk"><a href="#l-331">#</a> [13:17] &lt;Velmont&gt; annevk: Bah. They did not :S -- Well, they can actually change the numeric constants and leave the constants as-is. I guess their developers don't rely on 1 and 2, but rather IDBTransaction.READ_WRITE etc.</li>
+ <li id="l-332" _a="Ms2ger"><a href="#l-332">#</a> [13:17] &lt;Ms2ger&gt; Hah</li>
+ <li id="l-333" _a="Ms2ger"><a href="#l-333">#</a> [13:17] &lt;Ms2ger&gt; I would not count on such a reasonable thing</li>
+ <li id="l-334" _a="Velmont" _r="Ms2ger"><a href="#l-334">#</a> [13:18] &lt;Velmont&gt; Ms2ger: Well, I don't think Microsoft would admit that they have such sloppy developers.</li>
+ <li id="l-335" _a="annevk" _r="Velmont"><a href="#l-335">#</a> [13:18] &lt;annevk&gt; Velmont: but you know... you rewrote their tests</li>
+ <li id="l-336" _a="Velmont" _r="annevk"><a href="#l-336">#</a> [13:19] &lt;Velmont&gt; annevk: Heh, -- they didn't use the numbers there, they used the constant names.</li>
+ <li id="l-337" _a="annevk" _r="ah"><a href="#l-337">#</a> [13:19] &lt;annevk&gt; ah, at least they got something right :)</li>
+ <li id="l-338" _a="Ms2ger"><a href="#l-338">#</a> [13:20] &lt;Ms2ger&gt; Have you looked at the WebStorage tests?</li>
+ <li id="l-339" class="flagged" _a="annevk"><a href="#l-339">#</a> [13:21] &lt;annevk&gt; &quot;Interestingly enough, the IETF follows the snapshot model, deals with hundreds of highly critical standards and it works absolutely well.&quot;</li>
+ <li id="l-340" _a="Velmont"><a href="#l-340">#</a> [13:21] &lt;Velmont&gt; Not really, took a quick peek once.</li>
+ <li id="l-341"><a href="#l-341">#</a> [13:21] * Quits: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr) (Ping timeout: 252 seconds)</li>
+ <li id="l-342" _a="annevk"><a href="#l-342">#</a> [13:21] &lt;annevk&gt; hmm</li>
+ <li id="l-343" class="flagged" _a="annevk"><a href="#l-343">#</a> [13:21] &lt;annevk&gt; HTTP - latest stable version, out of date, a mess</li>
+ <li id="l-344" class="flagged" _a="annevk"><a href="#l-344">#</a> [13:21] &lt;annevk&gt; data URLs - a mess</li>
+ <li id="l-345" class="flagged" _a="annevk"><a href="#l-345">#</a> [13:21] &lt;annevk&gt; URI/IRI - cannot be implemented as is</li>
+ <li id="l-346" class="flagged" _a="annevk"><a href="#l-346">#</a> [13:22] &lt;annevk&gt; TLS - not updated with respect to what implementations actually need to do</li>
+ <li id="l-347" class="flagged" _a="annevk"><a href="#l-347">#</a> [13:22] &lt;annevk&gt; HTTP authentication -- hahaha</li>
+ <li id="l-348" _a="hsivonen"><a href="#l-348">#</a> [13:22] &lt;hsivonen&gt; I wonder how chuck@jumis manages to confuse server-side login with DRM and Trusted Computing for DRM and Trusted Computing against janitor attacks</li>
+ <li id="l-349" _a="hsivonen"><a href="#l-349">#</a> [13:23] &lt;hsivonen&gt; did I get trolled?</li>
+ <li id="l-350" _a="annevk"><a href="#l-350">#</a> [13:23] &lt;annevk&gt; MIME - maybe this one is too easy</li>
+ <li id="l-351" _a="Ms2ger" _r="Man"><a href="#l-351">#</a> [13:23] &lt;Ms2ger&gt; Man, I wish WebGL used testharness.js</li>
+ <li id="l-352" _a="annevk" _r="hsivonen"><a href="#l-352">#</a> [13:24] &lt;annevk&gt; hsivonen: I find his emails usually confusing</li>
+ <li id="l-353"><a href="#l-353">#</a> [13:25] * Quits: ehsan_ (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-354"><a href="#l-354">#</a> [13:42] * Quits: maikmerten (~maikmerte@port-92-201-211-62.dynamic.qsc.de) (Remote host closed the connection)</li>
+ <li id="l-355" _a="gsnedders" _r="Ms2ger"><a href="#l-355">#</a> [13:50] &lt;gsnedders&gt; Ms2ger: Likewise. WebKit's test harness really doesn't work if you want actual regression tracking…</li>
+ <li id="l-356" _a="Ms2ger" _r="Oh"><a href="#l-356">#</a> [13:51] &lt;Ms2ger&gt; Oh, is this all WebKit's fault?</li>
+ <li id="l-357" _a="gsnedders" _r="Well"><a href="#l-357">#</a> [13:51] &lt;gsnedders&gt; Well, at least it looks exactly like WebKit's JS test framework, so I was assuming it was.</li>
+ <li id="l-358" _a="gsnedders" _r="Also"><a href="#l-358">#</a> [13:54] &lt;gsnedders&gt; Also: I don't get how people don't bang heads against people claiming random crash bugs are security issues.</li>
+ <li id="l-359" _a="gsnedders" _r="And"><a href="#l-359">#</a> [13:57] &lt;gsnedders&gt; And, ah, how I've missed dealing with GWT output.</li>
+ <li id="l-360" _a="Ms2ger" _r="So"><a href="#l-360">#</a> [14:03] &lt;Ms2ger&gt; So, what's the current thinking about <a href="http://dev.w3.org/2009/dap/file-system/file-writer.html">http://dev.w3.org/2009/dap/file-system/file-writer.html</a> ?</li>
+ <li id="l-361" _a="asmodai" _r="hsivonen"><a href="#l-361">#</a> [14:07] &lt;asmodai&gt; hsivonen: Happen to know if FF fires events for the discarding of large images on a tab switch?</li>
+ <li id="l-362" _a="Ms2ger"><a href="#l-362">#</a> [14:10] &lt;Ms2ger&gt; To the page? No</li>
+ <li id="l-363" _a="asmodai"><a href="#l-363">#</a> [14:10] &lt;asmodai&gt; is there any other way to detect it?</li>
+ <li id="l-364" _a="Ms2ger"><a href="#l-364">#</a> [14:10] &lt;Ms2ger&gt; Shouldn't be</li>
+ <li id="l-365" _a="Ms2ger"><a href="#l-365">#</a> [14:10] &lt;Ms2ger&gt; You could try a timing attack</li>
+ <li id="l-366"><a href="#l-366">#</a> [14:15] * Joins: mhausenblas (~mhausenbl@188.141.67.15)</li>
+ <li id="l-367" _a="hsivonen" _r="asmodai"><a href="#l-367">#</a> [14:17] &lt;hsivonen&gt; asmodai: no idea</li>
+ <li id="l-368" _a="hsivonen" _r="annevk"><a href="#l-368">#</a> [14:18] &lt;hsivonen&gt; annevk: regarding indexed db, clearly, there's no v1, either, as evidenced by whar Isreal said</li>
+ <li id="l-369" _a="annevk"><a href="#l-369">#</a> [14:20] &lt;annevk&gt; well yeah, there's no v</li>
+ <li id="l-370" _a="hsivonen" _r="asmodai"><a href="#l-370">#</a> [14:20] &lt;hsivonen&gt; asmodai: what's the use case?</li>
+ <li id="l-371" _a="asmodai" _r="hsivonen"><a href="#l-371">#</a> [14:21] &lt;asmodai&gt; hsivonen: Was asking based on a tweet of a buddy of mine, I think he's working on his framework debugger again</li>
+ <li id="l-372" _a="asmodai" _r="hsivonen"><a href="#l-372">#</a> [14:21] &lt;asmodai&gt; hsivonen: Trying to get his ass in here so he can just ask himself XD</li>
+ <li id="l-373"><a href="#l-373">#</a> [14:22] * Joins: espadrine (~thaddee_t@AMontsouris-157-1-115-93.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-374" _a="annevk"><a href="#l-374">#</a> [14:22] &lt;annevk&gt; maybe it's time for a new &quot;red pill&quot; post</li>
+ <li id="l-375" _a="annevk"><a href="#l-375">#</a> [14:22] &lt;annevk&gt; on standards</li>
+ <li id="l-376" _a="hsivonen" _r="annevk"><a href="#l-376">#</a> [14:23] &lt;hsivonen&gt; annevk: go for it</li>
+ <li id="l-377"><a href="#l-377">#</a> [14:25] * Quits: annevk (annevk@nat/opera/x-thmbvwxjibcixwhp) (Quit: annevk)</li>
+ <li id="l-378" _a="hsivonen"><a href="#l-378">#</a> [14:28] &lt;hsivonen&gt; XML ER is not on xml-dev yet</li>
+ <li id="l-379"><a href="#l-379">#</a> [14:28] * Quits: ivan\ (~ivan@unaffiliated/ivan/x-000001) (Read error: Operation timed out)</li>
+ <li id="l-380"><a href="#l-380">#</a> [14:37] * Joins: ivan\ (~ivan@unaffiliated/ivan/x-000001)</li>
+ <li id="l-381"><a href="#l-381">#</a> [14:50] * Joins: riven` (~riven@53518387.cm-6-2c.dynamic.ziggo.nl)</li>
+ <li id="l-382"><a href="#l-382">#</a> [14:50] * Quits: riven (~riven@pdpc/supporter/professional/riven) (Disconnected by services)</li>
+ <li id="l-383" _a="riven`"><a href="#l-383">#</a> [14:50] * riven` is now known as riven</li>
+ <li id="l-384"><a href="#l-384">#</a> [14:50] * Quits: riven (~riven@53518387.cm-6-2c.dynamic.ziggo.nl) (Changing host)</li>
+ <li id="l-385"><a href="#l-385">#</a> [14:50] * Joins: riven (~riven@pdpc/supporter/professional/riven)</li>
+ <li id="l-386"><a href="#l-386">#</a> [14:51] * Joins: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-387"><a href="#l-387">#</a> [14:52] * Joins: graememcc (~chatzilla@host86-150-157-88.range86-150.btcentralplus.com)</li>
+ <li id="l-388"><a href="#l-388">#</a> [14:53] * Joins: maikmerten (~maikmerte@port-92-201-211-62.dynamic.qsc.de)</li>
+ <li id="l-389"><a href="#l-389">#</a> [14:56] * Joins: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net)</li>
+ <li id="l-390"><a href="#l-390">#</a> [14:59] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-391" _a="pflock"><a href="#l-391">#</a> [15:00] &lt;pflock&gt; Does anyone know why the lines here all have the same color though I gave them different strokeStyle's? <a href="http://jsfiddle.net/u4Gpf/">http://jsfiddle.net/u4Gpf/</a></li>
+ <li id="l-392" _a="Philip`" _r="pflock"><a href="#l-392">#</a> [15:02] &lt;Philip`&gt; pflock: You need to call context.beginPath() before each new path</li>
+ <li id="l-393" _a="pflock"><a href="#l-393">#</a> [15:02] &lt;pflock&gt; ah thanks ;)</li>
+ <li id="l-394" _a="Philip`"><a href="#l-394">#</a> [15:02] &lt;Philip`&gt; Otherwise you're drawing a path with 1 line, then extending the path to 2 lines and drawing all that again, etc</li>
+ <li id="l-395" _a="pflock"><a href="#l-395">#</a> [15:03] &lt;pflock&gt; yes I noticed that he always colored them all in the last color I set, so that one overwrites the other colors, but I didn't know why</li>
+ <li id="l-396"><a href="#l-396">#</a> [15:03] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-397" _a="pflock"><a href="#l-397">#</a> [15:03] &lt;pflock&gt; I thought context.stroke() already 'ends' the path</li>
+ <li id="l-398"><a href="#l-398">#</a> [15:12] * Joins: annevk (~annevk@77.88.102.21)</li>
+ <li id="l-399" _a="annevk"><a href="#l-399">#</a> [15:12] &lt;annevk&gt; ok so far I've got</li>
+ <li id="l-400" _a="annevk"><a href="#l-400">#</a> [15:12] &lt;annevk&gt; * living</li>
+ <li id="l-401" _a="annevk"><a href="#l-401">#</a> [15:13] &lt;annevk&gt; * public domain</li>
+ <li id="l-402" _a="annevk"><a href="#l-402">#</a> [15:13] &lt;annevk&gt; maybe developed in public is newish enough too</li>
+ <li id="l-403" _a="Ms2ger"><a href="#l-403">#</a> [15:14] &lt;Ms2ger&gt; * no telcons</li>
+ <li id="l-404" _a="annevk"><a href="#l-404">#</a> [15:14] &lt;annevk&gt; ah yeah, asynchronous public decision making</li>
+ <li id="l-405" _a="annevk"><a href="#l-405">#</a> [15:14] &lt;annevk&gt; nice one</li>
+ <li id="l-406" _a="mhausenblas"><a href="#l-406">#</a> [15:16] &lt;mhausenblas&gt; maybe add implementation-driven?</li>
+ <li id="l-407" _a="Ms2ger"><a href="#l-407">#</a> [15:17] &lt;Ms2ger&gt; Or in close cooperation with implementations, at least</li>
+ <li id="l-408"><a href="#l-408">#</a> [15:17] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-409" _a="mhausenblas"><a href="#l-409">#</a> [15:18] &lt;mhausenblas&gt; in this respect I'm rather radical, Ms2ger</li>
+ <li id="l-410" _a="Ms2ger"><a href="#l-410">#</a> [15:18] &lt;Ms2ger&gt; I'm not :)</li>
+ <li id="l-411" _a="mhausenblas"><a href="#l-411">#</a> [15:18] &lt;mhausenblas&gt; what's the point if it isn't implemented?</li>
+ <li id="l-412" _a="mhausenblas"><a href="#l-412">#</a> [15:18] &lt;mhausenblas&gt; why?</li>
+ <li id="l-413" _a="Ms2ger" _r="Well"><a href="#l-413">#</a> [15:18] &lt;Ms2ger&gt; Well, sure, it needs to be implemented</li>
+ <li id="l-414" _a="mhausenblas"><a href="#l-414">#</a> [15:18] &lt;mhausenblas&gt; implemented and implementable</li>
+ <li id="l-415" _a="mhausenblas"><a href="#l-415">#</a> [15:19] &lt;mhausenblas&gt; right</li>
+ <li id="l-416"><a href="#l-416">#</a> [15:19] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Client Quit)</li>
+ <li id="l-417" _a="mhausenblas"><a href="#l-417">#</a> [15:19] &lt;mhausenblas&gt; I remember in horror the work in MPEG-7</li>
+ <li id="l-418" _a="Ms2ger"><a href="#l-418">#</a> [15:19] &lt;Ms2ger&gt; But it sounded like you were saying it had to be implemented before starting on a spec</li>
+ <li id="l-419" _a="mhausenblas"><a href="#l-419">#</a> [15:19] &lt;mhausenblas&gt; I was young and I needed the job</li>
+ <li id="l-420" _a="mhausenblas" _r="mhm"><a href="#l-420">#</a> [15:19] &lt;mhausenblas&gt; mhm, sorta</li>
+ <li id="l-421" _a="mhausenblas"><a href="#l-421">#</a> [15:19] &lt;mhausenblas&gt; like impl - spec -impl - spec</li>
+ <li id="l-422" _a="mhausenblas"><a href="#l-422">#</a> [15:19] &lt;mhausenblas&gt; ...</li>
+ <li id="l-423" _a="mhausenblas"><a href="#l-423">#</a> [15:20] &lt;mhausenblas&gt; of course you don't  know the entire space so it must be iterative</li>
+ <li id="l-424" _a="mhausenblas"><a href="#l-424">#</a> [15:20] &lt;mhausenblas&gt; dunno who said it but something along the line of 'any complex system evolved from a very simple on'</li>
+ <li id="l-425" _a="Ms2ger"><a href="#l-425">#</a> [15:21] &lt;Ms2ger&gt; Mm</li>
+ <li id="l-426" _a="mhausenblas" _r="so"><a href="#l-426">#</a> [15:21] &lt;mhausenblas&gt; so: KISS(at least)  in the beginning and iterate</li>
+ <li id="l-427" _a="mhausenblas"><a href="#l-427">#</a> [15:21] &lt;mhausenblas&gt; s/simple on/simple one</li>
+ <li id="l-428" _a="Ms2ger"><a href="#l-428">#</a> [15:21] &lt;Ms2ger&gt; Agreed</li>
+ <li id="l-429"><a href="#l-429">#</a> [15:24] * Quits: Evanescence (~Evanescen@60.183.208.142) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-430"><a href="#l-430">#</a> [15:24] * Joins: Evanescence (~Evanescen@60.183.208.142)</li>
+ <li id="l-431" _a="annevk"><a href="#l-431">#</a> [15:28] &lt;annevk&gt; I don't think implementor involvement is important to mention</li>
+ <li id="l-432" _a="annevk"><a href="#l-432">#</a> [15:28] &lt;annevk&gt; if they're not involved</li>
+ <li id="l-433" _a="annevk"><a href="#l-433">#</a> [15:28] &lt;annevk&gt; nothing happens</li>
+ <li id="l-434" class="flagged" _a="annevk"><a href="#l-434">#</a> [15:30] &lt;annevk&gt; can anyone do a quick review? <a href="http://annevankesteren.nl/2012/02/standards-red-pill">http://annevankesteren.nl/2012/02/standards-red-pill</a></li>
+ <li id="l-435" _a="mhausenblas"><a href="#l-435">#</a> [15:31] &lt;mhausenblas&gt; annevk I don't understand your logic</li>
+ <li id="l-436" _a="mhausenblas"><a href="#l-436">#</a> [15:32] &lt;mhausenblas&gt; in what you say it looks implementer involvment is an essential precondition, no?</li>
+ <li id="l-437" _a="annevk"><a href="#l-437">#</a> [15:32] &lt;annevk&gt; what part?</li>
+ <li id="l-438" _a="annevk"><a href="#l-438">#</a> [15:32] &lt;annevk&gt; yeah</li>
+ <li id="l-439" _a="mhausenblas"><a href="#l-439">#</a> [15:32] &lt;mhausenblas&gt; so how can it be *not* important to mention</li>
+ <li id="l-440" _a="mhausenblas"><a href="#l-440">#</a> [15:32] &lt;mhausenblas&gt; people often make the mistake to forget to externalise the most basic assumption</li>
+ <li id="l-441" _a="annevk"><a href="#l-441">#</a> [15:33] &lt;annevk&gt; mkay</li>
+ <li id="l-442" _a="mhausenblas"><a href="#l-442">#</a> [15:33] &lt;mhausenblas&gt; because they seem to obvious</li>
+ <li id="l-443" _a="mhausenblas"><a href="#l-443">#</a> [15:33] &lt;mhausenblas&gt; right</li>
+ <li id="l-444" _a="Philip`" _r="annevk"><a href="#l-444">#</a> [15:33] &lt;Philip`&gt; annevk: s/proof/prove/</li>
+ <li id="l-445" _a="mhausenblas" _r="annevk"><a href="#l-445">#</a> [15:33] &lt;mhausenblas&gt; annevk, lemme know when you're done - happy to (re)tweet/G+ it</li>
+ <li id="l-446" _a="annevk"><a href="#l-446">#</a> [15:34] &lt;annevk&gt; thanks to Philip` and your addition I guess it's done now</li>
+ <li id="l-447" _a="mhausenblas"><a href="#l-447">#</a> [15:34] &lt;mhausenblas&gt; cool</li>
+ <li id="l-448"><a href="#l-448">#</a> [15:38] * Quits: drublic (~drublic@p54AE14C4.dip0.t-ipconnect.de) (Remote host closed the connection)</li>
+ <li id="l-449"><a href="#l-449">#</a> [15:41] * Quits: annevk (~annevk@77.88.102.21) (Quit: annevk)</li>
+ <li id="l-450"><a href="#l-450">#</a> [15:44] * Joins: smaug____ (~chatzilla@GGMYCXXVII.gprs.sl-laajakaista.fi)</li>
+ <li id="l-451"><a href="#l-451">#</a> [15:55] * Quits: Evanescence (~Evanescen@60.183.208.142) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-452"><a href="#l-452">#</a> [16:14] * Joins: davidwalsh (~davidwals@75-135-74-55.dhcp.mdsn.wi.charter.com)</li>
+ <li id="l-453"><a href="#l-453">#</a> [16:24] * Joins: karega (karega@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-454"><a href="#l-454">#</a> [16:29] * Quits: karega (karega@cpe-76-184-236-100.tx.res.rr.com) (Ping timeout: 245 seconds)</li>
+ <li id="l-455" _a="kennyluck"><a href="#l-455">#</a> [16:32] &lt;kennyluck&gt; Language — US English is the standard</li>
+ <li id="l-456"><a href="#l-456">#</a> [16:36] * Joins: Evanescence (~Evanescen@60.183.208.142)</li>
+ <li id="l-457"><a href="#l-457">#</a> [16:38] * Joins: chriseppstein (~chrisepps@99-6-85-4.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-458"><a href="#l-458">#</a> [16:42] * Joins: karega (karega@cpe-76-184-236-100.tx.res.rr.com)</li>
+ <li id="l-459"><a href="#l-459">#</a> [16:53] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-460"><a href="#l-460">#</a> [16:57] * Joins: Bass10 (Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-461"><a href="#l-461">#</a> [16:59] * Joins: joancreus (~chatzilla@188.84.17.100)</li>
+ <li id="l-462"><a href="#l-462">#</a> [17:20] * Quits: skylamer` (cgskylamer@78.90.213.55)</li>
+ <li id="l-463"><a href="#l-463">#</a> [17:20] * Joins: roc (~chatzilla@81.130.197.83)</li>
+ <li id="l-464"><a href="#l-464">#</a> [17:22] * Quits: espadrine (~thaddee_t@AMontsouris-157-1-115-93.w90-46.abo.wanadoo.fr) (Quit: espadrine)</li>
+ <li id="l-465"><a href="#l-465">#</a> [17:37] * Joins: drublic (~drublic@p54AE14C4.dip0.t-ipconnect.de)</li>
+ <li id="l-466"><a href="#l-466">#</a> [17:54] * Joins: jarek (~jarek@unaffiliated/jarek)</li>
+ <li id="l-467"><a href="#l-467">#</a> [17:58] * Quits: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl) (Quit: RobbertAtWork)</li>
+ <li id="l-468"><a href="#l-468">#</a> [18:14] * Joins: N0000B (~quassel@adsl-98-68-176-92.cha.bellsouth.net)</li>
+ <li id="l-469"><a href="#l-469">#</a> [18:14] * Joins: temp02 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-470"><a href="#l-470">#</a> [18:15] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 245 seconds)</li>
+ <li id="l-471"><a href="#l-471">#</a> [18:20] * Quits: joancreus (~chatzilla@188.84.17.100) (Quit: ChatZilla 0.9.88 [Firefox 10.0.2/20120216100510])</li>
+ <li id="l-472"><a href="#l-472">#</a> [18:32] * Quits: smaug____ (~chatzilla@GGMYCXXVII.gprs.sl-laajakaista.fi) (Remote host closed the connection)</li>
+ <li id="l-473"><a href="#l-473">#</a> [18:32] * Joins: smaug____ (~chatzilla@GGMYCXXVII.gprs.sl-laajakaista.fi)</li>
+ <li id="l-474"><a href="#l-474">#</a> [18:40] * Joins: davidb (~davidb@65.93.94.10)</li>
+ <li id="l-475"><a href="#l-475">#</a> [18:41] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-476"><a href="#l-476">#</a> [18:43] * Quits: davidb (~davidb@65.93.94.10) (Client Quit)</li>
+ <li id="l-477"><a href="#l-477">#</a> [18:46] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-478"><a href="#l-478">#</a> [18:52] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-479"><a href="#l-479">#</a> [18:57] * Joins: jonnybarnes (~jonny@jjjjbarnes.plus.com)</li>
+ <li id="l-480" _a="jonnybarnes" _r="hey"><a href="#l-480">#</a> [18:59] &lt;jonnybarnes&gt; hey, has anyone got a good refrence list of XML references?</li>
+ <li id="l-481" _a="StoneCypher"><a href="#l-481">#</a> [18:59] &lt;StoneCypher&gt; google does</li>
+ <li id="l-482"><a href="#l-482">#</a> [19:00] * Quits: Evanescence (~Evanescen@60.183.208.142) (Quit: my website: <a href="http://stardiviner.dyndns-blog.com/">http://stardiviner.dyndns-blog.com/</a>)</li>
+ <li id="l-483" _a="jonnybarnes"><a href="#l-483">#</a> [19:00] &lt;jonnybarnes&gt; Looking at an RSS feed I've made with PHP and seeing a lot of &amp;#13; entities and trying to find out what character thats meant to be</li>
+ <li id="l-484" _a="Ms2ger"><a href="#l-484">#</a> [19:00] &lt;Ms2ger&gt; CR</li>
+ <li id="l-485" _a="StoneCypher"><a href="#l-485">#</a> [19:00] &lt;StoneCypher&gt; so use an entity decoder</li>
+ <li id="l-486" _a="jonnybarnes"><a href="#l-486">#</a> [19:00] &lt;jonnybarnes&gt; Cheers Ms2ger</li>
+ <li id="l-487" _a="StoneCypher"><a href="#l-487">#</a> [19:00] &lt;StoneCypher&gt; or give a man a fish</li>
+ <li id="l-488" _a="jonnybarnes" _r="StoneCypher"><a href="#l-488">#</a> [19:01] &lt;jonnybarnes&gt; StoneCypher: any recomendations for entoty decoders?</li>
+ <li id="l-489" _a="Ms2ger"><a href="#l-489">#</a> [19:01] * Ms2ger slaps StoneCypher around a bit with a fish</li>
+ <li id="l-490" _a="jonnybarnes"><a href="#l-490">#</a> [19:01] &lt;jonnybarnes&gt; *entity</li>
+ <li id="l-491" _a="StoneCypher" _r="jonnybarnes"><a href="#l-491">#</a> [19:01] &lt;StoneCypher&gt; jonnybarnes: google does</li>
+ <li id="l-492"><a href="#l-492">#</a> [19:04] * Quits: danbri (~danbri@cable-146-255-153-130.dynamic.telemach.ba) (Read error: No route to host)</li>
+ <li id="l-493"><a href="#l-493">#</a> [19:04] * Joins: danbri (~danbri@cable-146-255-153-130.dynamic.telemach.ba)</li>
+ <li id="l-494"><a href="#l-494">#</a> [19:05] * Joins: dydx (~dydz@adsl-76-199-101-60.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-495"><a href="#l-495">#</a> [19:06] * Quits: jarek (~jarek@unaffiliated/jarek) (Quit: jarek)</li>
+ <li id="l-496"><a href="#l-496">#</a> [19:09] * Quits: jamesr (~jamesr@173-164-251-190-SFBA.hfc.comcastbusiness.net) (Quit: jamesr)</li>
+ <li id="l-497"><a href="#l-497">#</a> [19:11] * Quits: plutoniix (~plutoniix@125.25.232.18.adsl.dynamic.totbb.net) (Quit: Leaving)</li>
+ <li id="l-498"><a href="#l-498">#</a> [19:11] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-499" _a="Philip`" _r="jonnybarnes"><a href="#l-499">#</a> [19:16] &lt;Philip`&gt; jonnybarnes: <a href="http://www.fileformat.info/info/unicode/char/search.htm?q=%26%2313%3B&amp;preview=entity">http://www.fileformat.info/info/unicode/char/search.htm?q=%26%2313%3B&amp;preview=entity</a> should do it for numeric ones</li>
+ <li id="l-500" _a="Philip`" _r="(&amp;#13"><a href="#l-500">#</a> [19:16] &lt;Philip`&gt; (&amp;#13; means decimal 13, which is hex 000D, so it's Unicode character U+000D)</li>
+ <li id="l-501" _a="jonnybarnes"><a href="#l-501">#</a> [19:19] &lt;jonnybarnes&gt; cheers Philip`</li>
+ <li id="l-502"><a href="#l-502">#</a> [19:27] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-503"><a href="#l-503">#</a> [19:27] * Quits: mhausenblas (~mhausenbl@188.141.67.15) (Quit: mhausenblas)</li>
+ <li id="l-504"><a href="#l-504">#</a> [19:28] * Joins: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr)</li>
+ <li id="l-505"><a href="#l-505">#</a> [19:33] * Quits: dydx (~dydz@adsl-76-199-101-60.dsl.pltn13.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-506"><a href="#l-506">#</a> [19:34] * Joins: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-507"><a href="#l-507">#</a> [19:46] * Joins: hij1nx (~hij1nx@cpe-98-14-168-178.nyc.res.rr.com)</li>
+ <li id="l-508"><a href="#l-508">#</a> [19:48] * Joins: erlehmann (~erlehmann@82.113.106.233)</li>
+ <li id="l-509"><a href="#l-509">#</a> [19:48] * Quits: erlehmann (~erlehmann@82.113.106.233) (Read error: Connection reset by peer)</li>
+ <li id="l-510"><a href="#l-510">#</a> [19:51] * Joins: erlehmann (~erlehmann@82.113.106.233)</li>
+ <li id="l-511"><a href="#l-511">#</a> [19:51] * Parts: erlehmann (~erlehmann@82.113.106.233)</li>
+ <li id="l-512"><a href="#l-512">#</a> [19:51] * Quits: sicking (~chatzilla@154-93.80-90.static-ip.oleane.fr) (Ping timeout: 260 seconds)</li>
+ <li id="l-513"><a href="#l-513">#</a> [19:57] * Quits: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net) (Quit: pflock)</li>
+ <li id="l-514"><a href="#l-514">#</a> [19:57] * Quits: hij1nx (~hij1nx@cpe-98-14-168-178.nyc.res.rr.com) (Quit: hij1nx)</li>
+ <li id="l-515"><a href="#l-515">#</a> [20:01] * Joins: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net)</li>
+ <li id="l-516"><a href="#l-516">#</a> [20:01] * Quits: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net) (Client Quit)</li>
+ <li id="l-517"><a href="#l-517">#</a> [20:05] * Joins: niloy (~niloy@42.104.116.108)</li>
+ <li id="l-518"><a href="#l-518">#</a> [20:07] * Quits: drublic (~drublic@p54AE14C4.dip0.t-ipconnect.de) (Remote host closed the connection)</li>
+ <li id="l-519"><a href="#l-519">#</a> [20:07] * Quits: pyrsmk (~pyrsmk@mau49-1-82-245-46-173.fbx.proxad.net) (Quit: tzing)</li>
+ <li id="l-520"><a href="#l-520">#</a> [20:09] * Parts: jonnybarnes (~jonny@jjjjbarnes.plus.com) (&quot;WeeChat 0.3.6&quot;)</li>
+ <li id="l-521"><a href="#l-521">#</a> [20:09] * Quits: necolas (~necolas@5e0c715f.bb.sky.com) (Remote host closed the connection)</li>
+ <li id="l-522"><a href="#l-522">#</a> [20:13] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-523"><a href="#l-523">#</a> [20:15] * Joins: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net)</li>
+ <li id="l-524"><a href="#l-524">#</a> [20:16] * Joins: izhak (1000@188.168.76.104)</li>
+ <li id="l-525"><a href="#l-525">#</a> [20:17] * Quits: pflock (~Jakiw@gtng-4db056b6.pool.mediaWays.net) (Client Quit)</li>
+ <li id="l-526"><a href="#l-526">#</a> [20:33] * Quits: niloy (~niloy@42.104.116.108) (Read error: Connection reset by peer)</li>
+ <li id="l-527"><a href="#l-527">#</a> [20:38] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-528"><a href="#l-528">#</a> [20:42] * Joins: mishunov (~spliter@157.125.34.95.customer.cdi.no)</li>
+ <li id="l-529"><a href="#l-529">#</a> [20:42] * Quits: mishunov (~spliter@157.125.34.95.customer.cdi.no) (Client Quit)</li>
+ <li id="l-530"><a href="#l-530">#</a> [20:42] * Joins: ezoe (~ezoe@61-205-124-194f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-531" _a="jcranmer_"><a href="#l-531">#</a> [20:42] * jcranmer_ is now known as jcranmer</li>
+ <li id="l-532"><a href="#l-532">#</a> [20:47] * Quits: roc (~chatzilla@81.130.197.83) (Ping timeout: 240 seconds)</li>
+ <li id="l-533"><a href="#l-533">#</a> [20:48] * Quits: maikmerten (~maikmerte@port-92-201-211-62.dynamic.qsc.de) (Remote host closed the connection)</li>
+ <li id="l-534"><a href="#l-534">#</a> [20:56] * Joins: ehsan (~ehsan@209.29.21.241)</li>
+ <li id="l-535"><a href="#l-535">#</a> [20:59] * Quits: karega (karega@cpe-76-184-236-100.tx.res.rr.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-536"><a href="#l-536">#</a> [21:00] * Quits: asmodai (asmodai@178-85-121-247.dynamic.upc.nl) (Changing host)</li>
+ <li id="l-537"><a href="#l-537">#</a> [21:01] * Joins: asmodai (asmodai@freebsd/developer/asmodai)</li>
+ <li id="l-538"><a href="#l-538">#</a> [21:08] * Quits: kennyluck (~kennyluck@114-43-120-9.dynamic.hinet.net) (Read error: Connection reset by peer)</li>
+ <li id="l-539"><a href="#l-539">#</a> [21:10] * Quits: ehsan (~ehsan@209.29.21.241) (Remote host closed the connection)</li>
+ <li id="l-540" class="flagged" _a="hsivonen"><a href="#l-540">#</a> [21:11] &lt;hsivonen&gt; cute how DRM proponents don't like my use of the word adversary even though I used it because the proposal used that word</li>
+ <li id="l-541"><a href="#l-541">#</a> [21:13] * Joins: kennyluck (~kennyluck@114-43-123-235.dynamic.hinet.net)</li>
+ <li id="l-542" _a="StoneCypher"><a href="#l-542">#</a> [21:27] &lt;StoneCypher&gt; they're adversaries of adversary?</li>
+ <li id="l-543"><a href="#l-543">#</a> [21:33] * Quits: tomasf (~tom@2002:55e5:dbb7:0:d97d:6ab:8fa0:9d4d) (Ping timeout: 245 seconds)</li>
+ <li id="l-544"><a href="#l-544">#</a> [21:36] * Joins: RobbertAtWork (~Robbert@a83-160-99-114.adsl.xs4all.nl)</li>
+ <li id="l-545"><a href="#l-545">#</a> [21:37] * Joins: tomasf (~tom@c-b7dbe555.024-204-6c6b7012.cust.bredbandsbolaget.se)</li>
+ <li id="l-546" _a="smaug____"><a href="#l-546">#</a> [21:50] * smaug____ is glad he isn't following public-html</li>
+ <li id="l-547" _a="smaug____"><a href="#l-547">#</a> [21:50] &lt;smaug____&gt; Commenting &quot;Encrypted Media proposal&quot; would make me too angry</li>
+ <li id="l-548" _a="Ms2ger"><a href="#l-548">#</a> [21:50] &lt;Ms2ger&gt; I'm always glad I'm not following public-html</li>
+ <li id="l-549"><a href="#l-549">#</a> [21:51] * Quits: Kingdutch (~kingdutch@188.200.149.217) (*.net *.split)</li>
+ <li id="l-550"><a href="#l-550">#</a> [21:51] * Quits: Neocortex (~niels@82-170-160-25.ip.telfort.nl) (*.net *.split)</li>
+ <li id="l-551"><a href="#l-551">#</a> [21:51] * Quits: webben (~benjamin@173-203-84-17.static.cloud-ips.com) (*.net *.split)</li>
+ <li id="l-552"><a href="#l-552">#</a> [21:51] * Quits: mven_ (~mven__@169.241.49.57) (*.net *.split)</li>
+ <li id="l-553"><a href="#l-553">#</a> [21:51] * Quits: kborchers (~kborchers@unaffiliated/kborchers) (*.net *.split)</li>
+ <li id="l-554"><a href="#l-554">#</a> [21:51] * Quits: Rubennn (~Rubennn@apher.gewooniets.nl) (*.net *.split)</li>
+ <li id="l-555"><a href="#l-555">#</a> [21:51] * Quits: jeremyselier (u2513@gateway/web/irccloud.com/x-ryvzceosljrubrdf) (*.net *.split)</li>
+ <li id="l-556"><a href="#l-556">#</a> [21:51] * Quits: wycats (u79@gateway/web/irccloud.com/x-blqrlttrytxyvmut) (*.net *.split)</li>
+ <li id="l-557"><a href="#l-557">#</a> [21:51] * Quits: bobylito (u3929@gateway/web/irccloud.com/x-uipnrvldqihrrdyb) (*.net *.split)</li>
+ <li id="l-558"><a href="#l-558">#</a> [21:51] * Quits: matjas (u2247@gateway/web/irccloud.com/x-gqnubmeziglzraio) (*.net *.split)</li>
+ <li id="l-559"><a href="#l-559">#</a> [21:51] * Quits: Jedi_ (~Jedi@jedi.org) (*.net *.split)</li>
+ <li id="l-560"><a href="#l-560">#</a> [21:51] * Quits: Workshiva (~Dashiva@74.125.57.33) (*.net *.split)</li>
+ <li id="l-561"><a href="#l-561">#</a> [21:51] * Quits: Phae (u455@gateway/web/irccloud.com/x-bsgftlmifwdocyyu) (*.net *.split)</li>
+ <li id="l-562"><a href="#l-562">#</a> [21:51] * Quits: oal (u4126@gateway/web/irccloud.com/x-pbdcebfgpskvjevh) (*.net *.split)</li>
+ <li id="l-563"><a href="#l-563">#</a> [21:51] * Quits: jarib (~jarib@unaffiliated/jarib) (*.net *.split)</li>
+ <li id="l-564"><a href="#l-564">#</a> [21:53] * Joins: Kingdutch (~kingdutch@188.200.149.217)</li>
+ <li id="l-565"><a href="#l-565">#</a> [21:53] * Joins: Neocortex (~niels@82-170-160-25.ip.telfort.nl)</li>
+ <li id="l-566"><a href="#l-566">#</a> [21:53] * Joins: webben (~benjamin@173-203-84-17.static.cloud-ips.com)</li>
+ <li id="l-567"><a href="#l-567">#</a> [21:53] * Joins: mven_ (~mven__@169.241.49.57)</li>
+ <li id="l-568"><a href="#l-568">#</a> [21:53] * Joins: kborchers (~kborchers@unaffiliated/kborchers)</li>
+ <li id="l-569"><a href="#l-569">#</a> [21:53] * Joins: Rubennn (~Rubennn@apher.gewooniets.nl)</li>
+ <li id="l-570"><a href="#l-570">#</a> [21:53] * Joins: jeremyselier (u2513@gateway/web/irccloud.com/x-ryvzceosljrubrdf)</li>
+ <li id="l-571"><a href="#l-571">#</a> [21:53] * Joins: wycats (u79@gateway/web/irccloud.com/x-blqrlttrytxyvmut)</li>
+ <li id="l-572"><a href="#l-572">#</a> [21:53] * Joins: bobylito (u3929@gateway/web/irccloud.com/x-uipnrvldqihrrdyb)</li>
+ <li id="l-573"><a href="#l-573">#</a> [21:53] * Joins: matjas (u2247@gateway/web/irccloud.com/x-gqnubmeziglzraio)</li>
+ <li id="l-574"><a href="#l-574">#</a> [21:53] * Joins: Jedi_ (~Jedi@jedi.org)</li>
+ <li id="l-575"><a href="#l-575">#</a> [21:53] * Joins: Workshiva (~Dashiva@74.125.57.33)</li>
+ <li id="l-576"><a href="#l-576">#</a> [21:53] * Joins: oal (u4126@gateway/web/irccloud.com/x-pbdcebfgpskvjevh)</li>
+ <li id="l-577"><a href="#l-577">#</a> [21:53] * Joins: Phae (u455@gateway/web/irccloud.com/x-bsgftlmifwdocyyu)</li>
+ <li id="l-578"><a href="#l-578">#</a> [21:53] * Joins: jarib (~jarib@unaffiliated/jarib)</li>
+ <li id="l-579"><a href="#l-579">#</a> [22:01] * Quits: smaug____ (~chatzilla@GGMYCXXVII.gprs.sl-laajakaista.fi) (Ping timeout: 265 seconds)</li>
+ <li id="l-580"><a href="#l-580">#</a> [22:03] * Quits: Martijnc (~Martijn@d8D87A077.access.telenet.be) (Ping timeout: 265 seconds)</li>
+ <li id="l-581"><a href="#l-581">#</a> [22:10] * Joins: Martijnc (~Martijn@d8D87A077.access.telenet.be)</li>
+ <li id="l-582"><a href="#l-582">#</a> [22:15] * Joins: odwalla (~shane@184-76-83-2.war.clearwire-wmx.net)</li>
+ <li id="l-583"><a href="#l-583">#</a> [22:24] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-584"><a href="#l-584">#</a> [22:28] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-585"><a href="#l-585">#</a> [22:34] * Joins: smaug____ (~chatzilla@GGYGMYCDLXXI.gprs.sl-laajakaista.fi)</li>
+ <li id="l-586"><a href="#l-586">#</a> [22:38] * Quits: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-587"><a href="#l-587">#</a> [22:42] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Quit: snowfox)</li>
+ <li id="l-588"><a href="#l-588">#</a> [22:42] * Parts: odwalla (~shane@184-76-83-2.war.clearwire-wmx.net)</li>
+ <li id="l-589" _a="Hixie"><a href="#l-589">#</a> [22:43] &lt;Hixie&gt; wtf</li>
+ <li id="l-590"><a href="#l-590">#</a> [22:43] * Joins: odwalla (~shane@184-76-83-2.war.clearwire-wmx.net)</li>
+ <li id="l-591" _a="Hixie"><a href="#l-591">#</a> [22:43] &lt;Hixie&gt; i have a sqlite table</li>
+ <li id="l-592" _a="Hixie"><a href="#l-592">#</a> [22:44] &lt;Hixie&gt; it has a column whose values are all TRUE</li>
+ <li id="l-593" _a="Hixie"><a href="#l-593">#</a> [22:44] &lt;Hixie&gt; i do a select on that table with a GROUP BY clause, and select the aforementioned column</li>
+ <li id="l-594" _a="Hixie"><a href="#l-594">#</a> [22:44] &lt;Hixie&gt; the result set has that column with the value NULL</li>
+ <li id="l-595"><a href="#l-595">#</a> [22:45] * Quits: darin__ (darin@nat/google/x-cwpnljjhzvnzccum) (Quit: Leaving)</li>
+ <li id="l-596" _a="Velmont"><a href="#l-596">#</a> [22:47] &lt;Velmont&gt; grrrrreat! Sure they're all TRUE?</li>
+ <li id="l-597" _a="Hixie"><a href="#l-597">#</a> [22:47] &lt;Hixie&gt; yes</li>
+ <li id="l-598" _a="Hixie"><a href="#l-598">#</a> [22:47] &lt;Hixie&gt; i've never set them, and i only just added the column with default true</li>
+ <li id="l-599" _a="Velmont"><a href="#l-599">#</a> [22:48] &lt;Velmont&gt; A+ stuff. I'd guess either a very strange behaviour or a good old bug. -- From what I've heard about SQLite it might actually be the first one...</li>
+ <li id="l-600" _a="Hixie" _r="hm"><a href="#l-600">#</a> [22:52] &lt;Hixie&gt; hm, i wonder what it's value actually is</li>
+ <li id="l-601" _a="Hixie"><a href="#l-601">#</a> [22:52] &lt;Hixie&gt; it returns TRUE</li>
+ <li id="l-602" _a="Hixie"><a href="#l-602">#</a> [22:52] &lt;Hixie&gt; but sqlite doesn't have a TRUE value...</li>
+ <li id="l-603" _a="Hixie"><a href="#l-603">#</a> [22:52] &lt;Hixie&gt; ok i replaced whatever values it had with 1 and now it works</li>
+ <li id="l-604" _a="Hixie"><a href="#l-604">#</a> [22:52] * Hixie decides to move on in blissful ignorance</li>
+ <li id="l-605"><a href="#l-605">#</a> [23:17] * Quits: davidwalsh (~davidwals@75-135-74-55.dhcp.mdsn.wi.charter.com) (Quit: davidwalsh)</li>
+ <li id="l-606"><a href="#l-606">#</a> [23:28] * Quits: graememcc (~chatzilla@host86-150-157-88.range86-150.btcentralplus.com) (Quit: ChatZilla 0.9.88 [Firefox 10.0.2/20120216081259])</li>
+ <li id="l-607"><a href="#l-607">#</a> [23:37] * Quits: kborchers (~kborchers@unaffiliated/kborchers) (Ping timeout: 252 seconds)</li>
+ <li id="l-608"><a href="#l-608">#</a> [23:37] * Quits: gnarf (~gnarf@unaffiliated/gnarf) (Ping timeout: 276 seconds)</li>
+ <li id="l-609"><a href="#l-609">#</a> [23:48] * Joins: gnarf (~gnarf@unaffiliated/gnarf)</li>
+ <li id="l-610"><a href="#l-610">#</a> [23:49] * Joins: kborchers (~kborchers@unaffiliated/kborchers)</li>
+ <li id="l-611"><a href="#l-611">#</a> [23:50] * Quits: smaug____ (~chatzilla@GGYGMYCDLXXI.gprs.sl-laajakaista.fi) (Ping timeout: 240 seconds)</li>
+ <li id="l-612"><a href="#l-612">#</a> Session Close: Sun Feb 26 00:00:00 2012</li>
+</ol>
+<p id="end">The end :)

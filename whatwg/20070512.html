@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20070512</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20070512.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2007-05-12 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat May 12 00:00:00 2007</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Philip`"><a href="#l-3">#</a> [00:00] &lt;Philip`&gt; To find the colour of a pixel, like with the colour-picker tool in a paint program</li>
+ <li id="l-4" _a="Hixie"><a href="#l-4">#</a> [00:01] &lt;Hixie&gt; for that case you can just use the first pixel</li>
+ <li id="l-5" _a="Hixie"><a href="#l-5">#</a> [00:01] &lt;Hixie&gt; where's the problem?</li>
+ <li id="l-6" _a="Philip`"><a href="#l-6">#</a> [00:01] &lt;Philip`&gt; As far as I understand it, it could return zero pixels of data</li>
+ <li id="l-7" _a="Hixie"><a href="#l-7">#</a> [00:01] &lt;Hixie&gt; why?</li>
+ <li id="l-8" _a="othermaciej" _r="Philip`"><a href="#l-8">#</a> [00:01] &lt;othermaciej&gt; Philip`: it could only be zero if you have a &lt; 1 scale factor</li>
+ <li id="l-9" _a="hsivonen"><a href="#l-9">#</a> [00:02] &lt;hsivonen&gt; hmm. three XTech timeslots where I find it hard to decide which session to attend...</li>
+ <li id="l-10" _a="Philip`"><a href="#l-10">#</a> [00:02] &lt;Philip`&gt; Does anything prevent there being a &lt; 1 scale factor?</li>
+ <li id="l-11" _a="othermaciej" _r="Philip`"><a href="#l-11">#</a> [00:02] &lt;othermaciej&gt; Philip`: I think with non-integer scale factors of the backing store, implementing the requirement that putImageData(getImageData()) be idempotent is extremely difficult</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:02] * Joins: weinig (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-13" class="flagged" _a="Hixie"><a href="#l-13">#</a> [00:02] &lt;Hixie&gt; surely it's just a matter of rounding the same way?</li>
+ <li id="l-14" _a="othermaciej"><a href="#l-14">#</a> [00:04] * othermaciej thinks</li>
+ <li id="l-15" _a="othermaciej"><a href="#l-15">#</a> [00:05] &lt;othermaciej&gt; maybe that part is not hard; more that doing a putImageData() at a different location of the same data could have odd-looking results</li>
+ <li id="l-16" _a="othermaciej"><a href="#l-16">#</a> [00:05] &lt;othermaciej&gt; you could get cracks where you expected things to line up seamlessly</li>
+ <li id="l-17" class="flagged" _a="Hixie" _r="yup"><a href="#l-17">#</a> [00:05] &lt;Hixie&gt; yup, but if you want to move data, you should use drawImage()</li>
+ <li id="l-18" _a="Hixie"><a href="#l-18">#</a> [00:06] &lt;Hixie&gt; gID and pID really are only for two use cases, applying filters, and the colour picker -- for the colour picker case maybe i should make the spec guarentee that h*w &gt;= 1</li>
+ <li id="l-19"><a href="#l-19">#</a> [00:08] * Quits: timblair (n=timblair@host-87-74-129-183.bulldogdsl.com)</li>
+ <li id="l-20"><a href="#l-20">#</a> [00:11] * Quits: weinig (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-21" _a="zcorpan"><a href="#l-21">#</a> [00:11] &lt;zcorpan&gt; perfect! now i know how we should make the spec easier to read! <a href="http://venturebeat.com/2007/05/10/live-ink-offers-better-way-to-read-text-online/">http://venturebeat.com/2007/05/10/live-ink-offers-better-way-to-read-text-online/</a></li>
+ <li id="l-22" _a="Philip`"><a href="#l-22">#</a> [00:12] &lt;Philip`&gt; For filters that need to know the device scale factor (Gaussians etc), I suppose you could estimate it by dividing the returned .width and the parameter sw, at least for large enough areas that you won't get rounding problems - I don't know whether it'd be worth having ImageData explicitly tell you the scale factor</li>
+ <li id="l-23"><a href="#l-23">#</a> [00:12] * Parts: billmason (n=billmaso@ip156.unival.com)</li>
+ <li id="l-24" _a="Hixie" _r="zcorpan"><a href="#l-24">#</a> [00:13] &lt;Hixie&gt; zcorpan: you want me to turn the spec into one long poem? :-)</li>
+ <li id="l-25" _a="zcorpan"><a href="#l-25">#</a> [00:14] &lt;zcorpan&gt; yeah :)</li>
+ <li id="l-26" _a="zcorpan"><a href="#l-26">#</a> [00:14] &lt;zcorpan&gt; it would turn it into 1500 pages in print</li>
+ <li id="l-27" _a="hsivonen" _r="zcorpan"><a href="#l-27">#</a> [00:15] &lt;hsivonen&gt; zcorpan: they aren't eating their own dogfood for their paper</li>
+ <li id="l-28"><a href="#l-28">#</a> [00:15] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-29" _a="zcorpan"><a href="#l-29">#</a> [00:16] &lt;zcorpan&gt; <a href="http://www.accessifyforum.com/viewtopic.php?p=52490#52490">http://www.accessifyforum.com/viewtopic.php?p=52490#52490</a></li>
+ <li id="l-30"><a href="#l-30">#</a> [00:41] * Quits: YaaL (i=yaal@hell.pl) (Remote closed the connection)</li>
+ <li id="l-31"><a href="#l-31">#</a> [00:41] * Joins: YaaL (i=yaal@hell.pl)</li>
+ <li id="l-32"><a href="#l-32">#</a> [00:45] * Quits: kingryan (n=kingryan@142.131.37.98) (Read error: 110 (Connection timed out))</li>
+ <li id="l-33" _a="hsivonen"><a href="#l-33">#</a> [00:48] &lt;hsivonen&gt; <a href="http://en.wikipedia.org/w/index.php?title=Web_Hypertext_Application_Technology_Working_Group&amp;curid=1789925&amp;diff=125647714&amp;oldid=123198165">http://en.wikipedia.org/w/index.php?title=Web_Hypertext_Application_Technology_Working_Group&amp;curid=1789925&amp;diff=125647714&amp;oldid=123198165</a></li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:48] &lt;Hixie&gt; heh</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:48] &lt;Hixie&gt; that's news to me</li>
+ <li id="l-36" _a="Dashiva" _r="Well"><a href="#l-36">#</a> [00:49] &lt;Dashiva&gt; Well, they wouldn't be very undercover if they told you</li>
+ <li id="l-37" _a="Hixie"><a href="#l-37">#</a> [00:49] &lt;Hixie&gt; that page has so many errors</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:49] &lt;Hixie&gt; anyway</li>
+ <li id="l-39" _a="othermaciej"><a href="#l-39">#</a> [00:50] &lt;othermaciej&gt; but it's Truthy!</li>
+ <li id="l-40" _a="hsivonen"><a href="#l-40">#</a> [00:50] &lt;hsivonen&gt; reverted</li>
+ <li id="l-41" _a="Hixie"><a href="#l-41">#</a> [00:51] &lt;Hixie&gt; the version of reality before you reverted was better</li>
+ <li id="l-42" _a="Dashiva"><a href="#l-42">#</a> [00:52] &lt;Dashiva&gt; We need a quantum wikipedia, which alters reality to the truth you edit into it</li>
+ <li id="l-43" _a="hsivonen" _r="Hixie"><a href="#l-43">#</a> [00:52] &lt;hsivonen&gt; Hixie: how so?</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:52] &lt;Hixie&gt; that would be really freaking dangerous</li>
+ <li id="l-45" _a="Hixie" _r="hsivonen"><a href="#l-45">#</a> [00:52] &lt;Hixie&gt; hsivonen: if microsoft actually were involved, it would be awesome</li>
+ <li id="l-46"><a href="#l-46">#</a> [00:53] * Joins: kingryan (n=kingryan@banff-72-29-239-177.mycanopy.net)</li>
+ <li id="l-47" _a="Hixie"><a href="#l-47">#</a> [00:53] &lt;Hixie&gt; (in the whatwg, i mean)</li>
+ <li id="l-48" _a="hsivonen"><a href="#l-48">#</a> [00:53] &lt;hsivonen&gt; I see</li>
+ <li id="l-49" _a="zcorpan"><a href="#l-49">#</a> [00:54] &lt;zcorpan&gt;      data: [i for (i in function (n) { for (let i = 0; i &lt; n; i += 1) yield 0 }(w*h*4)) ]</li>
+ <li id="l-50" _a="zcorpan"><a href="#l-50">#</a> [00:55] * zcorpan dosn't recognize that syntax :|</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:55] &lt;Hixie&gt; js 1.7</li>
+ <li id="l-52" _a="Dashiva"><a href="#l-52">#</a> [00:55] &lt;Dashiva&gt; also known as pythonscript</li>
+ <li id="l-53" _a="bewest"><a href="#l-53">#</a> [00:55] &lt;bewest&gt; ooOoooo</li>
+ <li id="l-54" _a="Philip`"><a href="#l-54">#</a> [00:55] &lt;Philip`&gt; <a href="http://developer.mozilla.org/en/docs/New_in_JavaScript_1.7">http://developer.mozilla.org/en/docs/New_in_JavaScript_1.7</a></li>
+ <li id="l-55" _a="Hixie"><a href="#l-55">#</a> [00:55] &lt;Hixie&gt; (works in fx2)</li>
+ <li id="l-56" _a="zcorpan"><a href="#l-56">#</a> [00:57] &lt;zcorpan&gt; i get &quot;Error: missing ; after for-loop initializer&quot;</li>
+ <li id="l-57" _a="dbaron"><a href="#l-57">#</a> [00:57] &lt;dbaron&gt; there should *really* be a simpler way to do that</li>
+ <li id="l-58" _a="Philip`"><a href="#l-58">#</a> [00:58] &lt;Philip`&gt; It'd be better if they copied more of Python and let you write &quot;[0] * (w*h*4)&quot;</li>
+ <li id="l-59" _a="Hixie" _r="zcorpan"><a href="#l-59">#</a> [00:59] &lt;Hixie&gt; zcorpan: make sure you say &lt;script type=&quot;text/javascript;version=1.7&quot;&gt;</li>
+ <li id="l-60" _a="zcorpan"><a href="#l-60">#</a> [01:00] &lt;zcorpan&gt; ah</li>
+ <li id="l-61" _a="zcorpan"><a href="#l-61">#</a> [01:00] &lt;zcorpan&gt; ok</li>
+ <li id="l-62" _a="zcorpan" _r="Hixie"><a href="#l-62">#</a> [01:03] &lt;zcorpan&gt; Hixie: &quot;There's still no way to _get_ the transformation matrix, but you can not _set_ the transformation matrix now, which should be of help here.&quot; did you mean s/not // ?</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [01:04] &lt;Hixie&gt; i meant &quot;now&quot;</li>
+ <li id="l-64" _a="Hixie"><a href="#l-64">#</a> [01:04] &lt;Hixie&gt; oops</li>
+ <li id="l-65" _a="Hixie"><a href="#l-65">#</a> [01:04] &lt;Hixie&gt; always get those mixed up</li>
+ <li id="l-66" _a="zcorpan"><a href="#l-66">#</a> [01:05] &lt;zcorpan&gt; that's what you get for using dvorak :P</li>
+ <li id="l-67" _a="Hixie"><a href="#l-67">#</a> [01:05] &lt;Hixie&gt; hehe</li>
+ <li id="l-68" _a="Hixie"><a href="#l-68">#</a> [01:05] &lt;Hixie&gt; actually i get them confused in qwerty too</li>
+ <li id="l-69" class="flagged" _a="Hixie"><a href="#l-69">#</a> [01:05] &lt;Hixie&gt; i think it's a brain thing</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [01:05] &lt;Hixie&gt; not a finger thing</li>
+ <li id="l-71" _a="zcorpan"><a href="#l-71">#</a> [01:06] &lt;zcorpan&gt; oh</li>
+ <li id="l-72" _a="Hixie"><a href="#l-72">#</a> [01:06] &lt;Hixie&gt; i notice a lot of other people doing it too</li>
+ <li id="l-73" _a="dbaron"><a href="#l-73">#</a> [01:06] &lt;dbaron&gt; is one of them me?</li>
+ <li id="l-74" _a="Hixie"><a href="#l-74">#</a> [01:07] &lt;Hixie&gt; dunno</li>
+ <li id="l-75" _a="Hixie"><a href="#l-75">#</a> [01:07] &lt;Hixie&gt; maybe :-)</li>
+ <li id="l-76" _a="Hixie"><a href="#l-76">#</a> [01:09] &lt;Hixie&gt; 24 &lt;canvas&gt; mails left</li>
+ <li id="l-77" _a="Hixie"><a href="#l-77">#</a> [01:09] &lt;Hixie&gt; (not counting text issues)</li>
+ <li id="l-78" _a="othermaciej"><a href="#l-78">#</a> [01:13] * othermaciej is now known as om_coffee</li>
+ <li id="l-79"><a href="#l-79">#</a> [01:22] * Parts: zcorpan (n=zcorpan@84-216-40-21.sprayadsl.telenor.se)</li>
+ <li id="l-80"><a href="#l-80">#</a> [01:23] * Joins: zcorpan (n=zcorpan@84-216-40-21.sprayadsl.telenor.se)</li>
+ <li id="l-81" _a="om_coffee"><a href="#l-81">#</a> [01:24] * om_coffee is now known as othermaciej</li>
+ <li id="l-82"><a href="#l-82">#</a> [01:28] * Quits: yod (n=ot@banff-72-29-239-177.mycanopy.net) (&quot;Leaving&quot;)</li>
+ <li id="l-83"><a href="#l-83">#</a> [01:33] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-84"><a href="#l-84">#</a> [01:35] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-85"><a href="#l-85">#</a> [01:51] * Quits: kingryan (n=kingryan@banff-72-29-239-177.mycanopy.net)</li>
+ <li id="l-86"><a href="#l-86">#</a> [01:59] * Joins: kingryan (n=kingryan@142.131.37.98)</li>
+ <li id="l-87"><a href="#l-87">#</a> [02:04] * Quits: gavin (n=gavin@firefox/developer/gavin) (Remote closed the connection)</li>
+ <li id="l-88"><a href="#l-88">#</a> [02:04] * Joins: gavin (n=gavin@people.mozilla.com)</li>
+ <li id="l-89"><a href="#l-89">#</a> [02:16] * Joins: aroben_ (n=adamrobe@17.203.15.208)</li>
+ <li id="l-90"><a href="#l-90">#</a> [02:16] * Quits: aroben_ (n=adamrobe@17.203.15.208) (Remote closed the connection)</li>
+ <li id="l-91"><a href="#l-91">#</a> [02:36] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-92"><a href="#l-92">#</a> [02:54] * Quits: othermaciej (i=mjs@nat/apple/x-c438fb3298c4fb7a)</li>
+ <li id="l-93"><a href="#l-93">#</a> [03:27] * Quits: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca) (Read error: 110 (Connection timed out))</li>
+ <li id="l-94"><a href="#l-94">#</a> [03:31] * Joins: weinig (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-95"><a href="#l-95">#</a> [03:44] * Joins: kingryan_ (n=kingryan@142.131.37.98)</li>
+ <li id="l-96"><a href="#l-96">#</a> [03:44] * Quits: kingryan (n=kingryan@142.131.37.98) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-97"><a href="#l-97">#</a> [03:46] * Quits: dbaron (n=dbaron@corp-242.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-98"><a href="#l-98">#</a> [04:05] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-99"><a href="#l-99">#</a> [04:07] * Joins: markp (n=mark@adsl-221-79-235.rmo.bellsouth.net)</li>
+ <li id="l-100"><a href="#l-100">#</a> [04:09] * Quits: zcorpan (n=zcorpan@84-216-40-21.sprayadsl.telenor.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-101" _a="weinig"><a href="#l-101">#</a> [04:33] * weinig is now known as weinig|food</li>
+ <li id="l-102"><a href="#l-102">#</a> [04:33] * Quits: weinig|food (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-103"><a href="#l-103">#</a> [04:50] * Quits: markp (n=mark@adsl-221-79-235.rmo.bellsouth.net) (Read error: 113 (No route to host))</li>
+ <li id="l-104"><a href="#l-104">#</a> [04:53] * Joins: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-105" _a="kingryan_"><a href="#l-105">#</a> [04:58] * kingryan_ is now known as kingryan</li>
+ <li id="l-106"><a href="#l-106">#</a> [05:12] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-107"><a href="#l-107">#</a> [05:18] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-108"><a href="#l-108">#</a> [05:18] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-109"><a href="#l-109">#</a> [05:19] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-110"><a href="#l-110">#</a> [05:22] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-111"><a href="#l-111">#</a> [05:22] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-112"><a href="#l-112">#</a> [05:22] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-113"><a href="#l-113">#</a> [05:25] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-114"><a href="#l-114">#</a> [05:26] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-115"><a href="#l-115">#</a> [05:28] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-116"><a href="#l-116">#</a> [05:28] * Quits: kingryan (n=kingryan@142.131.37.98)</li>
+ <li id="l-117"><a href="#l-117">#</a> [05:29] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-118"><a href="#l-118">#</a> [05:32] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-119"><a href="#l-119">#</a> [05:32] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-120"><a href="#l-120">#</a> [05:45] * Quits: tantek (n=tantek@corp.technorati.com)</li>
+ <li id="l-121"><a href="#l-121">#</a> [05:46] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-122"><a href="#l-122">#</a> [05:47] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-123"><a href="#l-123">#</a> [05:47] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-124"><a href="#l-124">#</a> [05:48] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-125"><a href="#l-125">#</a> [05:48] * Parts: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-126"><a href="#l-126">#</a> [05:48] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-127"><a href="#l-127">#</a> [05:49] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-128"><a href="#l-128">#</a> [05:52] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-129"><a href="#l-129">#</a> [05:52] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-130"><a href="#l-130">#</a> [05:53] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-131"><a href="#l-131">#</a> [05:53] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-132"><a href="#l-132">#</a> [05:55] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-133"><a href="#l-133">#</a> [05:55] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-134"><a href="#l-134">#</a> [05:55] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-135"><a href="#l-135">#</a> [05:56] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-136"><a href="#l-136">#</a> [05:56] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-137"><a href="#l-137">#</a> [05:56] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-138"><a href="#l-138">#</a> [05:57] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-139"><a href="#l-139">#</a> [05:57] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-140"><a href="#l-140">#</a> [05:58] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-141"><a href="#l-141">#</a> [05:58] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-142"><a href="#l-142">#</a> [05:59] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-143"><a href="#l-143">#</a> [05:59] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-144"><a href="#l-144">#</a> [06:00] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-145"><a href="#l-145">#</a> [06:00] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-146"><a href="#l-146">#</a> [06:01] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-147"><a href="#l-147">#</a> [06:01] * Quits: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-148"><a href="#l-148">#</a> [06:01] * Joins: aroben_ (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-149" _a="aroben_"><a href="#l-149">#</a> [06:05] * aroben_ is now known as aroben</li>
+ <li id="l-150"><a href="#l-150">#</a> [06:16] * Quits: jdandrea (n=jdandrea@ool-44c0a1fe.dyn.optonline.net)</li>
+ <li id="l-151"><a href="#l-151">#</a> [06:36] * Joins: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net)</li>
+ <li id="l-152"><a href="#l-152">#</a> [06:54] * Quits: jcgregorio (n=chatzill@adsl-072-148-043-048.sip.rmo.bellsouth.net) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.3/0000000000]&quot;)</li>
+ <li id="l-153"><a href="#l-153">#</a> [06:54] * Joins: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-154"><a href="#l-154">#</a> [07:03] * Joins: wakaba_ (n=w@118.166.210.220.dy.bbexcite.jp)</li>
+ <li id="l-155"><a href="#l-155">#</a> [07:20] * Quits: wakaba (n=w@118.166.210.220.dy.bbexcite.jp) (Read error: 110 (Connection timed out))</li>
+ <li id="l-156"><a href="#l-156">#</a> [07:47] * Quits: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-157"><a href="#l-157">#</a> [08:02] * Joins: KevinMarks (n=Snak@h-68-164-93-9.snvacaid.dynamic.covad.net)</li>
+ <li id="l-158"><a href="#l-158">#</a> [08:38] * Quits: dolphinling (n=chatzill@rbpool4-60.shoreham.net) (&quot;upgrading chatzilla&quot;)</li>
+ <li id="l-159"><a href="#l-159">#</a> [08:42] * Joins: dolphinling (n=chatzill@rbpool4-60.shoreham.net)</li>
+ <li id="l-160"><a href="#l-160">#</a> [09:22] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-161" _a="annevk" _r="Hixie"><a href="#l-161">#</a> [09:30] &lt;annevk&gt; Hixie, what would be nice if .fillStyle returned a four-digit array instead</li>
+ <li id="l-162" _a="annevk"><a href="#l-162">#</a> [09:31] &lt;annevk&gt; and the same for .strokeStyle</li>
+ <li id="l-163" _a="annevk"><a href="#l-163">#</a> [09:31] &lt;annevk&gt; that would be much more trivial to parse</li>
+ <li id="l-164" _a="Hixie"><a href="#l-164">#</a> [09:31] &lt;Hixie&gt; it would also make it impossible to do .fillStyle = .fillStyle</li>
+ <li id="l-165" _a="Hixie"><a href="#l-165">#</a> [09:32] &lt;Hixie&gt; unless we added yet another way of assigning colour</li>
+ <li id="l-166" _a="Hixie"><a href="#l-166">#</a> [09:32] &lt;Hixie&gt; but anyway, who the heck is parsing these colours</li>
+ <li id="l-167" _a="Hixie"><a href="#l-167">#</a> [09:32] &lt;Hixie&gt; you had to set them yourself</li>
+ <li id="l-168" _a="Hixie"><a href="#l-168">#</a> [09:32] &lt;Hixie&gt; you KNOW what the colour is</li>
+ <li id="l-169"><a href="#l-169">#</a> [09:39] * Joins: timblair (n=timblair@host-87-74-129-183.bulldogdsl.com)</li>
+ <li id="l-170" _a="annevk"><a href="#l-170">#</a> [09:41] &lt;annevk&gt; people parse it</li>
+ <li id="l-171" _a="annevk"><a href="#l-171">#</a> [09:41] &lt;annevk&gt; apparently</li>
+ <li id="l-172" _a="annevk"><a href="#l-172">#</a> [09:41] &lt;annevk&gt; and yes, it would mean assigning would have to accept a four-digit array</li>
+ <li id="l-173"><a href="#l-173">#</a> [09:43] * Quits: timblair (n=timblair@host-87-74-129-183.bulldogdsl.com) (Client Quit)</li>
+ <li id="l-174" _a="annevk"><a href="#l-174">#</a> [09:44] &lt;annevk&gt; I guess I raised some problems multiple times because I don't keep track of the e-mails I have already sent</li>
+ <li id="l-175" _a="Hixie"><a href="#l-175">#</a> [10:01] &lt;Hixie&gt; :-)</li>
+ <li id="l-176" _a="Hixie"><a href="#l-176">#</a> [10:01] &lt;Hixie&gt; i wasn't criticising</li>
+ <li id="l-177" _a="Hixie"><a href="#l-177">#</a> [10:01] &lt;Hixie&gt; just thought it was amusing :-)</li>
+ <li id="l-178" _a="annevk" _r="btw"><a href="#l-178">#</a> [10:02] &lt;annevk&gt; btw, as for dropping features, did anyone implement shadows already?</li>
+ <li id="l-179" _a="Hixie" _r="safari"><a href="#l-179">#</a> [10:13] &lt;Hixie&gt; safari, i assume</li>
+ <li id="l-180" _a="Hixie"><a href="#l-180">#</a> [10:13] &lt;Hixie&gt; that was in their initial description</li>
+ <li id="l-181" _a="annevk"><a href="#l-181">#</a> [10:13] &lt;annevk&gt; oh ok</li>
+ <li id="l-182"><a href="#l-182">#</a> [10:14] * Quits: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net) (&quot;g'night&quot;)</li>
+ <li id="l-183" _a="othermaciej"><a href="#l-183">#</a> [10:18] &lt;othermaciej&gt; we do shadows?</li>
+ <li id="l-184" _a="othermaciej"><a href="#l-184">#</a> [10:18] &lt;othermaciej&gt; cool</li>
+ <li id="l-185" _a="Hixie"><a href="#l-185">#</a> [10:18] &lt;Hixie&gt; i haven't tested it</li>
+ <li id="l-186" _a="Hixie"><a href="#l-186">#</a> [10:18] &lt;Hixie&gt; at l0east not recently</li>
+ <li id="l-187" _a="annevk"><a href="#l-187">#</a> [10:19] &lt;annevk&gt; heh</li>
+ <li id="l-188" _a="annevk"><a href="#l-188">#</a> [10:20] &lt;annevk&gt; the primary use case for having totally global id= is getting the requirement for xml:id out of SVG</li>
+ <li id="l-189" _a="Hixie"><a href="#l-189">#</a> [10:20] &lt;Hixie&gt; why?</li>
+ <li id="l-190" _a="Hixie"><a href="#l-190">#</a> [10:20] &lt;Hixie&gt; svg already has id=&quot;&quot;</li>
+ <li id="l-191" _a="Hixie"><a href="#l-191">#</a> [10:20] &lt;Hixie&gt; it only uses xml:id in svg 1.2, no? and svg 1.2 is a waste of time anyway.</li>
+ <li id="l-192" _a="othermaciej"><a href="#l-192">#</a> [10:21] &lt;othermaciej&gt; svg added xml:id on the theory that it would be play nicer with embedding markup in other languages</li>
+ <li id="l-193" _a="othermaciej"><a href="#l-193">#</a> [10:21] &lt;othermaciej&gt; (apparently xhtml 1.0 and xhtml 1.1 were not considered among the important languages to embed)</li>
+ <li id="l-194" _a="othermaciej"><a href="#l-194">#</a> [10:21] &lt;othermaciej&gt; does MathML have any attributes of type ID?</li>
+ <li id="l-195" _a="othermaciej"><a href="#l-195">#</a> [10:21] &lt;othermaciej&gt; RSS? Atom?</li>
+ <li id="l-196" _a="annevk"><a href="#l-196">#</a> [10:21] &lt;annevk&gt; SVG Tiny 1.2 is happing at least for Opera</li>
+ <li id="l-197" _a="hsivonen"><a href="#l-197">#</a> [10:21] &lt;hsivonen&gt; the way SVG 1.2 specs IDness assignment is crazy</li>
+ <li id="l-198" _a="annevk"><a href="#l-198">#</a> [10:21] * annevk doesn't have time to do SVG fights atm</li>
+ <li id="l-199" _a="hsivonen"><a href="#l-199">#</a> [10:22] &lt;hsivonen&gt; can be please get it repealed somehow?</li>
+ <li id="l-200" _a="Hixie" _r="annevk"><a href="#l-200">#</a> [10:22] &lt;Hixie&gt; annevk: sorry to hear that</li>
+ <li id="l-201" _a="othermaciej"><a href="#l-201">#</a> [10:22] &lt;othermaciej&gt; we probably won't implement SVG 1.2 in WebKit, maybe selected parts, but likely not the whole thing</li>
+ <li id="l-202" _a="annevk"><a href="#l-202">#</a> [10:22] * annevk isn't sure about SVG 1.2 though</li>
+ <li id="l-203" _a="Hixie" _r="annevk"><a href="#l-203">#</a> [10:22] &lt;Hixie&gt; annevk: who's doing the qa?</li>
+ <li id="l-204" _a="annevk"><a href="#l-204">#</a> [10:23] &lt;annevk&gt; not sure</li>
+ <li id="l-205" _a="annevk"><a href="#l-205">#</a> [10:25] &lt;annevk&gt; Seems Acid3 has some script issues btw which causes it not to run</li>
+ <li id="l-206" _a="hsivonen"><a href="#l-206">#</a> [10:25] &lt;hsivonen&gt; it would be nice to have a spec for the subset of SVG that Opera, Apple and Mozilla implement</li>
+ <li id="l-207" _a="annevk"><a href="#l-207">#</a> [10:26] &lt;annevk&gt; That would be a tutorial</li>
+ <li id="l-208" _a="hsivonen" _r="annevk"><a href="#l-208">#</a> [10:26] &lt;hsivonen&gt; annevk: I mean SVG5</li>
+ <li id="l-209" _a="hsivonen" _r="annevk"><a href="#l-209">#</a> [10:27] &lt;hsivonen&gt; annevk: something realistic you could check conformance against</li>
+ <li id="l-210" _a="hsivonen" _r="annevk"><a href="#l-210">#</a> [10:27] &lt;hsivonen&gt; annevk: If I support SVG 1.1 but browsers support pieces of SVG 1.2, those pieces get flagged</li>
+ <li id="l-211" _a="annevk"><a href="#l-211">#</a> [10:28] &lt;annevk&gt; Someone just has to free up his time for the foreseeable future and do it... I suppose</li>
+ <li id="l-212" _a="hsivonen" _r="annevk"><a href="#l-212">#</a> [10:28] &lt;hsivonen&gt; annevk: If I supported SVG 1.2, I'd fail to flag stuff that authors should avoid</li>
+ <li id="l-213" _a="annevk"><a href="#l-213">#</a> [10:28] * annevk doesn't know much about vector graphics and doesn't have much free time</li>
+ <li id="l-214" _a="Hixie"><a href="#l-214">#</a> [10:31] &lt;Hixie&gt; acid3 isn't ready yet</li>
+ <li id="l-215"><a href="#l-215">#</a> [10:32] * Joins: maikmerten (n=maikmert@L82a0.l.pppool.de)</li>
+ <li id="l-216" _a="annevk" _r="maikmerten"><a href="#l-216">#</a> [10:33] &lt;annevk&gt; maikmerten, hi, Opera's implementation of &lt;video&gt; is experimental</li>
+ <li id="l-217" _a="maikmerten" _r="annevk"><a href="#l-217">#</a> [10:34] &lt;maikmerten&gt; annevk, yup</li>
+ <li id="l-218" _a="annevk"><a href="#l-218">#</a> [10:34] &lt;annevk&gt; as such, we don't support all members of HTMLMediaElement</li>
+ <li id="l-219" _a="maikmerten" _r="yeah"><a href="#l-219">#</a> [10:34] &lt;maikmerten&gt; yeah, only a basic subset</li>
+ <li id="l-220" _a="maikmerten"><a href="#l-220">#</a> [10:35] &lt;maikmerten&gt; I expected nothing else - doing a full scale implementation only makes sense once the &lt;video&gt; part of the spec is considered stable</li>
+ <li id="l-221" _a="annevk"><a href="#l-221">#</a> [10:36] &lt;annevk&gt; Our submission along with the work from Apple actually made Hixie draft that part of the spec as I understand it</li>
+ <li id="l-222" _a="maikmerten" _r="annevk"><a href="#l-222">#</a> [10:36] &lt;maikmerten&gt; annevk, by the way, any plans to expose the Theora postprocessing options in Opera?</li>
+ <li id="l-223" _a="Hixie"><a href="#l-223">#</a> [10:36] &lt;Hixie&gt; that could be a problem, since it won't be stable until there are at least two implementations :-)</li>
+ <li id="l-224" _a="annevk"><a href="#l-224">#</a> [10:36] &lt;annevk&gt; And it basically consisted of .play() .pause() and .stop() if I remember correctly</li>
+ <li id="l-225" _a="maikmerten"><a href="#l-225">#</a> [10:37] &lt;maikmerten&gt; I did write howcome and told him about the new Theora code (improved encoder, complete and safe decoder) but I guess that the mail was eaten by a spam filter ;)</li>
+ <li id="l-226" _a="maikmerten" _r="yeah"><a href="#l-226">#</a> [10:37] &lt;maikmerten&gt; yeah, and stop() more or less vanished, so it seems</li>
+ <li id="l-227" _a="annevk"><a href="#l-227">#</a> [10:37] &lt;annevk&gt; I believe .stop() is not part of the specification, not sure</li>
+ <li id="l-228" _a="annevk"><a href="#l-228">#</a> [10:37] &lt;annevk&gt; right</li>
+ <li id="l-229" _a="annevk" _r="oh"><a href="#l-229">#</a> [10:37] &lt;annevk&gt; oh, also in the implementation?</li>
+ <li id="l-230" _a="maikmerten"><a href="#l-230">#</a> [10:37] &lt;maikmerten&gt; nope</li>
+ <li id="l-231" _a="maikmerten"><a href="#l-231">#</a> [10:37] &lt;maikmerten&gt; the experimental build has stop()</li>
+ <li id="l-232" _a="maikmerten"><a href="#l-232">#</a> [10:38] &lt;maikmerten&gt; after finding out that the spec only has pause() the wikimedia player was altered to honor this</li>
+ <li id="l-233" _a="annevk"><a href="#l-233">#</a> [10:38] &lt;annevk&gt; ah ok</li>
+ <li id="l-234" _a="annevk"><a href="#l-234">#</a> [10:39] &lt;annevk&gt; if you guys would like a bit more than play() and pause() I suppose you could post that somewhere and I'll see what I can do</li>
+ <li id="l-235" _a="maikmerten" _r="well"><a href="#l-235">#</a> [10:39] &lt;maikmerten&gt; well, a stop() would be cool ;) - but that can be mimicked with pause() and start set to zero, I guess</li>
+ <li id="l-236" _a="annevk" _r="Hixie"><a href="#l-236">#</a> [10:40] &lt;annevk&gt; Hixie, any reason there's no stop()?</li>
+ <li id="l-237" _a="Hixie"><a href="#l-237">#</a> [10:40] &lt;Hixie&gt; what would it do?</li>
+ <li id="l-238" _a="maikmerten"><a href="#l-238">#</a> [10:40] &lt;maikmerten&gt; stop playback and set the playback position to zero</li>
+ <li id="l-239" _a="maikmerten"><a href="#l-239">#</a> [10:40] &lt;maikmerten&gt; (which can be achieved with the current draft in two steps already.... so...)</li>
+ <li id="l-240" _a="Hixie"><a href="#l-240">#</a> [10:40] &lt;Hixie&gt; ah. then there is. it's just spelt a bit longer: m.pause(); m.duration = 0;</li>
+ <li id="l-241" _a="annevk"><a href="#l-241">#</a> [10:40] &lt;annevk&gt; (Although what I meant was features missing in Opera.)</li>
+ <li id="l-242" _a="annevk"><a href="#l-242">#</a> [10:41] &lt;annevk&gt; you actually mean the more horrible currentTime</li>
+ <li id="l-243" _a="Hixie"><a href="#l-243">#</a> [10:41] &lt;Hixie&gt; right</li>
+ <li id="l-244" _a="Hixie" _r="m.pause()"><a href="#l-244">#</a> [10:41] &lt;Hixie&gt; m.pause(); m.currentTime = 0;</li>
+ <li id="l-245" _a="annevk"><a href="#l-245">#</a> [10:42] * annevk would like to have stop() back</li>
+ <li id="l-246" _a="annevk"><a href="#l-246">#</a> [10:42] &lt;annevk&gt; It was also on Audio()</li>
+ <li id="l-247" _a="Hixie"><a href="#l-247">#</a> [10:43] &lt;Hixie&gt; if it did something that you couldn't otherwise do...</li>
+ <li id="l-248" _a="Hixie"><a href="#l-248">#</a> [10:43] &lt;Hixie&gt; i'm not a fan of adding shortcuts before we know if anyone will use them</li>
+ <li id="l-249" _a="maikmerten" _r="oh"><a href="#l-249">#</a> [10:43] &lt;maikmerten&gt; oh, one thing: A reliable way to find out if &lt;video&gt; is supported would be nice. Currently I'm just embedding a &lt;video&gt; element without src, fetch that with getElementById and see if that has a play method</li>
+ <li id="l-250" _a="maikmerten"><a href="#l-250">#</a> [10:44] &lt;maikmerten&gt; don't know if that is how it's supposed to be</li>
+ <li id="l-251" _a="maikmerten"><a href="#l-251">#</a> [10:44] &lt;maikmerten&gt; and in the long term a way to query mime types supported by audio/video may be nice, too</li>
+ <li id="l-252" class="flagged" _a="Hixie"><a href="#l-252">#</a> [10:45] &lt;Hixie&gt; if (video.play) is one way to find out</li>
+ <li id="l-253" _a="Hixie" _r="anyway"><a href="#l-253">#</a> [10:45] &lt;Hixie&gt; anyway, i'm off hame</li>
+ <li id="l-254" _a="Hixie"><a href="#l-254">#</a> [10:45] &lt;Hixie&gt; nn</li>
+ <li id="l-255" _a="annevk"><a href="#l-255">#</a> [10:45] &lt;annevk&gt; g'night</li>
+ <li id="l-256" _a="maikmerten"><a href="#l-256">#</a> [10:45] &lt;maikmerten&gt; night</li>
+ <li id="l-257" class="flagged" _a="annevk" _r="Hixie"><a href="#l-257">#</a> [10:47] &lt;annevk&gt; Hixie, hmm, Wikipedia would use them :)</li>
+ <li id="l-258" _a="othermaciej" _r="maikmerten"><a href="#l-258">#</a> [10:48] &lt;othermaciej&gt; maikmerten: the intent is that you specify multiple sources with &lt;source&gt; elements instead of querying</li>
+ <li id="l-259" _a="maikmerten"><a href="#l-259">#</a> [10:48] &lt;maikmerten&gt; as for the mime type querying: Sooner or later as codec development goes on user agents may pick up new codecs (on the free side Ogg Ghost + Ogg Dirac or whatever, on the other side the future MPEG codecs) and content providers may want to be able to see what's supported. Plus as Ogg is a SHOULD some implementations may not implement it and then the either a fallback should be able to kick in or just tell the user</li>
+ <li id="l-260" _a="maikmerten" _r="ah"><a href="#l-260">#</a> [10:48] &lt;maikmerten&gt; ah, k</li>
+ <li id="l-261" _a="maikmerten"><a href="#l-261">#</a> [10:48] &lt;maikmerten&gt; that's an even better solution that's scripting independent</li>
+ <li id="l-262" _a="othermaciej" _r="maikmerten"><a href="#l-262">#</a> [10:48] &lt;othermaciej&gt; maikmerten: video codec support also is in general more fine-grained than mime types</li>
+ <li id="l-263" _a="maikmerten"><a href="#l-263">#</a> [10:48] &lt;maikmerten&gt; fair point</li>
+ <li id="l-264" _a="maikmerten"><a href="#l-264">#</a> [10:49] &lt;maikmerten&gt; currently e.g. the Wikimedia player queries the mime types and if it finds application/ogg (VLC plugin, totem plugin) it just assumes that Ogg plugin will also support video</li>
+ <li id="l-265" _a="othermaciej"><a href="#l-265">#</a> [10:49] &lt;othermaciej&gt; and the &lt;source&gt; element supports that via the MIME type codecs parameter</li>
+ <li id="l-266" _a="othermaciej"><a href="#l-266">#</a> [10:49] &lt;othermaciej&gt; it would be hard for a plugin to report all combos of the codecs parameter it supports</li>
+ <li id="l-267" _a="maikmerten"><a href="#l-267">#</a> [10:49] &lt;maikmerten&gt; true</li>
+ <li id="l-268" _a="maikmerten" _r="&lt;annevk&gt"><a href="#l-268">#</a> [10:50] &lt;maikmerten&gt; &lt;annevk&gt; Hixie, hmm, Wikipedia would use them :) &lt;-- well, Wikipedia will adapt to whatever is specified here, it shouldn't be the other way round</li>
+ <li id="l-269" _a="maikmerten"><a href="#l-269">#</a> [10:51] &lt;maikmerten&gt; the fact it's already having experimental &lt;video&gt; support is more to give a real-life testing ground for implementations and to voice support for the idea</li>
+ <li id="l-270" _a="annevk"><a href="#l-270">#</a> [10:51] * annevk was lobbying for less changes to Opera :)</li>
+ <li id="l-271" _a="annevk"><a href="#l-271">#</a> [10:52] &lt;annevk&gt; but yeah</li>
+ <li id="l-272" _a="maikmerten" _r="haha"><a href="#l-272">#</a> [10:52] &lt;maikmerten&gt; haha, right, standard procedure when several vendors come together... &quot;Why not adapt to what we already have?&quot; ;-)</li>
+ <li id="l-273" _a="maikmerten"><a href="#l-273">#</a> [10:53] &lt;maikmerten&gt; I nominate &lt;layer&gt; ;)</li>
+ <li id="l-274" _a="hsivonen"><a href="#l-274">#</a> [10:53] &lt;hsivonen&gt; I have now readjusted truthiness regarding the WHATWG and HTML5</li>
+ <li id="l-275" _a="hsivonen"><a href="#l-275">#</a> [10:53] &lt;hsivonen&gt; on wikipedia, that is</li>
+ <li id="l-276"><a href="#l-276">#</a> [10:54] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-277" _a="maikmerten"><a href="#l-277">#</a> [10:54] &lt;maikmerten&gt; I parse that as &quot;I edited the whatwg article on wikipedia&quot;, correct?</li>
+ <li id="l-278" _a="hsivonen" _r="maikmerten"><a href="#l-278">#</a> [10:54] &lt;hsivonen&gt; maikmerten: and HTML5 and HTML</li>
+ <li id="l-279" _a="maikmerten" _r="ah"><a href="#l-279">#</a> [10:54] &lt;maikmerten&gt; ah, nice</li>
+ <li id="l-280" _a="annevk"><a href="#l-280">#</a> [10:55] &lt;annevk&gt; I like <a href="http://en.wikipedia.org/wiki/HTML5">http://en.wikipedia.org/wiki/HTML5</a></li>
+ <li id="l-281" _a="annevk"><a href="#l-281">#</a> [10:55] &lt;annevk&gt; &quot;The HTML5 language is defined by a draft specification called “HTML 5” (note the space).&quot;</li>
+ <li id="l-282" _a="hsivonen" _r="maikmerten"><a href="#l-282">#</a> [10:55] &lt;hsivonen&gt; maikmerten: the article was called truthy last night, because it had some bogus stuff in it</li>
+ <li id="l-283" _a="maikmerten" _r="well"><a href="#l-283">#</a> [10:55] &lt;maikmerten&gt; well, as usual ;)</li>
+ <li id="l-284" _a="maikmerten"><a href="#l-284">#</a> [10:56] &lt;maikmerten&gt; (I *like* Wikipedia, but at times the strangest conceptions make it into articles because no real expert monitors them)</li>
+ <li id="l-285" _a="annevk"><a href="#l-285">#</a> [10:56] &lt;annevk&gt; It's also hard to get some articles changed, like HTML</li>
+ <li id="l-286" _a="annevk"><a href="#l-286">#</a> [10:57] &lt;annevk&gt; Although now HTML5 is done at the W3C it should be more easy I guess</li>
+ <li id="l-287" _a="hsivonen" _r="annevk"><a href="#l-287">#</a> [10:57] &lt;hsivonen&gt; annevk: I cited emails on lists.w3.org to avoid immediate reverts to the old accepted truth</li>
+ <li id="l-288" _a="maikmerten"><a href="#l-288">#</a> [10:57] &lt;maikmerten&gt; (by the way: Is there a reliable way to see if Java is *working* apart from embedding an applet and seeing if JavaScript can interact with that?)</li>
+ <li id="l-289" _a="annevk"><a href="#l-289">#</a> [10:58] &lt;annevk&gt; you might not have to embed it</li>
+ <li id="l-290" _a="annevk"><a href="#l-290">#</a> [10:58] &lt;annevk&gt; you could create the elements (such as &lt;video&gt; simply through script)</li>
+ <li id="l-291" _a="annevk"><a href="#l-291">#</a> [10:58] &lt;annevk&gt; and then do the check</li>
+ <li id="l-292" _a="annevk"><a href="#l-292">#</a> [10:59] &lt;annevk&gt; video = document.createElement('video'); if(video.play) { etc. }</li>
+ <li id="l-293" _a="maikmerten" _r="oh"><a href="#l-293">#</a> [11:01] &lt;maikmerten&gt; oh, sweet</li>
+ <li id="l-294" _a="maikmerten"><a href="#l-294">#</a> [11:01] &lt;maikmerten&gt; my JavaScript skills sorta cover whatever came with Netscape 3.0 ;-)</li>
+ <li id="l-295" _a="annevk"><a href="#l-295">#</a> [11:01] &lt;annevk&gt; nice</li>
+ <li id="l-296" _a="maikmerten"><a href="#l-296">#</a> [11:01] &lt;maikmerten&gt; (and with &quot;cover&quot; I mean &quot;I think I know 10% of that&quot;) ;)</li>
+ <li id="l-297" _a="maikmerten"><a href="#l-297">#</a> [11:02] &lt;maikmerten&gt; time to educate myself on the DOM</li>
+ <li id="l-298" _a="othermaciej" _r="hmm"><a href="#l-298">#</a> [11:03] &lt;othermaciej&gt; hmm, the WHATWG article still mentions microsoft</li>
+ <li id="l-299" _a="othermaciej"><a href="#l-299">#</a> [11:03] &lt;othermaciej&gt; <a href="http://en.wikipedia.org/wiki/Whatwg">http://en.wikipedia.org/wiki/Whatwg</a></li>
+ <li id="l-300"><a href="#l-300">#</a> [11:04] * Quits: marcosc (n=chatzill@131.181.148.226) (&quot;...and I'm gone.&quot;)</li>
+ <li id="l-301" _a="hsivonen" _r="othermaciej"><a href="#l-301">#</a> [11:05] &lt;hsivonen&gt; othermaciej: but now accurately, I hope</li>
+ <li id="l-302" _a="annevk" _r="othermaciej"><a href="#l-302">#</a> [11:05] &lt;annevk&gt; othermaciej, what it says there is correct though, right?</li>
+ <li id="l-303" _a="othermaciej"><a href="#l-303">#</a> [11:05] &lt;othermaciej&gt; what I see is &quot;The key contributing groups in the WHATWG are Google, the Mozilla Foundation, Opera Software, Apple Inc. and Microsoft.&quot;</li>
+ <li id="l-304" _a="hsivonen" _r="othermaciej"><a href="#l-304">#</a> [11:05] &lt;hsivonen&gt; othermaciej: reload</li>
+ <li id="l-305" _a="hsivonen" _r="othermaciej"><a href="#l-305">#</a> [11:06] &lt;hsivonen&gt; othermaciej: I guess you have an old cached version</li>
+ <li id="l-306" _a="hsivonen" _r="othermaciej"><a href="#l-306">#</a> [11:06] &lt;hsivonen&gt; othermaciej: either in your caches or in wikipedia's</li>
+ <li id="l-307" _a="othermaciej" _r="hsivonen"><a href="#l-307">#</a> [11:06] &lt;othermaciej&gt; hsivonen: just did; perhaps I'm a victim of too aggressive caching somewhere</li>
+ <li id="l-308" _a="othermaciej" _r="hsivonen"><a href="#l-308">#</a> [11:07] &lt;othermaciej&gt; hsivonen: seems to be in my browser cache</li>
+ <li id="l-309"><a href="#l-309">#</a> [11:07] * Joins: auk_ (n=scott@h-69-3-183-68.lsanca54.dynamic.covad.net)</li>
+ <li id="l-310"><a href="#l-310">#</a> [11:08] * Quits: auk_ (n=scott@h-69-3-183-68.lsanca54.dynamic.covad.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-311" _a="annevk"><a href="#l-311">#</a> [11:08] * annevk wonders why Wikipedia doesn't do redirects &quot;better&quot;</li>
+ <li id="l-312" _a="othermaciej"><a href="#l-312">#</a> [11:09] &lt;othermaciej&gt; I wonder why the description of the WHATWG membership in the Discuss page for that article says &quot;Maciej Stachowiak [ worked on Safari ]&quot;</li>
+ <li id="l-313" _a="othermaciej"><a href="#l-313">#</a> [11:09] &lt;othermaciej&gt; none of the others are in the past tense</li>
+ <li id="l-314" _a="annevk"><a href="#l-314">#</a> [11:11] &lt;annevk&gt; dunno</li>
+ <li id="l-315" _a="maikmerten"><a href="#l-315">#</a> [11:11] &lt;maikmerten&gt; I don't consider the discuss pages to be &quot;canon&quot; information</li>
+ <li id="l-316" _a="maikmerten" _r="(wow"><a href="#l-316">#</a> [11:12] &lt;maikmerten&gt; (wow, I just sounded like a Star Trek fan)</li>
+ <li id="l-317" _a="othermaciej"><a href="#l-317">#</a> [11:12] &lt;othermaciej&gt; whoever wrote the post saying that was confused I think</li>
+ <li id="l-318"><a href="#l-318">#</a> [11:13] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-319" _a="othermaciej" _r="damn"><a href="#l-319">#</a> [11:13] &lt;othermaciej&gt; damn, I screwed up the comment threading</li>
+ <li id="l-320" _a="othermaciej" _r="maikmerten"><a href="#l-320">#</a> [11:13] &lt;othermaciej&gt; maikmerten: is it considered bad form for someone closely associated with a product / project to edit the articles about it a lot?</li>
+ <li id="l-321" _a="maikmerten" _r="othermaciej"><a href="#l-321">#</a> [11:14] &lt;maikmerten&gt; othermaciej, good question - depends. Rule of thumb would say it's bad style</li>
+ <li id="l-322" _a="othermaciej" _r="maikmerten"><a href="#l-322">#</a> [11:14] &lt;othermaciej&gt; maikmerten: I really want to make a bunch of changes to the WebCore and WebKit articles (mainly merge most of the content into the WebKit one and change all the rendering engine list/comparison pages to point to WebKit instead of WebCore) but I'm worried this would be considered inappropriate</li>
+ <li id="l-323" _a="maikmerten" _r="well"><a href="#l-323">#</a> [11:15] &lt;maikmerten&gt; well, if the content is on a purely technical level I don't see why developers shouldn't be able to contribute</li>
+ <li id="l-324" _a="maikmerten"><a href="#l-324">#</a> [11:15] &lt;maikmerten&gt; after all that is not the usual company propaganda thing that is controversial</li>
+ <li id="l-325" _a="maikmerten" _r="err"><a href="#l-325">#</a> [11:16] &lt;maikmerten&gt; err, semantics were wrong on the last sentence</li>
+ <li id="l-326" _a="othermaciej"><a href="#l-326">#</a> [11:16] &lt;othermaciej&gt; I do have a lot of personal expert information which might not be based on published info</li>
+ <li id="l-327" _a="maikmerten"><a href="#l-327">#</a> [11:16] &lt;maikmerten&gt; as long as it stays on a technical level it's okay, I'd guess. Problematic would be company propaganda</li>
+ <li id="l-328" _a="othermaciej"><a href="#l-328">#</a> [11:16] &lt;othermaciej&gt; like what apps link to WebCore directly vs linking to WebKit</li>
+ <li id="l-329" _a="othermaciej"><a href="#l-329">#</a> [11:17] &lt;othermaciej&gt; but that is easily verifiable</li>
+ <li id="l-330" _a="othermaciej"><a href="#l-330">#</a> [11:17] &lt;othermaciej&gt; (at least for people who have access to the app)</li>
+ <li id="l-331" _a="maikmerten" _r="oh"><a href="#l-331">#</a> [11:17] &lt;maikmerten&gt; oh, and disclaimer: I'm not part of the Wikipedia project, just assist a bit with video technology related stuff</li>
+ <li id="l-332" _a="annevk"><a href="#l-332">#</a> [11:17] &lt;annevk&gt; Are you part of the Theora project?</li>
+ <li id="l-333" _a="maikmerten" _r="well"><a href="#l-333">#</a> [11:18] &lt;maikmerten&gt; well, yes and no. Not official member of xiph.org but I'm hanging around in the #theora channel and contributed a bit on the encoder</li>
+ <li id="l-334" _a="annevk"><a href="#l-334">#</a> [11:18] &lt;annevk&gt; k</li>
+ <li id="l-335" _a="maikmerten"><a href="#l-335">#</a> [11:19] &lt;maikmerten&gt; the border is a bit unclear as xiph.org isn't a real company but more a group of free media technology guys</li>
+ <li id="l-336" _a="maikmerten" _r="(well"><a href="#l-336">#</a> [11:22] &lt;maikmerten&gt; (well, to be precise: It is a legal entity complete with a board etc. - but that doesn't mean you have to be &quot;member&quot; of some sort to contribute)</li>
+ <li id="l-337"><a href="#l-337">#</a> [11:44] * Quits: psa (n=yomode@posom.com) (Remote closed the connection)</li>
+ <li id="l-338"><a href="#l-338">#</a> [11:44] * Parts: annevk (n=annevk@pat-tdc.opera.com)</li>
+ <li id="l-339"><a href="#l-339">#</a> [11:49] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-340"><a href="#l-340">#</a> [11:55] * Joins: annevk (n=annevk@pat-tdc.opera.com)</li>
+ <li id="l-341" _a="Philip`"><a href="#l-341">#</a> [12:31] &lt;Philip`&gt; About accepting [r,g,b,a] as input to fillStyle/strokeStyle, that'd be kind of handy since normally I have to write a [r,g,b,a]-to-&quot;rgba(...)&quot; function every time I do anything with colours, and have to worry about silly things like r,g,b being 0-255 while a is 0-1. (Not exceptionally handy and maybe not worth the cost, though.)</li>
+ <li id="l-342" _a="annevk"><a href="#l-342">#</a> [12:33] &lt;annevk&gt; is &quot;a&quot; in ImageData.data 0-225?</li>
+ <li id="l-343" _a="annevk"><a href="#l-343">#</a> [12:33] &lt;annevk&gt; I think you should mention the above on the list</li>
+ <li id="l-344" _a="Philip`"><a href="#l-344">#</a> [12:33] &lt;Philip`&gt; It is</li>
+ <li id="l-345" _a="annevk"><a href="#l-345">#</a> [12:33] &lt;annevk&gt; cool</li>
+ <li id="l-346" _a="annevk"><a href="#l-346">#</a> [12:34] &lt;annevk&gt; currently it accepts CSS for ease of use, but if you actually need to convert to CSS first it's not really &quot;easy&quot; anymore and just adds to the processing cost</li>
+ <li id="l-347" _a="Philip`"><a href="#l-347">#</a> [12:35] &lt;Philip`&gt; It's possibly nice that you can do HSL the same way as RGB when it's through CSS, which would no longer be the same if you had [r,g,b(,a)] arrays, but I don't know if anybody actually wants to use HSL</li>
+ <li id="l-348" _a="annevk"><a href="#l-348">#</a> [12:37] &lt;annevk&gt; you want ,a to be optional?</li>
+ <li id="l-349" _a="annevk"><a href="#l-349">#</a> [12:37] &lt;annevk&gt; it would still accept CSS I think</li>
+ <li id="l-350" _a="Philip`"><a href="#l-350">#</a> [12:39] &lt;Philip`&gt; Is there any reason not to make it optional? People will want solid colours more than they want transparent colours, so it would seem nicer to simplify that case rather than requiring a redundant ',255' every time</li>
+ <li id="l-351"><a href="#l-351">#</a> [12:39] * Joins: nickshanks_ (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-352" _a="othermaciej"><a href="#l-352">#</a> [12:39] &lt;othermaciej&gt; maybe functions to make and parse color strings would be more useful</li>
+ <li id="l-353" _a="othermaciej"><a href="#l-353">#</a> [12:39] &lt;othermaciej&gt; the array could only support a limited number of color formats</li>
+ <li id="l-354" _a="annevk" _r="Philip`"><a href="#l-354">#</a> [12:40] &lt;annevk&gt; Philip`, fair enough</li>
+ <li id="l-355" _a="annevk" _r="othermaciej"><a href="#l-355">#</a> [12:40] &lt;annevk&gt; othermaciej, thought about that... yet more global methods?</li>
+ <li id="l-356" _a="othermaciej"><a href="#l-356">#</a> [12:40] &lt;othermaciej&gt; but makeRGB, makeRGBA, makeHSL, makeHSLA, etc could do it</li>
+ <li id="l-357" _a="othermaciej"><a href="#l-357">#</a> [12:40] &lt;othermaciej&gt; they don't necessarily need to be global</li>
+ <li id="l-358" _a="othermaciej"><a href="#l-358">#</a> [12:40] &lt;othermaciej&gt; could be part of the CSSOM</li>
+ <li id="l-359" _a="othermaciej"><a href="#l-359">#</a> [12:40] &lt;othermaciej&gt; method on CSSColorValue constructor maybe</li>
+ <li id="l-360" _a="annevk"><a href="#l-360">#</a> [12:41] &lt;annevk&gt; that might work</li>
+ <li id="l-361" _a="annevk"><a href="#l-361">#</a> [12:41] * annevk thought of having CSSColorValue.data[0,0,0,0] as opposed to .red, .green .blue and .alpha</li>
+ <li id="l-362" _a="othermaciej"><a href="#l-362">#</a> [12:43] &lt;othermaciej&gt; .rgbaData might make more sense</li>
+ <li id="l-363" _a="othermaciej"><a href="#l-363">#</a> [12:43] &lt;othermaciej&gt; but I'm not sure it is more clear than named properties</li>
+ <li id="l-364" _a="annevk"><a href="#l-364">#</a> [12:44] &lt;annevk&gt; me neither</li>
+ <li id="l-365"><a href="#l-365">#</a> [12:47] * Quits: nickshanks (n=nicholas@home.nickshanks.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-366" _a="othermaciej"><a href="#l-366">#</a> [12:49] * othermaciej is now known as om_sleep</li>
+ <li id="l-367"><a href="#l-367">#</a> [12:52] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-368"><a href="#l-368">#</a> [13:20] * Joins: zcorpan (n=zcorpan@84-216-42-169.sprayadsl.telenor.se)</li>
+ <li id="l-369" _a="annevk"><a href="#l-369">#</a> [13:22] &lt;annevk&gt; nice Philip`</li>
+ <li id="l-370"><a href="#l-370">#</a> [13:44] * Joins: jdandrea (n=jdandrea@ool-44c0a1fe.dyn.optonline.net)</li>
+ <li id="l-371"><a href="#l-371">#</a> [14:02] * Joins: zcorpan_ (n=zcorpan@84-216-43-239.sprayadsl.telenor.se)</li>
+ <li id="l-372"><a href="#l-372">#</a> [14:03] * Joins: met_ (n=Hassman@r5bx220.net.upc.cz)</li>
+ <li id="l-373"><a href="#l-373">#</a> [14:06] * Joins: markp (n=mark@adsl-221-79-235.rmo.bellsouth.net)</li>
+ <li id="l-374"><a href="#l-374">#</a> [14:08] * Quits: zcorpan (n=zcorpan@84-216-42-169.sprayadsl.telenor.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-375" _a="hsivonen"><a href="#l-375">#</a> [15:01] &lt;hsivonen&gt; cool. my HTML5 revisions to wikipedia are still standing after 4 hours</li>
+ <li id="l-376" _a="annevk"><a href="#l-376">#</a> [15:03] &lt;annevk&gt; heh</li>
+ <li id="l-377" _a="annevk" _r="ooh"><a href="#l-377">#</a> [15:05] &lt;annevk&gt; ooh, those are pretty controversial</li>
+ <li id="l-378" _a="annevk"><a href="#l-378">#</a> [15:06] * annevk had only seen the first</li>
+ <li id="l-379" _a="hsivonen" _r="annevk"><a href="#l-379">#</a> [15:17] &lt;hsivonen&gt; annevk: what's controversial?</li>
+ <li id="l-380" _a="hsivonen" _r="annevk"><a href="#l-380">#</a> [15:17] &lt;hsivonen&gt; annevk: I tried to stick to stating facts</li>
+ <li id="l-381" _a="annevk"><a href="#l-381">#</a> [15:18] &lt;annevk&gt; controversial facts, if you wish</li>
+ <li id="l-382"><a href="#l-382">#</a> [15:18] * Joins: dev0 (i=Tobias@unaffiliated/icefox0)</li>
+ <li id="l-383"><a href="#l-383">#</a> [15:19] * Quits: markp (n=mark@adsl-221-79-235.rmo.bellsouth.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-384"><a href="#l-384">#</a> [15:48] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-385" _a="annevk"><a href="#l-385">#</a> [16:46] &lt;annevk&gt; <a href="http://en.wikipedia.org/wiki/XHTML">http://en.wikipedia.org/wiki/XHTML</a> might need updates as well</li>
+ <li id="l-386"><a href="#l-386">#</a> [16:53] * Joins: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-387" _a="hsivonen" _r="annevk"><a href="#l-387">#</a> [16:56] &lt;hsivonen&gt; annevk: feel free to edit :-)</li>
+ <li id="l-388" _a="annevk"><a href="#l-388">#</a> [16:57] &lt;annevk&gt; It's been said that I hate XHTML</li>
+ <li id="l-389" _a="annevk"><a href="#l-389">#</a> [16:57] &lt;annevk&gt; Any edit would immediately be reverted</li>
+ <li id="l-390" _a="met_"><a href="#l-390">#</a> [16:57] &lt;met_&gt; edit it anonymously</li>
+ <li id="l-391" _a="hsivonen"><a href="#l-391">#</a> [16:59] &lt;hsivonen&gt; ooh. they cite the Mozilla Web Author FAQ</li>
+ <li id="l-392" _a="annevk"><a href="#l-392">#</a> [17:00] &lt;annevk&gt; I'm sure someone else will fix it in due course</li>
+ <li id="l-393" _a="Philip`"><a href="#l-393">#</a> [17:01] &lt;Philip`&gt; <a href="http://en.wikipedia.org/w/index.php?title=XHTML&amp;oldid=129295550">http://en.wikipedia.org/w/index.php?title=XHTML&amp;oldid=129295550</a> - I prefer that version of the facts</li>
+ <li id="l-394" _a="annevk"><a href="#l-394">#</a> [17:04] &lt;annevk&gt; :)</li>
+ <li id="l-395" _a="hsivonen"><a href="#l-395">#</a> [17:05] &lt;hsivonen&gt; :-)</li>
+ <li id="l-396" _a="zcorpan_" _r="hsivonen"><a href="#l-396">#</a> [17:05] &lt;zcorpan_&gt; hsivonen: &quot;Namespace at-rules are supported.&quot; they are supported in HTML mode too</li>
+ <li id="l-397" _a="zcorpan_"><a href="#l-397">#</a> [17:05] &lt;zcorpan_&gt; (from the faq)</li>
+ <li id="l-398" _a="hsivonen" _r="zcorpan_"><a href="#l-398">#</a> [17:06] &lt;hsivonen&gt; zcorpan_: do you mean they work right if you introduce other namespaces via DOM manipulation?</li>
+ <li id="l-399" _a="zcorpan_"><a href="#l-399">#</a> [17:06] &lt;zcorpan_&gt; yes. or if you just declare a bogus namespace then it won't match html elements</li>
+ <li id="l-400" _a="hsivonen" _r="zcorpan_"><a href="#l-400">#</a> [17:07] &lt;hsivonen&gt; zcorpan_: OK. I take your word for it.</li>
+ <li id="l-401" _a="zcorpan_"><a href="#l-401">#</a> [17:07] &lt;zcorpan_&gt; html elements are in the xhtml namespace as far as css selectors are concerned</li>
+ <li id="l-402" _a="zcorpan_"><a href="#l-402">#</a> [17:07] &lt;zcorpan_&gt; in mozilla and opera and safari too iirc</li>
+ <li id="l-403" _a="zcorpan_"><a href="#l-403">#</a> [17:07] &lt;zcorpan_&gt; (even though they are in the null namespace in the DOM)</li>
+ <li id="l-404" _a="hsivonen" _r="zcorpan_"><a href="#l-404">#</a> [17:10] &lt;hsivonen&gt; zcorpan_: fix checked in. should appear in the next site rebuild</li>
+ <li id="l-405" _a="hsivonen" _r="zcorpan_"><a href="#l-405">#</a> [17:10] &lt;hsivonen&gt; zcorpan_: thanks for the report</li>
+ <li id="l-406" _a="zcorpan_"><a href="#l-406">#</a> [17:10] &lt;zcorpan_&gt; &quot;Other namespaces are supported.&quot; and &quot;xml:base is observed when following links.&quot; also are no different from HTML, except that you can't use them declaratively</li>
+ <li id="l-407" _a="hsivonen"><a href="#l-407">#</a> [17:11] &lt;hsivonen&gt; hmm. I wonder if the point is too subtle for the FAQ</li>
+ <li id="l-408" _a="zcorpan_"><a href="#l-408">#</a> [17:11] &lt;zcorpan_&gt; perhaps... i realise it's intended to say &quot;you can't use this&quot;</li>
+ <li id="l-409" _a="annevk"><a href="#l-409">#</a> [17:12] &lt;annevk&gt; not useful to mention I think</li>
+ <li id="l-410" _a="annevk"><a href="#l-410">#</a> [17:12] &lt;annevk&gt; you can't use them in HTML, you can use them in the DOM</li>
+ <li id="l-411" _a="zcorpan_" _r="yeah"><a href="#l-411">#</a> [17:13] &lt;zcorpan_&gt; yeah, fair enough</li>
+ <li id="l-412" _a="annevk"><a href="#l-412">#</a> [17:14] * annevk wonders what should happen with var imagedata = { height:1, width:2, data=[...], example:3 }</li>
+ <li id="l-413" _a="annevk"><a href="#l-413">#</a> [17:15] &lt;annevk&gt; the other question is whether it's useful that you're able to create your own objects...</li>
+ <li id="l-414" _a="annevk"><a href="#l-414">#</a> [17:15] &lt;annevk&gt; as &lt;canvas&gt; represents a grid that doesn't reflect device pixels</li>
+ <li id="l-415" _a="annevk"><a href="#l-415">#</a> [17:16] &lt;annevk&gt; it seems extremely easy to get it wrong</li>
+ <li id="l-416" _a="Philip`"><a href="#l-416">#</a> [17:17] &lt;Philip`&gt; It might make extensibility a bit harder too, if ImageData is modified in the future (e.g. to say how many device pixels per canvas pixel, or to indiciate a non-RGB colour space, or whatever) but people are passing in objects with those new attributes missing</li>
+ <li id="l-417" _a="Philip`"><a href="#l-417">#</a> [17:17] &lt;Philip`&gt; s/indiciate/indicate/</li>
+ <li id="l-418" _a="Philip`"><a href="#l-418">#</a> [17:20] &lt;Philip`&gt; It doesn't seem unreasonable to have people write var d; with (document.createElement('canvas')) { width = 100; height = 100; d = getContext('2d').getImageData(0, 0, width, height); }</li>
+ <li id="l-419" _a="Philip`"><a href="#l-419">#</a> [17:20] &lt;Philip`&gt; ...assuming every canvas has the same device pixel / canvas pixel mapping</li>
+ <li id="l-420" _a="annevk"><a href="#l-420">#</a> [17:21] &lt;annevk&gt; yeah</li>
+ <li id="l-421" _a="Philip`"><a href="#l-421">#</a> [17:21] &lt;Philip`&gt; (I guess there's already an assumption that that mapping doesn't change over time, e.g. if you do getImageData then the user changes their desktop resolution then you do putImageData)</li>
+ <li id="l-422" _a="Dashiva" _r="Philip`"><a href="#l-422">#</a> [17:22] &lt;Dashiva&gt; Philip`: Let's not encourage use of with too much</li>
+ <li id="l-423" _a="annevk"><a href="#l-423">#</a> [17:22] &lt;annevk&gt; especially since people tend to test only one browser...</li>
+ <li id="l-424" _a="annevk"><a href="#l-424">#</a> [17:22] &lt;annevk&gt; nothing wrong with with</li>
+ <li id="l-425" _a="Philip`" _r="Dashiva"><a href="#l-425">#</a> [17:22] &lt;Philip`&gt; Dashiva: I generally hate with because it seems confusing and error-prone, but I didn't want to bother declaring another variable :-)</li>
+ <li id="l-426" _a="annevk"><a href="#l-426">#</a> [17:23] &lt;annevk&gt; this feature allows you to imlement filters and I suppose that in theory you don't really care about the canvas pixels then but authors will break stuff</li>
+ <li id="l-427" _a="Philip`"><a href="#l-427">#</a> [17:24] &lt;Philip`&gt; For image filtering, it would be quite nice if the browser could JIT your JS code into optimised SIMD array operations...</li>
+ <li id="l-428" _a="Philip`" _r="(Actually"><a href="#l-428">#</a> [17:25] &lt;Philip`&gt; (Actually, I have no idea how fast it is with plain JS operating on arrays of integers)</li>
+ <li id="l-429" _a="Philip`" _r="Oh"><a href="#l-429">#</a> [17:28] &lt;Philip`&gt; Oh, one problem with implementing filters...</li>
+ <li id="l-430" _a="Philip`"><a href="#l-430">#</a> [17:28] &lt;Philip`&gt; Normally you want access to both the old and new arrays of pixels</li>
+ <li id="l-431" _a="Philip`"><a href="#l-431">#</a> [17:28] &lt;Philip`&gt; (because you need all the old values in order to compute the new ones)</li>
+ <li id="l-432" _a="Philip`"><a href="#l-432">#</a> [17:29] &lt;Philip`&gt; but that doesn't seem easy with ImageData - you have to somehow copy the .data array into a new array, then modify the values in .data</li>
+ <li id="l-433" _a="Philip`"><a href="#l-433">#</a> [17:30] &lt;Philip`&gt; whereas it'd seem more natural (and more efficient) to use the old values from .data and create a new array, then swap that new array back into the ImageData</li>
+ <li id="l-434" _a="Philip`"><a href="#l-434">#</a> [17:30] &lt;Philip`&gt; (but you can't because the array reference is readonly)</li>
+ <li id="l-435" _a="annevk"><a href="#l-435">#</a> [17:33] &lt;annevk&gt; you could simply create a new object it seems</li>
+ <li id="l-436" _a="annevk"><a href="#l-436">#</a> [17:33] &lt;annevk&gt; but given that you can do that it doesn't make much sense for .data to be readonly imo</li>
+ <li id="l-437" _a="annevk"><a href="#l-437">#</a> [17:34] &lt;annevk&gt; although the design is quite clear I don't think I particularly like these methods</li>
+ <li id="l-438" _a="annevk"><a href="#l-438">#</a> [17:34] &lt;annevk&gt; I'm pretty sure authors will almost directly rely on them returning specific results</li>
+ <li id="l-439" _a="annevk" _r="cool"><a href="#l-439">#</a> [17:38] &lt;annevk&gt; cool, bbc guys will show up at XTech</li>
+ <li id="l-440" _a="annevk"><a href="#l-440">#</a> [17:39] * annevk hopes they can give some info on Dirac</li>
+ <li id="l-441" _a="hsivonen" _r="annevk"><a href="#l-441">#</a> [17:41] &lt;hsivonen&gt; annevk: do they have a session?</li>
+ <li id="l-442" _a="annevk" _r="dunno"><a href="#l-442">#</a> [17:42] &lt;annevk&gt; dunno, just saw some guy from bbc commenting on molly.com</li>
+ <li id="l-443" _a="maikmerten"><a href="#l-443">#</a> [17:44] &lt;maikmerten&gt; I hope Dirac's bitstream specification will be declared stable in a foreseeable timeframe so useful implementation can be assembled</li>
+ <li id="l-444" _a="maikmerten"><a href="#l-444">#</a> [17:44] &lt;maikmerten&gt; (that'd be schrodinger.sf.net - dirac's real-life implementation)</li>
+ <li id="l-445"><a href="#l-445">#</a> [17:44] * Joins: madmoose (i=madmoose@gateway/web/cgi-irc/beitsahour.net/x-a6a69e0cd54b3b1a)</li>
+ <li id="l-446" _a="Philip`" _r="annevk"><a href="#l-446">#</a> [17:45] &lt;Philip`&gt; annevk: Oh, oops, I forgot you could create a new one</li>
+ <li id="l-447" _a="Philip`"><a href="#l-447">#</a> [17:46] &lt;Philip`&gt; <a href="http://canvex.lazyilluminati.com/misc/filter.html">http://canvex.lazyilluminati.com/misc/filter.html</a> - takes about 1.5 seconds to do the simplest useful filter on 300x150 pixels</li>
+ <li id="l-448" _a="Philip`"><a href="#l-448">#</a> [17:47] &lt;Philip`&gt; (...in FF3)</li>
+ <li id="l-449" _a="Dashiva"><a href="#l-449">#</a> [17:50] &lt;Dashiva&gt; I didn't know crashing my opera was a useful filter, but okay</li>
+ <li id="l-450" _a="annevk"><a href="#l-450">#</a> [17:50] * annevk will file the bug</li>
+ <li id="l-451" _a="Philip`" _r="Oh"><a href="#l-451">#</a> [17:50] &lt;Philip`&gt; Oh, that's not quite the intent</li>
+ <li id="l-452" _a="annevk"><a href="#l-452">#</a> [17:51] &lt;annevk&gt; it's good</li>
+ <li id="l-453" _a="Philip`"><a href="#l-453">#</a> [17:51] &lt;Philip`&gt; Opera 9.20 avoids crashing, which is good :-)</li>
+ <li id="l-454" _a="annevk"><a href="#l-454">#</a> [17:51] &lt;annevk&gt; better to discover it now</li>
+ <li id="l-455"><a href="#l-455">#</a> [17:51] * Joins: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com)</li>
+ <li id="l-456" _a="Philip`"><a href="#l-456">#</a> [17:53] * Philip` still forgot about imgdata.width != canvas.width when he first wrote this code</li>
+ <li id="l-457" _a="annevk"><a href="#l-457">#</a> [17:53] &lt;annevk&gt; right</li>
+ <li id="l-458"><a href="#l-458">#</a> [17:55] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (&quot;Leaving&quot;)</li>
+ <li id="l-459" _a="Philip`"><a href="#l-459">#</a> [17:55] &lt;Philip`&gt; (At least the filter algorithm doesn't care about that issue, but I was looping over the wrong array range)</li>
+ <li id="l-460" _a="annevk"><a href="#l-460">#</a> [17:57] * annevk e-mails the list</li>
+ <li id="l-461" _a="Philip`"><a href="#l-461">#</a> [18:00] &lt;Philip`&gt; It would be alright if imgdata.width != canvas.width all the time in every browser, because then everybody would notice when they first tried testing</li>
+ <li id="l-462" _a="annevk"><a href="#l-462">#</a> [18:00] &lt;annevk&gt; or simply assume it's 2*</li>
+ <li id="l-463" _a="Philip`"><a href="#l-463">#</a> [18:00] &lt;Philip`&gt; (but that would be silly for implementations which have one canvas pixel per device pixel)</li>
+ <li id="l-464" _a="annevk"><a href="#l-464">#</a> [18:01] &lt;annevk&gt; the thing is that can paint on half a pixel in theory</li>
+ <li id="l-465" _a="annevk"><a href="#l-465">#</a> [18:01] &lt;annevk&gt; because everything is float (ugh! thanks Apple) based</li>
+ <li id="l-466" _a="annevk"><a href="#l-466">#</a> [18:02] &lt;annevk&gt; if that wasn't the case you could just force 1 = 1 i suppose</li>
+ <li id="l-467" _a="Philip`"><a href="#l-467">#</a> [18:03] &lt;Philip`&gt; <a href="http://canvaspaint.org/paint.js">http://canvaspaint.org/paint.js</a> - their getPixel assumes imgd.width == canvas.width</li>
+ <li id="l-468" _a="Philip`"><a href="#l-468">#</a> [18:03] &lt;Philip`&gt; (Not sure why they commented out that code, though...)</li>
+ <li id="l-469" _a="Philip`"><a href="#l-469">#</a> [18:04] &lt;Philip`&gt; (unless it was just because nobody had implemented getImageData when they wrote that page)</li>
+ <li id="l-470" _a="annevk"><a href="#l-470">#</a> [18:04] &lt;annevk&gt; didn't work maybe?</li>
+ <li id="l-471"><a href="#l-471">#</a> [18:04] * Quits: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com) (&quot;later&quot;)</li>
+ <li id="l-472" _a="annevk"><a href="#l-472">#</a> [18:05] &lt;annevk&gt; Opera getPixel() actually assumes 1=1 as well in some way though I suppose it returns slightly weird things if you painted half a pixel before invoking it or something</li>
+ <li id="l-473" _a="annevk"><a href="#l-473">#</a> [18:06] * annevk wonders if anybody actually uses the floats</li>
+ <li id="l-474" _a="Philip`"><a href="#l-474">#</a> [18:07] &lt;Philip`&gt; <a href="http://svn.sourceforge.net/viewvc/*checkout*/jsmsx/trunk/msx.js?revision=20">http://svn.sourceforge.net/viewvc/*checkout*/jsmsx/trunk/msx.js?revision=20</a> - they get it wrong too</li>
+ <li id="l-475" _a="annevk"><a href="#l-475">#</a> [18:07] &lt;annevk&gt; can you maybe cite those on the list?</li>
+ <li id="l-476" _a="annevk"><a href="#l-476">#</a> [18:07] &lt;annevk&gt; otherwise I'm willing to do it</li>
+ <li id="l-477" _a="Philip`"><a href="#l-477">#</a> [18:08] &lt;Philip`&gt; I will do - I'll just see if I can find anybody doing it right first :-)</li>
+ <li id="l-478" _a="annevk"><a href="#l-478">#</a> [18:08] &lt;annevk&gt; (i really like that people are doing MS Paint in &lt;canvas&gt; btw, really nice :) )</li>
+ <li id="l-479" _a="annevk" _r="next"><a href="#l-479">#</a> [18:08] &lt;annevk&gt; next: photoshop :)</li>
+ <li id="l-480" _a="Philip`"><a href="#l-480">#</a> [18:10] &lt;Philip`&gt; I noticed there was some new Adobe application where they're written most of the code in Lua, and that kind of thing could work just as well in JS. But I guess they cheated and wrote optimised image-processing code in C++ instead :-(</li>
+ <li id="l-481" _a="annevk"><a href="#l-481">#</a> [18:10] &lt;annevk&gt; (drawing rectangles seems kind of messed up)</li>
+ <li id="l-482" _a="annevk" _r="&lt;canvas&gt"><a href="#l-482">#</a> [18:11] &lt;annevk&gt; &lt;canvas&gt; + XMLHttpRequest could do that :)</li>
+ <li id="l-483" _a="annevk" _r="well"><a href="#l-483">#</a> [18:11] &lt;annevk&gt; well, once it supports sending bytes over the wire better</li>
+ <li id="l-484" _a="Dashiva"><a href="#l-484">#</a> [18:12] * Dashiva is reminded of ajax &lt;blink&gt;</li>
+ <li id="l-485" _a="Philip`" _r="Ooh"><a href="#l-485">#</a> [18:19] &lt;Philip`&gt; Ooh, I found one using it correctly</li>
+ <li id="l-486" _a="annevk"><a href="#l-486">#</a> [18:19] &lt;annevk&gt; oh cool</li>
+ <li id="l-487" _a="annevk"><a href="#l-487">#</a> [18:21] &lt;annevk&gt; which one?</li>
+ <li id="l-488" _a="Philip`"><a href="#l-488">#</a> [18:25] &lt;Philip`&gt; <a href="http://tech.groups.yahoo.com/group/canvas-developers/files/buttons.html">http://tech.groups.yahoo.com/group/canvas-developers/files/buttons.html</a> - might need to register/login to access that, though</li>
+ <li id="l-489"><a href="#l-489">#</a> [18:26] * Joins: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net)</li>
+ <li id="l-490" _a="Philip`" _r="Hmm"><a href="#l-490">#</a> [18:26] &lt;Philip`&gt; Hmm, it would be easier to find people use canvas getImageData if it didn't use horribly common terms like &quot;canvas&quot; and &quot;getImageData&quot; so searches find people using dozens of other graphics libraries instead</li>
+ <li id="l-491" _a="Philip`" _r="Oh"><a href="#l-491">#</a> [18:28] &lt;Philip`&gt; Oh, perhaps <a href="http://f1.grp.yahoofs.com/v1/gORFRoOLlxuXtJddXwdSyravD-aFfgNuYoSzjI8vUevuBxus3V1sXs5xckiHKd1osiUpDE_bku-vtGMFPV_M-2JZkLKXTqc/buttons.html">http://f1.grp.yahoofs.com/v1/gORFRoOLlxuXtJddXwdSyravD-aFfgNuYoSzjI8vUevuBxus3V1sXs5xckiHKd1osiUpDE_bku-vtGMFPV_M-2JZkLKXTqc/buttons.html</a> works without logging in</li>
+ <li id="l-492" _a="annevk"><a href="#l-492">#</a> [18:29] &lt;annevk&gt; yeah</li>
+ <li id="l-493" _a="annevk"><a href="#l-493">#</a> [18:32] &lt;annevk&gt; I wonder what the expected rendering is...</li>
+ <li id="l-494" _a="annevk"><a href="#l-494">#</a> [18:33] &lt;annevk&gt; The last one and a half button should be blue?</li>
+ <li id="l-495" _a="Philip`" _r="Yep"><a href="#l-495">#</a> [18:33] &lt;Philip`&gt; Yep, it switches the red and blue components for the square (2000,0)-(3000,500)</li>
+ <li id="l-496" _a="Philip`"><a href="#l-496">#</a> [18:34] &lt;Philip`&gt; (I've no idea why it does that)</li>
+ <li id="l-497" _a="Philip`"><a href="#l-497">#</a> [18:34] &lt;Philip`&gt; (More precisely, I've no idea why the author decided to make it do that)</li>
+ <li id="l-498"><a href="#l-498">#</a> [18:39] * Joins: theoros (n=theoros@ACC8D244.ipt.aol.com)</li>
+ <li id="l-499" _a="annevk"><a href="#l-499">#</a> [18:40] &lt;annevk&gt; maybe just a test</li>
+ <li id="l-500"><a href="#l-500">#</a> [19:10] * Joins: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com)</li>
+ <li id="l-501"><a href="#l-501">#</a> [19:22] * Quits: dev0 (i=Tobias@unaffiliated/icefox0) (&quot;dev0 has no reason&quot;)</li>
+ <li id="l-502"><a href="#l-502">#</a> [19:27] * Quits: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-503"><a href="#l-503">#</a> [19:46] * Quits: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com) (&quot;later&quot;)</li>
+ <li id="l-504"><a href="#l-504">#</a> [19:46] * Joins: MichaelMH (n=Michael@87.254.86.84)</li>
+ <li id="l-505"><a href="#l-505">#</a> [19:56] * Quits: zcorpan_ (n=zcorpan@84-216-43-239.sprayadsl.telenor.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-506"><a href="#l-506">#</a> [20:24] * Quits: MichaelMH (n=Michael@87.254.86.84) (&quot;Leaving&quot;)</li>
+ <li id="l-507" _a="om_sleep"><a href="#l-507">#</a> [20:43] * om_sleep is now known as othermaciej</li>
+ <li id="l-508"><a href="#l-508">#</a> [20:43] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-509"><a href="#l-509">#</a> [20:44] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-510" _a="Philip`"><a href="#l-510">#</a> [20:44] * Philip` realises that drawImage(toDataURL) won't work as expected because it'll convert device pixels into image pixels, then draw image pixels as canvas pixels</li>
+ <li id="l-511"><a href="#l-511">#</a> [20:44] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-512"><a href="#l-512">#</a> [20:45] * Joins: weinig|food (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-513" _a="weinig|food"><a href="#l-513">#</a> [20:46] * weinig|food is now known as weinig</li>
+ <li id="l-514"><a href="#l-514">#</a> [20:53] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-515" _a="othermaciej"><a href="#l-515">#</a> [21:16] * othermaciej is now known as om_out</li>
+ <li id="l-516"><a href="#l-516">#</a> [21:18] * Joins: jruderman_ (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-517"><a href="#l-517">#</a> [21:18] * Quits: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-518"><a href="#l-518">#</a> [21:27] * Joins: bzed (n=bzed@dslb-084-059-126-057.pools.arcor-ip.net)</li>
+ <li id="l-519"><a href="#l-519">#</a> [21:32] * Joins: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-520"><a href="#l-520">#</a> [21:32] * Quits: jruderman_ (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-521"><a href="#l-521">#</a> [21:41] * Quits: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-522" _a="annevk" _r="Philip`"><a href="#l-522">#</a> [21:46] &lt;annevk&gt; Philip`, images are drawn as CSS pixels</li>
+ <li id="l-523" _a="annevk" _r="actually"><a href="#l-523">#</a> [21:46] &lt;annevk&gt; actually, isn't that defined?</li>
+ <li id="l-524" _a="annevk"><a href="#l-524">#</a> [21:46] &lt;annevk&gt; treat an image pixel as a canvas pixel or something?</li>
+ <li id="l-525" _a="annevk" _r="yeah"><a href="#l-525">#</a> [21:46] &lt;annevk&gt; yeah, that's defined</li>
+ <li id="l-526" _a="annevk"><a href="#l-526">#</a> [21:46] &lt;annevk&gt; &quot;interpreted such that one CSS pixel in the image is treated as one unit in the canvas coordinate space&quot;</li>
+ <li id="l-527" _a="Philip`" _r="Oh"><a href="#l-527">#</a> [21:47] &lt;Philip`&gt; Oh, right</li>
+ <li id="l-528" _a="Philip`"><a href="#l-528">#</a> [21:47] &lt;Philip`&gt; That's quite confusing - I expected it was equivalent to drawImage(img, 0, 0, img.width, img.height) because anything else is weird</li>
+ <li id="l-529" _a="Philip`"><a href="#l-529">#</a> [21:48] &lt;Philip`&gt; That also means sw,sh and dw,dh are different units, which is confusing</li>
+ <li id="l-530" _a="annevk"><a href="#l-530">#</a> [21:49] &lt;annevk&gt; huh?</li>
+ <li id="l-531" _a="Philip`" _r="Actually"><a href="#l-531">#</a> [21:49] &lt;Philip`&gt; Actually, not sure what I mean</li>
+ <li id="l-532"><a href="#l-532">#</a> [21:49] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-533" _a="annevk"><a href="#l-533">#</a> [21:49] &lt;annevk&gt; it should be equivalent to that...</li>
+ <li id="l-534" _a="Philip`"><a href="#l-534">#</a> [21:50] * Philip` is confused more now</li>
+ <li id="l-535" _a="annevk"><a href="#l-535">#</a> [21:50] &lt;annevk&gt; one image pixel is mapped to a canvas pixel</li>
+ <li id="l-536" _a="Philip`"><a href="#l-536">#</a> [21:50] &lt;Philip`&gt; If I have &lt;canvas width=100 height=100&gt; and want to draw img to fill it, would I say ctx.drawImage(img, 0, 0, 100, 100)?</li>
+ <li id="l-537" _a="Philip`"><a href="#l-537">#</a> [21:51] &lt;Philip`&gt; (and img is a 100x100 PNG or something)</li>
+ <li id="l-538" _a="Philip`"><a href="#l-538">#</a> [21:51] &lt;Philip`&gt; Oh</li>
+ <li id="l-539" _a="Philip`"><a href="#l-539">#</a> [21:51] &lt;Philip`&gt; but img.width is in CSS pixels too, not real pixels</li>
+ <li id="l-540" _a="annevk"><a href="#l-540">#</a> [21:51] &lt;annevk&gt; that should work</li>
+ <li id="l-541" _a="Philip`"><a href="#l-541">#</a> [21:51] &lt;Philip`&gt; so img.width is not necessarily 100</li>
+ <li id="l-542" _a="annevk"><a href="#l-542">#</a> [21:51] &lt;annevk&gt; it is</li>
+ <li id="l-543" _a="annevk"><a href="#l-543">#</a> [21:52] &lt;annevk&gt; one image pixel is one CSS pixel</li>
+ <li id="l-544" _a="Philip`"><a href="#l-544">#</a> [21:52] &lt;Philip`&gt; Still confused :-)</li>
+ <li id="l-545"><a href="#l-545">#</a> [21:52] * Joins: kingryan (n=kingryan@banff-72-29-239-177.mycanopy.net)</li>
+ <li id="l-546" _a="annevk"><a href="#l-546">#</a> [21:53] &lt;annevk&gt; you have device pixels, CSS pixels, canvas pixels and image pixels</li>
+ <li id="l-547" _a="annevk"><a href="#l-547">#</a> [21:53] &lt;annevk&gt; the latter is really equivalent to CSS pixels for the purposes of visual browsers aiui</li>
+ <li id="l-548" _a="annevk"><a href="#l-548">#</a> [21:53] &lt;annevk&gt; drawImage() takes one CSS pixel and makes it a canvas pixel</li>
+ <li id="l-549" _a="annevk"><a href="#l-549">#</a> [21:54] &lt;annevk&gt; so a 100x100 PNG would fill a 100x100 canvas</li>
+ <li id="l-550" _a="annevk"><a href="#l-550">#</a> [21:54] &lt;annevk&gt; and styling an image using CSS with 'width:200px' would also not modify a 200px width image (ever)</li>
+ <li id="l-551" _a="annevk"><a href="#l-551">#</a> [21:54] &lt;annevk&gt; s/width image/wide image/</li>
+ <li id="l-552" _a="Philip`"><a href="#l-552">#</a> [21:55] &lt;Philip`&gt; I think what I expect is that &lt;img src=&quot;some-100x100-image.png&quot;&gt;&lt;canvas width=100 height=100&gt;...ctx.drawImage(img, 0, 0, img.width, img.height) would fill the canvas, and ctx.drawImage(img, 0, 0) would do exactly the same, regardless of whatever the browser decides to do</li>
+ <li id="l-553" _a="Philip`"><a href="#l-553">#</a> [21:55] &lt;Philip`&gt; ...which seems to be what is specified, so that's alright, unless I'm wrong</li>
+ <li id="l-554" _a="annevk"><a href="#l-554">#</a> [21:55] &lt;annevk&gt; that's what the spec says</li>
+ <li id="l-555" _a="Philip`"><a href="#l-555">#</a> [21:56] &lt;Philip`&gt; Okay - then it still leaves the problem of converting device pixels to image pixels in toDataURL (which doesn't seem specified), and then treating image pixels = CSS pixels = canvas pixels when drawImaging again</li>
+ <li id="l-556" _a="Philip`"><a href="#l-556">#</a> [21:57] &lt;Philip`&gt; (I'd assume toDataURL isn't meant to lose all the high-res data if you've got &gt;1 device pixel per canvas pixel, because that wouldn't be nice, so it has to map device pixels onto image pixels)</li>
+ <li id="l-557" _a="annevk"><a href="#l-557">#</a> [21:57] &lt;annevk&gt; toDataURL makes a PNG</li>
+ <li id="l-558" _a="annevk"><a href="#l-558">#</a> [21:57] &lt;annevk&gt; oh you mean that 1 canvas pixel must become 1 image pixel?</li>
+ <li id="l-559" _a="Philip`"><a href="#l-559">#</a> [21:57] &lt;Philip`&gt; Will toDataURL on a &lt;canvas width=100 height=100&gt; always make a 100x100 PNG? Or does that depend on how many device pixels are in the canvas?</li>
+ <li id="l-560" _a="annevk"><a href="#l-560">#</a> [21:58] &lt;annevk&gt; 1 canvas pixel becomes 1 image pixel imo</li>
+ <li id="l-561" _a="Philip`"><a href="#l-561">#</a> [21:58] &lt;Philip`&gt; So toDataURL/drawImage will lose data?</li>
+ <li id="l-562"><a href="#l-562">#</a> [21:58] * Joins: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com)</li>
+ <li id="l-563" _a="annevk"><a href="#l-563">#</a> [21:58] &lt;annevk&gt; might</li>
+ <li id="l-564" _a="Philip`"><a href="#l-564">#</a> [21:58] &lt;Philip`&gt; That would seem quite annoying if you're trying to use toDataURL to implement a 'save image' button</li>
+ <li id="l-565" _a="annevk"><a href="#l-565">#</a> [21:59] &lt;annevk&gt; make a high res &lt;canvas&gt;</li>
+ <li id="l-566" _a="annevk"><a href="#l-566">#</a> [21:59] &lt;annevk&gt; and scale it down using CSS</li>
+ <li id="l-567" _a="annevk"><a href="#l-567">#</a> [21:59] &lt;annevk&gt; I'm actually all for going completely in that direction</li>
+ <li id="l-568" _a="annevk"><a href="#l-568">#</a> [21:59] &lt;annevk&gt; and have getImageData and putImageData do the same</li>
+ <li id="l-569" _a="annevk"><a href="#l-569">#</a> [21:59] &lt;annevk&gt; far more predictable</li>
+ <li id="l-570" _a="Philip`"><a href="#l-570">#</a> [22:00] &lt;Philip`&gt; Have the author explicitly make a high-res canvas when they want to support users with high-res displays?</li>
+ <li id="l-571" _a="annevk" _r="no"><a href="#l-571">#</a> [22:00] &lt;annevk&gt; no, when they want to support high-res output</li>
+ <li id="l-572" _a="annevk"><a href="#l-572">#</a> [22:01] &lt;annevk&gt; &lt;canvas height=&quot;1000&quot; width=&quot;1000&quot; style=&quot;height:100px;width:100px&quot;&gt;</li>
+ <li id="l-573" _a="Philip`"><a href="#l-573">#</a> [22:01] &lt;Philip`&gt; And then toDataURL would give a 1000x1000 image</li>
+ <li id="l-574" _a="annevk"><a href="#l-574">#</a> [22:02] &lt;annevk&gt; yeah</li>
+ <li id="l-575" _a="annevk"><a href="#l-575">#</a> [22:02] &lt;annevk&gt; I think it does now</li>
+ <li id="l-576" _a="Philip`"><a href="#l-576">#</a> [22:02] &lt;Philip`&gt; What if the user already has a clever browser and a really high-res display, so it puts 10x10 device pixels per canvas pixel?</li>
+ <li id="l-577" _a="annevk"><a href="#l-577">#</a> [22:02] &lt;annevk&gt; same</li>
+ <li id="l-578" _a="Philip`"><a href="#l-578">#</a> [22:02] &lt;Philip`&gt; and then it ends up with 10000x10000 device pixels for that canvas</li>
+ <li id="l-579" _a="annevk"><a href="#l-579">#</a> [22:02] &lt;annevk&gt; no</li>
+ <li id="l-580" _a="annevk" _r="well"><a href="#l-580">#</a> [22:03] &lt;annevk&gt; well, maybe if it does some clever subpixel rendering...</li>
+ <li id="l-581" _a="Philip`"><a href="#l-581">#</a> [22:03] &lt;Philip`&gt; Otherwise it would have to depend on the CSS computed size</li>
+ <li id="l-582" _a="Philip`"><a href="#l-582">#</a> [22:03] &lt;Philip`&gt; Or it would have to always have 1 device pixel = 1 canvas pixel</li>
+ <li id="l-583" _a="Philip`"><a href="#l-583">#</a> [22:03] &lt;Philip`&gt; (where the latter case makes everything easy, as far as I can see :-) )</li>
+ <li id="l-584" _a="annevk"><a href="#l-584">#</a> [22:03] &lt;annevk&gt; no it wouldn't</li>
+ <li id="l-585" _a="annevk"><a href="#l-585">#</a> [22:04] &lt;annevk&gt; CSS pixel != device pixel</li>
+ <li id="l-586" _a="annevk"><a href="#l-586">#</a> [22:04] &lt;annevk&gt; you'd get weird styling effects and such</li>
+ <li id="l-587"><a href="#l-587">#</a> [22:04] * Quits: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com) (&quot;later&quot;)</li>
+ <li id="l-588" _a="Philip`"><a href="#l-588">#</a> [22:05] &lt;Philip`&gt; If I have &lt;canvas width=1000 height=1000&gt; and a browser with 10x10 device pixels per canvas pixels, then the &quot;size of the coordinate space&quot; is 1000x1000, so that would give 10000x10000 device pixels?</li>
+ <li id="l-589" _a="annevk"><a href="#l-589">#</a> [22:05] &lt;annevk&gt; it depends on display</li>
+ <li id="l-590" _a="annevk"><a href="#l-590">#</a> [22:05] &lt;annevk&gt; on the device, really</li>
+ <li id="l-591" _a="annevk"><a href="#l-591">#</a> [22:06] &lt;annevk&gt; device pixels = actual rendering</li>
+ <li id="l-592" _a="annevk"><a href="#l-592">#</a> [22:06] &lt;annevk&gt; so it's not really about the browser</li>
+ <li id="l-593" _a="Philip`"><a href="#l-593">#</a> [22:06] &lt;Philip`&gt; However many device pixels it gives, does &lt;canvas width=1000 height=1000 style=&quot;width:100px; height:100px&quot;&gt; give the same number?</li>
+ <li id="l-594" _a="annevk"><a href="#l-594">#</a> [22:07] &lt;annevk&gt; unlikely</li>
+ <li id="l-595" _a="annevk" _r="actually"><a href="#l-595">#</a> [22:07] &lt;annevk&gt; actually, no</li>
+ <li id="l-596" _a="Philip`"><a href="#l-596">#</a> [22:07] &lt;Philip`&gt; If it depends on the computed CSS size, what would happen with &lt;canvas style=&quot;width:100%&quot;&gt; when the user resizes their browser and the computed CSS size changes?</li>
+ <li id="l-597" _a="annevk"><a href="#l-597">#</a> [22:08] &lt;annevk&gt; the canvas pixel to CSS pixel ratio would change?</li>
+ <li id="l-598" _a="annevk"><a href="#l-598">#</a> [22:08] &lt;annevk&gt; (amount of canvas pixels is always fixed)</li>
+ <li id="l-599" _a="Philip`"><a href="#l-599">#</a> [22:08] &lt;Philip`&gt; But the number of device pixels in the canvas would stay the same?</li>
+ <li id="l-600" _a="annevk"><a href="#l-600">#</a> [22:09] &lt;annevk&gt; (as in, unsigned integer)</li>
+ <li id="l-601" _a="annevk" _r="Philip`"><a href="#l-601">#</a> [22:09] &lt;annevk&gt; Philip`, no, device pixels is the amount of pixels used to render the canvas on the screen (= device)</li>
+ <li id="l-602" _a="Philip`"><a href="#l-602">#</a> [22:10] &lt;Philip`&gt; How can the browser change the number of device pixels being used to store the image in the canvas, without making a mess of the canvas's contents?</li>
+ <li id="l-603"><a href="#l-603">#</a> [22:10] * Quits: kingryan (n=kingryan@banff-72-29-239-177.mycanopy.net)</li>
+ <li id="l-604" _a="annevk" _r="Philip`"><a href="#l-604">#</a> [22:11] &lt;annevk&gt; Philip`, I would think the browser stores the data internally and eventually scales it based on CSS provided and puts it on the screen</li>
+ <li id="l-605" _a="annevk"><a href="#l-605">#</a> [22:12] &lt;annevk&gt; that's sort of what happens with scaled images iirc</li>
+ <li id="l-606" _a="Philip`"><a href="#l-606">#</a> [22:12] &lt;Philip`&gt; With things like getImageData, &quot;device pixels&quot; is used for the underlying pixel data that's stored internally</li>
+ <li id="l-607" _a="annevk"><a href="#l-607">#</a> [22:13] &lt;annevk&gt; it's all a bit confusing</li>
+ <li id="l-608" _a="Philip`"><a href="#l-608">#</a> [22:13] &lt;Philip`&gt; I would tend to agree ;-)</li>
+ <li id="l-609" _a="annevk"><a href="#l-609">#</a> [22:13] &lt;annevk&gt; but if that's your point I agree with your earlier suggestion about 1 device pixel = 1 canvas pixel</li>
+ <li id="l-610" _a="annevk"><a href="#l-610">#</a> [22:14] &lt;annevk&gt; and by default 1 canvas pixel would be 1 css pixel</li>
+ <li id="l-611" _a="Philip`"><a href="#l-611">#</a> [22:15] &lt;Philip`&gt; The only way that seems to make sense to me is if the underlying pixel data stores exactly one pixel of data per canvas pixel, and getImageData/putImageData/toDataURL/drawImage act on that pixel data, and then that bitmap just gets rescaled by CSS or whatever at the final render-to-screen stage</li>
+ <li id="l-612" _a="annevk"><a href="#l-612">#</a> [22:16] &lt;annevk&gt; <a href="http://twitter.com/annevk/statuses/61777592">http://twitter.com/annevk/statuses/61777592</a></li>
+ <li id="l-613"><a href="#l-613">#</a> [22:16] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-614" _a="annevk"><a href="#l-614">#</a> [22:16] &lt;annevk&gt; yeah</li>
+ <li id="l-615" _a="annevk"><a href="#l-615">#</a> [22:16] &lt;annevk&gt; I wonder what other implementors would think</li>
+ <li id="l-616" _a="annevk"><a href="#l-616">#</a> [22:17] &lt;annevk&gt; it would also allow us to get rid of all the floats...</li>
+ <li id="l-617" _a="Philip`"><a href="#l-617">#</a> [22:17] &lt;Philip`&gt; so a browser never has a higher-resolution bitmap to store the canvas data - it just scales up and looks a bit blurry</li>
+ <li id="l-618" _a="Philip`"><a href="#l-618">#</a> [22:17] &lt;Philip`&gt; (or the author makes canvas.width/height larger so there's more canvas pixels per monitor pixel)</li>
+ <li id="l-619" _a="Philip`"><a href="#l-619">#</a> [22:17] &lt;Philip`&gt; (if the author cares enough and makes sure they're not doing it all wrong)</li>
+ <li id="l-620" _a="Philip`"><a href="#l-620">#</a> [22:18] &lt;Philip`&gt; (and if the author has some way of determining that a certain user would benefit from a bigger canvas)</li>
+ <li id="l-621" _a="annevk"><a href="#l-621">#</a> [22:18] &lt;annevk&gt; not sure if you can forbid UAs to do anti-alias</li>
+ <li id="l-622" _a="annevk"><a href="#l-622">#</a> [22:19] &lt;annevk&gt; but getting the basics more consistent would be good</li>
+ <li id="l-623" _a="Philip`"><a href="#l-623">#</a> [22:19] &lt;Philip`&gt; Not sure why they'd be forbidden to anti-alias...</li>
+ <li id="l-624" _a="annevk" _r="well"><a href="#l-624">#</a> [22:19] &lt;annevk&gt; well, if you don't allow &quot;subpixel&quot; rendering</li>
+ <li id="l-625" _a="annevk"><a href="#l-625">#</a> [22:19] &lt;annevk&gt; it might be tricky to smooth things now and then</li>
+ <li id="l-626" _a="annevk"><a href="#l-626">#</a> [22:20] &lt;annevk&gt; (given that UAs actually do that now, dunno)</li>
+ <li id="l-627" _a="Philip`"><a href="#l-627">#</a> [22:20] &lt;Philip`&gt; They could do subpixel rendering inside a function, but the result would just be four bytes in a bitmap somewhere, so you could always retrieve and save and redraw the pixels without losing any information</li>
+ <li id="l-628" _a="Philip`"><a href="#l-628">#</a> [22:21] &lt;Philip`&gt; I suppose that would disallow supersampling antialiasing, where you just render to a big bitmap then scale down, but I didn't think anyone does that since it uses far too much memory</li>
+ <li id="l-629"><a href="#l-629">#</a> [22:23] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-630"><a href="#l-630">#</a> [22:25] * Quits: maikmerten (n=maikmert@L82a0.l.pppool.de) (&quot;Leaving&quot;)</li>
+ <li id="l-631" _a="Philip`" _r="Ah"><a href="#l-631">#</a> [22:25] &lt;Philip`&gt; Ah, an email - I think I agree with that, assuming I'm not mixing the terminology up again :-)</li>
+ <li id="l-632" _a="annevk"><a href="#l-632">#</a> [22:27] * annevk wonders if Apple guys would agree to getting rid of floats</li>
+ <li id="l-633" _a="Philip`"><a href="#l-633">#</a> [22:28] &lt;Philip`&gt; Which floats do you mean?</li>
+ <li id="l-634" _a="Philip`"><a href="#l-634">#</a> [22:28] &lt;Philip`&gt; It's still useful being able to draw to subpixel locations, because antialiasing does the right thing</li>
+ <li id="l-635" _a="Philip`"><a href="#l-635">#</a> [22:28] &lt;Philip`&gt; It's only really getImageData/putImageData where you want actual real pixels, not subpixels</li>
+ <li id="l-636" _a="annevk"><a href="#l-636">#</a> [22:28] &lt;annevk&gt; hmm ok</li>
+ <li id="l-637" _a="annevk"><a href="#l-637">#</a> [22:29] &lt;annevk&gt; but what if you put four different color subpixels into one pixel</li>
+ <li id="l-638" _a="annevk"><a href="#l-638">#</a> [22:29] &lt;annevk&gt; what would getImageData do?</li>
+ <li id="l-639" _a="annevk"><a href="#l-639">#</a> [22:29] * annevk ponders</li>
+ <li id="l-640" _a="Philip`"><a href="#l-640">#</a> [22:30] &lt;Philip`&gt; If you draw a solid 0.5x0.5 green rectangle inside one pixel, it will modify the internal bitmap to have a rgba(0, 255, 0, 0.25) value there</li>
+ <li id="l-641" _a="Philip`"><a href="#l-641">#</a> [22:30] &lt;Philip`&gt; (because the antialiasing algorithm decides that pixel has 25% coverage by what you're drawing, which it approximates by giving 25% alpha across the whole pixel)</li>
+ <li id="l-642" _a="annevk"><a href="#l-642">#</a> [22:30] &lt;annevk&gt; feel free to follow-up there with that</li>
+ <li id="l-643" _a="annevk"><a href="#l-643">#</a> [22:33] &lt;annevk&gt; I suppose your idea might make it more acceptable</li>
+ <li id="l-644" _a="Philip`"><a href="#l-644">#</a> [22:40] &lt;Philip`&gt; <a href="http://canvex.lazyilluminati.com/misc/subpixel.html">http://canvex.lazyilluminati.com/misc/subpixel.html</a> - 0.5x0.5 rectangles are drawn the same as 1x1 alpha=0.25 rectangles</li>
+ <li id="l-645" _a="annevk"><a href="#l-645">#</a> [22:41] &lt;annevk&gt; you get vastly different results in Firefox and Opera</li>
+ <li id="l-646"><a href="#l-646">#</a> [22:42] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-647" _a="annevk"><a href="#l-647">#</a> [22:44] &lt;annevk&gt; I think Opera does indeed do what you suggest</li>
+ <li id="l-648" _a="annevk"><a href="#l-648">#</a> [22:44] &lt;annevk&gt; Firefox doesn't</li>
+ <li id="l-649" _a="Philip`"><a href="#l-649">#</a> [22:45] &lt;Philip`&gt; That's the effects of their CSS image resizing - Opera seems to be just repeating each pixel 100x100 times, Firefox 3 is doing smooth scaling (like Opera normally does with resized images), but in both cases the actual canvas is just a 3x3 array of pixels (which is what I want)</li>
+ <li id="l-650" _a="annevk"><a href="#l-650">#</a> [22:47] &lt;annevk&gt; oh ok</li>
+ <li id="l-651"><a href="#l-651">#</a> [22:47] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-652" _a="annevk"><a href="#l-652">#</a> [22:47] &lt;annevk&gt; so the actual back end does indeed do 1 &lt;canvas&gt; device pixel = 1 canvas pixel</li>
+ <li id="l-653" _a="annevk"><a href="#l-653">#</a> [22:48] &lt;annevk&gt; I suppose that makes sense</li>
+ <li id="l-654" _a="annevk"><a href="#l-654">#</a> [22:59] &lt;annevk&gt; some people actually think the HTML4 spec is more clear</li>
+ <li id="l-655" _a="annevk"><a href="#l-655">#</a> [22:59] &lt;annevk&gt; see <a href="http://www.456bereastreet.com/archive/200705/is_html_5_a_slippery_slope/#comment17">http://www.456bereastreet.com/archive/200705/is_html_5_a_slippery_slope/#comment17</a></li>
+ <li id="l-656" _a="annevk"><a href="#l-656">#</a> [22:59] * annevk hopes he will give some suggestions on how to improve the text</li>
+ <li id="l-657" _a="annevk"><a href="#l-657">#</a> [23:00] * annevk is totally fine with the current text</li>
+ <li id="l-658" _a="annevk" _r="well"><a href="#l-658">#</a> [23:00] &lt;annevk&gt; well, the reading bit of it</li>
+ <li id="l-659" _a="annevk"><a href="#l-659">#</a> [23:03] &lt;annevk&gt; (I was quite confused above. Confusing the internal &lt;canvas&gt; with the output on screen...)</li>
+ <li id="l-660" _a="annevk"><a href="#l-660">#</a> [23:03] &lt;annevk&gt; (It just hit my why the difference in rendering is hardly an indicator of what's going on in this case :) )</li>
+ <li id="l-661"><a href="#l-661">#</a> [23:05] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-662" _a="annevk" _r="Philip`"><a href="#l-662">#</a> [23:09] &lt;annevk&gt; Philip`, can't the anti-aliasing algorithm differ per browser though?</li>
+ <li id="l-663" _a="Philip`"><a href="#l-663">#</a> [23:14] &lt;Philip`&gt; In theory it could, but in practice everyone seems to implement it in the standard way - a pixel of which a fraction 'n' is covered by (r,g,b,a) is just treated the same as a pixel entirely covered by (r,g,b,a*n)</li>
+ <li id="l-664" _a="Philip`"><a href="#l-664">#</a> [23:15] &lt;Philip`&gt; I don't know of any other ways to do it, without storing extra data (e.g. lots of subpixels) per pixel</li>
+ <li id="l-665" _a="Philip`"><a href="#l-665">#</a> [23:15] &lt;Philip`&gt; (and people don't really do the latter, in my experience)</li>
+ <li id="l-666" _a="Philip`"><a href="#l-666">#</a> [23:15] &lt;Philip`&gt; (*limited experience)</li>
+ <li id="l-667" _a="annevk"><a href="#l-667">#</a> [23:15] &lt;annevk&gt; k</li>
+ <li id="l-668" _a="annevk"><a href="#l-668">#</a> [23:16] &lt;annevk&gt; nice follow-up e-mail</li>
+ <li id="l-669" _a="Philip`"><a href="#l-669">#</a> [23:17] &lt;Philip`&gt; There are differences in how you decide how much of a pixel is covered by whatever's being drawn if you're e.g. drawing a gradient or a smoothly-filtered image (so it's not a single colour covering some fraction of the pixel), but still the output is a single (r,g,b,a) per pixel, and those differences don't matter much</li>
+ <li id="l-670" _a="annevk"><a href="#l-670">#</a> [23:17] &lt;annevk&gt; I suppose height and width are still useful on ImageData</li>
+ <li id="l-671" _a="Philip`"><a href="#l-671">#</a> [23:18] &lt;Philip`&gt; I think they're still useful since otherwise you'd usually have to remember the width and height in extra variables somewhere, because you're going to be looping over them or multiplying by them</li>
+ <li id="l-672" _a="annevk"><a href="#l-672">#</a> [23:19] &lt;annevk&gt; do you have tests on imagedata = {} not matching the actual definition?</li>
+ <li id="l-673" _a="Philip`"><a href="#l-673">#</a> [23:20] &lt;Philip`&gt; (In that button-drawing site I found where they actually used ImageData.width/height correctly, I think that was probably accidental and they just used width/height because they were convenient ways to access the numbers)</li>
+ <li id="l-674" _a="Philip`"><a href="#l-674">#</a> [23:21] &lt;Philip`&gt; I've not done any tests with ImageData</li>
+ <li id="l-675" _a="annevk"><a href="#l-675">#</a> [23:21] &lt;annevk&gt; k</li>
+ <li id="l-676" _a="annevk"><a href="#l-676">#</a> [23:21] &lt;annevk&gt; just have to catch a Hixie to update the spec</li>
+ <li id="l-677" _a="Philip`"><a href="#l-677">#</a> [23:24] &lt;Philip`&gt; <a href="http://www.w3.org/TR/html401/present/graphics.html#edef-B">http://www.w3.org/TR/html401/present/graphics.html#edef-B</a> - I think the list there (TT/I/B/...) makes HTML4 far more readable, compared to HTML5 where the definitions are spread all over the place</li>
+ <li id="l-678"><a href="#l-678">#</a> [23:26] * Quits: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-679" _a="annevk"><a href="#l-679">#</a> [23:27] &lt;annevk&gt; Elements could supposedly have an introduction chapter with such informative descriptions...</li>
+ <li id="l-680" _a="annevk"><a href="#l-680">#</a> [23:28] &lt;annevk&gt; the only thing it says is that they must be properly nested</li>
+ <li id="l-681" _a="annevk"><a href="#l-681">#</a> [23:28] &lt;annevk&gt; no other requirements...</li>
+ <li id="l-682" _a="Philip`"><a href="#l-682">#</a> [23:29] &lt;Philip`&gt; The lack of requirements and of precision is probably what makes it readable :-)</li>
+ <li id="l-683" _a="annevk"><a href="#l-683">#</a> [23:29] &lt;annevk&gt; id and class have no user agent requirements either</li>
+ <li id="l-684" _a="annevk"><a href="#l-684">#</a> [23:30] &lt;annevk&gt; I suppose :)</li>
+ <li id="l-685" _a="annevk"><a href="#l-685">#</a> [23:30] &lt;annevk&gt; it's a tutorial for authors :)</li>
+ <li id="l-686" _a="annevk"><a href="#l-686">#</a> [23:30] &lt;annevk&gt; with a spec sticker on top and some DTD grammar here and there</li>
+ <li id="l-687" _a="annevk"><a href="#l-687">#</a> [23:36] &lt;annevk&gt; I also believe that authors are better served with more interoperability than with a spec. Some vocal authors seem to disagree though</li>
+ <li id="l-688"><a href="#l-688">#</a> [23:37] * Quits: weinig (n=weinig@m810f36d0.tmodns.net)</li>
+ <li id="l-689" _a="annevk"><a href="#l-689">#</a> [23:37] &lt;annevk&gt; They are somehow under the impression that a clearer specification will improve authoring practices...</li>
+ <li id="l-690" _a="annevk"><a href="#l-690">#</a> [23:37] &lt;annevk&gt; &quot;Let me hit you with the specification-clue-stick&quot;</li>
+ <li id="l-691"><a href="#l-691">#</a> [23:43] * Quits: met_ (n=Hassman@r5bx220.net.upc.cz) (&quot;Chemists never die, they just stop reacting.&quot;)</li>
+ <li id="l-692"><a href="#l-692">#</a> [23:44] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-693"><a href="#l-693">#</a> [23:50] * Joins: theoros` (n=theoros@ACC8D244.ipt.aol.com)</li>
+ <li id="l-694"><a href="#l-694">#</a> [23:50] * Quits: theoros` (n=theoros@ACC8D244.ipt.aol.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-695"><a href="#l-695">#</a> Session Close: Sun May 13 00:00:00 2007</li>
+</ol>
+<p id="end">The end :)

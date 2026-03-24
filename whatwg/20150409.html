@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20150409</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="freenode/whatwg.20150409.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2015-04-09 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20150408>Previous day</a>, <a href=20150410>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Thu Apr 09 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #whatwg</li>
+<li id=l-3 class=hide><a href=#l-3>#</a> [00:00] * Quits: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-4 _a="Domenic"><a href=#l-4>#</a> [00:00] &lt;Domenic&gt; they can set up a small buffer pool and reuse buffers to limit total consumption and GC churn ... it will work beautifully ... /me waves his hands</li>
+<li id=l-5 class=hide><a href=#l-5>#</a> [00:01] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-6 class=hide><a href=#l-6>#</a> [00:01] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-7 class=hide><a href=#l-7>#</a> [00:01] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Ping timeout: 244 seconds)</li>
+<li id=l-8 class=hide><a href=#l-8>#</a> [00:05] * Joins: KevinMarks (~yaaic@2607:fb90:425:225f:8279:942b:e669:bef6)</li>
+<li id=l-9 class=hide><a href=#l-9>#</a> [00:06] * Quits: KevinMarks_ (~yaaic@2607:fb90:538:fe9e:b14f:3c3b:7fa7:b398) (Ping timeout: 245 seconds)</li>
+<li id=l-10 class=hide><a href=#l-10>#</a> [00:07] * Quits: newtron (~newtron@199.71.174.203) (Quit: Leaving...)</li>
+<li id=l-11 class=hide><a href=#l-11>#</a> [00:08] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-12 class=hide><a href=#l-12>#</a> [00:12] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-13 class=hide><a href=#l-13>#</a> [00:12] * Quits: benwerd (~benwerd@199.87.84.238) (Ping timeout: 245 seconds)</li>
+<li id=l-14 class=flagged _a="wanderview" _r="Domenic"><a href=#l-14>#</a> [00:12] &lt;wanderview&gt; Domenic: sorry... I'm used to the DOM stuff which just enforces types and then says &quot;using X's internal thing, do stuff&quot;</li>
+<li id=l-15 class=hide><a href=#l-15>#</a> [00:12] * Joins: encryptd_fractl (~encryptd_@23.30.224.246)</li>
+<li id=l-16 _a="Domenic" _r="wanderview"><a href=#l-16>#</a> [00:14] &lt;Domenic&gt; wanderview: np, just concerned about the layering in the design. Ideally *ByteStream should be additive and opt-in, both for consumers and from an architectural level.</li>
+<li id=l-17 class=hide><a href=#l-17>#</a> [00:14] * Quits: othermaciej (~mjs@17.244.160.90) (Ping timeout: 255 seconds)</li>
+<li id=l-18 _a="wanderview" _r="Domenic"><a href=#l-18>#</a> [00:17] &lt;wanderview&gt; Domenic: to be honest, things like off-main-thread piping are mostly interesting to me for *ByteStream... for streams with potentially arbitrary js objects for chunks... not sure I can safely move those around off-thread</li>
+<li id=l-19 _a="wanderview"><a href=#l-19>#</a> [00:17] &lt;wanderview&gt; not sure if that changes anything</li>
+<li id=l-20 _a="Domenic" _r="wanderview"><a href=#l-20>#</a> [00:17] &lt;Domenic&gt; wanderview: oh, no, I was never really planning on them being off thread... but i want the model to not change drastically when you move from non-byte to byte streams</li>
+<li id=l-21 class=hide><a href=#l-21>#</a> [00:17] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-22 class=hide><a href=#l-22>#</a> [00:17] * Quits: encryptd_fractl (~encryptd_@23.30.224.246) (Ping timeout: 272 seconds)</li>
+<li id=l-23 _a="Domenic" _r="wanderview"><a href=#l-23>#</a> [00:18] &lt;Domenic&gt; wanderview: although I guess it could be pretty useful in some cases e.g. if a UA provided stream wants to pass metadata with each chunk like { remotePort, remoteAddress, data } or something instead of just data</li>
+<li id=l-24 class=flagged _a="wanderview" _r="Domenic"><a href=#l-24>#</a> [00:19] &lt;wanderview&gt; Domenic: I built a bunch of node stream libs to do that kind of thing before... not sure anyone really liked it much</li>
+<li id=l-25 _a="wanderview"><a href=#l-25>#</a> [00:19] &lt;wanderview&gt; <a href="https://blog.wanderview.com/blog/2013/03/01/composable-object-streams/">https://blog.wanderview.com/blog/2013/03/01/composable-object-streams/</a></li>
+<li id=l-26 class=hide><a href=#l-26>#</a> [00:20] * Joins: othermaciej (~mjs@17.244.160.90)</li>
+<li id=l-27 _a="Domenic" _r="wanderview"><a href=#l-27>#</a> [00:20] &lt;Domenic&gt; wanderview: do you have a summary of where we are on <a href="https://github.com/yutakahirano/fetch-with-streams/issues/30">https://github.com/yutakahirano/fetch-with-streams/issues/30</a> ? when i went to bed last night i think we were convering on new Request({ body: readableStream }) + fetch(request, wsRevealer) + cache.add(request, wsRevealer) or similar. But then it changed overnight and now I am confused.</li>
+<li id=l-28 _a="wanderview" _r="Domenic"><a href=#l-28>#</a> [00:21] &lt;wanderview&gt; Domenic: I think DOM APIs would prefer to return a structured webidl object with a stream property (like Response)</li>
+<li id=l-29 _a="Domenic"><a href=#l-29>#</a> [00:21] &lt;Domenic&gt; ?</li>
+<li id=l-30 _a="wanderview" _r="Domenic"><a href=#l-30>#</a> [00:21] &lt;wanderview&gt; Domenic: I objected to putting wsRevealer on the consumer... because Request is no longer representative of the network request</li>
+<li id=l-31 _a="Domenic"><a href=#l-31>#</a> [00:21] &lt;Domenic&gt; (I like the UDP object streams BTW!)</li>
+<li id=l-32 _a="Domenic"><a href=#l-32>#</a> [00:22] &lt;Domenic&gt; Hmm was it ever?</li>
+<li id=l-33 _a="Domenic"><a href=#l-33>#</a> [00:22] &lt;Domenic&gt; Isn't Request more like RequestMetadata?</li>
+<li id=l-34 _a="wanderview" _r="Domenic"><a href=#l-34>#</a> [00:22] &lt;wanderview&gt; Domenic: no... before streams came into it, it contained all info to perform a network request</li>
+<li id=l-35 _a="wanderview"><a href=#l-35>#</a> [00:22] &lt;wanderview&gt; including the body</li>
+<li id=l-36 _a="Domenic" _r="right"><a href=#l-36>#</a> [00:23] &lt;Domenic&gt; right, info to perform a network request, but not a network request itself....</li>
+<li id=l-37 _a="Domenic"><a href=#l-37>#</a> [00:23] &lt;Domenic&gt; which is why you can store it in a cache; you can't store a network request in a cache...</li>
+<li id=l-38 _a="wanderview" _r="Domenic"><a href=#l-38>#</a> [00:24] &lt;wanderview&gt; Domenic: correct... it is a representation of a possible network request... it is not an actual in progress network request... but if you move the body ws-revealer to fetch() then Request no longer fully describes the possible network request</li>
+<li id=l-39 class=hide><a href=#l-39>#</a> [00:24] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-40 _a="Domenic"><a href=#l-40>#</a> [00:24] &lt;Domenic&gt; hmmm</li>
+<li id=l-41 _a="Domenic"><a href=#l-41>#</a> [00:24] &lt;Domenic&gt; i guess that's true</li>
+<li id=l-42 class=hide><a href=#l-42>#</a> [00:24] * Quits: dbaron (~dbaron@guest-nat.p2p.sfo1.mozilla.com) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+<li id=l-43 _a="Domenic"><a href=#l-43>#</a> [00:24] &lt;Domenic&gt; and ws-revealer is really &quot;a sequence of instructions for how to create a body&quot; so it still goes in the category of &quot;representation of a possible network request&quot;</li>
+<li id=l-44 _a="wanderview" _r="Domenic"><a href=#l-44>#</a> [00:24] &lt;wanderview&gt; Domenic: look at my last proposal... it combines your WritableStream wrapper without the hard coded type switch</li>
+<li id=l-45 class=hide><a href=#l-45>#</a> [00:25] * Joins: dbaron (~dbaron@2620:101:80fb:224:2d19:d044:d21e:612e)</li>
+<li id=l-46 _a="Domenic"><a href=#l-46>#</a> [00:25] &lt;Domenic&gt; Although I doubt you'll store the ws-revealer in the cache...</li>
+<li id=l-47 _a="Domenic" _r="Yeah"><a href=#l-47>#</a> [00:25] &lt;Domenic&gt; Yeah, I liked that, although unsure how it fits with the rest of the discussion up until that point</li>
+<li id=l-48 _a="wanderview" _r="Domenic"><a href=#l-48>#</a> [00:25] &lt;wanderview&gt; Domenic: well, right now Cache only supports GET... so can't put a body in... but if you could, Cache would trigger ws-revealer to get the body data</li>
+<li id=l-49 _a="wanderview"><a href=#l-49>#</a> [00:26] &lt;wanderview&gt; I still have all the code in gecko to store Request bodies</li>
+<li id=l-50 _a="Domenic"><a href=#l-50>#</a> [00:26] &lt;Domenic&gt; hmm i see</li>
+<li id=l-51 _a="Domenic"><a href=#l-51>#</a> [00:26] &lt;Domenic&gt; yeah i guess that makes sense</li>
+<li id=l-52 _a="Domenic"><a href=#l-52>#</a> [00:26] &lt;Domenic&gt; you reify the body whenever the request gets &quot;committed&quot; somewhere</li>
+<li id=l-53 _a="wanderview"><a href=#l-53>#</a> [00:27] &lt;wanderview&gt; those are fancy words, but I will nod my head</li>
+<li id=l-54 _a="Domenic"><a href=#l-54>#</a> [00:27] &lt;Domenic&gt; :P</li>
+<li id=l-55 _a="wanderview"><a href=#l-55>#</a> [00:27] &lt;wanderview&gt; does reify just mean normalize?</li>
+<li id=l-56 _a="Domenic"><a href=#l-56>#</a> [00:27] &lt;Domenic&gt; nah ... i'm thinking of it as, make a real set of bytes out of a function that represents a way to get bytes</li>
+<li id=l-57 _a="wanderview" _r="ah"><a href=#l-57>#</a> [00:28] &lt;wanderview&gt; ah, ok... serialize then</li>
+<li id=l-58 _a="Domenic"><a href=#l-58>#</a> [00:28] &lt;Domenic&gt; ws-revealer is a &quot;potential body&quot; that gets reified into a real body when you fetch/cache-add</li>
+<li id=l-59 _a="Domenic"><a href=#l-59>#</a> [00:28] &lt;Domenic&gt; yeah that i guess</li>
+<li id=l-60 _a="wanderview"><a href=#l-60>#</a> [00:28] &lt;wanderview&gt; I should look up that term I guess</li>
+<li id=l-61 _a="wanderview"><a href=#l-61>#</a> [00:28] &lt;wanderview&gt; I have more of an EE background so I tend to get lost in the CS theory world</li>
+<li id=l-62 _a="Domenic"><a href=#l-62>#</a> [00:29] &lt;Domenic&gt; might be a mathematician thing, I dunno. Or just a pretentious thing :P</li>
+<li id=l-63 _a="Domenic"><a href=#l-63>#</a> [00:29] &lt;Domenic&gt; so the current proposal is req.{setWriter/pipeTo} plus ... body(ws) { ... } which gets triggered after setWriter/pipeTo plus ... do we allow body: readableStream?</li>
+<li id=l-64 class=hide><a href=#l-64>#</a> [00:30] * Quits: tantek (~tantek@corp-nat.p2p.sfo1.mozilla.com) (Quit: tantek)</li>
+<li id=l-65 _a="wanderview" _r="Domenic"><a href=#l-65>#</a> [00:30] &lt;wanderview&gt; Domenic: I still want body: readableStream, yes</li>
+<li id=l-66 _a="Domenic"><a href=#l-66>#</a> [00:30] &lt;Domenic&gt; poor overloaded body: option</li>
+<li id=l-67 _a="wanderview" _r="Domenic"><a href=#l-67>#</a> [00:31] &lt;wanderview&gt; Domenic: didn't you hear?  fetch is mostly about sugar :-)</li>
+<li id=l-68 class=hide><a href=#l-68>#</a> [00:32] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 250 seconds)</li>
+<li id=l-69 _a="wanderview" _r="Domenic"><a href=#l-69>#</a> [00:32] &lt;wanderview&gt; Domenic: and to be clear... I only think we need this ws-revealer thing because of the desire to have progress notification that a pipe would obfuscate</li>
+<li id=l-70 class=hide><a href=#l-70>#</a> [00:33] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-71 _a="wanderview" _r="Domenic"><a href=#l-71>#</a> [00:34] &lt;wanderview&gt; Domenic: btw... resolving the .write() promises when written to the kernel is going to be somewhat challenging... in gecko we get notification from the network code about progress in a different path from where we write... so we have to match that progress back up to the promises to resolve, etc</li>
+<li id=l-72 _a="wanderview"><a href=#l-72>#</a> [00:34] &lt;wanderview&gt; maybe not challenging... but annoying</li>
+<li id=l-73 _a="Domenic"><a href=#l-73>#</a> [00:36] &lt;Domenic&gt; :-S</li>
+<li id=l-74 _a="wanderview"><a href=#l-74>#</a> [00:36] &lt;wanderview&gt; much easier to integrate that with a progress event (which is what it was designed for, of course)</li>
+<li id=l-75 _a="Domenic" _r="Well"><a href=#l-75>#</a> [00:36] &lt;Domenic&gt; Well, there's <a href="https://github.com/whatwg/streams/issues/316">https://github.com/whatwg/streams/issues/316</a> ...</li>
+<li id=l-76 _a="trevnorris" _r="wanderview"><a href=#l-76>#</a> [00:36] &lt;trevnorris&gt; wanderview: doubt this'll have any affect on the spec here, but in previous implementations I've had calls like .write() return a request object so you can trace the status at any point in the future.</li>
+<li id=l-77 _a="trevnorris"><a href=#l-77>#</a> [00:37] &lt;trevnorris&gt; e.g. .progress() to see how much has been written.</li>
+<li id=l-78 _a="trevnorris"><a href=#l-78>#</a> [00:37] &lt;trevnorris&gt; I use that in conjunction with timeouts to cancel writes that are taking too long.</li>
+<li id=l-79 _a="wanderview" _r="Domenic"><a href=#l-79>#</a> [00:37] &lt;wanderview&gt; Domenic: for example, I think gecko network code throttles progress notifications to once every 50ms or something... so you will see batches of .write() promises resolves at the same time, etc.</li>
+<li id=l-80 _a="wanderview" _r="trevnorris"><a href=#l-80>#</a> [00:38] &lt;wanderview&gt; trevnorris: sounds like you want cancellable promises :-)</li>
+<li id=l-81 _a="wanderview"><a href=#l-81>#</a> [00:38] * wanderview trolls</li>
+<li id=l-82 _a="Domenic" _r="wanderview"><a href=#l-82>#</a> [00:38] &lt;Domenic&gt; wanderview: lol, because the spec says 50 ms, good times :P</li>
+<li id=l-83 _a="trevnorris"><a href=#l-83>#</a> [00:38] &lt;trevnorris&gt; hehe. ;)</li>
+<li id=l-84 class=hide><a href=#l-84>#</a> [00:39] * Joins: eBureau (~Bruno@181.164.77.172)</li>
+<li id=l-85 _a="trevnorris" _r="wanderview"><a href=#l-85>#</a> [00:42] &lt;trevnorris&gt; wanderview: is it possible to do something like: var req = ws.write(data); setTimeout(function(req) { if (req.status() != 'complete') req.abort(); }, 1000); ?</li>
+<li id=l-86 _a="wanderview" _r="trevnorris"><a href=#l-86>#</a> [00:44] &lt;wanderview&gt; trevnorris: I think you would have to call ws.abort() instead of req.abort()</li>
+<li id=l-87 _a="trevnorris" _r="wanderview"><a href=#l-87>#</a> [00:44] &lt;trevnorris&gt; wanderview: what if you did ws.write(data1) ws.write(data2) and I only wanted to abort writing data1?</li>
+<li id=l-88 _a="Domenic"><a href=#l-88>#</a> [00:44] &lt;Domenic&gt; with cancelable promises you could do `var p = ws.write(data); setTimeout(() =&gt; p.cancel(), 1000). (Assuming calling p.cancel() does nothing on an already-settled promise)</li>
+<li id=l-89 _a="trevnorris"><a href=#l-89>#</a> [00:45] &lt;trevnorris&gt; already-settled promise?</li>
+<li id=l-90 _a="wanderview" _r="trevnorris"><a href=#l-90>#</a> [00:45] &lt;wanderview&gt; trevnorris: that seems racy to me... you may end up with data1 and data2 or just data2... also, not all write operations are abortable once they start, etc</li>
+<li id=l-91 _a="Domenic"><a href=#l-91>#</a> [00:45] &lt;Domenic&gt; already fulfilled or rejected</li>
+<li id=l-92 _a="Domenic" _r="yeah"><a href=#l-92>#</a> [00:46] &lt;Domenic&gt; yeah, how does that work in POSIX?</li>
+<li id=l-93 _a="trevnorris" _r="wanderview"><a href=#l-93>#</a> [00:46] &lt;trevnorris&gt; wanderview: if you've queued up several chunks of data to be written, and only the first has actually been sent to the kernel it should be possible to remove any specific write req from the queue.</li>
+<li id=l-94 _a="wanderview" _r="trevnorris"><a href=#l-94>#</a> [00:47] &lt;wanderview&gt; trevnorris: in a multi-threaded environment... it may have been sent to the kernel and you just haven't been notified of it yet</li>
+<li id=l-95 _a="boogyman"><a href=#l-95>#</a> [00:47] &lt;boogyman&gt; can you elaborate on a scenario where a Promise could be resolved while a &quot;child&quot; Promise has yet to resolve?</li>
+<li id=l-96 _a="bradleymeck"><a href=#l-96>#</a> [00:47] &lt;bradleymeck&gt; its important to remember cancellation does not mean abrupt termination</li>
+<li id=l-97 class=hide><a href=#l-97>#</a> [00:47] * Joins: svl (~me@200.123.210.20)</li>
+<li id=l-98 _a="bradleymeck"><a href=#l-98>#</a> [00:47] &lt;bradleymeck&gt; just that it should cancel at the next point</li>
+<li id=l-99 _a="Domenic" _r="boogyman"><a href=#l-99>#</a> [00:47] &lt;Domenic&gt; boogyman: what is a child promise</li>
+<li id=l-100 _a="trevnorris" _r="wanderview"><a href=#l-100>#</a> [00:47] &lt;trevnorris&gt; wanderview: as soon as the data is handed off to something else I'll consider it unreachable. in the case of Node I know because we make the call to uv_write() directly.</li>
+<li id=l-101 _a="bradleymeck"><a href=#l-101>#</a> [00:47] &lt;bradleymeck&gt; if there is not a clearly defines point of cancellation, something should not be cancellable</li>
+<li id=l-102 _a="bradleymeck"><a href=#l-102>#</a> [00:48] &lt;bradleymeck&gt; defined*</li>
+<li id=l-103 _a="boogyman" _r="Domenic"><a href=#l-103>#</a> [00:48] &lt;boogyman&gt; Domenic: however you define &quot;p.cancel()&quot; on an already resolved p</li>
+<li id=l-104 _a="Domenic"><a href=#l-104>#</a> [00:48] &lt;Domenic&gt; i don't understand</li>
+<li id=l-105 _a="Domenic"><a href=#l-105>#</a> [00:48] &lt;Domenic&gt; please phrase your question using code?</li>
+<li id=l-106 class=hide><a href=#l-106>#</a> [00:48] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-107 _a="wanderview" _r="trevnorris"><a href=#l-107>#</a> [00:48] &lt;wanderview&gt; trevnorris: &quot;something else&quot; is another thread?  or the kernel?  because in multi-process browsers it goes js-&gt;c++-&gt;IPC-&gt;c++-&gt;kernel with thread and process switches in there</li>
+<li id=l-108 _a="bradleymeck"><a href=#l-108>#</a> [00:48] &lt;bradleymeck&gt; if cancellation is inteded to be similar to abort()/halting a thread it should be rethought</li>
+<li id=l-109 _a="bradleymeck"><a href=#l-109>#</a> [00:49] * bradleymeck can't type today</li>
+<li id=l-110 _a="wanderview"><a href=#l-110>#</a> [00:49] &lt;wanderview&gt; right now ws.write() does not return a cancellable promise...</li>
+<li id=l-111 _a="wanderview"><a href=#l-111>#</a> [00:49] &lt;wanderview&gt; this is all hand wving</li>
+<li id=l-112 _a="wanderview"><a href=#l-112>#</a> [00:49] &lt;wanderview&gt; waving</li>
+<li id=l-113 _a="trevnorris" _r="wanderview"><a href=#l-113>#</a> [00:49] &lt;trevnorris&gt; wanderview: anything that takes control away from us over the lifetime of the data. but if I have an array of data chunks and only the first has been sent to uv_write() then the others should be able to be removed from their position in the queue.</li>
+<li id=l-114 _a="boogyman"><a href=#l-114>#</a> [00:49] &lt;boogyman&gt; `var p = ws.write(data); setTimeout(() =&gt; p.cancel(), 1000). (Assuming calling p.cancel() does nothing on an already-settled promise) &lt;-- Under what circumstance would be have already been resolved if it is dependent upon ws.write(data)</li>
+<li id=l-115 _a="boogyman"><a href=#l-115>#</a> [00:50] &lt;boogyman&gt; would p.cancel()*</li>
+<li id=l-116 _a="wanderview" _r="trevnorris"><a href=#l-116>#</a> [00:50] &lt;wanderview&gt; trevnorris: does uv_write() do file writing on a separate IO thread or the main thread?</li>
+<li id=l-117 _a="Domenic" _r="boogyman"><a href=#l-117>#</a> [00:50] &lt;Domenic&gt; boogyman: the adjective &quot;resolved&quot; does not apply to the function call p.cancel(), nor to its return value (which is undefined)</li>
+<li id=l-118 _a="trevnorris" _r="wanderview"><a href=#l-118>#</a> [00:50] &lt;trevnorris&gt; wanderview: main thread.</li>
+<li id=l-119 _a="bradleymeck" _r="wanderview"><a href=#l-119>#</a> [00:50] &lt;bradleymeck&gt; wanderview: but I think at that point the cancellation point would be if the kernel gets it still, once it gets to the kernel it cannot be stopped, so attempts at cancellation would need to propagate to the C++ that flushes to the kernel, and if it has started flushing it is in an uncancellable state</li>
+<li id=l-120 _a="Domenic" _r="trevnorris"><a href=#l-120>#</a> [00:50] &lt;Domenic&gt; trevnorris: false?</li>
+<li id=l-121 class=hide _a="heycam|away"><a href=#l-121>#</a> [00:50] * heycam|away is now known as heycam</li>
+<li id=l-122 _a="trevnorris" _r="wanderview"><a href=#l-122>#</a> [00:51] &lt;trevnorris&gt; wanderview: though I agree that if the data chunks were immediately sent to another thread to be written then we would have &quot;lost control&quot;. thus cancel would only be a notification that we no longer need to be notified of its completion.</li>
+<li id=l-123 _a="trevnorris" _r="Domenic"><a href=#l-123>#</a> [00:51] &lt;trevnorris&gt; Domenic: eh?</li>
+<li id=l-124 class=hide><a href=#l-124>#</a> [00:51] * Quits: othermaciej (~mjs@17.244.160.90) (Quit: othermaciej)</li>
+<li id=l-125 _a="Domenic" _r="trevnorris"><a href=#l-125>#</a> [00:51] &lt;Domenic&gt; trevnorris: fs writes in io are done in a threadpool?</li>
+<li id=l-126 _a="wanderview" _r="trevnorris"><a href=#l-126>#</a> [00:51] &lt;wanderview&gt; trevnorris: ok, then you don't have to deal with the races I do... trying to pick out a single buffer to cancel is going to be hit or miss in browsers or other multi-threaded environments</li>
+<li id=l-127 _a="bradleymeck"><a href=#l-127>#</a> [00:51] &lt;bradleymeck&gt; they are queued on the main thread though</li>
+<li id=l-128 _a="trevnorris" _r="Domenic"><a href=#l-128>#</a> [00:51] &lt;trevnorris&gt; Domenic: they're a special case. uv_wirte() and uv_try_write() is always done on the main thread.</li>
+<li id=l-129 _a="trevnorris"><a href=#l-129>#</a> [00:52] &lt;trevnorris&gt; *uv_write()</li>
+<li id=l-130 _a="bradleymeck"><a href=#l-130>#</a> [00:52] &lt;bradleymeck&gt; ?</li>
+<li id=l-131 _a="Domenic" _r="trevnorris"><a href=#l-131>#</a> [00:52] &lt;Domenic&gt; trevnorris: ah, I thought we were talking about file I/O since wanderview asked &quot;does uv_write() do file writing&quot;. I guess uv_write is for sockets?</li>
+<li id=l-132 _a="trevnorris"><a href=#l-132>#</a> [00:52] &lt;trevnorris&gt; yes. sorry I missed that. uv_write() is only for sockets.</li>
+<li id=l-133 _a="trevnorris"><a href=#l-133>#</a> [00:53] &lt;trevnorris&gt; filesystem I/O is a pain thanks to kernel incompatibilities.</li>
+<li id=l-134 _a="Domenic"><a href=#l-134>#</a> [00:53] &lt;Domenic&gt; gotcha</li>
+<li id=l-135 class=hide><a href=#l-135>#</a> [00:53] * Joins: roc (~chatzilla@121-99-129-223.bng1.tvc.orcon.net.nz)</li>
+<li id=l-136 _a="wanderview" _r="Domenic"><a href=#l-136>#</a> [00:53] &lt;wanderview&gt; Domenic: what I am getting is they treat the &quot;write is complete&quot; state when it leaves main thread... which might not quite be to kernel</li>
+<li id=l-137 _a="Domenic"><a href=#l-137>#</a> [00:53] &lt;Domenic&gt; yeah</li>
+<li id=l-138 _a="wanderview" _r="Domenic"><a href=#l-138>#</a> [00:53] &lt;wanderview&gt; Domenic: which is different from your goal of &quot;bytes written to kernel&quot;</li>
+<li id=l-139 _a="wanderview"><a href=#l-139>#</a> [00:53] &lt;wanderview&gt; I'm not sure to-kernel is all that much better than an app internal checkpoint</li>
+<li id=l-140 _a="Domenic"><a href=#l-140>#</a> [00:53] &lt;Domenic&gt; if you are sure that writes respect backpressure, maybe &quot;accepted and queued&quot; is a good enough proxy for upload progress...</li>
+<li id=l-141 _a="wanderview"><a href=#l-141>#</a> [00:53] &lt;wanderview&gt; but willing to try to support it</li>
+<li id=l-142 _a="trevnorris"><a href=#l-142>#</a> [00:54] &lt;trevnorris&gt; it's possible to share memory on the req across threads so read-only fields can be used to check its status.</li>
+<li id=l-143 _a="wanderview" _r="trevnorris"><a href=#l-143>#</a> [00:54] &lt;wanderview&gt; trevnorris: you have an atomic check-and-set for cancellation across threads?</li>
+<li id=l-144 _a="bradleymeck" _r="wanderview"><a href=#l-144>#</a> [00:54] &lt;bradleymeck&gt; wanderview: I think at either point cancellation is a suggestion to w/e you handed it off to</li>
+<li id=l-145 _a="bradleymeck"><a href=#l-145>#</a> [00:55] &lt;bradleymeck&gt; it needs to be able to continue the work if it has started side effects already</li>
+<li id=l-146 _a="bradleymeck"><a href=#l-146>#</a> [00:55] &lt;bradleymeck&gt; no real need for locking to my knowledge</li>
+<li id=l-147 _a="wanderview" _r="bradleymeck"><a href=#l-147>#</a> [00:55] &lt;wanderview&gt; bradleymeck: exactly... I guess I was just getting at I find it hard to reason about the need to cancel buffer1 and let buffer2 through... when you cannot know if you got to buffer1 in time</li>
+<li id=l-148 _a="trevnorris" _r="wanderview"><a href=#l-148>#</a> [00:55] &lt;trevnorris&gt; wanderview: right now only have it so if I've queued up many small buffers to be written I can check how many of them have actually been sent to the kernel.</li>
+<li id=l-149 _a="bradleymeck"><a href=#l-149>#</a> [00:55] &lt;bradleymeck&gt; i don't think you should be allowed to know at the time of cancellation</li>
+<li id=l-150 _a="trevnorris" _r="wanderview"><a href=#l-150>#</a> [00:56] &lt;trevnorris&gt; wanderview: streaming video for example. say you're buffering data to be written. it's better that frames are lost and the data stays current then making sure all the data goes through.</li>
+<li id=l-151 class=hide><a href=#l-151>#</a> [00:57] * Joins: othermaciej (~mjs@17.244.160.90)</li>
+<li id=l-152 _a="bradleymeck" _r="wanderview"><a href=#l-152>#</a> [00:57] &lt;bradleymeck&gt; wanderview: to rephrase, I cannot think of a good reason you should be allowed to know that buffer1 was cancelled before it calls .finally</li>
+<li id=l-153 _a="wanderview" _r="Domenic"><a href=#l-153>#</a> [00:57] &lt;wanderview&gt; Domenic: I think we are still not on the same page here:  <a href="https://github.com/yutakahirano/fetch-with-streams/issues/30#issuecomment-91057900">https://github.com/yutakahirano/fetch-with-streams/issues/30#issuecomment-91057900</a></li>
+<li id=l-154 _a="bradleymeck"><a href=#l-154>#</a> [00:58] &lt;bradleymeck&gt; which to me resolves the problem of reasoning</li>
+<li id=l-155 _a="wanderview"><a href=#l-155>#</a> [00:58] &lt;wanderview&gt; I guess I'm happy we don't yet allow canceling individual .write() calls... and if we did, I think it would very much have to be a &quot;best effort&quot;</li>
+<li id=l-156 class=hide><a href=#l-156>#</a> [00:59] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-157 _a="wanderview" _r="bradleymeck"><a href=#l-157>#</a> [00:59] &lt;wanderview&gt; bradleymeck: sure... I think I understand better that its a best effort cancel, for example the video streaming case mentioned</li>
+<li id=l-158 _a="bradleymeck"><a href=#l-158>#</a> [00:59] &lt;bradleymeck&gt; which is good, I want &quot;best effort&quot; and not guaranteed</li>
+<li id=l-159 class=hide><a href=#l-159>#</a> [00:59] * Quits: thinkxl (~thinkxl@74-95-237-22-Houston.hfc.comcastbusiness.net) (Quit: Lost terminal)</li>
+<li id=l-160 _a="bradleymeck"><a href=#l-160>#</a> [01:00] &lt;bradleymeck&gt; cause once side effects start / external systems are involved you need to let them resolve back to valid states (say if you have not finished writing)</li>
+<li id=l-161 _a="bradleymeck"><a href=#l-161>#</a> [01:00] &lt;bradleymeck&gt; guaranteed cancel would require external systems to stay in valid and buffered states which is a no-no</li>
+<li id=l-162 _a="wanderview" _r="Domenic"><a href=#l-162>#</a> [01:00] &lt;wanderview&gt; Domenic: I'll respond in bug... but I think very much &quot;setWriter()&quot; should function like a pipeTo()...  we could call it drainToWriter() or something if you want</li>
+<li id=l-163 class=hide><a href=#l-163>#</a> [01:02] * Quits: ehsan_ (~ehsan@2001:450:1f:224:d4de:dec7:880f:bcc7) (Remote host closed the connection)</li>
+<li id=l-164 class=hide><a href=#l-164>#</a> [01:02] * Quits: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-165 _a="trevnorris" _r="wanderview"><a href=#l-165>#</a> [01:03] &lt;trevnorris&gt; wanderview: doing an atomic field set so the writing thread can check if the queue from another thread is still needed is very much possible.</li>
+<li id=l-166 class=hide><a href=#l-166>#</a> [01:04] * Quits: asmodai (asmodai@freebsd/developer/asmodai) (Ping timeout: 264 seconds)</li>
+<li id=l-167 class=hide><a href=#l-167>#</a> [01:04] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Ping timeout: 272 seconds)</li>
+<li id=l-168 class=hide><a href=#l-168>#</a> [01:05] * Quits: xtrm0 (uid12574@gateway/web/irccloud.com/x-plqsjkpysnzhgwvh) (Quit: Connection closed for inactivity)</li>
+<li id=l-169 class=hide><a href=#l-169>#</a> [01:09] * Quits: svl (~me@200.123.210.20) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+<li id=l-170 class=hide><a href=#l-170>#</a> [01:12] * Quits: roc (~chatzilla@121-99-129-223.bng1.tvc.orcon.net.nz) (Remote host closed the connection)</li>
+<li id=l-171 class=hide><a href=#l-171>#</a> [01:12] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-172 class=hide><a href=#l-172>#</a> [01:15] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-173 class=hide><a href=#l-173>#</a> [01:17] * Quits: jsx (uid48919@fsf/intern/jsx) (Quit: Connection closed for inactivity)</li>
+<li id=l-174 class=hide><a href=#l-174>#</a> [01:25] * Joins: smaug____ (~chatzilla@62-78-246-79.bb.dnainternet.fi)</li>
+<li id=l-175 class=hide><a href=#l-175>#</a> [01:28] * Joins: ehsan_ (~ehsan@67.213.81.142)</li>
+<li id=l-176 class=hide><a href=#l-176>#</a> [01:36] * Quits: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com) (Quit: bradleymeck)</li>
+<li id=l-177 class=hide><a href=#l-177>#</a> [01:39] * Quits: diffalot (~diffalot@unaffiliated/papyromancer) (Remote host closed the connection)</li>
+<li id=l-178 class=hide><a href=#l-178>#</a> [01:40] * Joins: diffalot (~diffalot@unaffiliated/papyromancer)</li>
+<li id=l-179 class=hide><a href=#l-179>#</a> [01:41] * Quits: alrra (uid62345@gateway/web/irccloud.com/x-ncoqwrllfdpdgzzg) (Quit: Connection closed for inactivity)</li>
+<li id=l-180 class=hide><a href=#l-180>#</a> [01:45] * Joins: eric_carlson (~ericc@c-24-6-239-9.hsd1.ca.comcast.net)</li>
+<li id=l-181 class=hide><a href=#l-181>#</a> [01:45] * Joins: asmodai (asmodai@h159072.upc-h.chello.nl)</li>
+<li id=l-182 class=hide><a href=#l-182>#</a> [01:46] * Joins: KevinMarks_ (~KevinMark@199.87.84.238)</li>
+<li id=l-183 class=hide><a href=#l-183>#</a> [01:47] * Quits: jwalden (~waldo@2620:101:80fc:224:7e7a:91ff:fe25:a5a3) (Quit: ChatZilla 0.9.87-8.1450hg.fc20 [XULRunner 32.0/20140902134853])</li>
+<li id=l-184 class=hide><a href=#l-184>#</a> [01:49] * Joins: jwalden (~waldo@2620:101:80fc:224:7e7a:91ff:fe25:a5a3)</li>
+<li id=l-185 class=hide><a href=#l-185>#</a> [01:49] * Quits: bnicholson (~bnicholso@2620:101:80fb:224:f422:186:fa95:1a4c) (Quit: This computer has gone to sleep)</li>
+<li id=l-186 class=hide><a href=#l-186>#</a> [01:50] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-187 class=hide><a href=#l-187>#</a> [01:51] * Quits: boogyman (~boogyman@pdpc/supporter/professional/boogyman) (Ping timeout: 245 seconds)</li>
+<li id=l-188 class=hide><a href=#l-188>#</a> [01:51] * Joins: roc (~chatzilla@2001:cb0:b202:224:2677:3ff:fece:dc64)</li>
+<li id=l-189 class=hide><a href=#l-189>#</a> [01:53] * Quits: benwerd (~benwerd@199.87.84.238) (Read error: Connection reset by peer)</li>
+<li id=l-190 class=hide><a href=#l-190>#</a> [01:55] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-191 class=hide><a href=#l-191>#</a> [01:56] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-192 class=hide><a href=#l-192>#</a> [01:57] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-193 class=hide><a href=#l-193>#</a> [01:59] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-194 class=hide><a href=#l-194>#</a> [01:59] * Quits: othermaciej (~mjs@17.244.160.90) (Quit: othermaciej)</li>
+<li id=l-195 class=hide><a href=#l-195>#</a> [02:00] * Quits: hswolff (~hswolff@cpe-74-72-23-108.nyc.res.rr.com) (Ping timeout: 264 seconds)</li>
+<li id=l-196 class=hide><a href=#l-196>#</a> [02:01] * Joins: hswolff (~hswolff@cpe-74-72-23-108.nyc.res.rr.com)</li>
+<li id=l-197 class=hide><a href=#l-197>#</a> [02:02] * Joins: encryptd_fractl (~encryptd_@23.30.224.246)</li>
+<li id=l-198 class=hide><a href=#l-198>#</a> [02:03] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-199 class=hide><a href=#l-199>#</a> [02:04] * Joins: othermaciej (~mjs@17.244.160.90)</li>
+<li id=l-200 class=hide><a href=#l-200>#</a> [02:05] * Quits: othermaciej (~mjs@17.244.160.90) (Client Quit)</li>
+<li id=l-201 class=hide><a href=#l-201>#</a> [02:07] * Quits: mikenovikov (~mikenovik@ip-95-220-98-138.bb.netbynet.ru) (Read error: Connection reset by peer)</li>
+<li id=l-202 class=hide><a href=#l-202>#</a> [02:07] * Quits: encryptd_fractl (~encryptd_@23.30.224.246) (Ping timeout: 276 seconds)</li>
+<li id=l-203 class=hide><a href=#l-203>#</a> [02:07] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-204 class=hide><a href=#l-204>#</a> [02:10] * Quits: zama (~zama@unaffiliated/stryx/x-3871776) (Ping timeout: 264 seconds)</li>
+<li id=l-205 class=hide><a href=#l-205>#</a> [02:11] * Joins: zama (~zama@unaffiliated/stryx/x-3871776)</li>
+<li id=l-206 class=hide><a href=#l-206>#</a> [02:17] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-207 class=hide><a href=#l-207>#</a> [02:21] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 250 seconds)</li>
+<li id=l-208 class=hide><a href=#l-208>#</a> [02:21] * Joins: bnicholson (~bnicholso@223.sub-70-197-20.myvzw.com)</li>
+<li id=l-209 _a="wanderview" _r="Domenic"><a href=#l-209>#</a> [02:22] &lt;wanderview&gt; Domenic: ok... I have data that shows multiple read() calls with a promise each is much slower than being able to read buffered chunks synchronously</li>
+<li id=l-210 class=hide><a href=#l-210>#</a> [02:22] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-211 class=hide><a href=#l-211>#</a> [02:24] * Joins: jdaggett_ (~jdaggett@61-121-216-2.bitcat.net)</li>
+<li id=l-212 class=hide><a href=#l-212>#</a> Session Close: Thu Apr 09 02:24:47 2015</li>
+<li id=l-213><a href=#l-213>#</a> </li>
+<li id=l-214 class=hide><a href=#l-214>#</a> Session Start: Thu Apr 09 02:24:47 2015</li>
+<li id=l-215 class=hide><a href=#l-215>#</a> Session Ident: #whatwg</li>
+<li id=l-216><a href=#l-216>#</a> [02:24] * Disconnected</li>
+<li id=l-217 _a="Attempting"><a href=#l-217>#</a> [02:25] * Attempting to rejoin channel #whatwg</li>
+<li id=l-218 _a="Rejoined"><a href=#l-218>#</a> [02:26] * Rejoined channel #whatwg</li>
+<li id=l-219 _a="Topic"><a href=#l-219>#</a> [02:26] * Topic is 'https://whatwg.org/ — logs: <a href="http://krijnhoetmer.nl/irc-logs/">http://krijnhoetmer.nl/irc-logs/</a> &amp; <a href="http://logbot.glob.com.au/">http://logbot.glob.com.au/</a> — stats:  <a href="http://gavinsharp.com/irc/whatwg.html">http://gavinsharp.com/irc/whatwg.html</a> — Please leave your sense of logic at the door, thanks!'</li>
+<li id=l-220 _a="Set"><a href=#l-220>#</a> [02:26] * Set by MikeSmith!~mike@sideshowbarker.net on Wed Dec 10 17:23:43</li>
+<li id=l-221 class=hide><a href=#l-221>#</a> [02:27] * Joins: KevinMarks_ (~KevinMark@199.87.84.238)</li>
+<li id=l-222 _a="wanderview" _r="Domenic"><a href=#l-222>#</a> [02:27] &lt;wanderview&gt; Domenic: open this and look in your console: <a href="https://blog.wanderview.com/streams-promise-read/bluebird.html">https://blog.wanderview.com/streams-promise-read/bluebird.html</a></li>
+<li id=l-223 class=hide><a href=#l-223>#</a> [02:28] * Joins: JosephSilber (~JosephSil@ool-43513ca2.dyn.optonline.net)</li>
+<li id=l-224 _a="wanderview"><a href=#l-224>#</a> [02:28] &lt;wanderview&gt; code is here: <a href="https://github.com/wanderview/streams-promise-read">https://github.com/wanderview/streams-promise-read</a></li>
+<li id=l-225 _a="Domenic" _r="wanderview"><a href=#l-225>#</a> [02:34] &lt;Domenic&gt; wanderview: needs I/O to be a real test</li>
+<li id=l-226 class=hide><a href=#l-226>#</a> [02:34] * Joins: othermaciej (~mjs@17.245.121.12)</li>
+<li id=l-227 _a="Domenic"><a href=#l-227>#</a> [02:34] &lt;Domenic&gt;  All you are testing there is promises vs. loops</li>
+<li id=l-228 class=hide><a href=#l-228>#</a> [02:35] * Quits: espadrine (~tyl@dan75-7-88-166-187-54.fbx.proxad.net) (Ping timeout: 265 seconds)</li>
+<li id=l-229 _a="Domenic"><a href=#l-229>#</a> [02:35] &lt;Domenic&gt; Not the impact of promises on streams</li>
+<li id=l-230 class=hide><a href=#l-230>#</a> [02:38] * Quits: othermaciej (~mjs@17.245.121.12) (Ping timeout: 244 seconds)</li>
+<li id=l-231 _a="zewt"><a href=#l-231>#</a> [02:39] &lt;zewt&gt; i wonder what middle-managery person at mozilla thought having a &quot;start a conversation&quot; button in the toolbar was a cool idea</li>
+<li id=l-232 class=hide><a href=#l-232>#</a> [02:39] * Quits: bnicholson (~bnicholso@223.sub-70-197-20.myvzw.com) (Ping timeout: 272 seconds)</li>
+<li id=l-233 class=hide><a href=#l-233>#</a> [02:40] * Joins: othermaciej (~mjs@76.74.153.49)</li>
+<li id=l-234 class=hide><a href=#l-234>#</a> [02:44] * Joins: tripu (~tripu@p7223-ipngn11001marunouchi.tokyo.ocn.ne.jp)</li>
+<li id=l-235 class=hide><a href=#l-235>#</a> [02:45] * Joins: bnicholson (~bnicholso@204.sub-70-197-19.myvzw.com)</li>
+<li id=l-236 class=hide><a href=#l-236>#</a> [02:49] * Quits: bnicholson (~bnicholso@204.sub-70-197-19.myvzw.com) (Client Quit)</li>
+<li id=l-237 _a="wanderview" _r="Domenic"><a href=#l-237>#</a> [02:50] &lt;wanderview&gt; Domenic: its the case I described before... the I/O was done previously and written to a pipe... now a consumer is reading from a pipe to process it (perhaps all in memory)</li>
+<li id=l-238 _a="wanderview" _r="Domenic"><a href=#l-238>#</a> [02:50] &lt;wanderview&gt; Domenic: this is the case you said &quot;needs citation&quot; above</li>
+<li id=l-239 class=hide><a href=#l-239>#</a> [02:51] * Joins: ttepasse (~ttepasse@ip-178-200-61-79.hsi07.unitymediagroup.de)</li>
+<li id=l-240 _a="wanderview" _r="Domenic"><a href=#l-240>#</a> [02:52] &lt;wanderview&gt; Domenic: from here:  <a href="http://logs.glob.uno/?c=freenode%23whatwg&amp;s=8+Apr+2015&amp;e=8+Apr+2015&amp;h=citation#c944489">http://logs.glob.uno/?c=freenode%23whatwg&amp;s=8+Apr+2015&amp;e=8+Apr+2015&amp;h=citation#c944489</a></li>
+<li id=l-241 class=hide><a href=#l-241>#</a> [02:59] * Joins: KevinMarks__ (~yaaic@2607:fb90:2193:30e7:75a4:4623:28eb:38a1)</li>
+<li id=l-242 class=hide><a href=#l-242>#</a> [02:59] * Quits: smaug____ (~chatzilla@62-78-246-79.bb.dnainternet.fi) (Ping timeout: 252 seconds)</li>
+<li id=l-243 class=hide><a href=#l-243>#</a> [03:00] * Quits: KevinMarks (~yaaic@2607:fb90:425:225f:8279:942b:e669:bef6) (Ping timeout: 245 seconds)</li>
+<li id=l-244 _a="Domenic" _r="wanderview"><a href=#l-244>#</a> [03:08] &lt;Domenic&gt; wanderview: I must have misinterpreted. That's not streaming at all... Just buffering.</li>
+<li id=l-245 _a="wanderview" _r="Domenic"><a href=#l-245>#</a> [03:09] &lt;wanderview&gt; Domenic: so buffering is not supported in this stream model?</li>
+<li id=l-246 _a="Domenic" _r="wanderview"><a href=#l-246>#</a> [03:10] &lt;Domenic&gt; wanderview: a 1000-chunk high water Mark is unrealistic</li>
+<li id=l-247 _a="Domenic"><a href=#l-247>#</a> [03:10] &lt;Domenic&gt; of course it is, but you shouldn't use a stream when you're just buffering all data in memory anyway</li>
+<li id=l-248 _a="wanderview" _r="Domenic"><a href=#l-248>#</a> [03:10] &lt;wanderview&gt; Domenic: I'm not saying 1000 is realistic... but 10 chunks is a realistic bugger</li>
+<li id=l-249 _a="wanderview"><a href=#l-249>#</a> [03:10] &lt;wanderview&gt; buffer</li>
+<li id=l-250 _a="Domenic"><a href=#l-250>#</a> [03:11] &lt;Domenic&gt; A pipe should terminate in I/O on one side or the other</li>
+<li id=l-251 _a="wanderview" _r="Domenic"><a href=#l-251>#</a> [03:11] &lt;wanderview&gt; Domenic: I thought you were gone for the evening so I wrote my thoughts here: <a href="https://github.com/whatwg/streams/issues/320#issuecomment-91083647">https://github.com/whatwg/streams/issues/320#issuecomment-91083647</a></li>
+<li id=l-252 class=hide><a href=#l-252>#</a> [03:12] * Quits: KevinMarks_ (~KevinMark@199.87.84.238) (Ping timeout: 252 seconds)</li>
+<li id=l-253 _a="Domenic"><a href=#l-253>#</a> [03:12] &lt;Domenic&gt; If it takes x time to read from the pipe with promises, 0.04x time with batch, and 1000x time to put data in the pipe in the first place, I'm not too concerned.</li>
+<li id=l-254 _a="Domenic"><a href=#l-254>#</a> [03:12] &lt;Domenic&gt; I kind of am gone, should probably turn off notifications :p</li>
+<li id=l-255 _a="wanderview" _r="Domenic"><a href=#l-255>#</a> [03:13] &lt;wanderview&gt; Domenic: I feel like we've pessimized a common case in order to allow an optimization in obscure case later</li>
+<li id=l-256 _a="Domenic"><a href=#l-256>#</a> [03:13] &lt;Domenic&gt; I do not think chunks being synchronously generated in a batch is common.</li>
+<li id=l-257 _a="Domenic"><a href=#l-257>#</a> [03:14] &lt;Domenic&gt; Chunks come from somewhere, ultimately, perhaps after several transforms, but ultimately from I/O. This example does not show that.</li>
+<li id=l-258 _a="Domenic"><a href=#l-258>#</a> [03:16] &lt;Domenic&gt; Just read your comment... 6 ms is a lot... Absolute numbers help.</li>
+<li id=l-259 _a="Domenic"><a href=#l-259>#</a> [03:18] &lt;Domenic&gt; Except... 625 microseconds is actually 0.6 ms</li>
+<li id=l-260 _a="Domenic" _r="Oh"><a href=#l-260>#</a> [03:18] &lt;Domenic&gt; Oh, it's per chunk</li>
+<li id=l-261 _a="wanderview" _r="Domenic"><a href=#l-261>#</a> [03:19] &lt;wanderview&gt; Domenic: yea, sorry... I was trying to make the number easier to compare... so I normalized per chunk</li>
+<li id=l-262 _a="Domenic"><a href=#l-262>#</a> [03:19] &lt;Domenic&gt; Although I wonder if the code is just not hot enough for the optimizer to kick in for 10 chunks</li>
+<li id=l-263 _a="Domenic"><a href=#l-263>#</a> [03:20] &lt;Domenic&gt; Maybe do 10 chunks in a loop or something</li>
+<li id=l-264 _a="wanderview" _r="Domenic"><a href=#l-264>#</a> [03:20] &lt;wanderview&gt; Domenic: well, the higher number loops suggest the sync loop optimizes much better than the promise loop can be optimized... not surprising</li>
+<li id=l-265 _a="Domenic"><a href=#l-265>#</a> [03:20] &lt;Domenic&gt; Or ten chunks every requestAnimationFrame, since eating the frame budget is the real concern</li>
+<li id=l-266 _a="TabAtkins" _r="Domenic"><a href=#l-266>#</a> [03:20] &lt;TabAtkins&gt; Domenic: Yo, sorry for the digression, but random help here: it's a bad idea for an attribute to sometimes be updated sync and sometimes async, according to unknowable impl-specific criteria, right?</li>
+<li id=l-267 _a="Domenic"><a href=#l-267>#</a> [03:21] &lt;Domenic&gt; I'm not concerned about the relative numbers (see my &quot;x&quot; comment above), but about eating 6 ms of frame budget</li>
+<li id=l-268 _a="Domenic" _r="TabAtkins"><a href=#l-268>#</a> [03:21] &lt;Domenic&gt; TabAtkins: sounds bad, although I could imagine cases that fit that description which are probably ok?</li>
+<li id=l-269 _a="wanderview" _r="Domenic"><a href=#l-269>#</a> [03:22] &lt;wanderview&gt; Domenic: if we expect this only to happen for modest buffer sizes... I don't see how we can expect the loop to get super hot</li>
+<li id=l-270 _a="TabAtkins" _r="Well"><a href=#l-270>#</a> [03:22] &lt;TabAtkins&gt; Well, the case is whether a FontFace.status is set to &quot;unloaded&quot; or &quot;loading&quot;.  Currently it's always async, but jdaggett/heycam want it to be set syncly when possible (font is a data url, a blob url, a cached font, etc)</li>
+<li id=l-271 _a="wanderview" _r="Domenic"><a href=#l-271>#</a> [03:23] &lt;wanderview&gt; Domenic: anyway, I have to go crash and sleep for 12 hours... talk to you tomorrow!</li>
+<li id=l-272 class=hide><a href=#l-272>#</a> [03:24] * Quits: karlcow (~karl@nerval.la-grange.net) (Ping timeout: 276 seconds)</li>
+<li id=l-273 _a="Domenic"><a href=#l-273>#</a> [03:24] &lt;Domenic&gt; Cached sounds skeevy.... Others sound somewhat reasonable</li>
+<li id=l-274 _a="Domenic" _r="wanderview"><a href=#l-274>#</a> [03:24] &lt;Domenic&gt; wanderview: ok cool, I'll probably fork your thing and experiment</li>
+<li id=l-275 _a="wanderview" _r="Domenic"><a href=#l-275>#</a> [03:24] &lt;wanderview&gt; Domenic: please do... just don't judge me by my javascript :-)</li>
+<li id=l-276 class=hide><a href=#l-276>#</a> [03:25] * Quits: othermaciej (~mjs@76.74.153.49) (Quit: othermaciej)</li>
+<li id=l-277 class=hide><a href=#l-277>#</a> [03:25] * Joins: othermaciej (~mjs@76.74.153.49)</li>
+<li id=l-278 _a="wanderview" _r="Domenic"><a href=#l-278>#</a> [03:26] &lt;wanderview&gt; Domenic: btw... looking at the results I think the jit kicked in at 100 chunks... there was an across the board improvement there... the sync loop got another boost from some optimization going from 1000 chunks to 10,000 chunks... but the promise loop did not</li>
+<li id=l-279 _a="wanderview"><a href=#l-279>#</a> [03:26] &lt;wanderview&gt; in spidermonkey of cours.e.. don't know what chrome does</li>
+<li id=l-280 _a="Domenic" _r="TabAtkins"><a href=#l-280>#</a> [03:27] &lt;Domenic&gt; TabAtkins: I think some of the normal zalgo hazards don't apply here because I can't see a way for code to be written that assumes always sync or always async</li>
+<li id=l-281 class=hide><a href=#l-281>#</a> [03:27] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+<li id=l-282 class=hide><a href=#l-282>#</a> [03:27] * Joins: KevinMarks (~KevinMark@adsl-108-231-147-166.dsl.pltn13.sbcglobal.net)</li>
+<li id=l-283 _a="Domenic" _r="wanderview"><a href=#l-283>#</a> [03:28] &lt;Domenic&gt; wanderview: yeah, we need to make sure the code is hot before benchmarking. Kinda pointless to measure non hot code since it doesn't need to be fast.</li>
+<li id=l-284 _a="TabAtkins"><a href=#l-284>#</a> [03:28] &lt;TabAtkins&gt; Cached I definitely see - easy for a dev to accidentally work with cached fonts, and write broken code for users.</li>
+<li id=l-285 _a="TabAtkins"><a href=#l-285>#</a> [03:29] &lt;TabAtkins&gt; And I can see some browsers considering some types of urls as sync, while others dont'.</li>
+<li id=l-286 _a="Domenic" _r="TabAtkins"><a href=#l-286>#</a> [03:29] &lt;Domenic&gt; TabAtkins: but what kind of code would run into this? I would think conditionals on ff.status would work in either case.</li>
+<li id=l-287 class=hide><a href=#l-287>#</a> [03:30] * Quits: ap (~ap@17.202.44.214)</li>
+<li id=l-288 _a="TabAtkins" _r="Man"><a href=#l-288>#</a> [03:32] &lt;TabAtkins&gt; Man, I dunno. It just feels super icky to have a line in a spec that says &quot;If you want you can do this part sync, lol i dunno&quot;</li>
+<li id=l-289 _a="Domenic" _r="Yeah"><a href=#l-289>#</a> [03:33] &lt;Domenic&gt; Yeah, it would have to be normative which cases are sync</li>
+<li id=l-290 class=hide><a href=#l-290>#</a> [03:34] * Quits: jwalden (~waldo@2620:101:80fc:224:7e7a:91ff:fe25:a5a3) (Quit: ChatZilla 0.9.87-8.1450hg.fc20 [XULRunner 32.0/20140902134853])</li>
+<li id=l-291 class=hide><a href=#l-291>#</a> [03:37] * Quits: tripu (~tripu@p7223-ipngn11001marunouchi.tokyo.ocn.ne.jp) (Ping timeout: 264 seconds)</li>
+<li id=l-292 class=hide><a href=#l-292>#</a> [03:37] * Joins: tantek (~tantek@adsl-108-231-147-166.dsl.pltn13.sbcglobal.net)</li>
+<li id=l-293 class=hide><a href=#l-293>#</a> [03:39] * Quits: KevinMarks (~KevinMark@adsl-108-231-147-166.dsl.pltn13.sbcglobal.net) (Ping timeout: 272 seconds)</li>
+<li id=l-294 class=hide><a href=#l-294>#</a> [03:45] * Joins: bnicholson (~bnicholso@c-24-130-60-241.hsd1.ca.comcast.net)</li>
+<li id=l-295 _a="wanderview" _r="Domenic"><a href=#l-295>#</a> [03:47] &lt;wanderview&gt; Domenic: yea, you are right... let me add a call to the tests to prime the jit</li>
+<li id=l-296 class=hide><a href=#l-296>#</a> [03:48] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-297 class=hide><a href=#l-297>#</a> [03:49] * Quits: othermaciej (~mjs@76.74.153.49) (Quit: othermaciej)</li>
+<li id=l-298 class=hide><a href=#l-298>#</a> [03:52] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Ping timeout: 245 seconds)</li>
+<li id=l-299 _a="wanderview" _r="Domenic"><a href=#l-299>#</a> [03:58] &lt;wanderview&gt; Domenic: I think I agree the read() promise is fast enough for browsers... but also agree with trevnorris that its probably inadequate for what node.js needs... not sure we can get something that works perfectly for both</li>
+<li id=l-300 class=hide><a href=#l-300>#</a> [04:06] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-301 class=hide><a href=#l-301>#</a> [04:10] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 240 seconds)</li>
+<li id=l-302 class=hide><a href=#l-302>#</a> [04:13] * Joins: xtrm0 (uid12574@gateway/web/irccloud.com/x-wydvlcojcomybfdc)</li>
+<li id=l-303 class=hide><a href=#l-303>#</a> [04:15] * Joins: Goplat (~goplat@reactos/developer/Goplat)</li>
+<li id=l-304 class=hide _a="heycam"><a href=#l-304>#</a> [04:16] * heycam is now known as heycam|away</li>
+<li id=l-305 class=hide><a href=#l-305>#</a> [04:25] * Quits: rniwa (~rniwa@17.245.30.85) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-306 class=hide><a href=#l-306>#</a> [04:26] * Joins: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-307 class=hide><a href=#l-307>#</a> [04:30] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 248 seconds)</li>
+<li id=l-308 class=hide><a href=#l-308>#</a> [04:42] * Joins: othermaciej (~mjs@c-71-198-213-78.hsd1.ca.comcast.net)</li>
+<li id=l-309 class=hide><a href=#l-309>#</a> [04:48] * Joins: xiinotulp (~plutoniix@node-cpt.pool-125-24.dynamic.totbb.net)</li>
+<li id=l-310 class=hide><a href=#l-310>#</a> [04:49] * Joins: biniar_ (~biniar@c-68-34-47-33.hsd1.mi.comcast.net)</li>
+<li id=l-311 class=hide><a href=#l-311>#</a> [04:51] * Quits: plutoniix (~plutoniix@node-krx.pool-101-108.dynamic.totbb.net) (Ping timeout: 245 seconds)</li>
+<li id=l-312 class=hide><a href=#l-312>#</a> [04:57] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-313 class=hide><a href=#l-313>#</a> [05:00] * Quits: biniar_ (~biniar@c-68-34-47-33.hsd1.mi.comcast.net) (Quit: leaving)</li>
+<li id=l-314 class=hide><a href=#l-314>#</a> [05:00] * Quits: tantek (~tantek@adsl-108-231-147-166.dsl.pltn13.sbcglobal.net) (Quit: tantek)</li>
+<li id=l-315 class=hide><a href=#l-315>#</a> [05:06] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 264 seconds)</li>
+<li id=l-316 class=hide><a href=#l-316>#</a> [05:10] * Quits: dbaron (~dbaron@2620:101:80fb:224:2d19:d044:d21e:612e) (Ping timeout: 245 seconds)</li>
+<li id=l-317 class=hide><a href=#l-317>#</a> [05:15] * Joins: tripu (~tripu@2001:200:0:8805:594f:3cbd:ea8a:61d7)</li>
+<li id=l-318 class=hide><a href=#l-318>#</a> [05:23] * Joins: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-319 class=hide><a href=#l-319>#</a> [05:23] * Joins: rniwa (~rniwa@67.164.23.121)</li>
+<li id=l-320 class=hide><a href=#l-320>#</a> [05:25] * Joins: jwalden (~waldo@c-50-168-55-219.hsd1.ca.comcast.net)</li>
+<li id=l-321 class=hide><a href=#l-321>#</a> [05:26] * Quits: ttepasse (~ttepasse@ip-178-200-61-79.hsi07.unitymediagroup.de) (Quit: s)</li>
+<li id=l-322 class=hide><a href=#l-322>#</a> [05:29] * Quits: eBureau (~Bruno@181.164.77.172) (Quit: My iMac has gone to sleep. ZZZzzz…)</li>
+<li id=l-323 class=hide _a="heycam|away"><a href=#l-323>#</a> [05:29] * heycam|away is now known as heycam</li>
+<li id=l-324 class=hide><a href=#l-324>#</a> [05:30] * Joins: jyasskin (~jyasskin@173-228-80-34.dsl.static.fusionbroadband.com)</li>
+<li id=l-325 class=hide><a href=#l-325>#</a> [05:37] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-326 class=hide><a href=#l-326>#</a> [05:38] * Quits: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 250 seconds)</li>
+<li id=l-327 class=hide><a href=#l-327>#</a> [05:40] * Joins: encryptd_fractl (~encryptd_@23.30.224.246)</li>
+<li id=l-328 class=hide><a href=#l-328>#</a> [05:41] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Ping timeout: 256 seconds)</li>
+<li id=l-329 class=hide><a href=#l-329>#</a> [05:44] * Quits: encryptd_fractl (~encryptd_@23.30.224.246) (Ping timeout: 244 seconds)</li>
+<li id=l-330 class=hide><a href=#l-330>#</a> [05:45] * Quits: jyasskin (~jyasskin@173-228-80-34.dsl.static.fusionbroadband.com) (Quit: My computer has gone to sleep. ZZZzzz…)</li>
+<li id=l-331 class=hide><a href=#l-331>#</a> [05:48] * Joins: dbaron (~dbaron@70-36-140-197.dsl.dynamic.fusionbroadband.com)</li>
+<li id=l-332 class=hide><a href=#l-332>#</a> [05:55] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-333 class=hide><a href=#l-333>#</a> [05:57] * Quits: nunnun (~hiro@2001:200:164:48:20c:29ff:fe02:11d2) (Ping timeout: 256 seconds)</li>
+<li id=l-334 class=hide><a href=#l-334>#</a> [05:59] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 246 seconds)</li>
+<li id=l-335 class=hide><a href=#l-335>#</a> [06:01] * Joins: eBureau (~Bruno@181.164.77.172)</li>
+<li id=l-336 class=hide _a="heycam"><a href=#l-336>#</a> [06:03] * heycam is now known as heycam|away</li>
+<li id=l-337 class=hide><a href=#l-337>#</a> [06:25] * Quits: xtrm0 (uid12574@gateway/web/irccloud.com/x-wydvlcojcomybfdc) (Quit: Connection closed for inactivity)</li>
+<li id=l-338 class=hide><a href=#l-338>#</a> [06:34] * Joins: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-339 class=hide _a="heycam|away"><a href=#l-339>#</a> [06:38] * heycam|away is now known as heycam</li>
+<li id=l-340 class=hide><a href=#l-340>#</a> [06:51] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-341 class=hide><a href=#l-341>#</a> [06:53] * Joins: ohaibbq (~ohaibbq@2601:9:a80:a8f:952f:3b47:6ad8:107d)</li>
+<li id=l-342 class=hide><a href=#l-342>#</a> [06:55] * Joins: boogyman (~boogyman@pdpc/supporter/professional/boogyman)</li>
+<li id=l-343 class=hide><a href=#l-343>#</a> [06:56] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 245 seconds)</li>
+<li id=l-344 class=hide><a href=#l-344>#</a> [06:58] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-345 class=hide><a href=#l-345>#</a> [07:09] * Quits: KevinMarks__ (~yaaic@2607:fb90:2193:30e7:75a4:4623:28eb:38a1) (Ping timeout: 245 seconds)</li>
+<li id=l-346 class=hide><a href=#l-346>#</a> [07:11] * Quits: ^esc (~esc-ape@77.119.129.86.wireless.dyn.drei.com) (Ping timeout: 264 seconds)</li>
+<li id=l-347 class=hide><a href=#l-347>#</a> [07:12] * Joins: KevinMarks (~yaaic@2607:fb90:2196:710d:ed5f:b68c:f288:6382)</li>
+<li id=l-348 class=hide><a href=#l-348>#</a> [07:12] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-349 class=hide><a href=#l-349>#</a> [07:14] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-350 class=hide><a href=#l-350>#</a> [07:19] * Quits: igoroliveira (uid20755@gateway/web/irccloud.com/x-ijppgawzergdqrxb) (Quit: Connection closed for inactivity)</li>
+<li id=l-351 class=hide><a href=#l-351>#</a> [07:20] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Remote host closed the connection)</li>
+<li id=l-352 class=hide><a href=#l-352>#</a> [07:27] * Quits: hendry (~hendry@ec2-52-74-100-218.ap-southeast-1.compute.amazonaws.com) (Quit: brb)</li>
+<li id=l-353 class=hide><a href=#l-353>#</a> [07:28] * Joins: encryptd_fractl (~encryptd_@23.30.224.246)</li>
+<li id=l-354 class=hide><a href=#l-354>#</a> [07:31] * Quits: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Quit: Leaving)</li>
+<li id=l-355 class=hide><a href=#l-355>#</a> [07:32] * Joins: hendry (~hendry@ec2-52-74-100-218.ap-southeast-1.compute.amazonaws.com)</li>
+<li id=l-356 class=hide><a href=#l-356>#</a> [07:33] * Quits: encryptd_fractl (~encryptd_@23.30.224.246) (Ping timeout: 245 seconds)</li>
+<li id=l-357 class=hide><a href=#l-357>#</a> [07:33] * Joins: Areks (~Areks@rs.gridnine.com)</li>
+<li id=l-358 class=hide><a href=#l-358>#</a> [07:40] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-359 class=hide><a href=#l-359>#</a> [07:42] * Joins: nunnun (~hiro@2001:200:164:48:20c:29ff:fe02:11d2)</li>
+<li id=l-360 class=hide><a href=#l-360>#</a> [07:43] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-361 class=hide><a href=#l-361>#</a> [07:45] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-362 class=hide><a href=#l-362>#</a> [07:47] * Joins: KevinMarks_ (~yaaic@107-204-232-178.lightspeed.sntcca.sbcglobal.net)</li>
+<li id=l-363 class=hide><a href=#l-363>#</a> [07:48] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 256 seconds)</li>
+<li id=l-364 class=hide><a href=#l-364>#</a> [07:48] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-365 class=hide><a href=#l-365>#</a> [07:49] * Quits: KevinMarks (~yaaic@2607:fb90:2196:710d:ed5f:b68c:f288:6382) (Ping timeout: 245 seconds)</li>
+<li id=l-366 class=hide><a href=#l-366>#</a> [07:49] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-367 class=hide><a href=#l-367>#</a> [07:51] * Quits: rniwa (~rniwa@67.164.23.121) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-368 class=hide><a href=#l-368>#</a> [07:52] * Joins: rniwa (~rniwa@67.164.23.121)</li>
+<li id=l-369 class=hide><a href=#l-369>#</a> [07:53] * Joins: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com)</li>
+<li id=l-370 class=hide><a href=#l-370>#</a> [07:56] * Quits: rniwa (~rniwa@67.164.23.121) (Ping timeout: 250 seconds)</li>
+<li id=l-371 class=hide><a href=#l-371>#</a> [08:00] * Quits: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com) (Quit: tantek)</li>
+<li id=l-372 class=hide><a href=#l-372>#</a> [08:01] * Joins: KevinMarks (~KevinMark@107-204-232-178.lightspeed.sntcca.sbcglobal.net)</li>
+<li id=l-373 class=hide><a href=#l-373>#</a> [08:02] * Joins: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com)</li>
+<li id=l-374 class=hide><a href=#l-374>#</a> [08:02] * Quits: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com) (Client Quit)</li>
+<li id=l-375 class=hide><a href=#l-375>#</a> [08:06] * Joins: ^esc (~esc-ape@178.165.128.82.wireless.dyn.drei.com)</li>
+<li id=l-376 class=hide><a href=#l-376>#</a> [08:11] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-377 class=hide><a href=#l-377>#</a> [08:15] * Quits: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-378 class=hide><a href=#l-378>#</a> [08:18] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-379 class=hide><a href=#l-379>#</a> [08:19] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-380 class=hide><a href=#l-380>#</a> [08:21] * Quits: dbaron (~dbaron@70-36-140-197.dsl.dynamic.fusionbroadband.com) (Ping timeout: 252 seconds)</li>
+<li id=l-381 class=hide><a href=#l-381>#</a> [08:21] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-382 class=hide><a href=#l-382>#</a> [08:21] * Joins: tommyliu (~tommyliu@58.60.170.109)</li>
+<li id=l-383 class=hide><a href=#l-383>#</a> [08:22] * Quits: tommyliu (~tommyliu@58.60.170.109) (Remote host closed the connection)</li>
+<li id=l-384 class=hide><a href=#l-384>#</a> [08:22] * Joins: zdobersek (~zan@gateway/vpn/privateinternetaccess/zdobersek)</li>
+<li id=l-385 class=hide><a href=#l-385>#</a> [08:24] * Joins: tommyliu (~tommyliu@183.16.190.191)</li>
+<li id=l-386 class=hide><a href=#l-386>#</a> [08:24] * Quits: eBureau (~Bruno@181.164.77.172) (Quit: My iMac has gone to sleep. ZZZzzz…)</li>
+<li id=l-387 class=hide><a href=#l-387>#</a> [08:26] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 256 seconds)</li>
+<li id=l-388 class=hide><a href=#l-388>#</a> [08:27] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-389 class=hide><a href=#l-389>#</a> [08:27] * Joins: rniwa (~rniwa@67.164.23.121)</li>
+<li id=l-390 class=hide><a href=#l-390>#</a> [08:27] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+<li id=l-391 class=hide><a href=#l-391>#</a> [08:27] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-392 class=hide><a href=#l-392>#</a> [08:40] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-393 class=hide><a href=#l-393>#</a> [08:44] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-394 class=hide><a href=#l-394>#</a> [08:45] * Joins: SteveF_ (~chatzilla@cpc3-nmal20-2-0-cust916.19-2.cable.virginm.net)</li>
+<li id=l-395 class=hide><a href=#l-395>#</a> [08:45] * Quits: KevinMarks_ (~yaaic@107-204-232-178.lightspeed.sntcca.sbcglobal.net) (Read error: Connection reset by peer)</li>
+<li id=l-396 class=hide><a href=#l-396>#</a> [08:46] * Joins: KevinMarks_ (~yaaic@107-204-232-178.lightspeed.sntcca.sbcglobal.net)</li>
+<li id=l-397 class=hide><a href=#l-397>#</a> [08:46] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-398 class=hide><a href=#l-398>#</a> [08:48] * Joins: KevinMarks__ (~yaaic@2607:fb90:2179:9158:1e22:d01b:5373:37b3)</li>
+<li id=l-399 class=hide><a href=#l-399>#</a> [08:48] * Quits: KevinMarks (~KevinMark@107-204-232-178.lightspeed.sntcca.sbcglobal.net) (Ping timeout: 250 seconds)</li>
+<li id=l-400 class=hide><a href=#l-400>#</a> [08:48] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 250 seconds)</li>
+<li id=l-401 class=hide><a href=#l-401>#</a> [08:49] * Quits: roc (~chatzilla@2001:cb0:b202:224:2677:3ff:fece:dc64) (Ping timeout: 256 seconds)</li>
+<li id=l-402 class=hide><a href=#l-402>#</a> [08:50] * Quits: KevinMarks_ (~yaaic@107-204-232-178.lightspeed.sntcca.sbcglobal.net) (Ping timeout: 272 seconds)</li>
+<li id=l-403 class=hide><a href=#l-403>#</a> [08:53] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-404 class=hide><a href=#l-404>#</a> [08:53] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-405 class=hide><a href=#l-405>#</a> [08:56] * Quits: rniwa (~rniwa@67.164.23.121) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-406 class=hide><a href=#l-406>#</a> [08:57] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-407 class=hide><a href=#l-407>#</a> [08:59] * Joins: rniwa (~rniwa@67.164.23.121)</li>
+<li id=l-408 class=hide><a href=#l-408>#</a> [09:00] * Quits: rniwa (~rniwa@67.164.23.121) (Client Quit)</li>
+<li id=l-409 class=hide><a href=#l-409>#</a> [09:00] * Joins: markkes (~markkes@62.207.90.201)</li>
+<li id=l-410 class=hide><a href=#l-410>#</a> [09:03] * Joins: KevinMarks (~KevinMark@172.56.31.245)</li>
+<li id=l-411 class=hide><a href=#l-411>#</a> [09:06] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 256 seconds)</li>
+<li id=l-412 class=hide><a href=#l-412>#</a> [09:09] * Quits: hasather (~hasather@80.91.33.141) (Remote host closed the connection)</li>
+<li id=l-413 class=hide><a href=#l-413>#</a> [09:09] * Joins: hasather (~hasather@80.91.33.141)</li>
+<li id=l-414 class=hide><a href=#l-414>#</a> [09:10] * Quits: ohaibbq (~ohaibbq@2601:9:a80:a8f:952f:3b47:6ad8:107d) (Quit: Leaving...)</li>
+<li id=l-415 class=hide _a="heycam"><a href=#l-415>#</a> [09:12] * heycam is now known as heycam|away</li>
+<li id=l-416 class=hide><a href=#l-416>#</a> [09:13] * Joins: g4 (~g4@unaffiliated/gormer)</li>
+<li id=l-417 class=hide _a="xiinotulp"><a href=#l-417>#</a> [09:13] * xiinotulp is now known as plutoniix</li>
+<li id=l-418 class=hide><a href=#l-418>#</a> [09:15] * Quits: jwalden (~waldo@c-50-168-55-219.hsd1.ca.comcast.net) (Quit: ChatZilla 0.9.87-8.1450hg.fc20 [XULRunner 32.0/20140902134853])</li>
+<li id=l-419 class=hide><a href=#l-419>#</a> [09:20] * Quits: Goplat (~goplat@reactos/developer/Goplat) (Remote host closed the connection)</li>
+<li id=l-420 class=hide><a href=#l-420>#</a> [09:21] * Joins: roc (~chatzilla@121-99-129-223.bng1.tvc.orcon.net.nz)</li>
+<li id=l-421 class=hide><a href=#l-421>#</a> [09:25] * Joins: xtrm0 (uid12574@gateway/web/irccloud.com/x-arjnxhrgsycvfgpr)</li>
+<li id=l-422 class=hide><a href=#l-422>#</a> [09:27] * Joins: Ms2ger (~Ms2ger@193.190.253.150)</li>
+<li id=l-423 class=hide><a href=#l-423>#</a> [09:29] * Quits: annevk (~annevk@77-57-114-240.dclient.hispeed.ch) (Quit: Leaving...)</li>
+<li id=l-424 class=hide><a href=#l-424>#</a> [09:31] * Quits: tommyliu (~tommyliu@183.16.190.191) (Ping timeout: 250 seconds)</li>
+<li id=l-425 class=hide><a href=#l-425>#</a> [09:32] * Joins: tommyliu (~tommyliu@58.60.170.109)</li>
+<li id=l-426 class=hide><a href=#l-426>#</a> [09:34] * Quits: ehsan_ (~ehsan@67.213.81.142) (Remote host closed the connection)</li>
+<li id=l-427 class=hide><a href=#l-427>#</a> [09:34] * Joins: ehsan_ (~ehsan@67.213.81.142)</li>
+<li id=l-428 class=hide><a href=#l-428>#</a> [09:34] * Quits: ehsan_ (~ehsan@67.213.81.142) (Remote host closed the connection)</li>
+<li id=l-429 class=hide><a href=#l-429>#</a> [09:42] * Joins: annevk (~annevk@77-57-114-240.dclient.hispeed.ch)</li>
+<li id=l-430 class=hide><a href=#l-430>#</a> [09:44] * Joins: alrra (uid62345@gateway/web/irccloud.com/x-cxdcswolmtsmagfr)</li>
+<li id=l-431 class=hide><a href=#l-431>#</a> [09:44] * Joins: davve (~user@83.218.67.123)</li>
+<li id=l-432 class=hide><a href=#l-432>#</a> [09:47] * Parts: biniar (~biniar@unaffiliated/biniar)</li>
+<li id=l-433 class=hide><a href=#l-433>#</a> [09:48] * Quits: CvP (~CvP@203.76.123.238) (Ping timeout: 276 seconds)</li>
+<li id=l-434 class=hide><a href=#l-434>#</a> [09:48] * Quits: davve (~user@83.218.67.123) (Remote host closed the connection)</li>
+<li id=l-435 class=hide><a href=#l-435>#</a> [09:48] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-436 class=hide><a href=#l-436>#</a> [09:49] * Quits: hasather (~hasather@80.91.33.141) (Quit: Leaving...)</li>
+<li id=l-437 class=hide><a href=#l-437>#</a> [09:50] * Joins: hasather (~hasather@80.91.33.141)</li>
+<li id=l-438 class=hide><a href=#l-438>#</a> [09:58] * Joins: davve (~davve@83.218.67.123)</li>
+<li id=l-439 class=hide _a="davve"><a href=#l-439>#</a> [09:58] * davve is now known as Guest1598</li>
+<li id=l-440 class=hide><a href=#l-440>#</a> [09:59] * Quits: mpt (~mpt@canonical/mpt) (Read error: Connection reset by peer)</li>
+<li id=l-441 class=hide><a href=#l-441>#</a> [09:59] * Quits: hasather (~hasather@80.91.33.141) (Quit: Leaving...)</li>
+<li id=l-442 class=hide><a href=#l-442>#</a> [10:02] * Joins: mpt (~mpt@2001:67c:1560:a003:b167:9a92:14de:a297)</li>
+<li id=l-443 class=hide><a href=#l-443>#</a> [10:02] * Quits: mpt (~mpt@2001:67c:1560:a003:b167:9a92:14de:a297) (Changing host)</li>
+<li id=l-444 class=hide><a href=#l-444>#</a> [10:02] * Joins: mpt (~mpt@canonical/mpt)</li>
+<li id=l-445 class=hide><a href=#l-445>#</a> [10:07] * Quits: jdaggett_ (~jdaggett@61-121-216-2.bitcat.net) (Quit: jdaggett_)</li>
+<li id=l-446 class=hide><a href=#l-446>#</a> [10:08] * Joins: hasather (~hasather@80.91.33.141)</li>
+<li id=l-447 class=hide _a="Krinkle|detached"><a href=#l-447>#</a> [10:10] * Krinkle|detached is now known as Krinkle</li>
+<li id=l-448 class=hide><a href=#l-448>#</a> [10:12] * Quits: Guest1598 (~davve@83.218.67.123) (Quit: ZNC - <a href="http://znc.in">http://znc.in</a>)</li>
+<li id=l-449 class=hide><a href=#l-449>#</a> [10:13] * Joins: davve_ (~davve@83.218.67.123)</li>
+<li id=l-450 class=hide _a="davve_"><a href=#l-450>#</a> [10:13] * davve_ is now known as davve`</li>
+<li id=l-451 class=hide><a href=#l-451>#</a> [10:17] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-452 class=hide><a href=#l-452>#</a> [10:19] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Quit: Leaving...)</li>
+<li id=l-453 class=hide><a href=#l-453>#</a> [10:20] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: The deeper I go / the deeper I go / green mountains - Santoka)</li>
+<li id=l-454 class=hide><a href=#l-454>#</a> [10:22] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 246 seconds)</li>
+<li id=l-455 class=hide _a="davve`"><a href=#l-455>#</a> [10:22] * davve` is now known as davve</li>
+<li id=l-456 class=hide><a href=#l-456>#</a> [10:25] * Quits: davve (~davve@83.218.67.123) (Quit: ZNC - <a href="http://znc.in">http://znc.in</a>)</li>
+<li id=l-457 class=hide><a href=#l-457>#</a> [10:25] * Joins: davve (~davve@83.218.67.123)</li>
+<li id=l-458 class=hide><a href=#l-458>#</a> [10:32] * Quits: KevinMarks (~KevinMark@172.56.31.245) (Ping timeout: 256 seconds)</li>
+<li id=l-459 class=hide><a href=#l-459>#</a> [10:33] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-460 class=hide><a href=#l-460>#</a> [10:35] * Joins: ehsan_ (~ehsan@67.213.81.142)</li>
+<li id=l-461 class=hide><a href=#l-461>#</a> [10:35] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-462 class=hide><a href=#l-462>#</a> [10:36] * Joins: calvaris (~calvaris@fanzine.igalia.com)</li>
+<li id=l-463 class=hide><a href=#l-463>#</a> [10:37] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 244 seconds)</li>
+<li id=l-464 class=hide><a href=#l-464>#</a> [10:39] * Quits: ehsan_ (~ehsan@67.213.81.142) (Ping timeout: 240 seconds)</li>
+<li id=l-465 class=hide><a href=#l-465>#</a> [10:39] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-466 class=hide><a href=#l-466>#</a> [10:43] * Quits: tommyliu (~tommyliu@58.60.170.109) (Read error: Connection reset by peer)</li>
+<li id=l-467 class=hide><a href=#l-467>#</a> [10:43] * Joins: tommyliu (~tommyliu@183.16.190.191)</li>
+<li id=l-468 class=hide><a href=#l-468>#</a> [10:50] * Quits: sarri (~sari@unaffiliated/sarri) (Ping timeout: 252 seconds)</li>
+<li id=l-469 class=hide><a href=#l-469>#</a> [10:50] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-470 class=hide><a href=#l-470>#</a> [10:51] * Joins: sarri (~sari@unaffiliated/sarri)</li>
+<li id=l-471 class=hide><a href=#l-471>#</a> [10:54] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 245 seconds)</li>
+<li id=l-472 class=hide><a href=#l-472>#</a> [10:55] * Quits: tommyliu (~tommyliu@183.16.190.191) (Remote host closed the connection)</li>
+<li id=l-473 class=hide><a href=#l-473>#</a> [11:06] * Joins: CvP (~CvP@203.76.123.238)</li>
+<li id=l-474 class=hide><a href=#l-474>#</a> [11:08] * Joins: wilsonpage (~wilsonpag@217.111.161.212)</li>
+<li id=l-475 class=hide><a href=#l-475>#</a> [11:11] * Joins: espadrine (~tyl@LMontsouris-656-1-2-84.w80-12.abo.wanadoo.fr)</li>
+<li id=l-476 class=hide><a href=#l-476>#</a> [11:18] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-477 class=hide><a href=#l-477>#</a> [11:20] * Joins: mpt_ (~mpt@canonical/mpt)</li>
+<li id=l-478 class=hide><a href=#l-478>#</a> [11:22] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 250 seconds)</li>
+<li id=l-479 class=hide><a href=#l-479>#</a> [11:22] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 245 seconds)</li>
+<li id=l-480 class=hide><a href=#l-480>#</a> [11:32] * Joins: KevinMarks (~KevinMark@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+<li id=l-481 class=hide><a href=#l-481>#</a> [11:35] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-482 class=hide><a href=#l-482>#</a> [11:39] * Quits: MikeSmith (~mike@sideshow.default.msmith.uk0.bigv.io) (Ping timeout: 246 seconds)</li>
+<li id=l-483 class=hide><a href=#l-483>#</a> [11:40] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-484 _a="zcorpan"><a href=#l-484>#</a> [11:46] &lt;zcorpan&gt; ok any opinions on naming? document.scrollingElement? document.viewportElement? <a href="https://lists.w3.org/Archives/Public/www-style/2015Apr/0108.html">https://lists.w3.org/Archives/Public/www-style/2015Apr/0108.html</a></li>
+<li id=l-485 class=hide><a href=#l-485>#</a> [11:49] * Joins: wnklb (~winklebee@p4FE152DA.dip0.t-ipconnect.de)</li>
+<li id=l-486 class=hide><a href=#l-486>#</a> [11:50] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-487 class=hide><a href=#l-487>#</a> [11:52] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-488 _a="paul_irish"><a href=#l-488>#</a> [11:52] &lt;paul_irish&gt; document.viewportElement sgtm</li>
+<li id=l-489 _a="zcorpan"><a href=#l-489>#</a> [11:53] &lt;zcorpan&gt; thanks paul_irish</li>
+<li id=l-490 class=hide _a="Krinkle"><a href=#l-490>#</a> [11:58] * Krinkle is now known as Krinkle|detached</li>
+<li id=l-491 class=hide><a href=#l-491>#</a> [12:00] * Parts: Kingdutch (~kingdutch@cookiemonster.alexandervarwijk.com)</li>
+<li id=l-492 class=hide><a href=#l-492>#</a> [12:04] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 256 seconds)</li>
+<li id=l-493 class=hide><a href=#l-493>#</a> [12:15] * Quits: tripu (~tripu@2001:200:0:8805:594f:3cbd:ea8a:61d7) (Ping timeout: 250 seconds)</li>
+<li id=l-494 class=hide><a href=#l-494>#</a> [12:19] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-495 class=hide><a href=#l-495>#</a> [12:20] * Quits: wilsonpage (~wilsonpag@217.111.161.212) (Ping timeout: 256 seconds)</li>
+<li id=l-496 class=hide><a href=#l-496>#</a> [12:21] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-497 class=hide><a href=#l-497>#</a> [12:24] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 276 seconds)</li>
+<li id=l-498 class=hide><a href=#l-498>#</a> [12:26] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 264 seconds)</li>
+<li id=l-499 class=hide _a="Krinkle|detached"><a href=#l-499>#</a> [12:32] * Krinkle|detached is now known as Krinkle</li>
+<li id=l-500 class=hide><a href=#l-500>#</a> [12:43] * Quits: wnklb (~winklebee@p4FE152DA.dip0.t-ipconnect.de)</li>
+<li id=l-501 class=hide><a href=#l-501>#</a> [12:47] * Joins: smaug____ (~chatzilla@62-78-246-79.bb.dnainternet.fi)</li>
+<li id=l-502 class=hide><a href=#l-502>#</a> [12:47] * Joins: satazor (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-503 class=hide><a href=#l-503>#</a> [12:51] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-504 class=hide><a href=#l-504>#</a> [12:55] * Quits: xtrm0 (uid12574@gateway/web/irccloud.com/x-arjnxhrgsycvfgpr) (Quit: Connection closed for inactivity)</li>
+<li id=l-505 class=hide><a href=#l-505>#</a> [12:55] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Ping timeout: 250 seconds)</li>
+<li id=l-506 class=hide><a href=#l-506>#</a> [13:02] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-507 class=hide><a href=#l-507>#</a> [13:07] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-508 _a="roc"><a href=#l-508>#</a> [13:09] &lt;roc&gt; scrollingElement</li>
+<li id=l-509 _a="roc"><a href=#l-509>#</a> [13:09] &lt;roc&gt; viewportElement isn't correct</li>
+<li id=l-510 class=hide><a href=#l-510>#</a> [13:12] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Ping timeout: 244 seconds)</li>
+<li id=l-511 _a="zcorpan" _r="roc"><a href=#l-511>#</a> [13:14] &lt;zcorpan&gt; roc: it will be correct when webkit/blink have fixed scrollTop, no?</li>
+<li id=l-512 _a="zcorpan"><a href=#l-512>#</a> [13:17] &lt;zcorpan&gt; i guess background/overflow have different rules, but i think things would work as intended if this API is used for those also</li>
+<li id=l-513 class=hide><a href=#l-513>#</a> [13:19] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-514 class=hide><a href=#l-514>#</a> [13:23] * Joins: tommyliu (~tommyliu@14.153.62.206)</li>
+<li id=l-515 class=hide><a href=#l-515>#</a> [13:26] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 246 seconds)</li>
+<li id=l-516 class=hide><a href=#l-516>#</a> [13:27] * Quits: satazor (~satazor@bl6-111-97.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+<li id=l-517 class=hide><a href=#l-517>#</a> [13:27] * Joins: satazor (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-518 class=hide><a href=#l-518>#</a> [13:45] * Quits: rcombs (~rcombs@rcombs.me) (Read error: Connection reset by peer)</li>
+<li id=l-519 class=hide><a href=#l-519>#</a> [13:46] * Joins: satazor_ (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-520 class=hide><a href=#l-520>#</a> [13:47] * Joins: rcombs (~rcombs@rcombs.me)</li>
+<li id=l-521 class=hide><a href=#l-521>#</a> [13:49] * Quits: satazor (~satazor@bl6-111-97.dsl.telepac.pt) (Ping timeout: 250 seconds)</li>
+<li id=l-522 class=hide><a href=#l-522>#</a> [13:54] * Joins: xtrm0 (uid12574@gateway/web/irccloud.com/x-xuwfqakgcuqmbgcd)</li>
+<li id=l-523 class=hide><a href=#l-523>#</a> [13:59] * Joins: tripu (~tripu@p7223-ipngn11001marunouchi.tokyo.ocn.ne.jp)</li>
+<li id=l-524 class=hide><a href=#l-524>#</a> [14:00] * Joins: hemanth (~hemanth@122.167.67.18)</li>
+<li id=l-525 class=hide><a href=#l-525>#</a> [14:01] * Joins: MikeSmith (~mike@sideshow.default.msmith.uk0.bigv.io)</li>
+<li id=l-526 class=hide><a href=#l-526>#</a> [14:03] * Joins: scor (scor@nat/acquia/x-plwnabconupsidft)</li>
+<li id=l-527 class=hide><a href=#l-527>#</a> [14:03] * Quits: scor (scor@nat/acquia/x-plwnabconupsidft) (Changing host)</li>
+<li id=l-528 class=hide><a href=#l-528>#</a> [14:03] * Joins: scor (scor@drupal.org/user/52142/view)</li>
+<li id=l-529 class=hide><a href=#l-529>#</a> [14:04] * Quits: smaug____ (~chatzilla@62-78-246-79.bb.dnainternet.fi) (Ping timeout: 265 seconds)</li>
+<li id=l-530 class=hide><a href=#l-530>#</a> [14:07] * Joins: wilsonpage (~wilsonpag@217.111.161.212)</li>
+<li id=l-531 class=hide><a href=#l-531>#</a> [14:10] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-532 class=hide><a href=#l-532>#</a> [14:14] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 248 seconds)</li>
+<li id=l-533 class=hide><a href=#l-533>#</a> [14:16] * Quits: satazor_ (~satazor@bl6-111-97.dsl.telepac.pt) (Remote host closed the connection)</li>
+<li id=l-534 class=hide><a href=#l-534>#</a> [14:20] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-535 class=hide><a href=#l-535>#</a> [14:22] * Joins: zenith_ (~zenith@199-7-157-72.eng.wind.ca)</li>
+<li id=l-536 class=hide><a href=#l-536>#</a> [14:22] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-537 class=hide><a href=#l-537>#</a> [14:23] * Joins: eBureau (~Bruno@181.164.77.172)</li>
+<li id=l-538 class=hide><a href=#l-538>#</a> [14:26] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 250 seconds)</li>
+<li id=l-539 class=hide><a href=#l-539>#</a> [14:28] * Quits: zenith_ (~zenith@199-7-157-72.eng.wind.ca) (Ping timeout: 252 seconds)</li>
+<li id=l-540 class=hide><a href=#l-540>#</a> [14:30] * Joins: ehsan (~ehsan@67.213.81.142)</li>
+<li id=l-541 class=hide><a href=#l-541>#</a> [14:39] * Quits: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com) (Quit: Leaving)</li>
+<li id=l-542 class=hide><a href=#l-542>#</a> [14:41] * Quits: wilsonpage (~wilsonpag@217.111.161.212) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-543 class=hide><a href=#l-543>#</a> [14:42] * Quits: tripu (~tripu@p7223-ipngn11001marunouchi.tokyo.ocn.ne.jp) (Quit: Leaving)</li>
+<li id=l-544 class=hide><a href=#l-544>#</a> [14:47] * Joins: caitp (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-545 class=hide><a href=#l-545>#</a> [14:52] * Quits: eBureau (~Bruno@181.164.77.172) (Quit: My iMac has gone to sleep. ZZZzzz…)</li>
+<li id=l-546 class=hide><a href=#l-546>#</a> [14:53] * Joins: jdaggett_ (~jdaggett@ad056175.dynamic.ppp.asahi-net.or.jp)</li>
+<li id=l-547 class=hide><a href=#l-547>#</a> [14:55] * Joins: eBureau (~Bruno@181.164.77.172)</li>
+<li id=l-548 class=hide><a href=#l-548>#</a> [14:55] * Quits: zecho (~zecho@66-247-17-199.northern.mnscu.edu)</li>
+<li id=l-549 class=hide><a href=#l-549>#</a> [14:55] * Joins: caitp- (~caitp@CPE48f8b385c01c-CM84948c4c6f80.cpe.net.cable.rogers.com)</li>
+<li id=l-550 class=hide><a href=#l-550>#</a> [14:57] * Quits: eBureau (~Bruno@181.164.77.172) (Client Quit)</li>
+<li id=l-551 class=hide _a="Krinkle"><a href=#l-551>#</a> [14:59] * Krinkle is now known as Krinkle|detached</li>
+<li id=l-552 _a="zcorpan" _r="mathiasbynens"><a href=#l-552>#</a> [14:59] &lt;zcorpan&gt; mathiasbynens: wanna polyfill <a href="http://dev.w3.org/csswg/cssom-view/#dom-document-scrollingelement">http://dev.w3.org/csswg/cssom-view/#dom-document-scrollingelement</a> ?</li>
+<li id=l-553 class=hide><a href=#l-553>#</a> [15:00] * Joins: igoroliveira (uid20755@gateway/web/irccloud.com/x-xwfisbedbhwewppw)</li>
+<li id=l-554 _a="mathiasbynens" _r="zcorpan"><a href=#l-554>#</a> [15:01] &lt;mathiasbynens&gt; zcorpan: sounds like fun! will do</li>
+<li id=l-555 _a="zcorpan"><a href=#l-555>#</a> [15:02] &lt;zcorpan&gt; :-)</li>
+<li id=l-556 class=hide><a href=#l-556>#</a> [15:02] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-557 class=hide><a href=#l-557>#</a> [15:02] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-558 class=hide><a href=#l-558>#</a> [15:10] * Joins: eBureau (~Bruno@181.164.77.172)</li>
+<li id=l-559 class=hide><a href=#l-559>#</a> [15:13] * Joins: darobin (~darobin@2a01:e34:ed05:d180:e4e1:8dff:de94:d4f6)</li>
+<li id=l-560 class=hide><a href=#l-560>#</a> [15:16] * Joins: zecho (~zecho@66-247-17-199.northern.mnscu.edu)</li>
+<li id=l-561 class=hide><a href=#l-561>#</a> [15:18] * Joins: smaug____ (~chatzilla@62-78-246-79.bb.dnainternet.fi)</li>
+<li id=l-562 class=hide><a href=#l-562>#</a> [15:21] * Joins: newtron (~newtron@199.71.174.203)</li>
+<li id=l-563 class=hide><a href=#l-563>#</a> [15:23] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-564 class=hide><a href=#l-564>#</a> [15:23] * Joins: hgl- (~hgl@unaffiliated/hgl)</li>
+<li id=l-565 class=hide><a href=#l-565>#</a> [15:24] * Quits: tav (~tav`@host86-167-17-118.range86-167.btcentralplus.com) (Read error: Connection reset by peer)</li>
+<li id=l-566 class=hide><a href=#l-566>#</a> [15:27] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-567 class=hide><a href=#l-567>#</a> [15:27] * Quits: hgl (~hgl@unaffiliated/hgl) (Ping timeout: 264 seconds)</li>
+<li id=l-568 class=hide _a="hgl-"><a href=#l-568>#</a> [15:27] * hgl- is now known as hgl</li>
+<li id=l-569 class=hide><a href=#l-569>#</a> [15:27] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 250 seconds)</li>
+<li id=l-570 class=hide><a href=#l-570>#</a> [15:33] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-571 class=hide _a="Krinkle|detached"><a href=#l-571>#</a> [15:42] * Krinkle|detached is now known as Krinkle</li>
+<li id=l-572 class=hide><a href=#l-572>#</a> [15:43] * Joins: satazor (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-573 class=hide><a href=#l-573>#</a> [15:43] * Quits: satazor (~satazor@bl6-111-97.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+<li id=l-574 class=hide><a href=#l-574>#</a> [15:43] * Joins: satazor (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-575 class=hide><a href=#l-575>#</a> [15:45] * Joins: TallTed (~Thud@63.119.36.36)</li>
+<li id=l-576 class=hide><a href=#l-576>#</a> [15:46] * Joins: tav (~tav`@host86-167-17-118.range86-167.btcentralplus.com)</li>
+<li id=l-577 class=hide><a href=#l-577>#</a> [15:46] * Quits: satazor (~satazor@bl6-111-97.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+<li id=l-578 class=hide><a href=#l-578>#</a> [15:47] * Joins: satazor (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-579 class=hide><a href=#l-579>#</a> [15:47] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-580 class=hide><a href=#l-580>#</a> [15:49] * Joins: encryptd_fractl (~encryptd_@23.30.224.246)</li>
+<li id=l-581 class=hide><a href=#l-581>#</a> [15:56] * Joins: dbaron (~dbaron@70-36-140-197.dsl.dynamic.fusionbroadband.com)</li>
+<li id=l-582 class=hide><a href=#l-582>#</a> [15:58] * Joins: jsx (uid48919@fsf/intern/jsx)</li>
+<li id=l-583 class=hide><a href=#l-583>#</a> [15:59] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-584 class=hide><a href=#l-584>#</a> [15:59] * Joins: wilsonpage (~wilsonpag@217.111.161.212)</li>
+<li id=l-585 class=hide><a href=#l-585>#</a> [16:01] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-586 class=hide><a href=#l-586>#</a> [16:01] * Joins: satazor_ (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-587 class=hide><a href=#l-587>#</a> [16:03] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 246 seconds)</li>
+<li id=l-588 class=hide><a href=#l-588>#</a> [16:04] * Quits: hemanth (~hemanth@122.167.67.18) (Ping timeout: 264 seconds)</li>
+<li id=l-589 class=hide><a href=#l-589>#</a> [16:05] * Quits: satazor (~satazor@bl6-111-97.dsl.telepac.pt) (Ping timeout: 265 seconds)</li>
+<li id=l-590 class=hide><a href=#l-590>#</a> [16:13] * Joins: hemanth (~hemanth@122.167.67.18)</li>
+<li id=l-591 class=hide><a href=#l-591>#</a> [16:15] * Quits: satazor_ (~satazor@bl6-111-97.dsl.telepac.pt)</li>
+<li id=l-592 class=hide><a href=#l-592>#</a> [16:17] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+<li id=l-593 class=hide><a href=#l-593>#</a> [16:20] * Quits: eric_carlson (~ericc@c-24-6-239-9.hsd1.ca.comcast.net) (Quit: eric_carlson)</li>
+<li id=l-594 class=hide><a href=#l-594>#</a> [16:22] * Joins: eric_carlson (~ericc@c-24-6-239-9.hsd1.ca.comcast.net)</li>
+<li id=l-595 class=hide><a href=#l-595>#</a> [16:24] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-596 class=hide><a href=#l-596>#</a> [16:28] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 252 seconds)</li>
+<li id=l-597 class=hide><a href=#l-597>#</a> [16:28] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-598 class=hide><a href=#l-598>#</a> [16:29] * Quits: jungkees (uid24208@gateway/web/irccloud.com/x-jgbfnzftxzvvndln) (Quit: Connection closed for inactivity)</li>
+<li id=l-599 class=hide><a href=#l-599>#</a> [16:41] * Quits: tommyliu (~tommyliu@14.153.62.206) (Read error: Connection reset by peer)</li>
+<li id=l-600 class=hide><a href=#l-600>#</a> [16:41] * Joins: thinkxl (~thinkxl@74-95-237-22-Houston.hfc.comcastbusiness.net)</li>
+<li id=l-601 class=hide><a href=#l-601>#</a> [16:41] * Quits: hasather (~hasather@80.91.33.141) (Remote host closed the connection)</li>
+<li id=l-602 class=hide><a href=#l-602>#</a> [16:41] * Joins: tommyliu (~tommyliu@li587-82.members.linode.com)</li>
+<li id=l-603 class=hide><a href=#l-603>#</a> [16:42] * Joins: hasather (~hasather@80.91.33.141)</li>
+<li id=l-604 class=hide><a href=#l-604>#</a> [16:42] * Joins: tommyliu_ (~tommyliu@14.153.62.206)</li>
+<li id=l-605 class=hide><a href=#l-605>#</a> [16:43] * Quits: tommyliu_ (~tommyliu@14.153.62.206) (Client Quit)</li>
+<li id=l-606 class=hide><a href=#l-606>#</a> [16:44] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-607 class=hide><a href=#l-607>#</a> [16:46] * Quits: tommyliu (~tommyliu@li587-82.members.linode.com) (Ping timeout: 256 seconds)</li>
+<li id=l-608 class=hide><a href=#l-608>#</a> [16:53] * Joins: KevinMarks_ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+<li id=l-609 class=hide><a href=#l-609>#</a> [16:55] * Quits: KevinMarks__ (~yaaic@2607:fb90:2179:9158:1e22:d01b:5373:37b3) (Ping timeout: 245 seconds)</li>
+<li id=l-610 class=hide><a href=#l-610>#</a> [16:55] * Quits: xtrm0 (uid12574@gateway/web/irccloud.com/x-xuwfqakgcuqmbgcd) (Quit: Connection closed for inactivity)</li>
+<li id=l-611 class=hide><a href=#l-611>#</a> [16:56] * Quits: gavinc (~gavin@4df8-a168-e2af-74d7-030d-4002-3420-2062.6rd.ip6.sonic.net) (Quit: Konversation terminated!)</li>
+<li id=l-612 class=hide><a href=#l-612>#</a> [16:59] * Joins: jyasskin (~jyasskin@173-228-80-34.dsl.static.fusionbroadband.com)</li>
+<li id=l-613 class=hide><a href=#l-613>#</a> [17:02] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-614 class=hide><a href=#l-614>#</a> [17:24] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-615 class=hide><a href=#l-615>#</a> [17:24] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-616 class=hide><a href=#l-616>#</a> [17:25] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-617 class=hide><a href=#l-617>#</a> [17:26] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-618 class=hide><a href=#l-618>#</a> [17:26] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-619 class=hide><a href=#l-619>#</a> [17:27] * Joins: KevinMarks__ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+<li id=l-620 class=hide><a href=#l-620>#</a> [17:28] * Quits: mpt_ (~mpt@canonical/mpt) (Ping timeout: 250 seconds)</li>
+<li id=l-621 class=hide><a href=#l-621>#</a> [17:29] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 246 seconds)</li>
+<li id=l-622 class=hide><a href=#l-622>#</a> [17:29] * Quits: KevinMarks_ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net) (Ping timeout: 256 seconds)</li>
+<li id=l-623 class=hide><a href=#l-623>#</a> [17:31] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-624 class=hide><a href=#l-624>#</a> [17:31] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-625 class=hide><a href=#l-625>#</a> [17:36] * Joins: frivoal_ (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-626 class=hide><a href=#l-626>#</a> [17:36] * Quits: KevinMarks__ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net) (Read error: Connection reset by peer)</li>
+<li id=l-627 class=hide><a href=#l-627>#</a> [17:39] * Joins: KevinMarks_ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+<li id=l-628 class=hide><a href=#l-628>#</a> [17:40] * Quits: ehsan (~ehsan@67.213.81.142) (Remote host closed the connection)</li>
+<li id=l-629 class=hide><a href=#l-629>#</a> [17:41] * Joins: mpt_ (~mpt@canonical/mpt)</li>
+<li id=l-630 class=hide><a href=#l-630>#</a> [17:44] * Joins: svl (~me@200.123.210.20)</li>
+<li id=l-631 class=hide><a href=#l-631>#</a> [17:45] * Joins: zenith_ (~zenith@142.150.23.90)</li>
+<li id=l-632 class=hide><a href=#l-632>#</a> [17:48] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-633 class=hide><a href=#l-633>#</a> [17:50] * Quits: darobin (~darobin@2a01:e34:ed05:d180:e4e1:8dff:de94:d4f6) (Remote host closed the connection)</li>
+<li id=l-634 _a="calvaris" _r="Domenic"><a href=#l-634>#</a> [17:52] &lt;calvaris&gt; Domenic: I am writing more tests</li>
+<li id=l-635 _a="calvaris"><a href=#l-635>#</a> [17:52] &lt;calvaris&gt; and it seems that I can construct if I pass undefined to the constructor</li>
+<li id=l-636 class=hide><a href=#l-636>#</a> [17:52] * Quits: hemanth (~hemanth@122.167.67.18) (Quit: This computer has gone to sleep)</li>
+<li id=l-637 class=hide><a href=#l-637>#</a> [17:52] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 245 seconds)</li>
+<li id=l-638 _a="calvaris"><a href=#l-638>#</a> [17:52] &lt;calvaris&gt; which should be equivalent to pass no arguments, right?</li>
+<li id=l-639 class=hide><a href=#l-639>#</a> [17:54] * Joins: ap (~ap@17.202.44.214)</li>
+<li id=l-640 _a="Ms2ger"><a href=#l-640>#</a> [17:55] &lt;Ms2ger&gt; For optional arguments, yes</li>
+<li id=l-641 _a="Ms2ger"><a href=#l-641>#</a> [17:55] &lt;Ms2ger&gt; For required arguments, no</li>
+<li id=l-642 class=hide><a href=#l-642>#</a> [17:55] * Quits: zenith_ (~zenith@142.150.23.90) (Ping timeout: 256 seconds)</li>
+<li id=l-643 class=hide><a href=#l-643>#</a> [17:58] * Quits: dbaron (~dbaron@70-36-140-197.dsl.dynamic.fusionbroadband.com) (Ping timeout: 250 seconds)</li>
+<li id=l-644 class=hide><a href=#l-644>#</a> [17:59] * Quits: KevinMarks (~KevinMark@c-67-164-14-200.hsd1.ca.comcast.net) (Ping timeout: 264 seconds)</li>
+<li id=l-645 class=hide><a href=#l-645>#</a> [18:00] * Joins: KevinMarks (~yaaic@2607:fb90:5c6:8108:b51b:9d30:97c:63ee)</li>
+<li id=l-646 class=hide><a href=#l-646>#</a> [18:02] * Quits: KevinMarks_ (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net) (Ping timeout: 240 seconds)</li>
+<li id=l-647 class=hide><a href=#l-647>#</a> [18:05] * Joins: mcnesium (~mcnesium@unaffiliated/mcnesium)</li>
+<li id=l-648 _a="mcnesium"><a href=#l-648>#</a> [18:05] &lt;mcnesium&gt; my new wordpress does have a valid rss feed but safari on iOS and OSX do not show the &quot;reader&quot; sign. any idea what might be wrong? <a href="http://mcnesium.com">http://mcnesium.com</a></li>
+<li id=l-649 class=hide><a href=#l-649>#</a> [18:07] * Joins: ehsan (~ehsan@2001:450:1f:224:6030:da54:5ea8:49ec)</li>
+<li id=l-650 class=hide><a href=#l-650>#</a> [18:16] * Joins: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com)</li>
+<li id=l-651 class=hide><a href=#l-651>#</a> [18:16] * Quits: svl (~me@200.123.210.20) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+<li id=l-652 class=hide><a href=#l-652>#</a> [18:18] * Quits: espadrine (~tyl@LMontsouris-656-1-2-84.w80-12.abo.wanadoo.fr) (Ping timeout: 246 seconds)</li>
+<li id=l-653 class=hide><a href=#l-653>#</a> [18:25] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-654 class=hide><a href=#l-654>#</a> [18:29] * Quits: jyasskin_w (jyasskin@nat/google/x-rkziyehlwgqgatfh) (Ping timeout: 256 seconds)</li>
+<li id=l-655 class=hide><a href=#l-655>#</a> [18:29] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 245 seconds)</li>
+<li id=l-656 class=hide _a="Krinkle"><a href=#l-656>#</a> [18:30] * Krinkle is now known as Krinkle|detached</li>
+<li id=l-657 class=hide><a href=#l-657>#</a> [18:30] * Joins: darobin (~darobin@mtl93-18-78-208-93-24.fbx.proxad.net)</li>
+<li id=l-658 _a="calvaris"><a href=#l-658>#</a> [18:33] &lt;calvaris&gt; in this case, the object can be constructed with no arguments, so we can assume argument is optional</li>
+<li id=l-659 _a="calvaris"><a href=#l-659>#</a> [18:34] &lt;calvaris&gt; can't we?</li>
+<li id=l-660 _a="wanderview" _r="Domenic"><a href=#l-660>#</a> [18:35] &lt;wanderview&gt; Domenic: do you know why the promise cases in the benchmark all take longer to settle than the sync cases?</li>
+<li id=l-661 _a="wanderview" _r="Domenic"><a href=#l-661>#</a> [18:35] &lt;wanderview&gt; Domenic: is that just variability from runnables in the event queue?</li>
+<li id=l-662 _a="calvaris" _r="Ms2ger"><a href=#l-662>#</a> [18:35] &lt;calvaris&gt; Ms2ger: ?</li>
+<li id=l-663 _a="calvaris"><a href=#l-663>#</a> [18:36] &lt;calvaris&gt; I guess it is not</li>
+<li id=l-664 class=hide><a href=#l-664>#</a> [18:37] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-665 _a="calvaris"><a href=#l-665>#</a> [18:37] &lt;calvaris&gt; because in myFunction(myArgument = {}) {} it is different to call myFunction() than myFunction(undefined)</li>
+<li id=l-666 class=hide><a href=#l-666>#</a> [18:39] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-667 class=hide><a href=#l-667>#</a> [18:40] * Joins: jyasskin_w (jyasskin@nat/google/x-rrioyywaucjhgytz)</li>
+<li id=l-668 _a="calvaris" _r="no"><a href=#l-668>#</a> [18:41] &lt;calvaris&gt; no, it's the same thing</li>
+<li id=l-669 class=hide><a href=#l-669>#</a> [18:41] * Quits: mpt_ (~mpt@canonical/mpt) (Ping timeout: 250 seconds)</li>
+<li id=l-670 class=hide _a="Krinkle|detached"><a href=#l-670>#</a> [18:42] * Krinkle|detached is now known as Krinkle</li>
+<li id=l-671 class=hide><a href=#l-671>#</a> [18:51] * Joins: mpt_ (~mpt@canonical/mpt)</li>
+<li id=l-672 class=hide><a href=#l-672>#</a> [18:54] * Quits: frivoal_ (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-673 class=hide><a href=#l-673>#</a> [18:54] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-674 class=hide><a href=#l-674>#</a> [18:54] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-675 class=hide><a href=#l-675>#</a> [18:58] * Quits: darobin (~darobin@mtl93-18-78-208-93-24.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-676 class=hide _a="Krinkle"><a href=#l-676>#</a> [18:58] * Krinkle is now known as Krinkle|detached</li>
+<li id=l-677 class=hide><a href=#l-677>#</a> [19:01] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-678 class=hide><a href=#l-678>#</a> [19:05] * Quits: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com) (Quit: bradleymeck)</li>
+<li id=l-679 class=hide _a="Krinkle|detached"><a href=#l-679>#</a> [19:06] * Krinkle|detached is now known as Krinkle</li>
+<li id=l-680 class=hide><a href=#l-680>#</a> [19:22] * Quits: othermaciej (~mjs@c-71-198-213-78.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+<li id=l-681 class=hide><a href=#l-681>#</a> [19:24] * Joins: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com)</li>
+<li id=l-682 class=hide><a href=#l-682>#</a> [19:26] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-683 class=hide><a href=#l-683>#</a> [19:26] * Joins: KevinMarks_ (~yaaic@70-35-48-188.static.wiline.com)</li>
+<li id=l-684 class=hide><a href=#l-684>#</a> [19:29] * Quits: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com) (Client Quit)</li>
+<li id=l-685 class=hide><a href=#l-685>#</a> [19:29] * Joins: KevinMarks__ (~yaaic@sjspeed.wiline.com)</li>
+<li id=l-686 class=hide><a href=#l-686>#</a> [19:29] * Joins: othermaciej (~mjs@76.74.153.41)</li>
+<li id=l-687 class=hide><a href=#l-687>#</a> [19:29] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-688 class=hide><a href=#l-688>#</a> [19:30] * Quits: KevinMarks (~yaaic@2607:fb90:5c6:8108:b51b:9d30:97c:63ee) (Ping timeout: 245 seconds)</li>
+<li id=l-689 class=hide><a href=#l-689>#</a> [19:30] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Ping timeout: 256 seconds)</li>
+<li id=l-690 class=hide><a href=#l-690>#</a> [19:31] * Joins: jsbell (jsbell@nat/google/x-hcbdotivbmzqoxqm)</li>
+<li id=l-691 class=hide><a href=#l-691>#</a> [19:31] * Quits: KevinMarks_ (~yaaic@70-35-48-188.static.wiline.com) (Ping timeout: 264 seconds)</li>
+<li id=l-692 class=hide><a href=#l-692>#</a> [19:36] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-693 class=hide><a href=#l-693>#</a> [19:41] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 250 seconds)</li>
+<li id=l-694 _a="wanderview" _r="Domenic"><a href=#l-694>#</a> [19:42] &lt;wanderview&gt; Domenic: can you explain again why we need async read() always on getReader()... instead of making getReader().read() sync and getByobReader.read() async?</li>
+<li id=l-695 _a="wanderview"><a href=#l-695>#</a> [19:43] &lt;wanderview&gt; sorry... I know you've explained before</li>
+<li id=l-696 class=hide><a href=#l-696>#</a> [19:46] * Joins: KevinMarks (~KevinMark@sjspeed.wiline.com)</li>
+<li id=l-697 class=hide><a href=#l-697>#</a> [19:46] * Quits: jyasskin (~jyasskin@173-228-80-34.dsl.static.fusionbroadband.com) (Quit: My computer has gone to sleep. ZZZzzz…)</li>
+<li id=l-698 class=hide><a href=#l-698>#</a> [19:50] * Joins: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com)</li>
+<li id=l-699 _a="caitp-"><a href=#l-699>#</a> [19:51] &lt;caitp-&gt; dunno his reasons, but if it's sometimes sync and sometimes async, that's not great for usability</li>
+<li id=l-700 class=hide><a href=#l-700>#</a> [19:51] * Quits: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com) (Client Quit)</li>
+<li id=l-701 class=hide><a href=#l-701>#</a> [19:57] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com)</li>
+<li id=l-702 class=hide><a href=#l-702>#</a> [19:59] * Joins: mikenovikov (~mikenovik@176.195.203.7)</li>
+<li id=l-703 _a="wanderview" _r="caitp-"><a href=#l-703>#</a> [20:01] &lt;wanderview&gt; caitp-: no... its only async if you explicitly opt-in to the &quot;bring my own buffer&quot; optimization... and then its always async</li>
+<li id=l-704 class=hide><a href=#l-704>#</a> [20:01] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-705 _a="caitp-" _r="yes"><a href=#l-705>#</a> [20:01] &lt;caitp-&gt; yes, and then if you pass that reader to something that doesn't know you brought your own or not, it may or may not be async</li>
+<li id=l-706 class=hide><a href=#l-706>#</a> [20:02] * Joins: dbaron (~dbaron@2620:101:80fc:232:5d9e:fb04:9852:1d1e)</li>
+<li id=l-707 class=hide><a href=#l-707>#</a> [20:10] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-708 class=hide><a href=#l-708>#</a> [20:11] * Joins: rniwa (~rniwa@17.245.30.85)</li>
+<li id=l-709 _a="wanderview" _r="caitp-"><a href=#l-709>#</a> [20:15] &lt;wanderview&gt; caitp-: that reader has its own type... they are not compatible with each other already</li>
+<li id=l-710 class=hide><a href=#l-710>#</a> [20:16] * Joins: woebtz (~woebtz@12.36.17.197)</li>
+<li id=l-711 class=hide><a href=#l-711>#</a> [20:18] * Quits: KevinMarks__ (~yaaic@sjspeed.wiline.com) (Read error: Connection reset by peer)</li>
+<li id=l-712 class=hide><a href=#l-712>#</a> [20:19] * Joins: wartdev (~wartdev@109.255.148.96)</li>
+<li id=l-713 class=hide><a href=#l-713>#</a> [20:19] * Joins: KevinMarks_ (~yaaic@sjspeed.wiline.com)</li>
+<li id=l-714 class=hide><a href=#l-714>#</a> [20:21] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-715 class=hide><a href=#l-715>#</a> [20:22] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-716 class=hide><a href=#l-716>#</a> [20:22] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Client Quit)</li>
+<li id=l-717 class=hide><a href=#l-717>#</a> [20:24] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+<li id=l-718 class=hide><a href=#l-718>#</a> [20:25] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-719 class=hide><a href=#l-719>#</a> [20:28] * Quits: c74d (~c74d3a4eb@2002:4404:712c:0:76de:2bff:fed4:2766) (Remote host closed the connection)</li>
+<li id=l-720 class=hide><a href=#l-720>#</a> [20:34] * Quits: othermaciej (~mjs@76.74.153.41) (Quit: othermaciej)</li>
+<li id=l-721 class=hide><a href=#l-721>#</a> [20:34] * Joins: c74d (~c74d3a4eb@2002:4404:712c:0:76de:2bff:fed4:2766)</li>
+<li id=l-722 _a="caitp-"><a href=#l-722>#</a> [20:36] &lt;caitp-&gt; if they can be used the same way, you can probably expect that they would be</li>
+<li id=l-723 class=hide><a href=#l-723>#</a> [20:36] * Quits: calvaris (~calvaris@fanzine.igalia.com) (Quit: Ex-Chat)</li>
+<li id=l-724 class=hide><a href=#l-724>#</a> [20:36] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-725 class=hide><a href=#l-725>#</a> [20:37] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-726 class=hide><a href=#l-726>#</a> [20:38] * Quits: KevinMarks_ (~yaaic@sjspeed.wiline.com) (Remote host closed the connection)</li>
+<li id=l-727 class=hide><a href=#l-727>#</a> [20:39] * Quits: wilsonpage (~wilsonpag@217.111.161.212) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-728 class=hide><a href=#l-728>#</a> [20:40] * Joins: othermaciej (~mjs@17.244.161.39)</li>
+<li id=l-729 class=hide><a href=#l-729>#</a> [20:41] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 244 seconds)</li>
+<li id=l-730 class=hide><a href=#l-730>#</a> [20:44] * Quits: dbaron (~dbaron@2620:101:80fc:232:5d9e:fb04:9852:1d1e) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+<li id=l-731 class=hide><a href=#l-731>#</a> [20:45] * Joins: dbaron (~dbaron@2620:101:80fc:232:5d9e:fb04:9852:1d1e)</li>
+<li id=l-732 _a="wanderview" _r="caitp-"><a href=#l-732>#</a> [20:46] &lt;wanderview&gt; caitp-: agree in principal, but not sure if its worth baking a performance penalty into getReader() just to satisfy aesthetic similarity to getByobReader()</li>
+<li id=l-733 _a="caitp-"><a href=#l-733>#</a> [20:47] &lt;caitp-&gt; i'm sure domenic's reasons are better ones</li>
+<li id=l-734 _a="caitp-"><a href=#l-734>#</a> [20:47] &lt;caitp-&gt; or at least, he's probably spending more time thinking about it =p</li>
+<li id=l-735 class=hide><a href=#l-735>#</a> [20:51] * Joins: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-736 class=hide><a href=#l-736>#</a> [20:55] * Quits: asmodai (asmodai@h159072.upc-h.chello.nl) (Changing host)</li>
+<li id=l-737 class=hide><a href=#l-737>#</a> [20:55] * Joins: asmodai (asmodai@freebsd/developer/asmodai)</li>
+<li id=l-738 class=hide><a href=#l-738>#</a> [21:08] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-739 class=hide><a href=#l-739>#</a> [21:10] * Joins: mrtn_ (~Martin@h-52-179.a157.priv.bahnhof.se)</li>
+<li id=l-740 class=hide><a href=#l-740>#</a> [21:12] * Quits: othermaciej (~mjs@17.244.161.39) (Quit: othermaciej)</li>
+<li id=l-741 class=hide><a href=#l-741>#</a> [21:13] * Joins: othermaciej (~mjs@17.244.161.39)</li>
+<li id=l-742 class=hide><a href=#l-742>#</a> [21:15] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-743 class=hide><a href=#l-743>#</a> [21:15] * Joins: calvaris (~calvaris@254.126.27.77.dynamic.mundo-r.com)</li>
+<li id=l-744 class=hide><a href=#l-744>#</a> [21:16] * Joins: darobin (~darobin@2a01:e34:ed05:d180:d:517f:ab3:180e)</li>
+<li id=l-745 class=hide><a href=#l-745>#</a> [21:16] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-746 class=hide _a="Krinkle"><a href=#l-746>#</a> [21:19] * Krinkle is now known as Krinkle|detached</li>
+<li id=l-747 class=hide><a href=#l-747>#</a> [21:20] * Joins: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com)</li>
+<li id=l-748 class=hide><a href=#l-748>#</a> [21:21] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-749 class=hide><a href=#l-749>#</a> [21:23] * Quits: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net) (Quit: ZZZzzz…)</li>
+<li id=l-750 class=hide><a href=#l-750>#</a> [21:25] * Quits: darobin (~darobin@2a01:e34:ed05:d180:d:517f:ab3:180e) (Quit: Leaving...)</li>
+<li id=l-751 class=hide><a href=#l-751>#</a> [21:25] * Quits: Ms2ger (~Ms2ger@193.190.253.150) (Quit: nn)</li>
+<li id=l-752 class=hide><a href=#l-752>#</a> [21:27] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-753 class=hide><a href=#l-753>#</a> [21:29] * Joins: Maurice` (copyman@unaffiliated/maurice)</li>
+<li id=l-754 class=hide><a href=#l-754>#</a> [21:35] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-755 class=hide><a href=#l-755>#</a> [21:40] * Joins: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-756 class=hide><a href=#l-756>#</a> [21:41] * Joins: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com)</li>
+<li id=l-757 class=hide><a href=#l-757>#</a> [21:47] * Joins: jyasskin (jyasskin@nat/google/x-swqwxvrucfukuxgp)</li>
+<li id=l-758 class=hide><a href=#l-758>#</a> [21:48] * Quits: zdobersek (~zan@gateway/vpn/privateinternetaccess/zdobersek) (Quit: Leaving.)</li>
+<li id=l-759 class=hide><a href=#l-759>#</a> [21:50] * Quits: scor (scor@drupal.org/user/52142/view) (Quit: scor)</li>
+<li id=l-760 class=hide><a href=#l-760>#</a> [21:52] * Quits: benwerd (~benwerd@199.87.84.238) (Remote host closed the connection)</li>
+<li id=l-761 class=hide><a href=#l-761>#</a> [21:52] * Quits: KevinMarks (~KevinMark@sjspeed.wiline.com) (Ping timeout: 256 seconds)</li>
+<li id=l-762 class=hide><a href=#l-762>#</a> [21:54] * Joins: jwalden (~waldo@2620:101:80fc:224:7e7a:91ff:fe25:a5a3)</li>
+<li id=l-763 class=hide><a href=#l-763>#</a> [21:54] * Joins: benwerd (~benwerd@199.87.84.238)</li>
+<li id=l-764 class=hide><a href=#l-764>#</a> [21:59] * Joins: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com)</li>
+<li id=l-765 class=hide><a href=#l-765>#</a> [22:00] * Joins: jamesheston (~jameshest@wsip-72-196-170-92.sd.sd.cox.net)</li>
+<li id=l-766 class=hide><a href=#l-766>#</a> [22:02] * Quits: zcorpan (~zcorpan@90-230-218-37-no135.tbcn.telia.com) (Remote host closed the connection)</li>
+<li id=l-767 class=hide><a href=#l-767>#</a> [22:08] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-768 class=hide><a href=#l-768>#</a> [22:08] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-769 class=hide><a href=#l-769>#</a> [22:09] * Quits: wartdev (~wartdev@109.255.148.96) (Remote host closed the connection)</li>
+<li id=l-770 class=hide><a href=#l-770>#</a> [22:12] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-771 class=hide><a href=#l-771>#</a> [22:12] * Quits: bradleymeck (~bradleyme@cpe-70-114-246-88.austin.res.rr.com) (Quit: bradleymeck)</li>
+<li id=l-772 class=hide><a href=#l-772>#</a> [22:12] * Quits: newtron (~newtron@199.71.174.203) (Quit: Leaving...)</li>
+<li id=l-773 class=hide><a href=#l-773>#</a> [22:13] * Quits: hasather_ (~hasather@cm-84.210.170.16.getinternet.no) (Ping timeout: 256 seconds)</li>
+<li id=l-774 class=hide><a href=#l-774>#</a> [22:14] * Quits: calvaris (~calvaris@254.126.27.77.dynamic.mundo-r.com) (Quit: Ex-Chat)</li>
+<li id=l-775 class=hide><a href=#l-775>#</a> [22:17] * Joins: mven (~textual@32.97.110.57)</li>
+<li id=l-776 class=hide _a="heycam|away"><a href=#l-776>#</a> [22:22] * heycam|away is now known as heycam</li>
+<li id=l-777 class=hide><a href=#l-777>#</a> [22:28] * Quits: rniwa (~rniwa@17.245.30.85) (Ping timeout: 276 seconds)</li>
+<li id=l-778 class=hide><a href=#l-778>#</a> [22:34] * Joins: kruppel (~kruppel@192.161.158.18)</li>
+<li id=l-779 class=hide><a href=#l-779>#</a> [22:37] * Quits: lnr (~lnr@aim.engr.arizona.edu) (Ping timeout: 244 seconds)</li>
+<li id=l-780 class=hide><a href=#l-780>#</a> [22:37] * Quits: tantek (~tantek@50-1-62-185.dsl.dynamic.fusionbroadband.com) (Quit: tantek)</li>
+<li id=l-781 class=hide><a href=#l-781>#</a> [22:42] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.fusionbroadband.com) (Remote host closed the connection)</li>
+<li id=l-782 class=hide><a href=#l-782>#</a> [22:44] * Quits: beowulf (~sstewart@host86-153-9-85.range86-153.btcentralplus.com) (Ping timeout: 256 seconds)</li>
+<li id=l-783 class=hide><a href=#l-783>#</a> [22:45] * Joins: espadrine (~tyl@dan75-7-88-166-187-54.fbx.proxad.net)</li>
+<li id=l-784 class=hide><a href=#l-784>#</a> [22:45] * Joins: beowulf (~sstewart@host86-190-65-30.range86-190.btcentralplus.com)</li>
+<li id=l-785 class=hide><a href=#l-785>#</a> [23:01] * Joins: thinkxl_ (~thinkxl@74-95-237-22-Houston.hfc.comcastbusiness.net)</li>
+<li id=l-786 class=hide><a href=#l-786>#</a> [23:01] * Quits: alrra (uid62345@gateway/web/irccloud.com/x-cxdcswolmtsmagfr) (Quit: Connection closed for inactivity)</li>
+<li id=l-787 class=hide><a href=#l-787>#</a> [23:02] * Quits: thinkxl (~thinkxl@74-95-237-22-Houston.hfc.comcastbusiness.net) (Ping timeout: 250 seconds)</li>
+<li id=l-788 class=hide><a href=#l-788>#</a> [23:03] * Quits: Maurice` (copyman@unaffiliated/maurice)</li>
+<li id=l-789 class=hide><a href=#l-789>#</a> [23:05] * Joins: KevinMarks (~KevinMark@sjspeed.wiline.com)</li>
+<li id=l-790 class=hide><a href=#l-790>#</a> [23:05] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-791 class=hide><a href=#l-791>#</a> [23:08] * Joins: jacobolus (~jacobolus@215.sub-70-197-16.myvzw.com)</li>
+<li id=l-792 class=hide><a href=#l-792>#</a> [23:08] * Quits: TallTed (~Thud@63.119.36.36)</li>
+<li id=l-793 class=hide><a href=#l-793>#</a> [23:09] * Quits: othermaciej (~mjs@17.244.161.39) (Quit: othermaciej)</li>
+<li id=l-794 class=hide><a href=#l-794>#</a> [23:10] * Joins: othermaciej (~mjs@17.244.161.39)</li>
+<li id=l-795 class=hide><a href=#l-795>#</a> [23:11] * Quits: bholley (~bholley@c-50-174-198-217.hsd1.ca.comcast.net)</li>
+<li id=l-796 class=hide><a href=#l-796>#</a> [23:11] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+<li id=l-797 class=hide><a href=#l-797>#</a> [23:18] * Joins: xtrm0 (uid12574@gateway/web/irccloud.com/x-rtcjkddbtltuvfub)</li>
+<li id=l-798 class=hide><a href=#l-798>#</a> [23:22] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+<li id=l-799 class=hide _a="thinkxl_"><a href=#l-799>#</a> [23:27] * thinkxl_ is now known as thinkxl</li>
+<li id=l-800 class=hide><a href=#l-800>#</a> [23:27] * Quits: thinkxl (~thinkxl@74-95-237-22-Houston.hfc.comcastbusiness.net) (Changing host)</li>
+<li id=l-801 class=hide><a href=#l-801>#</a> [23:27] * Joins: thinkxl (~thinkxl@unaffiliated/thinkxl)</li>
+<li id=l-802 _a="wanderview"><a href=#l-802>#</a> [23:33] &lt;wanderview&gt; hmm... does chrome has something like URLSearchParams?</li>
+<li id=l-803 class=hide><a href=#l-803>#</a> [23:35] * Quits: frivoal (~frivoal@cm-84.208.175.177.getinternet.no) (Remote host closed the connection)</li>
+<li id=l-804 class=hide><a href=#l-804>#</a> [23:35] * Joins: frivoal (~frivoal@cm-84.208.175.177.getinternet.no)</li>
+<li id=l-805 _a="caitp"><a href=#l-805>#</a> [23:36] &lt;caitp&gt; doesn't look like it</li>
+<li id=l-806 _a="caitp" _r="well"><a href=#l-806>#</a> [23:36] &lt;caitp&gt; well, &quot;something like&quot;, probably just a JSObject</li>
+<li id=l-807 _a="caitp"><a href=#l-807>#</a> [23:38] &lt;caitp&gt; not even a JSObject</li>
+<li id=l-808 _a="caitp"><a href=#l-808>#</a> [23:38] &lt;caitp&gt; not exposed on the interface, and no TODO. should file :o</li>
+<li id=l-809 class=hide><a href=#l-809>#</a> [23:40] * Joins: rniwa (~rniwa@17.202.47.189)</li>
+<li id=l-810 class=hide _a="heycam"><a href=#l-810>#</a> [23:40] * heycam is now known as heycam|away</li>
+<li id=l-811 _a="caitp"><a href=#l-811>#</a> [23:44] &lt;caitp&gt; i guess it is filed</li>
+<li id=l-812 class=hide><a href=#l-812>#</a> [23:44] * Quits: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net) (Remote host closed the connection)</li>
+<li id=l-813 class=hide><a href=#l-813>#</a> [23:45] * Quits: jamesheston (~jameshest@wsip-72-196-170-92.sd.sd.cox.net) (Quit: Textual IRC Client: www.textualapp.com)</li>
+<li id=l-814 _a="wanderview"><a href=#l-814>#</a> [23:48] &lt;wanderview&gt; yea... I guess that part of the URL spec just needs to be implemented</li>
+<li id=l-815 _a="jgraham"><a href=#l-815>#</a> [23:49] &lt;jgraham&gt; Is there some way to tell if the origin of a page changed at some point (i.e. that document.domain was set)</li>
+<li id=l-816 class=hide><a href=#l-816>#</a> [23:53] * Joins: wartdev (~wartdev@109.255.148.96)</li>
+<li id=l-817 class=hide><a href=#l-817>#</a> [23:54] * Quits: SteveF_ (~chatzilla@cpc3-nmal20-2-0-cust916.19-2.cable.virginm.net) (Ping timeout: 250 seconds)</li>
+<li id=l-818 _a="caitp"><a href=#l-818>#</a> [23:55] &lt;caitp&gt; there's no event triggered in the setter algorithm, or anything</li>
+<li id=l-819 class=hide><a href=#l-819>#</a> [23:56] * Joins: SteveF_ (~chatzilla@cpc3-nmal20-2-0-cust916.19-2.cable.virginm.net)</li>
+<li id=l-820 class=hide><a href=#l-820>#</a> [23:57] * Joins: hasather_ (~hasather@cm-84.210.170.16.getinternet.no)</li>
+<li id=l-821 class=hide><a href=#l-821>#</a> [23:58] * Quits: kruppel (~kruppel@192.161.158.18) (Quit: My Mac has gone to sleep. ZZZzzz…)</li>
+<li id=l-822 class=hide><a href=#l-822>#</a> [23:59] * Quits: plutoniix (~plutoniix@node-cpt.pool-125-24.dynamic.totbb.net) (Ping timeout: 264 seconds)</li>
+<li id=l-823 class=hide><a href=#l-823>#</a> Session Close: Fri Apr 10 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20150408>Previous day</a>, <a href=20150410>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

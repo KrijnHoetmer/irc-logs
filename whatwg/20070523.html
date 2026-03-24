@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20070523</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20070523.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2007-05-23 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed May 23 00:00:00 2007</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Dashiva"><a href="#l-3">#</a> [00:01] &lt;Dashiva&gt; Hey Hixie, I understand acid3 is not available, not finished and all, but how about at least removing that incomplete line that triggers a parse error and makes it not work at all :)</li>
+ <li id="l-4" _a="Hixie"><a href="#l-4">#</a> [00:02] &lt;Hixie&gt; why?</li>
+ <li id="l-5" _a="Dashiva"><a href="#l-5">#</a> [00:02] &lt;Dashiva&gt; So the tests that do work can be run</li>
+ <li id="l-6" _a="Hixie"><a href="#l-6">#</a> [00:03] &lt;Hixie&gt; why? browser vendors won't want the big test, and who else is there who would care?</li>
+ <li id="l-7" _a="Dashiva"><a href="#l-7">#</a> [00:04] &lt;Dashiva&gt; Those of us who hunt unreported bugs</li>
+ <li id="l-8" class="flagged" _a="Hixie"><a href="#l-8">#</a> [00:04] &lt;Hixie&gt; copy the file and edit it :-P</li>
+ <li id="l-9" _a="Dashiva" _r="Darn"><a href="#l-9">#</a> [00:05] &lt;Dashiva&gt; Darn, I was hoping you wouldn't think of that</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:05] &lt;Hixie&gt; i'm in the middle of writing that test, it's not done yet, i'm not going to go out of my way to make it usable when all that would do is make my work harder</li>
+ <li id="l-11"><a href="#l-11">#</a> [00:05] * Joins: webben (n=benh@91.84.133.109)</li>
+ <li id="l-12" _a="Hixie"><a href="#l-12">#</a> [00:06] &lt;Hixie&gt; the tests in it are all based on other tests on hixie.ch anyway as far as i recall</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:06] &lt;Hixie&gt; and are trivially extractable</li>
+ <li id="l-14" _a="Philip`" _r="Hixie"><a href="#l-14">#</a> [00:12] &lt;Philip`&gt; Hixie: Waiting for browsers to make my code faster doesn't seem like it'd work too well in practice, since the bottlenecks that affect my code might not affect anyone else so the browsers wouldn't care enough to spend the effort optimising it; and even if they did fix it, it'd take a year or two for the next release to get out there, whereas I would want it to work as well as possible for people today</li>
+ <li id="l-15" _a="Hixie"><a href="#l-15">#</a> [00:13] &lt;Hixie&gt; fair enough. but then you'll have the same problem that any optimising compiler has -- different platforms and architectures have different characteristics and so will need optimising in different ways. :-)</li>
+ <li id="l-16" class="flagged" _a="Philip`"><a href="#l-16">#</a> [00:14] &lt;Philip`&gt; although in practice I see 50% of people using Firefox 2 on Windows so I could just optimise for that and forget about everyone else, but I prefer to be nice to everyone else :-)</li>
+ <li id="l-17" _a="jruderman" _r="Hixie"><a href="#l-17">#</a> [00:15] &lt;jruderman&gt; Hixie: what does &quot;the animation while the test was running has to be smooth&quot; mean? no pauses in the percentages? the color changes should be gradual?</li>
+ <li id="l-18" _a="Philip`"><a href="#l-18">#</a> [00:17] &lt;Philip`&gt; I think the main problem is just working out what the characteristics are - I suppose I could have some one-off calibration process that measures some things, and store the results in globalStorage so it can skip that step next time, and then it'll be better at adapting to unexpected/unknown platforms</li>
+ <li id="l-19" _a="Hixie" _r="jruderman"><a href="#l-19">#</a> [00:18] &lt;Hixie&gt; jruderman: it means you should be getting 20fps or better</li>
+ <li id="l-20" _a="Philip`"><a href="#l-20">#</a> [00:18] &lt;Philip`&gt; (maybe kind of like an optimising compiler that emits two versions of a function, one with plain x86 code and one with SSE3, with run-time detection of which version it should use, although not really like that since that can just ask the CPU for its capabilities instead of guessing...)</li>
+ <li id="l-21" _a="Hixie" _r="Philip`"><a href="#l-21">#</a> [00:18] &lt;Hixie&gt; Philip`: until a user upgrades to another browser and the browser imports those globalStorage settings :-)</li>
+ <li id="l-22" _a="jruderman" _r="Hixie"><a href="#l-22">#</a> [00:19] &lt;jruderman&gt; Hixie: hmm. i get a slight pause at 44% or 45% in firefox trunk</li>
+ <li id="l-23" _a="Philip`"><a href="#l-23">#</a> [00:19] &lt;Philip`&gt; It'd associate the results with the UA string to avoid that problem :-)</li>
+ <li id="l-24" _a="jruderman" _r="Hixie"><a href="#l-24">#</a> [00:19] &lt;jruderman&gt; Hixie: old computers need not apply? :P</li>
+ <li id="l-25" _a="Philip`"><a href="#l-25">#</a> [00:20] &lt;Philip`&gt; although if they upgrade their hardware and copy their old browser settings...</li>
+ <li id="l-26" _a="Dashiva" _r="Odd"><a href="#l-26">#</a> [00:20] &lt;Dashiva&gt; Odd, the tests around 44-45 are all empty</li>
+ <li id="l-27" _a="Hixie" _r="jruderman"><a href="#l-27">#</a> [00:20] &lt;Hixie&gt; jruderman: you shouldn't see jerks in any browser on any platform</li>
+ <li id="l-28" _a="jruderman"><a href="#l-28">#</a> [00:21] &lt;jruderman&gt; maybe that's when the browser decides to do javascript+xpcom garbage collection</li>
+ <li id="l-29" _a="Hixie"><a href="#l-29">#</a> [00:22] &lt;Hixie&gt; then it sucks</li>
+ <li id="l-30" _a="othermaciej" _r="Philip`"><a href="#l-30">#</a> [00:26] &lt;othermaciej&gt; Philip`: what code do you have in mind?</li>
+ <li id="l-31" _a="Philip`"><a href="#l-31">#</a> [00:35] &lt;Philip`&gt; I don't have anything specific in mind that I'm intending to work on - I'm mostly remembering Canvex and thinking about how I could have done that better</li>
+ <li id="l-32" _a="Philip`"><a href="#l-32">#</a> [00:37] &lt;Philip`&gt; (That's basically lots of scaled drawImages, so I didn't care about the performance of drawing lines and polygons and gradients and things)</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:38] * Parts: hendry (n=hendry@91.84.53.136)</li>
+ <li id="l-34" _a="zcorpan" _r="Philip`"><a href="#l-34">#</a> [00:40] &lt;zcorpan&gt; Philip`: you know about elastomania?</li>
+ <li id="l-35" _a="Philip`" _r="zcorpan"><a href="#l-35">#</a> [00:43] &lt;Philip`&gt; zcorpan: No, except for having looked at screenshots of something with that name on Wikipedia about fifteen seconds ago</li>
+ <li id="l-36" _a="zcorpan" _r="Philip`"><a href="#l-36">#</a> [00:44] &lt;zcorpan&gt; Philip`: heh, ok. i was thinking about whether it would be possible to port that to canvas with the exact same physics</li>
+ <li id="l-37" _a="zcorpan"><a href="#l-37">#</a> [00:45] &lt;zcorpan&gt; <a href="http://video.google.com/videoplay?docid=-669731391958349456&amp;q=elastomania">http://video.google.com/videoplay?docid=-669731391958349456&amp;q=elastomania</a></li>
+ <li id="l-38"><a href="#l-38">#</a> [00:51] * Quits: karlUshi (n=karl@ARouen-252-1-159-72.w90-23.abo.wanadoo.fr) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-39" _a="Philip`" _r="zcorpan"><a href="#l-39">#</a> [00:52] &lt;Philip`&gt; zcorpan: From what I can see, the 3D bits (rotating rider and (I think) apples) wouldn't really be possible, but I don't see any reason why the rest of it couldn't be reproduced</li>
+ <li id="l-40" _a="zcorpan" _r="oh"><a href="#l-40">#</a> [00:53] &lt;zcorpan&gt; oh, nothing is 3d</li>
+ <li id="l-41" _a="zcorpan"><a href="#l-41">#</a> [00:53] &lt;zcorpan&gt; and i don't care about the animations</li>
+ <li id="l-42"><a href="#l-42">#</a> [00:53] * Parts: webben (n=benh@91.84.133.109)</li>
+ <li id="l-43" _a="zcorpan"><a href="#l-43">#</a> [00:54] &lt;zcorpan&gt; i was more curious about whether the physics could be reproduced exactly</li>
+ <li id="l-44" _a="Philip`" _r="Oh"><a href="#l-44">#</a> [00:56] &lt;Philip`&gt; Oh, they look rather 3Dish</li>
+ <li id="l-45" _a="Philip`"><a href="#l-45">#</a> [00:56] &lt;Philip`&gt; How exactly is &quot;exactly&quot;?</li>
+ <li id="l-46" _a="Philip`"><a href="#l-46">#</a> [00:57] &lt;Philip`&gt; I expect you'd get minor differences just between JS doubles and C floats</li>
+ <li id="l-47" _a="zcorpan"><a href="#l-47">#</a> [00:57] &lt;zcorpan&gt; probably</li>
+ <li id="l-48" _a="Philip`"><a href="#l-48">#</a> [00:59] &lt;Philip`&gt; (It'd presumably also be impossible to reproduce fairly accurately without having access to the source code to copy)</li>
+ <li id="l-49" _a="zcorpan" _r="yeah"><a href="#l-49">#</a> [00:59] &lt;zcorpan&gt; yeah, makes sense. it's not open source</li>
+ <li id="l-50" _a="Philip`"><a href="#l-50">#</a> [01:00] &lt;Philip`&gt; Trying to deduce floating point algorithms from disassembly is usually a bit of a pain :-(</li>
+ <li id="l-51" _a="Philip`"><a href="#l-51">#</a> [01:03] &lt;Philip`&gt; It might not be impossible to work out something that acts similarly, though - it looks kind of like the bikes are just three masses with some damped springs, with collisions between the wheels and some straight lines, and presumably some forces from user input and gravity and friction and air resistance</li>
+ <li id="l-52" _a="zcorpan"><a href="#l-52">#</a> [01:04] &lt;zcorpan&gt; no air resistance, but otherwise yeah, something like that</li>
+ <li id="l-53" _a="Philip`"><a href="#l-53">#</a> [01:05] &lt;Philip`&gt; It should just be some maths, and some tweaking of values, and not much else :-)</li>
+ <li id="l-54" _a="zcorpan"><a href="#l-54">#</a> [01:06] &lt;zcorpan&gt; but it wouldn't be worth attempting if it would only be possible to get something that acts similarly...</li>
+ <li id="l-55" _a="zcorpan" _r="well"><a href="#l-55">#</a> [01:07] &lt;zcorpan&gt; well, for new players it might be</li>
+ <li id="l-56"><a href="#l-56">#</a> [01:08] * Joins: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-57"><a href="#l-57">#</a> [01:10] * Joins: Toolskyn_ (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-58" _a="Philip`"><a href="#l-58">#</a> [01:13] &lt;Philip`&gt; Have people reverse-engineered/documented the level file format?</li>
+ <li id="l-59" _a="zcorpan"><a href="#l-59">#</a> [01:15] &lt;zcorpan&gt; dunno</li>
+ <li id="l-60" _a="Philip`"><a href="#l-60">#</a> [01:17] &lt;Philip`&gt; The .exe has some strings (I guess from assert calls) that appear to give some information about the physics, except they say things like &quot;gyuru::beszur-ban k &gt;= pontszam!&quot; and I'm not quite sure what that means</li>
+ <li id="l-61" _a="zcorpan" _r="um"><a href="#l-61">#</a> [01:18] &lt;zcorpan&gt; um, don't know either</li>
+ <li id="l-62"><a href="#l-62">#</a> [01:19] * Quits: billmason (n=billmaso@ip156.unival.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-63" _a="Philip`"><a href="#l-63">#</a> [01:22] &lt;Philip`&gt; At least I can read &quot;fabs( ujenergia - oldenergia ) &gt; 0.001!&quot;</li>
+ <li id="l-64"><a href="#l-64">#</a> [01:24] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-65"><a href="#l-65">#</a> [01:25] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-66" _a="zcorpan"><a href="#l-66">#</a> [01:25] &lt;zcorpan&gt; seems like it's written in Hungary</li>
+ <li id="l-67" _a="zcorpan"><a href="#l-67">#</a> [01:27] &lt;zcorpan&gt; i mean Hungarian</li>
+ <li id="l-68"><a href="#l-68">#</a> [01:27] * Quits: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-69"><a href="#l-69">#</a> [01:28] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-70" _a="Philip`"><a href="#l-70">#</a> [01:30] &lt;Philip`&gt; <a href="http://www.gamedev.net/community/forums/topic.asp?topic_id=397791">http://www.gamedev.net/community/forums/topic.asp?topic_id=397791</a> has some relevant notes</li>
+ <li id="l-71" _a="Philip`"><a href="#l-71">#</a> [01:33] &lt;Philip`&gt; It'd always be possible to ask the original author exactly how the physics works, though I don't know if he'd like people reproducing his work in JavaScript :-)</li>
+ <li id="l-72" _a="zcorpan"><a href="#l-72">#</a> [01:33] &lt;zcorpan&gt; perhaps it makes elastomania even more famous :)</li>
+ <li id="l-73" _a="zcorpan"><a href="#l-73">#</a> [01:34] &lt;zcorpan&gt; it's a very addicting game</li>
+ <li id="l-74" _a="Philip`"><a href="#l-74">#</a> [01:34] &lt;Philip`&gt; I just keep bashing my head on the floor and dying</li>
+ <li id="l-75"><a href="#l-75">#</a> [01:35] * Quits: nickshanks (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-76" _a="zcorpan"><a href="#l-76">#</a> [01:35] &lt;zcorpan&gt; heh</li>
+ <li id="l-77"><a href="#l-77">#</a> [01:35] * Quits: aroben (i=adamrobe@nat/apple/x-3e6a6861855ff2b3)</li>
+ <li id="l-78" _a="zcorpan" _r="ah"><a href="#l-78">#</a> [01:36] &lt;zcorpan&gt; ah, its collision detection explains some bugs indeed</li>
+ <li id="l-79"><a href="#l-79">#</a> [01:37] * Joins: aroben (i=adamrobe@nat/apple/x-3235a9c15e9fd8db)</li>
+ <li id="l-80"><a href="#l-80">#</a> [01:37] * Quits: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-81"><a href="#l-81">#</a> [01:37] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-82" _a="zcorpan"><a href="#l-82">#</a> [01:42] &lt;zcorpan&gt; good stuff in there</li>
+ <li id="l-83"><a href="#l-83">#</a> [01:43] * Joins: KevinMarks (i=KevinMar@nat/google/x-474680ac7f54d202)</li>
+ <li id="l-84"><a href="#l-84">#</a> [01:44] * Quits: Toolskyn_ (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Connection timed out)</li>
+ <li id="l-85" _a="zcorpan"><a href="#l-85">#</a> [01:57] &lt;zcorpan&gt; xmoto is open source... but it doesn't have the same physics as elastomania at all</li>
+ <li id="l-86"><a href="#l-86">#</a> [02:02] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-87"><a href="#l-87">#</a> [02:05] * Quits: Welly (n=Welly@62-31-160-20.cable.ubr11.azte.blueyonder.co.uk) (&quot;Computer went to sleep&quot;)</li>
+ <li id="l-88"><a href="#l-88">#</a> [02:13] * Joins: yod (n=ot@softbank221018155222.bbtec.net)</li>
+ <li id="l-89"><a href="#l-89">#</a> [02:20] * Quits: bzed (n=bzed@dslb-084-059-099-088.pools.arcor-ip.net) (&quot;Leaving&quot;)</li>
+ <li id="l-90"><a href="#l-90">#</a> [02:23] * Quits: weinigLap (i=weinig@nat/apple/x-bc8b1335d980861d) (Remote closed the connection)</li>
+ <li id="l-91"><a href="#l-91">#</a> [02:24] * Joins: weinigLap (i=weinig@nat/apple/x-9fd4c6da5c3b0a4d)</li>
+ <li id="l-92"><a href="#l-92">#</a> [02:36] * Quits: weinigLap (i=weinig@nat/apple/x-9fd4c6da5c3b0a4d) (Remote closed the connection)</li>
+ <li id="l-93"><a href="#l-93">#</a> [02:37] * Joins: weinigLap (i=weinig@nat/apple/x-cf5f6a2e9b5be182)</li>
+ <li id="l-94"><a href="#l-94">#</a> [02:39] * Quits: kingryan (n=kingryan@corp.technorati.com)</li>
+ <li id="l-95"><a href="#l-95">#</a> [02:40] * Quits: weinigLap (i=weinig@nat/apple/x-cf5f6a2e9b5be182) (Client Quit)</li>
+ <li id="l-96"><a href="#l-96">#</a> [02:41] * Quits: aroben (i=adamrobe@nat/apple/x-3235a9c15e9fd8db)</li>
+ <li id="l-97"><a href="#l-97">#</a> [02:50] * Parts: zcorpan (n=zcorpan@84-216-43-255.sprayadsl.telenor.se)</li>
+ <li id="l-98"><a href="#l-98">#</a> [02:50] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Connection timed out)</li>
+ <li id="l-99"><a href="#l-99">#</a> [03:17] * Joins: weinigLap (i=weinig@nat/apple/x-9bfcbf9e2fd47b40)</li>
+ <li id="l-100"><a href="#l-100">#</a> [03:25] * Joins: aroben (i=adamrobe@nat/apple/x-28f9203a9eff5be4)</li>
+ <li id="l-101"><a href="#l-101">#</a> [03:26] * Quits: aroben (i=adamrobe@nat/apple/x-28f9203a9eff5be4) (Client Quit)</li>
+ <li id="l-102"><a href="#l-102">#</a> [03:27] * Joins: aroben (i=adamrobe@nat/apple/x-2feed6bc00425d0d)</li>
+ <li id="l-103"><a href="#l-103">#</a> [03:31] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-104"><a href="#l-104">#</a> [04:10] * Joins: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-105" _a="moeffju[Work]"><a href="#l-105">#</a> [04:30] * moeffju[Work] is now known as moeffju[ZzZz]</li>
+ <li id="l-106"><a href="#l-106">#</a> [04:53] * Quits: othermaciej (i=mjs@nat/apple/x-2babe6d794088105)</li>
+ <li id="l-107"><a href="#l-107">#</a> [04:55] * Quits: dbaron (n=dbaron@corp-242.mountainview.mozilla.com) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-108"><a href="#l-108">#</a> [04:58] * Quits: jruderman (n=jruderma@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-109"><a href="#l-109">#</a> [05:03] * Quits: Dashiva (i=Dashiva@v035b.studby.ntnu.no)</li>
+ <li id="l-110"><a href="#l-110">#</a> [05:04] * Joins: othermaciej (i=mjs@nat/apple/x-6c1f5e9e0dae2327)</li>
+ <li id="l-111"><a href="#l-111">#</a> [05:05] * Quits: h3h (n=w3rd@cpe-66-75-149-197.san.res.rr.com)</li>
+ <li id="l-112"><a href="#l-112">#</a> [05:08] * Joins: Dashiva (i=Dashiva@v035b.studby.ntnu.no)</li>
+ <li id="l-113"><a href="#l-113">#</a> [05:21] * Quits: othermaciej (i=mjs@nat/apple/x-6c1f5e9e0dae2327) (Read error: 110 (Connection timed out))</li>
+ <li id="l-114"><a href="#l-114">#</a> [05:23] * Joins: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-115"><a href="#l-115">#</a> [05:43] * Joins: MikeSmith (n=MikeSmit@tea12.w3.mag.keio.ac.jp)</li>
+ <li id="l-116" _a="MikeSmith"><a href="#l-116">#</a> [05:59] &lt;MikeSmith&gt; Hixie - you there?</li>
+ <li id="l-117" _a="MikeSmith"><a href="#l-117">#</a> [05:59] &lt;MikeSmith&gt; wanted to ask about meanings of flags/fields in html5 checkin message</li>
+ <li id="l-118"><a href="#l-118">#</a> [06:08] * Joins: htmlr (n=cjb@203-158-58-245.dyn.iinet.net.au)</li>
+ <li id="l-119"><a href="#l-119">#</a> [06:09] * Quits: weinigLap (i=weinig@nat/apple/x-9bfcbf9e2fd47b40)</li>
+ <li id="l-120"><a href="#l-120">#</a> [06:32] * Joins: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-121"><a href="#l-121">#</a> [06:33] * Quits: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net) (Remote closed the connection)</li>
+ <li id="l-122"><a href="#l-122">#</a> [06:34] * Joins: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-123"><a href="#l-123">#</a> [06:43] * Joins: othermaciej (n=mjs@c-67-164-12-146.hsd1.ca.comcast.net)</li>
+ <li id="l-124"><a href="#l-124">#</a> [07:02] * Quits: othermaciej (n=mjs@c-67-164-12-146.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-125" _a="hsivonen"><a href="#l-125">#</a> [07:08] &lt;hsivonen&gt; how testable is the HTML5 tokenizer these days? are the tokenizer tests in html5lib designed to run without a tree builder setting the content model flag?</li>
+ <li id="l-126" _a="hsivonen"><a href="#l-126">#</a> [07:08] &lt;hsivonen&gt; testable on its own, that is</li>
+ <li id="l-127"><a href="#l-127">#</a> [07:14] * Quits: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-128"><a href="#l-128">#</a> [07:15] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-129"><a href="#l-129">#</a> [07:28] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-130"><a href="#l-130">#</a> [07:30] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-131" _a="Hixie" _r="MikeSmith"><a href="#l-131">#</a> [07:32] &lt;Hixie&gt; MikeSmith: see the web-apps-tracker</li>
+ <li id="l-132" _a="MikeSmith"><a href="#l-132">#</a> [08:07] &lt;MikeSmith&gt; Hixie - thanks ... looking now</li>
+ <li id="l-133" _a="MikeSmith"><a href="#l-133">#</a> [08:10] &lt;MikeSmith&gt; Hixie - I know already about the browser flags in square brackets ... was wondering about the number in parens</li>
+ <li id="l-134" _a="Hixie"><a href="#l-134">#</a> [08:10] &lt;Hixie&gt; that's he stability</li>
+ <li id="l-135" _a="hsivonen" _r="Hixie"><a href="#l-135">#</a> [08:12] &lt;hsivonen&gt; Hixie: are your tokenizer tests applicable without a tree builder? that is, can I develop a tokenizer first and prove that I pass the semiofficial tests before I develop a suite of tree builder?</li>
+ <li id="l-136" _a="hsivonen"><a href="#l-136">#</a> [08:12] * hsivonen has a plan for 4 or 5 tree builder subclasses</li>
+ <li id="l-137" _a="Hixie"><a href="#l-137">#</a> [08:13] &lt;Hixie&gt; i believe there are tokeniser tests, but i didn't write them</li>
+ <li id="l-138" _a="MikeSmith"><a href="#l-138">#</a> [08:13] &lt;MikeSmith&gt; Hixie - OK ... stability values defined anywhere (mostly seems to be either 0 or 2 in checkin descriptions)</li>
+ <li id="l-139" _a="Hixie" _r="hsivonen"><a href="#l-139">#</a> [08:13] &lt;Hixie&gt; hsivonen: i assumed that most people would not write tokenisers exactly per spec</li>
+ <li id="l-140" _a="hsivonen" _r="Hixie"><a href="#l-140">#</a> [08:13] &lt;hsivonen&gt; Hixie: oh. I thought you had a tokenizer test suite</li>
+ <li id="l-141" _a="othermaciej"><a href="#l-141">#</a> [08:13] &lt;othermaciej&gt; presumably only the actual tree output is normative</li>
+ <li id="l-142" _a="othermaciej"><a href="#l-142">#</a> [08:14] &lt;othermaciej&gt; but some tokenizer issues must inevitably affect the DOM, so end-to-end tests could be made</li>
+ <li id="l-143" _a="Hixie" _r="MikeSmith"><a href="#l-143">#</a> [08:14] &lt;Hixie&gt; MikeSmith: 0 = experimental, 1 = unstable, 2 = has implementations, 3 = has stable implementations</li>
+ <li id="l-144"><a href="#l-144">#</a> [08:14] * Quits: aroben (i=adamrobe@nat/apple/x-2feed6bc00425d0d)</li>
+ <li id="l-145" _a="Hixie" _r="hsivonen"><a href="#l-145">#</a> [08:15] &lt;Hixie&gt; hsivonen: my tokeniser wasn't an implemenatation of the spec -- e.g. it did some preprocessing magic for collecting characters together and separating whitespace from non-whitespace depending on the tree constructor mode</li>
+ <li id="l-146" _a="hsivonen" _r="Hixie"><a href="#l-146">#</a> [08:15] &lt;hsivonen&gt; Hixie: how do you mean not exactly per spec? I intend to use the runtime stack for implicit state instead of an explicit state variable. Mike Day suggested making a table-driven DFA, but I'm not sure that makes sense in terms of optimizing Java performance</li>
+ <li id="l-147" _a="Hixie" _r="hsivonen"><a href="#l-147">#</a> [08:15] &lt;Hixie&gt; hsivonen: so any tests i had for that wouldn't match the spec</li>
+ <li id="l-148" _a="hsivonen"><a href="#l-148">#</a> [08:15] &lt;hsivonen&gt; oh</li>
+ <li id="l-149" _a="MikeSmith"><a href="#l-149">#</a> [08:15] &lt;MikeSmith&gt; Hixie - thanks</li>
+ <li id="l-150" _a="Hixie"><a href="#l-150">#</a> [08:15] &lt;Hixie&gt; np</li>
+ <li id="l-151" _a="hsivonen" _r="othermaciej"><a href="#l-151">#</a> [08:16] &lt;hsivonen&gt; othermaciej: I do intend to test the whole thing with a tree builder eventually</li>
+ <li id="l-152" _a="hsivonen"><a href="#l-152">#</a> [08:17] &lt;hsivonen&gt; (although I am hoping to write the tree building stuff one with pluggable tree builder-specific back ends so that there's really only one tree builder to test instead of 4 or 5)</li>
+ <li id="l-153" _a="hsivonen"><a href="#l-153">#</a> [08:17] &lt;hsivonen&gt; s/stuff one/stuff once/</li>
+ <li id="l-154"><a href="#l-154">#</a> [08:19] * Joins: KevinMarks (n=KevinMar@h-68-164-93-9.snvacaid.dynamic.covad.net)</li>
+ <li id="l-155"><a href="#l-155">#</a> [08:19] * Joins: aroben (i=adamrobe@nat/apple/x-49d798d480fe2de5)</li>
+ <li id="l-156"><a href="#l-156">#</a> [08:52] * Quits: aroben (i=adamrobe@nat/apple/x-49d798d480fe2de5) (Read error: 110 (Connection timed out))</li>
+ <li id="l-157"><a href="#l-157">#</a> [09:00] * Joins: hendry (n=hendry@91.84.53.136)</li>
+ <li id="l-158"><a href="#l-158">#</a> [09:12] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-159"><a href="#l-159">#</a> [09:34] * Joins: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com)</li>
+ <li id="l-160"><a href="#l-160">#</a> [09:36] * Quits: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com) (Client Quit)</li>
+ <li id="l-161"><a href="#l-161">#</a> [09:36] * Joins: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com)</li>
+ <li id="l-162"><a href="#l-162">#</a> [09:47] * Quits: gavin_ (n=gavin@firefox/developer/gavin) (Read error: 110 (Connection timed out))</li>
+ <li id="l-163" _a="annevk"><a href="#l-163">#</a> [09:49] &lt;annevk&gt; we're doing SQL now?!</li>
+ <li id="l-164"><a href="#l-164">#</a> [09:54] * Quits: yod (n=ot@softbank221018155222.bbtec.net) (&quot;Leaving&quot;)</li>
+ <li id="l-165"><a href="#l-165">#</a> [09:54] * Quits: peepo (n=Jay@host81-132-186-246.range81-132.btcentralplus.com) (&quot;later&quot;)</li>
+ <li id="l-166" _a="virtuelv" _r="annevk"><a href="#l-166">#</a> [09:59] &lt;virtuelv&gt; annevk: ?</li>
+ <li id="l-167" _a="virtuelv"><a href="#l-167">#</a> [09:59] &lt;virtuelv&gt; SQL in HTML5?</li>
+ <li id="l-168" _a="virtuelv"><a href="#l-168">#</a> [09:59] * virtuelv confused</li>
+ <li id="l-169" class="flagged" _a="annevk"><a href="#l-169">#</a> [10:04] &lt;annevk&gt; <a href="http://html5.org/tools/web-apps-tracker?from=837&amp;to=838">http://html5.org/tools/web-apps-tracker?from=837&amp;to=838</a></li>
+ <li id="l-170"><a href="#l-170">#</a> [10:15] * Joins: met_ (n=Hassman@b14-4.vscht.cz)</li>
+ <li id="l-171" _a="annevk"><a href="#l-171">#</a> [10:24] &lt;annevk&gt; I think it would be easier if the second argument was an array</li>
+ <li id="l-172" _a="annevk"><a href="#l-172">#</a> [10:24] &lt;annevk&gt; of executeSql()</li>
+ <li id="l-173" _a="annevk"><a href="#l-173">#</a> [10:25] &lt;annevk&gt; Methods with an arbitrary amount of arguments are hard to construct on the fly</li>
+ <li id="l-174"><a href="#l-174">#</a> [10:36] * Quits: hendry (n=hendry@91.84.53.136) (&quot;leaving&quot;)</li>
+ <li id="l-175"><a href="#l-175">#</a> [10:36] * Joins: bzed (n=bzed@dslb-084-059-117-253.pools.arcor-ip.net)</li>
+ <li id="l-176"><a href="#l-176">#</a> [10:39] * Joins: mikeday (n=mikeday@60.224.50.129)</li>
+ <li id="l-177"><a href="#l-177">#</a> [10:44] * Joins: maikmerten (n=maikmert@Lafc6.l.pppool.de)</li>
+ <li id="l-178" _a="mikeday" _r="so"><a href="#l-178">#</a> [10:44] &lt;mikeday&gt; so, in HTML5, http-equiv is only kept around for backward compatibility with refresh, yeah?</li>
+ <li id="l-179"><a href="#l-179">#</a> [10:45] * Joins: weinigLap_ (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-180" _a="annevk"><a href="#l-180">#</a> [10:48] &lt;annevk&gt; it's actually conforming to use it</li>
+ <li id="l-181" _a="mikeday"><a href="#l-181">#</a> [10:49] &lt;mikeday&gt; what about http-equiv=&quot;content-type&quot; ?</li>
+ <li id="l-182" _a="annevk"><a href="#l-182">#</a> [10:50] &lt;annevk&gt; that's replaced with &lt;meta charset=utf-8&gt;</li>
+ <li id="l-183" _a="annevk" _r="well"><a href="#l-183">#</a> [10:50] &lt;annevk&gt; well, replaced with &lt;meta charset&gt;</li>
+ <li id="l-184" _a="mikeday" _r="right"><a href="#l-184">#</a> [10:50] &lt;mikeday&gt; right, so pages that still use it can not be valid HTML5? (for whatever definition of valid we are using this week)</li>
+ <li id="l-185" _a="othermaciej"><a href="#l-185">#</a> [10:51] &lt;othermaciej&gt; I think &lt;meta http-equiv=&quot;content-type&quot;&gt; should remain conforming for charset purposes</li>
+ <li id="l-186" _a="othermaciej"><a href="#l-186">#</a> [10:51] &lt;othermaciej&gt; so your content can be conforming but still degrade gracefully</li>
+ <li id="l-187"><a href="#l-187">#</a> [10:52] * Quits: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-188"><a href="#l-188">#</a> [10:52] * Joins: hendry (n=hendry@91.84.53.136)</li>
+ <li id="l-189" _a="othermaciej" _r="annevk"><a href="#l-189">#</a> [10:52] &lt;othermaciej&gt; annevk: Function.call in JS lets you call any function with a variable number of arguments with an array instead</li>
+ <li id="l-190" _a="mikeday"><a href="#l-190">#</a> [10:52] &lt;mikeday&gt; that would help reduce confusion for authors following existing tutorials</li>
+ <li id="l-191" _a="othermaciej" _r="annevk"><a href="#l-191">#</a> [10:52] &lt;othermaciej&gt; annevk: but I don't believe there's a way to do the converse</li>
+ <li id="l-192" _a="annevk" _r="mikeday"><a href="#l-192">#</a> [10:53] &lt;annevk&gt; mikeday, valid also requires &lt;!Doctype html&gt;</li>
+ <li id="l-193" _a="mikeday"><a href="#l-193">#</a> [10:53] &lt;mikeday&gt; true.</li>
+ <li id="l-194" class="flagged" _a="annevk" _r="othermaciej"><a href="#l-194">#</a> [10:54] &lt;annevk&gt; othermaciej, when would you want to do the reverse?</li>
+ <li id="l-195" _a="annevk"><a href="#l-195">#</a> [10:55] &lt;annevk&gt; how do you set CVSROOT in Ubuntu?</li>
+ <li id="l-196" class="flagged" _a="othermaciej" _r="annevk"><a href="#l-196">#</a> [10:55] &lt;othermaciej&gt; annevk: I don't think you would want to do the reverse, but it makes functions w/ variable arguments more useful than functions that take an array</li>
+ <li id="l-197" _a="othermaciej"><a href="#l-197">#</a> [10:55] &lt;othermaciej&gt; if you only have one</li>
+ <li id="l-198" _a="othermaciej"><a href="#l-198">#</a> [10:55] &lt;othermaciej&gt; and I think I mean Function.apply, not call</li>
+ <li id="l-199" class="flagged" _a="mikeday"><a href="#l-199">#</a> [10:56] &lt;mikeday&gt; export CVSROOT=?</li>
+ <li id="l-200" _a="annevk" _r="mikeday"><a href="#l-200">#</a> [10:57] &lt;annevk&gt; mikeday, cool</li>
+ <li id="l-201" _a="annevk"><a href="#l-201">#</a> [10:57] * annevk continues fooling around</li>
+ <li id="l-202" _a="annevk"><a href="#l-202">#</a> [10:58] * annevk is trying to switch to Ubuntu</li>
+ <li id="l-203"><a href="#l-203">#</a> [11:02] * Joins: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-204"><a href="#l-204">#</a> [11:02] * Quits: weinigLap_ (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-205" _a="annevk" _r="othermaciej"><a href="#l-205">#</a> [11:02] &lt;annevk&gt; othermaciej, the good thing about not allowing content-type is that there's only one way to do it</li>
+ <li id="l-206" _a="annevk"><a href="#l-206">#</a> [11:02] &lt;annevk&gt; (in the markup, as you can still set it through HTTP)</li>
+ <li id="l-207" _a="Hixie"><a href="#l-207">#</a> [11:03] &lt;Hixie&gt; i can't think of a single time i've ever wanted to call a sql evaluator with a variable number of arguments -- it's not like getElementsByClassName() in that respect</li>
+ <li id="l-208" _a="mikeday" _r="annevk"><a href="#l-208">#</a> [11:03] &lt;mikeday&gt; annevk, what are you using now?</li>
+ <li id="l-209" _a="annevk"><a href="#l-209">#</a> [11:03] &lt;annevk&gt; ubuntu</li>
+ <li id="l-210" _a="annevk"><a href="#l-210">#</a> [11:03] &lt;annevk&gt; I used to use Windows XP</li>
+ <li id="l-211" _a="mikeday"><a href="#l-211">#</a> [11:03] &lt;mikeday&gt; ah.</li>
+ <li id="l-212" _a="annevk"><a href="#l-212">#</a> [11:03] &lt;annevk&gt; I also have a Windows XP installation on this computer</li>
+ <li id="l-213" _a="annevk"><a href="#l-213">#</a> [11:03] &lt;annevk&gt; but I hope to leave it alone</li>
+ <li id="l-214" _a="mikeday"><a href="#l-214">#</a> [11:04] &lt;mikeday&gt; vmware is handy for testing IE bugs while still running Linux</li>
+ <li id="l-215" _a="mikeday"><a href="#l-215">#</a> [11:04] &lt;mikeday&gt; if you've got gcc installed, you can always try building my stub code: libhtml.sf.net</li>
+ <li id="l-216" _a="annevk" _r="yeah"><a href="#l-216">#</a> [11:04] &lt;annevk&gt; yeah, I got IE6 and IE7 running</li>
+ <li id="l-217" _a="mikeday"><a href="#l-217">#</a> [11:04] &lt;mikeday&gt; (you'll need svn to check it out, not cvs)</li>
+ <li id="l-218" _a="annevk"><a href="#l-218">#</a> [11:05] &lt;annevk&gt; I need CVS for W3C stuff</li>
+ <li id="l-219" _a="othermaciej" _r="annevk"><a href="#l-219">#</a> [11:05] &lt;othermaciej&gt; annevk: I think &quot;only one way to do it&quot; is a weak advantage compared to graceful degradation</li>
+ <li id="l-220" _a="othermaciej"><a href="#l-220">#</a> [11:06] &lt;othermaciej&gt; in fact, I'm not sure &lt;meta charset=&quot;&quot;&gt; is really justifiable</li>
+ <li id="l-221" _a="othermaciej"><a href="#l-221">#</a> [11:06] &lt;othermaciej&gt; it's nicer syntax but it does not degrade in older browsers at all</li>
+ <li id="l-222" _a="annevk"><a href="#l-222">#</a> [11:06] &lt;annevk&gt; browsers have to support it to support the web</li>
+ <li id="l-223" _a="annevk"><a href="#l-223">#</a> [11:06] &lt;annevk&gt; in that sense it degrades perfectly</li>
+ <li id="l-224" _a="othermaciej"><a href="#l-224">#</a> [11:06] &lt;othermaciej&gt; &lt;meta charset&gt;?</li>
+ <li id="l-225" _a="annevk"><a href="#l-225">#</a> [11:07] &lt;annevk&gt; yeah</li>
+ <li id="l-226" _a="othermaciej"><a href="#l-226">#</a> [11:07] &lt;othermaciej&gt; what current browsers support it?</li>
+ <li id="l-227" _a="othermaciej"><a href="#l-227">#</a> [11:07] &lt;othermaciej&gt; I guess I just did not know about it</li>
+ <li id="l-228" _a="Hixie"><a href="#l-228">#</a> [11:07] &lt;Hixie&gt; all of them</li>
+ <li id="l-229" _a="mikeday" _r="hmm"><a href="#l-229">#</a> [11:07] &lt;mikeday&gt; hmm, in the charset sniffing, &lt;!--&gt; is not a complete comment, and &lt;!----&gt; is, but what about &lt;!---&gt; ?</li>
+ <li id="l-230" _a="Hixie"><a href="#l-230">#</a> [11:07] &lt;Hixie&gt; specifically they support &lt;meta htt-equiv=content-type content=text/html; charset=utf-8&gt;</li>
+ <li id="l-231" _a="Hixie"><a href="#l-231">#</a> [11:07] &lt;Hixie&gt; (note the lack of quotes)</li>
+ <li id="l-232" _a="othermaciej"><a href="#l-232">#</a> [11:08] &lt;othermaciej&gt; that's amusing</li>
+ <li id="l-233" _a="annevk" _r="mikeday"><a href="#l-233">#</a> [11:08] &lt;annevk&gt; mikeday, also not complete</li>
+ <li id="l-234" _a="othermaciej" _r="ok"><a href="#l-234">#</a> [11:08] &lt;othermaciej&gt; ok, no real objection then</li>
+ <li id="l-235" _a="mikeday" _r="annevk"><a href="#l-235">#</a> [11:09] &lt;mikeday&gt; annevk, the spec could be clearer on that point :)</li>
+ <li id="l-236" _a="mikeday" _r="or"><a href="#l-236">#</a> [11:09] &lt;mikeday&gt; or, I could be smarter</li>
+ <li id="l-237" _a="mikeday"><a href="#l-237">#</a> [11:09] &lt;mikeday&gt; I missed the bit that said after the existing --</li>
+ <li id="l-238" _a="annevk"><a href="#l-238">#</a> [11:09] &lt;annevk&gt; (note that &lt;!--&gt; will become a comment in due course)</li>
+ <li id="l-239" _a="annevk"><a href="#l-239">#</a> [11:10] &lt;annevk&gt; (to minimize differences between quirks and standards mode)</li>
+ <li id="l-240" _a="mikeday"><a href="#l-240">#</a> [11:10] &lt;mikeday&gt; &quot;Advance the position pointer so that it points at the first 0x3E byte which is preceeded by two 0x2D bytes and comes after the second 0x2D byte that was found.&quot;</li>
+ <li id="l-241"><a href="#l-241">#</a> [11:10] * Joins: zcorpan (n=zcorpan@84-216-42-16.sprayadsl.telenor.se)</li>
+ <li id="l-242" _a="mikeday"><a href="#l-242">#</a> [11:10] &lt;mikeday&gt; it could be clearer that the two 0x2D bytes come after the second 0x2D byte that was found</li>
+ <li id="l-243" _a="mikeday"><a href="#l-243">#</a> [11:10] &lt;mikeday&gt; not just the first 0x3E byte coming after the second 0x2D byte that was found.</li>
+ <li id="l-244" _a="Hixie"><a href="#l-244">#</a> [11:10] &lt;Hixie&gt; send mail</li>
+ <li id="l-245" _a="mikeday"><a href="#l-245">#</a> [11:11] * mikeday sends</li>
+ <li id="l-246" _a="Hixie"><a href="#l-246">#</a> [11:11] &lt;Hixie&gt; thanks</li>
+ <li id="l-247" _a="mikeday"><a href="#l-247">#</a> [11:11] &lt;mikeday&gt; (although if comment definition will change, perhaps charset sniffing will need to change as well)</li>
+ <li id="l-248" _a="annevk" _r="yeah"><a href="#l-248">#</a> [11:12] &lt;annevk&gt; yeah, likely</li>
+ <li id="l-249" _a="annevk"><a href="#l-249">#</a> [11:12] &lt;annevk&gt; at least, it would make sense if they behaved the same :)</li>
+ <li id="l-250" _a="mikeday"><a href="#l-250">#</a> [11:16] &lt;mikeday&gt; I'm trying to write a little state machine for charset sniffing,</li>
+ <li id="l-251" _a="mikeday"><a href="#l-251">#</a> [11:16] &lt;mikeday&gt; as it's a lot easier than writing a state machine for complete HTML tokenisation :)</li>
+ <li id="l-252" _a="mikeday"><a href="#l-252">#</a> [11:35] * mikeday is now known as mikeday|away</li>
+ <li id="l-253" _a="zcorpan"><a href="#l-253">#</a> [11:38] &lt;zcorpan&gt; what's the use-case for a client-side database?</li>
+ <li id="l-254"><a href="#l-254">#</a> [11:50] * Joins: tantek (n=tantek@c-67-188-209-131.hsd1.ca.comcast.net)</li>
+ <li id="l-255" _a="othermaciej"><a href="#l-255">#</a> [11:55] * othermaciej is now known as om_sleep</li>
+ <li id="l-256"><a href="#l-256">#</a> [11:57] * Quits: hendry (n=hendry@91.84.53.136) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-257"><a href="#l-257">#</a> [11:57] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-258"><a href="#l-258">#</a> [11:57] * Quits: jgraham (n=jgraham@85-210-7-238.dsl.pipex.com) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-259"><a href="#l-259">#</a> [11:57] * Quits: hsivonen (n=hsivonen@kekkonen.cs.hut.fi) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-260"><a href="#l-260">#</a> [11:57] * Quits: laug (n=laug@poy.chewa.net) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-261"><a href="#l-261">#</a> [11:57] * Quits: didymos (i=jho@rapwap.razor.dk) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-262"><a href="#l-262">#</a> [11:57] * Quits: deltab (n=deltab@82-46-154-93.cable.ubr02.smal.blueyonder.co.uk) (kubrick.freenode.net irc.freenode.net)</li>
+ <li id="l-263"><a href="#l-263">#</a> [11:58] * Joins: hendry (n=hendry@91.84.53.136)</li>
+ <li id="l-264"><a href="#l-264">#</a> [11:58] * Joins: mpt (n=mpt@canonical/launchpad/mpt)</li>
+ <li id="l-265"><a href="#l-265">#</a> [11:58] * Joins: jgraham (n=jgraham@85-210-7-238.dsl.pipex.com)</li>
+ <li id="l-266"><a href="#l-266">#</a> [11:58] * Joins: hsivonen (n=hsivonen@kekkonen.cs.hut.fi)</li>
+ <li id="l-267"><a href="#l-267">#</a> [11:58] * Joins: didymos (i=jho@rapwap.razor.dk)</li>
+ <li id="l-268"><a href="#l-268">#</a> [11:58] * Joins: laug (n=laug@poy.chewa.net)</li>
+ <li id="l-269"><a href="#l-269">#</a> [11:58] * Joins: deltab (n=deltab@82-46-154-93.cable.ubr02.smal.blueyonder.co.uk)</li>
+ <li id="l-270"><a href="#l-270">#</a> [12:03] * Quits: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net) (No route to host)</li>
+ <li id="l-271" _a="moeffju[ZzZz]"><a href="#l-271">#</a> [12:06] * moeffju[ZzZz] is now known as moeffju</li>
+ <li id="l-272" _a="hsivonen" _r="mikeday|away"><a href="#l-272">#</a> [12:08] &lt;hsivonen&gt; mikeday|away: did you already investigate the feasibility of a table-driven DFA for the tokenizer?</li>
+ <li id="l-273" _a="hsivonen"><a href="#l-273">#</a> [12:09] &lt;hsivonen&gt; SQL! whoa! how will that one interoperate without requiring every browser to embed sqlite?</li>
+ <li id="l-274" _a="zcorpan"><a href="#l-274">#</a> [12:10] &lt;zcorpan&gt; who requested it?</li>
+ <li id="l-275" _a="hsivonen"><a href="#l-275">#</a> [12:10] &lt;hsivonen&gt; SQL isn't exactly the best example of an interoperably implemented standard</li>
+ <li id="l-276" _a="annevk"><a href="#l-276">#</a> [12:12] &lt;annevk&gt; got a point there...</li>
+ <li id="l-277" _a="hsivonen"><a href="#l-277">#</a> [12:12] * hsivonen is still shying away from a table-driven DFA in Java</li>
+ <li id="l-278" _a="annevk" _r="zcorpan"><a href="#l-278">#</a> [12:12] &lt;annevk&gt; zcorpan, Mozilla has it</li>
+ <li id="l-279" _a="annevk"><a href="#l-279">#</a> [12:12] &lt;annevk&gt; not sure if they requested it</li>
+ <li id="l-280"><a href="#l-280">#</a> [12:19] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-281"><a href="#l-281">#</a> [12:32] * Joins: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-282" _a="mikeday|away"><a href="#l-282">#</a> [12:41] * mikeday|away is now known as mikeday</li>
+ <li id="l-283" _a="mikeday" _r="hsivonen"><a href="#l-283">#</a> [12:43] &lt;mikeday&gt; hsivonen, not sure yet, the state machine in the spec is too complex as is, needs to be simplified first</li>
+ <li id="l-284" _a="mikeday" _r="hsivonen"><a href="#l-284">#</a> [12:44] &lt;mikeday&gt; hsivonen, I'm just trying to get something basic working to implement &lt;meta charset&gt; sniffing</li>
+ <li id="l-285" _a="mikeday"><a href="#l-285">#</a> [12:44] &lt;mikeday&gt; but it won't be implemented as an array, probably just use goto</li>
+ <li id="l-286" _a="mikeday"><a href="#l-286">#</a> [12:44] &lt;mikeday&gt; and it only needs to apply to a buffer of fixed size, so blocking on input won't be an issue.</li>
+ <li id="l-287" _a="hsivonen" _r="mikeday"><a href="#l-287">#</a> [12:50] &lt;hsivonen&gt; mikeday: is your main loop of control going to be inside the parser as in Java SAX parsers or outside as in expat?</li>
+ <li id="l-288" _a="mikeday"><a href="#l-288">#</a> [12:50] &lt;mikeday&gt; outside</li>
+ <li id="l-289" _a="mikeday"><a href="#l-289">#</a> [12:51] &lt;mikeday&gt; can still support SAX that way</li>
+ <li id="l-290" _a="mikeday"><a href="#l-290">#</a> [12:52] &lt;mikeday&gt; and more convenient for integration with some input sources, eg. curl</li>
+ <li id="l-291" _a="hsivonen"><a href="#l-291">#</a> [12:52] &lt;hsivonen&gt; I've been thinking if I should decouple the loop from the tokenizer on the Java side, but I'll probably go with the traditional java.io/org.xml.sax model on the inside</li>
+ <li id="l-292"><a href="#l-292">#</a> [12:53] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-293" _a="mikeday"><a href="#l-293">#</a> [12:53] &lt;mikeday&gt; you've got a few more options in Java, but fitting in with SAX makes perfect sense.</li>
+ <li id="l-294"><a href="#l-294">#</a> [12:54] * Joins: arve (n=arve@213.236.208.247)</li>
+ <li id="l-295" _a="arve"><a href="#l-295">#</a> [12:54] * arve is now known as virtuelv2</li>
+ <li id="l-296" _a="hsivonen" _r="mikeday"><a href="#l-296">#</a> [12:56] &lt;hsivonen&gt; mikeday: just about all XML parsing in Java happens with the parser pulling stuff from java.io.InputStream instead of an app-owned loop pushing buffers to a parser</li>
+ <li id="l-297" _a="mikeday" _r="yeah"><a href="#l-297">#</a> [12:56] &lt;mikeday&gt; yeah, most C libraries work like that as well</li>
+ <li id="l-298" _a="mikeday"><a href="#l-298">#</a> [12:56] &lt;mikeday&gt; then sometimes end up trying to hack in support for progressive parsing later</li>
+ <li id="l-299" _a="mikeday"><a href="#l-299">#</a> [12:56] &lt;mikeday&gt; I'm going to try and do it the other way around from the beginning, and see how far I get :)</li>
+ <li id="l-300" _a="mikeday"><a href="#l-300">#</a> [12:58] &lt;mikeday&gt; but starting with charset sniffing, as that's easier and doesn't involve input at all</li>
+ <li id="l-301" _a="mikeday"><a href="#l-301">#</a> [12:58] &lt;mikeday&gt; as you only apply it to the bytes that you already have in the buffer.</li>
+ <li id="l-302" _a="hsivonen"><a href="#l-302">#</a> [12:59] &lt;hsivonen&gt; I'm a bit uncomfortable with the sniffing result depending on buffering</li>
+ <li id="l-303" _a="mikeday"><a href="#l-303">#</a> [12:59] &lt;mikeday&gt; tee hee, I found another bug in the spec: 0x3C 0x2D (ASCII '&lt;!')</li>
+ <li id="l-304" _a="hsivonen"><a href="#l-304">#</a> [12:59] &lt;hsivonen&gt; requiring the sniffer to read up to 512 until it finds the charset would be deterministic</li>
+ <li id="l-305" _a="mikeday" _r="yes"><a href="#l-305">#</a> [13:00] &lt;mikeday&gt; yes, mine will read up to 512 or EOF, whichever comes first.</li>
+ <li id="l-306" _a="mikeday" _r="hmm"><a href="#l-306">#</a> [13:01] &lt;mikeday&gt; hmm, actually mine will sometimes read past 512 at the moment</li>
+ <li id="l-307" _a="mikeday"><a href="#l-307">#</a> [13:01] &lt;mikeday&gt; do you think it would be best to clamp it at 512, regardless of how much has been read?</li>
+ <li id="l-308" _a="hsivonen"><a href="#l-308">#</a> [13:03] &lt;hsivonen&gt; I'd clamp to 512 to avoid results depending on buffering details.</li>
+ <li id="l-309" _a="hsivonen"><a href="#l-309">#</a> [13:03] &lt;hsivonen&gt; (those are hard to track down when something goes wrong)</li>
+ <li id="l-310" _a="mikeday" _r="right"><a href="#l-310">#</a> [13:03] &lt;mikeday&gt; right, sounds good.</li>
+ <li id="l-311" _a="mikeday" _r="min(buf-&gt;size"><a href="#l-311">#</a> [13:03] &lt;mikeday&gt; min(buf-&gt;size, 512) :)</li>
+ <li id="l-312"><a href="#l-312">#</a> [13:03] * Quits: htmlr (n=cjb@203-158-58-245.dyn.iinet.net.au)</li>
+ <li id="l-313" _a="mikeday" _r="hmm"><a href="#l-313">#</a> [13:05] &lt;mikeday&gt; hmm, with goto and macros you can make a decent state machine</li>
+ <li id="l-314" _a="mikeday"><a href="#l-314">#</a> [13:05] &lt;mikeday&gt; if you used labels-as-values gcc extension you could probably make it handle input buffering too</li>
+ <li id="l-315" _a="mikeday"><a href="#l-315">#</a> [13:06] &lt;mikeday&gt; basically defining a state machine mini-language in C</li>
+ <li id="l-316" _a="hsivonen" _r="mikeday"><a href="#l-316">#</a> [13:06] &lt;hsivonen&gt; mikeday: do you compile with GCC on Windows?</li>
+ <li id="l-317" _a="hsivonen"><a href="#l-317">#</a> [13:06] &lt;hsivonen&gt; or does MS support that GCC extension?</li>
+ <li id="l-318" _a="mikeday"><a href="#l-318">#</a> [13:06] &lt;mikeday&gt; I usually cross-compile Windows binaries on Linux using mingw32</li>
+ <li id="l-319" _a="mikeday"><a href="#l-319">#</a> [13:06] &lt;mikeday&gt; but I'll avoid using gcc extensions for now</li>
+ <li id="l-320" _a="mikeday"><a href="#l-320">#</a> [13:06] &lt;mikeday&gt; there's always someone out there not using gcc</li>
+ <li id="l-321" _a="mikeday"><a href="#l-321">#</a> [13:09] &lt;mikeday&gt; gcc also has case ranges: case 0x41 ... 0x5A:</li>
+ <li id="l-322" _a="mikeday"><a href="#l-322">#</a> [13:09] &lt;mikeday&gt; which would be quite handy in this case, as they would save me writing out 52 letters explicitly :/</li>
+ <li id="l-323" _a="gsnedders" _r="mikeday"><a href="#l-323">#</a> [13:10] &lt;gsnedders&gt; mikeday: no, you write code to write tedious code :)</li>
+ <li id="l-324" _a="mikeday"><a href="#l-324">#</a> [13:11] &lt;mikeday&gt; s/me/me or an automation under my control/</li>
+ <li id="l-325" _a="gsnedders"><a href="#l-325">#</a> [13:11] &lt;gsnedders&gt; :)</li>
+ <li id="l-326" _a="mikeday" _r="actually"><a href="#l-326">#</a> [13:11] &lt;mikeday&gt; actually, I'm curious to see if gcc generates any clever code for a switch statement on a byte value</li>
+ <li id="l-327" _a="mikeday"><a href="#l-327">#</a> [13:12] &lt;mikeday&gt; for example, does it generate a jump table by itself, or some other clever trick</li>
+ <li id="l-328" _a="Philip`"><a href="#l-328">#</a> [13:17] &lt;Philip`&gt; SELECT &quot;a&quot;||0;  - SQLite says &quot;a0&quot;, MySQL says 0, Postgres says column &quot;a&quot; does not exist; interoperably not great :-(</li>
+ <li id="l-329" _a="Dashiva"><a href="#l-329">#</a> [13:17] &lt;Dashiva&gt; You need 'a' for postgres, sadly</li>
+ <li id="l-330" _a="Dashiva"><a href="#l-330">#</a> [13:18] &lt;Dashiva&gt; I think oracle is the same</li>
+ <li id="l-331" _a="annevk"><a href="#l-331">#</a> [13:18] &lt;annevk&gt; SQL5 will safe us</li>
+ <li id="l-332" _a="Dashiva"><a href="#l-332">#</a> [13:18] &lt;Dashiva&gt; How many doctype states will -that- have ;)</li>
+ <li id="l-333" _a="moeffju"><a href="#l-333">#</a> [13:18] * moeffju is now known as moeffju[Work]</li>
+ <li id="l-334" _a="Philip`" _r="Dashiva"><a href="#l-334">#</a> [13:19] &lt;Philip`&gt; Dashiva: I'm guessing Postgres follows the standard, since MySQL doesn't and SQLite is slightly crazy</li>
+ <li id="l-335"><a href="#l-335">#</a> [13:19] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-336"><a href="#l-336">#</a> [13:21] * Quits: MikeSmith (n=MikeSmit@tea12.w3.mag.keio.ac.jp) (&quot;Get thee behind me, satan.&quot;)</li>
+ <li id="l-337"><a href="#l-337">#</a> [13:22] * Quits: virtuelv2 (n=arve@213.236.208.247) (Read error: 113 (No route to host))</li>
+ <li id="l-338"><a href="#l-338">#</a> [13:24] * Quits: jcgregorio (n=chatzill@adsl-072-148-043-048.sip.rmo.bellsouth.net) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.3/0000000000]&quot;)</li>
+ <li id="l-339" _a="Philip`" _r="Hixie"><a href="#l-339">#</a> [13:26] &lt;Philip`&gt; Hixie: I think variable number of arguments is useful whenever you want to add some abstracted interface, like with</li>
+ <li id="l-340" _a="Philip`"><a href="#l-340">#</a> [13:26] &lt;Philip`&gt;   function search(fields) {</li>
+ <li id="l-341" _a="Philip`"><a href="#l-341">#</a> [13:26] &lt;Philip`&gt;     db.execute(&quot;SELECT * FROM stuff WHERE &quot; + &quot; AND &quot;.join(name+&quot; = ?&quot; for name,value in fields), [ value for name,value in fields ]);</li>
+ <li id="l-342" _a="Philip`"><a href="#l-342">#</a> [13:26] &lt;Philip`&gt;   }</li>
+ <li id="l-343" _a="Philip`"><a href="#l-343">#</a> [13:26] &lt;Philip`&gt;   results = search([ ['name', n], ['age', 12], ['colour', c] ]);</li>
+ <li id="l-344" _a="mikeday"><a href="#l-344">#</a> [13:26] &lt;mikeday&gt; (where is this proposal to support SQL in JavaScript?)</li>
+ <li id="l-345" _a="Philip`" _r="(Er"><a href="#l-345">#</a> [13:26] &lt;Philip`&gt; (Er, that's probably a broken mix of JS and Python, though I suppose I might be lucky and it could be valid JS1.7)</li>
+ <li id="l-346" _a="Philip`"><a href="#l-346">#</a> [13:27] &lt;Philip`&gt; <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/section-sql.html">http://www.whatwg.org/specs/web-apps/current-work/multipage/section-sql.html</a></li>
+ <li id="l-347" _a="annevk" _r="mikeday"><a href="#l-347">#</a> [13:27] &lt;annevk&gt; mikeday, <a href="http://html5.org/tools/web-apps-tracker?from=837&amp;to=838">http://html5.org/tools/web-apps-tracker?from=837&amp;to=838</a></li>
+ <li id="l-348" _a="mikeday"><a href="#l-348">#</a> [13:28] &lt;mikeday&gt; &quot;A future version of this specification may define the exact SQL subset required in more detail.&quot;</li>
+ <li id="l-349" _a="mikeday"><a href="#l-349">#</a> [13:28] &lt;mikeday&gt; now there's an understatement :)</li>
+ <li id="l-350" _a="Philip`"><a href="#l-350">#</a> [13:29] &lt;Philip`&gt; I think the only interoperable subset of SQL and of existing SQL implementations is likely to be the empty set</li>
+ <li id="l-351" _a="Philip`" _r="Well"><a href="#l-351">#</a> [13:29] &lt;Philip`&gt; Well, maybe &quot;SELECT 1+1&quot; would work</li>
+ <li id="l-352" _a="Dashiva" _r="Philip`"><a href="#l-352">#</a> [13:29] &lt;Dashiva&gt; Philip`: Yeah, I finally found the part in SQL92 which mentions it</li>
+ <li id="l-353" _a="mikeday"><a href="#l-353">#</a> [13:31] &lt;mikeday&gt; &quot;SELECT * FROM table&quot; is probably more interoperable than 1+1</li>
+ <li id="l-354" _a="Philip`"><a href="#l-354">#</a> [13:31] &lt;Philip`&gt; I'd the practical effect would be that Firefox ships with support for the full SQLite syntax, so people write code assuming that, and other browsers have no choice but to use SQLite too, and then Microsoft would ship with Jet or whatever, and everyone would suffer pain, and then maybe someone would try to sort out the mess by defining a common subset but it'd be too late then</li>
+ <li id="l-355" _a="Philip`"><a href="#l-355">#</a> [13:31] &lt;Philip`&gt; *I'd guess</li>
+ <li id="l-356" _a="annevk"><a href="#l-356">#</a> [13:32] &lt;annevk&gt; at that point we get &quot;Web SQL 5&quot;</li>
+ <li id="l-357" _a="mikeday"><a href="#l-357">#</a> [13:33] &lt;mikeday&gt; why bother? I mean honestly, is SQL the best method for doing this?</li>
+ <li id="l-358" _a="zcorpan"><a href="#l-358">#</a> [13:34] * zcorpan doesn't understand the use-case for client side SQL</li>
+ <li id="l-359" _a="annevk" _r="&quot;best&quot"><a href="#l-359">#</a> [13:34] &lt;annevk&gt; &quot;best&quot; also includes what people are used to</li>
+ <li id="l-360" _a="annevk"><a href="#l-360">#</a> [13:34] &lt;annevk&gt; I think it's pretty awesome that techniques people are used to on the server can now be easily reused client side</li>
+ <li id="l-361" _a="annevk"><a href="#l-361">#</a> [13:35] &lt;annevk&gt; in theory you might even be able to share some code</li>
+ <li id="l-362" _a="mikeday"><a href="#l-362">#</a> [13:35] &lt;mikeday&gt; and in practice, you wouldn't</li>
+ <li id="l-363" _a="annevk" _r="yeah"><a href="#l-363">#</a> [13:35] &lt;annevk&gt; yeah, dunno about that either</li>
+ <li id="l-364" _a="annevk"><a href="#l-364">#</a> [13:35] &lt;annevk&gt; although some of the database design can be reused</li>
+ <li id="l-365" _a="Philip`"><a href="#l-365">#</a> [13:36] &lt;Philip`&gt; Like using XForms to integrate server-side and client-side processing of data?</li>
+ <li id="l-366" _a="annevk"><a href="#l-366">#</a> [13:36] &lt;annevk&gt; is there a better way to do relational data storage client side?</li>
+ <li id="l-367" _a="mikeday" _r="hmm"><a href="#l-367">#</a> [13:37] &lt;mikeday&gt; hmm, once you say relational, no, not really</li>
+ <li id="l-368" _a="Dashiva"><a href="#l-368">#</a> [13:37] &lt;Dashiva&gt; I'm not so worried about acid and all the fancy DB stuff, but SQL itself is a nice way to manipulate</li>
+ <li id="l-369" _a="annevk"><a href="#l-369">#</a> [13:37] &lt;annevk&gt; which also includes support for querying etc.</li>
+ <li id="l-370" _a="Philip`"><a href="#l-370">#</a> [13:38] &lt;Philip`&gt; It seems there are lots of libraries that hide the SQL behind an object-like interface, so maybe it'd be worth looking at those</li>
+ <li id="l-371" _a="mikeday"><a href="#l-371">#</a> [13:38] &lt;mikeday&gt; it just doesn't seem very webby, to me.</li>
+ <li id="l-372" _a="Philip`" _r="(Hmm"><a href="#l-372">#</a> [13:39] &lt;Philip`&gt; (Hmm, it doesn't look like there's even a common-subset way to concatenate strings...)</li>
+ <li id="l-373" _a="mikeday"><a href="#l-373">#</a> [13:39] &lt;mikeday&gt; HTML5 is complex enough without trying to inhale a common subset of SQL</li>
+ <li id="l-374" _a="hsivonen"><a href="#l-374">#</a> [13:39] &lt;hsivonen&gt; I wonder what the disk footprint of a SQLite database is</li>
+ <li id="l-375" _a="mikeday"><a href="#l-375">#</a> [13:39] &lt;mikeday&gt; seems to far removed from &quot;standardisation of what we already know&quot;</li>
+ <li id="l-376" _a="hsivonen"><a href="#l-376">#</a> [13:39] &lt;hsivonen&gt; considering that each domain needs its own</li>
+ <li id="l-377" _a="mikeday" _r="geez"><a href="#l-377">#</a> [13:40] &lt;mikeday&gt; geez, it's going to suck debugging random crappy websites in the future</li>
+ <li id="l-378" _a="mikeday"><a href="#l-378">#</a> [13:40] &lt;mikeday&gt; I mean keeping track of cookies was bad enough</li>
+ <li id="l-379" _a="annevk"><a href="#l-379">#</a> [13:40] &lt;annevk&gt; the web evolves :)</li>
+ <li id="l-380" _a="mikeday"><a href="#l-380">#</a> [13:40] &lt;mikeday&gt; and writing eg. little screen scraping tools with wget or whatever</li>
+ <li id="l-381" _a="mikeday"><a href="#l-381">#</a> [13:41] &lt;mikeday&gt; evolution != progress, it can just mean random mutations, genetic drift, and pointless specialisation :)</li>
+ <li id="l-382" _a="met_"><a href="#l-382">#</a> [13:41] &lt;met_&gt; whow! there is a book already <a href="http://www.amazon.com/tag/sql5">http://www.amazon.com/tag/sql5</a></li>
+ <li id="l-383" _a="mikeday" _r="SQL"><a href="#l-383">#</a> [13:41] &lt;mikeday&gt; SQL: the peacock's tail of the web</li>
+ <li id="l-384" _a="Philip`" _r="hsivonen"><a href="#l-384">#</a> [13:42] &lt;Philip`&gt; hsivonen: A SQLite database with one table and no data is 3072 bytes</li>
+ <li id="l-385" _a="Philip`"><a href="#l-385">#</a> [13:42] &lt;Philip`&gt; and 158 bytes after gzip</li>
+ <li id="l-386" _a="mikeday" _r="hah"><a href="#l-386">#</a> [13:43] &lt;mikeday&gt; hah, that's 158 bytes we won't see again in a hurry :)</li>
+ <li id="l-387" _a="Philip`"><a href="#l-387">#</a> [13:44] &lt;Philip`&gt; I bet you could do fun DOS attacks by JOINing a table with itself dozens of times</li>
+ <li id="l-388" _a="mikeday"><a href="#l-388">#</a> [13:46] &lt;mikeday&gt; presumably it's no more vulnerable to that sort of thing than JavaScript already is</li>
+ <li id="l-389" _a="mikeday"><a href="#l-389">#</a> [13:46] &lt;mikeday&gt; eg. running ackermann's function or whatever</li>
+ <li id="l-390" _a="Philip`"><a href="#l-390">#</a> [13:48] &lt;Philip`&gt; But the JS engines already provide timeouts so users can stop runaway scripts, and SQL engines might not</li>
+ <li id="l-391" _a="Philip`"><a href="#l-391">#</a> [13:48] &lt;Philip`&gt; (SQLite does, but it's marked as experimental)</li>
+ <li id="l-392" _a="mikeday" _r="right"><a href="#l-392">#</a> [13:49] &lt;mikeday&gt; right, it's another weak point that would need to be checked</li>
+ <li id="l-393" _a="mikeday"><a href="#l-393">#</a> [13:49] &lt;mikeday&gt; is it in the spec purely because Mozilla support it?</li>
+ <li id="l-394" _a="Philip`"><a href="#l-394">#</a> [13:51] &lt;Philip`&gt; Mozilla doesn't appear to support it now (though they could easily add it (if they don't care about security, e.g. limiting to privileged content) since they're using SQLite)</li>
+ <li id="l-395" _a="mikeday"><a href="#l-395">#</a> [13:51] &lt;mikeday&gt; so who asked for it?</li>
+ <li id="l-396" _a="annevk" _r="Developers"><a href="#l-396">#</a> [13:52] &lt;annevk&gt; Developers, developers, developers!</li>
+ <li id="l-397" _a="annevk"><a href="#l-397">#</a> [13:52] * annevk doesn't know</li>
+ <li id="l-398" _a="Dashiva"><a href="#l-398">#</a> [13:52] &lt;Dashiva&gt; You missed one developer</li>
+ <li id="l-399" _a="mikeday"><a href="#l-399">#</a> [13:52] &lt;mikeday&gt; hmm. Maybe I should ask for a complete POSIX implementation to be added to HTML5</li>
+ <li id="l-400" _a="annevk" _r="Dashiva"><a href="#l-400">#</a> [13:52] &lt;annevk&gt; Dashiva, he didn't care</li>
+ <li id="l-401" _a="Dashiva"><a href="#l-401">#</a> [13:52] &lt;Dashiva&gt; Oh</li>
+ <li id="l-402" _a="mikeday"><a href="#l-402">#</a> [13:52] &lt;mikeday&gt; that way, people could run existing Linux binaries in the browser environment</li>
+ <li id="l-403" _a="mikeday"><a href="#l-403">#</a> [13:52] &lt;mikeday&gt; each domain could have a chroot style setup</li>
+ <li id="l-404" _a="Philip`" _r="mikeday"><a href="#l-404">#</a> [13:52] &lt;Philip`&gt; mikeday: That would solve the problem of making a web-based OS</li>
+ <li id="l-405" _a="Dashiva"><a href="#l-405">#</a> [13:53] &lt;Dashiva&gt; Are we still talking about a world where Microsoft exists?</li>
+ <li id="l-406" _a="mikeday"><a href="#l-406">#</a> [13:53] &lt;mikeday&gt; with its own POSIX namespace, the usual APIs available, sockets, memory mapped files, etc.</li>
+ <li id="l-407" _a="Philip`"><a href="#l-407">#</a> [13:53] &lt;Philip`&gt; Just wait for virtualisation technology to advance a bit, and then it'll be fine to run a virtual machine per browser session</li>
+ <li id="l-408" _a="mikeday"><a href="#l-408">#</a> [13:53] &lt;mikeday&gt; or better yet, an x86 virtual machine would make more sense than a POSIX layer</li>
+ <li id="l-409" _a="mikeday" _r="hah"><a href="#l-409">#</a> [13:53] &lt;mikeday&gt; hah, you beat me to it</li>
+ <li id="l-410" _a="mikeday"><a href="#l-410">#</a> [13:54] &lt;mikeday&gt; then we could run arbitrary programs and old DOS games in the browser. take that, flash!</li>
+ <li id="l-411" _a="Philip`" _r="Hmm"><a href="#l-411">#</a> [13:54] &lt;Philip`&gt; Hmm, x86 is a pain - just make a new instruction set that's easy to virtualise, and port Linux to it</li>
+ <li id="l-412" _a="Dashiva"><a href="#l-412">#</a> [13:54] &lt;Dashiva&gt; Why not just reuse JS?</li>
+ <li id="l-413" _a="Dashiva"><a href="#l-413">#</a> [13:54] &lt;Dashiva&gt; We have JSON, next is JSOS</li>
+ <li id="l-414" _a="Philip`" _r="Hmm"><a href="#l-414">#</a> [13:55] &lt;Philip`&gt; Hmm, compile Linux into the instruction set for virtual machine written in JavaScript?</li>
+ <li id="l-415" _a="Philip`"><a href="#l-415">#</a> [13:55] &lt;Philip`&gt; +a</li>
+ <li id="l-416" _a="Philip`"><a href="#l-416">#</a> [13:55] &lt;Philip`&gt; Then just JIT it to the user's native instruction set, for optimal performance</li>
+ <li id="l-417" _a="mikeday"><a href="#l-417">#</a> [13:56] &lt;mikeday&gt; rather than having an SQL based storage system in the browser,</li>
+ <li id="l-418" _a="mikeday"><a href="#l-418">#</a> [13:56] &lt;mikeday&gt; you could have a virtual machine with a virtual IDE hard disk of configurable size</li>
+ <li id="l-419" _a="Philip`"><a href="#l-419">#</a> [13:56] * Philip` wonders how many potential embedded-SQL uses could be handled just by adding B-tree indexes to globalStorage</li>
+ <li id="l-420" _a="mikeday"><a href="#l-420">#</a> [13:56] &lt;mikeday&gt; scripts can then &quot;format&quot; the virtual hard disk with their file system of choice, and address it at block-level</li>
+ <li id="l-421" _a="Philip`"><a href="#l-421">#</a> [13:59] &lt;Philip`&gt; I would be quite nervous looking at a web site that said &quot;Formatting disk - please wait&quot; and knowing that it was actually capable of formatting a disk, even if I was fairly certain it was isolated to the web browser</li>
+ <li id="l-422" _a="mikeday"><a href="#l-422">#</a> [13:59] &lt;mikeday&gt; how nervous would you be to see &quot;Creating tables and building indices&quot;</li>
+ <li id="l-423" _a="Philip`"><a href="#l-423">#</a> [14:00] &lt;Philip`&gt; I know how to protect myself from tables, so that's not a problem - I can just climb up the stairs and they can't follow because their legs won't bend enough</li>
+ <li id="l-424" _a="mikeday"><a href="#l-424">#</a> [14:01] &lt;mikeday&gt; touche :)</li>
+ <li id="l-425" _a="hsivonen"><a href="#l-425">#</a> [14:01] &lt;hsivonen&gt; a whole new world of layout tables</li>
+ <li id="l-426" _a="Philip`"><a href="#l-426">#</a> [14:02] &lt;Philip`&gt; We could just adopt the proposal from <a href="http://sql4.by.ru/">http://sql4.by.ru/</a></li>
+ <li id="l-427"><a href="#l-427">#</a> [14:11] * Joins: csarven (n=nevrasc@modemcable081.152-201-24.mc.videotron.ca)</li>
+ <li id="l-428" _a="zcorpan"><a href="#l-428">#</a> [14:11] &lt;zcorpan&gt; we have good stuff in here for next year's april fool's joke</li>
+ <li id="l-429" _a="Dashiva"><a href="#l-429">#</a> [14:11] &lt;Dashiva&gt; Next year it won't be a joke anymore :)</li>
+ <li id="l-430" _a="mikeday"><a href="#l-430">#</a> [14:11] &lt;mikeday&gt; why wait? After all, they didn't wait until April for the SQL proposal :)</li>
+ <li id="l-431" _a="annevk"><a href="#l-431">#</a> [14:12] &lt;annevk&gt; :p</li>
+ <li id="l-432"><a href="#l-432">#</a> [14:17] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-433" _a="mikeday"><a href="#l-433">#</a> [14:20] &lt;mikeday&gt; ah well, that's enough spec bashing for now</li>
+ <li id="l-434" _a="mikeday"><a href="#l-434">#</a> [14:20] * mikeday waves</li>
+ <li id="l-435"><a href="#l-435">#</a> [14:21] * Quits: mikeday (n=mikeday@60.224.50.129) (&quot;-&quot;)</li>
+ <li id="l-436" _a="hsivonen" _r="Hixie"><a href="#l-436">#</a> [14:21] &lt;hsivonen&gt; Hixie: Re: IRC logs a week ago: Jukka Korpela is known to argue about the details of what it means to have a &quot;sample&quot; in the statistics sense.</li>
+ <li id="l-437" _a="hsivonen"><a href="#l-437">#</a> [14:26] &lt;hsivonen&gt; of course, on the Web, it is impossible to have the kind of sample he means</li>
+ <li id="l-438" _a="Lachy"><a href="#l-438">#</a> [14:26] &lt;Lachy&gt; what kind of sample does he mean?</li>
+ <li id="l-439" _a="Lachy"><a href="#l-439">#</a> [14:26] &lt;Lachy&gt; he refused to explain when I asked and then insulted me for not having taken statistics 101</li>
+ <li id="l-440" _a="Dashiva" _r="Well"><a href="#l-440">#</a> [14:27] &lt;Dashiva&gt; Well, intranet pages for one</li>
+ <li id="l-441" _a="hsivonen" _r="Lachy"><a href="#l-441">#</a> [14:29] &lt;hsivonen&gt; Lachy: I think he means that first you identify a population and then you pick a sample at random so that each member of the population has an equal probability of appearing in the sample</li>
+ <li id="l-442" _a="hsivonen" _r="Lachy"><a href="#l-442">#</a> [14:30] &lt;hsivonen&gt; Lachy: but on the Web, you cannot enumerate the population of pages and you cannot do uniform sampling</li>
+ <li id="l-443" _a="hsivonen" _r="Lachy"><a href="#l-443">#</a> [14:30] &lt;hsivonen&gt; Lachy: one might argue, though, that a chunk of &quot;important&quot; pages from google is more useful than a proper sample of the same size</li>
+ <li id="l-444" _a="Lachy"><a href="#l-444">#</a> [14:31] &lt;Lachy&gt; doesn't taking a massive sample of several billion pages somewhat compensate for the problems of not being able to do that?</li>
+ <li id="l-445" _a="hsivonen" _r="Lachy"><a href="#l-445">#</a> [14:31] &lt;hsivonen&gt; Lachy: but the argument wasn't about useful but about proper use of statistics terminology</li>
+ <li id="l-446" _a="hsivonen" _r="Lachy"><a href="#l-446">#</a> [14:31] &lt;hsivonen&gt; Lachy: just don't call it a &quot;sample&quot; :-)</li>
+ <li id="l-447" _a="Lachy" _r="well"><a href="#l-447">#</a> [14:31] &lt;Lachy&gt; well, what would you call it?</li>
+ <li id="l-448" _a="hsivonen"><a href="#l-448">#</a> [14:32] &lt;hsivonen&gt; dunno. it has been a while since I've done statistics</li>
+ <li id="l-449" _a="Philip`"><a href="#l-449">#</a> [14:32] &lt;Philip`&gt; Why would taking a bigger sample make it any better, if the sample is still biased in some direction?</li>
+ <li id="l-450" _a="hsivonen" _r="Philip`"><a href="#l-450">#</a> [14:33] &lt;hsivonen&gt; Philip`: well, if the bias is towards some notion of being more important</li>
+ <li id="l-451" _a="hsivonen" _r="Philip`"><a href="#l-451">#</a> [14:33] &lt;hsivonen&gt; Philip`: then we can discuss what's important</li>
+ <li id="l-452" _a="Philip`"><a href="#l-452">#</a> [14:33] &lt;Philip`&gt; If you identified a billion pages and then chose a million at random to analyse in detail, you should get exactly the same results (except for incredibly rare events where you'd lose statistical significance)</li>
+ <li id="l-453" _a="zcorpan" _r="Lachy"><a href="#l-453">#</a> [14:34] &lt;zcorpan&gt; Lachy: call it &quot;a subset of the Web&quot;. :)</li>
+ <li id="l-454" _a="Philip`"><a href="#l-454">#</a> [14:34] &lt;Philip`&gt; (then the problem is in identifying the population of a billion pages, and the actual sampling is easy)</li>
+ <li id="l-455" _a="hsivonen" _r="Philip`"><a href="#l-455">#</a> [14:35] &lt;hsivonen&gt; Philip`: the problem is that implicitly the infinite population of all Web pages is assumed</li>
+ <li id="l-456" _a="Philip`"><a href="#l-456">#</a> [14:35] &lt;Philip`&gt; (and using a bigger sample within that population wouldn't compensate for any problems in the choice of population)</li>
+ <li id="l-457" _a="hsivonen"><a href="#l-457">#</a> [14:36] &lt;hsivonen&gt; hmm. according to wikipedia, a non-random subset is still a &quot;sample&quot; even if not a &quot;random sample&quot;</li>
+ <li id="l-458" _a="Philip`"><a href="#l-458">#</a> [14:38] &lt;Philip`&gt; Sampling an infinite space seems like it ought to be impossible (or at least not well defined) - if you chose a sample of n random positive integers, then the mean would be some value which is completely non-representative of the population because there'd be a finite number of numbers below it and an infinite number of numbers above it...</li>
+ <li id="l-459"><a href="#l-459">#</a> [14:42] * Parts: zcorpan (n=zcorpan@84-216-42-16.sprayadsl.telenor.se)</li>
+ <li id="l-460"><a href="#l-460">#</a> [14:45] * Parts: annevk (n=annevk@pat-tdc.opera.com)</li>
+ <li id="l-461"><a href="#l-461">#</a> [14:45] * Joins: annevk (n=annevk@pat-tdc.opera.com)</li>
+ <li id="l-462" _a="annevk" _r="jgraham"><a href="#l-462">#</a> [14:51] &lt;annevk&gt; jgraham, I think we should be using insert(0, data) as opposed to append()</li>
+ <li id="l-463" _a="annevk" _r="jgraham"><a href="#l-463">#</a> [14:51] &lt;annevk&gt; jgraham, for stream.qeue</li>
+ <li id="l-464" _a="annevk" _r="jgraham"><a href="#l-464">#</a> [14:51] &lt;annevk&gt; jgraham, especially if we start allowing injection</li>
+ <li id="l-465"><a href="#l-465">#</a> [15:01] * Joins: gavins (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-466" _a="gavins"><a href="#l-466">#</a> [15:01] * gavins is now known as gavin_</li>
+ <li id="l-467"><a href="#l-467">#</a> [15:15] * Quits: Lachy (n=Lachlan@210-84-58-18.dyn.iinet.net.au) (Read error: 110 (Connection timed out))</li>
+ <li id="l-468" _a="annevk"><a href="#l-468">#</a> [15:17] &lt;annevk&gt; hehe</li>
+ <li id="l-469" _a="annevk"><a href="#l-469">#</a> [15:17] &lt;annevk&gt; the Content-Type discussion is funny</li>
+ <li id="l-470" _a="annevk"><a href="#l-470">#</a> [15:18] &lt;annevk&gt; the last e-mail from Jeff :)</li>
+ <li id="l-471" _a="annevk"><a href="#l-471">#</a> [15:37] &lt;annevk&gt; What annoys me most about these HTTP guys is that they always tell you how things should be done, but they never make it actually happen</li>
+ <li id="l-472" _a="annevk"><a href="#l-472">#</a> [15:38] &lt;annevk&gt; Browser vendors have tried and tried to fix the web, but it hasn't paid off and didn't work out very well either.</li>
+ <li id="l-473" _a="annevk"><a href="#l-473">#</a> [15:38] &lt;annevk&gt; In fact, we're still trying to actively educate people and publish articles, etc. and what not and still lots of people get it wrong and will get it wrong.</li>
+ <li id="l-474" _a="annevk"><a href="#l-474">#</a> [15:40] &lt;annevk&gt; (HTTP people also have this notion about asking the user. It's even in the HTTP specification. That's one of the worst possible models you can have and it has been widely ignored in practice...)</li>
+ <li id="l-475"><a href="#l-475">#</a> [15:45] * Parts: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-476" _a="Philip`"><a href="#l-476">#</a> [15:46] &lt;Philip`&gt; Browsers still seem to ask the user if they really want to submit a form, or if they really want to look at a secure site, or if they really want to leave a secure site</li>
+ <li id="l-477" _a="Philip`"><a href="#l-477">#</a> [15:46] &lt;Philip`&gt; though the default seems to be to only ask once, and it's not like anybody reads those messages the first time anyway, so I'm not sure what the point is</li>
+ <li id="l-478" _a="gsnedders" _r="Philip`"><a href="#l-478">#</a> [15:47] &lt;gsnedders&gt; Philip`: to claim you implement the spec</li>
+ <li id="l-479" _a="annevk"><a href="#l-479">#</a> [15:48] &lt;annevk&gt; My XML tokenizer now passes the &quot;tests&quot; in <a href="http://www.w3.org/TR/xml/#sec-entexpand">http://www.w3.org/TR/xml/#sec-entexpand</a></li>
+ <li id="l-480" _a="annevk"><a href="#l-480">#</a> [15:49] &lt;annevk&gt; Some bits are a bit hacky for my taste, but I suppose that can eventually be made cleaner</li>
+ <li id="l-481" _a="annevk" _r="Philip`"><a href="#l-481">#</a> [15:52] &lt;annevk&gt; Philip`, yeah, I've the feeling that those messages are there to please the HTTP gods</li>
+ <li id="l-482" _a="annevk"><a href="#l-482">#</a> [15:52] &lt;annevk&gt; At some point in the past my parents switched browser and were heavily confused with those modal dialogs wondering what they had done wrong.</li>
+ <li id="l-483" _a="gsnedders"><a href="#l-483">#</a> [15:54] * gsnedders is still attempting to get his mother to use a computer at all</li>
+ <li id="l-484"><a href="#l-484">#</a> [15:55] * Joins: briansuda (n=briansud@82.221.34.106)</li>
+ <li id="l-485"><a href="#l-485">#</a> [15:56] * Quits: briansuda (n=briansud@82.221.34.106) (Client Quit)</li>
+ <li id="l-486"><a href="#l-486">#</a> [15:57] * Joins: karlUshi (n=karl@ARouen-252-1-159-72.w90-23.abo.wanadoo.fr)</li>
+ <li id="l-487" _a="annevk"><a href="#l-487">#</a> [16:00] &lt;annevk&gt; After I hook this up with the treebuilder I need to start doing boring things... Such as making testcases :(</li>
+ <li id="l-488" _a="annevk"><a href="#l-488">#</a> [16:00] &lt;annevk&gt; Maybe I should open source it :)</li>
+ <li id="l-489"><a href="#l-489">#</a> [16:02] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-490"><a href="#l-490">#</a> [16:03] * Joins: briansuda (n=briansud@82.221.34.106)</li>
+ <li id="l-491" _a="Dashiva"><a href="#l-491">#</a> [16:12] &lt;Dashiva&gt; I liked that dialog box</li>
+ <li id="l-492" _a="Dashiva"><a href="#l-492">#</a> [16:12] &lt;Dashiva&gt; We should have more of those. &quot;Do you want this page to render correctly?&quot;</li>
+ <li id="l-493" _a="annevk"><a href="#l-493">#</a> [16:13] &lt;annevk&gt; &quot;Do you want to render this page per spec?&quot;</li>
+ <li id="l-494" _a="gsnedders"><a href="#l-494">#</a> [16:17] &lt;gsnedders&gt; &quot;Do you want to render this page in a way completely incompatible with the web?&quot;</li>
+ <li id="l-495" _a="annevk"><a href="#l-495">#</a> [16:17] &lt;annevk&gt; &quot;Do you want to use a browser that doesn't follow the spec but does render this page?&quot;</li>
+ <li id="l-496"><a href="#l-496">#</a> [16:18] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-497" _a="gsnedders"><a href="#l-497">#</a> [16:18] &lt;gsnedders&gt; Does anyone have any documentation of the major incompatibilities between HTTP/1.1 and HTTP in the real world?</li>
+ <li id="l-498" _a="annevk"><a href="#l-498">#</a> [16:18] &lt;annevk&gt; No</li>
+ <li id="l-499" _a="gsnedders"><a href="#l-499">#</a> [16:20] &lt;gsnedders&gt; ergh. does anyone know if you need to do hysterics involving CR or LF where the spec says you should have CRLF?</li>
+ <li id="l-500"><a href="#l-500">#</a> [16:20] * Quits: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-501"><a href="#l-501">#</a> [16:21] * Joins: hasather (n=hasather@81-235-209-174-no62.tbcn.telia.com)</li>
+ <li id="l-502"><a href="#l-502">#</a> [16:30] * Quits: karlUshi (n=karl@ARouen-252-1-159-72.w90-23.abo.wanadoo.fr) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-503"><a href="#l-503">#</a> [16:31] * Joins: icaaq_ (n=icaaaq@249.228.13.217.in-addr.dgcsystems.net)</li>
+ <li id="l-504" _a="hsivonen" _r="annevk"><a href="#l-504">#</a> [16:35] &lt;hsivonen&gt; annevk: are html5lib tokenizer tests independent of tree builder?</li>
+ <li id="l-505"><a href="#l-505">#</a> [16:36] * Joins: billmason (n=billmaso@ip156.unival.com)</li>
+ <li id="l-506"><a href="#l-506">#</a> [16:37] * Joins: MikeSmith (n=MikeSmit@58.157.21.205)</li>
+ <li id="l-507" _a="annevk" _r="hsivonen"><a href="#l-507">#</a> [16:38] &lt;annevk&gt; hsivonen, yes, although you have to implement some logic to run them</li>
+ <li id="l-508" _a="annevk" _r="hsivonen"><a href="#l-508">#</a> [16:38] &lt;annevk&gt; hsivonen, they may also assume a particular implementation</li>
+ <li id="l-509"><a href="#l-509">#</a> [16:38] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-510" _a="hsivonen" _r="annevk"><a href="#l-510">#</a> [16:38] &lt;hsivonen&gt; annevk: what kind of assumptions?</li>
+ <li id="l-511" _a="annevk"><a href="#l-511">#</a> [16:41] &lt;annevk&gt; that end tags have their attributes not dropped yet I believe</li>
+ <li id="l-512" _a="annevk"><a href="#l-512">#</a> [16:41] &lt;annevk&gt; some things are done during the tree builder step</li>
+ <li id="l-513" _a="annevk"><a href="#l-513">#</a> [16:42] &lt;annevk&gt; but just go through them yourself, it should not be that hard to modify the problematic ones</li>
+ <li id="l-514" _a="hsivonen"><a href="#l-514">#</a> [16:42] &lt;hsivonen&gt; eww. do the end tag attributes ever get anything but ignored?</li>
+ <li id="l-515" _a="hsivonen"><a href="#l-515">#</a> [16:42] * hsivonen doesn't remember the spec doing anything with end tag attributes</li>
+ <li id="l-516"><a href="#l-516">#</a> [16:45] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-517" _a="annevk" _r="hsivonen"><a href="#l-517">#</a> [16:47] &lt;annevk&gt; hsivonen, we don't check whether it's an end or start tag when appending attributes</li>
+ <li id="l-518"><a href="#l-518">#</a> [16:47] * Joins: h3h (n=w3rd@66-162-32-234.static.twtelecom.net)</li>
+ <li id="l-519"><a href="#l-519">#</a> [16:51] * Quits: icaaq_ (n=icaaaq@249.228.13.217.in-addr.dgcsystems.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-520"><a href="#l-520">#</a> [17:01] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-521" _a="annevk" _r="Philip`"><a href="#l-521">#</a> [17:02] &lt;annevk&gt; Philip`, you mentioned &lt;canvas&gt; perf earlier on? Do you have standalone testcases for that?</li>
+ <li id="l-522" _a="annevk" _r="Philip`"><a href="#l-522">#</a> [17:02] &lt;annevk&gt; Philip`, Having standalone testcases makes it easier to improve the situation</li>
+ <li id="l-523"><a href="#l-523">#</a> [17:09] * Quits: weinigLap (n=weinig@c-67-170-238-241.hsd1.ca.comcast.net)</li>
+ <li id="l-524"><a href="#l-524">#</a> [17:12] * Joins: briansuda_ (n=briansud@82.221.34.106)</li>
+ <li id="l-525"><a href="#l-525">#</a> [17:14] * Joins: jcgregorio (i=chatzill@nat/ibm/x-1cb5d8a313ebd622)</li>
+ <li id="l-526"><a href="#l-526">#</a> [17:30] * Quits: briansuda (n=briansud@82.221.34.106) (Read error: 110 (Connection timed out))</li>
+ <li id="l-527"><a href="#l-527">#</a> [17:33] * Quits: met_ (n=Hassman@b14-4.vscht.cz) (&quot;Chemists never die, they just stop reacting.&quot;)</li>
+ <li id="l-528"><a href="#l-528">#</a> [17:38] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-529"><a href="#l-529">#</a> [17:42] * Joins: weinigLap (n=weinig@17.203.15.217)</li>
+ <li id="l-530"><a href="#l-530">#</a> [17:44] * Joins: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net)</li>
+ <li id="l-531"><a href="#l-531">#</a> [17:44] * Quits: KevinMarks (n=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-532"><a href="#l-532">#</a> [17:56] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-533" _a="annevk"><a href="#l-533">#</a> [18:00] * annevk removes lots of HTML specific stuff out of base.py in his XML5 project</li>
+ <li id="l-534" _a="annevk"><a href="#l-534">#</a> [18:01] * annevk tries to align the architecture as much as possible so it remains relatively easy to do similar things</li>
+ <li id="l-535" _a="hsivonen"><a href="#l-535">#</a> [18:16] &lt;hsivonen&gt; what's the deal with this ship names thing?</li>
+ <li id="l-536" _a="hsivonen"><a href="#l-536">#</a> [18:16] &lt;hsivonen&gt; is there a good use case for needing to know that a string is a ship name?</li>
+ <li id="l-537" _a="hsivonen"><a href="#l-537">#</a> [18:17] &lt;hsivonen&gt; or is it just a popular contrived example of something that is italicized but doesn't have a more appropriate element than &lt;i&gt; in HTML?</li>
+ <li id="l-538" _a="Dashiva"><a href="#l-538">#</a> [18:17] &lt;Dashiva&gt; It's apparently the best example of semantic non-emphasis italic</li>
+ <li id="l-539" _a="hsivonen"><a href="#l-539">#</a> [18:17] &lt;hsivonen&gt; right.</li>
+ <li id="l-540" _a="hsivonen"><a href="#l-540">#</a> [18:18] &lt;hsivonen&gt; and presumably ship names are a common case?</li>
+ <li id="l-541" _a="Dashiva"><a href="#l-541">#</a> [18:18] &lt;Dashiva&gt; Personally I'd guess most people wouldn't italicize them at all</li>
+ <li id="l-542"><a href="#l-542">#</a> [18:25] * Quits: tantek (n=tantek@c-67-188-209-131.hsd1.ca.comcast.net)</li>
+ <li id="l-543"><a href="#l-543">#</a> [18:30] * Joins: nickshanks (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-544"><a href="#l-544">#</a> [18:38] * Joins: aroben (n=adamrobe@17.203.15.208)</li>
+ <li id="l-545"><a href="#l-545">#</a> [18:40] * Quits: briansuda_ (n=briansud@82.221.34.106) (Read error: 110 (Connection timed out))</li>
+ <li id="l-546"><a href="#l-546">#</a> [18:50] * Quits: nickshanks (n=nicholas@home.nickshanks.com)</li>
+ <li id="l-547"><a href="#l-547">#</a> [18:57] * Joins: tantek (n=tantek@corp.technorati.com)</li>
+ <li id="l-548" _a="Philip`" _r="annevk"><a href="#l-548">#</a> [19:03] &lt;Philip`&gt; annevk: I don't have any intentional tests - I've just played around a bit with <a href="http://canvex.lazyilluminati.com/misc/speed/benchmark.html">http://canvex.lazyilluminati.com/misc/speed/benchmark.html</a> but I don't think any of those cases are actually representative of what makes Canvex slow (e.g. I no longer see any real-world performance difference using drawImage(img) vs drawImage(canvas) because it's probably drowned out by other problems)</li>
+ <li id="l-549" _a="Philip`"><a href="#l-549">#</a> [19:06] &lt;Philip`&gt; I should probably set up some mode in Canvex where it starts in an interesting place looking at complex stuff, so I could run it in a profiler and see what's actually slow nowadays</li>
+ <li id="l-550"><a href="#l-550">#</a> [19:10] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-551"><a href="#l-551">#</a> [19:18] * Joins: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-552"><a href="#l-552">#</a> [19:21] * Joins: arve (n=arve@47.80-202-66.nextgentel.com)</li>
+ <li id="l-553" _a="arve"><a href="#l-553">#</a> [19:21] * arve is now known as virtuelv2</li>
+ <li id="l-554"><a href="#l-554">#</a> [19:27] * Joins: Toolskyn_ (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-555"><a href="#l-555">#</a> [19:33] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-556"><a href="#l-556">#</a> [19:35] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-557"><a href="#l-557">#</a> [19:44] * Quits: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-558"><a href="#l-558">#</a> [19:50] * Quits: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-559"><a href="#l-559">#</a> [19:53] * Joins: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-560"><a href="#l-560">#</a> [19:58] * Joins: KevinMarks (i=KevinMar@nat/google/x-3a8424a439da70b7)</li>
+ <li id="l-561" _a="Toolskyn_"><a href="#l-561">#</a> [20:00] * Toolskyn_ is now known as Toolskyn</li>
+ <li id="l-562"><a href="#l-562">#</a> [20:16] * Joins: dbaron (n=dbaron@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-563"><a href="#l-563">#</a> [20:17] * Joins: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-564"><a href="#l-564">#</a> [20:20] * Quits: BenWard (n=BenWard@cpc3-cmbg2-0-0-cust58.cmbg.cable.ntl.com)</li>
+ <li id="l-565"><a href="#l-565">#</a> [20:34] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-566" _a="om_sleep"><a href="#l-566">#</a> [21:14] * om_sleep is now known as othermaciej</li>
+ <li id="l-567"><a href="#l-567">#</a> [21:18] * Quits: jruderman (n=jruderma@c-67-169-183-228.hsd1.ca.comcast.net)</li>
+ <li id="l-568" _a="Hixie"><a href="#l-568">#</a> [21:46] &lt;Hixie&gt; the SQL stuff's main use case is offline Web apps -- big web apps like say an RSS reader that wants to support working while offline needs way more than the globalStorage stuff</li>
+ <li id="l-569" _a="Hixie"><a href="#l-569">#</a> [21:47] &lt;Hixie&gt; i'm very aware of the problem with sql interoperability :-(</li>
+ <li id="l-570" _a="Hixie"><a href="#l-570">#</a> [21:47] &lt;Hixie&gt; i hope we'll be able to have implementations in the coming 6-12 months; if we then have 2 implementations we can define a common subset and lock that down</li>
+ <li id="l-571" _a="virtuelv2" _r="Hixie"><a href="#l-571">#</a> [21:48] &lt;virtuelv2&gt; Hixie: I don't think interoperability should be a problem if you specify the exact subset of SQL supported by SQLite</li>
+ <li id="l-572" _a="Hixie"><a href="#l-572">#</a> [21:48] &lt;Hixie&gt; (in practice i would expect it to be very similar to sqllite, since safari and firefox are both already using it, as i understand it)</li>
+ <li id="l-573" _a="Hixie" _r="hsivonen"><a href="#l-573">#</a> [21:49] &lt;Hixie&gt; hsivonen: regarding samples, note that he never replied to my e-mail where i explained exactly how i defined a fixed sampling frame before taking a sample</li>
+ <li id="l-574" _a="virtuelv2"><a href="#l-574">#</a> [21:49] &lt;virtuelv2&gt; ... since SQLite is placed in the public domain, <a href="http://sqlite.org/copyright.html">http://sqlite.org/copyright.html</a></li>
+ <li id="l-575" _a="Hixie"><a href="#l-575">#</a> [21:50] &lt;Hixie&gt; yeah</li>
+ <li id="l-576" _a="virtuelv2"><a href="#l-576">#</a> [21:50] &lt;virtuelv2&gt; and they have this interesting take on patents, <a href="http://programming.reddit.com/info/1eypf/comments">http://programming.reddit.com/info/1eypf/comments</a></li>
+ <li id="l-577" _a="othermaciej"><a href="#l-577">#</a> [21:50] &lt;othermaciej&gt; being in the public domain is actually a little more dodgy than copyright with a liberal license</li>
+ <li id="l-578" _a="virtuelv2" _r="othermaciej"><a href="#l-578">#</a> [21:51] &lt;virtuelv2&gt; othermaciej: you're thinking of the fact that all jurisdictions don't recognize PD?</li>
+ <li id="l-579" _a="virtuelv2"><a href="#l-579">#</a> [21:51] &lt;virtuelv2&gt; They offer licensing for that purpose</li>
+ <li id="l-580" _a="othermaciej" _r="virtuelv2"><a href="#l-580">#</a> [21:53] &lt;othermaciej&gt; virtuelv2: that and because anyone can copyright even a trivial derivative work of a PD work in full, thereby potentially making the licensing issues more murky</li>
+ <li id="l-581" _a="gavin"><a href="#l-581">#</a> [21:53] &lt;gavin&gt; if it's in the public domain, who are they to issue licenses?</li>
+ <li id="l-582" _a="gavin"><a href="#l-582">#</a> [21:54] &lt;gavin&gt; isn't copyright in this case non-existent?</li>
+ <li id="l-583" _a="virtuelv2" _r="gavin"><a href="#l-583">#</a> [21:54] &lt;virtuelv2&gt; gavin: because all contributors have to sign off the code to the PD</li>
+ <li id="l-584" _a="virtuelv2"><a href="#l-584">#</a> [21:54] &lt;virtuelv2&gt; you can relicense PD code if you please, as othermaciej noted</li>
+ <li id="l-585" _a="gavin"><a href="#l-585">#</a> [21:54] &lt;gavin&gt; the copyright is what I'm wondering about</li>
+ <li id="l-586" _a="gavin"><a href="#l-586">#</a> [21:55] &lt;gavin&gt; if they say they have no copyright to the code, I don't see how they can license it</li>
+ <li id="l-587" _a="gavin"><a href="#l-587">#</a> [21:55] &lt;gavin&gt; you can only license something if you have the copyright</li>
+ <li id="l-588" _a="virtuelv2" _r="gavin"><a href="#l-588">#</a> [21:55] &lt;virtuelv2&gt; gavin: they can, because they are free to do so under the same license they're distributing it</li>
+ <li id="l-589" _a="virtuelv2"><a href="#l-589">#</a> [21:55] &lt;virtuelv2&gt; you can do the same</li>
+ <li id="l-590"><a href="#l-590">#</a> [21:56] * Joins: Toolskyn_ (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-591" _a="gavin"><a href="#l-591">#</a> [21:56] &lt;gavin&gt; maybe I should go speak to a copyright lawyer</li>
+ <li id="l-592" _a="gavin"><a href="#l-592">#</a> [21:56] &lt;gavin&gt; wonder how much that'll cost me :)</li>
+ <li id="l-593" _a="virtuelv2" _r="gavin"><a href="#l-593">#</a> [21:56] &lt;virtuelv2&gt; gavin: make sure you do in a country that accepts the PD</li>
+ <li id="l-594" _a="virtuelv2"><a href="#l-594">#</a> [21:56] &lt;virtuelv2&gt; Some countries don't</li>
+ <li id="l-595" _a="gavin"><a href="#l-595">#</a> [21:56] &lt;gavin&gt; I don't see how that matters</li>
+ <li id="l-596" _a="hsivonen"><a href="#l-596">#</a> [21:57] &lt;hsivonen&gt; I once had a boss who doubted our ability to waive copyright in Finland. So we used the MIT license. I have talked to copyright lawyers since and none of them saw a problem with waiving copyright.</li>
+ <li id="l-597" _a="virtuelv2" _r="ok"><a href="#l-597">#</a> [21:57] &lt;virtuelv2&gt; ok, let's say I place Item A in the public domain in country Foo</li>
+ <li id="l-598" _a="gavin"><a href="#l-598">#</a> [21:57] &lt;gavin&gt; I have no stake in this, I'm just curious</li>
+ <li id="l-599" _a="othermaciej"><a href="#l-599">#</a> [21:57] &lt;othermaciej&gt; make sure you talk to a lawyer that understands the copyright law of countries that accept the public domain</li>
+ <li id="l-600" _a="othermaciej"><a href="#l-600">#</a> [21:57] &lt;othermaciej&gt; that would be the right way to put it</li>
+ <li id="l-601" _a="gavin"><a href="#l-601">#</a> [21:57] &lt;gavin&gt; sure</li>
+ <li id="l-602" _a="gavin" _r="ah"><a href="#l-602">#</a> [21:57] &lt;gavin&gt; ah, ok, I see</li>
+ <li id="l-603" _a="gavin"><a href="#l-603">#</a> [21:57] &lt;gavin&gt; (what virtuelv2 meant)</li>
+ <li id="l-604" _a="virtuelv2"><a href="#l-604">#</a> [21:58] &lt;virtuelv2&gt; if a user in country Bar, that doesn't accept PD, gets my Item A, the legal system in Country Bar will assert that I own copyright of Item A</li>
+ <li id="l-605" _a="gavin"><a href="#l-605">#</a> [21:58] * gavin didn't intend to start a discussion about copyright law</li>
+ <li id="l-606" _a="Toolskyn_"><a href="#l-606">#</a> [21:58] * Toolskyn_ is now known as Toolskyn</li>
+ <li id="l-607" _a="gavin"><a href="#l-607">#</a> [21:58] &lt;gavin&gt; I should have kept my curiosity to myself :)</li>
+ <li id="l-608"><a href="#l-608">#</a> [21:59] * Joins: met_ (n=Hassman@r5bx220.net.upc.cz)</li>
+ <li id="l-609"><a href="#l-609">#</a> [22:02] * Joins: Lachy (n=Lachlan@203-206-243-149.dyn.iinet.net.au)</li>
+ <li id="l-610" _a="Philip`"><a href="#l-610">#</a> [22:09] * Philip` still can't imagine any two SQL implementations being close to interoperable, unless they're two versions of exactly the same database engine and then it's still fairly dodgy (e.g. SQLite 2 vs SQLite 3 being very different; though from what I've heard, v3 is considered pretty much complete and there's not going to be a v4, though I could be utterly wrong in remembering that)</li>
+ <li id="l-611"><a href="#l-611">#</a> [22:10] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-612" _a="Dashiva" _r="Well"><a href="#l-612">#</a> [22:11] &lt;Dashiva&gt; Well, cut down on the utility functions and fancy frills, and it gets a lot better</li>
+ <li id="l-613" _a="Philip`" _r="Oh"><a href="#l-613">#</a> [22:11] &lt;Philip`&gt; Oh, it was <a href="http://osdir.com/ml/python.db.pysqlite.user/2006-12/msg00015.html">http://osdir.com/ml/python.db.pysqlite.user/2006-12/msg00015.html</a> saying &quot;drh does not expect there to ever be a SQLite 4&quot;</li>
+ <li id="l-614" _a="Philip`"><a href="#l-614">#</a> [22:11] &lt;Philip`&gt; What about e.g. types?</li>
+ <li id="l-615" _a="Philip`" _r="like"><a href="#l-615">#</a> [22:11] &lt;Philip`&gt; like, SQLite doesn't really have them, but other databases do</li>
+ <li id="l-616" _a="Philip`"><a href="#l-616">#</a> [22:11] &lt;Philip`&gt; which seems a fairly major interoperability concern</li>
+ <li id="l-617" _a="Hixie" _r="Philip`"><a href="#l-617">#</a> [22:12] &lt;Hixie&gt; Philip`: we couldn't imagine two html implementations being close to interoperable, but now we have html5 and the goal is in sight :-)</li>
+ <li id="l-618" _a="Dashiva"><a href="#l-618">#</a> [22:13] &lt;Dashiva&gt; Maybe clarify what kind of interoperability is the worry. Developer experience/lockin, or machine/application interop?</li>
+ <li id="l-619" _a="Philip`"><a href="#l-619">#</a> [22:13] &lt;Philip`&gt; The people implementing HTML want it to be interoperable, whereas the people implementing SQL have never really cared and there's not much reason to think they ever will, and the people implementing HTML probably don't want all the work of reimplementing SQL too :-)</li>
+ <li id="l-620" _a="Philip`" _r="Uh"><a href="#l-620">#</a> [22:13] &lt;Philip`&gt; Uh, &quot;The people implementing HTML wanted HTML to be interoperable, ...&quot;</li>
+ <li id="l-621" _a="met_"><a href="#l-621">#</a> [22:13] &lt;met_&gt; Philip` there are people building apps with same SQL working on MSSQL and Oracle too, but it is only small subset of all functionality</li>
+ <li id="l-622"><a href="#l-622">#</a> [22:13] * Quits: Toolskyn88 (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Connection timed out)</li>
+ <li id="l-623" _a="Dashiva"><a href="#l-623">#</a> [22:15] &lt;Dashiva&gt; And on a pragmatic note, reality survives with the current set of SQL engines. Why would that change?</li>
+ <li id="l-624" _a="Philip`"><a href="#l-624">#</a> [22:17] &lt;Philip`&gt; I don't remember having seen any applications that work on more than one database, without them having put significant effort into writing multiple sets of database backend code</li>
+ <li id="l-625" _a="Hixie"><a href="#l-625">#</a> [22:17] &lt;Hixie&gt; we'll see. it may well be that we simply can't have interoperability here, and we have to drop it.</li>
+ <li id="l-626" _a="Dashiva"><a href="#l-626">#</a> [22:17] &lt;Dashiva&gt; I don't imagine there are too many web applications running SQL on the client side yet</li>
+ <li id="l-627" _a="Philip`"><a href="#l-627">#</a> [22:18] &lt;Philip`&gt; e.g. Trac at <a href="http://trac.edgewall.org/wiki/DatabaseBackend">http://trac.edgewall.org/wiki/DatabaseBackend</a> eventually got support for SQLite+MySQL+Postgres but it took a long time</li>
+ <li id="l-628" _a="Hixie"><a href="#l-628">#</a> [22:18] &lt;Hixie&gt; one thing though -- if the first two implementations use SQLLite, same version, and then we get widely distributed code out there that uses it, that will greatly increase the cost of someone writing a non-compatible version.</li>
+ <li id="l-629"><a href="#l-629">#</a> [22:19] * Joins: weinigLap_ (i=weinig@nat/apple/x-742d9daa8455f2c5)</li>
+ <li id="l-630" _a="Dashiva" _r="Well"><a href="#l-630">#</a> [22:20] &lt;Dashiva&gt; Well, look at mozilla expanding JS, who's to say they won't do the same to their SQL?</li>
+ <li id="l-631" _a="Dashiva"><a href="#l-631">#</a> [22:21] &lt;Dashiva&gt; they being browser vendors in general, not just moz</li>
+ <li id="l-632" _a="Hixie"><a href="#l-632">#</a> [22:25] &lt;Hixie&gt; they're expanding JS in conjunction with the ECMA working group</li>
+ <li id="l-633"><a href="#l-633">#</a> [22:26] * Quits: weinigLap (n=weinig@17.203.15.217) (Read error: 60 (Operation timed out))</li>
+ <li id="l-634"><a href="#l-634">#</a> [22:28] * Quits: annevk (n=annevk@pat-tdc.opera.com) (Read error: 60 (Operation timed out))</li>
+ <li id="l-635"><a href="#l-635">#</a> [22:29] * Quits: KevinMarks (i=KevinMar@pdpc/supporter/active/kevinmarks) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-636" _a="Philip`"><a href="#l-636">#</a> [22:30] &lt;Philip`&gt; If the first implementations do use SQLite and everyone else has to too, it sounds like the specification will simply (though maybe not explicitly) require all implementors to use the SQLite implementation, and it doesn't really sound very spec-like to say &quot;you must accept the dialect of SQL spoken by SQLite&quot; (but it wouldn't be good to not say that, if it's true)...</li>
+ <li id="l-637" _a="Philip`"><a href="#l-637">#</a> [22:32] &lt;Philip`&gt; I'm not sure if there's anything particularly wrong with everybody in the world using SQLite, if Microsoft would accept that too instead of going their own way with a different SQL implementation (assuming they ever bother with this at all), but it seems odd</li>
+ <li id="l-638" _a="Hixie" _r="Philip`"><a href="#l-638">#</a> [22:33] &lt;Hixie&gt; Philip`: no, we'd define it in detail, not like that</li>
+ <li id="l-639" _a="Hixie"><a href="#l-639">#</a> [22:34] &lt;Hixie&gt; it would just happen to be compatible with the implementations in the wild, whether that be sqllite or whatever</li>
+ <li id="l-640" _a="Philip`"><a href="#l-640">#</a> [22:34] &lt;Philip`&gt; What would happen with old content that came before it was defined, and assumed all of SQLite's behaviour?</li>
+ <li id="l-641" _a="Hixie"><a href="#l-641">#</a> [22:35] &lt;Hixie&gt; the idea would be to define it such that existing content works</li>
+ <li id="l-642" _a="Philip`"><a href="#l-642">#</a> [22:35] &lt;Philip`&gt; Just doing &quot;CREATE TABLE t ( n )&quot; is perfectly normal in SQLite but I don't believe it works in any other database at all (since they all require columns to have types)</li>
+ <li id="l-643" _a="Hixie"><a href="#l-643">#</a> [22:36] &lt;Hixie&gt; then if sqllite is what is used, then we will probably end up defining that</li>
+ <li id="l-644" _a="gsnedders"><a href="#l-644">#</a> [22:36] &lt;gsnedders&gt; ergh. I give up with people claiming &lt;i&gt; is deprecated.</li>
+ <li id="l-645" _a="Philip`"><a href="#l-645">#</a> [22:37] &lt;Philip`&gt; If someone isn't going to use SQLite for whatever reason, would they implement something that's compatible with it (or with the definition of it from the spec), rather than just sticking in whatever other SQL engine is handy because it'll save them years of work?</li>
+ <li id="l-646" _a="Hixie"><a href="#l-646">#</a> [22:38] &lt;Hixie&gt; if they want to be compliant and want to work with existing content, yes</li>
+ <li id="l-647" _a="Hixie"><a href="#l-647">#</a> [22:38] &lt;Hixie&gt; hence the desire to have existing content depend on something before we spec it in detail</li>
+ <li id="l-648" _a="Hixie"><a href="#l-648">#</a> [22:38] &lt;Hixie&gt; since that rather forces the issue</li>
+ <li id="l-649"><a href="#l-649">#</a> [22:39] * Quits: virtuelv2 (n=arve@47.80-202-66.nextgentel.com) (&quot;Leaving&quot;)</li>
+ <li id="l-650"><a href="#l-650">#</a> [22:43] * Quits: tantek (n=tantek@corp.technorati.com)</li>
+ <li id="l-651"><a href="#l-651">#</a> [22:43] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-652"><a href="#l-652">#</a> [22:43] * Joins: jruderman (n=jruderma@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-653" _a="Philip`"><a href="#l-653">#</a> [22:44] &lt;Philip`&gt; What'd be really neat is if you could use SQLite's virtual tables, where you implement the table backend in JavaScript and could make it do synchronous XHR requests to retrieve the data to return to the client code when it performs queries...</li>
+ <li id="l-654" _a="Philip`"><a href="#l-654">#</a> [22:46] &lt;Philip`&gt; (<a href="http://www.sqlite.org/cvstrac/wiki?p=VirtualTables">http://www.sqlite.org/cvstrac/wiki?p=VirtualTables</a> etc)</li>
+ <li id="l-655"><a href="#l-655">#</a> [22:46] * Quits: maikmerten (n=maikmert@Lafc6.l.pppool.de) (Remote closed the connection)</li>
+ <li id="l-656" _a="Hixie"><a href="#l-656">#</a> [22:50] &lt;Hixie&gt; yeah</li>
+ <li id="l-657"><a href="#l-657">#</a> [22:55] * Joins: othermaciej (n=mjs@netblock-66-245-248-74.dslextreme.com)</li>
+ <li id="l-658"><a href="#l-658">#</a> [22:56] * Quits: gsnedders (n=gsnedder@host86-139-123-225.range86-139.btcentralplus.com) (Remote closed the connection)</li>
+ <li id="l-659"><a href="#l-659">#</a> [22:57] * Joins: gsnedders (n=gsnedder@host86-139-123-225.range86-139.btcentralplus.com)</li>
+ <li id="l-660"><a href="#l-660">#</a> [22:58] * Quits: jruderman (n=jruderma@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-661"><a href="#l-661">#</a> [22:58] * Joins: jruderman (n=jruderma@corp-242.mountainview.mozilla.com)</li>
+ <li id="l-662"><a href="#l-662">#</a> [22:59] * Quits: jcgregorio (i=chatzill@nat/ibm/x-1cb5d8a313ebd622) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.3/0000000000]&quot;)</li>
+ <li id="l-663"><a href="#l-663">#</a> [23:01] * Joins: virtuelv2 (n=arve@47.80-202-66.nextgentel.com)</li>
+ <li id="l-664" _a="virtuelv2"><a href="#l-664">#</a> [23:01] &lt;virtuelv2&gt; 2</li>
+ <li id="l-665" _a="virtuelv2" _r="heh"><a href="#l-665">#</a> [23:01] &lt;virtuelv2&gt; heh, dette er pussig</li>
+ <li id="l-666" _a="virtuelv2"><a href="#l-666">#</a> [23:01] &lt;virtuelv2&gt; Ubuntu NEKTER å mounte ipoden min</li>
+ <li id="l-667"><a href="#l-667">#</a> [23:02] * Joins: KevinMarks (i=KevinMar@nat/google/x-652a1e6a7d56b6a8)</li>
+ <li id="l-668" _a="virtuelv2" _r="augh"><a href="#l-668">#</a> [23:02] &lt;virtuelv2&gt; augh, wrong channel</li>
+ <li id="l-669"><a href="#l-669">#</a> [23:03] * Quits: othermaciej (n=mjs@netblock-66-245-248-74.dslextreme.com)</li>
+ <li id="l-670"><a href="#l-670">#</a> [23:04] * Joins: aroben_ (i=adamrobe@nat/apple/x-55ac597385d42585)</li>
+ <li id="l-671"><a href="#l-671">#</a> [23:05] * Quits: aroben_ (i=adamrobe@nat/apple/x-55ac597385d42585) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-672"><a href="#l-672">#</a> [23:06] * Joins: aroben_ (i=adamrobe@nat/apple/x-2511b9c98d51a970)</li>
+ <li id="l-673" _a="Philip`"><a href="#l-673">#</a> [23:07] * Philip` assumes you wouldn't have to use transactions if you were doing everything in a single JS function (rather than spread across multiple event handlers), since JS has to execute single-threadedly so there wouldn't be concurrent database accesses, which is nice because it prevents some obvious errors</li>
+ <li id="l-674"><a href="#l-674">#</a> [23:11] * Quits: virtuelv2 (n=arve@47.80-202-66.nextgentel.com) (&quot;Leaving&quot;)</li>
+ <li id="l-675" _a="Philip`"><a href="#l-675">#</a> [23:12] &lt;Philip`&gt; Why does ResultSet have getName and not specify what order or what set of fields should be returned, rather than just saying it returns the same fields in the same order as in the SELECT statement (and then not needing getName because the user already knows)?</li>
+ <li id="l-676"><a href="#l-676">#</a> [23:12] * Quits: aroben (n=adamrobe@17.203.15.208) (Read error: 60 (Operation timed out))</li>
+ <li id="l-677" _a="Philip`"><a href="#l-677">#</a> [23:15] &lt;Philip`&gt; getName throwing exceptions if there are no results sounds a bit annoying, because it means you couldn't do &quot;r = executeSql(...); i = r.getName('field'); for (; r.validRow; r.next()) { dostuff(r[i]) }&quot;</li>
+ <li id="l-678" _a="Philip`"><a href="#l-678">#</a> [23:17] &lt;Philip`&gt; insertId doesn't say what happens if multiple rows were inserted</li>
+ <li id="l-679"><a href="#l-679">#</a> [23:18] * Joins: tantek (n=tantek@c-71-202-60-161.hsd1.ca.comcast.net)</li>
+ <li id="l-680" _a="Philip`"><a href="#l-680">#</a> [23:21] &lt;Philip`&gt; I expect people writing code would like to be able to find out how much disk space they're using and how much is available, so they can present it to the user nicely and can clean up old data if it's getting full, rather than waiting until they get an exception at an unexpected time</li>
+ <li id="l-681" _a="Hixie" _r="Philip`"><a href="#l-681">#</a> [23:22] &lt;Hixie&gt; Philip`: you don't know the rows in a SELECT * statement</li>
+ <li id="l-682" _a="Hixie"><a href="#l-682">#</a> [23:22] &lt;Hixie&gt; can you insert multiple rows?</li>
+ <li id="l-683" _a="Hixie" _r="yeah"><a href="#l-683">#</a> [23:22] &lt;Hixie&gt; yeah, i imagine quota management might be something we'll do in a v2</li>
+ <li id="l-684" _a="Philip`"><a href="#l-684">#</a> [23:22] &lt;Philip`&gt; I think &quot;executeSql('BEGIN'); executeSql('INSERT INTO table VALUES (?)', lots_of_data_so_we_run_out_space); executeSql('COMMIT')&quot; would break confusingly since JS exceptions won't roll back the transaction</li>
+ <li id="l-685" _a="Hixie"><a href="#l-685">#</a> [23:22] &lt;Hixie&gt; it interacts with the other storage things</li>
+ <li id="l-686" _a="Philip`" _r="Oh"><a href="#l-686">#</a> [23:23] &lt;Philip`&gt; Oh, I forgot about SELECT *</li>
+ <li id="l-687" _a="Hixie"><a href="#l-687">#</a> [23:23] &lt;Hixie&gt; why won't they?</li>
+ <li id="l-688" _a="Philip`"><a href="#l-688">#</a> [23:24] &lt;Philip`&gt; You can do e.g. &quot;INSERT INTO b SELECT * FROM a&quot; to copy a whole table at once</li>
+ <li id="l-689"><a href="#l-689">#</a> [23:24] * Quits: aroben_ (i=adamrobe@nat/apple/x-2511b9c98d51a970) (Remote closed the connection)</li>
+ <li id="l-690" _a="Hixie"><a href="#l-690">#</a> [23:24] &lt;Hixie&gt; hm</li>
+ <li id="l-691" _a="Hixie"><a href="#l-691">#</a> [23:25] &lt;Hixie&gt; what should insertId return then?</li>
+ <li id="l-692" _a="Philip`"><a href="#l-692">#</a> [23:25] &lt;Philip`&gt; I don't think they can they roll back the transaction without knowing that the exception is passing out of the transaction's scope without being caught</li>
+ <li id="l-693"><a href="#l-693">#</a> [23:25] * Joins: aroben (i=adamrobe@nat/apple/x-671c5a17b11e7edf)</li>
+ <li id="l-694" _a="Philip`"><a href="#l-694">#</a> [23:25] &lt;Philip`&gt; and since the transaction is defined by a pair of BEGIN and COMMIT commands, it doesn't have a scope that the browser could know about</li>
+ <li id="l-695" _a="Hixie" _r="oh"><a href="#l-695">#</a> [23:26] &lt;Hixie&gt; oh, well sure, if you're going to do commit/rollback transactions, you should use exception handlers around what you're doing</li>
+ <li id="l-696" _a="Hixie"><a href="#l-696">#</a> [23:26] &lt;Hixie&gt; i think you misunderstood getName, btw</li>
+ <li id="l-697" _a="Philip`"><a href="#l-697">#</a> [23:27] &lt;Philip`&gt; You could write a transaction wrapper and run &quot;doTransaction(function(){ executeSql(...) })&quot; and it can do the BEGIN/COMMIT/catch/ROLLBACK/throw stuff, I suppose</li>
+ <li id="l-698" _a="Hixie"><a href="#l-698">#</a> [23:27] &lt;Hixie&gt; your example would be  r = executeSql(...); for (; r.validRow; r.next()) { dostuff(r['field']) }</li>
+ <li id="l-699" _a="Hixie"><a href="#l-699">#</a> [23:28] &lt;Hixie&gt; there is in fact no way to get an index from a string</li>
+ <li id="l-700" _a="Philip`"><a href="#l-700">#</a> [23:28] &lt;Philip`&gt; SQLite's last_insert_rowid() returns the last row ID that was inserted in the current connection - if insertId is supposed to be per-resultset instead, I'm not sure how you could implement that, but it'd probably end up returning the last inserted row ID from that query</li>
+ <li id="l-701" _a="Hixie"><a href="#l-701">#</a> [23:28] &lt;Hixie&gt; k</li>
+ <li id="l-702" _a="Philip`" _r="Oops"><a href="#l-702">#</a> [23:29] &lt;Philip`&gt; Oops, yes, I got getName the wrong way round</li>
+ <li id="l-703" _a="Hixie"><a href="#l-703">#</a> [23:30] &lt;Hixie&gt; (well i guess you can get an index from a string if you loop over the fields looking at each name in turn)</li>
+ <li id="l-704" _a="Hixie"><a href="#l-704">#</a> [23:30] &lt;Hixie&gt; I fixed the insertId thing.</li>
+ <li id="l-705" _a="Hixie"><a href="#l-705">#</a> [23:30] &lt;Hixie&gt; you're in the acknowledgements already right?</li>
+ <li id="l-706"><a href="#l-706">#</a> [23:30] * Quits: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl) (Read error: 110 (Connection timed out))</li>
+ <li id="l-707" _a="Philip`"><a href="#l-707">#</a> [23:31] &lt;Philip`&gt; I'd guess doing string-&gt;index might be useful for efficiency, if you're getting lots of rows and don't want the hash lookup cost for each one, but maybe it's not worth caring about</li>
+ <li id="l-708" _a="Philip`"><a href="#l-708">#</a> [23:31] &lt;Philip`&gt; I am</li>
+ <li id="l-709" _a="Philip`"><a href="#l-709">#</a> [23:31] &lt;Philip`&gt; (I'm famous!)</li>
+ <li id="l-710"><a href="#l-710">#</a> [23:31] * Joins: Toolskyn (n=Toolskyn@adsl-dc-266ef.adsl.wanadoo.nl)</li>
+ <li id="l-711" _a="Hixie" _r="christ"><a href="#l-711">#</a> [23:32] &lt;Hixie&gt; christ, between twitter being down and the mail server being twitchy the people watching twitter and commit-watchers aren't going to get much of a good look at the changes today</li>
+ <li id="l-712" _a="Philip`"><a href="#l-712">#</a> [23:33] &lt;Philip`&gt; I'm not sure how you could implement insertId so it works with &quot;INSERT INTO t (id) VALUES (123) /* insertId = 123 */; DELETE FROM t /* insertId undefined */; INSERT INTO t (id) VALUES (123) /* insertId = 123 */&quot;, given SQLite's last_insert_rowid (which will (I think) give exactly the same value after each of those statements)</li>
+ <li id="l-713"><a href="#l-713">#</a> [23:33] * Quits: hendry (n=hendry@91.84.53.136) (&quot;bedtime&quot;)</li>
+ <li id="l-714" _a="Hixie" _r="dunno"><a href="#l-714">#</a> [23:35] &lt;Hixie&gt; dunno, we'll see what implementors say</li>
+ <li id="l-715" _a="Hixie"><a href="#l-715">#</a> [23:35] &lt;Hixie&gt; maybe we'll just have to have insertId return the last inserted row at the point the result set was created</li>
+ <li id="l-716" _a="met_"><a href="#l-716">#</a> [23:36] &lt;met_&gt; In ms sql wil be the second insert 134 (dunno sqllite)</li>
+ <li id="l-717" _a="Hixie"><a href="#l-717">#</a> [23:36] &lt;Hixie&gt; or they'll fix sqllite</li>
+ <li id="l-718" _a="Philip`"><a href="#l-718">#</a> [23:36] &lt;Philip`&gt; Could just drop it entirely and use executeSql(&quot;SELECT last_insert_rowid()&quot;)[0]</li>
+ <li id="l-719" _a="Hixie"><a href="#l-719">#</a> [23:38] &lt;Hixie&gt; when writing database code i always wish i could just do |var x = executeSql(&quot;INSERT ...&quot;).insertId;|</li>
+ <li id="l-720" _a="Philip`"><a href="#l-720">#</a> [23:38] &lt;Philip`&gt; (and have that be per browsing context, since it's per connection and each browsing context can have a separate connection)</li>
+ <li id="l-721" _a="Philip`"><a href="#l-721">#</a> [23:40] &lt;Philip`&gt; var x = executeSql(&quot;INSERT ...; SELECT last_insert_rowid()&quot;)[0] isn't much worse</li>
+ <li id="l-722" _a="Hixie"><a href="#l-722">#</a> [23:40] &lt;Hixie&gt; but it is worse :-)</li>
+ <li id="l-723" _a="Hixie"><a href="#l-723">#</a> [23:40] * Hixie ponders whether pushState() should always require a URI and title, or if it should allow state to be pushed without a URI</li>
+ <li id="l-724" _a="met_"><a href="#l-724">#</a> [23:40] &lt;met_&gt; Philip` why not per connection? it should be for one connection</li>
+ <li id="l-725" _a="Hixie"><a href="#l-725">#</a> [23:40] &lt;Hixie&gt; bbiab</li>
+ <li id="l-726" _a="Philip`" _r="met_"><a href="#l-726">#</a> [23:41] &lt;Philip`&gt; met_: Not quite sure what you mean</li>
+ <li id="l-727" _a="met_"><a href="#l-727">#</a> [23:42] &lt;met_&gt; you said  last_insert_rowid() should return last id from whole context not from one connection?</li>
+ <li id="l-728" _a="Philip`"><a href="#l-728">#</a> [23:45] &lt;Philip`&gt; I meant that if you did &quot;executeSql(&quot;INSERT ...&quot;); setTimeout(function(){ executeSql(&quot;SELECT last_insert_rowid()&quot;) }, 1000)&quot; (and nothing else happens on that page) then it should return the rowid from that first INSERT, regardless of whether you've got the same site open in a different tab or window and are inserting new rows over there</li>
+ <li id="l-729" _a="met_"><a href="#l-729">#</a> [23:46] &lt;met_&gt; yes I agree, misunderstand it</li>
+ <li id="l-730" _a="Philip`"><a href="#l-730">#</a> [23:46] &lt;Philip`&gt; which would require browsers to have a separate SQLite-connection in order to keep that separation</li>
+ <li id="l-731" _a="Philip`"><a href="#l-731">#</a> [23:46] &lt;Philip`&gt; Uh</li>
+ <li id="l-732" _a="Philip`"><a href="#l-732">#</a> [23:46] &lt;Philip`&gt; *a seperate SQLite-connection per browsing context</li>
+ <li id="l-733" _a="met_"><a href="#l-733">#</a> [23:46] &lt;met_&gt; yes</li>
+ <li id="l-734" _a="met_"><a href="#l-734">#</a> [23:47] &lt;met_&gt; has sqllite some lock mechanism for this?</li>
+ <li id="l-735" _a="met_"><a href="#l-735">#</a> [23:47] &lt;met_&gt; for more connection accesing one table</li>
+ <li id="l-736" _a="Philip`"><a href="#l-736">#</a> [23:51] &lt;Philip`&gt; You can open multiple connections (as long as the database is stored on disk, not in memory, I think), so each will have its own last_insert_rowid and stuff, and you can do some coarse-grained (per-table reader-writer) locking to stop transactions interfering</li>
+ <li id="l-737" _a="Philip`"><a href="#l-737">#</a> [23:52] &lt;Philip`&gt; and JavaScript's singlethreadedness should avoid most of the real concurrency issues</li>
+ <li id="l-738" _a="met_"><a href="#l-738">#</a> [23:52] &lt;met_&gt; fine</li>
+ <li id="l-739" _a="Philip`"><a href="#l-739">#</a> [23:52] &lt;Philip`&gt; (I think people would like finer-grained locks, but it'll only be implemented if they can find a mechanism that was described long enough ago for any patents to have expired)</li>
+ <li id="l-740" _a="met_"><a href="#l-740">#</a> [23:53] &lt;met_&gt; how handle in javascript case when 1 browser windows lock some table and second  windows are in a que? should'n be there some timeout? for not to freeze so many windows</li>
+ <li id="l-741" _a="met_"><a href="#l-741">#</a> [23:54] &lt;met_&gt; *queu</li>
+ <li id="l-742" _a="Philip`"><a href="#l-742">#</a> [23:56] &lt;Philip`&gt; The browser can set SQLite's busy_timeout, so if two pages both BEGIN EXCLUSIVE then the second will time out after 5 seconds (or whatever) and presumably the browser would then raise a JavaScript exception</li>
+ <li id="l-743" _a="Philip`" _r="Oh"><a href="#l-743">#</a> [23:56] &lt;Philip`&gt; Oh, actually, no</li>
+ <li id="l-744" _a="met_"><a href="#l-744">#</a> [23:56] &lt;met_&gt; busy_timetout will be useful</li>
+ <li id="l-745" _a="Philip`"><a href="#l-745">#</a> [23:57] &lt;Philip`&gt; Since JS runs single-threaded, you wouldn't want to bother with timeouts because there isn't any other thread that's going to release the lock later</li>
+ <li id="l-746" _a="met_"><a href="#l-746">#</a> [23:57] &lt;met_&gt; and what 2 browser windows?</li>
+ <li id="l-747" _a="Philip`"><a href="#l-747">#</a> [23:57] &lt;Philip`&gt; Both browser windows still run all the scripts in the same thread (as far as I'm aware)</li>
+ <li id="l-748" _a="met_"><a href="#l-748">#</a> [23:57] &lt;met_&gt; these are not neccessary in one JS thread</li>
+ <li id="l-749" _a="met_"><a href="#l-749">#</a> [23:58] &lt;met_&gt; or is it some recommendation for implementors?</li>
+ <li id="l-750" _a="Philip`"><a href="#l-750">#</a> [23:58] &lt;Philip`&gt; HTML5 says &quot;... the HTML scripting model is strictly single-threaded and not reentrant&quot;</li>
+ <li id="l-751" _a="met_"><a href="#l-751">#</a> [23:59] &lt;met_&gt; and concern this really more  windows?</li>
+ <li id="l-752" _a="Philip`"><a href="#l-752">#</a> [23:59] &lt;Philip`&gt; So you could still have one page that does BEGIN EXCLUSIVE and then returns control to the browser, then a second page comes along and tries BEGIN EXCLUSIVE but it would immediately fail because the table's already locked (so you set the busy timeout to 0, I guess)</li>
+ <li id="l-753"><a href="#l-753">#</a> Session Close: Thu May 24 00:00:00 2007</li>
+</ol>
+<p id="end">The end :)

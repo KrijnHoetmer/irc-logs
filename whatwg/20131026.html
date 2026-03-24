@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20131026</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20131026.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2013-10-26 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Oct 26 00:00:00 2013</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:06] * Quits: zdobersek (~zdobersek@cpe-77.38.31.63.cable.t-1.si) (Quit: ZNC - <a href="http://znc.in">http://znc.in</a>)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:06] * Quits: felipeduardo (~felipedua@189.115.44.34) (Ping timeout: 272 seconds)</li>
+ <li id="l-5" _a="DaveMethvin"><a href="#l-5">#</a> [00:14] * DaveMethvin is now known as DaveMethvin|away</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:17] * Quits: dbaron (~dbaron@64.213.97.194) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:21] * Joins: newtron (~newtron@108.161.116.88)</li>
+ <li id="l-8" _a="Hixie_" _r="rniwa"><a href="#l-8">#</a> [00:24] &lt;Hixie_&gt; rniwa: did you see my mail?</li>
+ <li id="l-9" _a="Hixie_" _r="bholley"><a href="#l-9">#</a> [00:25] &lt;Hixie_&gt; bholley: i don't know how opera did it exactly, but you can envisage a mode where js execution operates entirely separate from the C++ stack, much like how parsing HTML doesn't use the C++ stack, and where any API that might involve spinning the event loop is implemented as two halves, one of which just queues the other.</li>
+ <li id="l-10" _a="Hixie_" _r="bholley"><a href="#l-10">#</a> [00:26] &lt;Hixie_&gt; bholley: i doubt it would be particularly efficient</li>
+ <li id="l-11" _a="Hixie_" _r="bholley"><a href="#l-11">#</a> [00:26] &lt;Hixie_&gt; bholley: but it's certainly implementable in theory</li>
+ <li id="l-12" _a="bholley" _r="Hixie_"><a href="#l-12">#</a> [00:26] &lt;bholley&gt; Hixie_: but how does JS operate separately from the C++ stack? What happens when the calls interleave?</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:26] * Quits: WebJonas (~Jonas@166.201.202.84.customer.cdi.no) (Ping timeout: 248 seconds)</li>
+ <li id="l-14" _a="Hixie_" _r="bholley"><a href="#l-14">#</a> [00:27] &lt;Hixie_&gt; bholley: you mean like event dispatch?</li>
+ <li id="l-15" _a="bholley" _r="Hixie_"><a href="#l-15">#</a> [00:27] &lt;bholley&gt; Hixie_: or callbacks</li>
+ <li id="l-16" _a="Hixie_" _r="bholley"><a href="#l-16">#</a> [00:28] &lt;Hixie_&gt; bholley: you'd just treat that the same as spinning the event loop, essentially. have the C++ API implemented in a completely interruptible way, so that at the point where it would call the JS, it starts that off, queues itself again (with its internal state) as the thing to run once the script is done, then actually returns.</li>
+ <li id="l-17" _a="Hixie_" _r="bholley"><a href="#l-17">#</a> [00:28] &lt;Hixie_&gt; bholley: (i'm not saying this is a sane way to actually implement a performant UA)</li>
+ <li id="l-18" _a="Hixie_"><a href="#l-18">#</a> [00:28] &lt;Hixie_&gt; (or a maintainable one)</li>
+ <li id="l-19" _a="Hixie_"><a href="#l-19">#</a> [00:28] &lt;Hixie_&gt; the better way to implement what the spec does would be to use real continuations, in a language that supports those natively.</li>
+ <li id="l-20" _a="bholley"><a href="#l-20">#</a> [00:29] &lt;bholley&gt; heh</li>
+ <li id="l-21" _a="Hixie_"><a href="#l-21">#</a> [00:29] &lt;Hixie_&gt; so that you could shunt the entire stack, C++ and JS together, into a continuation.</li>
+ <li id="l-22"><a href="#l-22">#</a> [00:29] * Joins: fishd (darin@nat/google/x-espzlzljagvgwsfn)</li>
+ <li id="l-23" _a="bholley"><a href="#l-23">#</a> [00:29] &lt;bholley&gt; I don't think rust does</li>
+ <li id="l-24" _a="bholley"><a href="#l-24">#</a> [00:29] &lt;bholley&gt; heh</li>
+ <li id="l-25" _a="Hixie_"><a href="#l-25">#</a> [00:29] &lt;Hixie_&gt; in practice, i assume most UAs just actually nest the event loop, though that has a whole suit of issues.</li>
+ <li id="l-26" _a="bholley" _r="Hixie_"><a href="#l-26">#</a> [00:30] &lt;bholley&gt; Hixie_: which issues does the spec's approach avoid?</li>
+ <li id="l-27" _a="Hixie_"><a href="#l-27">#</a> [00:30] &lt;Hixie_&gt; you never have to worry about whether you have more than one event loop going</li>
+ <li id="l-28" _a="Hixie_"><a href="#l-28">#</a> [00:30] &lt;Hixie_&gt; makes it much easier to reason about when things actually run</li>
+ <li id="l-29" _a="Hixie_" _r="also"><a href="#l-29">#</a> [00:31] &lt;Hixie_&gt; also, should it ever be possible for &quot;spin the event loop&quot; conditions to return out of order, you don't end up unable to return to the right caller</li>
+ <li id="l-30" _a="Hixie_" _r="also"><a href="#l-30">#</a> [00:31] &lt;Hixie_&gt; also, you avoid your stack getting out of hand</li>
+ <li id="l-31" _a="Hixie_"><a href="#l-31">#</a> [00:31] &lt;Hixie_&gt; and you can never return without it costing anything</li>
+ <li id="l-32" _a="Hixie_"><a href="#l-32">#</a> [00:31] &lt;Hixie_&gt; just throw the continuation away</li>
+ <li id="l-33" _a="Hixie_"><a href="#l-33">#</a> [00:31] &lt;Hixie_&gt; no need to be able to handle &quot;this is irrelevant, just unwind please&quot; cases</li>
+ <li id="l-34"><a href="#l-34">#</a> [00:32] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-35" _a="bholley" _r="Hixie_"><a href="#l-35">#</a> [00:33] &lt;bholley&gt; Hixie_: I also wanted to talk to you about session history, though maybe this isn't the time</li>
+ <li id="l-36"><a href="#l-36">#</a> [00:33] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:33] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-38" class="flagged" _a="Hixie_" _r="bholley"><a href="#l-38">#</a> [00:34] &lt;Hixie_&gt; bholley: there's never a good time for talking about session history :-P</li>
+ <li id="l-39" class="flagged" _a="Hixie_" _r="bholley"><a href="#l-39">#</a> [00:34] &lt;Hixie_&gt; bholley: might as well try now :-P</li>
+ <li id="l-40" _a="Hixie_"><a href="#l-40">#</a> [00:34] &lt;Hixie_&gt; (unless it's not a good time for you)</li>
+ <li id="l-41" _a="bholley" _r="Hixie_"><a href="#l-41">#</a> [00:34] &lt;bholley&gt; Hixie_: well, I'm concerned that I'm too tired</li>
+ <li id="l-42" _a="bholley" _r="Hixie_"><a href="#l-42">#</a> [00:34] &lt;bholley&gt; Hixie_: but maybe I'll just try a high-level</li>
+ <li id="l-43" _a="Hixie_"><a href="#l-43">#</a> [00:34] &lt;Hixie_&gt; you want to be very awake to talk about session history stuff</li>
+ <li id="l-44" _a="Hixie_"><a href="#l-44">#</a> [00:35] &lt;Hixie_&gt; it's part of the whole navigation subsystem, which is probably the most complicated part of the spec</li>
+ <li id="l-45" _a="bholley" _r="Hixie_"><a href="#l-45">#</a> [00:35] &lt;bholley&gt; Hixie_: that or Location ;-)</li>
+ <li id="l-46" _a="Hixie_"><a href="#l-46">#</a> [00:35] &lt;Hixie_&gt; (but don't worry! we've proven it's interoperable, so we're good! just as the HTMLWG!)</li>
+ <li id="l-47" _a="rniwa" _r="Hixie_"><a href="#l-47">#</a> [00:35] &lt;rniwa&gt; Hixie_: yes</li>
+ <li id="l-48"><a href="#l-48">#</a> [00:35] * Joins: encryptd_fractal (~encryptd_@71-89-74-12.dhcp.bycy.mi.charter.com)</li>
+ <li id="l-49" _a="rniwa" _r="Hixie_"><a href="#l-49">#</a> [00:35] &lt;rniwa&gt; Hixie_: thanks!</li>
+ <li id="l-50" _a="Hixie_" _r="bholley"><a href="#l-50">#</a> [00:35] &lt;Hixie_&gt; bholley: well, the nav parts of Location are part of the same thing, and the security parts of Location are definitely not as complicated, they're far more localised</li>
+ <li id="l-51"><a href="#l-51">#</a> [00:35] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Remote host closed the connection)</li>
+ <li id="l-52" _a="rniwa" _r="Hixie_"><a href="#l-52">#</a> [00:35] &lt;rniwa&gt; Hixie_: haven't had a chance to read through hit</li>
+ <li id="l-53" _a="Hixie_" _r="rniwa"><a href="#l-53">#</a> [00:35] &lt;Hixie_&gt; rniwa: right-o</li>
+ <li id="l-54" _a="rniwa" _r="Hixie_"><a href="#l-54">#</a> [00:35] &lt;rniwa&gt; Hixie_: but I think your response makes sense</li>
+ <li id="l-55" _a="Hixie_" _r="rniwa"><a href="#l-55">#</a> [00:35] &lt;Hixie_&gt; rniwa: let me know if i can help further</li>
+ <li id="l-56" _a="rniwa" _r="Hixie_"><a href="#l-56">#</a> [00:36] &lt;rniwa&gt; Hixie_: will read &amp; respond as needed</li>
+ <li id="l-57" _a="rniwa" _r="Hixie_"><a href="#l-57">#</a> [00:36] &lt;rniwa&gt; Hixie_: yeah, thanks!</li>
+ <li id="l-58" _a="Hixie_" _r="rniwa"><a href="#l-58">#</a> [00:36] &lt;Hixie_&gt; rniwa: i did find a couple of errors in the spec walking through it, so thanks for asking, even though my answer was basically just &quot;the spec already says that&quot; :-)</li>
+ <li id="l-59" _a="bholley" _r="Hixie_"><a href="#l-59">#</a> [00:37] &lt;bholley&gt; Hixie_: so anyway. In Gecko, session history is stored at the top of the BC tree, and is represented as a tree of session history entries, each of which represents a given BC in the tree as it is currently navigated</li>
+ <li id="l-60"><a href="#l-60">#</a> [00:38] * Joins: ap (~ap@17.114.106.198)</li>
+ <li id="l-61" _a="bholley" _r="Hixie_"><a href="#l-61">#</a> [00:38] &lt;bholley&gt; Hixie_: whenever anything navigates, we snapshot/clone the entire tree and add that as an entry</li>
+ <li id="l-62"><a href="#l-62">#</a> [00:38] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 248 seconds)</li>
+ <li id="l-63" _a="bholley" _r="Hixie_"><a href="#l-63">#</a> [00:38] &lt;bholley&gt; Hixie_: IIUC, the spec's model is quite different. Am I correct?</li>
+ <li id="l-64" _a="Hixie_" _r="bholley"><a href="#l-64">#</a> [00:39] &lt;Hixie_&gt; bholley: i think the spec's model is isomorphic, but it's certainly described very differently</li>
+ <li id="l-65" _a="bholley" _r="Hixie_"><a href="#l-65">#</a> [00:40] &lt;bholley&gt; Hixie_: in the spec, is a browsing context parented to a document, or parented to another browsing context?</li>
+ <li id="l-66" _a="Hixie_" _r="bholley"><a href="#l-66">#</a> [00:41] &lt;Hixie_&gt; bholley: neither, precisely</li>
+ <li id="l-67"><a href="#l-67">#</a> [00:41] * Quits: tantek (~tantek@172.56.6.199) (Quit: tantek)</li>
+ <li id="l-68" _a="Hixie_" _r="bholley"><a href="#l-68">#</a> [00:42] &lt;Hixie_&gt; bholley: nested browsing contexts are, in most cases, parented to an element (&lt;iframe&gt;, &lt;frame&gt;, &lt;object&gt;, and in some edge cases involving SVG, &lt;embed&gt; or &lt;img&gt;), which themselves belong to documents, which belong to browsing contexts.</li>
+ <li id="l-69" _a="Hixie_"><a href="#l-69">#</a> [00:42] * Hixie_ sprinkles &quot;in most cases&quot; and &quot;roughly speaking&quot; througout that sentence</li>
+ <li id="l-70" _a="Hixie_"><a href="#l-70">#</a> [00:43] &lt;Hixie_&gt; throughout</li>
+ <li id="l-71" _a="bholley" _r="Hixie_"><a href="#l-71">#</a> [00:44] &lt;bholley&gt; Hixie_: do session history entries live on the browsing context?</li>
+ <li id="l-72" _a="Hixie_" _r="bholley"><a href="#l-72">#</a> [00:45] &lt;Hixie_&gt; bholley: &quot;The sequence of Documents in a browsing context is its session history&quot;</li>
+ <li id="l-73" _a="bholley" _r="Hixie_"><a href="#l-73">#</a> [00:45] &lt;bholley&gt; Hixie_: so this means that, when the UA decides to GC a document, the relevant session history goes away too?</li>
+ <li id="l-74" _a="Hixie_" _r="bholley"><a href="#l-74">#</a> [00:46] &lt;Hixie_&gt; bholley: insufficient detail, please elaborate</li>
+ <li id="l-75" _a="Hixie_" _r="bholley"><a href="#l-75">#</a> [00:46] &lt;Hixie_&gt; bholley: when a document is GC'ed, session history entries relating to frames within that document go away</li>
+ <li id="l-76" _a="Hixie_" _r="bholley"><a href="#l-76">#</a> [00:46] &lt;Hixie_&gt; bholley: session history entries involving that document itself do not</li>
+ <li id="l-77" _a="bholley" _r="Hixie_"><a href="#l-77">#</a> [00:47] &lt;bholley&gt; Hixie_: If the session history is just the list of documents, how does that last part work?</li>
+ <li id="l-78" _a="bholley" _r="Hixie_"><a href="#l-78">#</a> [00:47] &lt;bholley&gt; Hixie_: if the document is GCed, then it's nulled out, right?</li>
+ <li id="l-79" _a="Hixie_" _r="bholley"><a href="#l-79">#</a> [00:50] &lt;Hixie_&gt; bholley: the entries include more information than just the reference to the Document</li>
+ <li id="l-80" _a="Hixie_" _r="bholley"><a href="#l-80">#</a> [00:50] &lt;Hixie_&gt; bholley: but yeah, the sentence i pasted does make that unclear</li>
+ <li id="l-81" _a="Hixie_"><a href="#l-81">#</a> [00:50] &lt;Hixie_&gt; a few sentences later it says &quot;Each session history entry consists of a URL and optionally a state object, and may in addition have a title, a Document object, form data, a scroll position, and other information associated with it.&quot;</li>
+ <li id="l-82" _a="bholley" _r="Hixie_"><a href="#l-82">#</a> [00:50] &lt;bholley&gt; Hixie_: ok. So a browsing context has a list of entries, which include both URIs and direct document references</li>
+ <li id="l-83"><a href="#l-83">#</a> [00:50] * Joins: reyre (~reyre@83-244-151-250.cust-83.exponential-e.net)</li>
+ <li id="l-84" _a="Hixie_"><a href="#l-84">#</a> [00:50] &lt;Hixie_&gt; yeah. traversing the history checks if the document is still alive, and if not, brings a new one up</li>
+ <li id="l-85" _a="Hixie_"><a href="#l-85">#</a> [00:51] &lt;Hixie_&gt; (filed a bug on making that contradiction less blatent)</li>
+ <li id="l-86"><a href="#l-86">#</a> [00:52] * Quits: weinig (~weinig@17.114.219.46) (Quit: weinig)</li>
+ <li id="l-87"><a href="#l-87">#</a> [00:53] * Parts: decotii (~decotii@hq.croscon.com) (&quot;Leaving&quot;)</li>
+ <li id="l-88" _a="bholley" _r="Hixie_"><a href="#l-88">#</a> [00:53] &lt;bholley&gt; Hixie_: so, consider  this: <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/?saved=2569">http://software.hixie.ch/utilities/js/live-dom-viewer/?saved=2569</a></li>
+ <li id="l-89" _a="bholley" _r="Hixie_"><a href="#l-89">#</a> [00:53] &lt;bholley&gt; Hixie_: (you want rendered view for this one)</li>
+ <li id="l-90" _a="Hixie_" _r="yeah"><a href="#l-90">#</a> [00:54] &lt;Hixie_&gt; yeah, i was gonna say, live dom viewer with session history, you're a brave man</li>
+ <li id="l-91" _a="bholley" _r="Hixie_"><a href="#l-91">#</a> [00:54] &lt;bholley&gt; Hixie_: basically, we have an outer frame, P. P begins with an inner frame, C, which gets navigated to C'</li>
+ <li id="l-92" _a="bholley" _r="Hixie_"><a href="#l-92">#</a> [00:54] &lt;bholley&gt; Hixie_: then, P gets navigated to P'</li>
+ <li id="l-93" _a="Hixie_"><a href="#l-93">#</a> [00:54] &lt;Hixie_&gt; yup</li>
+ <li id="l-94" _a="Hixie_"><a href="#l-94">#</a> [00:55] &lt;Hixie_&gt; lgtm so far</li>
+ <li id="l-95" _a="bholley" _r="Hixie_"><a href="#l-95">#</a> [00:55] &lt;bholley&gt; Hixie_: in Gecko, hitting back after the P' navigation gives you a C' subframe</li>
+ <li id="l-96" _a="Hixie_"><a href="#l-96">#</a> [00:55] &lt;Hixie_&gt; chrome also</li>
+ <li id="l-97" _a="Hixie_"><a href="#l-97">#</a> [00:55] &lt;Hixie_&gt; which we explain via the bfcache</li>
+ <li id="l-98" _a="bholley" _r="Hixie_"><a href="#l-98">#</a> [00:55] &lt;bholley&gt; Hixie_: but in the spec, it depends on GC</li>
+ <li id="l-99" _a="Hixie_" _r="yeah"><a href="#l-99">#</a> [00:56] &lt;Hixie_&gt; yeah, it's true that if we assume the doc got GC'ed (which i guess it did in chrome), the spec doesn't explain this</li>
+ <li id="l-100" _a="Hixie_"><a href="#l-100">#</a> [00:56] &lt;Hixie_&gt; having said that, i'd argue this behaviour if the doc _did_ get GC'ed is rather dubious</li>
+ <li id="l-101" _a="Hixie_"><a href="#l-101">#</a> [00:56] &lt;Hixie_&gt; because you don't really have a sane way to know how to reconstruct the right state</li>
+ <li id="l-102" _a="bholley" _r="Hixie_"><a href="#l-102">#</a> [00:56] &lt;bholley&gt; Hixie_: well, Gecko does a whole lot of work to do so</li>
+ <li id="l-103" _a="Hixie_"><a href="#l-103">#</a> [00:56] &lt;Hixie_&gt; i mean, how do you know which iframe to use?</li>
+ <li id="l-104" _a="Hixie_"><a href="#l-104">#</a> [00:57] &lt;Hixie_&gt; it's all one big heuristic</li>
+ <li id="l-105" _a="bholley" _r="Hixie_"><a href="#l-105">#</a> [00:57] &lt;bholley&gt; Hixie_: yep</li>
+ <li id="l-106" _a="Hixie_"><a href="#l-106">#</a> [00:57] * Hixie_ votes to kill the heuristic</li>
+ <li id="l-107" _a="bholley" _r="Hixie_"><a href="#l-107">#</a> [00:57] &lt;bholley&gt; Hixie_: me too, but doing so is not necessarily web compatible</li>
+ <li id="l-108" _a="bholley" _r="Hixie_"><a href="#l-108">#</a> [00:57] &lt;bholley&gt; Hixie_: I mean, implementing the spec is like, 10 times easier than implementing it Gecko-style</li>
+ <li id="l-109" _a="Hixie_" _r="well"><a href="#l-109">#</a> [00:57] &lt;Hixie_&gt; well, the heuristic isn't either, especially in the case of web apps</li>
+ <li id="l-110" _a="Hixie_"><a href="#l-110">#</a> [00:57] &lt;Hixie_&gt; web compatible, that is</li>
+ <li id="l-111" _a="bholley" _r="Hixie_"><a href="#l-111">#</a> [00:58] &lt;bholley&gt; Hixie_: the heuristic is totally web-compatible</li>
+ <li id="l-112" _a="Hixie_"><a href="#l-112">#</a> [00:58] &lt;Hixie_&gt; i think it's reasonable to do it in the case of the page being static</li>
+ <li id="l-113" _a="bholley" _r="Hixie_"><a href="#l-113">#</a> [00:58] &lt;bholley&gt; Hixie_: Gecko does it. Chrome mostly kinda sorta tries to copy it</li>
+ <li id="l-114" _a="Hixie_"><a href="#l-114">#</a> [00:58] &lt;Hixie_&gt; that heuristic has actually broken my pages</li>
+ <li id="l-115" _a="Hixie_"><a href="#l-115">#</a> [00:58] &lt;Hixie_&gt; i've had to do all kinds of workarounds to stop it</li>
+ <li id="l-116" _a="bholley" _r="Hixie_"><a href="#l-116">#</a> [00:58] &lt;bholley&gt; Hixie_: sure. But that's your problem as a web author</li>
+ <li id="l-117" _a="Hixie_"><a href="#l-117">#</a> [00:58] &lt;Hixie_&gt; i care about web authors :-)</li>
+ <li id="l-118" _a="bholley" _r="Hixie_"><a href="#l-118">#</a> [00:59] &lt;bholley&gt; Hixie_: I know. But I'm saying that you're conflating &quot;developer-friendly&quot; with &quot;web-compatible&quot;</li>
+ <li id="l-119" _a="Hixie_"><a href="#l-119">#</a> [00:59] &lt;Hixie_&gt; well fair enough</li>
+ <li id="l-120" _a="bholley" _r="Hixie_"><a href="#l-120">#</a> [00:59] &lt;bholley&gt; Hixie_: they're two very different concepts</li>
+ <li id="l-121" _a="Hixie_"><a href="#l-121">#</a> [00:59] &lt;Hixie_&gt; though i'm sure this breaks web apps that use iframes internally but haven't been tested with the back button</li>
+ <li id="l-122"><a href="#l-122">#</a> [00:59] * Joins: reyre_ (~reyre@83-244-151-250.cust-83.exponential-e.net)</li>
+ <li id="l-123" _a="Hixie_"><a href="#l-123">#</a> [00:59] &lt;Hixie_&gt; anyway</li>
+ <li id="l-124" _a="bholley" _r="Hixie_"><a href="#l-124">#</a> [00:59] &lt;bholley&gt; Hixie_: yeah, sure</li>
+ <li id="l-125"><a href="#l-125">#</a> [00:59] * Quits: newtron (~newtron@108.161.116.88) (Remote host closed the connection)</li>
+ <li id="l-126" _a="Hixie_"><a href="#l-126">#</a> [00:59] &lt;Hixie_&gt; i'm happy to spec this if that's where we're going with this</li>
+ <li id="l-127" _a="bholley" _r="Hixie_"><a href="#l-127">#</a> [00:59] &lt;bholley&gt; Hixie_: so, I'm all in favor of the spec</li>
+ <li id="l-128" _a="Hixie_"><a href="#l-128">#</a> [00:59] &lt;Hixie_&gt; but i need a detailed precise description of the heuristic</li>
+ <li id="l-129" _a="bholley" _r="Hixie_"><a href="#l-129">#</a> [00:59] &lt;bholley&gt; Hixie_: and I want to try to implement the spec in servo</li>
+ <li id="l-130"><a href="#l-130">#</a> [01:00] * Quits: ehsan (~ehsan@66.207.208.102) (Remote host closed the connection)</li>
+ <li id="l-131" _a="bholley" _r="Hixie_"><a href="#l-131">#</a> [01:00] &lt;bholley&gt; Hixie_: but smaug is adamant that Gecko's model is necessary to avoid breaking the web</li>
+ <li id="l-132"><a href="#l-132">#</a> [01:00] * Joins: newtron (~newtron@108.161.116.88)</li>
+ <li id="l-133"><a href="#l-133">#</a> [01:00] * Joins: nimbu1 (~nimbu@sjfw1-a.adobe.com)</li>
+ <li id="l-134" _a="Hixie_" _r="bholley"><a href="#l-134">#</a> [01:00] &lt;Hixie_&gt; bholley: in the case of non-static pages?</li>
+ <li id="l-135" _a="bholley" _r="Hixie_"><a href="#l-135">#</a> [01:00] &lt;bholley&gt; Hixie_: he didn't go into detail. But it sounds like this whole situation is very touchy</li>
+ <li id="l-136" _a="Hixie_"><a href="#l-136">#</a> [01:00] &lt;Hixie_&gt; this is certainly a third rail issue</li>
+ <li id="l-137" _a="bholley" _r="Hixie_"><a href="#l-137">#</a> [01:01] &lt;bholley&gt; Hixie_: so anyway. Implementing the spec is very straightforward, so that's what I'm going to do in servo</li>
+ <li id="l-138"><a href="#l-138">#</a> [01:01] * Quits: reyre (~reyre@83-244-151-250.cust-83.exponential-e.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-139" _a="Hixie_"><a href="#l-139">#</a> [01:02] &lt;Hixie_&gt; basically my view is that in all the cases where you can't tell from script that the docs got GC'ed, i'm all in favour of the browsers pretending the docs weren't GC'ed and bringing everything back. but in the case where there's a way to tell whether or not the doc got GC'ed, e.g. going back is going to rerun some script that creates iframes or whatnot, then the spec model is the only sane option. imho.</li>
+ <li id="l-140"><a href="#l-140">#</a> [01:02] * Quits: nimbu (~nimbu@192.150.10.205) (Ping timeout: 245 seconds)</li>
+ <li id="l-141" _a="bholley" _r="(also"><a href="#l-141">#</a> [01:02] &lt;bholley&gt; (also, onpageshow)</li>
+ <li id="l-142" _a="Hixie_"><a href="#l-142">#</a> [01:03] &lt;Hixie_&gt; oh pretty much any script</li>
+ <li id="l-143"><a href="#l-143">#</a> [01:04] * Quits: nimbu1 (~nimbu@sjfw1-a.adobe.com) (Ping timeout: 260 seconds)</li>
+ <li id="l-144"><a href="#l-144">#</a> [01:05] * Joins: tantek (~tantek@50-0-164-83.dsl.dynamic.sonic.net)</li>
+ <li id="l-145"><a href="#l-145">#</a> [01:05] * Quits: newtron (~newtron@108.161.116.88) (Ping timeout: 272 seconds)</li>
+ <li id="l-146" _a="bholley"><a href="#l-146">#</a> [01:05] &lt;bholley&gt; so anyway. The spec might need to change, but at the moment it's the simplest option to implement, and I only want to implement the Gecko setup if it becomes clear that the spec model breaks the web and that servo is going to be shippable modulo this issue</li>
+ <li id="l-147"><a href="#l-147">#</a> [01:05] * Joins: weinig (~weinig@17.114.219.46)</li>
+ <li id="l-148" _a="Hixie_"><a href="#l-148">#</a> [01:05] &lt;Hixie_&gt; k</li>
+ <li id="l-149" _a="Hixie_"><a href="#l-149">#</a> [01:05] &lt;Hixie_&gt; sounds good</li>
+ <li id="l-150" _a="Hixie_"><a href="#l-150">#</a> [01:06] &lt;Hixie_&gt; if you do decide the spec needs to change, i need a description of what it should say</li>
+ <li id="l-151" _a="Hixie_"><a href="#l-151">#</a> [01:06] &lt;Hixie_&gt; because i'm at a loss as to how to spec that heuristic</li>
+ <li id="l-152" _a="bholley"><a href="#l-152">#</a> [01:06] * bholley doesn't look forward to it</li>
+ <li id="l-153"><a href="#l-153">#</a> [01:24] * Joins: master (~master@198.178.127.17)</li>
+ <li id="l-154" _a="master"><a href="#l-154">#</a> [01:24] * master is now known as Guest95276</li>
+ <li id="l-155"><a href="#l-155">#</a> [01:24] * Quits: frozenice (~frozenice@unaffiliated/fr0zenice) (Remote host closed the connection)</li>
+ <li id="l-156"><a href="#l-156">#</a> [01:26] * Quits: reyre_ (~reyre@83-244-151-250.cust-83.exponential-e.net) (Remote host closed the connection)</li>
+ <li id="l-157"><a href="#l-157">#</a> [01:29] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-158"><a href="#l-158">#</a> [01:33] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 272 seconds)</li>
+ <li id="l-159"><a href="#l-159">#</a> [01:42] * Joins: sayanee (~sayanee@210.23.18.239)</li>
+ <li id="l-160"><a href="#l-160">#</a> [01:42] * Quits: TuRnaD0 (~Thunderbi@x1-6-e0-46-9a-1e-fe-ca.k368.webspeed.dk) (Read error: Connection reset by peer)</li>
+ <li id="l-161"><a href="#l-161">#</a> [01:50] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Ping timeout: 245 seconds)</li>
+ <li id="l-162"><a href="#l-162">#</a> [01:50] * Quits: bholley (~bholley@24-134-57-28-dynip.superkabel.de) (Quit: bholley)</li>
+ <li id="l-163"><a href="#l-163">#</a> [01:50] * Quits: weinig (~weinig@17.114.219.46) (Quit: weinig)</li>
+ <li id="l-164"><a href="#l-164">#</a> [01:54] * Joins: weinig (~weinig@17.114.219.46)</li>
+ <li id="l-165"><a href="#l-165">#</a> [01:58] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-166"><a href="#l-166">#</a> [02:04] * Quits: cabanier (~cabanier@192.150.22.55) (Quit: Leaving.)</li>
+ <li id="l-167"><a href="#l-167">#</a> [02:10] * Quits: ap (~ap@17.114.106.198) (Quit: ap)</li>
+ <li id="l-168"><a href="#l-168">#</a> [02:19] * Quits: Benvie_ (~bbenvie@63.245.219.53) (Ping timeout: 256 seconds)</li>
+ <li id="l-169"><a href="#l-169">#</a> [02:20] * Joins: jernoble|laptop (~jernoble@17.114.109.237)</li>
+ <li id="l-170"><a href="#l-170">#</a> [02:22] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-171"><a href="#l-171">#</a> [02:24] * Joins: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-172"><a href="#l-172">#</a> [02:24] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-173"><a href="#l-173">#</a> [02:28] * Quits: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 245 seconds)</li>
+ <li id="l-174"><a href="#l-174">#</a> [02:32] * Quits: jorgepedret (~jorgepedr@64-46-23-103.dyn.novuscom.net) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-175"><a href="#l-175">#</a> [02:37] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Ping timeout: 272 seconds)</li>
+ <li id="l-176"><a href="#l-176">#</a> [02:38] * Quits: jernoble|laptop (~jernoble@17.114.109.237) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-177"><a href="#l-177">#</a> [02:38] * Quits: weinig (~weinig@17.114.219.46) (Quit: weinig)</li>
+ <li id="l-178"><a href="#l-178">#</a> [02:39] * Joins: jernoble|laptop (~jernoble@17.114.109.237)</li>
+ <li id="l-179"><a href="#l-179">#</a> [02:39] * Quits: jernoble|laptop (~jernoble@17.114.109.237) (Client Quit)</li>
+ <li id="l-180"><a href="#l-180">#</a> [02:40] * Joins: jernoble|laptop (~jernoble@17.114.109.237)</li>
+ <li id="l-181"><a href="#l-181">#</a> [02:40] * Quits: jernoble|laptop (~jernoble@17.114.109.237) (Client Quit)</li>
+ <li id="l-182"><a href="#l-182">#</a> [02:40] * Joins: weinig (~weinig@17.114.219.46)</li>
+ <li id="l-183"><a href="#l-183">#</a> [02:43] * Quits: malaclyps (~Danny@gateway/tor-sasl/malaclyps) (Ping timeout: 240 seconds)</li>
+ <li id="l-184"><a href="#l-184">#</a> [02:46] * Joins: sgalineau (~sylvaing@67.132.130.174)</li>
+ <li id="l-185"><a href="#l-185">#</a> [03:01] * Quits: sgalineau (~sylvaing@67.132.130.174) (Ping timeout: 245 seconds)</li>
+ <li id="l-186"><a href="#l-186">#</a> [03:02] * Quits: weinig (~weinig@17.114.219.46) (Quit: weinig)</li>
+ <li id="l-187"><a href="#l-187">#</a> [03:05] * Joins: jernoble|laptop (~jernoble@76.74.153.49)</li>
+ <li id="l-188"><a href="#l-188">#</a> [03:06] * Joins: Goplat (~goplat@reactos/developer/Goplat)</li>
+ <li id="l-189" _a="DaveMethvin|away"><a href="#l-189">#</a> [03:09] * DaveMethvin|away is now known as DaveMethvin</li>
+ <li id="l-190"><a href="#l-190">#</a> [03:18] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-191"><a href="#l-191">#</a> [03:19] * Joins: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-192"><a href="#l-192">#</a> [03:19] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-193"><a href="#l-193">#</a> [03:21] * Quits: encryptd_fractal (~encryptd_@71-89-74-12.dhcp.bycy.mi.charter.com) (Remote host closed the connection)</li>
+ <li id="l-194"><a href="#l-194">#</a> [03:23] * Quits: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 272 seconds)</li>
+ <li id="l-195"><a href="#l-195">#</a> [03:26] * Joins: ebetancourt (~textual@c-66-229-12-65.hsd1.fl.comcast.net)</li>
+ <li id="l-196"><a href="#l-196">#</a> [03:31] * Joins: jorgepedret (~jorgepedr@70-36-56-110.dyn.novuscom.net)</li>
+ <li id="l-197"><a href="#l-197">#</a> [03:34] * Joins: roadt_ (~roadt@36.7.147.169)</li>
+ <li id="l-198"><a href="#l-198">#</a> [03:38] * Joins: scor (~scor@c-67-169-179-108.hsd1.ca.comcast.net)</li>
+ <li id="l-199"><a href="#l-199">#</a> [03:38] * Quits: scor (~scor@c-67-169-179-108.hsd1.ca.comcast.net) (Changing host)</li>
+ <li id="l-200"><a href="#l-200">#</a> [03:38] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-201"><a href="#l-201">#</a> [03:40] * Quits: idbentley (~idbentley@204.91.28.98) (Ping timeout: 272 seconds)</li>
+ <li id="l-202"><a href="#l-202">#</a> [03:43] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-203"><a href="#l-203">#</a> [03:49] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-204"><a href="#l-204">#</a> [03:54] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-205"><a href="#l-205">#</a> [03:54] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-206"><a href="#l-206">#</a> [03:55] * Joins: Cromulent (~Cromulent@cpc1-reig5-2-0-cust251.6-3.cable.virginm.net)</li>
+ <li id="l-207"><a href="#l-207">#</a> [03:58] * Quits: jorgepedret (~jorgepedr@70-36-56-110.dyn.novuscom.net) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-208"><a href="#l-208">#</a> [03:58] * Quits: lmclister (~lmclister@192.150.10.209)</li>
+ <li id="l-209"><a href="#l-209">#</a> [04:04] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-210"><a href="#l-210">#</a> [04:11] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Remote host closed the connection)</li>
+ <li id="l-211"><a href="#l-211">#</a> [04:12] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-212"><a href="#l-212">#</a> [04:12] * Quits: rniwa (~rniwa@17.212.154.114) (Quit: rniwa)</li>
+ <li id="l-213"><a href="#l-213">#</a> [04:13] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-214"><a href="#l-214">#</a> [04:13] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-215"><a href="#l-215">#</a> [04:14] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-216"><a href="#l-216">#</a> [04:15] * Quits: jernoble|laptop (~jernoble@76.74.153.49) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-217"><a href="#l-217">#</a> [04:18] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 248 seconds)</li>
+ <li id="l-218"><a href="#l-218">#</a> [04:47] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-219"><a href="#l-219">#</a> [04:49] * Quits: tomasf (~tomasf@h210n5-n-d4.ias.bredband.telia.com) (Quit: tomasf)</li>
+ <li id="l-220" _a="DaveMethvin"><a href="#l-220">#</a> [05:06] * DaveMethvin is now known as DaveMethvin|away</li>
+ <li id="l-221"><a href="#l-221">#</a> [05:08] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-222"><a href="#l-222">#</a> [05:12] * Quits: tantek (~tantek@50-0-164-83.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-223"><a href="#l-223">#</a> [05:12] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 245 seconds)</li>
+ <li id="l-224"><a href="#l-224">#</a> [05:15] * Quits: ebetancourt (~textual@c-66-229-12-65.hsd1.fl.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)</li>
+ <li id="l-225"><a href="#l-225">#</a> [05:17] * Quits: nunnun (~hiro@sculptor.local.hiro.ne.jp) (Quit: Bye)</li>
+ <li id="l-226"><a href="#l-226">#</a> [05:22] * Quits: Guest95276 (~master@198.178.127.17) (Ping timeout: 246 seconds)</li>
+ <li id="l-227"><a href="#l-227">#</a> [05:44] * Joins: nunnun (~hiro@sculptor.local.hiro.ne.jp)</li>
+ <li id="l-228"><a href="#l-228">#</a> [05:49] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-229"><a href="#l-229">#</a> [05:57] * Quits: Cromulent (~Cromulent@cpc1-reig5-2-0-cust251.6-3.cable.virginm.net) (Quit: KVIrc 4.2.0 Equilibrium <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>)</li>
+ <li id="l-230"><a href="#l-230">#</a> [06:02] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-231"><a href="#l-231">#</a> [06:02] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-232"><a href="#l-232">#</a> [06:04] * Quits: sayanee (~sayanee@210.23.18.239) (Remote host closed the connection)</li>
+ <li id="l-233"><a href="#l-233">#</a> [06:04] * Joins: sayanee (~sayanee@210.23.18.239)</li>
+ <li id="l-234"><a href="#l-234">#</a> [06:06] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 252 seconds)</li>
+ <li id="l-235"><a href="#l-235">#</a> [06:23] * Joins: malaclyps (~Danny@gateway/tor-sasl/malaclyps)</li>
+ <li id="l-236"><a href="#l-236">#</a> [06:26] * Quits: wakaba__ (~wakaba@208.157.197.113.dy.bbexcite.jp) (Quit: Leaving...)</li>
+ <li id="l-237"><a href="#l-237">#</a> [06:33] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-238"><a href="#l-238">#</a> [06:33] * Joins: wakaba_ (~wakaba@208.157.197.113.dy.bbexcite.jp)</li>
+ <li id="l-239"><a href="#l-239">#</a> [06:41] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 272 seconds)</li>
+ <li id="l-240"><a href="#l-240">#</a> [06:41] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-241"><a href="#l-241">#</a> [06:44] * Quits: scor (~scor@drupal.org/user/52142/view) (Read error: Connection reset by peer)</li>
+ <li id="l-242"><a href="#l-242">#</a> [06:49] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-243"><a href="#l-243">#</a> [06:54] * Quits: sayanee (~sayanee@210.23.18.239) (Remote host closed the connection)</li>
+ <li id="l-244"><a href="#l-244">#</a> [06:56] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-245"><a href="#l-245">#</a> [06:57] * Joins: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-246"><a href="#l-246">#</a> [06:57] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-247"><a href="#l-247">#</a> [07:01] * Joins: rniwa (~rniwa@c-98-207-134-149.hsd1.ca.comcast.net)</li>
+ <li id="l-248"><a href="#l-248">#</a> [07:01] * Quits: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 245 seconds)</li>
+ <li id="l-249"><a href="#l-249">#</a> [07:02] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-250"><a href="#l-250">#</a> [07:10] * Quits: Philip` (~philip@compass.zaynar.co.uk) (Ping timeout: 248 seconds)</li>
+ <li id="l-251"><a href="#l-251">#</a> [07:14] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-252"><a href="#l-252">#</a> [07:25] * Joins: sicking (~sicking@c-67-180-9-161.hsd1.ca.comcast.net)</li>
+ <li id="l-253"><a href="#l-253">#</a> [07:39] * Quits: sicking (~sicking@c-67-180-9-161.hsd1.ca.comcast.net) (Quit: sicking)</li>
+ <li id="l-254"><a href="#l-254">#</a> [07:44] * Quits: frustrum (~frustrum@128.54.214.195) (Ping timeout: 252 seconds)</li>
+ <li id="l-255"><a href="#l-255">#</a> [07:51] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-256"><a href="#l-256">#</a> [07:52] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-257"><a href="#l-257">#</a> [07:52] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-258"><a href="#l-258">#</a> [07:57] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 248 seconds)</li>
+ <li id="l-259"><a href="#l-259">#</a> [08:11] * Quits: Goplat (~goplat@reactos/developer/Goplat) (Remote host closed the connection)</li>
+ <li id="l-260"><a href="#l-260">#</a> [08:16] * Quits: plutoniix (~plutoniix@node-1a5x.pool-101-109.dynamic.totbb.net) (Quit: จรลี จรลา)</li>
+ <li id="l-261"><a href="#l-261">#</a> [08:29] * Joins: Philip` (~philip@compass.zaynar.co.uk)</li>
+ <li id="l-262"><a href="#l-262">#</a> [08:46] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-263"><a href="#l-263">#</a> [08:48] * Joins: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-264"><a href="#l-264">#</a> [08:48] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-265"><a href="#l-265">#</a> [08:52] * Quits: marcosc_ (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 240 seconds)</li>
+ <li id="l-266"><a href="#l-266">#</a> [09:04] * Joins: Ms2ger (~Ms2ger@178.205-64-87.adsl-dyn.isp.belgacom.be)</li>
+ <li id="l-267" _a="MikeSmith" _r="Ms2ger"><a href="#l-267">#</a> [09:11] &lt;MikeSmith&gt; Ms2ger: any idea why <a href="http://w3c-test.org/web-platform-tests/master/dom/interfaces.html">http://w3c-test.org/web-platform-tests/master/dom/interfaces.html</a> doesn't run to completion?</li>
+ <li id="l-268" _a="Ms2ger"><a href="#l-268">#</a> [09:11] &lt;Ms2ger&gt; It doesn't?</li>
+ <li id="l-269" _a="MikeSmith"><a href="#l-269">#</a> [09:11] &lt;MikeSmith&gt; there are 3983 tests in the source</li>
+ <li id="l-270" _a="MikeSmith"><a href="#l-270">#</a> [09:12] &lt;MikeSmith&gt; in Firefox and Chrome for me, both run only 1331 tests and stop</li>
+ <li id="l-271" _a="Ms2ger"><a href="#l-271">#</a> [09:12] &lt;Ms2ger&gt; How did you count? :)</li>
+ <li id="l-272" _a="MikeSmith"><a href="#l-272">#</a> [09:13] &lt;MikeSmith&gt; ran it locally with <a href="http://web-platform.test:8000/html/dom/interfaces.html">http://web-platform.test:8000/html/dom/interfaces.html</a></li>
+ <li id="l-273" _a="MikeSmith"><a href="#l-273">#</a> [09:14] &lt;MikeSmith&gt; and if you examine the restults results from w3c-test.org you'll a bunch of tests from teh source are not reported</li>
+ <li id="l-274" _a="Ms2ger"><a href="#l-274">#</a> [09:14] &lt;Ms2ger&gt; Such as?</li>
+ <li id="l-275" _a="MikeSmith"><a href="#l-275">#</a> [09:15] &lt;MikeSmith&gt; all of the HTMLInputElement tests</li>
+ <li id="l-276" _a="Ms2ger"><a href="#l-276">#</a> [09:15] &lt;Ms2ger&gt; Ah</li>
+ <li id="l-277" _a="Ms2ger"><a href="#l-277">#</a> [09:15] &lt;Ms2ger&gt; You're looking at the wrong test</li>
+ <li id="l-278" _a="MikeSmith"><a href="#l-278">#</a> [09:15] &lt;MikeSmith&gt; maybe in fact all of the HTML*Element tests</li>
+ <li id="l-279" _a="MikeSmith"><a href="#l-279">#</a> [09:15] &lt;MikeSmith&gt; oh</li>
+ <li id="l-280" _a="Ms2ger"><a href="#l-280">#</a> [09:15] &lt;Ms2ger&gt; <a href="http://w3c-test.org/web-platform-tests/master/dom/interfaces.html">http://w3c-test.org/web-platform-tests/master/dom/interfaces.html</a> != <a href="http://w3c-test.org/web-platform-tests/master/html/dom/interfaces.html">http://w3c-test.org/web-platform-tests/master/html/dom/interfaces.html</a></li>
+ <li id="l-281" _a="MikeSmith"><a href="#l-281">#</a> [09:15] &lt;MikeSmith&gt; fuuuuu</li>
+ <li id="l-282" _a="MikeSmith"><a href="#l-282">#</a> [09:15] &lt;MikeSmith&gt; sorry for the noise</li>
+ <li id="l-283" _a="Ms2ger"><a href="#l-283">#</a> [09:16] &lt;Ms2ger&gt; Np</li>
+ <li id="l-284" _a="Ms2ger"><a href="#l-284">#</a> [09:16] &lt;Ms2ger&gt; Not sure how to make this more obvious</li>
+ <li id="l-285"><a href="#l-285">#</a> [09:17] * Joins: parshap_ (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-286"><a href="#l-286">#</a> [09:18] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-287" _a="MikeSmith"><a href="#l-287">#</a> [09:18] &lt;MikeSmith&gt; I think it's pretty clear to anybody who's being careful and paying attention</li>
+ <li id="l-288" _a="MikeSmith"><a href="#l-288">#</a> [09:20] &lt;MikeSmith&gt; plus one tab says &quot;DOM4 IDL tests&quot; and the other says &quot;HTML IDL tests&quot;</li>
+ <li id="l-289" _a="MikeSmith"><a href="#l-289">#</a> [09:20] &lt;MikeSmith&gt; etc.</li>
+ <li id="l-290"><a href="#l-290">#</a> [09:21] * Quits: rniwa (~rniwa@c-98-207-134-149.hsd1.ca.comcast.net) (Quit: rniwa)</li>
+ <li id="l-291" _a="Ms2ger"><a href="#l-291">#</a> [09:21] &lt;Ms2ger&gt; Even then, you're not the first to be confused :)</li>
+ <li id="l-292" _a="MikeSmith"><a href="#l-292">#</a> [09:28] &lt;MikeSmith&gt; could just add &lt;h1&gt;DOM4 IDL tests&lt;/h1&gt; to the source before &lt;div id=log&gt;</li>
+ <li id="l-293" _a="Ms2ger"><a href="#l-293">#</a> [09:28] &lt;Ms2ger&gt; Fair</li>
+ <li id="l-294" _a="Ms2ger"><a href="#l-294">#</a> [09:28] &lt;Ms2ger&gt; Let me go and do that</li>
+ <li id="l-295" _a="Ms2ger"><a href="#l-295">#</a> [09:29] * Ms2ger sees <a href="https://github.com/w3c/web-platform-tests/pull/368">https://github.com/w3c/web-platform-tests/pull/368</a> landed</li>
+ <li id="l-296" _a="Ms2ger"><a href="#l-296">#</a> [09:29] &lt;Ms2ger&gt; zcorpan++</li>
+ <li id="l-297" _a="Ms2ger"><a href="#l-297">#</a> [09:30] &lt;Ms2ger&gt; denis++</li>
+ <li id="l-298"><a href="#l-298">#</a> [09:32] * Joins: othermaciej (~mjs@c-50-136-134-16.hsd1.ca.comcast.net)</li>
+ <li id="l-299"><a href="#l-299">#</a> [09:34] * Joins: WebJonas (~Jonas@166.201.202.84.customer.cdi.no)</li>
+ <li id="l-300" _a="MikeSmith"><a href="#l-300">#</a> [09:41] &lt;MikeSmith&gt; ah cool</li>
+ <li id="l-301"><a href="#l-301">#</a> [09:42] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-302" _a="MikeSmith"><a href="#l-302">#</a> [09:42] &lt;MikeSmith&gt; having Denis working on tests is going to be a big win</li>
+ <li id="l-303"><a href="#l-303">#</a> [09:43] * Joins: bholley (~bholley@24-134-57-28-dynip.superkabel.de)</li>
+ <li id="l-304"><a href="#l-304">#</a> [09:43] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-305"><a href="#l-305">#</a> [09:43] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-306" _a="Ms2ger"><a href="#l-306">#</a> [09:45] &lt;Ms2ger&gt; <a href="https://github.com/w3c/web-platform-tests/pull/388">https://github.com/w3c/web-platform-tests/pull/388</a></li>
+ <li id="l-307"><a href="#l-307">#</a> [09:47] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-308"><a href="#l-308">#</a> [09:47] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 245 seconds)</li>
+ <li id="l-309"><a href="#l-309">#</a> [09:48] * Quits: parshap_ (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 272 seconds)</li>
+ <li id="l-310"><a href="#l-310">#</a> [09:54] * Quits: bholley (~bholley@24-134-57-28-dynip.superkabel.de) (Quit: bholley)</li>
+ <li id="l-311" _a="MikeSmith"><a href="#l-311">#</a> [09:57] * MikeSmith looks</li>
+ <li id="l-312" _a="MikeSmith" _r="btw"><a href="#l-312">#</a> [09:57] &lt;MikeSmith&gt; btw, I wonder if wptserve can handle the kind of case that abarth describes in <a href="https://groups.google.com/a/chromium.org/d/msg/blink-dev/fnWX8n6JrTg/qw1OC_P_AlEJ">https://groups.google.com/a/chromium.org/d/msg/blink-dev/fnWX8n6JrTg/qw1OC_P_AlEJ</a></li>
+ <li id="l-313" _a="MikeSmith"><a href="#l-313">#</a> [09:57] &lt;MikeSmith&gt; &quot;requires sending broken unicode on the wire and controlling exactly when the underlying socket is flushed&quot;</li>
+ <li id="l-314"><a href="#l-314">#</a> [10:00] * Joins: rego (~rego@231.193.27.77.dynamic.mundo-r.com)</li>
+ <li id="l-315" _a="MikeSmith" _r="Ms2ger"><a href="#l-315">#</a> [10:01] &lt;MikeSmith&gt; Ms2ger: how come Critic didn't create a review for <a href="https://github.com/w3c/web-platform-tests/pull/388">https://github.com/w3c/web-platform-tests/pull/388</a> ?</li>
+ <li id="l-316" _a="Ms2ger"><a href="#l-316">#</a> [10:02] &lt;Ms2ger&gt; No idea</li>
+ <li id="l-317" _a="Ms2ger"><a href="#l-317">#</a> [10:02] &lt;Ms2ger&gt; jgraham?</li>
+ <li id="l-318" _a="MikeSmith" _r="Ms2ger"><a href="#l-318">#</a> [10:04] &lt;MikeSmith&gt; Ms2ger: how come you're using /resources/WebIDLParser.js instead of /resources/webidl2/lib/webidl2.js ?</li>
+ <li id="l-319" _a="MikeSmith"><a href="#l-319">#</a> [10:04] &lt;MikeSmith&gt; WebIDLParser.js doesn't actually exist in the repo</li>
+ <li id="l-320" _a="Ms2ger"><a href="#l-320">#</a> [10:04] &lt;Ms2ger&gt; That's the one that works everywhere at this point</li>
+ <li id="l-321" _a="Ms2ger"><a href="#l-321">#</a> [10:05] &lt;Ms2ger&gt; Except in the repo, unfortunately</li>
+ <li id="l-322"><a href="#l-322">#</a> [10:06] * Quits: roadt_ (~roadt@36.7.147.169) (Ping timeout: 248 seconds)</li>
+ <li id="l-323" _a="MikeSmith"><a href="#l-323">#</a> [10:06] &lt;MikeSmith&gt; by &quot;everywhere&quot; you mean only some places? because it doesn't work on the jgraham/python branch with wptserve</li>
+ <li id="l-324"><a href="#l-324">#</a> [10:06] * Joins: Maurice (copyman@5ED57922.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-325" _a="Ms2ger"><a href="#l-325">#</a> [10:09] &lt;Ms2ger&gt; I thought that was going to get fixed</li>
+ <li id="l-326" _a="MikeSmith"><a href="#l-326">#</a> [10:09] &lt;MikeSmith&gt; oh</li>
+ <li id="l-327" _a="MikeSmith"><a href="#l-327">#</a> [10:10] &lt;MikeSmith&gt; I notice you used the passive voice there</li>
+ <li id="l-328" _a="jgraham" _r="MikeSmith"><a href="#l-328">#</a> [10:10] &lt;jgraham&gt; MikeSmith: wptserve should be able to do that. And I thought I fixed the idlharness thing but maybe not</li>
+ <li id="l-329" _a="jgraham"><a href="#l-329">#</a> [10:10] &lt;jgraham&gt; will check thst pr later</li>
+ <li id="l-330" _a="MikeSmith"><a href="#l-330">#</a> [10:11] &lt;MikeSmith&gt; ok</li>
+ <li id="l-331" _a="MikeSmith" _r="Ms2ger"><a href="#l-331">#</a> [10:11] &lt;MikeSmith&gt; Ms2ger: <a href="https://github.com/w3c/web-platform-tests/pull/388">https://github.com/w3c/web-platform-tests/pull/388</a> LGTM as long as you guys know the /resources/WebIDLParser.js is OK</li>
+ <li id="l-332" _a="MikeSmith"><a href="#l-332">#</a> [10:12] &lt;MikeSmith&gt; but I been using /resources/webidl2/lib/webidl2.js in IDL tests I wrote so I guess I should change that in my tests</li>
+ <li id="l-333" _a="Ms2ger"><a href="#l-333">#</a> [10:13] &lt;Ms2ger&gt; It seems to be OK for the DOM / HTML tests ;)</li>
+ <li id="l-334" _a="MikeSmith"><a href="#l-334">#</a> [10:18] &lt;MikeSmith&gt; ah sorry yeah I mispoke</li>
+ <li id="l-335" _a="MikeSmith"><a href="#l-335">#</a> [10:18] &lt;MikeSmith&gt; it does work in jgraham/python too</li>
+ <li id="l-336" _a="jgraham" _r="OK"><a href="#l-336">#</a> [10:18] &lt;jgraham&gt; OK, good</li>
+ <li id="l-337"><a href="#l-337">#</a> [10:18] * Quits: abarth (uid5294@gateway/web/irccloud.com/x-qqfitfosswuxbrdp) (Ping timeout: 248 seconds)</li>
+ <li id="l-338" _a="jgraham"><a href="#l-338">#</a> [10:18] &lt;jgraham&gt; and I just fixed critic which hit a known bug</li>
+ <li id="l-339"><a href="#l-339">#</a> [10:19] * Joins: abarth_ (uid5294@gateway/web/irccloud.com/x-eimzajjkkurhhakc)</li>
+ <li id="l-340" _a="MikeSmith"><a href="#l-340">#</a> [10:19] &lt;MikeSmith&gt; cool</li>
+ <li id="l-341" _a="Ms2ger"><a href="#l-341">#</a> [10:24] &lt;Ms2ger&gt; On another note, I've found a way to reduce the review backlog: <a href="https://github.com/w3c/web-platform-tests/pull/389">https://github.com/w3c/web-platform-tests/pull/389</a></li>
+ <li id="l-342"><a href="#l-342">#</a> [10:27] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-343"><a href="#l-343">#</a> [10:31] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-344"><a href="#l-344">#</a> [10:33] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-345"><a href="#l-345">#</a> [10:35] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-346"><a href="#l-346">#</a> [10:39] * Joins: tantek (~tantek@50-0-164-83.dsl.dynamic.sonic.net)</li>
+ <li id="l-347" _a="MikeSmith"><a href="#l-347">#</a> [10:54] &lt;MikeSmith&gt; yeah</li>
+ <li id="l-348"><a href="#l-348">#</a> [10:54] * Joins: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br)</li>
+ <li id="l-349" _a="MikeSmith"><a href="#l-349">#</a> [10:54] &lt;MikeSmith&gt; are those tests that plh added?</li>
+ <li id="l-350" _a="MikeSmith"><a href="#l-350">#</a> [10:55] &lt;MikeSmith&gt; weren't some really old crufty DOm tests imported in at some point?</li>
+ <li id="l-351" _a="MikeSmith"><a href="#l-351">#</a> [10:56] &lt;MikeSmith&gt; ah I see NIST listed in those W3C/domhtml/HTML* tests</li>
+ <li id="l-352" _a="Ms2ger" _r="Yeah"><a href="#l-352">#</a> [11:02] &lt;Ms2ger&gt; Yeah, the NIST ones</li>
+ <li id="l-353" _a="Ms2ger"><a href="#l-353">#</a> [11:03] &lt;Ms2ger&gt; With the extremely readable code that results from autogenerating Java and JS tests from XML files</li>
+ <li id="l-354"><a href="#l-354">#</a> [11:04] * Quits: othermaciej (~mjs@c-50-136-134-16.hsd1.ca.comcast.net) (Quit: othermaciej)</li>
+ <li id="l-355"><a href="#l-355">#</a> [11:05] * Joins: parshap_ (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-356"><a href="#l-356">#</a> [11:06] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-357"><a href="#l-357">#</a> [11:07] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 245 seconds)</li>
+ <li id="l-358"><a href="#l-358">#</a> [11:12] * Joins: zdobersek (~zdobersek@cpe-77.38.31.63.cable.t-1.si)</li>
+ <li id="l-359" _a="MikeSmith"><a href="#l-359">#</a> [11:16] &lt;MikeSmith&gt; yeah we should dump those</li>
+ <li id="l-360"><a href="#l-360">#</a> [11:18] * Joins: josemanuel (~josemanue@80.30.112.189)</li>
+ <li id="l-361"><a href="#l-361">#</a> [11:36] * Joins: roadt_ (~roadt@36.7.147.169)</li>
+ <li id="l-362"><a href="#l-362">#</a> [11:38] * Quits: josemanuel (~josemanue@80.30.112.189) (Quit: Saliendo)</li>
+ <li id="l-363"><a href="#l-363">#</a> [11:46] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-364"><a href="#l-364">#</a> [11:46] * Quits: parshap_ (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-365"><a href="#l-365">#</a> [12:04] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-366"><a href="#l-366">#</a> [12:05] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-367"><a href="#l-367">#</a> [12:05] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-368"><a href="#l-368">#</a> [12:09] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 265 seconds)</li>
+ <li id="l-369"><a href="#l-369">#</a> [12:11] * Quits: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br) (Read error: Connection reset by peer)</li>
+ <li id="l-370"><a href="#l-370">#</a> [12:11] * Joins: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br)</li>
+ <li id="l-371"><a href="#l-371">#</a> [12:14] * Joins: charl_ (~charl@charl.eu)</li>
+ <li id="l-372"><a href="#l-372">#</a> [12:27] * Joins: Cromulent (~Cromulent@cpc1-reig5-2-0-cust251.6-3.cable.virginm.net)</li>
+ <li id="l-373"><a href="#l-373">#</a> [12:28] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-374"><a href="#l-374">#</a> [12:35] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-375"><a href="#l-375">#</a> [12:57] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Ping timeout: 272 seconds)</li>
+ <li id="l-376"><a href="#l-376">#</a> [12:59] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-377"><a href="#l-377">#</a> [13:00] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-378"><a href="#l-378">#</a> [13:09] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-379"><a href="#l-379">#</a> [13:13] * Joins: plutoniix (~plutoniix@node-1a5x.pool-101-109.dynamic.totbb.net)</li>
+ <li id="l-380"><a href="#l-380">#</a> [13:15] * Joins: felipeduardo (~felipedua@189.115.44.34)</li>
+ <li id="l-381"><a href="#l-381">#</a> [13:17] * Joins: joelcox (~joelcox@unaffiliated/joelcox)</li>
+ <li id="l-382"><a href="#l-382">#</a> [13:31] * Quits: rego (~rego@231.193.27.77.dynamic.mundo-r.com) (Remote host closed the connection)</li>
+ <li id="l-383"><a href="#l-383">#</a> [13:33] * Quits: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br) (Ping timeout: 248 seconds)</li>
+ <li id="l-384"><a href="#l-384">#</a> [13:39] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-385"><a href="#l-385">#</a> [13:40] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-386"><a href="#l-386">#</a> [13:44] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Ping timeout: 246 seconds)</li>
+ <li id="l-387"><a href="#l-387">#</a> [13:46] * Quits: tantek (~tantek@50-0-164-83.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-388"><a href="#l-388">#</a> [14:10] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-389"><a href="#l-389">#</a> [14:13] * Joins: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt)</li>
+ <li id="l-390"><a href="#l-390">#</a> [14:14] * Joins: roadt__ (~roadt@36.7.147.100)</li>
+ <li id="l-391"><a href="#l-391">#</a> [14:17] * Quits: roadt_ (~roadt@36.7.147.169) (Ping timeout: 245 seconds)</li>
+ <li id="l-392"><a href="#l-392">#</a> [14:24] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Ping timeout: 272 seconds)</li>
+ <li id="l-393"><a href="#l-393">#</a> [14:31] * Joins: jernoble|laptop (~jernoble@199-188-193-107.PUBLIC.monkeybrains.net)</li>
+ <li id="l-394"><a href="#l-394">#</a> [14:32] * Quits: jernoble|laptop (~jernoble@199-188-193-107.PUBLIC.monkeybrains.net) (Client Quit)</li>
+ <li id="l-395"><a href="#l-395">#</a> [14:39] * Joins: reyre (~reyre@amigopod.rave.ac.uk)</li>
+ <li id="l-396"><a href="#l-396">#</a> [14:46] * Quits: reyre (~reyre@amigopod.rave.ac.uk) (Remote host closed the connection)</li>
+ <li id="l-397"><a href="#l-397">#</a> [14:46] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-398"><a href="#l-398">#</a> [14:53] * Joins: seventh (seventh@216.166.10.191)</li>
+ <li id="l-399"><a href="#l-399">#</a> [14:56] * Quits: Cromulent (~Cromulent@cpc1-reig5-2-0-cust251.6-3.cable.virginm.net) (Quit: KVIrc 4.2.0 Equilibrium <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>)</li>
+ <li id="l-400"><a href="#l-400">#</a> [14:57] * Joins: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br)</li>
+ <li id="l-401"><a href="#l-401">#</a> [15:01] * Quits: marcosc (~marcosc@bl10-104-157.dsl.telepac.pt) (Remote host closed the connection)</li>
+ <li id="l-402"><a href="#l-402">#</a> [15:16] * Joins: frustrum (~frustrum@jaw044-res.resnet.ucsd.edu)</li>
+ <li id="l-403" _a="DaveMethvin|away"><a href="#l-403">#</a> [15:26] * DaveMethvin|away is now known as DaveMethvin</li>
+ <li id="l-404"><a href="#l-404">#</a> [15:36] * Quits: rmichnik (~quassel@177.132.233.114.dynamic.adsl.gvt.net.br) (Read error: Connection reset by peer)</li>
+ <li id="l-405"><a href="#l-405">#</a> [15:56] * Joins: tomasf (~tomasf@h210n5-n-d4.ias.bredband.telia.com)</li>
+ <li id="l-406"><a href="#l-406">#</a> [15:59] * Quits: tomasf (~tomasf@h210n5-n-d4.ias.bredband.telia.com) (Client Quit)</li>
+ <li id="l-407"><a href="#l-407">#</a> [16:01] * Quits: roadt__ (~roadt@36.7.147.100) (Ping timeout: 272 seconds)</li>
+ <li id="l-408"><a href="#l-408">#</a> [16:03] * Joins: roadt__ (~roadt@36.7.147.100)</li>
+ <li id="l-409"><a href="#l-409">#</a> [16:22] * Joins: Goplat (~goplat@reactos/developer/Goplat)</li>
+ <li id="l-410"><a href="#l-410">#</a> [16:32] * Joins: xiinotulp (~plutoniix@node-r4g.pool-180-180.dynamic.totbb.net)</li>
+ <li id="l-411"><a href="#l-411">#</a> [16:35] * Quits: plutoniix (~plutoniix@node-1a5x.pool-101-109.dynamic.totbb.net) (Ping timeout: 248 seconds)</li>
+ <li id="l-412" _a="xiinotulp"><a href="#l-412">#</a> [16:39] * xiinotulp is now known as plutoniix</li>
+ <li id="l-413"><a href="#l-413">#</a> [16:42] * Quits: joelcox (~joelcox@unaffiliated/joelcox) (Quit: joelcox)</li>
+ <li id="l-414"><a href="#l-414">#</a> [17:02] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-415"><a href="#l-415">#</a> [17:04] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-416" _a="abarth_"><a href="#l-416">#</a> [17:17] * abarth_ is now known as abarth</li>
+ <li id="l-417"><a href="#l-417">#</a> [17:32] * Joins: cheron (~cheron@unaffiliated/cheron)</li>
+ <li id="l-418"><a href="#l-418">#</a> [17:41] * Quits: lilmonkey (~colin@pdpc/supporter/professional/riven) (Read error: Connection reset by peer)</li>
+ <li id="l-419"><a href="#l-419">#</a> [17:41] * Joins: lilmonkey (~colin@5469E6D4.cm-12-2d.dynamic.ziggo.nl)</li>
+ <li id="l-420"><a href="#l-420">#</a> [17:41] * Quits: lilmonkey (~colin@5469E6D4.cm-12-2d.dynamic.ziggo.nl) (Changing host)</li>
+ <li id="l-421"><a href="#l-421">#</a> [17:41] * Joins: lilmonkey (~colin@pdpc/supporter/professional/riven)</li>
+ <li id="l-422"><a href="#l-422">#</a> [18:02] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-423"><a href="#l-423">#</a> [18:02] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-424"><a href="#l-424">#</a> [18:04] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Client Quit)</li>
+ <li id="l-425"><a href="#l-425">#</a> [18:04] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-426"><a href="#l-426">#</a> [18:04] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-427"><a href="#l-427">#</a> [18:04] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-428"><a href="#l-428">#</a> [18:04] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Client Quit)</li>
+ <li id="l-429"><a href="#l-429">#</a> [18:05] * Joins: cabanier1 (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-430"><a href="#l-430">#</a> [18:05] * Quits: cabanier1 (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Client Quit)</li>
+ <li id="l-431"><a href="#l-431">#</a> [18:19] * Joins: bholley (~bholley@p54874A22.dip0.t-ipconnect.de)</li>
+ <li id="l-432"><a href="#l-432">#</a> [18:32] * Joins: Guest95276 (~master@198.178.120.115)</li>
+ <li id="l-433"><a href="#l-433">#</a> [18:33] * Joins: WesleyMcClane_ (~quassel@host97-144-dynamic.10-87-r.retail.telecomitalia.it)</li>
+ <li id="l-434"><a href="#l-434">#</a> [18:35] * Quits: WesleyMcClane (~quassel@host49-144-dynamic.10-87-r.retail.telecomitalia.it) (Ping timeout: 240 seconds)</li>
+ <li id="l-435"><a href="#l-435">#</a> [18:40] * Quits: Goplat (~goplat@reactos/developer/Goplat) (Remote host closed the connection)</li>
+ <li id="l-436"><a href="#l-436">#</a> [18:50] * Quits: toyoshim (~toyoshim@yuri.twintail.org) (Remote host closed the connection)</li>
+ <li id="l-437"><a href="#l-437">#</a> [18:51] * Joins: xxbila2xx_ (~xxbila2xx@114.79.54.38)</li>
+ <li id="l-438"><a href="#l-438">#</a> [18:54] * Parts: xxbila2xx_ (~xxbila2xx@114.79.54.38) (&quot;Leaving&quot;)</li>
+ <li id="l-439" _a="jgraham"><a href="#l-439">#</a> [18:56] &lt;jgraham&gt; I didn't realise that the history navigation stuff was supposed to be GC-dependent. That seems unfortunate</li>
+ <li id="l-440" _a="gsnedders" _r="jgraham"><a href="#l-440">#</a> [18:56] &lt;gsnedders&gt; jgraham: Is there any odd of you picking up the review/PR of your tests? :P</li>
+ <li id="l-441" _a="gsnedders" _r="jgraham"><a href="#l-441">#</a> [18:56] &lt;gsnedders&gt; jgraham: Speaking of history navigation</li>
+ <li id="l-442" _a="jgraham"><a href="#l-442">#</a> [18:57] &lt;jgraham&gt; I don't think I can review my own tests :)</li>
+ <li id="l-443" _a="jgraham"><a href="#l-443">#</a> [18:57] &lt;jgraham&gt; But maybe I can convince someone to review them when they are workong on Servo</li>
+ <li id="l-444"><a href="#l-444">#</a> [18:59] * Joins: ap (~ap@c-98-234-180-13.hsd1.ca.comcast.net)</li>
+ <li id="l-445" _a="gsnedders" _r="jgraham"><a href="#l-445">#</a> [18:59] &lt;gsnedders&gt; jgraham: Not so much review, but deal with any feedback, etc.</li>
+ <li id="l-446" _a="gsnedders"><a href="#l-446">#</a> [19:00] &lt;gsnedders&gt; I don't really have the time or motivation :)</li>
+ <li id="l-447"><a href="#l-447">#</a> [19:04] * Quits: bholley (~bholley@p54874A22.dip0.t-ipconnect.de) (Quit: bholley)</li>
+ <li id="l-448"><a href="#l-448">#</a> [19:06] * Joins: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-449" _a="jgraham"><a href="#l-449">#</a> [19:08] &lt;jgraham&gt; I can probably do that</li>
+ <li id="l-450"><a href="#l-450">#</a> [19:24] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Ping timeout: 240 seconds)</li>
+ <li id="l-451"><a href="#l-451">#</a> [19:28] * Joins: barnabywalters (~barnabywa@89.17.128.127)</li>
+ <li id="l-452"><a href="#l-452">#</a> [19:31] * Quits: frustrum (~frustrum@jaw044-res.resnet.ucsd.edu) (Ping timeout: 272 seconds)</li>
+ <li id="l-453"><a href="#l-453">#</a> [19:46] * Joins: frustrum (~frustrum@128.54.214.195)</li>
+ <li id="l-454"><a href="#l-454">#</a> [19:47] * Joins: baku (~baku@27.98.1.109.rev.sfr.net)</li>
+ <li id="l-455"><a href="#l-455">#</a> [19:48] * Quits: baku (~baku@27.98.1.109.rev.sfr.net) (Client Quit)</li>
+ <li id="l-456"><a href="#l-456">#</a> [19:52] * Quits: charl_ (~charl@charl.eu) (Quit: leaving)</li>
+ <li id="l-457"><a href="#l-457">#</a> [20:01] * Joins: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net)</li>
+ <li id="l-458" _a="DaveMethvin"><a href="#l-458">#</a> [20:06] * DaveMethvin is now known as DaveMethvin|away</li>
+ <li id="l-459"><a href="#l-459">#</a> [20:09] * Quits: parshap (~parshap@ip70-181-88-181.oc.oc.cox.net) (Remote host closed the connection)</li>
+ <li id="l-460"><a href="#l-460">#</a> [20:16] * Quits: ap (~ap@c-98-234-180-13.hsd1.ca.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-461"><a href="#l-461">#</a> [20:22] * Joins: jorgepedret (~jorgepedr@70-36-56-110.dyn.novuscom.net)</li>
+ <li id="l-462"><a href="#l-462">#</a> [20:37] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-463"><a href="#l-463">#</a> [20:41] * Quits: malaclyps (~Danny@gateway/tor-sasl/malaclyps) (Ping timeout: 240 seconds)</li>
+ <li id="l-464" _a="rektide"><a href="#l-464">#</a> [20:42] &lt;rektide&gt; does a script when executing have any context information available telling it what it's context is?</li>
+ <li id="l-465" _a="rektide"><a href="#l-465">#</a> [20:43] &lt;rektide&gt; how does/can a script find it' origin in the dhtml?</li>
+ <li id="l-466"><a href="#l-466">#</a> [20:53] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Remote host closed the connection)</li>
+ <li id="l-467"><a href="#l-467">#</a> [20:54] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-468"><a href="#l-468">#</a> [21:02] * Quits: jorgepedret (~jorgepedr@70-36-56-110.dyn.novuscom.net) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-469"><a href="#l-469">#</a> [21:04] * Joins: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net)</li>
+ <li id="l-470" _a="DaveMethvin|away"><a href="#l-470">#</a> [21:06] * DaveMethvin|away is now known as DaveMethvin</li>
+ <li id="l-471"><a href="#l-471">#</a> [21:22] * Quits: KevinMarks (~KevinMark@c-71-204-145-244.hsd1.ca.comcast.net) (Ping timeout: 260 seconds)</li>
+ <li id="l-472"><a href="#l-472">#</a> [21:24] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Remote host closed the connection)</li>
+ <li id="l-473"><a href="#l-473">#</a> [21:24] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-474"><a href="#l-474">#</a> [21:28] * Joins: weinig (~weinig@24.130.60.35)</li>
+ <li id="l-475"><a href="#l-475">#</a> [21:29] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Ping timeout: 272 seconds)</li>
+ <li id="l-476"><a href="#l-476">#</a> [21:30] * Quits: felipeduardo (~felipedua@189.115.44.34) (Remote host closed the connection)</li>
+ <li id="l-477"><a href="#l-477">#</a> [21:38] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-478"><a href="#l-478">#</a> [21:38] * Joins: ebollens (~ebollens@98.159.89.142)</li>
+ <li id="l-479"><a href="#l-479">#</a> [21:50] * Quits: weinig (~weinig@24.130.60.35) (Quit: weinig)</li>
+ <li id="l-480"><a href="#l-480">#</a> [22:04] * Joins: jorgepedret (~jorgepedr@70-36-56-110.dyn.novuscom.net)</li>
+ <li id="l-481"><a href="#l-481">#</a> [22:06] * Quits: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi) (Remote host closed the connection)</li>
+ <li id="l-482"><a href="#l-482">#</a> [22:07] * Joins: smaug____ (~chatzilla@84-231-164-251.elisa-mobile.fi)</li>
+ <li id="l-483"><a href="#l-483">#</a> [22:10] * Quits: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-484"><a href="#l-484">#</a> [22:17] * Joins: Ir1sh (~Ir1sh@89.100.254.231)</li>
+ <li id="l-485"><a href="#l-485">#</a> [22:42] * Quits: ebollens (~ebollens@98.159.89.142) (Quit: ebollens)</li>
+ <li id="l-486"><a href="#l-486">#</a> [22:45] * Quits: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley) (Read error: Operation timed out)</li>
+ <li id="l-487"><a href="#l-487">#</a> [22:52] * Quits: roadt__ (~roadt@36.7.147.100) (Ping timeout: 252 seconds)</li>
+ <li id="l-488"><a href="#l-488">#</a> [22:56] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-489"><a href="#l-489">#</a> [22:56] * Quits: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-490"><a href="#l-490">#</a> [22:56] * Joins: cabanier (~cabanier@c-98-237-137-173.hsd1.wa.comcast.net)</li>
+ <li id="l-491"><a href="#l-491">#</a> [23:02] * Quits: cheron (~cheron@unaffiliated/cheron) (Ping timeout: 272 seconds)</li>
+ <li id="l-492"><a href="#l-492">#</a> [23:03] * Quits: Ms2ger (~Ms2ger@178.205-64-87.adsl-dyn.isp.belgacom.be) (Quit: nn)</li>
+ <li id="l-493"><a href="#l-493">#</a> [23:07] * Joins: reyre (~reyre@83-244-151-250.cust-83.exponential-e.net)</li>
+ <li id="l-494"><a href="#l-494">#</a> [23:21] * Quits: reyre (~reyre@83-244-151-250.cust-83.exponential-e.net) (Read error: Connection reset by peer)</li>
+ <li id="l-495"><a href="#l-495">#</a> [23:21] * Joins: reyre_ (~reyre@83-244-151-250.cust-83.exponential-e.net)</li>
+ <li id="l-496"><a href="#l-496">#</a> [23:30] * Quits: reyre_ (~reyre@83-244-151-250.cust-83.exponential-e.net) (Remote host closed the connection)</li>
+ <li id="l-497"><a href="#l-497">#</a> [23:43] * Joins: rniwa-m (~rniwam@220.sub-70-197-3.myvzw.com)</li>
+ <li id="l-498"><a href="#l-498">#</a> [23:46] * Quits: rniwa-m (~rniwam@220.sub-70-197-3.myvzw.com) (Client Quit)</li>
+ <li id="l-499"><a href="#l-499">#</a> [23:49] * Joins: reyre (~reyre@83-244-151-250.cust-83.exponential-e.net)</li>
+ <li id="l-500" _a="DaveMethvin"><a href="#l-500">#</a> [23:52] * DaveMethvin is now known as DaveMethvin|away</li>
+ <li id="l-501"><a href="#l-501">#</a> [23:55] * Joins: TuRnaD0 (~Thunderbi@x1-6-e0-46-9a-1e-fe-ca.k368.webspeed.dk)</li>
+ <li id="l-502"><a href="#l-502">#</a> [23:58] * Quits: zdobersek (~zdobersek@cpe-77.38.31.63.cable.t-1.si) (Quit: ZNC - <a href="http://znc.in">http://znc.in</a>)</li>
+ <li id="l-503"><a href="#l-503">#</a> [23:58] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-504"><a href="#l-504">#</a> Session Close: Sun Oct 27 00:00:00 2013</li>
+</ol>
+<p id="end">The end :)

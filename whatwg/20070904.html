@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20070904</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20070904.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2007-09-04 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Tue Sep 04 00:00:00 2007</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:06] * Quits: grimboy (n=grimboy@85-211-253-126.dsl.pipex.com) (&quot;Dear #python: lolololololololololol&quot;)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:11] * Joins: webben (n=benh@91.84.196.77)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:11] * Joins: anne (n=annevk@86.90.70.28)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:11] * Parts: webben (n=benh@91.84.196.77)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:11] * Parts: anne (n=annevk@86.90.70.28)</li>
+ <li id="l-8" _a="jgraham_" _r="annevk"><a href="#l-8">#</a> [00:12] &lt;jgraham_&gt; annevk: I think the heading information for your table is almost right now</li>
+ <li id="l-9" _a="jgraham_"><a href="#l-9">#</a> [00:13] &lt;jgraham_&gt; The finalk thing is that the &lt;th&gt;Day 2&lt;/th&gt; has &quot;Day 1&quot; as one of its headings (and so on down the page)</li>
+ <li id="l-10" _a="jgraham_"><a href="#l-10">#</a> [00:13] &lt;jgraham_&gt; This is because these headers aren't assigned any heading information from the scope algorithm</li>
+ <li id="l-11" _a="jgraham_"><a href="#l-11">#</a> [00:14] &lt;jgraham_&gt; and HTML 4 says &quot;In the absence of header information from either the scope or headers attribute, user agents may construct header information according to the following algorithm&quot;</li>
+ <li id="l-12" _a="annevk"><a href="#l-12">#</a> [00:14] &lt;annevk&gt; how would Day 2 get Day 1? Day 1 has an explicit scope...</li>
+ <li id="l-13" _a="jgraham_"><a href="#l-13">#</a> [00:15] &lt;jgraham_&gt; From the implicit algorithm.</li>
+ <li id="l-14" _a="annevk"><a href="#l-14">#</a> [00:15] &lt;annevk&gt; I do get how Day x gets Location, estimated time, etc. although that's not desired</li>
+ <li id="l-15" _a="jgraham_"><a href="#l-15">#</a> [00:15] &lt;jgraham_&gt; I think it's an incorrect reading of the HTML 4 spec, but I don't know what the right reading is.</li>
+ <li id="l-16"><a href="#l-16">#</a> [00:15] * Joins: webben (n=benh@91.84.196.77)</li>
+ <li id="l-17" _a="annevk"><a href="#l-17">#</a> [00:16] &lt;annevk&gt; I'm not sure why you think there's absense of scope or headers attribute</li>
+ <li id="l-18" _a="annevk"><a href="#l-18">#</a> [00:17] &lt;annevk&gt; I suppose I need something like &lt;th scope=rowgroup colspan=4 headers&gt;Day x&lt;/th&gt; to override the Location, Height, ... headings</li>
+ <li id="l-19" _a="jgraham_" _r="Because"><a href="#l-19">#</a> [00:17] &lt;jgraham_&gt; Because, at the moment, my implementation assumes that &quot;&quot;In the absence of header information from either the scope or headers attribute&quot; applies to the cell we are trying to assign a heading to</li>
+ <li id="l-20" _a="annevk"><a href="#l-20">#</a> [00:17] &lt;annevk&gt; assuming &lt;th headers&gt; works like that</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:18] * Quits: mpt (n=mpt@canonical/launchpad/mpt) (&quot;This computer has gone to sleep&quot;)</li>
+ <li id="l-22" _a="annevk" _r="jgraham_"><a href="#l-22">#</a> [00:18] &lt;annevk&gt; jgraham_, yeah, so you look up and find a &lt;th&gt;, but that &lt;th&gt; can't be the header of the header because it has a different scope...</li>
+ <li id="l-23" _a="jgraham_"><a href="#l-23">#</a> [00:18] &lt;jgraham_&gt; in the case of the &lt;th&gt; cell containing &quot;Day 2&quot; there is no information from any scope or headers attribute that assigns heading information to that cell</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:18] * Joins: mpt (n=mpt@121-72-130-6.dsl.telstraclear.net)</li>
+ <li id="l-25" _a="jgraham_" _r="annevk"><a href="#l-25">#</a> [00:19] &lt;jgraham_&gt; annevk: But does HTML 4 actually say that?</li>
+ <li id="l-26" _a="annevk"><a href="#l-26">#</a> [00:19] &lt;annevk&gt; not sure</li>
+ <li id="l-27" _a="annevk"><a href="#l-27">#</a> [00:19] &lt;annevk&gt; it also seems that the headers given in &lt;thead&gt; are not applied to the four columns...</li>
+ <li id="l-28" _a="jgraham_"><a href="#l-28">#</a> [00:20] &lt;jgraham_&gt; My reading is that if a cell has no heading information supplied from headers or scope you then do the row/column search ignoring scope or headers attributes</li>
+ <li id="l-29" _a="annevk"><a href="#l-29">#</a> [00:20] &lt;annevk&gt; this is the case in the HTML5 algorithm though</li>
+ <li id="l-30" _a="jgraham_" _r="annevk"><a href="#l-30">#</a> [00:20] &lt;jgraham_&gt; annevk: agreed</li>
+ <li id="l-31" _a="annevk"><a href="#l-31">#</a> [00:20] &lt;annevk&gt; HTML5 actually has exactly how I want it</li>
+ <li id="l-32" _a="jgraham_"><a href="#l-32">#</a> [00:20] &lt;jgraham_&gt; My imp. of the HTML 5 algorithm seems to get that right</li>
+ <li id="l-33" _a="annevk"><a href="#l-33">#</a> [00:20] &lt;annevk&gt; including the scope=rowgroup headers not getting the &lt;thead&gt; headers</li>
+ <li id="l-34" _a="annevk"><a href="#l-34">#</a> [00:21] * annevk wonders if that always makes sense</li>
+ <li id="l-35" _a="webben"><a href="#l-35">#</a> [00:21] &lt;webben&gt; Probably not.</li>
+ <li id="l-36" _a="jgraham_"><a href="#l-36">#</a> [00:21] &lt;jgraham_&gt; My conclusion from playing with a few tables on the net is that nothing always makes sense</li>
+ <li id="l-37" _a="webben"><a href="#l-37">#</a> [00:22] &lt;webben&gt; You could have a header cell for a rowgroup in a row that contained summary information/totals for the rowgroup</li>
+ <li id="l-38" _a="webben"><a href="#l-38">#</a> [00:22] &lt;webben&gt; I think I've seen tables like that in print.</li>
+ <li id="l-39" _a="annevk"><a href="#l-39">#</a> [00:22] &lt;annevk&gt; I'm not sure if that's correct usage though</li>
+ <li id="l-40" _a="webben"><a href="#l-40">#</a> [00:23] &lt;webben&gt; correct usage of what?</li>
+ <li id="l-41" _a="annevk"><a href="#l-41">#</a> [00:23] &lt;annevk&gt; of HTML tables</li>
+ <li id="l-42"><a href="#l-42">#</a> [00:23] * Quits: Ducki (n=Ducki@nrdh-d9b980d9.pool.mediaWays.net) (Read error: 113 (No route to host))</li>
+ <li id="l-43" _a="webben"><a href="#l-43">#</a> [00:23] &lt;webben&gt; Why aren't you?</li>
+ <li id="l-44" _a="annevk"><a href="#l-44">#</a> [00:24] &lt;annevk&gt; because it doesn't make much sense to me to put summaries in headers</li>
+ <li id="l-45" _a="webben" _r="annevk"><a href="#l-45">#</a> [00:24] &lt;webben&gt; annevk: I don't see why not. A good example would be demographics.</li>
+ <li id="l-46" _a="webben"><a href="#l-46">#</a> [00:24] &lt;webben&gt; say you have area then pop in the thead</li>
+ <li id="l-47" _a="webben"><a href="#l-47">#</a> [00:25] &lt;webben&gt; then you have each rowgroup as a continent with total pop</li>
+ <li id="l-48" _a="webben"><a href="#l-48">#</a> [00:25] &lt;webben&gt; then you have countries in each rowgroup row</li>
+ <li id="l-49" _a="webben"><a href="#l-49">#</a> [00:25] &lt;webben&gt; with their respective pop</li>
+ <li id="l-50" _a="webben"><a href="#l-50">#</a> [00:26] &lt;webben&gt; Don't forget that a td can be a header simultaneously with being a data cell.</li>
+ <li id="l-51" _a="annevk"><a href="#l-51">#</a> [00:28] &lt;annevk&gt; that's not actually clear from HTML4</li>
+ <li id="l-52" _a="webben" _r="annevk"><a href="#l-52">#</a> [00:28] &lt;webben&gt; annevk: yes it is. it's stated in the DTD</li>
+ <li id="l-53" _a="webben"><a href="#l-53">#</a> [00:28] &lt;webben&gt; is there anything that contradicts that?</li>
+ <li id="l-54" _a="annevk"><a href="#l-54">#</a> [00:29] &lt;annevk&gt; the prose doesn't really support that comment</li>
+ <li id="l-55" _a="webben" _r="annevk"><a href="#l-55">#</a> [00:30] &lt;webben&gt; annevk: I think trying to read the comments against the prose doesn't make much sense. Specifications aren't meant to be read to be self-contradicting. :) (They might be self-contradicting by accident, but you don't seem to be arguing that's the case here.)</li>
+ <li id="l-56" _a="annevk"><a href="#l-56">#</a> [00:32] &lt;annevk&gt; I'm not sure why it doesn't make sense. Comments, notes, examples, etc. are all non-normative. (Although in this specific case nothing much is normative and the whole thing is rather vague.)</li>
+ <li id="l-57" _a="webben" _r="annevk"><a href="#l-57">#</a> [00:34] &lt;webben&gt; annevk: Actually the prose does say: &quot;Note that it's not always possible to make a clean division of cells into headers or data. You should use the TD element for such cells together with the id or scope attributes as appropriate.&quot; Which seems a relatively clear restatement of the principle.</li>
+ <li id="l-58" _a="webben" _r="annevk"><a href="#l-58">#</a> [00:34] &lt;webben&gt; annevk: Yes. But they are all intended to help explain the spec, not contradict it.</li>
+ <li id="l-59" _a="webben"><a href="#l-59">#</a> [00:35] &lt;webben&gt; therefore trying to read them as a source of contradictions, like two alternative sources for the same thing, is strange</li>
+ <li id="l-60"><a href="#l-60">#</a> [00:35] * Joins: kingryan (n=kingryan@dsl081-240-149.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-61" _a="webben"><a href="#l-61">#</a> [00:35] &lt;webben&gt; (that quote is from 11.4.1)</li>
+ <li id="l-62" _a="moeffju[Away]"><a href="#l-62">#</a> [00:36] * moeffju[Away] is now known as moeffju[ZzZz]</li>
+ <li id="l-63" _a="webben" _r="annevk"><a href="#l-63">#</a> [00:36] &lt;webben&gt; annevk: also note the example intended to illustrate the scope attribute which features td with the scope=&quot;row&quot;</li>
+ <li id="l-64" _a="webben"><a href="#l-64">#</a> [00:36] &lt;webben&gt; followed by the text in the prose: &quot;Although the first cell in each row contains data, not header information, the scope attribute makes the data cell behave like a row header cell.&quot;</li>
+ <li id="l-65" _a="zcorpan"><a href="#l-65">#</a> [00:37] * zcorpan is unsure what the benefit is of trying to figure out what the intent of html4 is</li>
+ <li id="l-66" _a="zcorpan"><a href="#l-66">#</a> [00:37] &lt;zcorpan&gt; isn't it better to focus on figuring out an algorithm for html5 that works with existing tables on the web?</li>
+ <li id="l-67" _a="annevk"><a href="#l-67">#</a> [00:37] * annevk is not going to add scope=&quot;row&quot; to all his &lt;tr&gt;s</li>
+ <li id="l-68" _a="annevk" _r="euh"><a href="#l-68">#</a> [00:37] &lt;annevk&gt; euh, &lt;td&gt;s</li>
+ <li id="l-69" _a="jgraham_" _r="zcorpan"><a href="#l-69">#</a> [00:37] &lt;jgraham_&gt; zcorpan: I'm interested insofar as it it necessary to show people that vauge = bad + probably illogical</li>
+ <li id="l-70"><a href="#l-70">#</a> [00:38] * Parts: moeffju[ZzZz] (i=moeffju@ubermutant.net)</li>
+ <li id="l-71" _a="jgraham_"><a href="#l-71">#</a> [00:38] &lt;jgraham_&gt; (illogical in non-trivial cases, that is)</li>
+ <li id="l-72" _a="zcorpan" _r="jgraham_"><a href="#l-72">#</a> [00:38] &lt;zcorpan&gt; jgraham_: ok</li>
+ <li id="l-73" _a="annevk"><a href="#l-73">#</a> [00:39] &lt;annevk&gt; it's also good to know what use cases HTML4 catered for</li>
+ <li id="l-74" _a="jgraham_"><a href="#l-74">#</a> [00:39] * jgraham_ is now known as jgraham</li>
+ <li id="l-75" _a="webben" _r="annevk"><a href="#l-75">#</a> [00:39] &lt;webben&gt; annevk: Actually looking through the prose throughout supports that comment.</li>
+ <li id="l-76" _a="webben"><a href="#l-76">#</a> [00:39] &lt;webben&gt; I hadn't realised just how supported it was.</li>
+ <li id="l-77" _a="annevk"><a href="#l-77">#</a> [00:40] &lt;annevk&gt; ?</li>
+ <li id="l-78" _a="webben"><a href="#l-78">#</a> [00:41] &lt;webben&gt; I can't see how one could construct anything contradicting the comment.</li>
+ <li id="l-79" _a="annevk"><a href="#l-79">#</a> [00:41] &lt;annevk&gt; oh</li>
+ <li id="l-80" _a="webben" _r="zcorpan"><a href="#l-80">#</a> [00:42] &lt;webben&gt; zcorpan: Depends on whether &quot;figuring out an algorithm ... that works with existing tables&quot; without consulting the spec that data table creators used is a realistic task. I suspect it isn't.</li>
+ <li id="l-81" _a="webben"><a href="#l-81">#</a> [00:44] &lt;webben&gt; (Although I'd certainly say it would be also worth looking at representations of the spec in major unlearning resources like w3schools.)</li>
+ <li id="l-82" _a="annevk"><a href="#l-82">#</a> [00:45] &lt;annevk&gt; I'm not sure why it's unrealistic to study actual tables out there</li>
+ <li id="l-83" _a="webben" _r="annevk"><a href="#l-83">#</a> [00:47] &lt;webben&gt; annevk: I didn't say it was. I think that's a very important part of the process too.</li>
+ <li id="l-84" _a="webben" _r="annevk"><a href="#l-84">#</a> [00:48] &lt;webben&gt; annevk: What I am saying is it's unrealistic to /only/ do that.</li>
+ <li id="l-85" _a="webben"><a href="#l-85">#</a> [00:50] &lt;webben&gt; (because the spec is a guide to well-authored tables that aren't sampled and unlearning resources are a guide to badly authored ones)</li>
+ <li id="l-86" _a="annevk"><a href="#l-86">#</a> [00:51] * annevk shrugs and goes to bed</li>
+ <li id="l-87" _a="tndH"><a href="#l-87">#</a> [00:51] &lt;tndH&gt; speaking of w3schools... <a href="http://w3schools.invisionzone.com/index.php?showtopic=15018">http://w3schools.invisionzone.com/index.php?showtopic=15018</a> *grin*</li>
+ <li id="l-88" _a="Philip`"><a href="#l-88">#</a> [00:58] &lt;Philip`&gt; I'm hoping that doesn't count as a legitimate use case for &lt;input usemap&gt;</li>
+ <li id="l-89" _a="Philip`"><a href="#l-89">#</a> [00:58] &lt;Philip`&gt; (It's good to see the author has stopped using &lt;font&gt; - now they just need to go a little further and stop using &lt;/font&gt; too...)</li>
+ <li id="l-90"><a href="#l-90">#</a> [00:59] * Quits: zcorpan (n=zcorpan@c-d391e355.022-154-6c6b7013.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-91" _a="annevk"><a href="#l-91">#</a> [01:05] &lt;annevk&gt; Given the way how HTML5 defines that browsers should present an image (inside an HTML document) you can  theoretically style that page using the Link: HTTP header...</li>
+ <li id="l-92" _a="annevk"><a href="#l-92">#</a> [01:05] * annevk adds it to a list of silly things to test</li>
+ <li id="l-93" _a="annevk" _r="&quot;"><a href="#l-93">#</a> [01:09] &lt;annevk&gt; &quot;, and to the #mrt crew, the #mrt.no crew, and the cabal for their ideas and support.&quot;</li>
+ <li id="l-94" _a="annevk" _r="lol"><a href="#l-94">#</a> [01:09] &lt;annevk&gt; lol, I'm pretty sure that read #whatwg before...</li>
+ <li id="l-95"><a href="#l-95">#</a> [01:28] * Quits: tndH (i=Rob@adsl-87-102-114-49.karoo.KCOM.COM) (&quot;ChatZilla 0.9.78.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-96"><a href="#l-96">#</a> [01:55] * Joins: doublec (n=doublec@202.180.114.137)</li>
+ <li id="l-97"><a href="#l-97">#</a> [02:09] * Joins: marcosc (n=chatzill@131.181.148.226)</li>
+ <li id="l-98"><a href="#l-98">#</a> [02:32] * Quits: tantek (n=tantek@adsl-63-195-114-133.dsl.snfc21.pacbell.net)</li>
+ <li id="l-99"><a href="#l-99">#</a> [02:38] * Quits: webben (n=benh@91.84.196.77)</li>
+ <li id="l-100"><a href="#l-100">#</a> [02:41] * Joins: karlUshi (n=karl@natbox2.mita.keio.ac.jp)</li>
+ <li id="l-101"><a href="#l-101">#</a> [02:45] * Joins: jwalden (n=waldo@STRATTON-SIX-FOURTY-FIVE.MIT.EDU)</li>
+ <li id="l-102"><a href="#l-102">#</a> [02:58] * Quits: hasather (n=hasather@90-227-221-48-no62.tbcn.telia.com) (&quot;leaving&quot;)</li>
+ <li id="l-103"><a href="#l-103">#</a> [03:00] * Joins: MikeSmith (n=MikeSmit@eM60-254-223-53.pool.emnet.ne.jp)</li>
+ <li id="l-104"><a href="#l-104">#</a> [03:12] * Quits: om_afk (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net) (Remote closed the connection)</li>
+ <li id="l-105"><a href="#l-105">#</a> [03:24] * Joins: yod (n=ot@softbank221018155222.bbtec.net)</li>
+ <li id="l-106"><a href="#l-106">#</a> [03:38] * Joins: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-107"><a href="#l-107">#</a> [03:51] * Quits: gsnedders (n=gsnedder@host217-42-133-228.range217-42.btcentralplus.com)</li>
+ <li id="l-108"><a href="#l-108">#</a> [04:02] * Joins: kfish (n=conrad@61.194.21.25)</li>
+ <li id="l-109"><a href="#l-109">#</a> [04:02] * Quits: jwalden (n=waldo@STRATTON-SIX-FOURTY-FIVE.MIT.EDU) (&quot;ChatZilla 0.9.78.1-rdmsoft [XULRunner 1.8.0.9/2006120508]&quot;)</li>
+ <li id="l-110"><a href="#l-110">#</a> [04:33] * Joins: h3h (n=w3rd@cpe-76-88-44-219.san.res.rr.com)</li>
+ <li id="l-111" _a="Lachy" _r="jgraham"><a href="#l-111">#</a> [04:43] &lt;Lachy&gt; jgraham, is the source code for your table inspector available yet, or are you planning to release it soon?</li>
+ <li id="l-112"><a href="#l-112">#</a> [04:47] * Quits: h3h (n=w3rd@cpe-76-88-44-219.san.res.rr.com)</li>
+ <li id="l-113"><a href="#l-113">#</a> [04:50] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-114"><a href="#l-114">#</a> [05:09] * Quits: MikeSmith (n=MikeSmit@eM60-254-223-53.pool.emnet.ne.jp) (&quot;Less talk, more pimp walk.&quot;)</li>
+ <li id="l-115"><a href="#l-115">#</a> [05:09] * Quits: karlUshi (n=karl@natbox2.mita.keio.ac.jp) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-116"><a href="#l-116">#</a> [05:37] * Quits: csarven (n=nevrasc@modemcable130.251-202-24.mc.videotron.ca) (&quot;http:/www.csarven.ca&quot;)</li>
+ <li id="l-117"><a href="#l-117">#</a> [05:46] * Quits: annevk (n=annevk@86.90.70.28) (Read error: 110 (Connection timed out))</li>
+ <li id="l-118"><a href="#l-118">#</a> [05:51] * Quits: weinig (i=weinig@nat/apple/x-2945d26023acff75)</li>
+ <li id="l-119"><a href="#l-119">#</a> [06:16] * Joins: MikeSmith (n=MikeSmit@eM60-254-241-254.pool.emnet.ne.jp)</li>
+ <li id="l-120"><a href="#l-120">#</a> [06:24] * Joins: karlUshi (n=karl@natbox2.mita.keio.ac.jp)</li>
+ <li id="l-121"><a href="#l-121">#</a> [06:40] * Joins: weinig (n=weinig@c-24-6-210-182.hsd1.ca.comcast.net)</li>
+ <li id="l-122"><a href="#l-122">#</a> [07:29] * Joins: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net)</li>
+ <li id="l-123"><a href="#l-123">#</a> [07:48] * Quits: karlUshi (n=karl@natbox2.mita.keio.ac.jp) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-124"><a href="#l-124">#</a> [07:48] * Quits: MikeSmith (n=MikeSmit@eM60-254-241-254.pool.emnet.ne.jp) (&quot;Less talk, more pimp walk.&quot;)</li>
+ <li id="l-125"><a href="#l-125">#</a> [08:16] * Joins: weinig_ (n=weinig@c-24-6-210-182.hsd1.ca.comcast.net)</li>
+ <li id="l-126"><a href="#l-126">#</a> [08:16] * Quits: weinig (n=weinig@c-24-6-210-182.hsd1.ca.comcast.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-127"><a href="#l-127">#</a> [08:42] * Joins: karlUshi (n=karl@124-144-94-188.rev.home.ne.jp)</li>
+ <li id="l-128"><a href="#l-128">#</a> [08:53] * Quits: doublec (n=doublec@202.180.114.137)</li>
+ <li id="l-129"><a href="#l-129">#</a> [09:02] * Quits: yod (n=ot@softbank221018155222.bbtec.net) (&quot;Leaving&quot;)</li>
+ <li id="l-130"><a href="#l-130">#</a> [09:03] * Quits: Hixie (i=ianh@trivini.no) (&quot;leaving&quot;)</li>
+ <li id="l-131"><a href="#l-131">#</a> [09:03] * Joins: MikeSmith (n=MikeSmit@eM60-254-241-254.pool.emnet.ne.jp)</li>
+ <li id="l-132"><a href="#l-132">#</a> [09:03] * Joins: Hixie (i=ianh@trivini.no)</li>
+ <li id="l-133" _a="hsivonen"><a href="#l-133">#</a> [09:20] &lt;hsivonen&gt; wow. while I was away public-html complaints have broadened to cover b.m.o and bugzilla.webkit.org bug content.</li>
+ <li id="l-134" _a="hsivonen"><a href="#l-134">#</a> [09:20] &lt;hsivonen&gt; I wonder if Opera's bugs would merit complaints, too, if they were world-readable. :-)</li>
+ <li id="l-135" _a="othermaciej" _r="hsivonen"><a href="#l-135">#</a> [09:21] &lt;othermaciej&gt; hsivonen: I found those particular complaints to be mind-boggling</li>
+ <li id="l-136" _a="othermaciej"><a href="#l-136">#</a> [09:21] &lt;othermaciej&gt; especially the complaint about a comment by me on a bugs.webkit.org bug</li>
+ <li id="l-137" _a="virtuelv" _r="hsivonen"><a href="#l-137">#</a> [09:28] &lt;virtuelv&gt; hsivonen: huh? URL?</li>
+ <li id="l-138" _a="hsivonen" _r="virtuelv"><a href="#l-138">#</a> [09:31] &lt;hsivonen&gt; virtuelv: <a href="http://www.w3.org/mid/00bf01c7e5b9$ccf642f0$582b42ab@Piglet">http://www.w3.org/mid/00bf01c7e5b9$ccf642f0$582b42ab@Piglet</a></li>
+ <li id="l-139"><a href="#l-139">#</a> [09:31] * Joins: annevk (n=annevk@86.90.70.28)</li>
+ <li id="l-140"><a href="#l-140">#</a> [09:33] * Joins: doublec (n=doublec@203-211-105-134.ue.woosh.co.nz)</li>
+ <li id="l-141" _a="annevk"><a href="#l-141">#</a> [09:33] &lt;annevk&gt; the comments in those bug reports are even more fun, claiming that IE and Safari support &lt;input usemap&gt;</li>
+ <li id="l-142"><a href="#l-142">#</a> [09:39] * Quits: doublec (n=doublec@203-211-105-134.ue.woosh.co.nz)</li>
+ <li id="l-143"><a href="#l-143">#</a> [09:47] * Quits: aroben (n=adamrobe@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-144"><a href="#l-144">#</a> [09:51] * Joins: doublec (n=doublec@203-211-98-166.ue.woosh.co.nz)</li>
+ <li id="l-145"><a href="#l-145">#</a> [10:01] * Joins: tndH_ (i=Rob@adsl-87-102-114-49.karoo.KCOM.COM)</li>
+ <li id="l-146" _a="tndH_"><a href="#l-146">#</a> [10:01] * tndH_ is now known as tndH</li>
+ <li id="l-147" _a="jgraham" _r="Lachy"><a href="#l-147">#</a> [10:09] &lt;jgraham&gt; Lachy: I'm planning to release it Any Minute Now.</li>
+ <li id="l-148"><a href="#l-148">#</a> [10:10] * Joins: zcorpan (n=zcorpan@c-d391e355.022-154-6c6b7013.cust.bredbandsbolaget.se)</li>
+ <li id="l-149" _a="hsivonen" _r="zcorpan"><a href="#l-149">#</a> [10:11] &lt;hsivonen&gt; zcorpan: which apps convert real (non-entity) no-break spaces to regular spaces on copy/paste?</li>
+ <li id="l-150"><a href="#l-150">#</a> [10:13] * Quits: dbaron (n=dbaron@c-71-198-189-81.hsd1.ca.comcast.net) (&quot;g'night&quot;)</li>
+ <li id="l-151" _a="zcorpan" _r="hsivonen"><a href="#l-151">#</a> [10:14] &lt;zcorpan&gt; hsivonen: just tested copying from firefox into notepad on windows, and it became a regular space</li>
+ <li id="l-152" _a="annevk" _r="well"><a href="#l-152">#</a> [10:16] &lt;annevk&gt; well, it seems like we released an experimental build with improved support for &lt;canvas&gt;, Selectors and the like: <a href="http://www.opera.com/products/desktop/next/">http://www.opera.com/products/desktop/next/</a> (plug)</li>
+ <li id="l-153" _a="zcorpan" _r="ah"><a href="#l-153">#</a> [10:16] &lt;zcorpan&gt; ah, it's tuesday already</li>
+ <li id="l-154" _a="annevk"><a href="#l-154">#</a> [10:16] &lt;annevk&gt; morning zcorpan :p</li>
+ <li id="l-155" _a="zcorpan"><a href="#l-155">#</a> [10:16] &lt;zcorpan&gt; morning :)</li>
+ <li id="l-156" _a="marcosc"><a href="#l-156">#</a> [10:20] * marcosc installs Opera 9.5....</li>
+ <li id="l-157" _a="marcosc"><a href="#l-157">#</a> [10:25] * marcosc likes the smooth scroll :D</li>
+ <li id="l-158" _a="marcosc"><a href="#l-158">#</a> [10:28] &lt;marcosc&gt; hmmm... still leaves rendering artifacts in gmail....</li>
+ <li id="l-159" _a="hendry" _r="annevk"><a href="#l-159">#</a> [10:32] &lt;hendry&gt; annevk: hi, i am studing your access control TR. Have you seen <a href="http://www.gnucitizen.org/blog/i-dont-think-that-you-understand-firefox3-vulnerable-by-design">http://www.gnucitizen.org/blog/i-dont-think-that-you-understand-firefox3-vulnerable-by-design</a> ? is that stuff serious?</li>
+ <li id="l-160" _a="Lachy" _r="hendry"><a href="#l-160">#</a> [10:32] &lt;Lachy&gt; hendry, most of it is bogus</li>
+ <li id="l-161" _a="hendry" _r="annevk"><a href="#l-161">#</a> [10:33] &lt;hendry&gt; annevk: ah, I've seen you responded. no worries</li>
+ <li id="l-162" _a="hendry" _r="Lachy"><a href="#l-162">#</a> [10:33] &lt;hendry&gt; Lachy: looked a bit OTT ;)</li>
+ <li id="l-163" _a="Lachy"><a href="#l-163">#</a> [10:33] &lt;Lachy&gt; what's OTT?</li>
+ <li id="l-164" _a="hendry"><a href="#l-164">#</a> [10:34] &lt;hendry&gt; OTT = over the top</li>
+ <li id="l-165" _a="annevk" _r="changelog"><a href="#l-165">#</a> [10:37] &lt;annevk&gt; changelog: <a href="http://snapshot.opera.com/windows/w950a1.html">http://snapshot.opera.com/windows/w950a1.html</a></li>
+ <li id="l-166" _a="Dashiva"><a href="#l-166">#</a> [10:38] &lt;Dashiva&gt; It doesn't look like he even thought his ideas through...</li>
+ <li id="l-167" _a="Lachy"><a href="#l-167">#</a> [10:38] &lt;Lachy&gt; hmm. why does the URI to the blog entry call it &quot;...opera-9-5-alpha-3&quot;, but the it's only alpha 1? <a href="http://my.opera.com/desktopteam/blog/2007/09/04/go-and-get-opera-9-5-alpha-3">http://my.opera.com/desktopteam/blog/2007/09/04/go-and-get-opera-9-5-alpha-3</a></li>
+ <li id="l-168" _a="annevk"><a href="#l-168">#</a> [10:39] &lt;annevk&gt; he should read the spec, there are method restrictions, there are restrictions on availability of readyState, etc.</li>
+ <li id="l-169" _a="Dashiva" _r="Lachy"><a href="#l-169">#</a> [10:40] &lt;Dashiva&gt; Lachy: Maybe they messed up the post two times before getting it right :D</li>
+ <li id="l-170" _a="Lachy"><a href="#l-170">#</a> [10:44] &lt;Lachy&gt; oh nice, they finally fixed this bug &quot;No longer use font-variant: small-caps for acronym elements&quot;. I wondered how long they would remain inconsistent with other browsers on that</li>
+ <li id="l-171" _a="othermaciej" _r="cool"><a href="#l-171">#</a> [10:46] &lt;othermaciej&gt; cool, text-shadow support</li>
+ <li id="l-172" _a="virtuelv" _r="othermaciej"><a href="#l-172">#</a> [10:47] &lt;virtuelv&gt; othermaciej: something not immediatly evident: We support multiple text shadows, comma-separated</li>
+ <li id="l-173" _a="virtuelv"><a href="#l-173">#</a> [10:47] &lt;virtuelv&gt; I think the limit is at something like 12 shadows</li>
+ <li id="l-174" _a="othermaciej"><a href="#l-174">#</a> [10:47] &lt;othermaciej&gt; our limit is one shadow</li>
+ <li id="l-175" _a="jgraham" _r="Lachy"><a href="#l-175">#</a> [10:47] &lt;jgraham&gt; Lachy: <a href="http://html5.googlecode.com/svn/trunk/tables/">http://html5.googlecode.com/svn/trunk/tables/</a></li>
+ <li id="l-176" _a="Lachy" _r="jgraham"><a href="#l-176">#</a> [10:47] &lt;Lachy&gt; jgraham, thanks</li>
+ <li id="l-177" _a="othermaciej"><a href="#l-177">#</a> [10:48] &lt;othermaciej&gt; cause that was easier to implement with high performance, and more than one shadow seemed useless</li>
+ <li id="l-178" _a="Dashiva"><a href="#l-178">#</a> [10:48] &lt;Dashiva&gt; virtuelv had some crazy use case for 8, I think :)</li>
+ <li id="l-179" _a="virtuelv" _r="Dashiva"><a href="#l-179">#</a> [10:48] &lt;virtuelv&gt; Dashiva: 9 in fact</li>
+ <li id="l-180"><a href="#l-180">#</a> [10:48] * Quits: zcorpan (n=zcorpan@c-d391e355.022-154-6c6b7013.cust.bredbandsbolaget.se) (Read error: 110 (Connection timed out))</li>
+ <li id="l-181" _a="virtuelv"><a href="#l-181">#</a> [10:49] &lt;virtuelv&gt; I used Opera as a rendering engine for some PNG</li>
+ <li id="l-182" _a="virtuelv"><a href="#l-182">#</a> [10:49] &lt;virtuelv&gt; instead of torturing myself with GIMP</li>
+ <li id="l-183" _a="annevk"><a href="#l-183">#</a> [10:49] &lt;annevk&gt; I wonder when we'll be flamed at for implementing some bits of HTML5</li>
+ <li id="l-184" _a="Dashiva"><a href="#l-184">#</a> [10:49] &lt;Dashiva&gt; I heard we already implemented &lt;p&gt;</li>
+ <li id="l-185" _a="othermaciej"><a href="#l-185">#</a> [10:51] &lt;othermaciej&gt; how dare you speak for the HTML working group!</li>
+ <li id="l-186" _a="othermaciej"><a href="#l-186">#</a> [10:51] &lt;othermaciej&gt; no final decision has been made on &lt;p&gt;</li>
+ <li id="l-187" _a="hsivonen"><a href="#l-187">#</a> [10:51] * hsivonen is mildly surprised about Opera putting resources into text-shadow implementation considering that howcome categorized text-shadow as &quot;excessive&quot; in his thesis</li>
+ <li id="l-188" _a="hsivonen" _r="Dashiva"><a href="#l-188">#</a> [10:52] &lt;hsivonen&gt; Dashiva: do you work for Opera?</li>
+ <li id="l-189" _a="Dashiva"><a href="#l-189">#</a> [10:52] &lt;Dashiva&gt; Only in the summer</li>
+ <li id="l-190" _a="othermaciej"><a href="#l-190">#</a> [10:52] &lt;othermaciej&gt; snapshot.opera.com is responding really slowly for me</li>
+ <li id="l-191" _a="hsivonen" _r="Dashiva"><a href="#l-191">#</a> [10:52] &lt;hsivonen&gt; Dashiva: ok. I hadn't realized.</li>
+ <li id="l-192" _a="Dashiva"><a href="#l-192">#</a> [10:53] &lt;Dashiva&gt; I'm just a lowly webapps slave</li>
+ <li id="l-193"><a href="#l-193">#</a> [10:53] * Joins: dev0 (i=Tobias@unaffiliated/icefox0)</li>
+ <li id="l-194" _a="annevk" _r="othermaciej"><a href="#l-194">#</a> [10:53] &lt;annevk&gt; othermaciej, confirmed :)</li>
+ <li id="l-195" _a="othermaciej"><a href="#l-195">#</a> [10:53] &lt;othermaciej&gt; I have to benchmark the new beta against Safari 3</li>
+ <li id="l-196" _a="othermaciej" _r="er"><a href="#l-196">#</a> [10:53] &lt;othermaciej&gt; er, new alpha</li>
+ <li id="l-197" _a="othermaciej" _r="hmm"><a href="#l-197">#</a> [10:57] &lt;othermaciej&gt; hmm, does window.resizeTo not work?</li>
+ <li id="l-198" _a="annevk"><a href="#l-198">#</a> [10:59] &lt;annevk&gt; I'd guess that's disabled by default, but dunno really</li>
+ <li id="l-199" _a="othermaciej"><a href="#l-199">#</a> [10:59] &lt;othermaciej&gt; I was trying to type javascript:resizeTo(800,600) to have a consistent testing environment</li>
+ <li id="l-200" _a="othermaciej"><a href="#l-200">#</a> [10:59] &lt;othermaciej&gt; but I just resized by hand instead</li>
+ <li id="l-201"><a href="#l-201">#</a> [11:02] * Quits: MikeSmith (n=MikeSmit@eM60-254-241-254.pool.emnet.ne.jp) (&quot;Less talk, more pimp walk.&quot;)</li>
+ <li id="l-202" _a="othermaciej" _r="well"><a href="#l-202">#</a> [11:03] &lt;othermaciej&gt; well, the JS is faster than Opera 9.2</li>
+ <li id="l-203" _a="othermaciej"><a href="#l-203">#</a> [11:03] &lt;othermaciej&gt; at least on Mac</li>
+ <li id="l-204" _a="Lachy"><a href="#l-204">#</a> [11:04] &lt;Lachy&gt; hmm. there still doesn't appear to be a way to make Find-as-you-type work properly in Opera :-(</li>
+ <li id="l-205" _a="Dashiva"><a href="#l-205">#</a> [11:07] &lt;Dashiva&gt; How does it not work properly at the moment?</li>
+ <li id="l-206" _a="Lachy"><a href="#l-206">#</a> [11:08] &lt;Lachy&gt; I have to press '/' to activate it. I want it to start finding as soon as I start typing, like I have it configured in FF</li>
+ <li id="l-207" _a="Dashiva"><a href="#l-207">#</a> [11:11] &lt;Dashiva&gt; How does that interact with one-key shortcuts, though?</li>
+ <li id="l-208" _a="Lachy"><a href="#l-208">#</a> [11:12] &lt;Lachy&gt; I don't care. I don't want one-key shortcuts</li>
+ <li id="l-209" _a="othermaciej" _r="wow"><a href="#l-209">#</a> [11:20] &lt;othermaciej&gt; wow, I can't imagine having find configured that way</li>
+ <li id="l-210"><a href="#l-210">#</a> [11:31] * Joins: Ducki (n=Ducki@nrdh-d9b980dd.pool.mediaWays.net)</li>
+ <li id="l-211"><a href="#l-211">#</a> [11:43] * Quits: karlUshi (n=karl@124-144-94-188.rev.home.ne.jp) (&quot;Where dwelt Ymir, or wherein did he find sustenance?&quot;)</li>
+ <li id="l-212"><a href="#l-212">#</a> [11:47] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-213"><a href="#l-213">#</a> [11:51] * Parts: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-214"><a href="#l-214">#</a> [11:51] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-215"><a href="#l-215">#</a> [11:56] * Quits: Lachy (n=Lachy@124-170-105-252.dyn.iinet.net.au) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518]&quot;)</li>
+ <li id="l-216"><a href="#l-216">#</a> [11:59] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-217"><a href="#l-217">#</a> [12:00] * Joins: Ducki_ (n=Ducki@nrdh-d9b98075.pool.mediaWays.net)</li>
+ <li id="l-218"><a href="#l-218">#</a> [12:01] * Parts: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-219"><a href="#l-219">#</a> [12:02] * Joins: zcorpan (n=zcorpan@pat.se.opera.com)</li>
+ <li id="l-220"><a href="#l-220">#</a> [12:12] * Joins: BenWard (i=BenWard@nat/yahoo/x-cad1ecf16bb470bd)</li>
+ <li id="l-221"><a href="#l-221">#</a> [12:18] * Quits: Ducki (n=Ducki@nrdh-d9b980dd.pool.mediaWays.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-222"><a href="#l-222">#</a> [12:29] * Joins: Lachy (n=Lachy@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-223"><a href="#l-223">#</a> [12:53] * Joins: met_ (n=Hassman@b14-4.vscht.cz)</li>
+ <li id="l-224"><a href="#l-224">#</a> [13:14] * Quits: Lachy (n=Lachy@124-170-105-252.dyn.iinet.net.au) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518]&quot;)</li>
+ <li id="l-225"><a href="#l-225">#</a> [13:33] * Joins: hasather_ (n=hasather@90-227-221-48-no62.tbcn.telia.com)</li>
+ <li id="l-226"><a href="#l-226">#</a> [14:03] * Quits: kfish (n=conrad@61.194.21.25) (&quot;pike!&quot;)</li>
+ <li id="l-227"><a href="#l-227">#</a> [14:04] * Parts: doublec (n=doublec@203-211-98-166.ue.woosh.co.nz)</li>
+ <li id="l-228"><a href="#l-228">#</a> [14:18] * Quits: gavin (n=gavin@firefox/developer/gavin) (Read error: 110 (Connection timed out))</li>
+ <li id="l-229"><a href="#l-229">#</a> [14:20] * Quits: Ducki_ (n=Ducki@nrdh-d9b98075.pool.mediaWays.net) (Read error: 113 (No route to host))</li>
+ <li id="l-230"><a href="#l-230">#</a> [14:34] * Joins: Lachy (n=Lachy@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-231"><a href="#l-231">#</a> [14:37] * Parts: hasather_ (n=hasather@90-227-221-48-no62.tbcn.telia.com)</li>
+ <li id="l-232"><a href="#l-232">#</a> [14:40] * Joins: hasather_ (n=hasather@90-227-221-48-no62.tbcn.telia.com)</li>
+ <li id="l-233"><a href="#l-233">#</a> [14:40] * Quits: tndH (i=Rob@adsl-87-102-114-49.karoo.KCOM.COM) (&quot;red button pressed...&quot;)</li>
+ <li id="l-234"><a href="#l-234">#</a> [14:40] * Quits: met_ (n=Hassman@b14-4.vscht.cz) (Read error: 110 (Connection timed out))</li>
+ <li id="l-235"><a href="#l-235">#</a> [14:41] * Parts: hasather_ (n=hasather@90-227-221-48-no62.tbcn.telia.com)</li>
+ <li id="l-236"><a href="#l-236">#</a> [14:44] * Joins: tndH (i=Rob@adsl-87-102-114-49.karoo.KCOM.COM)</li>
+ <li id="l-237" _a="Philip`"><a href="#l-237">#</a> [15:04] &lt;Philip`&gt; &quot;Fixed canvas locking in the 2dgame context to allow updating when the canvas is locked and fixed the update function to actually work&quot; - aha, sounds like it's no longer utterly useless</li>
+ <li id="l-238" _a="Philip`"><a href="#l-238">#</a> [15:05] &lt;Philip`&gt; <a href="http://snapshot.opera.com/unix/u950a1.html">http://snapshot.opera.com/unix/u950a1.html</a> has encoding errors in [micro]Torrent's name near the bottom :-(</li>
+ <li id="l-239"><a href="#l-239">#</a> [15:14] * Joins: Ducki (i=Ducki@nrdh-d9b980d2.pool.mediaWays.net)</li>
+ <li id="l-240" _a="Philip`" _r="Hmm"><a href="#l-240">#</a> [15:18] &lt;Philip`&gt; Hmm, Canvex is broken in O9.5 - if I select &quot;large&quot; then it only draws the top-left quarter of the canvas</li>
+ <li id="l-241" _a="annevk"><a href="#l-241">#</a> [15:22] &lt;annevk&gt; encoding error is being fixed</li>
+ <li id="l-242" _a="hsivonen"><a href="#l-242">#</a> [15:23] &lt;hsivonen&gt; hmm. validator.nu sucks in Opera Mini 4 beta</li>
+ <li id="l-243" _a="hsivonen"><a href="#l-243">#</a> [15:24] &lt;hsivonen&gt; I wonder if I should make a handheld style sheet</li>
+ <li id="l-244" _a="annevk"><a href="#l-244">#</a> [15:25] &lt;annevk&gt; It seems that teaching the world that &quot;Selectors&quot; is not &quot;CSS3 Selectors&quot; is near impossible</li>
+ <li id="l-245" _a="Philip`"><a href="#l-245">#</a> [15:25] &lt;Philip`&gt; <a href="http://canvex.lazyilluminati.com/tests/tests/results.html">http://canvex.lazyilluminati.com/tests/tests/results.html</a></li>
+ <li id="l-246" _a="annevk" _r="Cool"><a href="#l-246">#</a> [15:27] &lt;annevk&gt; Cool, looks like quite a lot of bugfixes and a few regressions</li>
+ <li id="l-247" _a="hsivonen"><a href="#l-247">#</a> [15:27] &lt;hsivonen&gt; will Opera Mini take the handheld CSS if I bother making a separate style sheet?</li>
+ <li id="l-248" _a="Dashiva"><a href="#l-248">#</a> [15:28] &lt;Dashiva&gt; Hmm... canvex seems to mess up info panel too</li>
+ <li id="l-249" _a="annevk"><a href="#l-249">#</a> [15:28] &lt;annevk&gt; I think it will, though given that pages abuse handheld CSS as well it might not...</li>
+ <li id="l-250" _a="Dashiva" _r="nm"><a href="#l-250">#</a> [15:29] &lt;Dashiva&gt; nm, I missed the commenting out of all those scripts</li>
+ <li id="l-251" _a="Philip`" _r="Dashiva"><a href="#l-251">#</a> [15:29] &lt;Philip`&gt; Dashiva: ?</li>
+ <li id="l-252" _a="hsivonen" _r="annevk"><a href="#l-252">#</a> [15:30] &lt;hsivonen&gt; annevk: is there a media value that says: &quot;I have Opera for Mobile, Opera Mini and S60 Browser for testing, I know what I'm doing.&quot;</li>
+ <li id="l-253" _a="hsivonen"><a href="#l-253">#</a> [15:30] &lt;hsivonen&gt; ?</li>
+ <li id="l-254" _a="Philip`"><a href="#l-254">#</a> [15:31] &lt;Philip`&gt; <a href="http://canvex.lazyilluminati.com/misc/physics.html">http://canvex.lazyilluminati.com/misc/physics.html</a> still seems peculiarly slow in Opera :-(</li>
+ <li id="l-255" _a="annevk" _r="hsivonen"><a href="#l-255">#</a> [15:32] &lt;annevk&gt; hsivonen, I'd use a media query</li>
+ <li id="l-256" _a="annevk" _r="hsivonen"><a href="#l-256">#</a> [15:32] &lt;annevk&gt; hsivonen, see also <a href="http://dev.opera.com/articles/view/evolving-the-internet-on-your-phone-des-1/">http://dev.opera.com/articles/view/evolving-the-internet-on-your-phone-des-1/</a> which does say you can use &quot;handheld&quot; but media queries probably work better with other mobile devices such as the iPhone etc.</li>
+ <li id="l-257" _a="hsivonen" _r="annevk"><a href="#l-257">#</a> [15:32] &lt;hsivonen&gt; annevk: thanks</li>
+ <li id="l-258" _a="hsivonen" _r="annevk"><a href="#l-258">#</a> [15:33] &lt;hsivonen&gt; annevk: testing validator.nu with iPhone probably ain't gonna happen (by me) as long as it isn't available in Europe</li>
+ <li id="l-259"><a href="#l-259">#</a> [15:35] * Joins: othermaciej_ (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-260" _a="hsivonen"><a href="#l-260">#</a> [15:35] * hsivonen now has a mobile arsenal of 5 browsers</li>
+ <li id="l-261" _a="othermaciej_" _r="hsivonen"><a href="#l-261">#</a> [15:36] &lt;othermaciej_&gt; hsivonen: which ones?</li>
+ <li id="l-262"><a href="#l-262">#</a> [15:36] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-263" _a="othermaciej_"><a href="#l-263">#</a> [15:36] * othermaciej_ is now known as othermaciej</li>
+ <li id="l-264" _a="hsivonen"><a href="#l-264">#</a> [15:37] &lt;hsivonen&gt; S60 browser, Opera for Mobile, Opera Mini 4 beta, Maemo Browser with Gecko and Maemo Browser with Opera</li>
+ <li id="l-265"><a href="#l-265">#</a> [15:42] * Joins: gavins (n=gavin@firefox/developer/gavin)</li>
+ <li id="l-266" _a="othermaciej"><a href="#l-266">#</a> [15:50] &lt;othermaciej&gt; Nokia is so open-minded in their choice of browser engines</li>
+ <li id="l-267" _a="virtuelv" _r="hsivonen"><a href="#l-267">#</a> [15:53] &lt;virtuelv&gt; hsivonen: I'd stay away from handheld, and just use media queries too</li>
+ <li id="l-268" _a="hsivonen" _r="virtuelv"><a href="#l-268">#</a> [15:54] &lt;hsivonen&gt; virtuelv: ok. thanks</li>
+ <li id="l-269" _a="virtuelv" _r="othermaciej"><a href="#l-269">#</a> [15:55] &lt;virtuelv&gt; othermaciej: resizeTo() has, afair, to be turned on here: opera:config#UserPrefs|Allowscripttoresizewindow</li>
+ <li id="l-270" _a="zcorpan" _r="hsivonen"><a href="#l-270">#</a> [15:57] &lt;zcorpan&gt; hsivonen: i think you could make it work ok in opera mini 4 without media queries</li>
+ <li id="l-271" _a="zcorpan"><a href="#l-271">#</a> [15:57] &lt;zcorpan&gt; i.e. media=&quot;all&quot;</li>
+ <li id="l-272" _a="virtuelv" _r="othermaciej"><a href="#l-272">#</a> [15:57] &lt;virtuelv&gt; othermaciej: with the added snag that maximized windows are unresizable</li>
+ <li id="l-273" _a="othermaciej" _r="virtuelv"><a href="#l-273">#</a> [15:58] &lt;othermaciej&gt; virtuelv: in the end it was easier to just resize manually</li>
+ <li id="l-274" _a="othermaciej"><a href="#l-274">#</a> [15:59] &lt;othermaciej&gt; (wanted to see how Opera 9.5 did on page load speed benchmarks, which requires a consistent sized content area to be meaningful)</li>
+ <li id="l-275" _a="zcorpan" _r="hsivonen"><a href="#l-275">#</a> [15:59] &lt;zcorpan&gt; hsivonen: use % for left and right padding on body and fieldset</li>
+ <li id="l-276" _a="zcorpan"><a href="#l-276">#</a> [15:59] &lt;zcorpan&gt; e.g. 3%</li>
+ <li id="l-277"><a href="#l-277">#</a> [16:02] * Quits: Ducki (i=Ducki@nrdh-d9b980d2.pool.mediaWays.net) (Read error: 113 (No route to host))</li>
+ <li id="l-278" _a="hsivonen" _r="zcorpan"><a href="#l-278">#</a> [16:12] &lt;hsivonen&gt; zcorpan: thanks. I made it suck less</li>
+ <li id="l-279" _a="hsivonen" _r="zcorpan"><a href="#l-279">#</a> [16:13] &lt;hsivonen&gt; zcorpan: I think I'm still going to read about media queries one day and move the labels above the fields on narrow displays</li>
+ <li id="l-280" _a="zcorpan" _r="hsivonen"><a href="#l-280">#</a> [16:14] &lt;zcorpan&gt; hsivonen: ok. that should be doable (again without mq ;) ) with float and min-width</li>
+ <li id="l-281" _a="zcorpan"><a href="#l-281">#</a> [16:16] &lt;zcorpan&gt; but perhaps simpler with mq</li>
+ <li id="l-282" _a="hsivonen" _r="zcorpan"><a href="#l-282">#</a> [16:17] &lt;hsivonen&gt; zcorpan: at least if I use mq I don't need to change markup or retest in IE :-)</li>
+ <li id="l-283" _a="zcorpan"><a href="#l-283">#</a> [16:18] &lt;zcorpan&gt; @media all and (max-width:15em) { ... }</li>
+ <li id="l-284"><a href="#l-284">#</a> [16:19] * Quits: Lachy (n=Lachy@124-170-105-252.dyn.iinet.net.au) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518]&quot;)</li>
+ <li id="l-285" _a="zcorpan" _r="table"><a href="#l-285">#</a> [16:20] &lt;zcorpan&gt; table, tbody, tr, th, td { display:block; }</li>
+ <li id="l-286"><a href="#l-286">#</a> [16:20] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-287"><a href="#l-287">#</a> [16:28] * Quits: annevk (n=annevk@86.90.70.28) (Read error: 110 (Connection timed out))</li>
+ <li id="l-288" _a="hsivonen"><a href="#l-288">#</a> [16:30] &lt;hsivonen&gt; hmm. why does the Opera Mini doc talk about device widths instead of the rendering surface width?</li>
+ <li id="l-289"><a href="#l-289">#</a> [16:31] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-290"><a href="#l-290">#</a> [16:31] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-291" _a="zcorpan"><a href="#l-291">#</a> [16:31] &lt;zcorpan&gt; pointer?</li>
+ <li id="l-292" _a="hsivonen" _r="zcorpan"><a href="#l-292">#</a> [16:32] &lt;hsivonen&gt; zcorpan: <a href="http://dev.opera.com/articles/view/evolving-the-internet-on-your-phone-des-1/">http://dev.opera.com/articles/view/evolving-the-internet-on-your-phone-des-1/</a></li>
+ <li id="l-293" _a="hsivonen"><a href="#l-293">#</a> [16:32] &lt;hsivonen&gt; should I expect queries relative to the rendering surface to be supported?</li>
+ <li id="l-294" _a="virtuelv" _r="hsivonen"><a href="#l-294">#</a> [16:33] &lt;virtuelv&gt; hsivonen: such as?</li>
+ <li id="l-295"><a href="#l-295">#</a> [16:33] * Joins: billmason (n=billmaso@ip156.unival.com)</li>
+ <li id="l-296" _a="zcorpan" _r="hsivonen"><a href="#l-296">#</a> [16:33] &lt;zcorpan&gt; hsivonen: by opera, yes</li>
+ <li id="l-297" _a="zcorpan"><a href="#l-297">#</a> [16:34] &lt;zcorpan&gt; dunno why one would want to use max-device-width at all</li>
+ <li id="l-298" _a="hsivonen" _r="zcorpan"><a href="#l-298">#</a> [16:34] &lt;hsivonen&gt; zcorpan: thanks</li>
+ <li id="l-299" _a="hsivonen" _r="virtuelv"><a href="#l-299">#</a> [16:35] &lt;hsivonen&gt; virtuelv: max-width (as opposed to max-device-width)</li>
+ <li id="l-300" _a="virtuelv" _r="hsivonen"><a href="#l-300">#</a> [16:35] &lt;virtuelv&gt; hsivonen: I think so, but I'm not entirely sure</li>
+ <li id="l-301" _a="Lachy"><a href="#l-301">#</a> [16:35] &lt;Lachy&gt; I'm trying out Opera's IRC client.  Does anyone know if there's a way to make it automatically connect as soon as I launch Opera?</li>
+ <li id="l-302" _a="virtuelv" _r="Lachy"><a href="#l-302">#</a> [16:36] &lt;virtuelv&gt; Lachy: save the windows in a session and restore that session on startup</li>
+ <li id="l-303" _a="zcorpan"><a href="#l-303">#</a> [16:36] &lt;zcorpan&gt; or just let opera remember which tabs were open last time, wfm</li>
+ <li id="l-304" _a="virtuelv" _r="zcorpan"><a href="#l-304">#</a> [16:36] &lt;virtuelv&gt; zcorpan: that too</li>
+ <li id="l-305" _a="Lachy" _r="virtuelv"><a href="#l-305">#</a> [16:37] &lt;Lachy&gt; virtuelv, how do I do that?</li>
+ <li id="l-306" _a="virtuelv"><a href="#l-306">#</a> [16:37] &lt;virtuelv&gt; and remember to lock your IRC tabs if you want to prevent yourself from accidentally leaving a channel</li>
+ <li id="l-307" _a="virtuelv" _r="Lachy"><a href="#l-307">#</a> [16:37] &lt;virtuelv&gt; Lachy: File-&gt;Sessions-&gt;Save session</li>
+ <li id="l-308" _a="virtuelv" _r="Lachy"><a href="#l-308">#</a> [16:38] &lt;virtuelv&gt; Lachy: and close all other windows before saving the session</li>
+ <li id="l-309" _a="Lachy" _r="ok"><a href="#l-309">#</a> [16:39] &lt;Lachy&gt; ok, I'll see if that worked</li>
+ <li id="l-310"><a href="#l-310">#</a> [16:39] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-311"><a href="#l-311">#</a> [16:39] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-312" _a="zcorpan"><a href="#l-312">#</a> [16:40] &lt;zcorpan&gt; wb</li>
+ <li id="l-313" _a="Lachy" _r="ok"><a href="#l-313">#</a> [16:41] &lt;Lachy&gt; ok, that worked. now I need find out how to make it send my freenode password whenever I log into #whatwg</li>
+ <li id="l-314" _a="zcorpan" _r="tools"><a href="#l-314">#</a> [16:41] &lt;zcorpan&gt; tools, mail and chat accounts</li>
+ <li id="l-315"><a href="#l-315">#</a> [16:42] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-316"><a href="#l-316">#</a> [16:42] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-317" _a="Lachy" _r="cool"><a href="#l-317">#</a> [16:43] &lt;Lachy&gt; cool, it all works :-)</li>
+ <li id="l-318" _a="zcorpan"><a href="#l-318">#</a> [16:43] &lt;zcorpan&gt; :)</li>
+ <li id="l-319" _a="hsivonen"><a href="#l-319">#</a> [16:43] &lt;hsivonen&gt; hmm. Opera on desktop does weird things with max-width media queries :-(</li>
+ <li id="l-320" _a="zcorpan" _r="hsivonen"><a href="#l-320">#</a> [16:43] &lt;zcorpan&gt; hsivonen: such as?</li>
+ <li id="l-321" _a="Lachy"><a href="#l-321">#</a> [16:44] &lt;Lachy&gt; hmm. I wonder why Opera had the default encoding set to ISO-8859-15?</li>
+ <li id="l-322" _a="zcorpan" _r="Lachy"><a href="#l-322">#</a> [16:45] &lt;zcorpan&gt; Lachy: as opposed to utf-8 or iso-8859-1?</li>
+ <li id="l-323" _a="Lachy" _r="yes"><a href="#l-323">#</a> [16:45] &lt;Lachy&gt; yes, in the IRC acct settings</li>
+ <li id="l-324" _a="hsivonen" _r="zcorpan"><a href="#l-324">#</a> [16:45] &lt;hsivonen&gt; zcorpan: it seems to set the max-width property of body or html. dunno which :-(</li>
+ <li id="l-325" _a="hsivonen"><a href="#l-325">#</a> [16:45] &lt;hsivonen&gt; in 9.20</li>
+ <li id="l-326" _a="Lachy"><a href="#l-326">#</a> [16:46] &lt;Lachy&gt; just checking it's using UTF-8 now, this should be a smily face: ☺</li>
+ <li id="l-327" _a="Lachy" _r="cool"><a href="#l-327">#</a> [16:47] &lt;Lachy&gt; cool, that showed in the logs correctly :-)</li>
+ <li id="l-328"><a href="#l-328">#</a> [16:47] * Joins: hasather (n=hasather@90-227-221-48-no62.tbcn.telia.com)</li>
+ <li id="l-329" _a="zcorpan" _r="hsivonen"><a href="#l-329">#</a> [16:48] &lt;zcorpan&gt; hsivonen: do you have a test case?</li>
+ <li id="l-330" _a="zcorpan"><a href="#l-330">#</a> [16:50] &lt;zcorpan&gt; i don't see it with 9.23</li>
+ <li id="l-331" _a="zcorpan" _r="Lachy"><a href="#l-331">#</a> [16:50] &lt;zcorpan&gt; Lachy: which do you think should be default: utf-8 or iso-8859-1?</li>
+ <li id="l-332" _a="Lachy"><a href="#l-332">#</a> [16:51] &lt;Lachy&gt; for IRC, it should be UTF-8</li>
+ <li id="l-333" _a="Lachy"><a href="#l-333">#</a> [16:51] &lt;Lachy&gt; that's what chatzilla and xchat use, I believe</li>
+ <li id="l-334" _a="zcorpan" _r="Lachy"><a href="#l-334">#</a> [16:52] &lt;zcorpan&gt; Lachy: file a bug? :)</li>
+ <li id="l-335"><a href="#l-335">#</a> [16:53] * Joins: gsnedders (n=gsnedder@host217-42-133-228.range217-42.btcentralplus.com)</li>
+ <li id="l-336" _a="virtuelv" _r="hsivonen"><a href="#l-336">#</a> [16:54] &lt;virtuelv&gt; hsivonen: tried in 9.5?</li>
+ <li id="l-337" _a="hsivonen" _r="zcorpan"><a href="#l-337">#</a> [16:56] &lt;hsivonen&gt; zcorpan: hmm. when I try to minimize the test case, I see neither the problem nor correct behavior...</li>
+ <li id="l-338" _a="zcorpan" _r="hsivonen"><a href="#l-338">#</a> [16:56] &lt;zcorpan&gt; hsivonen: interesting</li>
+ <li id="l-339" _a="hsivonen" _r="zcorpan"><a href="#l-339">#</a> [16:57] &lt;hsivonen&gt; zcorpan: test case <a href="http://hsivonen.iki.fi/test/max-width-mq.html">http://hsivonen.iki.fi/test/max-width-mq.html</a></li>
+ <li id="l-340" _a="hsivonen"><a href="#l-340">#</a> [16:58] &lt;hsivonen&gt; hmm. might have been a mistake in my testing or I don't grok the SSR mode in the desktop build</li>
+ <li id="l-341" _a="hsivonen" _r="anyway"><a href="#l-341">#</a> [16:58] &lt;hsivonen&gt; anyway, it turns out that max-width works</li>
+ <li id="l-342" _a="hsivonen"><a href="#l-342">#</a> [16:58] &lt;hsivonen&gt; but not after window resize without reload</li>
+ <li id="l-343" _a="hsivonen"><a href="#l-343">#</a> [16:58] &lt;hsivonen&gt; so the query applies at initial load time only</li>
+ <li id="l-344" _a="zcorpan" _r="hsivonen"><a href="#l-344">#</a> [16:59] &lt;zcorpan&gt; hsivonen: you will need to make the window narrower for the mq to apply, not just enable ssr</li>
+ <li id="l-345" _a="zcorpan" _r="hsivonen"><a href="#l-345">#</a> [16:59] &lt;zcorpan&gt; hsivonen: in 9.5 it gets applied as you change the window size</li>
+ <li id="l-346"><a href="#l-346">#</a> [17:01] * Joins: aroben (n=adamrobe@c-67-160-250-192.hsd1.ca.comcast.net)</li>
+ <li id="l-347" class="flagged" _a="Lachy" _r="zcorpan"><a href="#l-347">#</a> [17:03] &lt;Lachy&gt; zcorpan, bugs.opera.com really needs to have a link to bugs.opera.com/wizard/ - I had to go the long way around to find it through opera.com -&gt; support -&gt; ...</li>
+ <li id="l-348"><a href="#l-348">#</a> [17:03] * Quits: aroben (n=adamrobe@unaffiliated/aroben) (Remote closed the connection)</li>
+ <li id="l-349"><a href="#l-349">#</a> [17:04] * Joins: aroben (n=adamrobe@unaffiliated/aroben)</li>
+ <li id="l-350" _a="Lachy" _r="zcorpan"><a href="#l-350">#</a> [17:05] &lt;Lachy&gt; zcorpan, bug-281826 is filed</li>
+ <li id="l-351" _a="hsivonen"><a href="#l-351">#</a> [17:06] &lt;hsivonen&gt; yay. made validator.nu no longer suck in Opera Mini</li>
+ <li id="l-352" _a="zcorpan" _r="Lachy"><a href="#l-352">#</a> [17:06] &lt;zcorpan&gt; Lachy: thanks</li>
+ <li id="l-353" _a="hsivonen"><a href="#l-353">#</a> [17:06] &lt;hsivonen&gt; still sucks in S60 browser, though</li>
+ <li id="l-354" _a="hsivonen"><a href="#l-354">#</a> [17:06] &lt;hsivonen&gt; I guess they don't support media queries :-(</li>
+ <li id="l-355" _a="zcorpan" _r="hsivonen"><a href="#l-355">#</a> [17:07] &lt;zcorpan&gt; hsivonen: nice</li>
+ <li id="l-356" _a="zcorpan" _r="hsivonen"><a href="#l-356">#</a> [17:09] &lt;zcorpan&gt; hsivonen: they might support &quot;handheld&quot;</li>
+ <li id="l-357"><a href="#l-357">#</a> [17:16] * Quits: weinig_ (n=weinig@c-24-6-210-182.hsd1.ca.comcast.net)</li>
+ <li id="l-358" _a="othermaciej"><a href="#l-358">#</a> [17:16] &lt;othermaciej&gt; if they ever update to a newer WebKit they will</li>
+ <li id="l-359" _a="othermaciej"><a href="#l-359">#</a> [17:16] &lt;othermaciej&gt; in fact the WebKit media query support was originally written by someone from Nokia</li>
+ <li id="l-360" _a="hasather" _r="Lachy"><a href="#l-360">#</a> [17:23] &lt;hasather&gt; Lachy: it does have a link to te wizard</li>
+ <li id="l-361" _a="zcorpan"><a href="#l-361">#</a> [17:24] * zcorpan just forwarded the request... :)</li>
+ <li id="l-362" class="flagged" _a="Lachy" _r="hasather"><a href="#l-362">#</a> [17:25] &lt;Lachy&gt; hasather, where?</li>
+ <li id="l-363" _a="hasather" _r="Lachy"><a href="#l-363">#</a> [17:26] &lt;hasather&gt; Lachy: bugs.opera.com says &quot;If you are not an Opera employee or partner, but wish to report a bug, please visit the bug report wizard after reading the guidelines.&quot; with a link to the wizard</li>
+ <li id="l-364" _a="Lachy" _r="oh"><a href="#l-364">#</a> [17:27] &lt;Lachy&gt; oh, that's not at all obvious. It should be in the toolbar</li>
+ <li id="l-365" _a="Lachy"><a href="#l-365">#</a> [17:28] &lt;Lachy&gt; I tried &quot;Enter new bug&quot; in the toolbar, and that didn't work, so I figured there wasn't another link</li>
+ <li id="l-366" _a="Lachy"><a href="#l-366">#</a> [17:32] &lt;Lachy&gt; hmm. smileys aren't showing as graphics for me, as they're supposed to <a href="http://help.opera.com/Windows/9.20/en/chat.html#smileys">http://help.opera.com/Windows/9.20/en/chat.html#smileys</a></li>
+ <li id="l-367" _a="virtuelv" _r="Lachy"><a href="#l-367">#</a> [17:33] &lt;virtuelv&gt; Lachy: known, I believe</li>
+ <li id="l-368" _a="Lachy" _r="ok"><a href="#l-368">#</a> [17:33] &lt;Lachy&gt; ok, is it just a bug in the 9.5 alpha?</li>
+ <li id="l-369" _a="hasather" _r="Lachy"><a href="#l-369">#</a> [17:33] &lt;hasather&gt; Lachy: yes</li>
+ <li id="l-370" _a="Lachy"><a href="#l-370">#</a> [17:34] &lt;Lachy&gt; ok</li>
+ <li id="l-371" _a="Lachy"><a href="#l-371">#</a> [17:34] &lt;Lachy&gt; is it possible to fix the nickname completion to use a comma instead of a colon after the name?</li>
+ <li id="l-372"><a href="#l-372">#</a> [17:34] * Quits: aroben (n=adamrobe@unaffiliated/aroben) (Read error: 110 (Connection timed out))</li>
+ <li id="l-373" _a="Lachy"><a href="#l-373">#</a> [17:34] &lt;Lachy&gt; I couldn't find any pref for it</li>
+ <li id="l-374" _a="hasather" _r="Lachy"><a href="#l-374">#</a> [17:35] &lt;hasather&gt; Lachy: not that I know of, but I've never looked into it</li>
+ <li id="l-375" _a="zcorpan" _r="Lachy"><a href="#l-375">#</a> [17:39] &lt;zcorpan&gt; Lachy: file another bug? :)</li>
+ <li id="l-376" _a="Lachy" _r="zcorpan"><a href="#l-376">#</a> [17:43] &lt;Lachy&gt; zcorpan: I will later. I'm currently trying to work out how to manage my user profile in opera, like I can with Firefox.</li>
+ <li id="l-377"><a href="#l-377">#</a> [17:44] * Joins: Ducki (i=Ducki@nrdh-d9b98048.pool.mediaWays.net)</li>
+ <li id="l-378"><a href="#l-378">#</a> [17:44] * Joins: weinig (i=weinig@nat/apple/x-c6ab01bd90b0e76f)</li>
+ <li id="l-379"><a href="#l-379">#</a> [17:45] * Joins: grimboy (n=grimboy@85-211-246-129.dsl.pipex.com)</li>
+ <li id="l-380"><a href="#l-380">#</a> [17:45] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-381"><a href="#l-381">#</a> [17:46] * Joins: maikmerten (n=maikmert@T659d.t.pppool.de)</li>
+ <li id="l-382" _a="gsnedders"><a href="#l-382">#</a> [17:58] &lt;gsnedders&gt; hmmm… which is the lesser evil: XHTML, or HTML 3.2?</li>
+ <li id="l-383" _a="hsivonen"><a href="#l-383">#</a> [17:58] &lt;hsivonen&gt; I wonder if anything can be done to the Apache policy of not putting x- types in mime.types...</li>
+ <li id="l-384" _a="hsivonen"><a href="#l-384">#</a> [17:58] &lt;hsivonen&gt; seems like a *very* counter-productive policy to me</li>
+ <li id="l-385"><a href="#l-385">#</a> [18:06] * Joins: Lachy_ (n=Lachy@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-386"><a href="#l-386">#</a> [18:07] * Joins: Ducki_ (n=Ducki@nrdh-d9b980d3.pool.mediaWays.net)</li>
+ <li id="l-387" _a="Lachy_"><a href="#l-387">#</a> [18:08] &lt;Lachy_&gt; hmm. I can't figure out how Opera's profile managment works.  I want to store the whole profile on my data disk (D:) instead of my system disk (C:). I give up for tonight</li>
+ <li id="l-388"><a href="#l-388">#</a> [18:10] * Quits: KevinMarks (n=KevinMar@c-76-102-254-252.hsd1.ca.comcast.net) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-389" _a="hasather" _r="Lachy_"><a href="#l-389">#</a> [18:11] &lt;hasather&gt; Lachy_: this might help <a href="http://operawiki.info/OperaProfiles">http://operawiki.info/OperaProfiles</a></li>
+ <li id="l-390"><a href="#l-390">#</a> [18:13] * Joins: aroben (n=adamrobe@17.203.15.195)</li>
+ <li id="l-391" _a="Lachy_" _r="hasather"><a href="#l-391">#</a> [18:15] &lt;Lachy_&gt; hasather, thanks.</li>
+ <li id="l-392" _a="Lachy_"><a href="#l-392">#</a> [18:16] &lt;Lachy_&gt; Opera definitely needs a profile manager like Firefox's though</li>
+ <li id="l-393"><a href="#l-393">#</a> [18:18] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-394"><a href="#l-394">#</a> [18:18] * Quits: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au) (Remote closed the connection)</li>
+ <li id="l-395"><a href="#l-395">#</a> [18:27] * Quits: Ducki (i=Ducki@nrdh-d9b98048.pool.mediaWays.net) (Read error: 113 (No route to host))</li>
+ <li id="l-396"><a href="#l-396">#</a> [18:33] * Joins: aaron (n=chatzill@c-66-31-86-217.hsd1.ma.comcast.net)</li>
+ <li id="l-397"><a href="#l-397">#</a> [18:34] * Joins: jbarnett__ (n=jbarnett@71.159.54.54)</li>
+ <li id="l-398"><a href="#l-398">#</a> [18:35] * Quits: gsnedders (n=gsnedder@host217-42-133-228.range217-42.btcentralplus.com)</li>
+ <li id="l-399"><a href="#l-399">#</a> [18:36] * Joins: h3h (n=w3rd@66-162-32-234.static.twtelecom.net)</li>
+ <li id="l-400" _a="aaron"><a href="#l-400">#</a> [18:36] * aaron is now known as aaronlev_</li>
+ <li id="l-401"><a href="#l-401">#</a> [18:37] * Joins: gsnedders (n=gsnedder@host217-42-133-228.range217-42.btcentralplus.com)</li>
+ <li id="l-402"><a href="#l-402">#</a> [18:38] * Quits: Lachy_ (n=Lachy@124-170-105-252.dyn.iinet.net.au) (&quot;ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518]&quot;)</li>
+ <li id="l-403"><a href="#l-403">#</a> [18:38] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-404"><a href="#l-404">#</a> [18:40] * Quits: dev0 (i=Tobias@unaffiliated/icefox0) (&quot;dev0 has no reason&quot;)</li>
+ <li id="l-405"><a href="#l-405">#</a> [18:43] * Joins: tantek (n=tantek@host217-34-42-151.in-addr.btopenworld.com)</li>
+ <li id="l-406"><a href="#l-406">#</a> [18:51] * Joins: maikmerten_ (n=maikmert@T7c6f.t.pppool.de)</li>
+ <li id="l-407"><a href="#l-407">#</a> [19:07] * Quits: maikmerten (n=maikmert@T659d.t.pppool.de) (Read error: 110 (Connection timed out))</li>
+ <li id="l-408"><a href="#l-408">#</a> [19:08] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-409" _a="aaronlev_" _r="hsivonen"><a href="#l-409">#</a> [19:09] &lt;aaronlev_&gt; hsivonen: yt?</li>
+ <li id="l-410"><a href="#l-410">#</a> [19:09] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-411" _a="hsivonen" _r="aaronlev_"><a href="#l-411">#</a> [19:14] &lt;hsivonen&gt; aaronlev_: yes. (still catching up on email. sorry.)</li>
+ <li id="l-412" _a="aaronlev_" _r="hsivonen"><a href="#l-412">#</a> [19:14] &lt;aaronlev_&gt; hsivonen: np</li>
+ <li id="l-413" _a="aaronlev_"><a href="#l-413">#</a> [19:14] &lt;aaronlev_&gt; i probably wrote a similar email twice, sorry about that</li>
+ <li id="l-414"><a href="#l-414">#</a> [19:18] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-415"><a href="#l-415">#</a> [19:20] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-416"><a href="#l-416">#</a> [19:21] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-417"><a href="#l-417">#</a> [19:21] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-418"><a href="#l-418">#</a> [19:22] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-419"><a href="#l-419">#</a> [19:22] * Quits: zcorpan (n=zcorpan@pat.se.opera.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-420" class="flagged" _a="Philip`"><a href="#l-420">#</a> [19:23] &lt;Philip`&gt; Opera 9.5 says: &quot;Insert em tag instead of i tag when using italic execCommand parameter&quot; - that sounds semantically unsound :-(</li>
+ <li id="l-421"><a href="#l-421">#</a> [19:23] * Joins: webben (i=benh@nat/yahoo/x-810142f898617979)</li>
+ <li id="l-422"><a href="#l-422">#</a> [19:24] * Parts: webben (i=benh@nat/yahoo/x-810142f898617979)</li>
+ <li id="l-423"><a href="#l-423">#</a> [19:27] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-424"><a href="#l-424">#</a> [19:27] * Parts: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-425"><a href="#l-425">#</a> [19:28] * Joins: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au)</li>
+ <li id="l-426"><a href="#l-426">#</a> [19:28] * Joins: G0k (n=hmason@rrdhcp152-474.redrover.cornell.edu)</li>
+ <li id="l-427"><a href="#l-427">#</a> [19:28] * Parts: G0k (n=hmason@rrdhcp152-474.redrover.cornell.edu)</li>
+ <li id="l-428" _a="hsivonen" _r="aaronlev_"><a href="#l-428">#</a> [19:29] &lt;hsivonen&gt; aaronlev_: I'm reading your mail now, but it will take me a while to think enough before I reply</li>
+ <li id="l-429" _a="aaronlev_"><a href="#l-429">#</a> [19:30] &lt;aaronlev_&gt; cool</li>
+ <li id="l-430"><a href="#l-430">#</a> [19:31] * Quits: kingryan (n=kingryan@dsl081-240-149.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-431"><a href="#l-431">#</a> [19:35] * Joins: tndH_ (i=Rob@adsl-87-102-118-51.karoo.KCOM.COM)</li>
+ <li id="l-432"><a href="#l-432">#</a> [19:36] * Quits: othermaciej (n=mjs@dsl081-048-145.sfo1.dsl.speakeasy.net)</li>
+ <li id="l-433"><a href="#l-433">#</a> [19:46] * Joins: KevinMarks (i=KevinMar@nat/google/x-15e0086b68ac6e8e)</li>
+ <li id="l-434" _a="hasather" _r="Philip`"><a href="#l-434">#</a> [19:52] &lt;hasather&gt; Philip`: thought so too. Is it for compatibility?</li>
+ <li id="l-435"><a href="#l-435">#</a> [19:53] * Quits: tndH (i=Rob@adsl-87-102-114-49.karoo.KCOM.COM) (Read error: 110 (Connection timed out))</li>
+ <li id="l-436"><a href="#l-436">#</a> [19:53] * Quits: BenWard (i=BenWard@nat/yahoo/x-cad1ecf16bb470bd) (&quot;Fades out again…&quot;)</li>
+ <li id="l-437" _a="jbarnett__" _r="iirc"><a href="#l-437">#</a> [19:53] &lt;jbarnett__&gt; iirc, that's what IE does.  Firefox uses &lt;b&gt; and &lt;i&gt; (again, iirc)</li>
+ <li id="l-438" _a="tndH_"><a href="#l-438">#</a> [19:54] * tndH_ is now known as tndH</li>
+ <li id="l-439"><a href="#l-439">#</a> [19:56] * Quits: KevinMarks (i=KevinMar@nat/google/x-15e0086b68ac6e8e) (&quot;brb&quot;)</li>
+ <li id="l-440"><a href="#l-440">#</a> [19:59] * Quits: tantek (n=tantek@host217-34-42-151.in-addr.btopenworld.com)</li>
+ <li id="l-441"><a href="#l-441">#</a> [20:03] * Joins: Ducki (i=Ducki@nrdh-d9b98059.pool.mediaWays.net)</li>
+ <li id="l-442"><a href="#l-442">#</a> [20:08] * Quits: psa (n=yomode@posom.com) (&quot;All things must come to an end&quot;)</li>
+ <li id="l-443"><a href="#l-443">#</a> [20:08] * Joins: psa (n=yomode@posom.com)</li>
+ <li id="l-444"><a href="#l-444">#</a> [20:09] * Joins: tantek (n=tantek@host217-34-42-151.in-addr.btopenworld.com)</li>
+ <li id="l-445"><a href="#l-445">#</a> [20:11] * Joins: zcorpan (n=zcorpan@c-d391e355.022-154-6c6b7013.cust.bredbandsbolaget.se)</li>
+ <li id="l-446"><a href="#l-446">#</a> [20:15] * Quits: tantek (n=tantek@host217-34-42-151.in-addr.btopenworld.com)</li>
+ <li id="l-447" _a="gsnedders"><a href="#l-447">#</a> [20:15] * gsnedders adds a list of contributors to his draft of tolerant HTTP parsing: Philip`</li>
+ <li id="l-448" _a="Philip`"><a href="#l-448">#</a> [20:16] * Philip` wonders why</li>
+ <li id="l-449" _a="gsnedders" _r="Philip`"><a href="#l-449">#</a> [20:17] &lt;gsnedders&gt; Philip`: &quot;why&quot; is answered somewhere on your web space. Don't have the URI off hand. You did it before I was intending to actually formally write the behaviour down.</li>
+ <li id="l-450" _a="Philip`" _r="Hmm"><a href="#l-450">#</a> [20:19] &lt;Philip`&gt; Hmm, I sort of vaguely remember doing something to test different combinations of \r and \n in headers</li>
+ <li id="l-451" _a="gsnedders"><a href="#l-451">#</a> [20:20] &lt;gsnedders&gt; Yeah. That.</li>
+ <li id="l-452" _a="Philip`"><a href="#l-452">#</a> [20:22] * Philip` probably ought to sort out a better method of remembering what he's done in the past, since his brain is too leaky to store non-backed-up data in</li>
+ <li id="l-453"><a href="#l-453">#</a> [20:22] * Joins: KevinMarks (i=KevinMar@nat/google/x-9ad1961f7c6e8370)</li>
+ <li id="l-454" _a="gsnedders"><a href="#l-454">#</a> [20:22] &lt;gsnedders&gt; ergh. apparently RAID HD has failed. yuk.</li>
+ <li id="l-455" _a="Hixie" _r="Philip`"><a href="#l-455">#</a> [20:23] &lt;Hixie&gt; Philip`: you could do less work... that's the only way i've found</li>
+ <li id="l-456" _a="Hixie"><a href="#l-456">#</a> [20:23] &lt;Hixie&gt; not a particularly fun way of solving the problem though</li>
+ <li id="l-457"><a href="#l-457">#</a> [20:23] * Joins: kingryan (n=kingryan@corp.technorati.com)</li>
+ <li id="l-458"><a href="#l-458">#</a> [20:26] * Quits: hasather (n=hasather@90-227-221-48-no62.tbcn.telia.com) (Remote closed the connection)</li>
+ <li id="l-459" _a="Philip`"><a href="#l-459">#</a> [20:27] &lt;Philip`&gt; I was thinking more along the lines of writing stuff down, and not putting everything in &quot;misc&quot; folders :-)</li>
+ <li id="l-460"><a href="#l-460">#</a> [20:27] * Quits: Ducki_ (n=Ducki@nrdh-d9b980d3.pool.mediaWays.net) (Connection timed out)</li>
+ <li id="l-461" _a="Hixie" _r="Philip`"><a href="#l-461">#</a> [20:27] &lt;Hixie&gt; Philip`: pah, google is your friend :-P</li>
+ <li id="l-462" _a="gsnedders"><a href="#l-462">#</a> [20:33] &lt;gsnedders&gt; but yeah Philip`, you are the list :)</li>
+ <li id="l-463" _a="Philip`"><a href="#l-463">#</a> [20:35] &lt;Philip`&gt; Do I win a T-shirt or badge or something, or is it just fame and glory?</li>
+ <li id="l-464"><a href="#l-464">#</a> [20:36] * Joins: othermaciej (n=mjs@17.203.15.144)</li>
+ <li id="l-465" _a="gsnedders" _r="Philip`"><a href="#l-465">#</a> [20:37] &lt;gsnedders&gt; Philip`: just fame and glory for draft -00</li>
+ <li id="l-466" _a="Philip`" _r="Hmm"><a href="#l-466">#</a> [20:45] &lt;Philip`&gt; Hmm, I suppose that'll be good enough for now, given that I can barely remember what contribution I made :-p</li>
+ <li id="l-467"><a href="#l-467">#</a> [20:47] * Quits: grimboy (n=grimboy@85-211-246-129.dsl.pipex.com) (Read error: 110 (Connection timed out))</li>
+ <li id="l-468" _a="gsnedders" _r="Philip`"><a href="#l-468">#</a> [20:51] &lt;gsnedders&gt; Philip`: If you care, further testing made it rather clear that how you treat CR is rather irrelevant, as every browser treats it differently</li>
+ <li id="l-469" _a="Philip`"><a href="#l-469">#</a> [20:57] &lt;Philip`&gt; Is any of them sensible enough to use its behaviour in a specification, or is it saner to make up another different behaviour?</li>
+ <li id="l-470" _a="gsnedders" _r="Well"><a href="#l-470">#</a> [20:58] &lt;gsnedders&gt; Well, I've yet to find anything reliant on any particular behaviour, so I am (for now) treating it as a valid header name/value character</li>
+ <li id="l-471"><a href="#l-471">#</a> [20:58] * Joins: tantek (n=tantek@ashy.demon.co.uk)</li>
+ <li id="l-472" _a="gsnedders"><a href="#l-472">#</a> [20:59] &lt;gsnedders&gt; which as the algorithm will be written, is the simplist</li>
+ <li id="l-473" _a="gsnedders"><a href="#l-473">#</a> [20:59] &lt;gsnedders&gt; but it's also different to everything I've tested</li>
+ <li id="l-474" _a="gsnedders" _r="actually"><a href="#l-474">#</a> [20:59] &lt;gsnedders&gt; actually, Safari is somewhat like it</li>
+ <li id="l-475" _a="gsnedders"><a href="#l-475">#</a> [20:59] &lt;gsnedders&gt; Safari's behaviour is more complex when it is surrounded by whitespace in the value, though</li>
+ <li id="l-476"><a href="#l-476">#</a> [20:59] * Joins: tantek_ (n=tantek@81-5-138-228.dsl.eclipse.net.uk)</li>
+ <li id="l-477"><a href="#l-477">#</a> [21:03] * Joins: grimboy (n=grimboy@84.13.125.171)</li>
+ <li id="l-478" _a="gsnedders"><a href="#l-478">#</a> [21:04] &lt;gsnedders&gt; <a href="http://geoffers.uni.cc/draft-sneddon-http-parsing-00.html">http://geoffers.uni.cc/draft-sneddon-http-parsing-00.html</a> is current draft</li>
+ <li id="l-479"><a href="#l-479">#</a> [21:04] * Quits: KevinMarks (i=KevinMar@nat/google/x-9ad1961f7c6e8370) (&quot;The computer fell asleep&quot;)</li>
+ <li id="l-480"><a href="#l-480">#</a> [21:05] * Quits: ROBOd (n=robod@86.34.246.154) (heinlein.freenode.net irc.freenode.net)</li>
+ <li id="l-481"><a href="#l-481">#</a> [21:15] * Quits: tantek (n=tantek@ashy.demon.co.uk) (Connection timed out)</li>
+ <li id="l-482" _a="Hixie" _r="gsnedders"><a href="#l-482">#</a> [21:15] &lt;Hixie&gt; gsnedders: one thing for the security section of that draft is the need for implementations to follow the spec exactly lest they be vulnerable to content stuffing that abuses differences in parsing algorithms</li>
+ <li id="l-483" _a="gsnedders" _r="Hixie"><a href="#l-483">#</a> [21:16] &lt;gsnedders&gt; Hixie: yeah, that was one section I needed to solicit comments on about what to write there :)</li>
+ <li id="l-484" _a="Hixie"><a href="#l-484">#</a> [21:16] &lt;Hixie&gt; looks good so far though</li>
+ <li id="l-485" _a="gsnedders"><a href="#l-485">#</a> [21:17] &lt;gsnedders&gt; some of the algorithmic text is based off HTML 5 text, so it's not overly amazing that you're saying that</li>
+ <li id="l-486" _a="Hixie"><a href="#l-486">#</a> [21:17] &lt;Hixie&gt; :-)</li>
+ <li id="l-487" _a="gsnedders"><a href="#l-487">#</a> [21:17] &lt;gsnedders&gt; there was in very early drafts a reference to that, but all the algorithms have been totally rewritten since</li>
+ <li id="l-488" _a="gsnedders" _r="(i.e."><a href="#l-488">#</a> [21:17] &lt;gsnedders&gt; (i.e., at least one algorithm was a verbatim copy)</li>
+ <li id="l-489" _a="Hixie"><a href="#l-489">#</a> [21:17] &lt;Hixie&gt; heh</li>
+ <li id="l-490" _a="Lachy"><a href="#l-490">#</a> [21:17] &lt;Lachy&gt; hey Hixie</li>
+ <li id="l-491" _a="Hixie"><a href="#l-491">#</a> [21:18] &lt;Hixie&gt; hey!</li>
+ <li id="l-492" _a="Hixie"><a href="#l-492">#</a> [21:18] &lt;Hixie&gt; wassup?</li>
+ <li id="l-493" _a="Hixie"><a href="#l-493">#</a> [21:18] &lt;Hixie&gt; anything fun while i was in the desert?</li>
+ <li id="l-494" _a="gsnedders"><a href="#l-494">#</a> [21:18] &lt;gsnedders&gt; the first step (&quot;input&quot;/&quot;position&quot; inheritance) is still verbatim. the rest is totally my own writing, as far as I can see</li>
+ <li id="l-495" _a="Lachy"><a href="#l-495">#</a> [21:18] &lt;Lachy&gt; what were you in the desert for?</li>
+ <li id="l-496" _a="Hixie" _r="gsnedders"><a href="#l-496">#</a> [21:18] &lt;Hixie&gt; gsnedders: yeah i noticed that, i'm all in favour :-D</li>
+ <li id="l-497" _a="Hixie" _r="Lachy"><a href="#l-497">#</a> [21:18] &lt;Hixie&gt; Lachy: burning man</li>
+ <li id="l-498" _a="Lachy"><a href="#l-498">#</a> [21:19] &lt;Lachy&gt; I implemented the text/html feed sniffing algorithm a few days ago</li>
+ <li id="l-499" _a="Hixie"><a href="#l-499">#</a> [21:19] &lt;Hixie&gt; cool</li>
+ <li id="l-500" _a="Hixie"><a href="#l-500">#</a> [21:19] &lt;Hixie&gt; does it work?</li>
+ <li id="l-501" _a="Lachy"><a href="#l-501">#</a> [21:19] &lt;Lachy&gt; <a href="http://html5.lachy.id.au/content-sniffing/">http://html5.lachy.id.au/content-sniffing/</a></li>
+ <li id="l-502" _a="gsnedders" _r="Hixie"><a href="#l-502">#</a> [21:19] &lt;gsnedders&gt; Hixie: WP:NPOV!11!!11!</li>
+ <li id="l-503" _a="Lachy"><a href="#l-503">#</a> [21:19] &lt;Lachy&gt; I found one problem with the prose, which I should send mail about but havent yet.</li>
+ <li id="l-504" _a="gsnedders" _r="Lachy"><a href="#l-504">#</a> [21:20] &lt;gsnedders&gt; Lachy: several have already been sent by both me and kingryan</li>
+ <li id="l-505" _a="Hixie" _r="gsnedders"><a href="#l-505">#</a> [21:20] &lt;Hixie&gt; gsnedders: :-D</li>
+ <li id="l-506" _a="Hixie" _r="Lachy"><a href="#l-506">#</a> [21:20] &lt;Hixie&gt; Lachy: k</li>
+ <li id="l-507" _a="gsnedders" _r="Lachy"><a href="#l-507">#</a> [21:20] &lt;gsnedders&gt; Lachy: was it fairly obvious?</li>
+ <li id="l-508" _a="Lachy"><a href="#l-508">#</a> [21:20] * Lachy is looking for it now...</li>
+ <li id="l-509"><a href="#l-509">#</a> [21:21] * Joins: ROBOd (n=robod@86.34.246.154)</li>
+ <li id="l-510" _a="Lachy"><a href="#l-510">#</a> [21:21] &lt;Lachy&gt; step 6 says:</li>
+ <li id="l-511" _a="Lachy"><a href="#l-511">#</a> [21:21] &lt;Lachy&gt; 3. Otherwise, increase pos by 1.</li>
+ <li id="l-512" _a="Lachy"><a href="#l-512">#</a> [21:21] &lt;Lachy&gt; 4. Otherwise, return to step 2 in these substeps.</li>
+ <li id="l-513" _a="gsnedders" _r="yeah"><a href="#l-513">#</a> [21:21] &lt;gsnedders&gt; yeah, that's already been sent</li>
+ <li id="l-514" _a="kingryan"><a href="#l-514">#</a> [21:21] &lt;kingryan&gt;  Lachy: what's that content-sniffing written in?</li>
+ <li id="l-515" _a="Lachy" _r="gsnedders"><a href="#l-515">#</a> [21:22] &lt;Lachy&gt; gsnedders: ok</li>
+ <li id="l-516" _a="Lachy" _r="kingryan"><a href="#l-516">#</a> [21:22] &lt;Lachy&gt; kingryan: javascript</li>
+ <li id="l-517" _a="Hixie" _r="Lachy"><a href="#l-517">#</a> [21:22] &lt;Hixie&gt; Lachy: just an extra &quot;Otherwise&quot;, right?</li>
+ <li id="l-518" _a="gsnedders"><a href="#l-518">#</a> [21:22] &lt;gsnedders&gt; I sent an email about rdf:RDF as well</li>
+ <li id="l-519" _a="Lachy"><a href="#l-519">#</a> [21:22] &lt;Lachy&gt; yes</li>
+ <li id="l-520" _a="gsnedders" _r="Hixie"><a href="#l-520">#</a> [21:22] &lt;gsnedders&gt; Hixie: yeah</li>
+ <li id="l-521" _a="Hixie" _r="Lachy"><a href="#l-521">#</a> [21:22] &lt;Hixie&gt; Lachy: also, did you implement step 10?</li>
+ <li id="l-522" _a="Lachy" _r="no"><a href="#l-522">#</a> [21:22] &lt;Lachy&gt; no, not yet</li>
+ <li id="l-523" _a="Hixie"><a href="#l-523">#</a> [21:23] &lt;Hixie&gt; k</li>
+ <li id="l-524" _a="kingryan" _r="Hixie"><a href="#l-524">#</a> [21:23] &lt;kingryan&gt; Hixie: fwiw, I implemented step 10 in a naive way and it seems to work</li>
+ <li id="l-525" _a="Hixie"><a href="#l-525">#</a> [21:23] &lt;Hixie&gt; i'm not sure how to spec it exactly</li>
+ <li id="l-526" _a="Hixie" _r="kingryan"><a href="#l-526">#</a> [21:23] &lt;Hixie&gt; kingryan: yeah?</li>
+ <li id="l-527" _a="gsnedders"><a href="#l-527">#</a> [21:23] &lt;gsnedders&gt; regarding step 10: &lt;<a href="http://lists.w3.org/Archives/Public/public-html/2007Aug/0671.html">http://lists.w3.org/Archives/Public/public-html/2007Aug/0671.html</a>&gt;</li>
+ <li id="l-528"><a href="#l-528">#</a> [21:25] * Joins: webben (n=benh@91.84.196.77)</li>
+ <li id="l-529" _a="Hixie"><a href="#l-529">#</a> [21:25] &lt;Hixie&gt; i think that's in the issues list</li>
+ <li id="l-530" _a="gsnedders" _r="yeah"><a href="#l-530">#</a> [21:25] &lt;gsnedders&gt; yeah, it is</li>
+ <li id="l-531" _a="kingryan" _r="Hixie"><a href="#l-531">#</a> [21:25] &lt;kingryan&gt; Hixie:  yeah, I did what gsnedders' email suggests</li>
+ <li id="l-532" _a="gsnedders"><a href="#l-532">#</a> [21:25] &lt;gsnedders&gt; just for anyone here not aware of it while discussing it</li>
+ <li id="l-533" _a="kingryan"><a href="#l-533">#</a> [21:25] &lt;kingryan&gt; I don't look for the namespaces</li>
+ <li id="l-534" _a="gsnedders"><a href="#l-534">#</a> [21:26] &lt;gsnedders&gt; as I said, I've yet to see anything break</li>
+ <li id="l-535" _a="Hixie" _r="well"><a href="#l-535">#</a> [21:27] &lt;Hixie&gt; well, i'm sure i'll look at this again when i edit that part of the spec :-D</li>
+ <li id="l-536"><a href="#l-536">#</a> [21:28] * Quits: gavin_ (n=gavin@firefox/developer/gavin) (&quot;Lost terminal&quot;)</li>
+ <li id="l-537" _a="kingryan"><a href="#l-537">#</a> [21:28] &lt;kingryan&gt; when that time comes, let me know and I can run some stats from our spider to see how well the simple version of step 10 works</li>
+ <li id="l-538" _a="gsnedders" _r="Hixie"><a href="#l-538">#</a> [21:28] &lt;gsnedders&gt; Hixie: I'm going to be writing test cases (far more comprehensive than yours) for all sorts of sniffing behaviour. I'll test what I have time to myself, but help is always welcome ;)</li>
+ <li id="l-539"><a href="#l-539">#</a> [21:28] * Joins: gavin_ (n=gavin@people.mozilla.com)</li>
+ <li id="l-540" _a="Hixie" _r="gsnedders"><a href="#l-540">#</a> [21:28] &lt;Hixie&gt; gsnedders: cool</li>
+ <li id="l-541" _a="gsnedders"><a href="#l-541">#</a> [21:29] &lt;gsnedders&gt; I conned anne out of gsnedders.html5.org, which is where they'll be</li>
+ <li id="l-542" _a="Hixie"><a href="#l-542">#</a> [21:29] &lt;Hixie&gt; hah</li>
+ <li id="l-543" _a="gsnedders"><a href="#l-543">#</a> [21:29] &lt;gsnedders&gt; first person to not have firstname.html5.org :P</li>
+ <li id="l-544" _a="kingryan" _r="gsnedders"><a href="#l-544">#</a> [21:29] &lt;kingryan&gt; gsnedders: we can put the tests in html5lib, too, if you wish</li>
+ <li id="l-545" _a="Philip`" _r="gsnedders"><a href="#l-545">#</a> [21:30] &lt;Philip`&gt; gsnedders: Not the first - there's www.html5.org, and I doubt there's anyone here named www :-)</li>
+ <li id="l-546" _a="Lachy"><a href="#l-546">#</a> [21:30] &lt;Lachy&gt; oh wow! IE doesn't need to see the namespaces put on the start tag for it to sniff as a feed</li>
+ <li id="l-547" _a="gsnedders" _r="kingryan"><a href="#l-547">#</a> [21:30] &lt;gsnedders&gt; kingryan: they'll all be MIT licensed, but arguably having tests over hundreds of files isn't that nice for test suites</li>
+ <li id="l-548" _a="Lachy"><a href="#l-548">#</a> [21:31] &lt;Lachy&gt; <a href="http://html5.lachy.id.au/content-sniffing/?%3Crdf%3ARDF%3Etest%3C%2Frdf%3ARDF%20xmlns%3D%22http%3A%2F%2Fpurl.org%2Frss%2F1.0%2F%22%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%3E">http://html5.lachy.id.au/content-sniffing/?%3Crdf%3ARDF%3Etest%3C%2Frdf%3ARDF%20xmlns%3D%22http%3A%2F%2Fpurl.org%2Frss%2F1.0%2F%22%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%3E</a></li>
+ <li id="l-549" _a="zcorpan" _r="Hixie"><a href="#l-549">#</a> [21:31] &lt;zcorpan&gt; Hixie: btw, do you have data about how many feeds are &quot;text/html;...&quot; but not &quot;text/html; charset=iso-8859-1&quot; or &quot;text/html; charset=ISO-8859-1&quot;? i was wondering if it would be possible to limit the sniffing similarly to text/plain</li>
+ <li id="l-550" _a="gsnedders" _r="Philip`"><a href="#l-550">#</a> [21:31] &lt;gsnedders&gt; Philip`: meh. www is the same as without :P</li>
+ <li id="l-551"><a href="#l-551">#</a> [21:31] * Quits: maikmerten_ (n=maikmert@T7c6f.t.pppool.de) (&quot;Leaving&quot;)</li>
+ <li id="l-552"><a href="#l-552">#</a> [21:31] * Quits: othermaciej (n=mjs@17.203.15.144) (Read error: 110 (Connection timed out))</li>
+ <li id="l-553" _a="Hixie" _r="zcorpan"><a href="#l-553">#</a> [21:31] &lt;Hixie&gt; zcorpan: no data at the moment</li>
+ <li id="l-554" _a="zcorpan" _r="Hixie"><a href="#l-554">#</a> [21:32] &lt;zcorpan&gt; Hixie: ok</li>
+ <li id="l-555"><a href="#l-555">#</a> [21:32] * Quits: grimboy (n=grimboy@84.13.125.171) (Read error: 110 (Connection timed out))</li>
+ <li id="l-556" _a="gsnedders" _r="Hixie"><a href="#l-556">#</a> [21:34] &lt;gsnedders&gt; Hixie: oh, and regarding the informative reference to HTML 5 in W3C repo, that's mainly down to needed a stable URI. I'm planning on changing it to the FPWD when that comes (whenever that is, or whether the heart stops beating)</li>
+ <li id="l-557" _a="gsnedders"><a href="#l-557">#</a> [21:34] &lt;gsnedders&gt; terrible pun, I know.</li>
+ <li id="l-558"><a href="#l-558">#</a> [21:35] * Joins: grimboy (n=grimboy@84.13.125.171)</li>
+ <li id="l-559" _a="Hixie"><a href="#l-559">#</a> [21:35] &lt;Hixie&gt; stable how?</li>
+ <li id="l-560" _a="gsnedders"><a href="#l-560">#</a> [21:36] &lt;gsnedders&gt; a non-changing URI pointing to the same document. my understanding of the I-D/RFC requirements is for that to be a specific version of the document.</li>
+ <li id="l-561" _a="Hixie"><a href="#l-561">#</a> [21:37] &lt;Hixie&gt; ah</li>
+ <li id="l-562" _a="Hixie"><a href="#l-562">#</a> [21:37] &lt;Hixie&gt; makes sense</li>
+ <li id="l-563" _a="gsnedders"><a href="#l-563">#</a> [21:38] &lt;gsnedders&gt; and the W3C CVS URIs are the only ones to my knowledge that currently meet that requirement</li>
+ <li id="l-564" _a="Hixie"><a href="#l-564">#</a> [21:38] &lt;Hixie&gt; i'm very interested to see what reaction your draft gets when you submit it</li>
+ <li id="l-565" _a="gsnedders"><a href="#l-565">#</a> [21:39] &lt;gsnedders&gt; theoretically I don't need that much done to be allowed to submit it, but it'd probably be better to have more done</li>
+ <li id="l-566" _a="Lachy" _r="gsnedders"><a href="#l-566">#</a> [21:39] &lt;Lachy&gt; gsnedders: how much of RFC 2616 are you intending to rewrite?</li>
+ <li id="l-567" _a="gsnedders" _r="Lachy"><a href="#l-567">#</a> [21:40] &lt;gsnedders&gt; Lachy: just define the parsing. nothing more.</li>
+ <li id="l-568" _a="Lachy"><a href="#l-568">#</a> [21:40] &lt;Lachy&gt; ok</li>
+ <li id="l-569" _a="Lachy"><a href="#l-569">#</a> [21:41] &lt;Lachy&gt; so you're not redefining what is and is not conforming syntax?</li>
+ <li id="l-570" _a="gsnedders"><a href="#l-570">#</a> [21:41] * gsnedders wonders where he could get it published if the reaction when submitted is less than ideal</li>
+ <li id="l-571" _a="gsnedders" _r="Lachy"><a href="#l-571">#</a> [21:42] &lt;gsnedders&gt; Lachy: conformance requirements for syntax are unchanged. conformance requirements for parsing are.</li>
+ <li id="l-572" _a="Lachy"><a href="#l-572">#</a> [21:42] &lt;Lachy&gt; ok.</li>
+ <li id="l-573" _a="gsnedders"><a href="#l-573">#</a> [21:43] &lt;gsnedders&gt; I should do my homework that's due for tomorrow…</li>
+ <li id="l-574" _a="Hixie" _r="gsnedders"><a href="#l-574">#</a> [21:43] &lt;Hixie&gt; gsnedders: we can definitely set up an http.whatwg.org thing if the ietf doesn't react favourably</li>
+ <li id="l-575" _a="gsnedders" _r="Hixie"><a href="#l-575">#</a> [21:44] &lt;gsnedders&gt; Hixie: you think it was coincidence I mentioned that with you around, and hosting with anne around? :D</li>
+ <li id="l-576" _a="Lachy" _r="hey"><a href="#l-576">#</a> [21:45] &lt;Lachy&gt; hey, gsnedders, in a MIME type for the Content-Type header, is there technically allowed to be whitespace between the semi-colon and paramters? like: text/html;&lt;space&gt;charset=UTF-8?</li>
+ <li id="l-577" _a="Hixie" _r="gsnedders"><a href="#l-577">#</a> [21:45] &lt;Hixie&gt; gsnedders: :-)</li>
+ <li id="l-578" _a="gsnedders" _r="Lachy"><a href="#l-578">#</a> [21:45] &lt;gsnedders&gt; Lachy: yes</li>
+ <li id="l-579" _a="Lachy"><a href="#l-579">#</a> [21:45] &lt;Lachy&gt; when I read it yesterday, cause I had to write a regex to validate it, the BNF in the RFC seemed to indicate that it can't</li>
+ <li id="l-580" _a="gsnedders" _r="Lachy"><a href="#l-580">#</a> [21:46] &lt;gsnedders&gt; Lachy: the MIME spec allows one spec, IIRC, and any LWS in HTTP is reduced to a single space</li>
+ <li id="l-581" _a="Lachy"><a href="#l-581">#</a> [21:47] &lt;Lachy&gt; really? RFC 2616 says this:</li>
+ <li id="l-582" _a="Lachy"><a href="#l-582">#</a> [21:47] &lt;Lachy&gt;        media-type     = type &quot;/&quot; subtype *( &quot;;&quot; parameter )</li>
+ <li id="l-583" _a="Lachy"><a href="#l-583">#</a> [21:47] &lt;Lachy&gt;        type           = token</li>
+ <li id="l-584" _a="Lachy"><a href="#l-584">#</a> [21:47] &lt;Lachy&gt;        subtype        = token</li>
+ <li id="l-585" _a="Lachy"><a href="#l-585">#</a> [21:47] &lt;Lachy&gt;        parameter      = attribute &quot;=&quot; value</li>
+ <li id="l-586" _a="Lachy"><a href="#l-586">#</a> [21:47] &lt;Lachy&gt;        attribute      = token</li>
+ <li id="l-587" _a="Lachy"><a href="#l-587">#</a> [21:47] &lt;Lachy&gt;        value          = token | quoted-string</li>
+ <li id="l-588" _a="Lachy"><a href="#l-588">#</a> [21:47] &lt;Lachy&gt;        quoted-string  = ( '&quot;' *(qdtext | quoted-pair ) '&quot;' )</li>
+ <li id="l-589" _a="Lachy"><a href="#l-589">#</a> [21:47] &lt;Lachy&gt;        qdtext         = any TEXT except '&quot;'</li>
+ <li id="l-590" _a="Lachy"><a href="#l-590">#</a> [21:47] &lt;Lachy&gt;        quoted-pair    = &quot;\&quot; CHAR</li>
+ <li id="l-591" _a="gsnedders" _r="yeah"><a href="#l-591">#</a> [21:48] &lt;gsnedders&gt; yeah, RFC 2045 agrees with no space being allowed</li>
+ <li id="l-592" _a="Hixie"><a href="#l-592">#</a> [21:48] &lt;Hixie&gt; what's a &quot;token&quot;?</li>
+ <li id="l-593" _a="gsnedders"><a href="#l-593">#</a> [21:48] &lt;gsnedders&gt; my memory is wrong</li>
+ <li id="l-594" _a="gsnedders" _r="Hixie"><a href="#l-594">#</a> [21:48] &lt;gsnedders&gt; Hixie: a horribly wrong number of characters</li>
+ <li id="l-595" _a="gsnedders"><a href="#l-595">#</a> [21:48] &lt;gsnedders&gt; s/wrong/long/</li>
+ <li id="l-596" _a="Lachy"><a href="#l-596">#</a> [21:48] &lt;Lachy&gt; and token is defined to exclude control chars, spaces and a few other special things</li>
+ <li id="l-597" _a="Hixie"><a href="#l-597">#</a> [21:48] &lt;Hixie&gt; can it start with LWS?</li>
+ <li id="l-598" _a="gsnedders"><a href="#l-598">#</a> [21:48] &lt;gsnedders&gt; no</li>
+ <li id="l-599" _a="Hixie"><a href="#l-599">#</a> [21:48] &lt;Hixie&gt; k</li>
+ <li id="l-600" _a="Hixie"><a href="#l-600">#</a> [21:48] &lt;Hixie&gt; odd</li>
+ <li id="l-601" _a="gsnedders"><a href="#l-601">#</a> [21:48] &lt;gsnedders&gt; it's what a header name can be</li>
+ <li id="l-602" _a="Hixie"><a href="#l-602">#</a> [21:49] &lt;Hixie&gt; does *( ... ) imply LWS?</li>
+ <li id="l-603" _a="Lachy"><a href="#l-603">#</a> [21:49] &lt;Lachy&gt;        token          = 1*&lt;any CHAR except CTLs or separators&gt;</li>
+ <li id="l-604" _a="Lachy"><a href="#l-604">#</a> [21:49] &lt;Lachy&gt;        separators     = &quot;(&quot; | &quot;)&quot; | &quot;&lt;&quot; | &quot;&gt;&quot; | &quot;@&quot;</li>
+ <li id="l-605" _a="Lachy"><a href="#l-605">#</a> [21:49] &lt;Lachy&gt;                       | &quot;,&quot; | &quot;;&quot; | &quot;:&quot; | &quot;\&quot; | &lt;&quot;&gt;</li>
+ <li id="l-606" _a="Lachy"><a href="#l-606">#</a> [21:49] &lt;Lachy&gt;                       | &quot;/&quot; | &quot;[&quot; | &quot;]&quot; | &quot;?&quot; | &quot;=&quot;</li>
+ <li id="l-607" _a="Lachy"><a href="#l-607">#</a> [21:49] &lt;Lachy&gt;                       | &quot;{&quot; | &quot;}&quot; | SP | HT</li>
+ <li id="l-608"><a href="#l-608">#</a> [21:49] * Quits: tantek_ (n=tantek@81-5-138-228.dsl.eclipse.net.uk)</li>
+ <li id="l-609" _a="gsnedders" _r="Lachy"><a href="#l-609">#</a> [21:49] &lt;gsnedders&gt; Lachy: my memory is wrong because it's impossible to implement that as specified :P</li>
+ <li id="l-610" _a="Lachy" _r="yeah"><a href="#l-610">#</a> [21:50] &lt;Lachy&gt; yeah, I noticed. I decided to explicitly allow spaces to occur there in my regex</li>
+ <li id="l-611" _a="gsnedders"><a href="#l-611">#</a> [21:50] &lt;gsnedders&gt; here we go</li>
+ <li id="l-612" _a="gsnedders"><a href="#l-612">#</a> [21:50] &lt;gsnedders&gt; actually</li>
+ <li id="l-613" _a="gsnedders"><a href="#l-613">#</a> [21:50] &lt;gsnedders&gt; it is allowed</li>
+ <li id="l-614" _a="gsnedders"><a href="#l-614">#</a> [21:50] &lt;gsnedders&gt; page 15</li>
+ <li id="l-615" _a="gsnedders"><a href="#l-615">#</a> [21:50] &lt;gsnedders&gt; see implied *LWS</li>
+ <li id="l-616" _a="gsnedders"><a href="#l-616">#</a> [21:51] &lt;gsnedders&gt; it disallows it between the type and subtype, and attribute and vale, but not before the semi-colon</li>
+ <li id="l-617" _a="Lachy"><a href="#l-617">#</a> [21:51] &lt;Lachy&gt; what about between attr=value?</li>
+ <li id="l-618" _a="gsnedders" _r="yeah"><a href="#l-618">#</a> [21:52] &lt;gsnedders&gt; yeah, it's disallowed between attr and value</li>
+ <li id="l-619" _a="Lachy"><a href="#l-619">#</a> [21:52] &lt;Lachy&gt; where does it say that?</li>
+ <li id="l-620" _a="gsnedders"><a href="#l-620">#</a> [21:52] &lt;gsnedders&gt; page 26</li>
+ <li id="l-621" _a="gsnedders"><a href="#l-621">#</a> [21:52] &lt;gsnedders&gt; bottom paragraph</li>
+ <li id="l-622" _a="gsnedders"><a href="#l-622">#</a> [21:53] &lt;gsnedders&gt; when fetching a HTTP header through JS, is its name case-sensitive?</li>
+ <li id="l-623" _a="gsnedders" _r="Lachy"><a href="#l-623">#</a> [21:54] &lt;gsnedders&gt; Lachy: I was sure it was allowed, just couldn't see where straight away. RFC 2616 is like that :)</li>
+ <li id="l-624"><a href="#l-624">#</a> [21:54] * Joins: othermaciej (n=mjs@17.203.15.144)</li>
+ <li id="l-625" _a="Lachy"><a href="#l-625">#</a> [21:55] &lt;Lachy&gt; but it says &quot;linear white space (LWS) can be included ... between adjacent words and separators&quot;, so therefore space between attribute and &quot;=&quot; would be allowed</li>
+ <li id="l-626" _a="Hixie" _r="othermaciej"><a href="#l-626">#</a> [21:55] &lt;Hixie&gt; othermaciej: i think i'm convinced by your idea of application=&quot;manifest&quot; with the manifest being the identifier for the cache</li>
+ <li id="l-627" _a="Hixie" _r="othermaciej"><a href="#l-627">#</a> [21:55] &lt;Hixie&gt; othermaciej: especially because for single-page apps, it still works to have application=&quot;&quot; since we can just say it's a relative URL to the same page</li>
+ <li id="l-628" _a="Hixie"><a href="#l-628">#</a> [21:56] &lt;Hixie&gt; thus making the manifest optional, effectively</li>
+ <li id="l-629" _a="gsnedders" _r="Lachy"><a href="#l-629">#</a> [21:56] &lt;gsnedders&gt; Lachy: it also says except where explicitly it is not allowed. page 26 explicitly says between attributes and their values it is not allowed.</li>
+ <li id="l-630" _a="Hixie" _r="hmm"><a href="#l-630">#</a> [21:56] &lt;Hixie&gt; hmm, the manifest could also point to the &quot;top&quot; page, so the manifest could be HTML...</li>
+ <li id="l-631" _a="Hixie"><a href="#l-631">#</a> [21:56] &lt;Hixie&gt; hm</li>
+ <li id="l-632" _a="othermaciej" _r="Hixie"><a href="#l-632">#</a> [21:56] &lt;othermaciej&gt; Hixie: I'd say the manifest should either be implicit or some format other than HTML</li>
+ <li id="l-633" _a="Lachy" _r="gsnedders"><a href="#l-633">#</a> [21:57] &lt;Lachy&gt; gsnedders: ok</li>
+ <li id="l-634" _a="othermaciej" _r="Hixie"><a href="#l-634">#</a> [21:57] &lt;othermaciej&gt; Hixie: in other words, make application=&quot;&quot; a special case</li>
+ <li id="l-635" _a="Hixie"><a href="#l-635">#</a> [21:57] &lt;Hixie&gt; oh?</li>
+ <li id="l-636" _a="Hixie"><a href="#l-636">#</a> [21:57] &lt;Hixie&gt; even with the feedback we got from the gears guys that people don't like manifests?</li>
+ <li id="l-637" _a="Lachy" _r="gsnedders"><a href="#l-637">#</a> [21:58] &lt;Lachy&gt; gsnedders: so spaces could occur here: type/subtype LWS ; LWS attribute=value</li>
+ <li id="l-638" _a="othermaciej" _r="Hixie"><a href="#l-638">#</a> [21:58] &lt;othermaciej&gt; Hixie: sorry, I might not be expressing myself clearly</li>
+ <li id="l-639" _a="Hixie"><a href="#l-639">#</a> [21:58] &lt;Hixie&gt; i kinda like the idea of making the manifest executable, the way the top page is in the proposal i mentioned, because it allows for the page to talk from its new version to its old version and negotiate things between multiple open pages, etc</li>
+ <li id="l-640" _a="gsnedders" _r="Lachy"><a href="#l-640">#</a> [21:58] &lt;gsnedders&gt; Lachy: correct</li>
+ <li id="l-641" _a="Hixie"><a href="#l-641">#</a> [21:58] &lt;Hixie&gt; i have to get lunch, i'll be back shortly</li>
+ <li id="l-642" _a="Lachy" _r="ok"><a href="#l-642">#</a> [21:58] &lt;Lachy&gt; ok, I'll update my regex</li>
+ <li id="l-643" _a="othermaciej"><a href="#l-643">#</a> [21:58] &lt;othermaciej&gt; I think application with no value or an empty value should be a special case where you get the &quot;implicit manifest&quot; behavior</li>
+ <li id="l-644" _a="othermaciej"><a href="#l-644">#</a> [21:59] &lt;othermaciej&gt; but in other cases the manifest should be some specific non-executable format</li>
+ <li id="l-645" _a="gsnedders" _r="Lachy"><a href="#l-645">#</a> [21:59] &lt;gsnedders&gt; Lachy: or in ABNF, more exactly: type &quot;/&quot; subtype *(LWS &quot;;&quot; LWS parameter)</li>
+ <li id="l-646" _a="othermaciej"><a href="#l-646">#</a> [21:59] &lt;othermaciej&gt; one of the benefits of a manifest is being able to very quickly check for updates</li>
+ <li id="l-647" _a="gsnedders" _r="Lachy"><a href="#l-647">#</a> [21:59] &lt;gsnedders&gt; Lachy: as there can be multiple parameters</li>
+ <li id="l-648" _a="othermaciej"><a href="#l-648">#</a> [21:59] &lt;othermaciej&gt; you can just do a conditional GET of the manifest</li>
+ <li id="l-649" _a="othermaciej"><a href="#l-649">#</a> [22:00] &lt;othermaciej&gt; and then further do conditional GETs of the resources listed, possibly only if the manifest indicates their version changed, depending on the format</li>
+ <li id="l-650" _a="othermaciej"><a href="#l-650">#</a> [22:00] &lt;othermaciej&gt; I don't think that works where your external manifest is an HTML file that executes script</li>
+ <li id="l-651" _a="othermaciej"><a href="#l-651">#</a> [22:00] &lt;othermaciej&gt; I also think some of the reasons stated for not liking manifests are equally bad problems for an implicit offline cache scheme</li>
+ <li id="l-652" _a="othermaciej"><a href="#l-652">#</a> [22:01] &lt;othermaciej&gt; if all loads go in the offline cache, then to do valid offline testing you have to blow away your browser cache *and* your offline cache</li>
+ <li id="l-653"><a href="#l-653">#</a> [22:01] * Joins: Ducki_ (i=Ducki@nrdh-d9b98052.pool.mediaWays.net)</li>
+ <li id="l-654" _a="othermaciej"><a href="#l-654">#</a> [22:01] &lt;othermaciej&gt; otherwise you might miss hard dependencies on resources that are not loaded every single time</li>
+ <li id="l-655" _a="othermaciej"><a href="#l-655">#</a> [22:01] &lt;othermaciej&gt; (that load late on demand, say)</li>
+ <li id="l-656"><a href="#l-656">#</a> [22:06] * Quits: othermaciej (n=mjs@17.203.15.144) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-657"><a href="#l-657">#</a> [22:06] * Joins: othermaciej (n=mjs@17.203.15.144)</li>
+ <li id="l-658"><a href="#l-658">#</a> [22:25] * Quits: Ducki (i=Ducki@nrdh-d9b98059.pool.mediaWays.net) (No route to host)</li>
+ <li id="l-659"><a href="#l-659">#</a> [22:25] * Joins: KevinMarks (i=KevinMar@nat/google/x-7ef78134774a9a1e)</li>
+ <li id="l-660"><a href="#l-660">#</a> [22:38] * Joins: Ducki__ (n=Ducki@nrdh-d9b980d1.pool.mediaWays.net)</li>
+ <li id="l-661"><a href="#l-661">#</a> [22:47] * Quits: othermaciej (n=mjs@17.203.15.144) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-662"><a href="#l-662">#</a> [22:47] * Joins: othermaciej (n=mjs@17.203.15.144)</li>
+ <li id="l-663"><a href="#l-663">#</a> [23:03] * Quits: Ducki_ (i=Ducki@nrdh-d9b98052.pool.mediaWays.net) (Read error: 113 (No route to host))</li>
+ <li id="l-664"><a href="#l-664">#</a> [23:05] * Quits: grimboy (n=grimboy@84.13.125.171) (Connection timed out)</li>
+ <li id="l-665"><a href="#l-665">#</a> [23:10] * Quits: othermaciej (n=mjs@17.203.15.144) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-666"><a href="#l-666">#</a> [23:10] * Joins: othermaciej (n=mjs@17.203.15.144)</li>
+ <li id="l-667"><a href="#l-667">#</a> [23:12] * Joins: virtuelv_ (n=virtuelv@58.80-202-82.nextgentel.com)</li>
+ <li id="l-668" _a="Hixie" _r="othermaciej"><a href="#l-668">#</a> [23:16] &lt;Hixie&gt; othermaciej: true</li>
+ <li id="l-669"><a href="#l-669">#</a> [23:16] * Joins: weinig_ (i=weinig@nat/apple/x-ed64a475e71308d9)</li>
+ <li id="l-670"><a href="#l-670">#</a> [23:17] * Quits: weinig (i=weinig@nat/apple/x-c6ab01bd90b0e76f) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-671" _a="weinig_"><a href="#l-671">#</a> [23:18] * weinig_ is now known as weinig</li>
+ <li id="l-672"><a href="#l-672">#</a> [23:20] * Quits: Lachy (n=lachlan_@124-170-105-252.dyn.iinet.net.au) (Read error: 110 (Connection timed out))</li>
+ <li id="l-673"><a href="#l-673">#</a> [23:23] * Joins: webben_ (n=benh@dip5-fw.corp.ukl.yahoo.com)</li>
+ <li id="l-674"><a href="#l-674">#</a> [23:26] * Quits: ROBOd (n=robod@86.34.246.154) (&quot;<a href="http://www.robodesign.ro">http://www.robodesign.ro</a>&quot;)</li>
+ <li id="l-675"><a href="#l-675">#</a> [23:30] * Joins: tantek (n=tantek@ashy.demon.co.uk)</li>
+ <li id="l-676" _a="Hixie"><a href="#l-676">#</a> [23:33] * Hixie finally gets to the public-html mail</li>
+ <li id="l-677"><a href="#l-677">#</a> [23:34] * Quits: tndH (i=Rob@adsl-87-102-118-51.karoo.KCOM.COM) (Read error: 104 (Connection reset by peer))</li>
+ <li id="l-678"><a href="#l-678">#</a> [23:36] * Quits: aaronlev_ (n=chatzill@c-66-31-86-217.hsd1.ma.comcast.net) (Read error: 110 (Connection timed out))</li>
+ <li id="l-679"><a href="#l-679">#</a> [23:37] * Joins: tndH (i=Rob@adsl-87-102-118-51.karoo.KCOM.COM)</li>
+ <li id="l-680"><a href="#l-680">#</a> [23:39] * Quits: webben (n=benh@91.84.196.77) (Read error: 110 (Connection timed out))</li>
+ <li id="l-681"><a href="#l-681">#</a> [23:44] * Joins: bzed (n=bzed@devel.recluse.de)</li>
+ <li id="l-682"><a href="#l-682">#</a> [23:50] * Joins: jwalden (n=waldo@RANDOM-SIX-FIFTY.MIT.EDU)</li>
+ <li id="l-683"><a href="#l-683">#</a> [23:52] * Joins: doublec (n=doublec@202.180.114.137)</li>
+ <li id="l-684" _a="zcorpan" _r="Hixie"><a href="#l-684">#</a> [23:53] &lt;zcorpan&gt; Hixie: <a href="http://tdspodcast.com/archive/2007/09/04/constructive-feedback-lacking-in-opinion-of-at-product.aspx">http://tdspodcast.com/archive/2007/09/04/constructive-feedback-lacking-in-opinion-of-at-product.aspx</a></li>
+ <li id="l-685"><a href="#l-685">#</a> Session Close: Wed Sep 05 00:00:00 2007</li>
+</ol>
+<p id="end">The end :)

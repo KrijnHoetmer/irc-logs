@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20140521</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20140521.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2014-05-21 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed May 21 00:00:00 2014</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:00] * Joins: Adawerk__ (~mven@169.241.49.57)</li>
+ <li id="l-4" _a="Domenic" _r="oh"><a href="#l-4">#</a> [00:00] &lt;Domenic&gt; oh, the other big question is, can this event occur more than once</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:00] * Joins: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:00] * Quits: mven_ (~mven@169.241.49.57) (Read error: No route to host)</li>
+ <li id="l-7" _a="Domenic"><a href="#l-7">#</a> [00:01] &lt;Domenic&gt; if it occurs only 0 or 1 times, then a promise might be a good fit. Especially if the alternative to occuring once is an error.</li>
+ <li id="l-8" _a="Domenic"><a href="#l-8">#</a> [00:01] &lt;Domenic&gt; More than once, and you should probably not use a promise, except for the cases we were talking about earlier where &quot;most of the time&quot; authors use them as one-shots, like &lt;img&gt;</li>
+ <li id="l-9" class="flagged" _a="Domenic"><a href="#l-9">#</a> [00:02] &lt;Domenic&gt; bigger picture</li>
+ <li id="l-10" _a="Domenic"><a href="#l-10">#</a> [00:02] &lt;Domenic&gt; the utility of adding promises for e.g. script loading is they are easily combinatored, e.g. Promise.all([script1.loaded, script2.loaded]).then(() =&gt; { doStuff(); return script3.loaded.then(() =&gt; doStuffDependingOnScript3()); }</li>
+ <li id="l-11"><a href="#l-11">#</a> [00:03] * Quits: bholley (~bholley@98.210.101.88) (Quit: Textual IRC Client: www.textualapp.com)</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:03] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:03] * Quits: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Client Quit)</li>
+ <li id="l-14" _a="Domenic"><a href="#l-14">#</a> [00:03] &lt;Domenic&gt; going through each potential thing that the platform wants to expose and agonizing over the &quot;correct&quot; paradigm to use when exposing is as important as considering the value-add for common use cases like that.</li>
+ <li id="l-15" _a="Domenic"><a href="#l-15">#</a> [00:03] &lt;Domenic&gt; s/is as/is not as/</li>
+ <li id="l-16" _a="Domenic"><a href="#l-16">#</a> [00:04] &lt;Domenic&gt; although upon reflection it seems likely that script.executed would be more useful in that sense than script.loaded</li>
+ <li id="l-17"><a href="#l-17">#</a> [00:05] * Joins: othermaciej (~mjs@17.114.217.202)</li>
+ <li id="l-18"><a href="#l-18">#</a> [00:06] * Quits: zdobersek (~zan@185.3.135.82) (Quit: Leaving.)</li>
+ <li id="l-19"><a href="#l-19">#</a> [00:06] * Quits: sankha_ (~sankha93@dslb-188-104-195-160.pools.arcor-ip.net) (Remote host closed the connection)</li>
+ <li id="l-20"><a href="#l-20">#</a> [00:07] * Joins: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:07] * Joins: roc (~chatzilla@60.234.66.18)</li>
+ <li id="l-22"><a href="#l-22">#</a> [00:08] * Quits: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Client Quit)</li>
+ <li id="l-23"><a href="#l-23">#</a> [00:09] * Joins: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-24" _a="Hixie" _r="Domenic"><a href="#l-24">#</a> [00:12] &lt;Hixie&gt; Domenic: well if the .loaded promise needs to get reset each time you load a new one, it's not clear to me why others wouldn't as well</li>
+ <li id="l-25" _a="Hixie" _r="Domenic"><a href="#l-25">#</a> [00:12] &lt;Hixie&gt; Domenic: i'll be providing events for anything provided with promises anyway</li>
+ <li id="l-26" _a="Hixie" _r="Domenic"><a href="#l-26">#</a> [00:12] &lt;Hixie&gt; Domenic: so you always have the choice of doing it the event way</li>
+ <li id="l-27"><a href="#l-27">#</a> [00:12] * Quits: deane (~Thunderbi@124-197-19-37.callplus.net.nz) (Ping timeout: 240 seconds)</li>
+ <li id="l-28" _a="Domenic" _r="Hixie"><a href="#l-28">#</a> [00:12] &lt;Domenic&gt; Hixie: they probably would need to be reset.</li>
+ <li id="l-29" _a="Hixie" _r="also"><a href="#l-29">#</a> [00:14] &lt;Hixie&gt; also, what's the pattern for handing a promise to an API to tell the API to not do anything until that promise has resolved somehow?</li>
+ <li id="l-30" _a="Domenic"><a href="#l-30">#</a> [00:16] &lt;Domenic&gt; &quot;When _p_ becomes fulfilled...&quot; or similar phrasings. There's a particular WebIDL thing you can link to</li>
+ <li id="l-31" _a="Domenic"><a href="#l-31">#</a> [00:16] &lt;Domenic&gt; <a href="http://heycam.github.io/webidl/#es-promise">http://heycam.github.io/webidl/#es-promise</a></li>
+ <li id="l-32" _a="Domenic"><a href="#l-32">#</a> [00:16] &lt;Domenic&gt; erform some steps once a promise is settled</li>
+ <li id="l-33" _a="Domenic"><a href="#l-33">#</a> [00:16] &lt;Domenic&gt; I had a few more <a href="https://github.com/w3ctag/promises-guide#shorthand-phrases">https://github.com/w3ctag/promises-guide#shorthand-phrases</a></li>
+ <li id="l-34" _a="Domenic"><a href="#l-34">#</a> [00:17] &lt;Domenic&gt; but they belong in WebIDL</li>
+ <li id="l-35"><a href="#l-35">#</a> [00:17] * Quits: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Quit: leaving)</li>
+ <li id="l-36"><a href="#l-36">#</a> [00:18] * Joins: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:18] * Joins: deane (~Thunderbi@124-197-19-37.callplus.net.nz)</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:24] &lt;Hixie&gt; i mean the api surface itself</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:24] &lt;Hixie&gt; not how to spec it</li>
+ <li id="l-40"><a href="#l-40">#</a> [00:24] * Quits: plutoniix (~plutoniix@node-l8i.pool-101-108.dynamic.totbb.net) (Quit: จรลี จรลา)</li>
+ <li id="l-41" _a="Domenic"><a href="#l-41">#</a> [00:25] &lt;Domenic&gt; promise.then(theAPI)?</li>
+ <li id="l-42" _a="Domenic"><a href="#l-42">#</a> [00:25] &lt;Domenic&gt; or promise.then(() =&gt; theAPI(promise)) if it is important the API receives a promise</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [00:28] &lt;Hixie&gt; no no, the idea is that the API would be given a handful of promises and other dependencies, and would wait until they've all been fulfilled</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:28] &lt;Hixie&gt; so you can't just wait until your promise has fulfilled before informing the API for it, otherwise the API wouldn't know to wait</li>
+ <li id="l-45" _a="Domenic"><a href="#l-45">#</a> [00:29] &lt;Domenic&gt; I don't quite understand the second sentence, but the first sounds like Promise.all([p1, p2, p3]).then(([v1, v2, v3]) =&gt; ...)</li>
+ <li id="l-46" _a="Hixie"><a href="#l-46">#</a> [00:32] &lt;Hixie&gt; suppose you have a &lt;script&gt;</li>
+ <li id="l-47" _a="Hixie"><a href="#l-47">#</a> [00:33] &lt;Hixie&gt; it depends on an &lt;img&gt; element and another &lt;script&gt; element, identified by IDs, and specified via an attribute in the markup.</li>
+ <li id="l-48" _a="Hixie"><a href="#l-48">#</a> [00:33] &lt;Hixie&gt; and another script wants to say &quot;also, wait until promise P is done too&quot;</li>
+ <li id="l-49" _a="Hixie"><a href="#l-49">#</a> [00:33] &lt;Hixie&gt; so you have script S, and promise P, and... go</li>
+ <li id="l-50"><a href="#l-50">#</a> [00:33] * Joins: KevinMarks_ (~KevinMark@172.56.38.142)</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:34] &lt;Hixie&gt; or suppose you have a script S and two separate other scripts that don't know about each other want to add promises P1 and P2 to the list of promises that S is waiting on before executing</li>
+ <li id="l-52" _a="Hixie"><a href="#l-52">#</a> [00:34] &lt;Hixie&gt; what would the script behind P1 do?</li>
+ <li id="l-53" _a="Hixie"><a href="#l-53">#</a> [00:34] &lt;Hixie&gt; S.addDependency(P1)?</li>
+ <li id="l-54" _a="Domenic" _r="Oh"><a href="#l-54">#</a> [00:35] &lt;Domenic&gt; Oh, we want to add the ability for a script to block another script's execution on arbitrary async events??</li>
+ <li id="l-55" _a="SamB"><a href="#l-55">#</a> [00:35] &lt;SamB&gt; are we trying to add Make to JS now?</li>
+ <li id="l-56" _a="Hixie" _r="SamB"><a href="#l-56">#</a> [00:36] &lt;Hixie&gt; SamB: see <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage#abstract">http://www.whatwg.org/specs/web-apps/current-work/multipage#abstract</a></li>
+ <li id="l-57" _a="Hixie" _r="Domenic"><a href="#l-57">#</a> [00:36] &lt;Hixie&gt; Domenic: right</li>
+ <li id="l-58" _a="Hixie" _r="Domenic"><a href="#l-58">#</a> [00:36] &lt;Hixie&gt; Domenic: (or something else, doesn't have to be a script we're blocking)</li>
+ <li id="l-59" _a="Hixie" _r="Domenic"><a href="#l-59">#</a> [00:37] &lt;Hixie&gt; Domenic: (could be, don't load this style sheet unless all these promises have resolved)</li>
+ <li id="l-60" _a="Domenic" _r="Hixie"><a href="#l-60">#</a> [00:37] &lt;Domenic&gt; Hixie: Do you want to actually block execution, or block other people from being notified of execution?</li>
+ <li id="l-61" _a="Hixie"><a href="#l-61">#</a> [00:37] &lt;Hixie&gt; block execution</li>
+ <li id="l-62" _a="Domenic" _r="Wait"><a href="#l-62">#</a> [00:37] &lt;Domenic&gt; Wait, &quot;don't load this style sheet unless all these promises have resolved&quot; is easy:</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:37] &lt;Hixie&gt; (and possibly download)</li>
+ <li id="l-64" _a="benjamingr"><a href="#l-64">#</a> [00:37] &lt;benjamingr&gt; Hixie `.then` unwraps things recursively, if each promise returns a promise for all its dependencies (via .all) , that promises will resolve when all those dependencies are resolved.</li>
+ <li id="l-65" _a="Domenic" _r="Promise.all([p1"><a href="#l-65">#</a> [00:37] &lt;Domenic&gt; Promise.all([p1, p2, p3]).then(() =&gt; stylesheet.load())</li>
+ <li id="l-66" _a="Hixie"><a href="#l-66">#</a> [00:37] &lt;Hixie&gt; there might be two separate scripts independently doing this to the same style sheet</li>
+ <li id="l-67" _a="Domenic"><a href="#l-67">#</a> [00:38] &lt;Domenic&gt; So script 2 can affect how script 1 loads resources</li>
+ <li id="l-68" _a="Domenic"><a href="#l-68">#</a> [00:38] &lt;Domenic&gt; honestly this feels like a service worker level thing, if you want scripts to interfere with network-level operations like that</li>
+ <li id="l-69" _a="benjamingr"><a href="#l-69">#</a> [00:39] &lt;benjamingr&gt; loadDependends = (obj) =&gt; getDependents(obj).then(deps =&gt; Promise.all(deps.map(getDependents))</li>
+ <li id="l-70" _a="Hixie" _r="Domenic"><a href="#l-70">#</a> [00:39] &lt;Hixie&gt; Domenic: i don't really see how this would fit into service workers</li>
+ <li id="l-71" _a="Hixie"><a href="#l-71">#</a> [00:39] &lt;Hixie&gt; i've no idea what that code is doing</li>
+ <li id="l-72" _a="Domenic" _r="Hixie"><a href="#l-72">#</a> [00:39] &lt;Domenic&gt; Hixie: onfetch = function (ev) { if (isStylesheetIWantToDelay(ev.req)) { otherPromise.then(() =&gt; ev.respondWith(...)); }</li>
+ <li id="l-73"><a href="#l-73">#</a> [00:39] * Quits: deane (~Thunderbi@124-197-19-37.callplus.net.nz) (Read error: Connection reset by peer)</li>
+ <li id="l-74" _a="Domenic" _r="benjamingr"><a href="#l-74">#</a> [00:39] &lt;Domenic&gt; benjamingr: I don't think that's what Hixie is asking about</li>
+ <li id="l-75"><a href="#l-75">#</a> [00:39] * Quits: satazor (~satazor@80.78.37.188.rev.vodafone.pt)</li>
+ <li id="l-76" _a="Domenic" _r="Hixie"><a href="#l-76">#</a> [00:40] &lt;Domenic&gt; Hixie: you are saying that you want the ability for scripts to intercept arbitrary resource loads and delay them based on other async ops</li>
+ <li id="l-77" _a="benjamingr" _r="Hixie"><a href="#l-77">#</a> [00:40] &lt;benjamingr&gt; Hixie: :) Ok, it takes an object, and calls getDependents on it, then, when those arrive, it maps each dependent to its own dependencies and continues to resolve the dependencies until it reaches everything - I thought that's what you meant.</li>
+ <li id="l-78" _a="Hixie"><a href="#l-78">#</a> [00:40] &lt;Hixie&gt; i've no idea what _that_ code is doign either</li>
+ <li id="l-79" _a="Domenic"><a href="#l-79">#</a> [00:40] &lt;Domenic&gt; that is basically service worker</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [00:40] &lt;Hixie&gt; how does the service worker know what the style sheet is?</li>
+ <li id="l-81" _a="Domenic"><a href="#l-81">#</a> [00:40] &lt;Domenic&gt; presumably script1 told it</li>
+ <li id="l-82" _a="Hixie" _r="Domenic"><a href="#l-82">#</a> [00:40] &lt;Hixie&gt; Domenic: not quite, but close</li>
+ <li id="l-83" _a="Hixie"><a href="#l-83">#</a> [00:41] &lt;Hixie&gt; the api i'm thinking of would be something like:</li>
+ <li id="l-84" _a="Hixie"><a href="#l-84">#</a> [00:41] &lt;Hixie&gt; myStylesheet.addDependency(myPromise);</li>
+ <li id="l-85" _a="Hixie"><a href="#l-85">#</a> [00:41] &lt;Hixie&gt; that seems simpler than the stuff y'all are describing above...</li>
+ <li id="l-86" _a="Hixie"><a href="#l-86">#</a> [00:42] &lt;Hixie&gt; especially the stuff with =&gt; where i can't tell where the lambda starts and where it finishes</li>
+ <li id="l-87" _a="benjamingr" _r="Hixie"><a href="#l-87">#</a> [00:42] &lt;benjamingr&gt; Hixie: that has to be a builder pattern though, right? I'd have to call a `.init()` or something, otherwise I would never know when I'm done calling `addDependency`</li>
+ <li id="l-88" _a="Domenic" _r="Hixie"><a href="#l-88">#</a> [00:42] &lt;Domenic&gt; Hixie: that seems like an API you would build on top of service worker, yeah. Only service worker has that kind of interception capability right now.</li>
+ <li id="l-89" _a="Hixie" _r="benjamingr"><a href="#l-89">#</a> [00:43] &lt;Hixie&gt; benjamingr: there's a separate method to say &quot;ok now i need you, load all your pending dependencies and once everything is ready, apply yourself and let me know you're done&quot;</li>
+ <li id="l-90" _a="Domenic" _r="Hixie"><a href="#l-90">#</a> [00:43] &lt;Domenic&gt; Hixie: in particular, the ability to interfere with loads you yourself do not execute is the new thing</li>
+ <li id="l-91" _a="benjamingr" _r="Ah"><a href="#l-91">#</a> [00:43] &lt;benjamingr&gt; Ah, I think I understand now, lemme see if I can write something like this in ES5ish</li>
+ <li id="l-92" _a="Hixie" _r="Domenic"><a href="#l-92">#</a> [00:43] &lt;Hixie&gt; Domenic: i don't see what service workers have to do with anything here. How do you delay the application of a &lt;link&gt; element, or &lt;style&gt;, or &lt;img&gt;, or &lt;script&gt;, from a service worker? You can't get to the DOM from those.</li>
+ <li id="l-93" _a="zewt"><a href="#l-93">#</a> [00:43] &lt;zewt&gt; hard to believe that &quot;we don't have code to generate unguessable uuids&quot; is actually being used as a reason for anything</li>
+ <li id="l-94" _a="Domenic" _r="Hixie"><a href="#l-94">#</a> [00:43] &lt;Domenic&gt; Hixie: you prevent the HTTP response from coming back!</li>
+ <li id="l-95" _a="Hixie"><a href="#l-95">#</a> [00:44] &lt;Hixie&gt; who said anything about HTTP?</li>
+ <li id="l-96" _a="zewt"><a href="#l-96">#</a> [00:44] &lt;zewt&gt; hard to believe that any browser would generate guessable uuids, for that matter</li>
+ <li id="l-97" _a="Hixie"><a href="#l-97">#</a> [00:44] &lt;Hixie&gt; UUIDs are usually surprisingly guessable</li>
+ <li id="l-98" _a="Hixie"><a href="#l-98">#</a> [00:44] &lt;Hixie&gt; by design</li>
+ <li id="l-99"><a href="#l-99">#</a> [00:44] * Joins: deane (~Thunderbi@124-197-19-37.callplus.net.nz)</li>
+ <li id="l-100" _a="Domenic" _r="Hixie"><a href="#l-100">#</a> [00:45] &lt;Domenic&gt; Hixie: it is use-case equivalent to prevent something from being loaded vs. being applied. (You have to be clever and send the response anyway, but delay relaying it to the main thread until the delay is over, so as to avoid extra latency from excessive laziness. But straightforward.)</li>
+ <li id="l-101" _a="Domenic"><a href="#l-101">#</a> [00:46] &lt;Domenic&gt; If you disagree with that, then that seems like an argument for separating the APIs that load and apply these resources, more than anything.</li>
+ <li id="l-102" _a="benjamingr" _r="Hixie"><a href="#l-102">#</a> [00:46] &lt;benjamingr&gt; Hixie: you mean something like this? <a href="https://gist.github.com/benjamingr/749bfe2b3c0411c7430c">https://gist.github.com/benjamingr/749bfe2b3c0411c7430c</a> (in terms of API)</li>
+ <li id="l-103" _a="Domenic"><a href="#l-103">#</a> [00:46] &lt;Domenic&gt; that gist is pretty good</li>
+ <li id="l-104" _a="benjamingr" _r="whoops"><a href="#l-104">#</a> [00:47] &lt;benjamingr&gt; whoops, cache is not needed I decided it complicates things so I edited. Sorry about that.</li>
+ <li id="l-105" _a="Hixie" _r="Domenic"><a href="#l-105">#</a> [00:47] &lt;Hixie&gt; Domenic: well you definitely want to be able to fetch the resources ahead of time (and even compile / decode them)</li>
+ <li id="l-106" _a="Domenic"><a href="#l-106">#</a> [00:47] &lt;Domenic&gt; in fact it's probably best to ignore my insistence that this is service-worker level and focus on this gist.</li>
+ <li id="l-107" _a="Hixie"><a href="#l-107">#</a> [00:48] &lt;Hixie&gt; i don't understand what tht gist is trying to do</li>
+ <li id="l-108" _a="Domenic"><a href="#l-108">#</a> [00:48] &lt;Domenic&gt; it is giving you your API</li>
+ <li id="l-109" _a="Hixie"><a href="#l-109">#</a> [00:48] &lt;Hixie&gt; how would you use this?</li>
+ <li id="l-110" _a="Domenic"><a href="#l-110">#</a> [00:48] &lt;Domenic&gt; var resource = new ResourceBuilder();</li>
+ <li id="l-111" _a="Domenic"><a href="#l-111">#</a> [00:48] &lt;Domenic&gt; resourceBuilder.addDependency('foo');</li>
+ <li id="l-112" _a="Domenic"><a href="#l-112">#</a> [00:48] &lt;Domenic&gt; reosurceBuilder.addDependency('bar');</li>
+ <li id="l-113" _a="Domenic"><a href="#l-113">#</a> [00:49] &lt;Domenic&gt; resourceBuilder.get().then(() =&gt; { 'foo' and 'bar' have been loaded })</li>
+ <li id="l-114"><a href="#l-114">#</a> [00:49] * Quits: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Quit: leaving)</li>
+ <li id="l-115" _a="Domenic"><a href="#l-115">#</a> [00:49] &lt;Domenic&gt; in the gist there is a separation between dependencies (strings in my example) and promises, with the loadDependency function converting dependencies into promises</li>
+ <li id="l-116" _a="Hixie"><a href="#l-116">#</a> [00:50] &lt;Hixie&gt; how is this better than just foo.addDependency(bar) ?</li>
+ <li id="l-117" _a="Hixie"><a href="#l-117">#</a> [00:50] &lt;Hixie&gt; where foo is an element and bar is a promise</li>
+ <li id="l-118" _a="zewt"><a href="#l-118">#</a> [00:50] &lt;zewt&gt; death to all &quot;Builder&quot; classes</li>
+ <li id="l-119" _a="Domenic" _r="Hixie"><a href="#l-119">#</a> [00:50] &lt;Domenic&gt; Hixie: it's not; if you don't need that extra level of intermediation then it's unnecessary</li>
+ <li id="l-120" _a="benjamingr" _r="Hixie"><a href="#l-120">#</a> [00:50] &lt;benjamingr&gt; Hixie: How can you ever know if foo is ready?</li>
+ <li id="l-121" _a="Hixie" _r="benjamingr"><a href="#l-121">#</a> [00:50] &lt;Hixie&gt; benjamingr: what do you mean by &quot;ready&quot;? and why would you want to know?</li>
+ <li id="l-122" _a="zewt"><a href="#l-122">#</a> [00:50] &lt;zewt&gt; (usually they're just extra busywork, eg. BlobBuilder vs. new Blob)</li>
+ <li id="l-123"><a href="#l-123">#</a> [00:50] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-124" _a="Domenic" _r="zewt"><a href="#l-124">#</a> [00:51] &lt;Domenic&gt; zewt: Hixie's argument is that the creator of the resource is not the same as the person who adds dependencies to the resource</li>
+ <li id="l-125" _a="Domenic" _r="zewt"><a href="#l-125">#</a> [00:51] &lt;Domenic&gt; zewt: so you hand out the &quot;building&quot; capability to other people</li>
+ <li id="l-126" _a="benjamingr" _r="Hixie"><a href="#l-126">#</a> [00:51] &lt;benjamingr&gt; Hixie: how can I use `foo` if I don't know yet if it has all the dependencies it requires to be used?</li>
+ <li id="l-127" _a="Domenic" _r="benjamingr"><a href="#l-127">#</a> [00:51] &lt;Domenic&gt; benjamingr: Hixie: I think you two are talking past each other.</li>
+ <li id="l-128"><a href="#l-128">#</a> [00:51] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-129" _a="Domenic"><a href="#l-129">#</a> [00:51] &lt;Domenic&gt; Modulo benjamingr's gist having an unnecessary level of indirection, it illustrates exactly what Hixie was asking for.</li>
+ <li id="l-130" _a="Hixie" _r="benjamingr"><a href="#l-130">#</a> [00:52] &lt;Hixie&gt; benjamingr: well presumably whoever is doing this would set up all the dependencies before telling anything to actually get applied/executed</li>
+ <li id="l-131" _a="Domenic" _r="Here"><a href="#l-131">#</a> [00:53] &lt;Domenic&gt; Here, forked and clarified <a href="https://gist.github.com/domenic/f19ba7fb48d53e2590fa">https://gist.github.com/domenic/f19ba7fb48d53e2590fa</a></li>
+ <li id="l-132" _a="Domenic"><a href="#l-132">#</a> [00:54] &lt;Domenic&gt; i wasn't sure if you wanted resource to load in parallel with dependencies or after it</li>
+ <li id="l-133" _a="Domenic"><a href="#l-133">#</a> [00:54] &lt;Domenic&gt; right now it's in parallel</li>
+ <li id="l-134" _a="benjamingr" _r="Hixie"><a href="#l-134">#</a> [00:54] &lt;benjamingr&gt; Hixie: this is exactly what the builder does for you and why I used that indirection, the `.get` method is what actually contains the logic to get the instance, and is what gives us a guarantee that we're only going to use the dependencies we have so far to build this instance, if we fail to do it with those resources, we fail. It 'snapshots' the current</li>
+ <li id="l-135" _a="benjamingr"><a href="#l-135">#</a> [00:54] &lt;benjamingr&gt; dependencies.</li>
+ <li id="l-136"><a href="#l-136">#</a> [00:55] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Remote host closed the connection)</li>
+ <li id="l-137" _a="Hixie" _r="benjamingr"><a href="#l-137">#</a> [00:55] &lt;Hixie&gt; benjamingr: so suppose that the thing that we're blocking on is  &lt;script src=&quot;a.js&quot; whenneeded needs=&quot;b.js c.js&quot;&gt;&lt;/script&gt;</li>
+ <li id="l-138" _a="Domenic"><a href="#l-138">#</a> [00:55] &lt;Domenic&gt; .get() is Hixie's &quot;there's a separate method to say &quot;ok now i need you, load all your pending dependencies and once everything is ready, apply yourself and let me know you're done&quot; from earlier</li>
+ <li id="l-139" _a="Hixie" _r="benjamingr"><a href="#l-139">#</a> [00:56] &lt;Hixie&gt; benjamingr: and support that one script wants to say &quot;a.js also needs to wait for my style sheet&quot; and b.js wants to say &quot;a.js also needs to wait for my promise&quot;</li>
+ <li id="l-140" _a="Hixie" _r="benjamingr"><a href="#l-140">#</a> [00:56] &lt;Hixie&gt; benjamingr: and then once that's all done, some other script calls scriptA.execute()</li>
+ <li id="l-141" _a="Hixie" _r="benjamingr"><a href="#l-141">#</a> [00:56] &lt;Hixie&gt; benjamingr: how does your gist fit into this?</li>
+ <li id="l-142" _a="benjamingr" _r="Hixie"><a href="#l-142">#</a> [00:56] &lt;benjamingr&gt; Hixie: yes! we'd like a.js loading to trigger loading b.js and c.js too :) That's what I attempted to initially describe with all those arrows (and failed), let me see if I write a more readable function that does it.</li>
+ <li id="l-143" _a="Hixie"><a href="#l-143">#</a> [00:57] &lt;Hixie&gt; (the needs=&quot;&quot; attribute here being the stuff i proposed last year, syntax probably to change)</li>
+ <li id="l-144" _a="Hixie" _r="(well"><a href="#l-144">#</a> [00:57] &lt;Hixie&gt; (well, whenneeded is more likely to change than needs=&quot;&quot;. people seemed ok with needs=&quot;&quot;.)</li>
+ <li id="l-145" _a="Hixie"><a href="#l-145">#</a> [00:59] * Hixie mumbles, on an unrelated note, about how repeatedly referencing zalgo isn't particularly helpful in making one's case</li>
+ <li id="l-146" _a="benjamingr" _r="Hixie"><a href="#l-146">#</a> [00:59] &lt;benjamingr&gt; Hixie: how would we know that b.js also needs d.js or a stylesheet?</li>
+ <li id="l-147" _a="Hixie" _r="benjamingr"><a href="#l-147">#</a> [00:59] &lt;Hixie&gt; benjamingr: who's &quot;we&quot; here? and what are those other resources?</li>
+ <li id="l-148" _a="benjamingr"><a href="#l-148">#</a> [01:00] &lt;benjamingr&gt; Let's say I'm c.js and I'm not in a script tag, how do we know my dependencies? When it was a.js, I knew the dependencies by reading the script tag.</li>
+ <li id="l-149" _a="Hixie"><a href="#l-149">#</a> [01:02] &lt;Hixie&gt; how would you not be in a script tag?</li>
+ <li id="l-150" _a="Hixie"><a href="#l-150">#</a> [01:02] &lt;Hixie&gt; the only way to run an external script file is from a script element</li>
+ <li id="l-151" _a="benjamingr"><a href="#l-151">#</a> [01:02] &lt;benjamingr&gt; In your above example, a had a b.js dependency, however - b.js may have dependencies of its own - right? Where are those specified?</li>
+ <li id="l-152" _a="Hixie"><a href="#l-152">#</a> [01:03] &lt;Hixie&gt; on the &lt;script src=&quot;b.js&quot;&gt;&lt;/script&gt; element</li>
+ <li id="l-153" _a="benjamingr" _r="Ah"><a href="#l-153">#</a> [01:03] &lt;benjamingr&gt; Ah, cool :)</li>
+ <li id="l-154" _a="benjamingr" _r="Ok"><a href="#l-154">#</a> [01:03] &lt;benjamingr&gt; Ok, gisting</li>
+ <li id="l-155" _a="Hixie" _r="needs=&quot;&quot"><a href="#l-155">#</a> [01:03] &lt;Hixie&gt; needs=&quot;&quot; doesn't cause any script to run</li>
+ <li id="l-156" _a="Hixie"><a href="#l-156">#</a> [01:03] &lt;Hixie&gt; it just says &quot;I need to have previously had &lt;script&gt;s pointing to these URLs executed&quot;</li>
+ <li id="l-157" _a="Hixie" _r="(or"><a href="#l-157">#</a> [01:03] &lt;Hixie&gt; (or, later, modules or whatnot)</li>
+ <li id="l-158"><a href="#l-158">#</a> [01:04] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-159" _a="benjamingr"><a href="#l-159">#</a> [01:05] &lt;benjamingr&gt; I think I understand what we're doing a lot better now, gisting :)</li>
+ <li id="l-160" _a="benjamingr" _r="Hixie"><a href="#l-160">#</a> [01:06] &lt;benjamingr&gt; Hixie: what would you like to do about a recursive depencency? Right now I deadlock</li>
+ <li id="l-161" _a="Krinkle"><a href="#l-161">#</a> [01:07] * Krinkle is now known as Krinkle|detached</li>
+ <li id="l-162"><a href="#l-162">#</a> [01:08] * Joins: othermaciej (~mjs@17.114.217.202)</li>
+ <li id="l-163" _a="Hixie"><a href="#l-163">#</a> [01:08] &lt;Hixie&gt; i can fix those easily enough</li>
+ <li id="l-164" _a="Hixie"><a href="#l-164">#</a> [01:08] &lt;Hixie&gt; don't worry about those</li>
+ <li id="l-165" _a="Hixie"><a href="#l-165">#</a> [01:08] &lt;Hixie&gt; i'm more interested in what the API looks like</li>
+ <li id="l-166" _a="Hixie"><a href="#l-166">#</a> [01:08] &lt;Hixie&gt; the UA-provided API, i mean</li>
+ <li id="l-167" _a="benjamingr" _r="Hixie"><a href="#l-167">#</a> [01:10] &lt;benjamingr&gt; Hixie: <a href="https://gist.github.com/benjamingr/0ed038727f38fb77e7ee">https://gist.github.com/benjamingr/0ed038727f38fb77e7ee</a></li>
+ <li id="l-168" _a="benjamingr"><a href="#l-168">#</a> [01:10] &lt;benjamingr&gt; This is just the function that resolves a dependency, let's add it to the API :)</li>
+ <li id="l-169" _a="Hixie"><a href="#l-169">#</a> [01:14] &lt;Hixie&gt; let's try this a different way</li>
+ <li id="l-170" _a="Hixie"><a href="#l-170">#</a> [01:14] &lt;Hixie&gt; <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/saved/3030">http://software.hixie.ch/utilities/js/live-dom-viewer/saved/3030</a></li>
+ <li id="l-171" _a="benjamingr"><a href="#l-171">#</a> [01:15] &lt;benjamingr&gt; I'm still writing :)</li>
+ <li id="l-172" _a="Hixie"><a href="#l-172">#</a> [01:15] &lt;Hixie&gt; what would you put in place of the two places there that say // INSERT CODE ?</li>
+ <li id="l-173" _a="benjamingr"><a href="#l-173">#</a> [01:15] &lt;benjamingr&gt; ah cool, this is easier</li>
+ <li id="l-174"><a href="#l-174">#</a> [01:17] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-175" _a="Hixie"><a href="#l-175">#</a> [01:18] &lt;Hixie&gt; (for the record, here's what my current straw man is: <a href="http://software.hixie.ch/utilities/js/live-dom-viewer/saved/3031">http://software.hixie.ch/utilities/js/live-dom-viewer/saved/3031</a> )</li>
+ <li id="l-176" _a="benjamingr" _r="Oh"><a href="#l-176">#</a> [01:19] &lt;benjamingr&gt; Oh, I thought you wanted me to actually code something that does this :)</li>
+ <li id="l-177" _a="Hixie"><a href="#l-177">#</a> [01:19] &lt;Hixie&gt; oh</li>
+ <li id="l-178" _a="Hixie"><a href="#l-178">#</a> [01:19] &lt;Hixie&gt; no no</li>
+ <li id="l-179" _a="Hixie"><a href="#l-179">#</a> [01:19] &lt;Hixie&gt; sorry</li>
+ <li id="l-180" _a="Hixie"><a href="#l-180">#</a> [01:20] &lt;Hixie&gt; that's the browser vendors' problem :-)</li>
+ <li id="l-181" _a="benjamingr" _r="Ah"><a href="#l-181">#</a> [01:20] &lt;benjamingr&gt; Ah, wouldn't that make talking about it easier though?</li>
+ <li id="l-182" _a="Hixie"><a href="#l-182">#</a> [01:20] &lt;Hixie&gt; well it couldn't hurt</li>
+ <li id="l-183" _a="Hixie"><a href="#l-183">#</a> [01:21] &lt;Hixie&gt; but the end goal is to figure out what the UA API should be</li>
+ <li id="l-184" _a="benjamingr" _r="Yeah"><a href="#l-184">#</a> [01:21] &lt;benjamingr&gt; Yeah, but that's hard to do without something working to test on :)</li>
+ <li id="l-185" _a="Hixie"><a href="#l-185">#</a> [01:23] &lt;Hixie&gt; i usually find that if i can make a convincing shim that does the same thing, it means i don't need an API</li>
+ <li id="l-186" _a="Hixie"><a href="#l-186">#</a> [01:23] &lt;Hixie&gt; so usually i only need to be designing APIs when making a convincing shim is either very hard, or implausible</li>
+ <li id="l-187" _a="benjamingr"><a href="#l-187">#</a> [01:24] &lt;benjamingr&gt; I can make a convincing shim if I do `data-src` instead of `src`</li>
+ <li id="l-188"><a href="#l-188">#</a> [01:24] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-189" _a="Domenic"><a href="#l-189">#</a> [01:30] &lt;Domenic&gt; ^ pointing to how separating execution from loading is really what's at stake here</li>
+ <li id="l-190"><a href="#l-190">#</a> [01:36] * Joins: jdaggett (~jdaggett@61-121-216-2.bitcat.net)</li>
+ <li id="l-191"><a href="#l-191">#</a> [01:36] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-192"><a href="#l-192">#</a> [01:43] * Quits: ehsan (~ehsan@66.207.208.102) (Remote host closed the connection)</li>
+ <li id="l-193"><a href="#l-193">#</a> [01:44] * Joins: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net)</li>
+ <li id="l-194"><a href="#l-194">#</a> [01:44] * Quits: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net) (Changing host)</li>
+ <li id="l-195"><a href="#l-195">#</a> [01:44] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-196"><a href="#l-196">#</a> [01:45] * Quits: tantek (~tantek@70-36-139-254.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-197"><a href="#l-197">#</a> [01:48] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-198"><a href="#l-198">#</a> [01:52] * Joins: mven (~textual@ip68-104-38-84.lv.lv.cox.net)</li>
+ <li id="l-199"><a href="#l-199">#</a> [01:53] * Joins: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-200"><a href="#l-200">#</a> [01:59] * Quits: lmclister (~lmclister@192.150.10.210)</li>
+ <li id="l-201"><a href="#l-201">#</a> [02:00] * Quits: NDoc (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Quit: leaving)</li>
+ <li id="l-202"><a href="#l-202">#</a> [02:03] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-203"><a href="#l-203">#</a> [02:03] * Quits: ap (~ap@2620:149:4:304:60b2:7b5b:c970:cd45) (Quit: ap)</li>
+ <li id="l-204" _a="benjamingr" _r="sorry"><a href="#l-204">#</a> [02:07] &lt;benjamingr&gt; sorry, had to leave, I'll get back to this tomorrow :)</li>
+ <li id="l-205"><a href="#l-205">#</a> [02:07] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-206" _a="coolbot95"><a href="#l-206">#</a> [02:08] &lt;coolbot95&gt; Can somebody tell me what the current state of HTML 5 audio is? I really wish to drop Flash finally now. Does HTML 5 audio - whatever it is called now - have support for multi-voice (multiple samples at once), panning and volume?</li>
+ <li id="l-207" _a="coolbot95"><a href="#l-207">#</a> [02:08] &lt;coolbot95&gt; And support in all modern browsers?</li>
+ <li id="l-208"><a href="#l-208">#</a> [02:11] * Quits: aiglesias (~aiglesias@147-195-17-190.fibertel.com.ar) (Remote host closed the connection)</li>
+ <li id="l-209"><a href="#l-209">#</a> [02:12] * Quits: deane (~Thunderbi@124-197-19-37.callplus.net.nz) (Quit: deane)</li>
+ <li id="l-210"><a href="#l-210">#</a> [02:15] * Joins: dbaron (~dbaron@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-211"><a href="#l-211">#</a> [02:16] * Joins: ehsan (~ehsan@24-212-207-29.cable.teksavvy.com)</li>
+ <li id="l-212"><a href="#l-212">#</a> [02:17] * Joins: abinader (sid21713@gateway/web/irccloud.com/x-unythathyxpzznve)</li>
+ <li id="l-213"><a href="#l-213">#</a> [02:18] * Quits: SamB (~SamB@2001:470:1f07:57:6583:8fb3:b515:3bd8) (Read error: Connection reset by peer)</li>
+ <li id="l-214"><a href="#l-214">#</a> [02:19] * Joins: SamB (~SamB@2001:470:1f07:57:6d76:16bb:edf7:10ba)</li>
+ <li id="l-215"><a href="#l-215">#</a> [02:24] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-216"><a href="#l-216">#</a> [02:25] * Quits: smaug____ (~chatzilla@a91-154-44-207.elisa-laajakaista.fi) (Ping timeout: 240 seconds)</li>
+ <li id="l-217"><a href="#l-217">#</a> [02:25] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-218"><a href="#l-218">#</a> [02:28] * Quits: KevinMarks_ (~KevinMark@172.56.38.142) (Ping timeout: 264 seconds)</li>
+ <li id="l-219"><a href="#l-219">#</a> [02:29] * Joins: plutoniix (~plutoniix@210.213.57.70)</li>
+ <li id="l-220"><a href="#l-220">#</a> [02:34] * Joins: toyoshiAw (~toyoshim@yuri.twintail.org)</li>
+ <li id="l-221" _a="toyoshiAw"><a href="#l-221">#</a> [02:34] * toyoshiAw is now known as toyoshim</li>
+ <li id="l-222"><a href="#l-222">#</a> [02:34] * Joins: seventh (seventh@103.17.199.238)</li>
+ <li id="l-223"><a href="#l-223">#</a> [02:42] * Quits: jsbell (jsbell@nat/google/x-pvabvuvmhmtwilyw) (Quit: There's no place like home...)</li>
+ <li id="l-224"><a href="#l-224">#</a> [02:47] * Quits: jwalden (~waldo@corp.mtv2.mozilla.com) (Quit: out for the day, back tomorrow hopefully earlier)</li>
+ <li id="l-225"><a href="#l-225">#</a> [02:51] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-226" _a="MikeSmith"><a href="#l-226">#</a> [02:53] &lt;MikeSmith&gt; <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=25721">https://www.w3.org/Bugs/Public/show_bug.cgi?id=25721</a> &quot;Does choosing to run a javascript application mean that the user must accept all the choices made by this application?&quot; ...</li>
+ <li id="l-227" _a="Hixie" _r="coolbot95"><a href="#l-227">#</a> [02:55] &lt;Hixie&gt; coolbot95: it's called &quot;Web Audio&quot;, and I believe the answer is yes</li>
+ <li id="l-228"><a href="#l-228">#</a> [02:56] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-229"><a href="#l-229">#</a> [02:57] * Joins: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-230"><a href="#l-230">#</a> [02:59] * Quits: victorbjelkholm (~victorbje@41.Red-83-60-204.dynamicIP.rima-tde.net) (Quit: ZZZzzz…)</li>
+ <li id="l-231"><a href="#l-231">#</a> [03:00] * Joins: jeffreyatw (~jeffreyat@199-241-200-45.PUBLIC.monkeybrains.net)</li>
+ <li id="l-232"><a href="#l-232">#</a> [03:01] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Ping timeout: 258 seconds)</li>
+ <li id="l-233"><a href="#l-233">#</a> [03:03] * Joins: Goplat (~goplat@reactos/developer/Goplat)</li>
+ <li id="l-234" _a="zewt" _r="MikeSmith"><a href="#l-234">#</a> [03:06] &lt;zewt&gt; MikeSmith: bad%20life%20decisions.js</li>
+ <li id="l-235" _a="Domenic" _r="MikeSmith"><a href="#l-235">#</a> [03:06] &lt;Domenic&gt; MikeSmith: oh my god, that thread, I feel so bad for Ryan :(</li>
+ <li id="l-236"><a href="#l-236">#</a> [03:14] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-237" _a="zewt"><a href="#l-237">#</a> [03:15] &lt;zewt&gt; did someone fall into a trap?</li>
+ <li id="l-238" _a="coolbot95" _r="Hixie"><a href="#l-238">#</a> [03:24] &lt;coolbot95&gt; Hixie: Hmm...</li>
+ <li id="l-239" _a="coolbot95" _r="Hixie"><a href="#l-239">#</a> [03:24] &lt;coolbot95&gt; Hixie: Can you link me to documentation?</li>
+ <li id="l-240" _a="coolbot95"><a href="#l-240">#</a> [03:25] &lt;coolbot95&gt; It's such a jungle of different terms.</li>
+ <li id="l-241" _a="coolbot95"><a href="#l-241">#</a> [03:25] &lt;coolbot95&gt; I think they tried to standardize this multiple times?</li>
+ <li id="l-242" _a="coolbot95"><a href="#l-242">#</a> [03:25] &lt;coolbot95&gt; I really wanna leave Flash 100% now.</li>
+ <li id="l-243" _a="coolbot95"><a href="#l-243">#</a> [03:25] &lt;coolbot95&gt; No more dependency on Flash objects for audio playback.</li>
+ <li id="l-244"><a href="#l-244">#</a> [03:29] * Joins: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net)</li>
+ <li id="l-245"><a href="#l-245">#</a> [03:29] * Quits: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net) (Changing host)</li>
+ <li id="l-246"><a href="#l-246">#</a> [03:29] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-247" _a="bengl" _r="coolbot95"><a href="#l-247">#</a> [03:34] &lt;bengl&gt; coolbot95: this isn't a half-bad place to start: <a href="http://www.html5rocks.com/en/tutorials/webaudio/intro">http://www.html5rocks.com/en/tutorials/webaudio/intro</a></li>
+ <li id="l-248"><a href="#l-248">#</a> [03:37] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-249"><a href="#l-249">#</a> [03:37] * Quits: KevinMarks (~yaaic@2607:fb90:212a:1795:dc53:91fa:58e0:4449) (Ping timeout: 252 seconds)</li>
+ <li id="l-250"><a href="#l-250">#</a> [03:37] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-251"><a href="#l-251">#</a> [03:42] * Joins: tantek (~tantek@70-36-139-254.dsl.dynamic.sonic.net)</li>
+ <li id="l-252" _a="zewt"><a href="#l-252">#</a> [03:42] &lt;zewt&gt; i wonder how much less hated windows APIs would be if they released source for them fifteen years ago</li>
+ <li id="l-253" _a="zewt"><a href="#l-253">#</a> [03:44] &lt;zewt&gt; nothing to do with &quot;open source&quot; or changing anything, it's just 100x easier to figure out why their APIs (which are still terrible) are behaving strangely</li>
+ <li id="l-254"><a href="#l-254">#</a> [03:44] * Joins: jacobolus (~jacobolus@c-107-3-150-163.hsd1.ca.comcast.net)</li>
+ <li id="l-255" _a="MikeSmith" _r="Domenic"><a href="#l-255">#</a> [03:44] &lt;MikeSmith&gt; Domenic: yeah Ryan's gotta be admired for making the effort. He put way more time responding to that guy than I would have bothered to.</li>
+ <li id="l-256" _a="MikeSmith"><a href="#l-256">#</a> [03:47] * MikeSmith imagines the discussion with the directory about that formal objection... &quot;So here's how the web works, and over here is how this guy would like for it to work instead. Changing the way the entire web works is a bit out of scope for the crypto spec...&quot;</li>
+ <li id="l-257" _a="hober" _r="MikeSmith"><a href="#l-257">#</a> [03:48] &lt;hober&gt; MikeSmith: Domenic: context?</li>
+ <li id="l-258"><a href="#l-258">#</a> [03:48] * Joins: Streusel (~Anonymous@unaffiliated/streusel)</li>
+ <li id="l-259" _a="SamB" _r="zewt"><a href="#l-259">#</a> [03:49] &lt;SamB&gt; zewt: then people would complain even MORE if undocumented aspects the behaviour changed, probably</li>
+ <li id="l-260" _a="MikeSmith" _r="hober"><a href="#l-260">#</a> [03:49] &lt;MikeSmith&gt; hober: <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=25721">https://www.w3.org/Bugs/Public/show_bug.cgi?id=25721</a></li>
+ <li id="l-261" _a="zewt"><a href="#l-261">#</a> [03:49] &lt;zewt&gt; &quot;formal objections&quot; seem to be a pretty reliable way to alienate everyone in earshot</li>
+ <li id="l-262" _a="MikeSmith" _r="zewt"><a href="#l-262">#</a> [03:49] &lt;MikeSmith&gt; zewt: :) yeah pretty much. At least the few people who are actually listening</li>
+ <li id="l-263" _a="SamB"><a href="#l-263">#</a> [03:50] &lt;SamB&gt; I think it should be required to wear formalwear to issue a formal objection</li>
+ <li id="l-264" _a="MikeSmith"><a href="#l-264">#</a> [03:50] &lt;MikeSmith&gt; making a formal objection is pretty much never a good idea</li>
+ <li id="l-265" _a="zewt"><a href="#l-265">#</a> [03:50] &lt;zewt&gt; i mean if it was a known mozilla developer we'd probably stop and think &quot;maybe he's doing this for a reason&quot;, but invariably it's someone at some hostname nobody's ever heard of</li>
+ <li id="l-266"><a href="#l-266">#</a> [03:51] * Joins: KevinMarks (~yaaic@2607:fb90:212a:1795:dc53:91fa:58e0:4449)</li>
+ <li id="l-267" _a="SamB" _r="MikeSmith"><a href="#l-267">#</a> [03:51] &lt;SamB&gt; MikeSmith: the requirement to wear a tuxedo might reenforce that principle nicely</li>
+ <li id="l-268" _a="zewt" _r="SamB"><a href="#l-268">#</a> [03:53] &lt;zewt&gt; SamB: i don't really care how much people complain, it makes my life easier</li>
+ <li id="l-269" _a="zewt"><a href="#l-269">#</a> [03:54] &lt;zewt&gt; not that it actually makes things like WPF not nightmarishly broken or anything</li>
+ <li id="l-270" _a="SamB"><a href="#l-270">#</a> [03:54] &lt;SamB&gt; plus I figure the pictures would be funny</li>
+ <li id="l-271" _a="MikeSmith" _r="SamB"><a href="#l-271">#</a> [03:54] &lt;MikeSmith&gt; SamB: we should add some other requirement like they have to physically nail the objection to somebody's front door</li>
+ <li id="l-272" _a="SamB"><a href="#l-272">#</a> [03:55] &lt;SamB&gt; while wearing a tuxedo?</li>
+ <li id="l-273" _a="zewt"><a href="#l-273">#</a> [03:55] &lt;zewt&gt; the only platforms I've done UI stuff on in living memory where I could pretty reliably tell what was going on, and avoid spending more time convincing the UI than actually getting stuff done, are the web and ... iOS, oddly</li>
+ <li id="l-274" _a="SamB"><a href="#l-274">#</a> [03:55] &lt;SamB&gt; and post pictures on the 'net?</li>
+ <li id="l-275" _a="zewt" _r="wpf"><a href="#l-275">#</a> [03:55] &lt;zewt&gt; wpf: totally broken. android: totally broken.</li>
+ <li id="l-276" _a="MikeSmith" _r="SamB"><a href="#l-276">#</a> [03:55] &lt;MikeSmith&gt; SamB: there we go. good brainstorming</li>
+ <li id="l-277" _a="zewt" _r="(basically"><a href="#l-277">#</a> [03:56] &lt;zewt&gt; (basically, the APIs that try to force &quot;separation of business logic&quot; crap on you, whether it makes sense or not, tend to be the ones that are nearly unusable)</li>
+ <li id="l-278" _a="SamB" _r="wait"><a href="#l-278">#</a> [03:56] &lt;SamB&gt; wait, there's business logic in android apps?</li>
+ <li id="l-279" _a="SamB"><a href="#l-279">#</a> [03:57] * SamB thought they were all toys</li>
+ <li id="l-280" _a="zewt"><a href="#l-280">#</a> [03:57] &lt;zewt&gt; android has a lack of toys, too, but that's a separate issue</li>
+ <li id="l-281" _a="coolbot95" _r="zewt"><a href="#l-281">#</a> [03:57] &lt;coolbot95&gt; zewt: Huh? The source code for their API? That makes no sense.</li>
+ <li id="l-282" _a="coolbot95"><a href="#l-282">#</a> [03:58] &lt;coolbot95&gt; That must mean you want them to release the source code for their OS.</li>
+ <li id="l-283" _a="zewt"><a href="#l-283">#</a> [03:58] &lt;zewt&gt; ...</li>
+ <li id="l-284" _a="MikeSmith"><a href="#l-284">#</a> [03:58] &lt;MikeSmith&gt; formal objections are usually just a formal statement of &quot;Let this hereby be a formal record of the fact that I've failed to make a convincing argument.&quot;</li>
+ <li id="l-285" _a="zewt"><a href="#l-285">#</a> [03:58] &lt;zewt&gt; they release source to chunks of APIs <a href="http://referencesource.microsoft.com/#PresentationFramework/src/Framework/System/Windows/Input/KeyboardNavigation.cs">http://referencesource.microsoft.com/#PresentationFramework/src/Framework/System/Windows/Input/KeyboardNavigation.cs</a></li>
+ <li id="l-286" _a="SamB"><a href="#l-286">#</a> [03:59] &lt;SamB&gt; but not the win32 APIs</li>
+ <li id="l-287" _a="coolbot95"><a href="#l-287">#</a> [03:59] &lt;coolbot95&gt; But... and API...</li>
+ <li id="l-288" _a="coolbot95"><a href="#l-288">#</a> [03:59] &lt;coolbot95&gt; Source code... to an API...</li>
+ <li id="l-289" _a="coolbot95"><a href="#l-289">#</a> [03:59] * coolbot95 's head explodes.</li>
+ <li id="l-290" _a="coolbot95"><a href="#l-290">#</a> [03:59] &lt;coolbot95&gt; *an API</li>
+ <li id="l-291" _a="SamB" _r="coolbot95"><a href="#l-291">#</a> [03:59] &lt;SamB&gt; coolbot95: it's a common sloppy usage ...</li>
+ <li id="l-292" _a="zewt" _r="sorry"><a href="#l-292">#</a> [03:59] &lt;zewt&gt; sorry, you're not being very interesting, informative or helpful</li>
+ <li id="l-293"><a href="#l-293">#</a> [03:59] * Quits: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-294" _a="SamB" _r="coolbot95"><a href="#l-294">#</a> [03:59] &lt;SamB&gt; coolbot95: insert the term &quot;implementation&quot; in there somehow and it will make more sense</li>
+ <li id="l-295" _a="zewt" _r="MikeSmith"><a href="#l-295">#</a> [04:00] &lt;zewt&gt; MikeSmith: with the other important detail: &quot;... and I think I should be able to win the argument anyway because my employer gives money to the W3C&quot;</li>
+ <li id="l-296" _a="MikeSmith"><a href="#l-296">#</a> [04:00] &lt;MikeSmith&gt; heh</li>
+ <li id="l-297" _a="MikeSmith"><a href="#l-297">#</a> [04:00] &lt;MikeSmith&gt; yeah that too</li>
+ <li id="l-298" _a="caitp" _r="ralph"><a href="#l-298">#</a> [04:00] &lt;caitp&gt; ralph: did you write software to generate those it's vs its typo fix patches, or are you just bored and doing that on your own? if it's software I'd like to see it, I'm interested</li>
+ <li id="l-299" _a="zewt" _r="MikeSmith"><a href="#l-299">#</a> [04:00] &lt;zewt&gt; MikeSmith: it's probably the operative part, at least as far as the impression people make on me when they do it</li>
+ <li id="l-300" _a="MikeSmith" _r="zewt"><a href="#l-300">#</a> [04:02] &lt;MikeSmith&gt; zewt: though in the case of that bug, their reporter neither works for the w3c nor has ever contributed in any way to developing new security/privacy-related technologies/standards for the platform</li>
+ <li id="l-301" _a="coolbot95"><a href="#l-301">#</a> [04:02] &lt;coolbot95&gt; I have to use a god damn XMLHttpRequest to load sounds? Why isn't it just like Image()?</li>
+ <li id="l-302" _a="MikeSmith" _r="zewt"><a href="#l-302">#</a> [04:02] &lt;MikeSmith&gt; zewt: yeah, that is the impression it makes in most case</li>
+ <li id="l-303" _a="zewt" _r="coolbot95"><a href="#l-303">#</a> [04:03] &lt;zewt&gt; coolbot95: well, god DAMN IT then</li>
+ <li id="l-304" _a="coolbot95" _r="zewt"><a href="#l-304">#</a> [04:03] &lt;coolbot95&gt; zewt: What?</li>
+ <li id="l-305" _a="SamB"><a href="#l-305">#</a> [04:03] &lt;SamB&gt; wouldn't a regular XMLHttpRequest work just fine?</li>
+ <li id="l-306" _a="zewt"><a href="#l-306">#</a> [04:04] &lt;zewt&gt; heretical xhr is cooler than sync xhr, that's for sure</li>
+ <li id="l-307" _a="coolbot95" _r="SamB"><a href="#l-307">#</a> [04:04] &lt;coolbot95&gt; SamB: It makes it look ugly.</li>
+ <li id="l-308" _a="SamB"><a href="#l-308">#</a> [04:04] &lt;SamB&gt; I mean why do you need to use a god damn one</li>
+ <li id="l-309"><a href="#l-309">#</a> [04:04] * Quits: KevinMarks (~yaaic@2607:fb90:212a:1795:dc53:91fa:58e0:4449) (Ping timeout: 240 seconds)</li>
+ <li id="l-310" _a="coolbot95"><a href="#l-310">#</a> [04:04] &lt;coolbot95&gt; If Image() is done like that, why not Audio()?</li>
+ <li id="l-311" _a="zewt" _r="SamB"><a href="#l-311">#</a> [04:04] &lt;zewt&gt; SamB: &quot;whoosh&quot;</li>
+ <li id="l-312" _a="coolbot95"><a href="#l-312">#</a> [04:05] &lt;coolbot95&gt; It's ugly to have to use an XMLHttpRequest.</li>
+ <li id="l-313" _a="caitp"><a href="#l-313">#</a> [04:06] &lt;caitp&gt; if the api were pretty, it wouldn't be successful</li>
+ <li id="l-314" _a="MikeSmith" _r="zewt"><a href="#l-314">#</a> [04:06] &lt;MikeSmith&gt; zewt: also the thing is, the director doesn't really care whether a comment is a formal objection or not. he care about the technical merit of the comment regardless. Also I think that spec is in last call right now, and if so, the WG will anyway be obligated to inform the director about any comments that were not resolved to the commenter's satisfication. So there's no different process effect between making a Last Call comment and making a formal obje</li>
+ <li id="l-315" _a="caitp"><a href="#l-315">#</a> [04:06] &lt;caitp&gt; the only way for it to be successful is for it to be both A) terrible and B) the only option!</li>
+ <li id="l-316"><a href="#l-316">#</a> [04:06] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: This computer has gone to sleep)</li>
+ <li id="l-317" _a="SamB" _r="MikeSmith"><a href="#l-317">#</a> [04:06] &lt;SamB&gt; MikeSmith: except the &quot;I'm a douchebag&quot; effect</li>
+ <li id="l-318" _a="zewt" _r="well"><a href="#l-318">#</a> [04:07] &lt;zewt&gt; well, that's the main effect we've been talking about ... though that perhaps is a more succinct way of putting it</li>
+ <li id="l-319" _a="coolbot95"><a href="#l-319">#</a> [04:07] &lt;coolbot95&gt; The linked-to article is from 2011.</li>
+ <li id="l-320" _a="SamB"><a href="#l-320">#</a> [04:07] &lt;SamB&gt; I mean the formal objection will communicate this to the director, too</li>
+ <li id="l-321" _a="coolbot95"><a href="#l-321">#</a> [04:07] &lt;coolbot95&gt; And does not mention anything about volume or panning as far as I can see.</li>
+ <li id="l-322" _a="coolbot95"><a href="#l-322">#</a> [04:08] &lt;coolbot95&gt; Or about multi-voice.</li>
+ <li id="l-323" _a="MikeSmith"><a href="#l-323">#</a> [04:08] * MikeSmith smiles about caitp's earlier &quot;what is money if it doesn't flow down the river&quot;</li>
+ <li id="l-324" _a="zewt"><a href="#l-324">#</a> [04:08] &lt;zewt&gt; maybe a different aspect is &quot;your arguments are irrelevant because we pay the W3C&quot;, which may be why it feels like an insult</li>
+ <li id="l-325" _a="coolbot95"><a href="#l-325">#</a> [04:08] &lt;coolbot95&gt; It does mention realtime filters, though, which is unexpected.</li>
+ <li id="l-326" _a="coolbot95"><a href="#l-326">#</a> [04:08] &lt;coolbot95&gt; You'd think panning and volume would be basics.</li>
+ <li id="l-327" _a="bengl" _r="coolbot95"><a href="#l-327">#</a> [04:08] &lt;bengl&gt; coolbot95: <a href="https://developer.mozilla.org/en-US/docs/Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web_Audio_API</a></li>
+ <li id="l-328" _a="coolbot95"><a href="#l-328">#</a> [04:08] &lt;coolbot95&gt; And realtime filters would be fancy.</li>
+ <li id="l-329" _a="bengl" _r="coolbot95"><a href="#l-329">#</a> [04:09] &lt;bengl&gt; coolbot95: also <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement">https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement</a></li>
+ <li id="l-330" _a="caitp"><a href="#l-330">#</a> [04:10] &lt;caitp&gt; it's a great line mike, you've got to drop it at the appropriate time though, like when people are daring you to spend millions of dollars on something that nobody will ever agree on</li>
+ <li id="l-331" _a="MikeSmith"><a href="#l-331">#</a> [04:11] &lt;MikeSmith&gt; heh</li>
+ <li id="l-332"><a href="#l-332">#</a> [04:12] * Joins: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149)</li>
+ <li id="l-333"><a href="#l-333">#</a> [04:12] * Joins: KevinMarks (~yaaic@2607:fb90:212a:1795:dc53:91fa:58e0:4449)</li>
+ <li id="l-334"><a href="#l-334">#</a> [04:14] * Quits: annevk_ (~annevk@77-57-114-66.dclient.hispeed.ch) (Read error: Connection reset by peer)</li>
+ <li id="l-335"><a href="#l-335">#</a> [04:15] * Joins: annevk (~annevk@77-57-114-66.dclient.hispeed.ch)</li>
+ <li id="l-336"><a href="#l-336">#</a> [04:18] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-337"><a href="#l-337">#</a> [04:18] * Joins: aiglesias (~aiglesias@host111.186-109-20.telecom.net.ar)</li>
+ <li id="l-338"><a href="#l-338">#</a> [04:20] * Quits: aiglesias (~aiglesias@host111.186-109-20.telecom.net.ar) (Remote host closed the connection)</li>
+ <li id="l-339"><a href="#l-339">#</a> [04:21] * Joins: myakura (d25fff95@gateway/web/freenode/ip.210.95.255.149)</li>
+ <li id="l-340" _a="coolbot95"><a href="#l-340">#</a> [04:25] &lt;coolbot95&gt; Why is audio playback such a massive, over-engineered deal?</li>
+ <li id="l-341" _a="coolbot95"><a href="#l-341">#</a> [04:25] &lt;coolbot95&gt; Even back in the MS-DOS days, a genius such as John Carmack would still license out the audio playback part.</li>
+ <li id="l-342"><a href="#l-342">#</a> [04:26] * Quits: seventh (seventh@103.17.199.238) (Read error: Connection reset by peer)</li>
+ <li id="l-343" _a="coolbot95"><a href="#l-343">#</a> [04:26] &lt;coolbot95&gt; He could code a fantastic 3D engine for very slow computers, but not audio playback.</li>
+ <li id="l-344" _a="caitp"><a href="#l-344">#</a> [04:26] &lt;caitp&gt; it's just electronics</li>
+ <li id="l-345" _a="coolbot95"><a href="#l-345">#</a> [04:26] &lt;coolbot95&gt; ?</li>
+ <li id="l-346" _a="caitp"><a href="#l-346">#</a> [04:27] &lt;caitp&gt; surely you could build a neve mixer in your garage, how hard could it be</li>
+ <li id="l-347" _a="coolbot95"><a href="#l-347">#</a> [04:27] &lt;coolbot95&gt; What?</li>
+ <li id="l-348" _a="caitp"><a href="#l-348">#</a> [04:27] &lt;caitp&gt; super simple stuff</li>
+ <li id="l-349"><a href="#l-349">#</a> [04:28] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-350"><a href="#l-350">#</a> [04:29] * Quits: JosephSilber (~Joseph@ool-44c3e80a.static.optonline.net) (Read error: Connection reset by peer)</li>
+ <li id="l-351"><a href="#l-351">#</a> [04:38] * Joins: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-352"><a href="#l-352">#</a> [04:44] * Joins: othermaciej (~mjs@17.114.217.202)</li>
+ <li id="l-353"><a href="#l-353">#</a> [04:50] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-354" _a="coolbot95"><a href="#l-354">#</a> [04:53] &lt;coolbot95&gt; Have you been smoking crack cocaine?</li>
+ <li id="l-355"><a href="#l-355">#</a> [04:53] * Quits: coolbot95 (~coolbot95@gateway/tor-sasl/coolbot95) (Quit: coolbot95)</li>
+ <li id="l-356"><a href="#l-356">#</a> [04:54] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-357" _a="caitp"><a href="#l-357">#</a> [04:55] &lt;caitp&gt; oh dear</li>
+ <li id="l-358"><a href="#l-358">#</a> [04:57] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-359"><a href="#l-359">#</a> [05:01] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Ping timeout: 240 seconds)</li>
+ <li id="l-360"><a href="#l-360">#</a> [05:02] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-361"><a href="#l-361">#</a> [05:03] * Quits: karlcow (~karl@nerval.la-grange.net) (Remote host closed the connection)</li>
+ <li id="l-362"><a href="#l-362">#</a> [05:03] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-363" _a="TabAtkins" _r="Hixie"><a href="#l-363">#</a> [05:03] &lt;TabAtkins&gt; Hixie: The way you handle the &quot;don't do something until this promise I'm handing you settles&quot; is by making a method that takes the promise as an arg.</li>
+ <li id="l-364" _a="TabAtkins"><a href="#l-364">#</a> [05:04] &lt;TabAtkins&gt; ServiceWorker has a .waitUntil(Promise) method for this.</li>
+ <li id="l-365"><a href="#l-365">#</a> [05:08] * Quits: myakura (d25fff95@gateway/web/freenode/ip.210.95.255.149) (Ping timeout: 240 seconds)</li>
+ <li id="l-366"><a href="#l-366">#</a> [05:11] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-367"><a href="#l-367">#</a> [05:17] * Quits: plutoniix (~plutoniix@210.213.57.70) (Ping timeout: 240 seconds)</li>
+ <li id="l-368"><a href="#l-368">#</a> [05:25] * Joins: llkats (~llkats@c-69-181-45-245.hsd1.ca.comcast.net)</li>
+ <li id="l-369"><a href="#l-369">#</a> [05:33] * Joins: myakura (d25fff95@gateway/web/freenode/ip.210.95.255.149)</li>
+ <li id="l-370"><a href="#l-370">#</a> [05:33] * Joins: othermaciej (~mjs@17.114.217.202)</li>
+ <li id="l-371"><a href="#l-371">#</a> [05:40] * Joins: jungkees (uid24208@gateway/web/irccloud.com/x-sxdmnfdqdcggwmqb)</li>
+ <li id="l-372"><a href="#l-372">#</a> [05:45] * Joins: plutoniix (~plutoniix@210.213.57.70)</li>
+ <li id="l-373"><a href="#l-373">#</a> [05:46] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-374"><a href="#l-374">#</a> [05:47] * Quits: jacobolus (~jacobolus@c-107-3-150-163.hsd1.ca.comcast.net) (Remote host closed the connection)</li>
+ <li id="l-375"><a href="#l-375">#</a> [05:54] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-376" _a="Hixie" _r="TabAtkins"><a href="#l-376">#</a> [06:00] &lt;Hixie&gt; TabAtkins: yeah, that's what i assumed. i was getting confused by Domenic and benjamingr :-|</li>
+ <li id="l-377" _a="Hixie" _r="TabAtkins"><a href="#l-377">#</a> [06:00] &lt;Hixie&gt; TabAtkins: can waitUntil be called several times?</li>
+ <li id="l-378"><a href="#l-378">#</a> [06:02] * Quits: Goplat (~goplat@reactos/developer/Goplat) (Remote host closed the connection)</li>
+ <li id="l-379"><a href="#l-379">#</a> [06:03] * Joins: Goplat (~goplat@reactos/developer/Goplat)</li>
+ <li id="l-380"><a href="#l-380">#</a> [06:11] * Joins: estellevw (~estellevw@173-228-112-232.dsl.dynamic.sonic.net)</li>
+ <li id="l-381"><a href="#l-381">#</a> [06:17] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-382"><a href="#l-382">#</a> [06:21] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-383"><a href="#l-383">#</a> [06:22] * Quits: myakura (d25fff95@gateway/web/freenode/ip.210.95.255.149) (Quit: Page closed)</li>
+ <li id="l-384"><a href="#l-384">#</a> [06:24] * Quits: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149) (Ping timeout: 240 seconds)</li>
+ <li id="l-385"><a href="#l-385">#</a> [06:25] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-386"><a href="#l-386">#</a> [06:32] * Quits: jeffreyatw (~jeffreyat@199-241-200-45.PUBLIC.monkeybrains.net) (Quit: jeffreyatw)</li>
+ <li id="l-387"><a href="#l-387">#</a> [06:46] * Quits: Rastus_Vernon (uid15187@wikimedia/Rastus-Vernon) (Quit: Connection closed for inactivity)</li>
+ <li id="l-388"><a href="#l-388">#</a> [06:47] * Quits: jungkees (uid24208@gateway/web/irccloud.com/x-sxdmnfdqdcggwmqb) (Ping timeout: 245 seconds)</li>
+ <li id="l-389"><a href="#l-389">#</a> [06:47] * Quits: espadrine` (~ttyl@AMontsouris-158-1-15-151.w92-128.abo.wanadoo.fr) (Ping timeout: 240 seconds)</li>
+ <li id="l-390"><a href="#l-390">#</a> [06:47] * Quits: mattur_ (sid16049@gateway/web/irccloud.com/x-kosjhlfzwynuufpq) (Ping timeout: 245 seconds)</li>
+ <li id="l-391"><a href="#l-391">#</a> [06:48] * Quits: JakeA (uid3836@gateway/web/irccloud.com/x-amwuauijhiovzsxc) (Ping timeout: 245 seconds)</li>
+ <li id="l-392"><a href="#l-392">#</a> [06:48] * Joins: mattur_ (sid16049@gateway/web/irccloud.com/x-hwhzbavjxikprhuv)</li>
+ <li id="l-393"><a href="#l-393">#</a> [06:49] * Quits: benschwarz_ (sid2121@gateway/web/irccloud.com/x-hrrpuokenukxdomr) (Ping timeout: 276 seconds)</li>
+ <li id="l-394"><a href="#l-394">#</a> [06:50] * Joins: jungkees (uid24208@gateway/web/irccloud.com/x-vxurpkglrgcumsik)</li>
+ <li id="l-395"><a href="#l-395">#</a> [06:50] * Joins: benschwarz_ (sid2121@gateway/web/irccloud.com/x-lwfgtktwfrrisvfb)</li>
+ <li id="l-396"><a href="#l-396">#</a> [06:50] * Joins: JakeA (uid3836@gateway/web/irccloud.com/x-ondlcdextnftccgy)</li>
+ <li id="l-397"><a href="#l-397">#</a> [06:52] * Quits: rniwa (~rniwa@17.202.43.222) (Quit: rniwa)</li>
+ <li id="l-398"><a href="#l-398">#</a> [06:54] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-399"><a href="#l-399">#</a> [06:55] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-400"><a href="#l-400">#</a> [06:58] * Joins: espadrine` (~ttyl@AMontsouris-158-1-15-151.w92-128.abo.wanadoo.fr)</li>
+ <li id="l-401" _a="TabAtkins"><a href="#l-401">#</a> [07:00] &lt;TabAtkins&gt; Dunno.</li>
+ <li id="l-402"><a href="#l-402">#</a> [07:11] * Quits: llkats (~llkats@c-69-181-45-245.hsd1.ca.comcast.net)</li>
+ <li id="l-403"><a href="#l-403">#</a> [07:12] * Joins: yoav (~yoav@sdo26-1-78-245-148-181.fbx.proxad.net)</li>
+ <li id="l-404"><a href="#l-404">#</a> [07:20] * Joins: IZh (~IZh@0897578511.static.corbina.ru)</li>
+ <li id="l-405" _a="birtles_"><a href="#l-405">#</a> [07:21] * birtles_ is now known as birtles</li>
+ <li id="l-406"><a href="#l-406">#</a> [07:25] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-407"><a href="#l-407">#</a> [07:27] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-408"><a href="#l-408">#</a> [07:29] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-409"><a href="#l-409">#</a> [07:29] * Joins: BigBangUDR (~Thunderbi@220.225.242.27)</li>
+ <li id="l-410"><a href="#l-410">#</a> [07:34] * Joins: zdobersek (~zan@185.3.135.178)</li>
+ <li id="l-411" _a="astearns_"><a href="#l-411">#</a> [07:42] * astearns_ is now known as astearns</li>
+ <li id="l-412" _a="MikeSmith" _r="Hixie"><a href="#l-412">#</a> [07:45] &lt;MikeSmith&gt; Hixie: the URL spec doesn't like your data: URLs <a href="http://sideshowbarker.net:8888/?doc=http%3A%2F%2Fwhatwg.org%2Fspecs%2Fweb-apps%2Fcurrent-work%2F">http://sideshowbarker.net:8888/?doc=http%3A%2F%2Fwhatwg.org%2Fspecs%2Fweb-apps%2Fcurrent-work%2F</a></li>
+ <li id="l-413"><a href="#l-413">#</a> [07:49] * Quits: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-414"><a href="#l-414">#</a> [07:55] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-415"><a href="#l-415">#</a> [07:57] * Joins: Ducki (~Ducki@137.116.197.171)</li>
+ <li id="l-416"><a href="#l-416">#</a> [08:04] * Joins: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149)</li>
+ <li id="l-417" _a="zcorpan" _r="Hixie"><a href="#l-417">#</a> [08:04] &lt;zcorpan&gt; Hixie: i like the rotated labels :-)</li>
+ <li id="l-418"><a href="#l-418">#</a> [08:08] * Quits: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149) (Ping timeout: 240 seconds)</li>
+ <li id="l-419"><a href="#l-419">#</a> [08:17] * Parts: a-ja (~Instantbi@70.230.147.189)</li>
+ <li id="l-420"><a href="#l-420">#</a> [08:23] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-421"><a href="#l-421">#</a> [08:29] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-422"><a href="#l-422">#</a> [08:30] * Joins: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-423"><a href="#l-423">#</a> [08:40] * Quits: karlcow (~karl@nerval.la-grange.net) (Quit: :tiuQ tiuq sah woclrak)</li>
+ <li id="l-424"><a href="#l-424">#</a> [08:40] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-425"><a href="#l-425">#</a> [08:42] * Quits: roc (~chatzilla@60.234.66.18) (Ping timeout: 265 seconds)</li>
+ <li id="l-426"><a href="#l-426">#</a> [08:44] * Quits: diffalot (~diffalot@c-76-107-128-104.hsd1.ms.comcast.net) (Ping timeout: 276 seconds)</li>
+ <li id="l-427"><a href="#l-427">#</a> [08:44] * Quits: BigBangUDR (~Thunderbi@220.225.242.27) (Quit: BigBangUDR)</li>
+ <li id="l-428"><a href="#l-428">#</a> [08:47] * Joins: markkes (~markkes@62.207.90.201)</li>
+ <li id="l-429"><a href="#l-429">#</a> [08:49] * Joins: diffalot (~diffalot@c-76-107-128-104.hsd1.ms.comcast.net)</li>
+ <li id="l-430" _a="TabAtkins" _r="Hixie"><a href="#l-430">#</a> [08:51] &lt;TabAtkins&gt; Hixie: And I like the :target styling, and will try to steal it for CSS.</li>
+ <li id="l-431" _a="Hixie"><a href="#l-431">#</a> [08:52] &lt;Hixie&gt; man is <a href="https://github.com/domenic/promises-unwrapping/issues/24#issuecomment-43714664">https://github.com/domenic/promises-unwrapping/issues/24#issuecomment-43714664</a> really the kind of code we can expect to see when promises are everywhere? that's horrifying</li>
+ <li id="l-432" _a="Hixie"><a href="#l-432">#</a> [08:52] &lt;Hixie&gt; just long changes of method calls with no obvious control flow</li>
+ <li id="l-433" _a="Hixie"><a href="#l-433">#</a> [08:52] &lt;Hixie&gt; chains</li>
+ <li id="l-434" _a="Hixie" _r="TabAtkins"><a href="#l-434">#</a> [08:52] &lt;Hixie&gt; TabAtkins: cool</li>
+ <li id="l-435" _a="Hixie" _r="MikeSmith"><a href="#l-435">#</a> [08:53] &lt;Hixie&gt; MikeSmith: any idea which character it is it doesn't like?</li>
+ <li id="l-436" _a="TabAtkins" _r="Hixie"><a href="#l-436">#</a> [08:54] &lt;TabAtkins&gt; Hixie: That's already the code we have today with callback functions (see: &quot;callback hell&quot;), except it's worse today due to the rightward march.</li>
+ <li id="l-437" _a="TabAtkins"><a href="#l-437">#</a> [08:54] &lt;TabAtkins&gt; Also terrible error-handling, no free synchronization primitives, etc.</li>
+ <li id="l-438" _a="Hixie"><a href="#l-438">#</a> [08:55] &lt;Hixie&gt; i don't recall every writing code that hard to read</li>
+ <li id="l-439" _a="TabAtkins" _r="Hixie"><a href="#l-439">#</a> [08:55] &lt;TabAtkins&gt; Hixie: Promise code is as close as we can get to straight-line sync code without new JS facilities.</li>
+ <li id="l-440" _a="TabAtkins"><a href="#l-440">#</a> [08:55] &lt;TabAtkins&gt; And new JS facilities *are* coming - the &quot;await&quot; keyword lets you write code that looks sync.</li>
+ <li id="l-441"><a href="#l-441">#</a> [08:55] * Quits: lmclister (~lmclister@c-98-210-38-110.hsd1.ca.comcast.net)</li>
+ <li id="l-442" _a="Hixie"><a href="#l-442">#</a> [08:56] &lt;Hixie&gt; yeah except i'll never be able to use it because it screws up throwing TypeErrors...</li>
+ <li id="l-443" _a="MikeSmith" _r="Hixie"><a href="#l-443">#</a> [08:56] &lt;MikeSmith&gt; Hixie: the braces I think</li>
+ <li id="l-444" _a="TabAtkins" _r="Actually"><a href="#l-444">#</a> [08:56] &lt;TabAtkins&gt; Actually, &quot;await fetch()&quot; I suspect would throw a rejection.</li>
+ <li id="l-445" _a="Hixie" _r="MikeSmith"><a href="#l-445">#</a> [08:56] &lt;Hixie&gt; MikeSmith: ah</li>
+ <li id="l-446" _a="TabAtkins"><a href="#l-446">#</a> [08:56] &lt;TabAtkins&gt; No sure I've heard it.</li>
+ <li id="l-447"><a href="#l-447">#</a> [08:56] * Joins: Ms2ger (~Ms2ger@212.216-242-81.adsl-dyn.isp.belgacom.be)</li>
+ <li id="l-448" _a="TabAtkins" _r="Rather"><a href="#l-448">#</a> [08:56] &lt;TabAtkins&gt; Rather, &quot;not sure I've heard of the specific plans for what 'await' does for rejections&quot;.</li>
+ <li id="l-449" _a="TabAtkins"><a href="#l-449">#</a> [08:57] &lt;TabAtkins&gt; Because `try { await fetch(...) } catch(e) {...}` can get CPT-transformed into good code for you, in a way that is super clumsy and terrible when doing straight promises by themselves.</li>
+ <li id="l-450" _a="TabAtkins"><a href="#l-450">#</a> [08:58] &lt;TabAtkins&gt; If it makes you feel better, just remember that using raw promises everywhere is a middle step in the evolution of good async handling.</li>
+ <li id="l-451" _a="TabAtkins"><a href="#l-451">#</a> [08:58] &lt;TabAtkins&gt; (And that no matter how bad you think it looks, it looks much worse today.)</li>
+ <li id="l-452" _a="TabAtkins"><a href="#l-452">#</a> [08:58] &lt;TabAtkins&gt; (And if you think you write elegant beautiful callback-hell code, you can do the same thing with promises.)</li>
+ <li id="l-453"><a href="#l-453">#</a> [08:58] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-454" _a="TabAtkins" _r="Hixie"><a href="#l-454">#</a> [09:00] &lt;TabAtkins&gt; Hixie: Basically, check out <a href="http://www.xanthir.com/b4P_0">http://www.xanthir.com/b4P_0</a>. We're still in the Mauvascript stage of async code, with Promises being a pretty band-aid.</li>
+ <li id="l-455" _a="Hixie"><a href="#l-455">#</a> [09:02] &lt;Hixie&gt; i don't understand why .foo('5') should fail one way when you typoed &quot;foo&quot; and a different way when you typoed its argument.</li>
+ <li id="l-456" _a="MikeSmith" _r="Hixie"><a href="#l-456">#</a> [09:03] &lt;MikeSmith&gt; Hixie: btw I notice my chrome doesn't scroll to the right place when I visit <a href="http://url.spec.whatwg.org/#url-code-points">http://url.spec.whatwg.org/#url-code-points</a> (though Firefox does). I wonder if it's a side effect of the spec stylesheet redesign, and the :target thing</li>
+ <li id="l-457" _a="Hixie" _r="MikeSmith"><a href="#l-457">#</a> [09:03] &lt;Hixie&gt; MikeSmith: yeah i've noticed that too. i think it might be, though no idea why or how</li>
+ <li id="l-458" _a="MikeSmith"><a href="#l-458">#</a> [09:03] &lt;MikeSmith&gt; seems like a chrome bug</li>
+ <li id="l-459"><a href="#l-459">#</a> [09:04] * Quits: roven (~roven@78-20-24-80.access.telenet.be) (Ping timeout: 252 seconds)</li>
+ <li id="l-460" _a="Ms2ger"><a href="#l-460">#</a> [09:04] &lt;Ms2ger&gt; Good morning, Hixie</li>
+ <li id="l-461" _a="Hixie"><a href="#l-461">#</a> [09:05] &lt;Hixie&gt; yeah i really should head to bed</li>
+ <li id="l-462"><a href="#l-462">#</a> [09:06] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-463" _a="TabAtkins" _r="Hixie"><a href="#l-463">#</a> [09:16] &lt;TabAtkins&gt; Hixie: I typed a more involved argument into GitHub.</li>
+ <li id="l-464" _a="TabAtkins"><a href="#l-464">#</a> [09:16] &lt;TabAtkins&gt; One you have `await` it won't be different (when you use await).</li>
+ <li id="l-465" _a="TabAtkins"><a href="#l-465">#</a> [09:17] &lt;TabAtkins&gt; Right now, and in the future when you're operating on the promise directly, it'll just be a wart from JS not supporting async from the get-go.  Oh well.</li>
+ <li id="l-466"><a href="#l-466">#</a> [09:17] * Quits: Goplat (~goplat@reactos/developer/Goplat) (Remote host closed the connection)</li>
+ <li id="l-467" _a="Ms2ger" _r="Yay"><a href="#l-467">#</a> [09:18] &lt;Ms2ger&gt; Yay, more warts</li>
+ <li id="l-468"><a href="#l-468">#</a> [09:18] * Joins: richt (~richt@83.218.67.123)</li>
+ <li id="l-469" _a="TabAtkins"><a href="#l-469">#</a> [09:19] &lt;TabAtkins&gt; It's an existing wart, so whatevs.</li>
+ <li id="l-470" _a="Ms2ger"><a href="#l-470">#</a> [09:19] &lt;Ms2ger&gt; I think it's funny how quickly promises moved from &quot;the bright new future&quot; to &quot;wart&quot;</li>
+ <li id="l-471" _a="TabAtkins"><a href="#l-471">#</a> [09:20] &lt;TabAtkins&gt; If JS had some different syntax for calling things async, it'd probably work - the language would catch any errors for you and package them into a rejected promise automatically.</li>
+ <li id="l-472" _a="TabAtkins" _r="Ms2ger"><a href="#l-472">#</a> [09:20] &lt;TabAtkins&gt; Ms2ger: Why are you implying they aren't both?</li>
+ <li id="l-473"><a href="#l-473">#</a> [09:20] * Joins: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149)</li>
+ <li id="l-474" _a="zcorpan" _r="annevk"><a href="#l-474">#</a> [09:20] &lt;zcorpan&gt; annevk: seems we're gonna try url(&quot;...&quot; crossorigin etc); and you have to use quotes. possibly also support image(&quot;...&quot; crossorigin etc, &lt;color&gt;);</li>
+ <li id="l-475" _a="TabAtkins"><a href="#l-475">#</a> [09:20] &lt;TabAtkins&gt; Promises are the stepping stone towards good async, representing the base notion of an &quot;async value&quot;.  They're great, and enable tons of great things that'll make lots of different programming concepts better.</li>
+ <li id="l-476" _a="TabAtkins" _r="annevk"><a href="#l-476">#</a> [09:21] &lt;TabAtkins&gt; annevk: Specifically, I'm pretty sure I can adjust Syntax to parse a quoted-string url() as a plain function(), leaving only unquoted urls as a url-token.</li>
+ <li id="l-477" _a="TabAtkins"><a href="#l-477">#</a> [09:21] &lt;TabAtkins&gt; s/function()/function-token/</li>
+ <li id="l-478" _a="TabAtkins" _r="SimonSapin"><a href="#l-478">#</a> [09:22] &lt;TabAtkins&gt; SimonSapin: ^^^ also</li>
+ <li id="l-479"><a href="#l-479">#</a> [09:27] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-480" _a="SimonSapin" _r="TabAtkins"><a href="#l-480">#</a> [09:28] &lt;SimonSapin&gt; TabAtkins: I’m missing context. Why would you want to do that?</li>
+ <li id="l-481" _a="SimonSapin" _r="Also"><a href="#l-481">#</a> [09:29] &lt;SimonSapin&gt; Also, how? It doesn’t sound possible unless you make tokenization context-aware</li>
+ <li id="l-482" _a="IZh"><a href="#l-482">#</a> [09:32] &lt;IZh&gt; Is it possible for IDs to end with &quot;?&quot; character?</li>
+ <li id="l-483"><a href="#l-483">#</a> [09:33] * Joins: ^esc (~esc-ape@178.115.129.108.wireless.dyn.drei.com)</li>
+ <li id="l-484" _a="IZh"><a href="#l-484">#</a> [09:33] &lt;IZh&gt; The spec has one. And a href to it.</li>
+ <li id="l-485"><a href="#l-485">#</a> [09:33] * Joins: victorbjelkholm (~victorbje@41.Red-83-60-204.dynamicIP.rima-tde.net)</li>
+ <li id="l-486"><a href="#l-486">#</a> [09:34] * Joins: Smylers (~smylers@217.39.7.253)</li>
+ <li id="l-487" _a="mathiasbynens" _r="IZh"><a href="#l-487">#</a> [09:36] &lt;mathiasbynens&gt; IZh: sure, IDs can contain any symbol except for spaces <a href="http://mathiasbynens.be/notes/html5-id-class">http://mathiasbynens.be/notes/html5-id-class</a></li>
+ <li id="l-488"><a href="#l-488">#</a> [09:37] * Quits: victorbjelkholm (~victorbje@41.Red-83-60-204.dynamicIP.rima-tde.net) (Client Quit)</li>
+ <li id="l-489"><a href="#l-489">#</a> [09:40] * Quits: Smylers (~smylers@217.39.7.253) (Ping timeout: 240 seconds)</li>
+ <li id="l-490" _a="TabAtkins" _r="SimonSapin"><a href="#l-490">#</a> [09:40] &lt;TabAtkins&gt; SimonSapin: Nope, no context-awareness needed.</li>
+ <li id="l-491" _a="TabAtkins" _r="SimonSapin"><a href="#l-491">#</a> [09:41] &lt;TabAtkins&gt; SimonSapin: After seeing &quot;url(&quot;, consume whitespace until the next character is non-whitespace.  If it's a double or single quote, return a function token named &quot;url&quot;, otherwise switch into the crazytimes unquoted url consuming code.</li>
+ <li id="l-492"><a href="#l-492">#</a> [09:42] * Joins: roven (~roven@78-20-24-80.access.telenet.be)</li>
+ <li id="l-493" _a="TabAtkins" _r="IZh"><a href="#l-493">#</a> [09:42] &lt;TabAtkins&gt; IZh: Note that HTML IDs and the CSS ID selector have different syntaxes.  You could write &lt;div id=&quot;foo?&quot;&gt;, but to select it would need #foo\?.</li>
+ <li id="l-494" _a="TabAtkins" _r="SimonSapin"><a href="#l-494">#</a> [09:44] &lt;TabAtkins&gt; SimonSapin: The reasoning is so we can add cors, integrity, etc to urls in CSS without having to invent a function with a new name.</li>
+ <li id="l-495" _a="SimonSapin" _r="TabAtkins"><a href="#l-495">#</a> [09:44] &lt;SimonSapin&gt; TabAtkins: Oh, so &lt;function-token&gt; only for URLs with quoted strings. I thought you meant &lt;function-token name=url content=[&lt;unquoted-url-body&gt;]&gt;</li>
+ <li id="l-496" _a="TabAtkins"><a href="#l-496">#</a> [09:45] &lt;TabAtkins&gt; Yup.</li>
+ <li id="l-497" _a="IZh"><a href="#l-497">#</a> [09:45] &lt;IZh&gt; The spec has &lt;a href=#is-this-html5?&gt;...&lt;/a&gt; and &lt;h3 id=is-this-html5?&gt;...&lt;/h3&gt;.</li>
+ <li id="l-498" _a="TabAtkins" _r="IZh"><a href="#l-498">#</a> [09:45] &lt;TabAtkins&gt; IZh: Yeah, that works.</li>
+ <li id="l-499" _a="TabAtkins"><a href="#l-499">#</a> [09:46] &lt;TabAtkins&gt; (? has a meaning in urls, but only *before* the hash.  Once you're in the hash ? doesn't mean anything special.)</li>
+ <li id="l-500" _a="TabAtkins" _r="zcorpan"><a href="#l-500">#</a> [09:47] &lt;TabAtkins&gt; zcorpan: What's the &quot;rotated labels&quot; you talked about?</li>
+ <li id="l-501"><a href="#l-501">#</a> [09:47] * Quits: tav (~tav`@host31-52-138-103.range31-52.btcentralplus.com) (Quit: tav)</li>
+ <li id="l-502"><a href="#l-502">#</a> [09:47] * Joins: cheron (~cheron@unaffiliated/cheron)</li>
+ <li id="l-503" _a="SimonSapin" _r="TabAtkins"><a href="#l-503">#</a> [09:48] &lt;SimonSapin&gt; TabAtkins: sounds reasonable. There is a slight impl bug potential in forgetting to update some of the parser places that expect a url token to also look for a function token with name URL, but it may be worth it</li>
+ <li id="l-504" _a="TabAtkins" _r="SimonSapin"><a href="#l-504">#</a> [09:48] &lt;TabAtkins&gt; SimonSapin: Yeah, good point.</li>
+ <li id="l-505"><a href="#l-505">#</a> [09:50] * Joins: Smylers (~smylers@81.143.60.194)</li>
+ <li id="l-506" _a="TabAtkins" _r="SimonSapin"><a href="#l-506">#</a> [09:52] &lt;TabAtkins&gt; SimonSapin: If we were allowed to output multiple tokens in a single pass to/from the initial state, we could handle unquoted urls as functions just fine.</li>
+ <li id="l-507" _a="TabAtkins" _r="Hm"><a href="#l-507">#</a> [09:52] &lt;TabAtkins&gt; Hm, except for bad-url I guess.</li>
+ <li id="l-508"><a href="#l-508">#</a> [09:54] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-509" _a="zcorpan" _r="TabAtkins"><a href="#l-509">#</a> [09:56] &lt;zcorpan&gt; TabAtkins: &quot;Note&quot; etc in the html spec. you need a browser that supports unprefixed 'transform'</li>
+ <li id="l-510" _a="SimonSapin"><a href="#l-510">#</a> [09:56] &lt;SimonSapin&gt; Some bad-url would become parser-level errors</li>
+ <li id="l-511"><a href="#l-511">#</a> [09:57] * Quits: IZh (~IZh@0897578511.static.corbina.ru) (Remote host closed the connection)</li>
+ <li id="l-512"><a href="#l-512">#</a> [09:58] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-513"><a href="#l-513">#</a> [09:58] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Remote host closed the connection)</li>
+ <li id="l-514" _a="TabAtkins" _r="zcorpan"><a href="#l-514">#</a> [09:59] &lt;TabAtkins&gt; zcorpan: Ah, kk.</li>
+ <li id="l-515"><a href="#l-515">#</a> [09:59] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-516" _a="TabAtkins" _r="SimonSapin"><a href="#l-516">#</a> [10:00] &lt;TabAtkins&gt; SimonSapin: I guess we could still output an error token in that case with the same effect - it's a token that's guaranteed to never be in any grammar.</li>
+ <li id="l-517" _a="TabAtkins"><a href="#l-517">#</a> [10:00] &lt;TabAtkins&gt; But anyway, the guarantee that we only ever output one token per pass is a nice quality to preserve.</li>
+ <li id="l-518" _a="TabAtkins"><a href="#l-518">#</a> [10:01] &lt;TabAtkins&gt; I suppose we could just add a single bit of state to the tokenizer - an &quot;in unquoted url?&quot; bool.</li>
+ <li id="l-519" _a="benjamingr" _r="Hixie"><a href="#l-519">#</a> [10:01] &lt;benjamingr&gt; Hixie: half (read 95%) of the time with promises you're not in a sync context but in a promise chain anyway, just like in callbacks often you're inside an emitter callback. A promise rejection that's unhandled causes the chain to stop running (unless it is handled). Throwing synchronously means you create different behavior when you start the chain and when</li>
+ <li id="l-520" _a="benjamingr"><a href="#l-520">#</a> [10:01] &lt;benjamingr&gt; you're running it.</li>
+ <li id="l-521" _a="benjamingr"><a href="#l-521">#</a> [10:04] &lt;benjamingr&gt; Maybe you have a point and we have to wrap the initial API calls with `Promise.try` (in ES6, Promise.resolve().then) calls anyway though, thinking about it.</li>
+ <li id="l-522" _a="TabAtkins"><a href="#l-522">#</a> [10:08] &lt;TabAtkins&gt; I mean, that's certainly *a* way to go about things, to guarantee that any mistakes you make don't cause something crazy.</li>
+ <li id="l-523"><a href="#l-523">#</a> [10:14] * Quits: jdaggett (~jdaggett@61-121-216-2.bitcat.net) (Ping timeout: 276 seconds)</li>
+ <li id="l-524"><a href="#l-524">#</a> [10:23] * Quits: dbaron (~dbaron@corp-nat.p2p.sfo1.mozilla.com) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-525"><a href="#l-525">#</a> [10:26] * Joins: BigBangUDR (~Thunderbi@220.225.242.27)</li>
+ <li id="l-526"><a href="#l-526">#</a> [10:30] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-527"><a href="#l-527">#</a> [10:35] * Quits: zcorpan (d25fff95@gateway/web/freenode/ip.210.95.255.149) (Ping timeout: 240 seconds)</li>
+ <li id="l-528"><a href="#l-528">#</a> [10:40] * Joins: IZh (~IZh@83.220.239.43)</li>
+ <li id="l-529"><a href="#l-529">#</a> [10:40] * Quits: IZh (~IZh@83.220.239.43) (Remote host closed the connection)</li>
+ <li id="l-530" _a="JakeA" _r="annevk"><a href="#l-530">#</a> [10:45] &lt;JakeA&gt; annevk: <a href="https://github.com/slightlyoff/ServiceWorker/issues/285">https://github.com/slightlyoff/ServiceWorker/issues/285</a> - you're saying 1. would be the CSS base url, right?</li>
+ <li id="l-531" _a="JakeA" _r="annevk"><a href="#l-531">#</a> [10:45] &lt;JakeA&gt; annevk: Because I think Alex thinks it's 2.</li>
+ <li id="l-532" _a="JakeA" _r="annevk"><a href="#l-532">#</a> [10:45] &lt;JakeA&gt; annevk: (and I think it should be 3, so yey!)</li>
+ <li id="l-533" _a="annevk" _r="JakeA"><a href="#l-533">#</a> [10:47] &lt;annevk&gt; JakeA: I think it should be 3 if you use default()</li>
+ <li id="l-534" _a="annevk" _r="JakeA"><a href="#l-534">#</a> [10:47] &lt;annevk&gt; JakeA: otherwise the /fallback.html stuff sucks</li>
+ <li id="l-535" _a="annevk" _r="JakeA"><a href="#l-535">#</a> [10:48] &lt;annevk&gt; JakeA: a good way to think about it is what URL you'd expect in the address bar</li>
+ <li id="l-536" _a="JakeA" _r="annevk"><a href="#l-536">#</a> [10:48] &lt;JakeA&gt; annevk: This is for a CSS subresource, not a navigate. What do you think the base url would be using the code as it is (using fetch())</li>
+ <li id="l-537" _a="annevk" _r="JakeA"><a href="#l-537">#</a> [10:49] &lt;annevk&gt; JakeA: I think it should be 1</li>
+ <li id="l-538"><a href="#l-538">#</a> [10:49] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-539" _a="annevk" _r="JakeA"><a href="#l-539">#</a> [10:49] &lt;annevk&gt; JakeA: I realize this is for CSS, but I don't think we should apply different semantics to navigate necessarily</li>
+ <li id="l-540" _a="annevk" _r="JakeA"><a href="#l-540">#</a> [10:49] &lt;annevk&gt; JakeA: the only thing that's special about navigate is that the invoking algorithm needs to have a say in redirect handling</li>
+ <li id="l-541"><a href="#l-541">#</a> [10:50] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-542"><a href="#l-542">#</a> [10:50] * Quits: nunnun (~hiro@2001:200:164:48:20c:29ff:fe02:11d2) (Quit: Bye)</li>
+ <li id="l-543" _a="annevk" _r="TabAtkins"><a href="#l-543">#</a> [10:51] &lt;annevk&gt; TabAtkins: url(&quot;...&quot; ...) sounds nice</li>
+ <li id="l-544"><a href="#l-544">#</a> [10:51] * Joins: nunnun (~hiro@2001:200:164:48:20c:29ff:fe02:11d2)</li>
+ <li id="l-545"><a href="#l-545">#</a> [10:53] * Quits: cabanier (sid15093@gateway/web/irccloud.com/x-ozkimgpwrpfutmrf) (Ping timeout: 258 seconds)</li>
+ <li id="l-546"><a href="#l-546">#</a> [10:55] * Joins: cabanier (sid15093@gateway/web/irccloud.com/x-ddimfazltpzfcrpz)</li>
+ <li id="l-547"><a href="#l-547">#</a> [11:03] * Quits: plutoniix (~plutoniix@210.213.57.70) (Quit: จรลี จรลา)</li>
+ <li id="l-548"><a href="#l-548">#</a> [11:04] * Joins: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-549"><a href="#l-549">#</a> [11:04] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Read error: Connection reset by peer)</li>
+ <li id="l-550"><a href="#l-550">#</a> [11:05] * Quits: tmfsd (sid26422@gateway/web/irccloud.com/x-jokgsszvfavssvzn) (Ping timeout: 264 seconds)</li>
+ <li id="l-551"><a href="#l-551">#</a> [11:07] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-552"><a href="#l-552">#</a> [11:08] * Joins: tmfsd (sid26422@gateway/web/irccloud.com/x-ubmvgswbygmufrhp)</li>
+ <li id="l-553"><a href="#l-553">#</a> [11:10] * Quits: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-554"><a href="#l-554">#</a> [11:13] * Quits: BigBangUDR (~Thunderbi@220.225.242.27) (Quit: BigBangUDR)</li>
+ <li id="l-555" _a="JakeA" _r="annevk"><a href="#l-555">#</a> [11:17] &lt;JakeA&gt; annevk: yeah, that makes sense. Just hate the magic of event.default(). What about request.followRedirects, which would be true for stuff coming through event.request?</li>
+ <li id="l-556" _a="JakeA"><a href="#l-556">#</a> [11:18] &lt;JakeA&gt; So fetch(event.request) would return an OpaqueResponse redirect if it hit one</li>
+ <li id="l-557" _a="annevk" _r="JakeA"><a href="#l-557">#</a> [11:19] &lt;annevk&gt; JakeA: where is this proposal specified?</li>
+ <li id="l-558" _a="JakeA" _r="annevk"><a href="#l-558">#</a> [11:19] &lt;JakeA&gt; annevk: In IRC just now :D</li>
+ <li id="l-559"><a href="#l-559">#</a> [11:20] * Quits: Streusel (~Anonymous@unaffiliated/streusel) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-560" _a="annevk" _r="JakeA"><a href="#l-560">#</a> [11:20] &lt;annevk&gt; JakeA: what is an &lt;img&gt; element going to do if it gets handed an OpaqueResponse? It'll just fail</li>
+ <li id="l-561" _a="JakeA" _r="annevk"><a href="#l-561">#</a> [11:21] &lt;JakeA&gt; annevk: If the OpaqueResponse is a redirect, doesn't the fetch spec deal with the rest of the redirects?</li>
+ <li id="l-562"><a href="#l-562">#</a> [11:22] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-563"><a href="#l-563">#</a> [11:22] * Joins: Lachy (~Lachy@213.166.174.2)</li>
+ <li id="l-564" _a="JakeA" _r="annevk"><a href="#l-564">#</a> [11:22] &lt;JakeA&gt; annevk: (also, images will render OpaqueResponses fine, but they'll taint canvases)</li>
+ <li id="l-565" _a="annevk" _r="JakeA"><a href="#l-565">#</a> [11:22] &lt;annevk&gt; JakeA: (not if the OpaqueResponse is a redirect)</li>
+ <li id="l-566" _a="annevk" _r="JakeA"><a href="#l-566">#</a> [11:23] &lt;annevk&gt; JakeA: I think the idea was that only an explicit redirect from the service worker would be handled by Fetch</li>
+ <li id="l-567" _a="annevk" _r="JakeA"><a href="#l-567">#</a> [11:23] &lt;annevk&gt; JakeA: anything else would just be passed back up the stack</li>
+ <li id="l-568" _a="annevk"><a href="#l-568">#</a> [11:24] &lt;annevk&gt; Although I guess I can see arguments both ways... Hmm</li>
+ <li id="l-569" _a="JakeA" _r="annevk"><a href="#l-569">#</a> [11:24] &lt;JakeA&gt; annevk: Is an OpaqueResponse redirect not an explicit redirect?</li>
+ <li id="l-570" _a="JakeA"><a href="#l-570">#</a> [11:24] &lt;JakeA&gt; I thought that was how event.default() would work</li>
+ <li id="l-571" _a="JakeA"><a href="#l-571">#</a> [11:25] &lt;JakeA&gt; if event.default() resolves to a redirect, it must be OpaqueResponse for security reasons</li>
+ <li id="l-572" _a="annevk" _r="JakeA"><a href="#l-572">#</a> [11:28] &lt;annevk&gt; JakeA: an explicit redirect would be something like new RedirectResponse({status:301, location:...})</li>
+ <li id="l-573" _a="JakeA" _r="annevk"><a href="#l-573">#</a> [11:29] &lt;JakeA&gt; annevk: But isn't exposing that a security no-no?</li>
+ <li id="l-574" _a="annevk" _r="JakeA"><a href="#l-574">#</a> [11:29] &lt;annevk&gt; JakeA: no, only network-level redirects cannot be exposed</li>
+ <li id="l-575" _a="annevk" _r="JakeA"><a href="#l-575">#</a> [11:29] &lt;annevk&gt; JakeA: sorry, we would also not expose that one to the API, we would indeed follow it</li>
+ <li id="l-576" _a="annevk" _r="JakeA"><a href="#l-576">#</a> [11:30] &lt;annevk&gt; JakeA: but not because of security</li>
+ <li id="l-577" _a="JakeA" _r="annevk"><a href="#l-577">#</a> [11:30] &lt;JakeA&gt; annevk: what does event.default() resolve to if it hits a redirect?</li>
+ <li id="l-578" _a="JakeA"><a href="#l-578">#</a> [11:32] &lt;JakeA&gt; I thought it would be a redirect response, which would be opaque for security reasons</li>
+ <li id="l-579"><a href="#l-579">#</a> [11:35] * Quits: KevinMarks (~yaaic@2607:fb90:212a:1795:dc53:91fa:58e0:4449) (Ping timeout: 252 seconds)</li>
+ <li id="l-580" _a="annevk" _r="JakeA"><a href="#l-580">#</a> [11:35] &lt;annevk&gt; JakeA: it depends on the request instance</li>
+ <li id="l-581"><a href="#l-581">#</a> [11:36] * Joins: KevinMarks (~yaaic@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+ <li id="l-582" _a="annevk" _r="JakeA"><a href="#l-582">#</a> [11:36] &lt;annevk&gt; JakeA: if the manual redirect flag is not set (most cases), it just follows them and hands back a &quot;flattened&quot; response</li>
+ <li id="l-583"><a href="#l-583">#</a> [11:37] * Quits: benschwarz_ (sid2121@gateway/web/irccloud.com/x-lwfgtktwfrrisvfb) (Read error: Connection reset by peer)</li>
+ <li id="l-584" _a="JakeA" _r="annevk"><a href="#l-584">#</a> [11:37] &lt;JakeA&gt; annevk: But there's a difference between SW doing the flattening and the fetch spec doing the flattening</li>
+ <li id="l-585" _a="annevk" _r="JakeA"><a href="#l-585">#</a> [11:37] &lt;annevk&gt; JakeA: Fetch does it</li>
+ <li id="l-586"><a href="#l-586">#</a> [11:37] * Joins: benschwarz_ (sid2121@gateway/web/irccloud.com/x-xhaeqxquxpiokswu)</li>
+ <li id="l-587" _a="JakeA" _r="annevk"><a href="#l-587">#</a> [11:38] &lt;JakeA&gt; annevk: If you do fetch(url) the response url will always be the original url, despite redirects, right?</li>
+ <li id="l-588"><a href="#l-588">#</a> [11:38] * Joins: BigBangUDR (~Thunderbi@220.225.242.27)</li>
+ <li id="l-589" _a="annevk" _r="JakeA"><a href="#l-589">#</a> [11:38] &lt;annevk&gt; JakeA: the only case where an SW might be able to have another crack at a redirect (and this depends on the context) is when the manual redirect flag is set (navigate) or when the SW returns a redirect it created itself</li>
+ <li id="l-590" _a="JakeA"><a href="#l-590">#</a> [11:38] &lt;JakeA&gt; agreed</li>
+ <li id="l-591" _a="annevk" _r="JakeA"><a href="#l-591">#</a> [11:39] &lt;annevk&gt; JakeA: if you do fetch(url) the response's url will be the final url</li>
+ <li id="l-592" _a="annevk" _r="JakeA"><a href="#l-592">#</a> [11:39] &lt;annevk&gt; JakeA: no different from XHR.responseURL</li>
+ <li id="l-593" _a="annevk" _r="JakeA"><a href="#l-593">#</a> [11:39] &lt;annevk&gt; JakeA: however, it's not clear the layer above SW (Fetch) cares about that URL</li>
+ <li id="l-594" _a="annevk" _r="JakeA"><a href="#l-594">#</a> [11:40] &lt;annevk&gt; JakeA: my assumption has been that it does not, because of the /fallback and other cases</li>
+ <li id="l-595" _a="JakeA" _r="annevk"><a href="#l-595">#</a> [11:40] &lt;JakeA&gt; annevk: I thought we couldn't expose responseURL for security reasons</li>
+ <li id="l-596" _a="annevk" _r="JakeA"><a href="#l-596">#</a> [11:41] &lt;annevk&gt; JakeA: it might not be exposed in all cases</li>
+ <li id="l-597" _a="annevk" _r="JakeA"><a href="#l-597">#</a> [11:41] &lt;annevk&gt; JakeA: depends on the type of response</li>
+ <li id="l-598" _a="annevk"><a href="#l-598">#</a> [11:41] &lt;annevk&gt; (but it's certainly known to the UA)</li>
+ <li id="l-599" _a="JakeA"><a href="#l-599">#</a> [11:41] &lt;JakeA&gt; yeah</li>
+ <li id="l-600" _a="annevk"><a href="#l-600">#</a> [11:44] &lt;annevk&gt; XHR can always expose it because XHR only does CORS, no tainted stuff</li>
+ <li id="l-601" _a="JakeA" _r="annevk"><a href="#l-601">#</a> [11:44] &lt;JakeA&gt; annevk: event.default() returns a redirect if it hits one, which gets handed back to the fetch spec, which either hands that to the top level (if manual redirect is set) or follows the redirects without further SW interaction &amp; uses the final url as the base url, right?</li>
+ <li id="l-602" _a="JakeA"><a href="#l-602">#</a> [11:45] &lt;JakeA&gt; (by top level I mean the fetch spec caller, sorry)</li>
+ <li id="l-603" _a="annevk"><a href="#l-603">#</a> [11:45] &lt;annevk&gt; event.default() invokes Fetch with the original request instance and an override to bypass the SW; whatever it gets out of that it hands back to the SW</li>
+ <li id="l-604" _a="annevk"><a href="#l-604">#</a> [11:46] &lt;annevk&gt; so it's very much like fetch() except that it uses the original request instance</li>
+ <li id="l-605"><a href="#l-605">#</a> [11:48] * Quits: timeless (sid4015@firefox/developer/timeless) (Ping timeout: 240 seconds)</li>
+ <li id="l-606" _a="annevk"><a href="#l-606">#</a> [11:48] &lt;annevk&gt; (which also means it modifies the original request instance and therefore response's url and such are different; there's some details to figure out there as obviously the Request object exposed in the API cannot change, that needs to be a snapshot)</li>
+ <li id="l-607" _a="JakeA" _r="annevk"><a href="#l-607">#</a> [11:50] &lt;JakeA&gt; annevk: So, going back to the CSS example, how does the response from respondWith(event.default()) end up with a difference base url than respondWith(fetch(event.request))?</li>
+ <li id="l-608" _a="annevk"><a href="#l-608">#</a> [11:50] &lt;annevk&gt; I wish we had gone through this more at the F2F, I tried to push for it but everyone else seemed to think it was somehow clear...</li>
+ <li id="l-609" _a="JakeA" _r="annevk"><a href="#l-609">#</a> [11:51] &lt;JakeA&gt; annevk: Thanks for going through it now though. Happy to jump on VC if you think it'd be easier</li>
+ <li id="l-610" _a="annevk" _r="JakeA"><a href="#l-610">#</a> [11:51] &lt;annevk&gt; JakeA: fetch() creates a new (you could think of it as nested) instance of the request</li>
+ <li id="l-611"><a href="#l-611">#</a> [11:51] * Joins: Lachy_ (~Lachy@tmo-096-247.customers.d1-online.com)</li>
+ <li id="l-612"><a href="#l-612">#</a> [11:51] * Joins: timeless (sid4015@firefox/developer/timeless)</li>
+ <li id="l-613" _a="JakeA" _r="annevk"><a href="#l-613">#</a> [11:52] &lt;JakeA&gt; annevk: I don't think it matters what fetch() does, as the base url is set in the fetch spec, once it gets a response from SW</li>
+ <li id="l-614" _a="JakeA" _r="annevk"><a href="#l-614">#</a> [11:52] &lt;JakeA&gt; annevk: As far as I can tell, the fetch spec gets the response from SW, and sets its response url (for base purposes) to request.url</li>
+ <li id="l-615"><a href="#l-615">#</a> [11:53] * Quits: Lachy (~Lachy@213.166.174.2) (Ping timeout: 240 seconds)</li>
+ <li id="l-616" _a="JakeA" _r="annevk"><a href="#l-616">#</a> [11:54] &lt;JakeA&gt; annevk: That's how the example on <a href="https://github.com/slightlyoff/ServiceWorker/issues/285">https://github.com/slightlyoff/ServiceWorker/issues/285</a> becomes 1.</li>
+ <li id="l-617" _a="annevk" _r="JakeA"><a href="#l-617">#</a> [11:54] &lt;annevk&gt; JakeA: Fetch gets a Request R1, opens SW, SW initaties a *new* Fetch with R2 using fetch() and gets back a response, hands that back to R1 (R1 never saw it's url field change so sets that on the response)</li>
+ <li id="l-618" _a="annevk" _r="JakeA"><a href="#l-618">#</a> [11:54] &lt;annevk&gt; JakeA: default() however keeps using R1</li>
+ <li id="l-619" _a="JakeA"><a href="#l-619">#</a> [11:56] &lt;JakeA&gt; Ohhh ok *thinks*</li>
+ <li id="l-620"><a href="#l-620">#</a> [11:57] * Joins: Lachy (~Lachy@213.166.174.2)</li>
+ <li id="l-621" _a="annevk"><a href="#l-621">#</a> [11:58] * annevk is still trying to go through the IRC backlog</li>
+ <li id="l-622" _a="JakeA" _r="Sorry"><a href="#l-622">#</a> [11:58] &lt;JakeA&gt; Sorry, I realise I'm not helping</li>
+ <li id="l-623"><a href="#l-623">#</a> [11:59] * Joins: satazor (~satazor@bl17-218-25.dsl.telepac.pt)</li>
+ <li id="l-624"><a href="#l-624">#</a> [12:00] * Quits: Lachy_ (~Lachy@tmo-096-247.customers.d1-online.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-625" _a="JakeA" _r="annevk"><a href="#l-625">#</a> [12:03] &lt;JakeA&gt; annevk: I thought the fetch spec would open SW before step 7 of <a href="http://fetch.spec.whatwg.org/#concept-http-fetch">http://fetch.spec.whatwg.org/#concept-http-fetch</a>, but the response would still hit step 10 that deals with redirects &amp; 304</li>
+ <li id="l-626" _a="annevk" _r="JakeA"><a href="#l-626">#</a> [12:03] &lt;annevk&gt; JakeA: heh, it's just very long today, that's all</li>
+ <li id="l-627" _a="JakeA"><a href="#l-627">#</a> [12:05] &lt;JakeA&gt; so if the SW respondWith a redirect (opaque or not), it'd go through step 10, and follow the redirect but ignoring the SW</li>
+ <li id="l-628" _a="annevk" _r="JakeA"><a href="#l-628">#</a> [12:06] &lt;annevk&gt; JakeA: well, a) it would follow the redirect if the manual redirect flag was unset and b) it would go back into the SW as following a redirect invokes Fetch</li>
+ <li id="l-629"><a href="#l-629">#</a> [12:06] * Joins: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-630"><a href="#l-630">#</a> [12:06] * Joins: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt)</li>
+ <li id="l-631"><a href="#l-631">#</a> [12:09] * Quits: satazor (~satazor@bl17-218-25.dsl.telepac.pt) (Ping timeout: 255 seconds)</li>
+ <li id="l-632"><a href="#l-632">#</a> [12:09] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-633"><a href="#l-633">#</a> [12:10] * Quits: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-634"><a href="#l-634">#</a> [12:14] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-635" _a="annevk"><a href="#l-635">#</a> [12:19] &lt;annevk&gt; &quot;I really wish people would just read the spec that Ian wrote and what I wrote about this on es-discuss in the past instead of making random assumptions...&quot;</li>
+ <li id="l-636" _a="annevk"><a href="#l-636">#</a> [12:19] &lt;annevk&gt; <a href="https://github.com/domenic/promises-unwrapping/issues/108#issuecomment-43691121">https://github.com/domenic/promises-unwrapping/issues/108#issuecomment-43691121</a></li>
+ <li id="l-637"><a href="#l-637">#</a> [12:19] * Joins: coolbot95 (~coolbot95@gateway/tor-sasl/coolbot95)</li>
+ <li id="l-638"><a href="#l-638">#</a> [12:21] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-639" _a="Ms2ger"><a href="#l-639">#</a> [12:25] &lt;Ms2ger&gt; Let's move everything into ES</li>
+ <li id="l-640" _a="Ms2ger"><a href="#l-640">#</a> [12:25] &lt;Ms2ger&gt; There will certainly be no issues integrating them with the platform</li>
+ <li id="l-641"><a href="#l-641">#</a> [12:27] * Joins: darobin (~darobin@78.109.80.74)</li>
+ <li id="l-642" _a="annevk" _r="Ms2ger"><a href="#l-642">#</a> [12:32] &lt;annevk&gt; Ms2ger: go do some homework :p</li>
+ <li id="l-643" _a="Ms2ger" _r="Nah"><a href="#l-643">#</a> [12:32] &lt;Ms2ger&gt; Nah, I see what happens to bz's homework</li>
+ <li id="l-644"><a href="#l-644">#</a> [12:55] * Quits: BigBangUDR (~Thunderbi@220.225.242.27) (Quit: BigBangUDR)</li>
+ <li id="l-645"><a href="#l-645">#</a> [13:02] * Joins: dbaron (~dbaron@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-646"><a href="#l-646">#</a> [13:08] * Quits: Ms2ger (~Ms2ger@212.216-242-81.adsl-dyn.isp.belgacom.be) (Ping timeout: 258 seconds)</li>
+ <li id="l-647"><a href="#l-647">#</a> [13:09] * Quits: zdobersek (~zan@185.3.135.178) (Quit: Leaving.)</li>
+ <li id="l-648"><a href="#l-648">#</a> [13:20] * Joins: zcorpan (~zcorpan@113.199.41.81)</li>
+ <li id="l-649"><a href="#l-649">#</a> [13:22] * Joins: barnabywalters (~barnabywa@46-239-239-203.tal.is)</li>
+ <li id="l-650"><a href="#l-650">#</a> [13:35] * Quits: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt) (Remote host closed the connection)</li>
+ <li id="l-651"><a href="#l-651">#</a> [13:36] * Joins: satazor (~satazor@bl17-218-25.dsl.telepac.pt)</li>
+ <li id="l-652"><a href="#l-652">#</a> [13:36] * Joins: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt)</li>
+ <li id="l-653"><a href="#l-653">#</a> [13:37] * Quits: Kolombiken (~Adium@94.137.124.2) (Quit: Leaving.)</li>
+ <li id="l-654"><a href="#l-654">#</a> [13:41] * Quits: satazor (~satazor@bl17-218-25.dsl.telepac.pt) (Ping timeout: 276 seconds)</li>
+ <li id="l-655"><a href="#l-655">#</a> [13:41] * Joins: Kolombiken (~Adium@gateway.creuna.se)</li>
+ <li id="l-656"><a href="#l-656">#</a> [13:47] * Quits: zcorpan (~zcorpan@113.199.41.81) (Remote host closed the connection)</li>
+ <li id="l-657"><a href="#l-657">#</a> [13:49] * Joins: scor (scor@nat/acquia/x-qibcgyoktqddohqy)</li>
+ <li id="l-658"><a href="#l-658">#</a> [13:49] * Quits: scor (scor@nat/acquia/x-qibcgyoktqddohqy) (Changing host)</li>
+ <li id="l-659"><a href="#l-659">#</a> [13:49] * Joins: scor (scor@drupal.org/user/52142/view)</li>
+ <li id="l-660"><a href="#l-660">#</a> [13:51] * Quits: Lachy (~Lachy@213.166.174.2) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-661"><a href="#l-661">#</a> [13:52] * Joins: Lachy (~Lachy@213.166.174.2)</li>
+ <li id="l-662"><a href="#l-662">#</a> [13:53] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-663" _a="Krinkle|detached"><a href="#l-663">#</a> [14:02] * Krinkle|detached is now known as Krinkle</li>
+ <li id="l-664"><a href="#l-664">#</a> [14:04] * Joins: newtron (~newtron@199.71.174.203)</li>
+ <li id="l-665" _a="annevk" _r="JakeA"><a href="#l-665">#</a> [14:05] &lt;annevk&gt; JakeA: might want to check the logs regarding script loading</li>
+ <li id="l-666" _a="annevk" _r="JakeA"><a href="#l-666">#</a> [14:05] &lt;annevk&gt; JakeA: seems &lt;script needs&gt; or some such is still floating around</li>
+ <li id="l-667" _a="JakeA"><a href="#l-667">#</a> [14:05] * JakeA sobs</li>
+ <li id="l-668" _a="annevk" _r="JakeA"><a href="#l-668">#</a> [14:13] &lt;annevk&gt; JakeA: if you don't like it you should talk to Hixie</li>
+ <li id="l-669" _a="annevk" _r="JakeA"><a href="#l-669">#</a> [14:13] &lt;annevk&gt; JakeA: seems like he's investing time in it</li>
+ <li id="l-670" _a="JakeA" _r="annevk"><a href="#l-670">#</a> [14:14] &lt;JakeA&gt; annevk: I'm not really against it, it was just a really painful thread last time around</li>
+ <li id="l-671" _a="JakeA" _r="Hixie"><a href="#l-671">#</a> [14:16] &lt;JakeA&gt; Hixie: Domenic: If we have &lt;link rel=preload&gt; which has a .loaded promise, you can do most of this delayed execution stuff yourself</li>
+ <li id="l-672" _a="JakeA" _r="Hixie"><a href="#l-672">#</a> [14:18] &lt;JakeA&gt; Hixie: Domenic: But for the simple case, I don't think we need anything more complex than &lt;script depends=&quot;.css-selector&quot;&gt;, where the CSS selector points to other script/img/link elements</li>
+ <li id="l-673" _a="JakeA"><a href="#l-673">#</a> [14:20] &lt;JakeA&gt; The dependencies can be calculated at document insertion time, which avoids circular dependencies. Also &lt;script depends=&quot;script&quot;&gt; becomes a handy way to do sequential execution</li>
+ <li id="l-674"><a href="#l-674">#</a> [14:24] * Joins: smaug____ (~chatzilla@a91-154-44-207.elisa-laajakaista.fi)</li>
+ <li id="l-675" _a="annevk" _r="JakeA"><a href="#l-675">#</a> [14:29] &lt;annevk&gt; JakeA: seems Hixie added ele.addDependency(promise) to the mix</li>
+ <li id="l-676"><a href="#l-676">#</a> [14:29] * Joins: tj_vantoll (~Adium@2601:4:5380:eba:d08e:e5b7:26d5:e54a)</li>
+ <li id="l-677" _a="JakeA"><a href="#l-677">#</a> [14:30] &lt;JakeA&gt; I think that's where having preload primitives is better. You can do whatever you want then</li>
+ <li id="l-678"><a href="#l-678">#</a> [14:33] * Quits: smaug____ (~chatzilla@a91-154-44-207.elisa-laajakaista.fi) (Remote host closed the connection)</li>
+ <li id="l-679"><a href="#l-679">#</a> [14:33] * Joins: smaug____ (~chatzilla@a91-154-44-207.elisa-laajakaista.fi)</li>
+ <li id="l-680"><a href="#l-680">#</a> [14:35] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-681"><a href="#l-681">#</a> [14:38] * Joins: Ms2ger (~Ms2ger@nata241.ugent.be)</li>
+ <li id="l-682" _a="toyoshim"><a href="#l-682">#</a> [14:40] * toyoshim is now known as toyoshiAw</li>
+ <li id="l-683"><a href="#l-683">#</a> [14:40] * Joins: bzed_ (~bzed@devel.recluse.de)</li>
+ <li id="l-684"><a href="#l-684">#</a> [14:42] * Quits: bzed (~bzed@devel.recluse.de) (Ping timeout: 245 seconds)</li>
+ <li id="l-685" _a="bzed_"><a href="#l-685">#</a> [14:42] * bzed_ is now known as bzed</li>
+ <li id="l-686"><a href="#l-686">#</a> [14:44] * Joins: jdaggett (~jdaggett@q023013.dynamic.ppp.asahi-net.or.jp)</li>
+ <li id="l-687"><a href="#l-687">#</a> [14:47] * Quits: Kolombiken (~Adium@gateway.creuna.se) (Quit: Leaving.)</li>
+ <li id="l-688"><a href="#l-688">#</a> [14:52] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-689"><a href="#l-689">#</a> [14:54] * Joins: Kolombiken (~Adium@gateway.creuna.se)</li>
+ <li id="l-690"><a href="#l-690">#</a> [14:56] * Joins: npcomp (~eldon@50-13-195-119.gar.clearwire-wmx.net)</li>
+ <li id="l-691"><a href="#l-691">#</a> [15:02] * Quits: tj_vantoll (~Adium@2601:4:5380:eba:d08e:e5b7:26d5:e54a) (Read error: Connection reset by peer)</li>
+ <li id="l-692"><a href="#l-692">#</a> [15:05] * Joins: aiglesias (~aiglesias@host236.190-30-21.telecom.net.ar)</li>
+ <li id="l-693"><a href="#l-693">#</a> [15:06] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-694"><a href="#l-694">#</a> [15:06] * Joins: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-695"><a href="#l-695">#</a> [15:09] * Joins: tj_vantoll (~Adium@c-98-250-130-237.hsd1.mi.comcast.net)</li>
+ <li id="l-696"><a href="#l-696">#</a> [15:09] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-697"><a href="#l-697">#</a> [15:10] * Quits: aiglesias (~aiglesias@host236.190-30-21.telecom.net.ar) (Remote host closed the connection)</li>
+ <li id="l-698"><a href="#l-698">#</a> [15:10] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-699"><a href="#l-699">#</a> [15:22] * Quits: Kolombiken (~Adium@gateway.creuna.se) (Quit: Leaving.)</li>
+ <li id="l-700"><a href="#l-700">#</a> [15:23] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-701" _a="jcgregorio" _r="annevk"><a href="#l-701">#</a> [15:27] &lt;jcgregorio&gt; annevk: I thought Object.observe didn't work for DOM?</li>
+ <li id="l-702" _a="jcgregorio"><a href="#l-702">#</a> [15:27] &lt;jcgregorio&gt; re navigator.language shipping thread</li>
+ <li id="l-703" _a="annevk" _r="jcgregorio"><a href="#l-703">#</a> [15:27] &lt;annevk&gt; jcgregorio: it has hooks</li>
+ <li id="l-704" _a="annevk" _r="jcgregorio"><a href="#l-704">#</a> [15:28] &lt;annevk&gt; jcgregorio: it doesn't work for everything, e.g. you wouldn't want it for ele.innerHTML, but for things where we already dispatch events it's fine</li>
+ <li id="l-705" _a="jcgregorio"><a href="#l-705">#</a> [15:31] &lt;jcgregorio&gt; ah ok, and for everything else there's MutationObserver?</li>
+ <li id="l-706"><a href="#l-706">#</a> [15:31] * Joins: zcorpan (~zcorpan@113.199.41.81)</li>
+ <li id="l-707"><a href="#l-707">#</a> [15:32] * Joins: BigBangUDR (~Thunderbi@115.245.32.168)</li>
+ <li id="l-708" _a="annevk" _r="jcgregorio"><a href="#l-708">#</a> [15:36] &lt;annevk&gt; jcgregorio: I guess it's more like MutationObserver is for trees, and O.o is for most other things</li>
+ <li id="l-709"><a href="#l-709">#</a> [15:40] * Quits: Ms2ger (~Ms2ger@nata241.ugent.be) (Ping timeout: 255 seconds)</li>
+ <li id="l-710"><a href="#l-710">#</a> [15:40] * Quits: BigBangUDR (~Thunderbi@115.245.32.168) (Ping timeout: 240 seconds)</li>
+ <li id="l-711"><a href="#l-711">#</a> [15:44] * Joins: fabiofl (~fabiofl@179.153.232.110)</li>
+ <li id="l-712"><a href="#l-712">#</a> [15:45] * Quits: dbaron (~dbaron@corp-nat.p2p.sfo1.mozilla.com) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-713"><a href="#l-713">#</a> [15:45] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-714"><a href="#l-714">#</a> [15:47] * Quits: dshwang (dshwang@nat/intel/x-qdwpuzvajnbclbgk) (Remote host closed the connection)</li>
+ <li id="l-715" _a="caitp"><a href="#l-715">#</a> [15:48] &lt;caitp&gt; annevk (or others), is there a specific status code that should be expected when fetch/xhr send times out?</li>
+ <li id="l-716" _a="caitp"><a href="#l-716">#</a> [15:49] &lt;caitp&gt; I'm not seeing one mentioned in fetch, but it's being asked about in a separate channel</li>
+ <li id="l-717"><a href="#l-717">#</a> [15:50] * Joins: Kolombiken (~Adium@gateway.creuna.se)</li>
+ <li id="l-718" _a="annevk" _r="caitp"><a href="#l-718">#</a> [15:50] &lt;annevk&gt; caitp: 0</li>
+ <li id="l-719" _a="caitp"><a href="#l-719">#</a> [15:50] &lt;caitp&gt; where is that actually specified?</li>
+ <li id="l-720" _a="annevk" _r="caitp"><a href="#l-720">#</a> [15:51] &lt;annevk&gt; caitp: last bit is <a href="http://xhr.spec.whatwg.org/#request-error-steps">http://xhr.spec.whatwg.org/#request-error-steps</a> where it sets response to a network error (whose status is 0)</li>
+ <li id="l-721"><a href="#l-721">#</a> [15:51] * Joins: dshwang (~dshwang@134.134.137.75)</li>
+ <li id="l-722"><a href="#l-722">#</a> [15:51] * Joins: plutoniix (~plutoniix@node-19es.pool-101-109.dynamic.totbb.net)</li>
+ <li id="l-723" _a="annevk"><a href="#l-723">#</a> [15:52] &lt;annevk&gt; One thing that could be improved is that XMLHttpRequest currently does not check the timeout attribute value continuously, seems a bit buggy</li>
+ <li id="l-724" _a="caitp"><a href="#l-724">#</a> [15:57] &lt;caitp&gt; I believe it's stated in the specification (and tested in the wpt) that setting the attribute means setting the timeout to a new value relative to the start of the request, if a request had already started</li>
+ <li id="l-725" _a="caitp"><a href="#l-725">#</a> [15:58] &lt;caitp&gt; which should mean &quot;dispatch timeout if that time has already elapsed&quot;</li>
+ <li id="l-726" _a="annevk" _r="caitp"><a href="#l-726">#</a> [15:58] &lt;annevk&gt; caitp: that's the bug I just mentioned</li>
+ <li id="l-727" _a="caitp"><a href="#l-727">#</a> [15:59] &lt;caitp&gt; I'm not sure what you mean then, why would it need to be checked continuously if the behaviour that would happen when checking it, happens when the value changes?</li>
+ <li id="l-728" _a="annevk"><a href="#l-728">#</a> [15:59] &lt;annevk&gt; if 50ms is enough accuracy I could just piggyback on the callbacks from Fetch</li>
+ <li id="l-729" _a="annevk" _r="caitp"><a href="#l-729">#</a> [15:59] &lt;annevk&gt; caitp: you might change the value to enlarge the window, but yeah, could be done in multiple ways, patches welcome</li>
+ <li id="l-730" _a="jgraham" _r="hober"><a href="#l-730">#</a> [16:01] &lt;jgraham&gt; hober: I think people still at Opera like critic too :p</li>
+ <li id="l-731"><a href="#l-731">#</a> [16:01] * Joins: Maurice (copyman@5ED57922.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-732" _a="jgraham"><a href="#l-732">#</a> [16:02] &lt;jgraham&gt; (but actually it generally seems like people who use it a bit don't have too many complaints, which fits my hypothesis that it's basically a good tool, with a learning curve and a slightly aesthetically displeasing frontend)</li>
+ <li id="l-733" _a="caitp"><a href="#l-733">#</a> [16:02] &lt;caitp&gt; i'm still not sure what you mean, it seems like the instructions are spelled out, they just don't seem to be normative / are expressed sort of like hints</li>
+ <li id="l-734" _a="caitp"><a href="#l-734">#</a> [16:02] &lt;caitp&gt; so if there's a bug, it's more that it's not expressed as a MUST or even SHOULD</li>
+ <li id="l-735"><a href="#l-735">#</a> [16:03] * Joins: BigBangUDR (~Thunderbi@101.56.26.116)</li>
+ <li id="l-736"><a href="#l-736">#</a> [16:03] * Quits: BigBangUDR (~Thunderbi@101.56.26.116) (Client Quit)</li>
+ <li id="l-737" _a="annevk" _r="caitp"><a href="#l-737">#</a> [16:07] &lt;annevk&gt; caitp: there's none of that, everything follows from &quot;The send(data) method must run these steps:&quot;</li>
+ <li id="l-738"><a href="#l-738">#</a> [16:09] * Quits: jdaggett (~jdaggett@q023013.dynamic.ppp.asahi-net.or.jp) (Quit: jdaggett)</li>
+ <li id="l-739" _a="caitp"><a href="#l-739">#</a> [16:10] &lt;caitp&gt; <a href="http://xhr.spec.whatwg.org/#dom-xmlhttprequest-timeout">http://xhr.spec.whatwg.org/#dom-xmlhttprequest-timeout</a> it's more the &quot;note&quot; section, it's very awkward to have something like this stated as &quot;this implies...&quot;</li>
+ <li id="l-740" _a="caitp"><a href="#l-740">#</a> [16:11] &lt;caitp&gt; fetch doesn't really make any mention of the behaviour dictated by this note, and nor does anywhere else in xhr, as far as I can see</li>
+ <li id="l-741" _a="annevk" _r="caitp"><a href="#l-741">#</a> [16:13] &lt;annevk&gt; caitp: right, that's why I said the text in the send() section is somewhat buggy</li>
+ <li id="l-742"><a href="#l-742">#</a> [16:14] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 252 seconds)</li>
+ <li id="l-743" _a="caitp" _r="okay"><a href="#l-743">#</a> [16:14] &lt;caitp&gt; okay, I see what you're getting at</li>
+ <li id="l-744"><a href="#l-744">#</a> [16:15] * Joins: tav (~tav`@host31-52-138-103.range31-52.btcentralplus.com)</li>
+ <li id="l-745"><a href="#l-745">#</a> [16:27] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-746"><a href="#l-746">#</a> [16:31] * Joins: NDoc_ (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net)</li>
+ <li id="l-747"><a href="#l-747">#</a> [16:32] * Quits: NDoc_ (~NDoc@c-68-80-107-173.hsd1.pa.comcast.net) (Client Quit)</li>
+ <li id="l-748"><a href="#l-748">#</a> [16:40] * Joins: aiglesias (~aiglesias@147-195-17-190.fibertel.com.ar)</li>
+ <li id="l-749" _a="zcorpan" _r="annevk"><a href="#l-749">#</a> [16:51] &lt;zcorpan&gt; annevk: i introduced a new flag to &lt;img&gt; that is not exposed to JS in <a href="https://github.com/ResponsiveImagesCG/picture-element/pull/179">https://github.com/ResponsiveImagesCG/picture-element/pull/179</a> to fix <a href="https://code.google.com/p/chromium/issues/detail?id=372971">https://code.google.com/p/chromium/issues/detail?id=372971</a></li>
+ <li id="l-750" _a="zcorpan" _r="annevk"><a href="#l-750">#</a> [16:52] &lt;zcorpan&gt; annevk: but you can get an img with the flag set by doing innerHTML = '&lt;img&gt;' on an element in a document without a browsing context</li>
+ <li id="l-751" _a="zcorpan"><a href="#l-751">#</a> [16:52] &lt;zcorpan&gt; not sure if this is relevant to the &quot;implement a browser in JS&quot; thing or whatever</li>
+ <li id="l-752" _a="annevk" _r="zcorpan"><a href="#l-752">#</a> [16:52] &lt;annevk&gt; zcorpan: I'm not sure what you're asking me, but &quot;await a stable state&quot; was recently factored out</li>
+ <li id="l-753" _a="annevk" _r="zcorpan"><a href="#l-753">#</a> [16:53] &lt;annevk&gt; zcorpan: ah I see</li>
+ <li id="l-754" _a="annevk" _r="zcorpan"><a href="#l-754">#</a> [16:53] &lt;annevk&gt; zcorpan: for that bit I recommend filing an issue here: <a href="https://github.com/dglazkov/html-as-custom-elements/issues">https://github.com/dglazkov/html-as-custom-elements/issues</a></li>
+ <li id="l-755" _a="zcorpan" _r="annevk"><a href="#l-755">#</a> [16:54] &lt;zcorpan&gt; annevk: &quot;await a stable state&quot; is still defined, it's just defined in terms of microtasks</li>
+ <li id="l-756" _a="annevk" _r="zcorpan"><a href="#l-756">#</a> [16:54] &lt;annevk&gt; zcorpan: for removing &quot;await a stable state&quot; I suggest looking at how Hixie did that</li>
+ <li id="l-757" _a="annevk"><a href="#l-757">#</a> [16:54] &lt;annevk&gt; oh</li>
+ <li id="l-758"><a href="#l-758">#</a> [16:54] * Quits: richt (~richt@83.218.67.123) (Remote host closed the connection)</li>
+ <li id="l-759" _a="annevk"><a href="#l-759">#</a> [16:54] &lt;annevk&gt; fair enough</li>
+ <li id="l-760" _a="zcorpan"><a href="#l-760">#</a> [16:54] &lt;zcorpan&gt; so that should be fine i think. the img move happened after the stable state changes</li>
+ <li id="l-761"><a href="#l-761">#</a> [16:55] * Joins: richt (~richt@83.218.67.123)</li>
+ <li id="l-762" _a="annevk"><a href="#l-762">#</a> [16:56] &lt;annevk&gt; Sometimes I wish the other XMLHttpRequest editors fixed some bugs</li>
+ <li id="l-763" _a="zcorpan"><a href="#l-763">#</a> [16:58] &lt;zcorpan&gt; ok filed <a href="https://github.com/dglazkov/html-as-custom-elements/issues/15">https://github.com/dglazkov/html-as-custom-elements/issues/15</a></li>
+ <li id="l-764"><a href="#l-764">#</a> [16:59] * Quits: richt (~richt@83.218.67.123) (Ping timeout: 252 seconds)</li>
+ <li id="l-765"><a href="#l-765">#</a> [17:01] * Quits: fabiofl (~fabiofl@179.153.232.110) (Quit: Lingo - <a href="http://lingoirc.com">http://lingoirc.com</a>)</li>
+ <li id="l-766"><a href="#l-766">#</a> [17:02] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 240 seconds)</li>
+ <li id="l-767" _a="zcorpan"><a href="#l-767">#</a> [17:04] &lt;zcorpan&gt; <a href="https://www.igvita.com/2014/05/20/script-injected-async-scripts-considered-harmful/">https://www.igvita.com/2014/05/20/script-injected-async-scripts-considered-harmful/</a> - was there any progress on declarative dependencies thing to get ordered execution for &lt;script src async&gt;?</li>
+ <li id="l-768"><a href="#l-768">#</a> [17:07] * Quits: mven (~textual@ip68-104-38-84.lv.lv.cox.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-769"><a href="#l-769">#</a> [17:14] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-770" _a="annevk" _r="zcorpan"><a href="#l-770">#</a> [17:15] &lt;annevk&gt; zcorpan: see discussion from today's logs before we woke up</li>
+ <li id="l-771"><a href="#l-771">#</a> [17:16] * Joins: richt (~richt@c83-248-137-176.bredband.comhem.se)</li>
+ <li id="l-772"><a href="#l-772">#</a> [17:23] * Joins: adactio (~adactio@cowo.umcowo.garagebilk.net)</li>
+ <li id="l-773"><a href="#l-773">#</a> [17:24] * Quits: markkes (~markkes@62.207.90.201) (Ping timeout: 252 seconds)</li>
+ <li id="l-774"><a href="#l-774">#</a> [17:25] * Quits: zcorpan (~zcorpan@113.199.41.81) (Remote host closed the connection)</li>
+ <li id="l-775"><a href="#l-775">#</a> [17:30] * Joins: BigBangUDR (~Thunderbi@123.239.190.7)</li>
+ <li id="l-776"><a href="#l-776">#</a> [17:36] * Quits: BigBangUDR (~Thunderbi@123.239.190.7) (Ping timeout: 255 seconds)</li>
+ <li id="l-777"><a href="#l-777">#</a> [17:37] * Quits: ehsan (~ehsan@24-212-207-29.cable.teksavvy.com) (Remote host closed the connection)</li>
+ <li id="l-778"><a href="#l-778">#</a> [17:41] * Quits: npcomp (~eldon@50-13-195-119.gar.clearwire-wmx.net) (Quit: leaving)</li>
+ <li id="l-779" _a="annevk" _r="smaug____"><a href="#l-779">#</a> [17:43] &lt;annevk&gt; smaug____: if XHR provided a way to disable 401 dialogs, what should we call the flag?</li>
+ <li id="l-780" _a="annevk" _r="smaug____"><a href="#l-780">#</a> [17:45] &lt;annevk&gt; smaug____: disableUserAgentAidedAuthentication</li>
+ <li id="l-781" _a="annevk"><a href="#l-781">#</a> [17:45] &lt;annevk&gt; disableAssistedAuthentication</li>
+ <li id="l-782" _a="Hixie" _r="annevk"><a href="#l-782">#</a> [17:46] &lt;Hixie&gt; annevk: 'await a stable state' is still there, actually, what was factored out is 'provide a stable state'.</li>
+ <li id="l-783" _a="Hixie"><a href="#l-783">#</a> [17:46] &lt;Hixie&gt; 'await a stable state' now just queues a microtask</li>
+ <li id="l-784" _a="annevk" _r="Hixie"><a href="#l-784">#</a> [17:46] &lt;annevk&gt; Hixie: yeah zcorpan pointed that out, my bad</li>
+ <li id="l-785" _a="Hixie"><a href="#l-785">#</a> [17:46] &lt;Hixie&gt; ah right</li>
+ <li id="l-786" _a="smaug____"><a href="#l-786">#</a> [17:46] &lt;smaug____&gt; hmm</li>
+ <li id="l-787" _a="smaug____"><a href="#l-787">#</a> [17:47] &lt;smaug____&gt; the flag should have something about unauthorized</li>
+ <li id="l-788" _a="annevk" _r="JakeA"><a href="#l-788">#</a> [17:47] &lt;annevk&gt; JakeA: this could be another difference between default() and fetch(); whether UA assisted authentication is enabled</li>
+ <li id="l-789" _a="annevk" _r="smaug____"><a href="#l-789">#</a> [17:48] &lt;annevk&gt; smaug____: disable401Handling</li>
+ <li id="l-790" _a="smaug____"><a href="#l-790">#</a> [17:48] &lt;smaug____&gt; heh</li>
+ <li id="l-791" _a="smaug____" _r="though"><a href="#l-791">#</a> [17:48] &lt;smaug____&gt; though, that is pretty clear</li>
+ <li id="l-792" _a="annevk" _r="smaug____"><a href="#l-792">#</a> [17:48] &lt;annevk&gt; smaug____: Unauthorized is hard to spell</li>
+ <li id="l-793" _a="annevk" _r="smaug____"><a href="#l-793">#</a> [17:48] &lt;annevk&gt; smaug____: and I don't think we want to mess with proxy authentication</li>
+ <li id="l-794" _a="JakeA" _r="annevk"><a href="#l-794">#</a> [17:49] &lt;JakeA&gt; annevk: Makes sense</li>
+ <li id="l-795" _a="annevk" _r="JakeA"><a href="#l-795">#</a> [17:49] &lt;annevk&gt; JakeA: for new APIs I'd really like to avoid popping up auth dialogs</li>
+ <li id="l-796" _a="JakeA" _r="annevk"><a href="#l-796">#</a> [17:50] &lt;JakeA&gt; annevk: Should only be for navigations. Probably top-level at that</li>
+ <li id="l-797" _a="annevk" _r="smaug____"><a href="#l-797">#</a> [17:50] &lt;annevk&gt; smaug____: can also have disable304Handling at some point</li>
+ <li id="l-798" _a="annevk" _r="JakeA"><a href="#l-798">#</a> [17:50] &lt;annevk&gt; JakeA: currently pretty much everything does them</li>
+ <li id="l-799" _a="annevk" _r="JakeA"><a href="#l-799">#</a> [17:50] &lt;annevk&gt; JakeA: might actually be compat problem to remove them</li>
+ <li id="l-800" _a="smaug____"><a href="#l-800">#</a> [17:50] &lt;smaug____&gt; I kind of like having the number there</li>
+ <li id="l-801" _a="annevk" _r="JakeA"><a href="#l-801">#</a> [17:50] &lt;annevk&gt; JakeA: for things like &lt;img&gt;</li>
+ <li id="l-802"><a href="#l-802">#</a> [17:51] * Joins: svl (~me@ip565744a7.direct-adsl.nl)</li>
+ <li id="l-803" _a="JakeA" _r="annevk"><a href="#l-803">#</a> [17:51] &lt;JakeA&gt; annevk: Yeah, actually hit that issue this morning. Interestingly, Chrome doesn't seem to support username:password@ urls on images</li>
+ <li id="l-804" _a="JakeA"><a href="#l-804">#</a> [17:51] &lt;JakeA&gt; iOS seems to</li>
+ <li id="l-805" _a="JakeA"><a href="#l-805">#</a> [17:52] &lt;JakeA&gt; Didn't test anything else</li>
+ <li id="l-806" _a="JakeA"><a href="#l-806">#</a> [17:52] &lt;JakeA&gt; Had to add an iframe to the page with the username:password@ url, *then* the images would load</li>
+ <li id="l-807"><a href="#l-807">#</a> [17:52] * Quits: karlcow (~karl@nerval.la-grange.net) (Ping timeout: 258 seconds)</li>
+ <li id="l-808" _a="annevk" _r="JakeA"><a href="#l-808">#</a> [17:52] &lt;annevk&gt; JakeA: Fetch supports both variants, it's up to the API to define whether URL credentials take effect</li>
+ <li id="l-809" _a="JakeA"><a href="#l-809">#</a> [17:52] &lt;JakeA&gt; But the iframe made iOS have a phishing panic</li>
+ <li id="l-810"><a href="#l-810">#</a> [17:53] * Joins: Ms2ger (~Ms2ger@212.216-242-81.adsl-dyn.isp.belgacom.be)</li>
+ <li id="l-811" _a="annevk" _r="smaug____"><a href="#l-811">#</a> [17:53] &lt;annevk&gt; smaug____: ta</li>
+ <li id="l-812"><a href="#l-812">#</a> [17:54] * Joins: karlcow (~karl@nerval.la-grange.net)</li>
+ <li id="l-813"><a href="#l-813">#</a> [17:57] * Joins: adactio_ (~adactio@tmo-097-88.customers.d1-online.com)</li>
+ <li id="l-814"><a href="#l-814">#</a> [17:57] * Quits: adactio (~adactio@cowo.umcowo.garagebilk.net) (Ping timeout: 264 seconds)</li>
+ <li id="l-815" _a="adactio_"><a href="#l-815">#</a> [17:57] * adactio_ is now known as adactio</li>
+ <li id="l-816"><a href="#l-816">#</a> [17:58] * Quits: adactio (~adactio@tmo-097-88.customers.d1-online.com) (Read error: No route to host)</li>
+ <li id="l-817"><a href="#l-817">#</a> [18:00] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-818"><a href="#l-818">#</a> [18:01] * Joins: adactio (~adactio@cowo.umcowo.garagebilk.net)</li>
+ <li id="l-819"><a href="#l-819">#</a> [18:01] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 240 seconds)</li>
+ <li id="l-820"><a href="#l-820">#</a> [18:02] * Joins: lmclister (~lmclister@192.150.10.210)</li>
+ <li id="l-821"><a href="#l-821">#</a> [18:04] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net) (Ping timeout: 255 seconds)</li>
+ <li id="l-822"><a href="#l-822">#</a> [18:06] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-823"><a href="#l-823">#</a> [18:13] * Joins: ehsan (~ehsan@66.207.208.102)</li>
+ <li id="l-824"><a href="#l-824">#</a> [18:14] * Joins: mpt (~mpt@nat/canonical/x-cuejqbwksoeoyfeh)</li>
+ <li id="l-825"><a href="#l-825">#</a> [18:14] * Quits: mpt (~mpt@nat/canonical/x-cuejqbwksoeoyfeh) (Changing host)</li>
+ <li id="l-826"><a href="#l-826">#</a> [18:14] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-827" _a="annevk" _r="Ms2ger"><a href="#l-827">#</a> [18:15] &lt;annevk&gt; Ms2ger: constraints seems correct, no?</li>
+ <li id="l-828"><a href="#l-828">#</a> [18:16] * Quits: Lachy (~Lachy@213.166.174.2) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-829"><a href="#l-829">#</a> [18:17] * Quits: darobin (~darobin@78.109.80.74) (Remote host closed the connection)</li>
+ <li id="l-830"><a href="#l-830">#</a> [18:21] * Quits: estellevw (~estellevw@173-228-112-232.dsl.dynamic.sonic.net) (Quit: Snuggling with the puppies)</li>
+ <li id="l-831"><a href="#l-831">#</a> [18:29] * Quits: Smylers (~smylers@81.143.60.194) (Ping timeout: 265 seconds)</li>
+ <li id="l-832"><a href="#l-832">#</a> [18:31] * Parts: adactio (~adactio@cowo.umcowo.garagebilk.net)</li>
+ <li id="l-833"><a href="#l-833">#</a> [18:31] * Quits: richt (~richt@c83-248-137-176.bredband.comhem.se) (Remote host closed the connection)</li>
+ <li id="l-834"><a href="#l-834">#</a> [18:32] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-835"><a href="#l-835">#</a> [18:35] * Joins: jeffreyatw (~jeffreyat@173.247.197.10)</li>
+ <li id="l-836"><a href="#l-836">#</a> [18:38] * Joins: ap_ (~ap@2620:149:4:304:5d6a:e774:4735:d973)</li>
+ <li id="l-837" _a="ap_"><a href="#l-837">#</a> [18:38] * ap_ is now known as ap</li>
+ <li id="l-838"><a href="#l-838">#</a> [18:43] * Quits: diffalot (~diffalot@c-76-107-128-104.hsd1.ms.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-839"><a href="#l-839">#</a> [18:46] * Joins: Smylers (~smylers@94.116.25.223)</li>
+ <li id="l-840"><a href="#l-840">#</a> [18:47] * Joins: diffalot (~diffalot@c-76-107-128-104.hsd1.ms.comcast.net)</li>
+ <li id="l-841"><a href="#l-841">#</a> [18:47] * Joins: NDoc (NDoc@2600:3c02::f03c:91ff:fe6e:605c)</li>
+ <li id="l-842"><a href="#l-842">#</a> [18:51] * Quits: Smylers (~smylers@94.116.25.223) (Ping timeout: 265 seconds)</li>
+ <li id="l-843"><a href="#l-843">#</a> [19:01] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-844" _a="tantek"><a href="#l-844">#</a> [19:02] * tantek is now known as would</li>
+ <li id="l-845" _a="would"><a href="#l-845">#</a> [19:03] * would is now known as tantek</li>
+ <li id="l-846"><a href="#l-846">#</a> [19:05] * Quits: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net) (Ping timeout: 255 seconds)</li>
+ <li id="l-847"><a href="#l-847">#</a> [19:07] * Quits: jensnockert_ (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Remote host closed the connection)</li>
+ <li id="l-848"><a href="#l-848">#</a> [19:09] * Quits: cheron (~cheron@unaffiliated/cheron) (Ping timeout: 240 seconds)</li>
+ <li id="l-849"><a href="#l-849">#</a> [19:10] * Joins: cheron (~cheron@unaffiliated/cheron)</li>
+ <li id="l-850"><a href="#l-850">#</a> [19:13] * Joins: jsbell (jsbell@nat/google/x-htictdvutivycrfx)</li>
+ <li id="l-851"><a href="#l-851">#</a> [19:14] * Quits: barnabywalters (~barnabywa@46-239-239-203.tal.is) (Quit: barnabywalters)</li>
+ <li id="l-852"><a href="#l-852">#</a> [19:14] * Quits: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt) (Read error: No route to host)</li>
+ <li id="l-853"><a href="#l-853">#</a> [19:15] * Joins: satazor (~satazor@bl17-218-25.dsl.telepac.pt)</li>
+ <li id="l-854"><a href="#l-854">#</a> [19:16] * Quits: lmclister (~lmclister@192.150.10.210)</li>
+ <li id="l-855"><a href="#l-855">#</a> [19:20] * Joins: KevinMarks_ (~KevinMark@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+ <li id="l-856"><a href="#l-856">#</a> [19:21] * Quits: satazor (~satazor@bl17-218-25.dsl.telepac.pt) (Read error: No route to host)</li>
+ <li id="l-857"><a href="#l-857">#</a> [19:21] * Joins: satazor (~satazor@bl17-218-25.dsl.telepac.pt)</li>
+ <li id="l-858"><a href="#l-858">#</a> [19:21] * Joins: lmclister (~lmclister@192.150.10.210)</li>
+ <li id="l-859"><a href="#l-859">#</a> [19:23] * Quits: KevinMarks_ (~KevinMark@c-67-164-14-200.hsd1.ca.comcast.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-860" _a="Ms2ger" _r="annevk"><a href="#l-860">#</a> [19:32] &lt;Ms2ger&gt; annevk, as the verb? Doesn't sound right to me, but I guess we should ask a native :)</li>
+ <li id="l-861"><a href="#l-861">#</a> [19:34] * Joins: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt)</li>
+ <li id="l-862" _a="Ms2ger"><a href="#l-862">#</a> [19:34] &lt;Ms2ger&gt; &quot;The XMLHttpRequest standard intentionally constraints the use of HTTP here in line with contemporary implementations.&quot;</li>
+ <li id="l-863"><a href="#l-863">#</a> [19:34] * Joins: sankha93 (~sankha93@dslb-188-104-218-173.pools.arcor-ip.net)</li>
+ <li id="l-864"><a href="#l-864">#</a> [19:34] * Quits: sankha93 (~sankha93@dslb-188-104-218-173.pools.arcor-ip.net) (Changing host)</li>
+ <li id="l-865"><a href="#l-865">#</a> [19:34] * Joins: sankha93 (~sankha93@fsf/emeritus/sankha93)</li>
+ <li id="l-866" _a="Ms2ger"><a href="#l-866">#</a> [19:34] &lt;Ms2ger&gt; Native speakers, please comment</li>
+ <li id="l-867"><a href="#l-867">#</a> [19:35] * Joins: KevinMarks_ (~KevinMark@c-67-164-14-200.hsd1.ca.comcast.net)</li>
+ <li id="l-868"><a href="#l-868">#</a> [19:35] * Quits: satazor (~satazor@bl17-218-25.dsl.telepac.pt) (Read error: Connection reset by peer)</li>
+ <li id="l-869"><a href="#l-869">#</a> [19:37] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-870"><a href="#l-870">#</a> [19:39] * Quits: 14WACXBWE (scrollback@conference/jsconf/x-gtpwpupcdgmfydhk) (Read error: Connection reset by peer)</li>
+ <li id="l-871"><a href="#l-871">#</a> [19:39] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-872"><a href="#l-872">#</a> [19:40] * Joins: 20WAAHVL4 (scrollback@conference/jsconf/x-hjjhymyhfbrhickw)</li>
+ <li id="l-873"><a href="#l-873">#</a> [19:40] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-874"><a href="#l-874">#</a> [19:41] * Quits: jeremyj (~jeremyj@17.202.44.231) (Client Quit)</li>
+ <li id="l-875"><a href="#l-875">#</a> [19:42] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-876"><a href="#l-876">#</a> [19:45] * Joins: jacobolus (~jacobolus@70-36-196-50.dsl.static.sonic.net)</li>
+ <li id="l-877" _a="Domenic"><a href="#l-877">#</a> [19:46] &lt;Domenic&gt; should be constrains</li>
+ <li id="l-878" _a="Domenic"><a href="#l-878">#</a> [19:46] &lt;Domenic&gt; a constraint is a noun; constrain is a verb</li>
+ <li id="l-879"><a href="#l-879">#</a> [19:47] * Quits: scor (scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-880" _a="SamB"><a href="#l-880">#</a> [19:47] &lt;SamB&gt; &quot;in line with contemporary implementations&quot; seems a bit odd ... somehow</li>
+ <li id="l-881"><a href="#l-881">#</a> [19:48] * Quits: satazor_ (~satazor@239.201.37.188.rev.vodafone.pt)</li>
+ <li id="l-882"><a href="#l-882">#</a> [19:48] * Joins: Smylers (~smylers@host86-140-155-113.range86-140.btcentralplus.com)</li>
+ <li id="l-883" _a="SamB"><a href="#l-883">#</a> [19:49] &lt;SamB&gt; (maybe some more specific explanation of the reasoning would be better?)</li>
+ <li id="l-884"><a href="#l-884">#</a> [19:58] * Quits: tav (~tav`@host31-52-138-103.range31-52.btcentralplus.com) (Quit: tav)</li>
+ <li id="l-885"><a href="#l-885">#</a> [19:58] * Joins: ambv (~ambv@206.108.217.134)</li>
+ <li id="l-886"><a href="#l-886">#</a> [20:00] * Joins: llkats (~llkats@h-64-236-138-1.aoltw.net)</li>
+ <li id="l-887"><a href="#l-887">#</a> [20:01] * Joins: newtron_ (~newtron@199.71.174.204)</li>
+ <li id="l-888"><a href="#l-888">#</a> [20:02] * Joins: newtron_work (~newtron@199.71.174.204)</li>
+ <li id="l-889"><a href="#l-889">#</a> [20:02] * Joins: ehsan_ (~ehsan@66.207.208.102)</li>
+ <li id="l-890"><a href="#l-890">#</a> [20:04] * Quits: newtron (~newtron@199.71.174.203) (Ping timeout: 240 seconds)</li>
+ <li id="l-891"><a href="#l-891">#</a> [20:05] * Quits: newtron_ (~newtron@199.71.174.204) (Ping timeout: 240 seconds)</li>
+ <li id="l-892"><a href="#l-892">#</a> [20:05] * Joins: richt (~richt@c83-248-137-176.bredband.comhem.se)</li>
+ <li id="l-893"><a href="#l-893">#</a> [20:05] * Quits: ehsan (~ehsan@66.207.208.102) (Ping timeout: 240 seconds)</li>
+ <li id="l-894"><a href="#l-894">#</a> [20:08] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-895"><a href="#l-895">#</a> [20:10] * Joins: IZh_ (~Igor_Zhba@0897578511.static.corbina.ru)</li>
+ <li id="l-896" _a="IZh_"><a href="#l-896">#</a> [20:13] * IZh_ is now known as IZh</li>
+ <li id="l-897"><a href="#l-897">#</a> [20:16] * Quits: ^esc (~esc-ape@178.115.129.108.wireless.dyn.drei.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-898"><a href="#l-898">#</a> [20:17] * Joins: zdobersek (~zan@130.185.155.130)</li>
+ <li id="l-899"><a href="#l-899">#</a> [20:18] * Joins: danjesus (~danjesus@187.37.65.87)</li>
+ <li id="l-900"><a href="#l-900">#</a> [20:18] * Quits: danjesus (~danjesus@187.37.65.87) (Remote host closed the connection)</li>
+ <li id="l-901"><a href="#l-901">#</a> [20:18] * Joins: gavinc (~gavin@barad-dur.carothers.name)</li>
+ <li id="l-902"><a href="#l-902">#</a> [20:18] * Joins: danjesus (~danjesus@187.37.65.87)</li>
+ <li id="l-903"><a href="#l-903">#</a> [20:24] * Quits: newtron_work (~newtron@199.71.174.204) (Remote host closed the connection)</li>
+ <li id="l-904"><a href="#l-904">#</a> [20:24] * Joins: newtron (~newtron@199.71.174.204)</li>
+ <li id="l-905"><a href="#l-905">#</a> [20:26] * Joins: jwalden (~waldo@corp.mtv2.mozilla.com)</li>
+ <li id="l-906"><a href="#l-906">#</a> [20:28] * Joins: ^esc (~esc-ape@178.115.128.142.wireless.dyn.drei.com)</li>
+ <li id="l-907"><a href="#l-907">#</a> [20:28] * Quits: danjesus (~danjesus@187.37.65.87)</li>
+ <li id="l-908"><a href="#l-908">#</a> [20:28] * Quits: newtron (~newtron@199.71.174.204) (Ping timeout: 240 seconds)</li>
+ <li id="l-909"><a href="#l-909">#</a> [20:30] * Joins: npcomp (~eldon@50-13-195-119.gar.clearwire-wmx.net)</li>
+ <li id="l-910"><a href="#l-910">#</a> [20:31] * Quits: tndrH (~Rob@cpc4-seac20-2-0-cust858.7-2.cable.virginm.net) (Ping timeout: 258 seconds)</li>
+ <li id="l-911"><a href="#l-911">#</a> [20:34] * Quits: jeffreyatw (~jeffreyat@173.247.197.10) (Quit: jeffreyatw)</li>
+ <li id="l-912"><a href="#l-912">#</a> [20:36] * Quits: ^esc (~esc-ape@178.115.128.142.wireless.dyn.drei.com) (Ping timeout: 252 seconds)</li>
+ <li id="l-913"><a href="#l-913">#</a> [20:38] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-914"><a href="#l-914">#</a> [20:41] * Quits: NDoc (NDoc@2600:3c02::f03c:91ff:fe6e:605c) (Quit: Sleep... sleep... Zzz-_-zzZ)</li>
+ <li id="l-915"><a href="#l-915">#</a> [20:41] * Joins: NDoc (NDoc@2600:3c02::f03c:91ff:fe6e:605c)</li>
+ <li id="l-916"><a href="#l-916">#</a> [20:43] * Joins: newtron (~newtron@199.71.174.204)</li>
+ <li id="l-917"><a href="#l-917">#</a> [20:43] * Quits: newtron (~newtron@199.71.174.204) (Remote host closed the connection)</li>
+ <li id="l-918"><a href="#l-918">#</a> [20:43] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-919"><a href="#l-919">#</a> [20:43] * Joins: newtron (~newtron@199.71.174.203)</li>
+ <li id="l-920"><a href="#l-920">#</a> [20:46] * Joins: ^esc (~esc-ape@178.115.128.222.wireless.dyn.drei.com)</li>
+ <li id="l-921"><a href="#l-921">#</a> [20:48] * Quits: npcomp (~eldon@50-13-195-119.gar.clearwire-wmx.net) (Quit: leaving)</li>
+ <li id="l-922"><a href="#l-922">#</a> [20:48] * Quits: tantek (~tantek@70-36-139-254.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-923"><a href="#l-923">#</a> [20:49] * Parts: NDoc (NDoc@2600:3c02::f03c:91ff:fe6e:605c)</li>
+ <li id="l-924"><a href="#l-924">#</a> [20:49] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-925"><a href="#l-925">#</a> [20:50] * Joins: richt_ (~richt@c83-248-137-176.bredband.comhem.se)</li>
+ <li id="l-926"><a href="#l-926">#</a> [20:50] * Quits: richt (~richt@c83-248-137-176.bredband.comhem.se) (Read error: Connection reset by peer)</li>
+ <li id="l-927"><a href="#l-927">#</a> [20:50] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-928"><a href="#l-928">#</a> [20:50] * Joins: zcorpan (~zcorpan@113.199.41.81)</li>
+ <li id="l-929"><a href="#l-929">#</a> [20:54] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-930"><a href="#l-930">#</a> [20:54] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-931" _a="IZh"><a href="#l-931">#</a> [20:54] &lt;IZh&gt; Some of the links in spec points to redirecting pages. Should it be corrected to point to &quot;final&quot; pages?</li>
+ <li id="l-932" _a="IZh"><a href="#l-932">#</a> [20:57] &lt;IZh&gt; For example, there is a link to <a href="http://whatwg.org/html">http://whatwg.org/html</a> that redirects to <a href="http://www.whatwg.org/html">http://www.whatwg.org/html</a> that redirects to <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage">http://www.whatwg.org/specs/web-apps/current-work/multipage</a> that redirects to <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/">http://www.whatwg.org/specs/web-apps/current-work/multipage/</a></li>
+ <li id="l-933" _a="IZh"><a href="#l-933">#</a> [20:57] &lt;IZh&gt; Shouldn't we point the link against real page?</li>
+ <li id="l-934" _a="IZh"><a href="#l-934">#</a> [20:57] &lt;IZh&gt; Point to.</li>
+ <li id="l-935" _a="IZh"><a href="#l-935">#</a> [20:59] &lt;IZh&gt; IMHO 3 redirects is too much.</li>
+ <li id="l-936"><a href="#l-936">#</a> [21:03] * Joins: tantek (~tantek@c-76-126-173-242.hsd1.ca.comcast.net)</li>
+ <li id="l-937"><a href="#l-937">#</a> [21:03] * Quits: karlcow (~karl@nerval.la-grange.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-938"><a href="#l-938">#</a> [21:04] * Quits: dshwang (~dshwang@134.134.137.75) (Remote host closed the connection)</li>
+ <li id="l-939"><a href="#l-939">#</a> [21:05] * Quits: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-940"><a href="#l-940">#</a> [21:09] * Quits: tantek (~tantek@c-76-126-173-242.hsd1.ca.comcast.net) (Quit: tantek)</li>
+ <li id="l-941"><a href="#l-941">#</a> [21:12] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-942"><a href="#l-942">#</a> [21:16] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-943"><a href="#l-943">#</a> [21:17] * Quits: llkats (~llkats@h-64-236-138-1.aoltw.net) (Remote host closed the connection)</li>
+ <li id="l-944" _a="Krinkle"><a href="#l-944">#</a> [21:17] * Krinkle is now known as Krinkle|detached</li>
+ <li id="l-945"><a href="#l-945">#</a> [21:21] * Joins: jeffreyatw (~jeffreyat@173.247.197.10)</li>
+ <li id="l-946"><a href="#l-946">#</a> [21:23] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-947"><a href="#l-947">#</a> [21:26] * Joins: rniwa (~rniwa@17.202.43.222)</li>
+ <li id="l-948"><a href="#l-948">#</a> [21:26] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Read error: Connection reset by peer)</li>
+ <li id="l-949"><a href="#l-949">#</a> [21:27] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-950"><a href="#l-950">#</a> [21:29] * Quits: zcorpan (~zcorpan@113.199.41.81) (Remote host closed the connection)</li>
+ <li id="l-951"><a href="#l-951">#</a> [21:30] * Joins: zcorpan (~zcorpan@113.199.41.81)</li>
+ <li id="l-952"><a href="#l-952">#</a> [21:31] * Quits: amtiskaw (sid19262@gateway/web/irccloud.com/x-thsacybauqttoqbo) (Ping timeout: 258 seconds)</li>
+ <li id="l-953"><a href="#l-953">#</a> [21:32] * Joins: amtiskaw (sid19262@gateway/web/irccloud.com/x-fmyhoffnmqwqfvrg)</li>
+ <li id="l-954"><a href="#l-954">#</a> [21:35] * Quits: zcorpan (~zcorpan@113.199.41.81) (Ping timeout: 258 seconds)</li>
+ <li id="l-955"><a href="#l-955">#</a> [21:37] * Joins: llkats (~llkats@h-64-236-138-1.aoltw.net)</li>
+ <li id="l-956"><a href="#l-956">#</a> [21:38] * Joins: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net)</li>
+ <li id="l-957"><a href="#l-957">#</a> [21:38] * Quits: scor (~scor@c-24-2-162-32.hsd1.ma.comcast.net) (Changing host)</li>
+ <li id="l-958"><a href="#l-958">#</a> [21:38] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-959" _a="Krinkle|detached"><a href="#l-959">#</a> [21:38] * Krinkle|detached is now known as Krinkle</li>
+ <li id="l-960"><a href="#l-960">#</a> [21:38] * Quits: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com) (Remote host closed the connection)</li>
+ <li id="l-961"><a href="#l-961">#</a> [21:40] * Joins: othermaciej (~mjs@17.114.217.202)</li>
+ <li id="l-962"><a href="#l-962">#</a> [21:40] * Joins: victorbjelkholm (~victorbje@41.Red-83-60-204.dynamicIP.rima-tde.net)</li>
+ <li id="l-963"><a href="#l-963">#</a> [21:41] * Joins: tantek (~tantek@70-36-139-254.dsl.dynamic.sonic.net)</li>
+ <li id="l-964"><a href="#l-964">#</a> [21:43] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-965"><a href="#l-965">#</a> [21:43] * Joins: zcorpan (~zcorpan@113.199.42.54)</li>
+ <li id="l-966"><a href="#l-966">#</a> [21:43] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-967"><a href="#l-967">#</a> [21:47] * Quits: IZh (~Igor_Zhba@0897578511.static.corbina.ru) (Quit: ChatZilla 0.9.90.1 [SeaMonkey 2.26/20140428215944])</li>
+ <li id="l-968"><a href="#l-968">#</a> [21:48] * Joins: IZh (~IZh@0897578511.static.corbina.ru)</li>
+ <li id="l-969"><a href="#l-969">#</a> [21:51] * Quits: gavin__ (~gavin@76.14.87.162) (Read error: Connection reset by peer)</li>
+ <li id="l-970"><a href="#l-970">#</a> [21:51] * Joins: gavin_ (~gavin@76.14.87.162)</li>
+ <li id="l-971" _a="IZh"><a href="#l-971">#</a> [21:51] &lt;IZh&gt; For beautiful url with ability to change real page in the future, I suppose, one redirect is enough.</li>
+ <li id="l-972"><a href="#l-972">#</a> [21:51] * Joins: lilmonkey` (~colin@5ED090B0.cm-7-1c.dynamic.ziggo.nl)</li>
+ <li id="l-973"><a href="#l-973">#</a> [21:51] * Quits: lilmonkey` (~colin@5ED090B0.cm-7-1c.dynamic.ziggo.nl) (Changing host)</li>
+ <li id="l-974"><a href="#l-974">#</a> [21:51] * Joins: lilmonkey` (~colin@pdpc/supporter/professional/riven)</li>
+ <li id="l-975" _a="SamB" _r="IZh"><a href="#l-975">#</a> [21:52] &lt;SamB&gt; IZh: you would think it could at least combine the first two ...</li>
+ <li id="l-976" _a="SamB" _r="well"><a href="#l-976">#</a> [21:53] &lt;SamB&gt; well, actually, combining all three redirects into one wouldn't seem all that much to ask ...</li>
+ <li id="l-977"><a href="#l-977">#</a> [21:53] * Quits: lilmonkey (~colin@pdpc/supporter/professional/riven) (Ping timeout: 240 seconds)</li>
+ <li id="l-978" _a="IZh"><a href="#l-978">#</a> [21:54] &lt;IZh&gt; In the spec there are dozen of links that points to redirects of different depth. The 3 is the maximum, but there are lots of 2</li>
+ <li id="l-979"><a href="#l-979">#</a> [21:55] * Joins: satazor (~satazor@a213-22-1-7.cpe.netcabo.pt)</li>
+ <li id="l-980"><a href="#l-980">#</a> [21:56] * Quits: m4nu (~manu@216.252.204.51) (Ping timeout: 276 seconds)</li>
+ <li id="l-981" _a="Hixie" _r="IZh"><a href="#l-981">#</a> [21:57] &lt;Hixie&gt; IZh: i use the link whatwg.org/html because that's the shortest link and so people might remember it.</li>
+ <li id="l-982" _a="Hixie" _r="zcorpan"><a href="#l-982">#</a> [21:57] &lt;Hixie&gt; zcorpan: whatwg.org redirects everything to www.whatwg.org so that all cookies so that there's only one canonical domain</li>
+ <li id="l-983" _a="SamB"><a href="#l-983">#</a> [21:58] &lt;SamB&gt; I thought there were technically some shorter ones (but which are irrelevant since not actually memorable)</li>
+ <li id="l-984" _a="Hixie" _r="er"><a href="#l-984">#</a> [21:58] &lt;Hixie&gt; er, s/zcorpan/IZh/</li>
+ <li id="l-985" _a="Hixie" _r="IZh"><a href="#l-985">#</a> [21:58] &lt;Hixie&gt; IZh: then .../html does the redirect to .../multipage, since that's what it's a shortcut for</li>
+ <li id="l-986" _a="Hixie" _r="IZh"><a href="#l-986">#</a> [21:58] &lt;Hixie&gt; IZh: then apache does the redirect to add the /</li>
+ <li id="l-987" _a="Hixie" _r="IZh"><a href="#l-987">#</a> [21:59] &lt;Hixie&gt; IZh: we can't add the / at the third step because otherwise if you went to .../html/ you'd end up at .../multipage//</li>
+ <li id="l-988" _a="SamB"><a href="#l-988">#</a> [21:59] &lt;SamB&gt; hmm</li>
+ <li id="l-989" _a="SamB"><a href="#l-989">#</a> [21:59] &lt;SamB&gt; no regexen?</li>
+ <li id="l-990" _a="Hixie"><a href="#l-990">#</a> [22:00] &lt;Hixie&gt; it's even better if you go to .../html#foo because then you get a javascript redirect after all the above...</li>
+ <li id="l-991" _a="IZh" _r="Hixie"><a href="#l-991">#</a> [22:00] &lt;IZh&gt; Hixie: yes, I see. But why not shorten the path?</li>
+ <li id="l-992" _a="Hixie"><a href="#l-992">#</a> [22:00] &lt;Hixie&gt; which path?</li>
+ <li id="l-993" _a="IZh" _r="Hixie"><a href="#l-993">#</a> [22:00] &lt;IZh&gt; Hixie: I mean, why so deep?</li>
+ <li id="l-994" _a="SamB" _r="oh"><a href="#l-994">#</a> [22:00] &lt;SamB&gt; oh, you mean just actually have the spec at /html/ ?</li>
+ <li id="l-995" _a="Hixie"><a href="#l-995">#</a> [22:00] &lt;Hixie&gt; oh well there used to be multiple specs and there used to be multiple snapshots</li>
+ <li id="l-996" _a="zcorpan" _r="Hixie"><a href="#l-996">#</a> [22:00] &lt;zcorpan&gt; Hixie: can't you write two rules, /html redirects to multipage/ and /html/ redirects to multipage/ ?</li>
+ <li id="l-997" _a="Hixie" _r="zcorpan"><a href="#l-997">#</a> [22:01] &lt;Hixie&gt; zcorpan: maybe, dunno</li>
+ <li id="l-998" _a="IZh"><a href="#l-998">#</a> [22:01] &lt;IZh&gt; Why not point html to multipage/ in one step?</li>
+ <li id="l-999"><a href="#l-999">#</a> [22:01] * Joins: manu (~manu@216.252.204.51)</li>
+ <li id="l-1000" _a="Hixie" _r="&lt;Hixie&gt"><a href="#l-1000">#</a> [22:01] &lt;Hixie&gt; &lt;Hixie&gt; IZh: we can't add the / at the third step because otherwise if you went to .../html/ you'd end up at .../multipage//</li>
+ <li id="l-1001" _a="manu"><a href="#l-1001">#</a> [22:01] * manu is now known as Guest41481</li>
+ <li id="l-1002" _a="Hixie" _r="zcorpan"><a href="#l-1002">#</a> [22:01] &lt;Hixie&gt; zcorpan: btw should i be moving the &lt;img&gt; bugs you filed to HTML - &lt;img&gt;?</li>
+ <li id="l-1003"><a href="#l-1003">#</a> [22:01] * Quits: llkats (~llkats@h-64-236-138-1.aoltw.net)</li>
+ <li id="l-1004" _a="Hixie" _r="zcorpan"><a href="#l-1004">#</a> [22:01] &lt;Hixie&gt; zcorpan: or are they for me later?</li>
+ <li id="l-1005" _a="zcorpan" _r="Hixie"><a href="#l-1005">#</a> [22:01] &lt;zcorpan&gt; Hixie: sure</li>
+ <li id="l-1006" _a="Hixie"><a href="#l-1006">#</a> [22:01] &lt;Hixie&gt; k</li>
+ <li id="l-1007" _a="zcorpan" _r="Hixie"><a href="#l-1007">#</a> [22:02] &lt;zcorpan&gt; Hixie: one &lt;img&gt; is for you</li>
+ <li id="l-1008" _a="Guest41481"><a href="#l-1008">#</a> [22:02] * Guest41481 is now known as m4nu</li>
+ <li id="l-1009" _a="zcorpan"><a href="#l-1009">#</a> [22:02] &lt;zcorpan&gt; <a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=25848">https://www.w3.org/Bugs/Public/show_bug.cgi?id=25848</a></li>
+ <li id="l-1010" _a="Hixie"><a href="#l-1010">#</a> [22:02] &lt;Hixie&gt; i'm behind on bugs, been working on e-mail</li>
+ <li id="l-1011"><a href="#l-1011">#</a> [22:03] * Joins: caitp (~caitp@CPE48f8b385c01c-CM602ad06daeed.cpe.net.cable.rogers.com)</li>
+ <li id="l-1012"><a href="#l-1012">#</a> [22:03] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-1013" _a="zcorpan"><a href="#l-1013">#</a> [22:03] &lt;zcorpan&gt; but i think it's ok for you to wait a bit with that bug</li>
+ <li id="l-1014" _a="IZh" _r="Hixie"><a href="#l-1014">#</a> [22:03] &lt;IZh&gt; Hixie: I think it's possible to make 2 redirects: both html and html/ to multipage/</li>
+ <li id="l-1015" _a="Hixie"><a href="#l-1015">#</a> [22:04] &lt;Hixie&gt; yeah that's what zcorpan suggested</li>
+ <li id="l-1016" _a="Hixie" _r="zcorpan"><a href="#l-1016">#</a> [22:04] &lt;Hixie&gt; zcorpan: k</li>
+ <li id="l-1017"><a href="#l-1017">#</a> [22:05] * Quits: IZh (~IZh@0897578511.static.corbina.ru) (Remote host closed the connection)</li>
+ <li id="l-1018" _a="zcorpan" _r="Hixie"><a href="#l-1018">#</a> [22:05] &lt;zcorpan&gt; Hixie: if you remember rationale for some of the &lt;img&gt; bugs i filed i'd be happy if you could add a comment</li>
+ <li id="l-1019" _a="Hixie"><a href="#l-1019">#</a> [22:06] &lt;Hixie&gt; k</li>
+ <li id="l-1020"><a href="#l-1020">#</a> [22:06] * Joins: IZh (~Igor_Zhba@0897578511.static.corbina.ru)</li>
+ <li id="l-1021"><a href="#l-1021">#</a> [22:06] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-1022"><a href="#l-1022">#</a> [22:07] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-1023" _a="zcorpan"><a href="#l-1023">#</a> [22:07] &lt;zcorpan&gt; in other news, i hate moving 7 timezones. it fucks up my sleep</li>
+ <li id="l-1024"><a href="#l-1024">#</a> [22:08] * Quits: jeremyj (~jeremyj@17.202.44.231) (Client Quit)</li>
+ <li id="l-1025" _a="IZh" _r="Hixie"><a href="#l-1025">#</a> [22:08] &lt;IZh&gt; Hixie: Good news. Validator that I use did not found any serious errors in the spec. :-)</li>
+ <li id="l-1026" _a="IZh" _r="Hixie"><a href="#l-1026">#</a> [22:09] &lt;IZh&gt; Hixie: Just some accessibility and some CSS issues.</li>
+ <li id="l-1027"><a href="#l-1027">#</a> [22:09] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-1028"><a href="#l-1028">#</a> [22:10] * Quits: Ms2ger (~Ms2ger@212.216-242-81.adsl-dyn.isp.belgacom.be) (Quit: nn)</li>
+ <li id="l-1029" _a="zcorpan"><a href="#l-1029">#</a> [22:10] &lt;zcorpan&gt; what are the claimed acc issues?</li>
+ <li id="l-1030" _a="IZh" _r="zcorpan"><a href="#l-1030">#</a> [22:12] &lt;IZh&gt; zcorpan: One iframe lacks of &quot;title&quot; attribute.</li>
+ <li id="l-1031" _a="zcorpan"><a href="#l-1031">#</a> [22:12] &lt;zcorpan&gt; ...</li>
+ <li id="l-1032" _a="zcorpan" _r="gsnedders"><a href="#l-1032">#</a> [22:14] &lt;zcorpan&gt; gsnedders: have you checked out the Pixel one or whatever it's called?</li>
+ <li id="l-1033" _a="zcorpan" _r="oh"><a href="#l-1033">#</a> [22:15] &lt;zcorpan&gt; oh, TabAtkins already suggested that</li>
+ <li id="l-1034"><a href="#l-1034">#</a> [22:19] * Quits: othermaciej (~mjs@17.114.217.202) (Quit: othermaciej)</li>
+ <li id="l-1035"><a href="#l-1035">#</a> [22:21] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-1036"><a href="#l-1036">#</a> [22:25] * Quits: nephyrin (~neph@corp.mtv2.mozilla.com) (Read error: Connection reset by peer)</li>
+ <li id="l-1037" _a="IZh"><a href="#l-1037">#</a> [22:25] &lt;IZh&gt; In the FAQ there are some broken links.</li>
+ <li id="l-1038"><a href="#l-1038">#</a> [22:25] * Joins: nephyrin (~neph@corp.mtv2.mozilla.com)</li>
+ <li id="l-1039" _a="IZh"><a href="#l-1039">#</a> [22:25] &lt;IZh&gt; In &quot;When will we be able to start using these new features?&quot; there is a link to <a href="http://dev.opera.com/articles/html/">http://dev.opera.com/articles/html/</a></li>
+ <li id="l-1040"><a href="#l-1040">#</a> [22:28] * Quits: nephyrin (~neph@corp.mtv2.mozilla.com) (Read error: Connection reset by peer)</li>
+ <li id="l-1041" _a="IZh"><a href="#l-1041">#</a> [22:28] &lt;IZh&gt; In &quot;What are the various versions of the HTML spec?&quot; there is a broken link to W3C Microdata: <a href="http://dev.w3.org/html5/md/">http://dev.w3.org/html5/md/</a></li>
+ <li id="l-1042"><a href="#l-1042">#</a> [22:28] * Joins: estellevw (~estellewy@209.49.66.106)</li>
+ <li id="l-1043" _a="IZh"><a href="#l-1043">#</a> [22:29] &lt;IZh&gt; And at the same place the link to <a href="http://www.w3.org/html/wg/drafts/2dcontext/html5_canvas/">http://www.w3.org/html/wg/drafts/2dcontext/html5_canvas/</a></li>
+ <li id="l-1044"><a href="#l-1044">#</a> [22:30] * Quits: zcorpan (~zcorpan@113.199.42.54) (Remote host closed the connection)</li>
+ <li id="l-1045" _a="Hixie"><a href="#l-1045">#</a> [22:30] &lt;Hixie&gt; feel free to edit that page</li>
+ <li id="l-1046" _a="Hixie"><a href="#l-1046">#</a> [22:30] &lt;Hixie&gt; let me know if you need a login to the wiki</li>
+ <li id="l-1047" _a="IZh"><a href="#l-1047">#</a> [22:31] &lt;IZh&gt; First of all we need alive links there.</li>
+ <li id="l-1048" _a="IZh" _r="Hixie"><a href="#l-1048">#</a> [22:35] &lt;IZh&gt; Hixie: There are two links for Microdata: <a href="http://www.w3.org/TR/microdata/">http://www.w3.org/TR/microdata/</a> and <a href="http://www.w3.org/html/wg/drafts/microdata/master/">http://www.w3.org/html/wg/drafts/microdata/master/</a> Which one you prefer?</li>
+ <li id="l-1049"><a href="#l-1049">#</a> [22:35] * Joins: bnicholson (~bnicholso@corp.mtv2.mozilla.com)</li>
+ <li id="l-1050"><a href="#l-1050">#</a> [22:35] * Joins: mmn (~MattN@192.95.22.58)</li>
+ <li id="l-1051"><a href="#l-1051">#</a> [22:36] * Joins: othermaciej (~mjs@17.114.3.249)</li>
+ <li id="l-1052" _a="IZh"><a href="#l-1052">#</a> [22:37] &lt;IZh&gt; Latest published or editors draft?</li>
+ <li id="l-1053" _a="Hixie" _r="IZh"><a href="#l-1053">#</a> [22:38] &lt;Hixie&gt; IZh: i &quot;prefer&quot; <a href="http://whatwg.org/html#microdata">http://whatwg.org/html#microdata</a></li>
+ <li id="l-1054" _a="SamB" _r="IZh"><a href="#l-1054">#</a> [22:38] &lt;SamB&gt; IZh: well it was an editor's draft before</li>
+ <li id="l-1055" _a="Hixie"><a href="#l-1055">#</a> [22:38] &lt;Hixie&gt; if we're talking about what the url to the w3c fork of it should be, then it should be the one that isn't in /TR/</li>
+ <li id="l-1056" _a="estellevw"><a href="#l-1056">#</a> [22:39] &lt;estellevw&gt; I just removed  &quot;The disabled attribute is ignored if the value of the type attribute is hidden&quot; from the display attribute on MDN pages. I see that on w3schools, but I didn't see that as &quot;fact&quot; in the spec. Am I wrong? Is disabled is not supported on input type hidden? It doesn't submit in my test, but it's odd to think that a myth somehow got started. Was that ever the case?</li>
+ <li id="l-1057" _a="Hixie" _r="estellevw"><a href="#l-1057">#</a> [22:40] &lt;Hixie&gt; estellevw: see the &quot;bookkeeping details&quot; in <a href="http://www.whatwg.org/specs/web-apps/current-work/#hidden-state-(type=hidden">http://www.whatwg.org/specs/web-apps/current-work/#hidden-state-(type=hidden</a>)</li>
+ <li id="l-1058" _a="estellevw"><a href="#l-1058">#</a> [22:40] &lt;estellevw&gt; was disabled on input type hidden ever ignored, or is it ignored in any browsers that anyone knows of?</li>
+ <li id="l-1059" _a="estellevw"><a href="#l-1059">#</a> [22:40] &lt;estellevw&gt; thanks</li>
+ <li id="l-1060" _a="Hixie"><a href="#l-1060">#</a> [22:40] &lt;Hixie&gt; oh hm</li>
+ <li id="l-1061" _a="Hixie"><a href="#l-1061">#</a> [22:40] &lt;Hixie&gt; looks like &quot;disabled&quot; always applies maybe?</li>
+ <li id="l-1062"><a href="#l-1062">#</a> [22:40] * Quits: g4 (~g4@unaffiliated/gormer) (Ping timeout: 245 seconds)</li>
+ <li id="l-1063" _a="Hixie" _r="yeah"><a href="#l-1063">#</a> [22:41] &lt;Hixie&gt; yeah, check <a href="http://www.whatwg.org/specs/web-apps/current-work/#attr-fe-disabled">http://www.whatwg.org/specs/web-apps/current-work/#attr-fe-disabled</a></li>
+ <li id="l-1064" _a="Hixie"><a href="#l-1064">#</a> [22:41] &lt;Hixie&gt; type=hidden has no relevance to disabled=&quot;&quot;</li>
+ <li id="l-1065"><a href="#l-1065">#</a> [22:41] * Quits: jeremyj (~jeremyj@17.202.44.231) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-1066" _a="estellevw" _r="yeah"><a href="#l-1066">#</a> [22:42] &lt;estellevw&gt; yeah, i had read both of those, so decided to remove that sentence from MDN page, but have since seen it mentioned on w3schools and stack overflow, so wanted to confirm</li>
+ <li id="l-1067" _a="estellevw"><a href="#l-1067">#</a> [22:43] &lt;estellevw&gt; thanks</li>
+ <li id="l-1068"><a href="#l-1068">#</a> [22:44] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-1069" _a="Hixie"><a href="#l-1069">#</a> [22:45] &lt;Hixie&gt; w3schools is so full of nonsense it's not worth even considering in any capacity regarding whether something is true or not</li>
+ <li id="l-1070"><a href="#l-1070">#</a> [22:46] * Joins: nephyrin (~neph@corp.mtv2.mozilla.com)</li>
+ <li id="l-1071" _a="wilhelm"><a href="#l-1071">#</a> [22:49] &lt;wilhelm&gt; I recently discovered they're five guys, and have a turnover of more than 3M USD. Not too bad for a scam.</li>
+ <li id="l-1072" _a="Hixie"><a href="#l-1072">#</a> [22:50] &lt;Hixie&gt; i've been happy to see MDN starting to take over in my google results</li>
+ <li id="l-1073" _a="Hixie"><a href="#l-1073">#</a> [22:50] * Hixie is a big fan of MDN</li>
+ <li id="l-1074" _a="estellevw" _r="yeah"><a href="#l-1074">#</a> [22:50] &lt;estellevw&gt; yeah, that was why i got confused. MDN was wrong. Wasn't sure if W3Schools copied MDN or the other way around</li>
+ <li id="l-1075" _a="Hixie"><a href="#l-1075">#</a> [22:51] &lt;Hixie&gt; heh</li>
+ <li id="l-1076"><a href="#l-1076">#</a> [22:51] * Joins: jeremyj (~jeremyj@17.202.44.231)</li>
+ <li id="l-1077" _a="Hixie"><a href="#l-1077">#</a> [22:51] &lt;Hixie&gt; i'm sure w3schools didn't copy mdn</li>
+ <li id="l-1078" _a="Hixie"><a href="#l-1078">#</a> [22:51] &lt;Hixie&gt; they probably made it up</li>
+ <li id="l-1079"><a href="#l-1079">#</a> [22:51] * Joins: a-ja (~Instantbi@70.230.147.189)</li>
+ <li id="l-1080" _a="wilhelm"><a href="#l-1080">#</a> [22:51] &lt;wilhelm&gt; But MDN doesn't have certifications! How else can I document my skills? <a href="http://www.refsnesdata.no/certification/w3certified.asp?id=5204222">http://www.refsnesdata.no/certification/w3certified.asp?id=5204222</a></li>
+ <li id="l-1081" _a="estellevw"><a href="#l-1081">#</a> [22:51] &lt;estellevw&gt; I am currently updating the Wufoo form pages, and that will hopefully be very accurate. I am updating MDN as i find new stuff for the Wufoo page.</li>
+ <li id="l-1082" _a="estellevw" _r="wilhelm"><a href="#l-1082">#</a> [22:51] &lt;estellevw&gt; wilhelm: haha</li>
+ <li id="l-1083" _a="tantek" _r="wow"><a href="#l-1083">#</a> [22:52] &lt;tantek&gt; wow, I just don't even: <a href="http://www.w3schools.com/cert/default.asp">http://www.w3schools.com/cert/default.asp</a></li>
+ <li id="l-1084" _a="estellevw"><a href="#l-1084">#</a> [22:53] &lt;estellevw&gt; no longer haha. now whaaaaa, or however you write a cry. So sad.</li>
+ <li id="l-1085" _a="wilhelm" _r="tantek"><a href="#l-1085">#</a> [22:53] &lt;wilhelm&gt; tantek: Yup, that's how the manager of a five-person company can pay himself 1M USD per year.</li>
+ <li id="l-1086" _a="tantek"><a href="#l-1086">#</a> [22:54] &lt;tantek&gt; from that page: &quot;Highly Recommended / W3Schools' tutorials are recommended reading in over 100 Universities and High schools all over the world.&quot; (lists 9 examples of universities)</li>
+ <li id="l-1087" _a="tantek" _r="Ok"><a href="#l-1087">#</a> [22:54] &lt;tantek&gt; Ok, so the next time someone asks me about university-based web dev education vs. self-taught web dev hackers, I am going to point them to this. What a disaster.</li>
+ <li id="l-1088" _a="caitp"><a href="#l-1088">#</a> [22:56] &lt;caitp&gt; you laugh, but those kids will be making the snapchats and tinder</li>
+ <li id="l-1089" _a="caitp"><a href="#l-1089">#</a> [22:56] &lt;caitp&gt; of tomorrow</li>
+ <li id="l-1090" _a="tantek"><a href="#l-1090">#</a> [22:56] &lt;tantek&gt; and their citations seem to check out too (checked 3 out of 9), and they link to specific University pages which link to W3schools</li>
+ <li id="l-1091" _a="caitp"><a href="#l-1091">#</a> [22:56] &lt;caitp&gt; and getting rich off it despite not providing anything of any real value</li>
+ <li id="l-1092" _a="tantek"><a href="#l-1092">#</a> [22:57] &lt;tantek&gt; caitp - not as bad as finance industry with making up financial &quot;instruments&quot; which then make money out of nothing</li>
+ <li id="l-1093" _a="IZh" _r="Hixie"><a href="#l-1093">#</a> [22:57] &lt;IZh&gt; Hixie: Please make me an account on Wiki.</li>
+ <li id="l-1094" _a="tantek"><a href="#l-1094">#</a> [22:57] &lt;tantek&gt; so what this tells me is that W3C should issue certificates instead</li>
+ <li id="l-1095" _a="tantek"><a href="#l-1095">#</a> [22:57] &lt;tantek&gt; as a funding model alternative to membership fees</li>
+ <li id="l-1096" _a="caitp"><a href="#l-1096">#</a> [22:57] &lt;caitp&gt; lets turn the W3C into a for-profit school like devry</li>
+ <li id="l-1097" _a="caitp"><a href="#l-1097">#</a> [22:57] &lt;caitp&gt; it will be brilliant</li>
+ <li id="l-1098" _a="caitp"><a href="#l-1098">#</a> [22:57] &lt;caitp&gt; nothing could go wrong</li>
+ <li id="l-1099"><a href="#l-1099">#</a> [22:58] * Joins: g4 (~g4@unaffiliated/gormer)</li>
+ <li id="l-1100"><a href="#l-1100">#</a> [22:58] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-1101" _a="wilhelm"><a href="#l-1101">#</a> [22:59] &lt;wilhelm&gt; Here's a selection of gullible people paying money for that scam: <a href="https://google.com/search?q=site%3Arefsnesdata.no">https://google.com/search?q=site%3Arefsnesdata.no</a></li>
+ <li id="l-1102"><a href="#l-1102">#</a> [22:59] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-1103"><a href="#l-1103">#</a> [23:00] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-1104" _a="caitp"><a href="#l-1104">#</a> [23:00] &lt;caitp&gt; you could even get the w3c its own faculty at university of phoenix</li>
+ <li id="l-1105" _a="Hixie" _r="IZh"><a href="#l-1105">#</a> [23:01] &lt;Hixie&gt; IZh: e-mail address?</li>
+ <li id="l-1106" _a="IZh" _r="Hixie"><a href="#l-1106">#</a> [23:01] &lt;IZh&gt; Hixie: izh1979@gmail.com</li>
+ <li id="l-1107" _a="Hixie"><a href="#l-1107">#</a> [23:02] &lt;Hixie&gt; don</li>
+ <li id="l-1108" _a="Hixie"><a href="#l-1108">#</a> [23:02] &lt;Hixie&gt; done</li>
+ <li id="l-1109" _a="SamB" _r="tantek"><a href="#l-1109">#</a> [23:03] &lt;SamB&gt; tantek: you want the W3C to be a CA?</li>
+ <li id="l-1110" _a="IZh" _r="Hixie"><a href="#l-1110">#</a> [23:03] &lt;IZh&gt; Hixie: Thank you.</li>
+ <li id="l-1111"><a href="#l-1111">#</a> [23:03] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Client Quit)</li>
+ <li id="l-1112"><a href="#l-1112">#</a> [23:04] * Quits: satazor (~satazor@a213-22-1-7.cpe.netcabo.pt) (Remote host closed the connection)</li>
+ <li id="l-1113"><a href="#l-1113">#</a> [23:04] * Quits: Maurice (copyman@5ED57922.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-1114"><a href="#l-1114">#</a> [23:05] * Quits: Smylers (~smylers@host86-140-155-113.range86-140.btcentralplus.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-1115"><a href="#l-1115">#</a> [23:06] * Joins: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com)</li>
+ <li id="l-1116"><a href="#l-1116">#</a> [23:07] * Joins: satazor (~satazor@a213-22-1-7.cpe.netcabo.pt)</li>
+ <li id="l-1117" _a="IZh"><a href="#l-1117">#</a> [23:07] &lt;IZh&gt; Grr... Even <a href="http://www.w3.org/TR/microdata/">http://www.w3.org/TR/microdata/</a> contains broken link to latest editor's draft. So there is no known link to it.</li>
+ <li id="l-1118" _a="tantek"><a href="#l-1118">#</a> [23:09] &lt;tantek&gt; lZh don't bother linking to any W3C microdata resources - W3C has abandoned microdata. The *only* reference is WHATWG microdata.</li>
+ <li id="l-1119"><a href="#l-1119">#</a> [23:09] * Quits: IZh (~Igor_Zhba@0897578511.static.corbina.ru) (Quit: ChatZilla 0.9.90.1 [SeaMonkey 2.26/20140428215944])</li>
+ <li id="l-1120" _a="tantek"><a href="#l-1120">#</a> [23:10] &lt;tantek&gt; (boom)</li>
+ <li id="l-1121" _a="SamB"><a href="#l-1121">#</a> [23:10] &lt;SamB&gt; I can't tell if that's even nice</li>
+ <li id="l-1122"><a href="#l-1122">#</a> [23:11] * Quits: othermaciej (~mjs@17.114.3.249) (Quit: othermaciej)</li>
+ <li id="l-1123" _a="Hixie"><a href="#l-1123">#</a> [23:11] &lt;Hixie&gt; it's what i'd like them to do to all the specs</li>
+ <li id="l-1124" _a="Hixie"><a href="#l-1124">#</a> [23:11] &lt;Hixie&gt; (that they fork from us)</li>
+ <li id="l-1125"><a href="#l-1125">#</a> [23:11] * Quits: zdobersek (~zan@130.185.155.130) (Quit: Leaving.)</li>
+ <li id="l-1126" _a="SamB" _r="well"><a href="#l-1126">#</a> [23:11] &lt;SamB&gt; well, I mean, is it because they despair of the idea or is it just that they dispair of hijacking the idea</li>
+ <li id="l-1127" _a="SamB"><a href="#l-1127">#</a> [23:11] &lt;SamB&gt; the latter is clearly good</li>
+ <li id="l-1128" _a="Hixie"><a href="#l-1128">#</a> [23:11] &lt;Hixie&gt; oh i'm sure they did it because it competes with RDFa</li>
+ <li id="l-1129" _a="Hixie"><a href="#l-1129">#</a> [23:12] &lt;Hixie&gt; and since anyone who cares about microdata is just gonna do it in the WHATWG, they no longer had anyone there advocating for it</li>
+ <li id="l-1130" _a="Hixie"><a href="#l-1130">#</a> [23:12] &lt;Hixie&gt; so the RDFa voices could get their fork shut down</li>
+ <li id="l-1131" _a="Hixie"><a href="#l-1131">#</a> [23:12] &lt;Hixie&gt; speaking of forks, i wonder how the w3c's fork of anne's URL spec that replaces the IETF URL spec is coming along</li>
+ <li id="l-1132"><a href="#l-1132">#</a> [23:14] * Quits: sicking (~sicking@corp-nat.p2p.sfo1.mozilla.com) (Quit: sicking)</li>
+ <li id="l-1133"><a href="#l-1133">#</a> [23:17] * Quits: satazor (~satazor@a213-22-1-7.cpe.netcabo.pt)</li>
+ <li id="l-1134"><a href="#l-1134">#</a> [23:18] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-1135"><a href="#l-1135">#</a> [23:18] * Quits: tj_vantoll (~Adium@c-98-250-130-237.hsd1.mi.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-1136"><a href="#l-1136">#</a> [23:21] * Joins: jensnockert (~jensnocke@dynamic.1.7.34dbfd722180.e0f8471ae7fa.afb.bredband2.com)</li>
+ <li id="l-1137" _a="m4nu"><a href="#l-1137">#</a> [23:21] * m4nu wakes up to RDFa/Microdata snarkiness.</li>
+ <li id="l-1138" _a="m4nu" _r="huh"><a href="#l-1138">#</a> [23:21] &lt;m4nu&gt; huh, when did Microdata become a NOTE at W3C? Last I heard, it was barreling down the REC track?</li>
+ <li id="l-1139" _a="Hixie" _r="hey"><a href="#l-1139">#</a> [23:21] &lt;Hixie&gt; hey, for once, there wasn't actually any snarkiness there :-)</li>
+ <li id="l-1140" _a="m4nu"><a href="#l-1140">#</a> [23:22] &lt;m4nu&gt; :P</li>
+ <li id="l-1141" _a="Hixie"><a href="#l-1141">#</a> [23:22] &lt;Hixie&gt; i mean, i have barrels of it i could deploy, but i was holding back :-)</li>
+ <li id="l-1142" _a="m4nu"><a href="#l-1142">#</a> [23:22] * m4nu appreciates Hixie's restraint.</li>
+ <li id="l-1143" _a="m4nu"><a href="#l-1143">#</a> [23:22] * m4nu wonders if he should see if HTML5+RDFa has been NOTE'd as well.</li>
+ <li id="l-1144" _a="m4nu"><a href="#l-1144">#</a> [23:23] &lt;m4nu&gt; 'cause I haven't been paying attention to what's been happening in the W3C HTML WG...</li>
+ <li id="l-1145" _a="Hixie"><a href="#l-1145">#</a> [23:23] &lt;Hixie&gt; heh</li>
+ <li id="l-1146" _a="Hixie"><a href="#l-1146">#</a> [23:23] &lt;Hixie&gt; text/html RDFa is happening in the HTMLWG?</li>
+ <li id="l-1147" _a="Hixie"><a href="#l-1147">#</a> [23:23] &lt;Hixie&gt; i thought that was an RDF world thing</li>
+ <li id="l-1148" _a="m4nu"><a href="#l-1148">#</a> [23:24] &lt;m4nu&gt; does seem kind of bad form to not point to WHATWG Microdata spec as &quot;Latest Editor's Draft&quot;</li>
+ <li id="l-1149" _a="SamB"><a href="#l-1149">#</a> [23:24] &lt;SamB&gt; indeed</li>
+ <li id="l-1150" _a="Hixie"><a href="#l-1150">#</a> [23:24] &lt;Hixie&gt; that's the least of the troubles on that front</li>
+ <li id="l-1151" _a="Hixie"><a href="#l-1151">#</a> [23:24] &lt;Hixie&gt; q.v. <a href="http://lists.w3.org/Archives/Public/www-archive/2014Apr/0034.html">http://lists.w3.org/Archives/Public/www-archive/2014Apr/0034.html</a></li>
+ <li id="l-1152"><a href="#l-1152">#</a> [23:25] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)</li>
+ <li id="l-1153"><a href="#l-1153">#</a> [23:26] * Quits: cheron (~cheron@unaffiliated/cheron) (Ping timeout: 252 seconds)</li>
+ <li id="l-1154" _a="m4nu"><a href="#l-1154">#</a> [23:27] * m4nu remembers reading that missive... I remember agreeing w/ about 65% of it.</li>
+ <li id="l-1155"><a href="#l-1155">#</a> [23:27] * Quits: sankha93 (~sankha93@fsf/emeritus/sankha93) (Remote host closed the connection)</li>
+ <li id="l-1156" _a="Hixie"><a href="#l-1156">#</a> [23:28] &lt;Hixie&gt; presumably the consensus parts are in the 35%?</li>
+ <li id="l-1157"><a href="#l-1157">#</a> [23:28] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-1158"><a href="#l-1158">#</a> [23:28] * Quits: Lachy (~Lachy@cm-84.215.104.248.getinternet.no) (Client Quit)</li>
+ <li id="l-1159" _a="m4nu"><a href="#l-1159">#</a> [23:29] &lt;m4nu&gt; maybe 20% of it - I'm not a card carrying consensus-is-the-only-way member. Other 15% had to do w/ things like &quot;Tim has the final say.&quot; arguments (yes he does, but in practice, doesn't use it)</li>
+ <li id="l-1160"><a href="#l-1160">#</a> [23:30] * Joins: mven (~textual@169.241.49.229)</li>
+ <li id="l-1161" _a="Hixie"><a href="#l-1161">#</a> [23:30] &lt;Hixie&gt; well if he doesn't have the final say, that means the relevant wg's chair does</li>
+ <li id="l-1162"><a href="#l-1162">#</a> [23:30] * Quits: aiglesias (~aiglesias@147-195-17-190.fibertel.com.ar) (Read error: Connection reset by peer)</li>
+ <li id="l-1163" _a="Hixie"><a href="#l-1163">#</a> [23:30] &lt;Hixie&gt; the way the w3c is structured, there's always someone who has the final say.</li>
+ <li id="l-1164" _a="m4nu"><a href="#l-1164">#</a> [23:30] &lt;m4nu&gt; in any case, good email, I've been pointing people at it to try and explain why the WHATWG/W3C dynamic isn't a simple one.</li>
+ <li id="l-1165" _a="Hixie"><a href="#l-1165">#</a> [23:31] &lt;Hixie&gt; (and that person is rarely the person who truly has the final say, the implementor)</li>
+ <li id="l-1166" _a="m4nu" _r="yeah"><a href="#l-1166">#</a> [23:31] &lt;m4nu&gt; yeah, but again - I don't think that's a terrible thing to have a tie-breaker... and I agree w/ you wrt. implementors have the final say.</li>
+ <li id="l-1167" _a="m4nu"><a href="#l-1167">#</a> [23:32] &lt;m4nu&gt; just think that there needs to be something there to balance the multi-billion dollar multinationals w/ the general public.</li>
+ <li id="l-1168" _a="m4nu"><a href="#l-1168">#</a> [23:32] &lt;m4nu&gt; (wrt. privacy rights, centralization, etc.)</li>
+ <li id="l-1169" _a="Hixie"><a href="#l-1169">#</a> [23:32] &lt;Hixie&gt; (there's also a less-well-written sequel, if you're pining for me hixie-ranting: <a href="http://lists.w3.org/Archives/Public/www-archive/2014Apr/0039.html">http://lists.w3.org/Archives/Public/www-archive/2014Apr/0039.html</a> )</li>
+ <li id="l-1170" _a="m4nu" _r="anyway"><a href="#l-1170">#</a> [23:32] &lt;m4nu&gt; anyway, don't want to spam this channel w/ all of that stuff...</li>
+ <li id="l-1171"><a href="#l-1171">#</a> [23:32] * Joins: Lachy (~Lachy@cm-84.215.104.248.getinternet.no)</li>
+ <li id="l-1172" _a="Hixie"><a href="#l-1172">#</a> [23:33] &lt;Hixie&gt; it's ok, nobody else is talking right now :-D</li>
+ <li id="l-1173" _a="Hixie"><a href="#l-1173">#</a> [23:33] &lt;Hixie&gt; obviously i don't think it's bad for someone to be tie-breaker</li>
+ <li id="l-1174" _a="Hixie"><a href="#l-1174">#</a> [23:33] &lt;Hixie&gt; since that's how everything works in the whatwg too :-)</li>
+ <li id="l-1175" _a="Hixie"><a href="#l-1175">#</a> [23:33] &lt;Hixie&gt; my point is mainly that the w3c's claimed process -- consensus -- isn't the actual process</li>
+ <li id="l-1176" _a="Hixie"><a href="#l-1176">#</a> [23:34] &lt;Hixie&gt; the actual process is more subtle and complicated</li>
+ <li id="l-1177"><a href="#l-1177">#</a> [23:34] * Quits: svl (~me@ip565744a7.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-1178" _a="SamB" _r="m4nu"><a href="#l-1178">#</a> [23:34] &lt;SamB&gt; m4nu: what would you prefer it be spammed with?</li>
+ <li id="l-1179"><a href="#l-1179">#</a> [23:35] * Quits: richt_ (~richt@c83-248-137-176.bredband.comhem.se) (Remote host closed the connection)</li>
+ <li id="l-1180" _a="m4nu"><a href="#l-1180">#</a> [23:35] &lt;m4nu&gt; cat pictures and discussion about how we're going to fix the Web login mess... and pervasive monitoring.</li>
+ <li id="l-1181"><a href="#l-1181">#</a> [23:35] * Joins: richt (~richt@c83-248-137-176.bredband.comhem.se)</li>
+ <li id="l-1182" _a="Hixie"><a href="#l-1182">#</a> [23:36] &lt;Hixie&gt; 🐱 ?</li>
+ <li id="l-1183" _a="m4nu"><a href="#l-1183">#</a> [23:36] &lt;m4nu&gt; \o/ !</li>
+ <li id="l-1184" _a="Hixie"><a href="#l-1184">#</a> [23:36] * Hixie wonders if that showed up right for anyone at all</li>
+ <li id="l-1185" _a="m4nu"><a href="#l-1185">#</a> [23:36] &lt;m4nu&gt; did for me...</li>
+ <li id="l-1186" _a="Hixie"><a href="#l-1186">#</a> [23:36] &lt;Hixie&gt; nice</li>
+ <li id="l-1187" _a="Hixie"><a href="#l-1187">#</a> [23:36] &lt;Hixie&gt; what irc client?</li>
+ <li id="l-1188" _a="m4nu"><a href="#l-1188">#</a> [23:36] &lt;m4nu&gt; xchat</li>
+ <li id="l-1189" _a="Hixie"><a href="#l-1189">#</a> [23:36] &lt;Hixie&gt; wow</li>
+ <li id="l-1190" _a="Hixie"><a href="#l-1190">#</a> [23:36] &lt;Hixie&gt; impressive</li>
+ <li id="l-1191" _a="m4nu"><a href="#l-1191">#</a> [23:37] * m4nu thinks it has more to do w/ how your font server is configured than anything else.</li>
+ <li id="l-1192" _a="Hixie" _r="ah"><a href="#l-1192">#</a> [23:37] &lt;Hixie&gt; ah, could be</li>
+ <li id="l-1193" _a="Hixie"><a href="#l-1193">#</a> [23:37] &lt;Hixie&gt; i'm on mac here</li>
+ <li id="l-1194" _a="Hixie"><a href="#l-1194">#</a> [23:37] &lt;Hixie&gt; it displayed as a question mark :-)</li>
+ <li id="l-1195" _a="jeffreyatw"><a href="#l-1195">#</a> [23:38] &lt;jeffreyatw&gt; it did for me, on colloquy</li>
+ <li id="l-1196" _a="m4nu" _r="Hixie"><a href="#l-1196">#</a> [23:38] &lt;m4nu&gt; Hixie: re: claimed process of consensus - yes, I agree that there are good points to be made that W3C doesn't practice what they preach at times (WHATWG spec forking being an example of that)... and there is a lot of big corporate interest in W3C that makes dumb stuff happen sometimes, and perhaps we'd be better off if that was tamped down a bit.</li>
+ <li id="l-1197" _a="m4nu"><a href="#l-1197">#</a> [23:40] &lt;m4nu&gt; anyway - bottom line - it's good that both the WHATWG and W3C exist and do what they do, even though it's a pain in all of our collective asses for a non-trivial chunk of the year.</li>
+ <li id="l-1198"><a href="#l-1198">#</a> [23:40] * Quits: richt (~richt@c83-248-137-176.bredband.comhem.se) (Read error: Connection reset by peer)</li>
+ <li id="l-1199" _a="m4nu"><a href="#l-1199">#</a> [23:40] * m4nu afks.</li>
+ <li id="l-1200"><a href="#l-1200">#</a> [23:40] * Joins: richt (~richt@c83-248-137-176.bredband.comhem.se)</li>
+ <li id="l-1201" _a="SamB" _r="m4nu"><a href="#l-1201">#</a> [23:40] &lt;SamB&gt; m4nu: which chunk of the year is it non-painful for?</li>
+ <li id="l-1202" _a="Hixie"><a href="#l-1202">#</a> [23:42] &lt;Hixie&gt; vacation?</li>
+ <li id="l-1203" _a="Hixie"><a href="#l-1203">#</a> [23:42] &lt;Hixie&gt; there's lots of specs being developed at the w3c that are fine</li>
+ <li id="l-1204" _a="Hixie"><a href="#l-1204">#</a> [23:42] &lt;Hixie&gt; it's just the way they insist on forking our specs that i find asinine</li>
+ <li id="l-1205" _a="Krinkle"><a href="#l-1205">#</a> [23:44] * Krinkle is now known as Krinkle|detached</li>
+ <li id="l-1206"><a href="#l-1206">#</a> [23:45] * Quits: mven (~textual@169.241.49.229) (Read error: Connection reset by peer)</li>
+ <li id="l-1207"><a href="#l-1207">#</a> [23:48] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-1208"><a href="#l-1208">#</a> [23:51] * Joins: markkes (~markkes@62.207.90.201)</li>
+ <li id="l-1209"><a href="#l-1209">#</a> Session Close: Thu May 22 00:00:00 2014</li>
+</ol>
+<p id="end">The end :)

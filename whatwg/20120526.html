@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20120526</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20120526.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2012-05-26 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat May 26 00:00:01 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="jamesr_"><a href="#l-3">#</a> [00:00] &lt;jamesr_&gt; it gets messy quickly</li>
+ <li id="l-4" _a="jamesr_"><a href="#l-4">#</a> [00:00] &lt;jamesr_&gt; and someone always goes &quot;can i just pass a function?&quot; then you have to explain how it picks up the global context and the thread implications, then someone wants a JS isolate, then you're in a world of hurt</li>
+ <li id="l-5" _a="zewt" _r="well"><a href="#l-5">#</a> [00:01] &lt;zewt&gt; well, mongo's query language is static</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:01] * Quits: tantek_ (~tantek@nat/mozilla/x-dxmyevhjknbwiwpb) (Quit: tantek_)</li>
+ <li id="l-7" _a="zewt"><a href="#l-7">#</a> [00:01] &lt;zewt&gt; the above can be optimized (and even if it's not, it's a lot faster to convert it to a native object and just test them all, since you don't have to fire off JS)</li>
+ <li id="l-8"><a href="#l-8">#</a> [00:01] * Quits: tantek (~tantek@nat/mozilla/x-kxtgfsopbpibgyml) (Quit: tantek)</li>
+ <li id="l-9" _a="TabAtkins" _r="Yes"><a href="#l-9">#</a> [00:01] &lt;TabAtkins&gt; Yes, take some object with values.  Eagerly parse them to dispose of getters. Done.</li>
+ <li id="l-10" _a="zewt"><a href="#l-10">#</a> [00:02] &lt;zewt&gt; (idl dictionary)</li>
+ <li id="l-11"><a href="#l-11">#</a> [00:02] * Quits: malcolmva (~malcolmva@pool-74-108-142-22.nycmny.fios.verizon.net) (Ping timeout: 276 seconds)</li>
+ <li id="l-12"><a href="#l-12">#</a> [00:07] * Quits: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-13"><a href="#l-13">#</a> [00:08] * Quits: drublic (~drublic@frbg-5d84ec31.pool.mediaWays.net) (Remote host closed the connection)</li>
+ <li id="l-14"><a href="#l-14">#</a> [00:08] * Quits: othermaciej (~mjs@17.245.98.87) (Quit: othermaciej)</li>
+ <li id="l-15"><a href="#l-15">#</a> [00:11] * Joins: othermaciej (~mjs@17.245.98.87)</li>
+ <li id="l-16"><a href="#l-16">#</a> [00:11] * Quits: WeirdAl (~chatzilla@g2spf.ask.info) (Remote host closed the connection)</li>
+ <li id="l-17"><a href="#l-17">#</a> [00:14] * Quits: nesta_ (~nesta_@13.109.219.87.dynamic.jazztel.es) (Quit: nesta_)</li>
+ <li id="l-18"><a href="#l-18">#</a> [00:22] * Quits: hasathe__ (~hasather_@cm-84.208.108.107.getinternet.no) (Remote host closed the connection)</li>
+ <li id="l-19" _a="Hixie" _r="TabAtkins"><a href="#l-19">#</a> [00:25] &lt;Hixie&gt; TabAtkins: my utf-8 validating code isn't vorking</li>
+ <li id="l-20" _a="TabAtkins" _r="Hixie"><a href="#l-20">#</a> [00:25] &lt;TabAtkins&gt; Hixie: Interesting.  Should be trivial!</li>
+ <li id="l-21" _a="Hixie" _r="specifically"><a href="#l-21">#</a> [00:26] &lt;Hixie&gt; specifically, it thinks 0xED 0x9F 0xBF is invalid, because it decodes it to a bogus value</li>
+ <li id="l-22" _a="Hixie"><a href="#l-22">#</a> [00:27] &lt;Hixie&gt; my code for decoding sequences starting with 0xED is equivalent to  0xD000 + ((c1-0x80) &lt;&lt; 6) + (c2-0x80)</li>
+ <li id="l-23" _a="Hixie"><a href="#l-23">#</a> [00:27] &lt;Hixie&gt; am i missing something?</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:28] * Quits: tomasf_ (~tomasf@host-95-199-2-14.mobileonline.telia.com) (Quit: tomasf_)</li>
+ <li id="l-25" _a="TabAtkins"><a href="#l-25">#</a> [00:28] &lt;TabAtkins&gt; Assuming that c1 and c2 are guaranteed to be in [00,ff], and you're already making sure that the second bit in each is 0, that should be fine.</li>
+ <li id="l-26" _a="TabAtkins"><a href="#l-26">#</a> [00:29] &lt;TabAtkins&gt; Better would be to &amp; each with 0x00111111.</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:29] &lt;Hixie&gt; each one is known to be in the range 0x80 .. 0xBF</li>
+ <li id="l-28" _a="TabAtkins"><a href="#l-28">#</a> [00:29] &lt;TabAtkins&gt; Just to be safe, try swapping your &quot;-0x80&quot; with &quot;&amp;63&quot;.</li>
+ <li id="l-29" _a="Hixie"><a href="#l-29">#</a> [00:33] &lt;Hixie&gt; that (thankfully) made no difference</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:33] * Quits: othermaciej (~mjs@17.245.98.87) (Quit: othermaciej)</li>
+ <li id="l-31" _a="TabAtkins" _r="Okay"><a href="#l-31">#</a> [00:33] &lt;TabAtkins&gt; Okay, good.  Just sanity-checking.</li>
+ <li id="l-32" _a="TabAtkins"><a href="#l-32">#</a> [00:33] &lt;TabAtkins&gt; What's the bogus value it's decoding to?</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:34] * Quits: jarib (~jarib@unaffiliated/jarib) (Excess Flood)</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:34] &lt;Hixie&gt; 0xDB5F</li>
+ <li id="l-35" _a="Hixie"><a href="#l-35">#</a> [00:34] &lt;Hixie&gt; oh i see the problem</li>
+ <li id="l-36" _a="Hixie"><a href="#l-36">#</a> [00:35] &lt;Hixie&gt; off by one error</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:35] * Joins: jarib (~jarib@unaffiliated/jarib)</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:35] &lt;Hixie&gt; don't mind me</li>
+ <li id="l-39" _a="eric_carlson"><a href="#l-39">#</a> [00:35] * eric_carlson is now known as ericc|afk</li>
+ <li id="l-40" _a="TabAtkins" _r="uh"><a href="#l-40">#</a> [00:35] &lt;TabAtkins&gt; uh, okay.</li>
+ <li id="l-41" _a="Hixie"><a href="#l-41">#</a> [00:35] &lt;Hixie&gt; c2 contained c1 and c1 contained c0</li>
+ <li id="l-42" _a="Hixie"><a href="#l-42">#</a> [00:36] &lt;Hixie&gt; the leading byte</li>
+ <li id="l-43" _a="Hixie"><a href="#l-43">#</a> [00:36] &lt;Hixie&gt; that resulted in disturbingly few of my tests failing</li>
+ <li id="l-44" _a="Hixie"><a href="#l-44">#</a> [00:36] &lt;Hixie&gt; but that's another story</li>
+ <li id="l-45" _a="Hixie" _r="ok"><a href="#l-45">#</a> [00:37] &lt;Hixie&gt; ok, bbiab</li>
+ <li id="l-46" _a="TabAtkins" _r="Oh"><a href="#l-46">#</a> [00:38] &lt;TabAtkins&gt; Oh, duh, I should have noticed that as soon as I looked at it.</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:42] * Joins: nonge (~nonge@p50829B42.dip.t-dialin.net)</li>
+ <li id="l-48" _a="rniwa" _r="hsivonen"><a href="#l-48">#</a> [00:43] &lt;rniwa&gt; hsivonen: yt?</li>
+ <li id="l-49" _a="rniwa" _r="Hixie"><a href="#l-49">#</a> [00:44] &lt;rniwa&gt; Hixie: do you know how well tested the part it says to throw SYNAX_ERR in <a href="http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface">http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface</a> ?</li>
+ <li id="l-50"><a href="#l-50">#</a> [00:44] * Joins: nickrathert (~nickrathe@c-98-206-42-116.hsd1.il.comcast.net)</li>
+ <li id="l-51" _a="rniwa"><a href="#l-51">#</a> [00:44] &lt;rniwa&gt; when the element name is html, body, etc...?</li>
+ <li id="l-52"><a href="#l-52">#</a> [00:44] * Joins: jdong_bot_ (~jdong_bot@117.79.233.235)</li>
+ <li id="l-53"><a href="#l-53">#</a> [00:46] * Quits: nickrathert (~nickrathe@c-98-206-42-116.hsd1.il.comcast.net) (Client Quit)</li>
+ <li id="l-54"><a href="#l-54">#</a> [00:53] * Joins: othermaciej (~mjs@17.245.104.231)</li>
+ <li id="l-55"><a href="#l-55">#</a> [00:54] * Quits: sanjayb (~sanj@122.170.67.108) (Ping timeout: 246 seconds)</li>
+ <li id="l-56"><a href="#l-56">#</a> [01:02] * Quits: jernoble (~jernoble@17.212.152.13) (Quit: jernoble)</li>
+ <li id="l-57" _a="rafaelw_" _r="Hixie"><a href="#l-57">#</a> [01:03] &lt;rafaelw_&gt; Hixie; Where are you WRT Document.parse()?</li>
+ <li id="l-58" _a="rafaelw_"><a href="#l-58">#</a> [01:04] &lt;rafaelw_&gt; I'd really like to get this in. I'm wondering if you still have strong objections or not.</li>
+ <li id="l-59"><a href="#l-59">#</a> [01:08] * Joins: tantek (~tantek@md60536d0.tmodns.net)</li>
+ <li id="l-60" _a="espadrine"><a href="#l-60">#</a> [01:09] &lt;espadrine&gt; Firefox cannot redefine Element.prototype.scrollIntoView, while webkit can. Firefox's wrong, right?</li>
+ <li id="l-61"><a href="#l-61">#</a> [01:09] * Quits: tantek (~tantek@md60536d0.tmodns.net) (Read error: Connection reset by peer)</li>
+ <li id="l-62"><a href="#l-62">#</a> [01:10] * Joins: tantek (~tantek@md60536d0.tmodns.net)</li>
+ <li id="l-63"><a href="#l-63">#</a> [01:21] * Quits: ehsan (~ehsan@66.207.208.98) (Remote host closed the connection)</li>
+ <li id="l-64"><a href="#l-64">#</a> [01:22] * Quits: sarro (~sarro@i5E864094.versanet.de)</li>
+ <li id="l-65"><a href="#l-65">#</a> [01:26] * Joins: dgathright (~dgathrigh@nat/yahoo/x-tflupbnqvcnmhbxf)</li>
+ <li id="l-66"><a href="#l-66">#</a> [01:31] * Quits: jdong_bot_ (~jdong_bot@117.79.233.235) (Remote host closed the connection)</li>
+ <li id="l-67"><a href="#l-67">#</a> [01:31] * Joins: jernoble (~jernoble@2620:149:4:1b01:523:8488:bfe3:d5f2)</li>
+ <li id="l-68" _a="jwalden" _r="espadrine"><a href="#l-68">#</a> [01:31] &lt;jwalden&gt; espadrine: wrong assuming you consider webidl authoritative now, yes</li>
+ <li id="l-69" _a="jwalden" _r="espadrine"><a href="#l-69">#</a> [01:31] &lt;jwalden&gt; espadrine: DOM bindings are being rewritten now and should end up fixing that</li>
+ <li id="l-70" _a="espadrine" _r="jwalden"><a href="#l-70">#</a> [01:32] &lt;espadrine&gt; jwalden: oh ok, thanks!</li>
+ <li id="l-71"><a href="#l-71">#</a> [01:33] * Quits: gavinc (~gavin@barad-dur.carothers.name) (Quit: Konversation terminated!)</li>
+ <li id="l-72"><a href="#l-72">#</a> [01:35] * Quits: tantek (~tantek@md60536d0.tmodns.net) (Quit: tantek)</li>
+ <li id="l-73"><a href="#l-73">#</a> [01:39] * Quits: grantbdev (~grantbdev@ip174-70-100-162.no.no.cox.net) (Quit: Leaving)</li>
+ <li id="l-74"><a href="#l-74">#</a> [01:41] * Quits: krit (~krit@sjfw1-a.adobe.com) (Quit: Leaving.)</li>
+ <li id="l-75"><a href="#l-75">#</a> [01:43] * Quits: jacobolus (~jacobolus@coffeebar.static.monkeybrains.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-76"><a href="#l-76">#</a> [01:45] * Joins: mven_ (~mven__@169.241.49.57)</li>
+ <li id="l-77"><a href="#l-77">#</a> [01:47] * Quits: mven (~mven__@169.241.49.57) (Ping timeout: 260 seconds)</li>
+ <li id="l-78"><a href="#l-78">#</a> [01:50] * Quits: Kasey (~kkellydes@cpe-76-181-198-184.columbus.res.rr.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-79"><a href="#l-79">#</a> [01:50] * Joins: JoePeck (~JoePeck@2620:149:4:304:58f2:b453:3c3:2c19)</li>
+ <li id="l-80"><a href="#l-80">#</a> [01:51] * Quits: JoePeck (~JoePeck@2620:149:4:304:58f2:b453:3c3:2c19) (Client Quit)</li>
+ <li id="l-81" _a="heycam|away"><a href="#l-81">#</a> [02:04] * heycam|away is now known as heycam</li>
+ <li id="l-82"><a href="#l-82">#</a> [02:05] * Quits: jernoble (~jernoble@2620:149:4:1b01:523:8488:bfe3:d5f2) (Quit: jernoble)</li>
+ <li id="l-83"><a href="#l-83">#</a> [02:09] * Joins: jernoble (~jernoble@17.212.152.13)</li>
+ <li id="l-84"><a href="#l-84">#</a> [02:14] * Joins: jacobolus (~jacobolus@coffeebar.static.monkeybrains.net)</li>
+ <li id="l-85"><a href="#l-85">#</a> [02:20] * Quits: astearns (~astearns@192.150.22.5) (Quit: astearns)</li>
+ <li id="l-86"><a href="#l-86">#</a> [02:23] * Joins: astearns (~astearns@192.150.22.5)</li>
+ <li id="l-87"><a href="#l-87">#</a> [02:24] * Quits: astearns (~astearns@192.150.22.5) (Client Quit)</li>
+ <li id="l-88"><a href="#l-88">#</a> [02:24] * Joins: danielfilho (~daniel@187.31.77.7)</li>
+ <li id="l-89"><a href="#l-89">#</a> [02:31] * Joins: ap (~ap@2620:149:4:1b01:7d88:7c01:23e9:de30)</li>
+ <li id="l-90"><a href="#l-90">#</a> [02:31] * Joins: jamesr (jamesr@nat/google/x-mtwuxnhowvsejqxd)</li>
+ <li id="l-91"><a href="#l-91">#</a> [02:37] * Joins: jsbell (jsbell@nat/google/x-gctkgncespsdifmf)</li>
+ <li id="l-92"><a href="#l-92">#</a> [02:37] * Joins: scor (~scor@c-98-216-66-30.hsd1.ma.comcast.net)</li>
+ <li id="l-93"><a href="#l-93">#</a> [02:37] * Quits: scor (~scor@c-98-216-66-30.hsd1.ma.comcast.net) (Changing host)</li>
+ <li id="l-94"><a href="#l-94">#</a> [02:37] * Joins: scor (~scor@drupal.org/user/52142/view)</li>
+ <li id="l-95"><a href="#l-95">#</a> [02:38] * Quits: jamesr (jamesr@nat/google/x-mtwuxnhowvsejqxd) (Quit: jamesr)</li>
+ <li id="l-96"><a href="#l-96">#</a> [02:39] * Joins: MikeSmith (~MikeSmith@s1106207.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-97"><a href="#l-97">#</a> [02:40] * Quits: jsbell (jsbell@nat/google/x-gctkgncespsdifmf) (Client Quit)</li>
+ <li id="l-98"><a href="#l-98">#</a> [02:42] * Quits: othermaciej (~mjs@17.245.104.231) (Quit: othermaciej)</li>
+ <li id="l-99"><a href="#l-99">#</a> [02:44] * Quits: mven_ (~mven__@169.241.49.57) (Read error: Connection reset by peer)</li>
+ <li id="l-100"><a href="#l-100">#</a> [02:44] * Joins: tantek (~tantek@50-0-92-247.dsl.dynamic.sonic.net)</li>
+ <li id="l-101" _a="edwardbc"><a href="#l-101">#</a> [02:46] * edwardbc is now known as edwardbc_</li>
+ <li id="l-102"><a href="#l-102">#</a> [02:47] * Joins: mven (~mven__@169.241.49.57)</li>
+ <li id="l-103"><a href="#l-103">#</a> [02:51] * Joins: othermaciej (~mjs@17.245.104.231)</li>
+ <li id="l-104"><a href="#l-104">#</a> [03:11] * Quits: danielfilho (~daniel@187.31.77.7) (Quit: &lt;/html&gt;)</li>
+ <li id="l-105"><a href="#l-105">#</a> [03:27] * Quits: dgathright (~dgathrigh@nat/yahoo/x-tflupbnqvcnmhbxf) (Quit: dgathright)</li>
+ <li id="l-106"><a href="#l-106">#</a> [03:39] * Quits: chriseppstein (~chrisepps@209.119.65.162) (Quit: chriseppstein)</li>
+ <li id="l-107"><a href="#l-107">#</a> [03:39] * Quits: sicking (~chatzilla@2620:101:8003:200:226:bbff:fe05:3fe1) (Ping timeout: 272 seconds)</li>
+ <li id="l-108"><a href="#l-108">#</a> [04:10] * Quits: aklein (u4454@gateway/web/irccloud.com/x-otzusccxjxexxuwy)</li>
+ <li id="l-109"><a href="#l-109">#</a> [04:13] * Quits: ivan\ (~ivan@unaffiliated/ivan/x-000001) (Quit: ERC Version 5.3 (IRC client for Emacs))</li>
+ <li id="l-110"><a href="#l-110">#</a> [04:14] * Joins: ivan\ (~ivan@unaffiliated/ivan/x-000001)</li>
+ <li id="l-111"><a href="#l-111">#</a> [04:21] * Quits: othermaciej (~mjs@17.245.104.231) (Quit: othermaciej)</li>
+ <li id="l-112"><a href="#l-112">#</a> [04:23] * Quits: scor (~scor@drupal.org/user/52142/view) (Quit: scor)</li>
+ <li id="l-113"><a href="#l-113">#</a> [04:26] * Joins: jacobolu_ (~jacobolus@coffeebar.static.monkeybrains.net)</li>
+ <li id="l-114"><a href="#l-114">#</a> [04:27] * Quits: jacobolus (~jacobolus@coffeebar.static.monkeybrains.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-115" _a="jacobolu_"><a href="#l-115">#</a> [04:28] * jacobolu_ is now known as jacobolus</li>
+ <li id="l-116"><a href="#l-116">#</a> [04:30] * Quits: twisted` (~twisted@p5DDBB0E0.dip.t-dialin.net) (Ping timeout: 246 seconds)</li>
+ <li id="l-117"><a href="#l-117">#</a> [04:31] * Joins: twisted` (~twisted@p5DDBB78A.dip.t-dialin.net)</li>
+ <li id="l-118"><a href="#l-118">#</a> [04:35] * Joins: fileformat (485ec707@gateway/web/freenode/ip.72.94.199.7)</li>
+ <li id="l-119"><a href="#l-119">#</a> [04:36] * Quits: fileformat (485ec707@gateway/web/freenode/ip.72.94.199.7) (Client Quit)</li>
+ <li id="l-120"><a href="#l-120">#</a> [05:04] * Quits: jacobolus (~jacobolus@coffeebar.static.monkeybrains.net) (Remote host closed the connection)</li>
+ <li id="l-121"><a href="#l-121">#</a> [05:21] * Joins: nessy (~Adium@124.170.221.202)</li>
+ <li id="l-122"><a href="#l-122">#</a> [05:22] * Joins: Druide_ (~Druid@p5B1365B2.dip.t-dialin.net)</li>
+ <li id="l-123"><a href="#l-123">#</a> [05:23] * Quits: ap (~ap@2620:149:4:1b01:7d88:7c01:23e9:de30) (Quit: ap)</li>
+ <li id="l-124"><a href="#l-124">#</a> [05:24] * Quits: Druide__ (~Druid@p5B135B6F.dip.t-dialin.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-125"><a href="#l-125">#</a> [05:31] * Quits: tantek (~tantek@50-0-92-247.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-126"><a href="#l-126">#</a> [05:38] * Quits: twisted` (~twisted@p5DDBB78A.dip.t-dialin.net) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-127"><a href="#l-127">#</a> [05:39] * Joins: Kasey (~kkellydes@cpe-76-181-198-184.columbus.res.rr.com)</li>
+ <li id="l-128"><a href="#l-128">#</a> [05:40] * Joins: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-129"><a href="#l-129">#</a> [05:46] * Quits: rniwa (rniwa@nat/google/x-mquixmkbjxhxuifi) (Quit: rniwa)</li>
+ <li id="l-130"><a href="#l-130">#</a> [05:52] * Joins: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net)</li>
+ <li id="l-131"><a href="#l-131">#</a> [05:58] * Quits: jryans (~jryans@rrcs-108-178-108-5.sw.biz.rr.com) (Quit: Be back later)</li>
+ <li id="l-132"><a href="#l-132">#</a> [06:02] * Quits: MikeSmith (~MikeSmith@s1106207.xgsspn.imtp.tachikawa.spmode.ne.jp) (Ping timeout: 245 seconds)</li>
+ <li id="l-133"><a href="#l-133">#</a> [06:14] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-134"><a href="#l-134">#</a> [06:18] * Joins: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net)</li>
+ <li id="l-135"><a href="#l-135">#</a> [06:39] * Quits: Kasey (~kkellydes@cpe-76-181-198-184.columbus.res.rr.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-136"><a href="#l-136">#</a> [06:42] * Joins: Kasey (~kkellydes@cpe-76-181-198-184.columbus.res.rr.com)</li>
+ <li id="l-137"><a href="#l-137">#</a> [06:43] * Quits: Kasey (~kkellydes@cpe-76-181-198-184.columbus.res.rr.com) (Client Quit)</li>
+ <li id="l-138"><a href="#l-138">#</a> [06:45] * Quits: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-139"><a href="#l-139">#</a> [06:56] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-140"><a href="#l-140">#</a> [06:57] * Quits: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net) (Quit: dgathright)</li>
+ <li id="l-141"><a href="#l-141">#</a> [06:58] * Quits: jwalden (~waldo@2620:101:8003:200:224:d7ff:fef0:8d90) (Quit: ChatZilla 0.9.87-4.1450hg.fc15 [XULRunner 12.0/20120424092743])</li>
+ <li id="l-142"><a href="#l-142">#</a> [07:03] * Joins: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net)</li>
+ <li id="l-143"><a href="#l-143">#</a> [07:07] * Quits: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-144"><a href="#l-144">#</a> [07:07] * Joins: othermaciej_ (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-145"><a href="#l-145">#</a> [07:07] * Quits: othermaciej_ (~mjs@c-24-6-209-189.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-146"><a href="#l-146">#</a> [07:09] * Joins: sanjayb (~sanj@122.170.67.108)</li>
+ <li id="l-147"><a href="#l-147">#</a> [07:25] * Joins: LBP (~Mirc@pD9EB057A.dip0.t-ipconnect.de)</li>
+ <li id="l-148"><a href="#l-148">#</a> [07:26] * Quits: espadrine (~espadrine@nat/mozilla/x-zlqscxflzumyvyll) (Quit: espadrine)</li>
+ <li id="l-149"><a href="#l-149">#</a> [07:32] * Joins: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-150"><a href="#l-150">#</a> [07:41] * Joins: rniwa (~rniwa@70-89-66-218-ca.sfba.hfc.comcastbusiness.net)</li>
+ <li id="l-151"><a href="#l-151">#</a> [08:04] * Quits: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-152"><a href="#l-152">#</a> [08:12] * Joins: espadrine (~espadrine@63-235-13-3.dia.static.qwest.net)</li>
+ <li id="l-153"><a href="#l-153">#</a> [08:15] * Joins: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-154"><a href="#l-154">#</a> [08:27] * Joins: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com)</li>
+ <li id="l-155"><a href="#l-155">#</a> [08:29] * Quits: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-156"><a href="#l-156">#</a> [08:37] * Quits: Hixie (~ianh@178.255.149.100) (Ping timeout: 252 seconds)</li>
+ <li id="l-157"><a href="#l-157">#</a> [08:38] * Joins: Ms2ger (~Ms2ger@91.181.22.56)</li>
+ <li id="l-158"><a href="#l-158">#</a> [08:38] * Joins: Hixie (~ianh@178.255.149.100)</li>
+ <li id="l-159"><a href="#l-159">#</a> [08:45] * Joins: chayin (quassel@nat/nokia/x-tjnonryzgatxeaoo)</li>
+ <li id="l-160"><a href="#l-160">#</a> [08:47] * Quits: chayin__ (quassel@nat/nokia/x-bnkehibuaxnwycoh) (Ping timeout: 250 seconds)</li>
+ <li id="l-161"><a href="#l-161">#</a> [08:56] * Joins: ehsan (~ehsan@209.20.29.228)</li>
+ <li id="l-162"><a href="#l-162">#</a> [08:57] * Joins: raphc (~rc@ppp-sei21-46-193-160.67.wb.wifirst.net)</li>
+ <li id="l-163"><a href="#l-163">#</a> [08:59] * Joins: tantek (~tantek@70-36-197-110.dsl.dynamic.sonic.net)</li>
+ <li id="l-164" _a="jernoble"><a href="#l-164">#</a> [08:59] * jernoble is now known as jernoble|afk</li>
+ <li id="l-165"><a href="#l-165">#</a> [08:59] * Joins: danbri (~danbri@athedsl-4563686.home.otenet.gr)</li>
+ <li id="l-166" _a="tantek"><a href="#l-166">#</a> [09:01] &lt;tantek&gt; who has admin access to the wiki?</li>
+ <li id="l-167" _a="tantek"><a href="#l-167">#</a> [09:01] &lt;tantek&gt; e.g. to install extensions</li>
+ <li id="l-168" _a="tantek"><a href="#l-168">#</a> [09:02] &lt;tantek&gt; perhaps annevk?</li>
+ <li id="l-169" _a="tantek"><a href="#l-169">#</a> [09:02] &lt;tantek&gt; would be great to get the SemanticHTML extension installed</li>
+ <li id="l-170" _a="tantek"><a href="#l-170">#</a> [09:02] &lt;tantek&gt; <a href="https://github.com/microformats/mediawiki-semantic-html">https://github.com/microformats/mediawiki-semantic-html</a></li>
+ <li id="l-171" _a="annevk"><a href="#l-171">#</a> [09:03] &lt;annevk&gt; I don't think I can ssh into the wiki</li>
+ <li id="l-172" _a="heycam"><a href="#l-172">#</a> [09:03] * heycam is now known as heycam|away</li>
+ <li id="l-173" _a="tantek"><a href="#l-173">#</a> [09:03] &lt;tantek&gt; it allows use of more semantic HTML markup tags on MediaWIki pages, useful for new tags in particular like &lt;time&gt; and &lt;data&gt;</li>
+ <li id="l-174" _a="tantek"><a href="#l-174">#</a> [09:03] &lt;tantek&gt; ah ok</li>
+ <li id="l-175" _a="tantek"><a href="#l-175">#</a> [09:03] &lt;tantek&gt; we're running it live on the microformats wiki if anyone wants to experiment</li>
+ <li id="l-176" _a="tantek" _r="annevk"><a href="#l-176">#</a> [09:04] &lt;tantek&gt; annevk, ok, np. I'll wait til Hixie is official back from vacation and ask him (though I'm sure he's going to be overrun by a lot of pent-up requests).</li>
+ <li id="l-177" _a="tantek"><a href="#l-177">#</a> [09:05] &lt;tantek&gt; *officially</li>
+ <li id="l-178" _a="annevk"><a href="#l-178">#</a> [09:05] &lt;annevk&gt; Lachy might have access too</li>
+ <li id="l-179" _a="annevk"><a href="#l-179">#</a> [09:05] &lt;annevk&gt; but waiting for Hixie works</li>
+ <li id="l-180" _a="tantek"><a href="#l-180">#</a> [09:05] &lt;tantek&gt; not in a rush so that's fine</li>
+ <li id="l-181" _a="tantek"><a href="#l-181">#</a> [09:06] &lt;tantek&gt; just a nice convenient incremental upgrade</li>
+ <li id="l-182" _a="tantek" _r="plus"><a href="#l-182">#</a> [09:06] &lt;tantek&gt; plus, hey, more HTML5 :)</li>
+ <li id="l-183" _a="tantek"><a href="#l-183">#</a> [09:06] &lt;tantek&gt; is there an implementations or tools page somewhere where we keep track of HTML5 implementations / tools?</li>
+ <li id="l-184"><a href="#l-184">#</a> [09:07] * Quits: davatron5000 (~dave@cpe-66-25-175-141.austin.res.rr.com) (Quit: davatron5000)</li>
+ <li id="l-185" _a="annevk"><a href="#l-185">#</a> [09:07] &lt;annevk&gt; yeah</li>
+ <li id="l-186" _a="tantek"><a href="#l-186">#</a> [09:07] &lt;tantek&gt; (I figured I would ask before creating one)</li>
+ <li id="l-187" _a="annevk"><a href="#l-187">#</a> [09:07] &lt;annevk&gt; <a href="http://wiki.whatwg.org/wiki/Category:Implementations">http://wiki.whatwg.org/wiki/Category:Implementations</a></li>
+ <li id="l-188" _a="tantek"><a href="#l-188">#</a> [09:07] &lt;tantek&gt; ok - so any page tagged with that category</li>
+ <li id="l-189" _a="annevk"><a href="#l-189">#</a> [09:07] &lt;annevk&gt; all major things are listed from the front page</li>
+ <li id="l-190" _a="tantek"><a href="#l-190">#</a> [09:07] &lt;tantek&gt; or would it be better to make a publishing page</li>
+ <li id="l-191" _a="tantek"><a href="#l-191">#</a> [09:08] &lt;tantek&gt; for HTML5 publishing tools</li>
+ <li id="l-192" _a="annevk"><a href="#l-192">#</a> [09:08] &lt;annevk&gt; at some point I turned a few into categories to make it easier to group stuff</li>
+ <li id="l-193" _a="tantek"><a href="#l-193">#</a> [09:08] &lt;tantek&gt; whatever grouping/organization is your preference</li>
+ <li id="l-194" _a="annevk"><a href="#l-194">#</a> [09:08] &lt;annevk&gt; I don't think we have quite enough implementation pages to start separating them further</li>
+ <li id="l-195" _a="tantek"><a href="#l-195">#</a> [09:09] &lt;tantek&gt; ok</li>
+ <li id="l-196" _a="Ms2ger"><a href="#l-196">#</a> [09:11] &lt;Ms2ger&gt; AryehGregor probably also has access</li>
+ <li id="l-197"><a href="#l-197">#</a> [09:13] * Quits: raphc (~rc@ppp-sei21-46-193-160.67.wb.wifirst.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-198"><a href="#l-198">#</a> [09:14] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-199"><a href="#l-199">#</a> [09:28] * Quits: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net) (Quit: dgathright)</li>
+ <li id="l-200"><a href="#l-200">#</a> [09:32] * Joins: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net)</li>
+ <li id="l-201"><a href="#l-201">#</a> [09:37] * Joins: tomasf_ (~tomasf@host-95-199-2-14.mobileonline.telia.com)</li>
+ <li id="l-202"><a href="#l-202">#</a> [09:44] * Quits: tantek (~tantek@70-36-197-110.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-203"><a href="#l-203">#</a> [09:54] * Quits: annevk (~annevk@a82-161-179-17.adsl.xs4all.nl) (Quit: annevk)</li>
+ <li id="l-204"><a href="#l-204">#</a> [09:57] * Joins: Maurice (copyman@5ED573FA.cm-7-6b.dynamic.ziggo.nl)</li>
+ <li id="l-205"><a href="#l-205">#</a> [10:07] * Quits: danbri (~danbri@athedsl-4563686.home.otenet.gr) (Remote host closed the connection)</li>
+ <li id="l-206" _a="Stevef" _r="tantek"><a href="#l-206">#</a> [10:22] &lt;Stevef&gt; tantek: a heads up, I mentioned &lt;hgroup&gt; to you at TPAC last year, seems like the HTML WG chairs will soon provide some feedback on Issue 164 <a href="http://dev.w3.org/html5/status/issue-status.html#ISSUE-164">http://dev.w3.org/html5/status/issue-status.html#ISSUE-164</a> if you have any interest in keeping hgroup in HTML5 you may want to keep an eye on this issue. there are 5 proposals 4 of which proposae replacing hgroup. As there has been no real data or...</li>
+ <li id="l-207" _a="Stevef"><a href="#l-207">#</a> [10:22] &lt;Stevef&gt; ...argument from the WHATWG side on keeping hgroup I would be surprised if it survives.</li>
+ <li id="l-208"><a href="#l-208">#</a> [10:25] * Quits: ehsan (~ehsan@209.20.29.228) (Ping timeout: 240 seconds)</li>
+ <li id="l-209"><a href="#l-209">#</a> [10:33] * Quits: NimeshNeema (u2689@gateway/web/irccloud.com/x-kxtvkvrmgxohhrzi) (Quit: Connection closed for inactivity)</li>
+ <li id="l-210" _a="Stevef" _r="hober"><a href="#l-210">#</a> [10:34] &lt;Stevef&gt; hober: ping re: <a href="http://lists.w3.org/Archives/Public/public-html/2012May/0008.html">http://lists.w3.org/Archives/Public/public-html/2012May/0008.html</a></li>
+ <li id="l-211"><a href="#l-211">#</a> [10:43] * Quits: esc_ (~esc_ape@77.117.247.3) (Ping timeout: 265 seconds)</li>
+ <li id="l-212"><a href="#l-212">#</a> [10:57] * Quits: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-213"><a href="#l-213">#</a> [11:04] * Joins: tantek (~tantek@50-0-92-247.dsl.dynamic.sonic.net)</li>
+ <li id="l-214"><a href="#l-214">#</a> [11:09] * Quits: carlos_a1tonio (~benway@173.230.152.21) (Ping timeout: 272 seconds)</li>
+ <li id="l-215"><a href="#l-215">#</a> [11:11] * Joins: graememcc (~chatzilla@host86-147-207-41.range86-147.btcentralplus.com)</li>
+ <li id="l-216"><a href="#l-216">#</a> [11:13] * Quits: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley) (Ping timeout: 245 seconds)</li>
+ <li id="l-217"><a href="#l-217">#</a> [11:13] * Joins: GPHemsley (~GPHemsley@209-23-243-49-ip-static.hfc.comcastbusiness.net)</li>
+ <li id="l-218"><a href="#l-218">#</a> [11:13] * Quits: GPHemsley (~GPHemsley@209-23-243-49-ip-static.hfc.comcastbusiness.net) (Changing host)</li>
+ <li id="l-219"><a href="#l-219">#</a> [11:13] * Joins: GPHemsley (~GPHemsley@pdpc/supporter/student/GPHemsley)</li>
+ <li id="l-220"><a href="#l-220">#</a> [11:14] * Joins: danbri (~danbri@athedsl-4563686.home.otenet.gr)</li>
+ <li id="l-221"><a href="#l-221">#</a> [11:29] * Joins: nesta_ (~nesta_@13.109.219.87.dynamic.jazztel.es)</li>
+ <li id="l-222"><a href="#l-222">#</a> [11:30] * Joins: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk)</li>
+ <li id="l-223"><a href="#l-223">#</a> [11:31] * Joins: hasather_ (~hasather_@cm-84.208.108.107.getinternet.no)</li>
+ <li id="l-224"><a href="#l-224">#</a> [11:33] * Joins: MattWilcox (~MattWilco@elvendil.plus.com)</li>
+ <li id="l-225"><a href="#l-225">#</a> [11:34] * Joins: nonge_ (~nonge@p5B326653.dip.t-dialin.net)</li>
+ <li id="l-226"><a href="#l-226">#</a> [11:35] * Quits: danbri (~danbri@athedsl-4563686.home.otenet.gr) (Ping timeout: 246 seconds)</li>
+ <li id="l-227"><a href="#l-227">#</a> [11:38] * Quits: nonge (~nonge@p50829B42.dip.t-dialin.net) (Ping timeout: 252 seconds)</li>
+ <li id="l-228"><a href="#l-228">#</a> [11:40] * Quits: jernoble|afk (~jernoble@17.212.152.13) (Quit: jernoble|afk)</li>
+ <li id="l-229"><a href="#l-229">#</a> [11:46] * Quits: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com) (Ping timeout: 246 seconds)</li>
+ <li id="l-230"><a href="#l-230">#</a> [11:56] * Joins: nesta__ (~nesta_@133.115.219.87.dynamic.jazztel.es)</li>
+ <li id="l-231"><a href="#l-231">#</a> [11:56] * Quits: nesta_ (~nesta_@13.109.219.87.dynamic.jazztel.es) (Read error: Connection reset by peer)</li>
+ <li id="l-232" _a="nesta__"><a href="#l-232">#</a> [11:56] * nesta__ is now known as nesta_</li>
+ <li id="l-233"><a href="#l-233">#</a> [11:57] * Joins: saba (~foo@unaffiliated/saba)</li>
+ <li id="l-234"><a href="#l-234">#</a> [12:00] * Joins: maikmerten (~maikmerte@port-92-201-61-100.dynamic.qsc.de)</li>
+ <li id="l-235"><a href="#l-235">#</a> [12:00] * Joins: nesta__ (~nesta_@59.102.219.87.dynamic.jazztel.es)</li>
+ <li id="l-236"><a href="#l-236">#</a> [12:03] * Quits: nesta_ (~nesta_@133.115.219.87.dynamic.jazztel.es) (Ping timeout: 246 seconds)</li>
+ <li id="l-237" _a="nesta__"><a href="#l-237">#</a> [12:03] * nesta__ is now known as nesta_</li>
+ <li id="l-238"><a href="#l-238">#</a> [12:10] * Joins: nesta__ (~nesta_@205.81.219.87.dynamic.jazztel.es)</li>
+ <li id="l-239"><a href="#l-239">#</a> [12:12] * Quits: nesta_ (~nesta_@59.102.219.87.dynamic.jazztel.es) (Ping timeout: 245 seconds)</li>
+ <li id="l-240" _a="nesta__"><a href="#l-240">#</a> [12:12] * nesta__ is now known as nesta_</li>
+ <li id="l-241" _a="Ms2ger" _r="Velmont"><a href="#l-241">#</a> [12:15] &lt;Ms2ger&gt; Velmont, <a href="http://dvcs.w3.org/hg/webapps/rev/ec3740e46700#l8.1">http://dvcs.w3.org/hg/webapps/rev/ec3740e46700#l8.1</a> doesn't look like it should have been there</li>
+ <li id="l-242"><a href="#l-242">#</a> [12:21] * Quits: nesta_ (~nesta_@205.81.219.87.dynamic.jazztel.es) (Ping timeout: 246 seconds)</li>
+ <li id="l-243"><a href="#l-243">#</a> [12:32] * Joins: twisted` (~twisted@p5DDBB78A.dip.t-dialin.net)</li>
+ <li id="l-244"><a href="#l-244">#</a> [12:36] * Quits: twisted` (~twisted@p5DDBB78A.dip.t-dialin.net) (Client Quit)</li>
+ <li id="l-245"><a href="#l-245">#</a> [12:39] * Joins: [[zzz]] (~q@node-19rr.pool-125-25.dynamic.totbb.net)</li>
+ <li id="l-246"><a href="#l-246">#</a> [12:43] * Quits: [[zz]] (~q@node-19rs.pool-125-25.dynamic.totbb.net) (Ping timeout: 265 seconds)</li>
+ <li id="l-247"><a href="#l-247">#</a> [12:45] * Joins: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com)</li>
+ <li id="l-248"><a href="#l-248">#</a> [12:47] * Quits: saba (~foo@unaffiliated/saba) (Ping timeout: 252 seconds)</li>
+ <li id="l-249"><a href="#l-249">#</a> [12:55] * Quits: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk) (Quit: sarspazam)</li>
+ <li id="l-250"><a href="#l-250">#</a> [12:56] * Joins: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk)</li>
+ <li id="l-251"><a href="#l-251">#</a> [12:56] * Quits: nessy (~Adium@124.170.221.202) (Quit: Leaving.)</li>
+ <li id="l-252"><a href="#l-252">#</a> [12:57] * Quits: rniwa (~rniwa@70-89-66-218-ca.sfba.hfc.comcastbusiness.net) (Quit: rniwa)</li>
+ <li id="l-253"><a href="#l-253">#</a> [13:05] * Quits: richt (richt@nat/opera/x-monrsjlkgulqxtnb) (Remote host closed the connection)</li>
+ <li id="l-254"><a href="#l-254">#</a> [13:15] * Joins: MikeSmith (~MikeSmith@s1106001.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-255"><a href="#l-255">#</a> [13:21] * Quits: MikeSmith (~MikeSmith@s1106001.xgsspn.imtp.tachikawa.spmode.ne.jp) (Ping timeout: 252 seconds)</li>
+ <li id="l-256"><a href="#l-256">#</a> [13:21] * Joins: MikeSmith (~MikeSmith@s1106130.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-257"><a href="#l-257">#</a> [13:23] * Joins: mattlucht (~mattlucht@194.102.13.2)</li>
+ <li id="l-258"><a href="#l-258">#</a> [13:33] * Joins: saba (~foo@unaffiliated/saba)</li>
+ <li id="l-259"><a href="#l-259">#</a> [13:34] * Quits: MikeSmith (~MikeSmith@s1106130.xgsspn.imtp.tachikawa.spmode.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-260" _a="[[zzz]]"><a href="#l-260">#</a> [13:37] * [[zzz]] is now known as [[zz]]</li>
+ <li id="l-261"><a href="#l-261">#</a> [13:43] * Quits: mattlucht (~mattlucht@194.102.13.2) (Quit: mattlucht)</li>
+ <li id="l-262"><a href="#l-262">#</a> [13:47] * Joins: tomasf__ (~tomasf@host-95-199-12-125.mobileonline.telia.com)</li>
+ <li id="l-263"><a href="#l-263">#</a> [13:49] * Quits: tomasf_ (~tomasf@host-95-199-2-14.mobileonline.telia.com) (Ping timeout: 256 seconds)</li>
+ <li id="l-264"><a href="#l-264">#</a> [13:55] * Quits: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com) (Ping timeout: 246 seconds)</li>
+ <li id="l-265"><a href="#l-265">#</a> [13:55] * Quits: maikmerten (~maikmerte@port-92-201-61-100.dynamic.qsc.de) (Ping timeout: 244 seconds)</li>
+ <li id="l-266"><a href="#l-266">#</a> [13:56] * Joins: jarek (~jarek@bcz37.neoplus.adsl.tpnet.pl)</li>
+ <li id="l-267"><a href="#l-267">#</a> [13:56] * Quits: jarek (~jarek@bcz37.neoplus.adsl.tpnet.pl) (Changing host)</li>
+ <li id="l-268"><a href="#l-268">#</a> [13:56] * Joins: jarek (~jarek@unaffiliated/jarek)</li>
+ <li id="l-269"><a href="#l-269">#</a> [13:57] * Quits: tomasf__ (~tomasf@host-95-199-12-125.mobileonline.telia.com) (Read error: Connection reset by peer)</li>
+ <li id="l-270"><a href="#l-270">#</a> [14:12] * Joins: danbri (~danbri@athedsl-4559652.home.otenet.gr)</li>
+ <li id="l-271"><a href="#l-271">#</a> [14:14] * Joins: sarro (~sarro@i5E865F1A.versanet.de)</li>
+ <li id="l-272"><a href="#l-272">#</a> [14:19] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-273"><a href="#l-273">#</a> [14:20] * Quits: danbri (~danbri@athedsl-4559652.home.otenet.gr) (Remote host closed the connection)</li>
+ <li id="l-274"><a href="#l-274">#</a> [14:21] * Joins: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-275"><a href="#l-275">#</a> [14:28] * Quits: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-276"><a href="#l-276">#</a> [14:58] * Joins: maikmerten (~maikmerte@port-92-201-61-100.dynamic.qsc.de)</li>
+ <li id="l-277"><a href="#l-277">#</a> [15:01] * Quits: sedovsek (~robert@93-103-104-107.dynamic.t-2.net) (Quit: sedovsek)</li>
+ <li id="l-278"><a href="#l-278">#</a> [15:02] * Quits: jarib (~jarib@unaffiliated/jarib) (Excess Flood)</li>
+ <li id="l-279"><a href="#l-279">#</a> [15:02] * Quits: jarek (~jarek@unaffiliated/jarek) (Quit: Leaving)</li>
+ <li id="l-280"><a href="#l-280">#</a> [15:03] * Joins: jarib (~jarib@unaffiliated/jarib)</li>
+ <li id="l-281"><a href="#l-281">#</a> [15:06] * Quits: sarro (~sarro@i5E865F1A.versanet.de)</li>
+ <li id="l-282"><a href="#l-282">#</a> [15:11] * Joins: NimeshNeema (u2689@gateway/web/irccloud.com/x-gcnfpygvjeudcckd)</li>
+ <li id="l-283"><a href="#l-283">#</a> [15:35] * Joins: ehsan (~ehsan@209.20.29.228)</li>
+ <li id="l-284"><a href="#l-284">#</a> [15:45] * Quits: rworth (~rworth@pool-173-66-213-252.washdc.fios.verizon.net) (Quit: Linkinus - <a href="http://linkinus.com">http://linkinus.com</a>)</li>
+ <li id="l-285"><a href="#l-285">#</a> [15:49] * Quits: edwardbc_ (~edward.ba@186.32.50.168) (Remote host closed the connection)</li>
+ <li id="l-286"><a href="#l-286">#</a> [15:49] * Joins: edwardbc (~edward.ba@186.32.50.168)</li>
+ <li id="l-287" _a="nonge_"><a href="#l-287">#</a> [15:49] * nonge_ is now known as nonge</li>
+ <li id="l-288"><a href="#l-288">#</a> [15:50] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-289"><a href="#l-289">#</a> [15:50] * Quits: sedovsek (~robert@93-103-104-107.dynamic.t-2.net) (Client Quit)</li>
+ <li id="l-290"><a href="#l-290">#</a> [15:57] * Quits: ehsan (~ehsan@209.20.29.228) (Remote host closed the connection)</li>
+ <li id="l-291"><a href="#l-291">#</a> [16:02] * Joins: ehsan (~ehsan@209.20.29.228)</li>
+ <li id="l-292"><a href="#l-292">#</a> [16:03] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-293" _a="Velmont" _r="Ms2ger"><a href="#l-293">#</a> [16:14] &lt;Velmont&gt; Ms2ger: wtf! grrrrrr.... i am not happy with hg</li>
+ <li id="l-294" _a="Velmont"><a href="#l-294">#</a> [16:15] &lt;Velmont&gt; sorry about that</li>
+ <li id="l-295"><a href="#l-295">#</a> [16:16] * Quits: MattWilcox (~MattWilco@elvendil.plus.com) (Quit: Leaving.)</li>
+ <li id="l-296" _a="gsnedders" _r="Velmont"><a href="#l-296">#</a> [16:17] &lt;gsnedders&gt; Velmont: Deep breaths.</li>
+ <li id="l-297"><a href="#l-297">#</a> [16:22] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Ping timeout: 250 seconds)</li>
+ <li id="l-298"><a href="#l-298">#</a> [16:28] * Joins: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net)</li>
+ <li id="l-299"><a href="#l-299">#</a> [16:30] * Quits: jochen__ (jochen@nat/google/x-gsaskmdgdrcawusi) (Remote host closed the connection)</li>
+ <li id="l-300"><a href="#l-300">#</a> [16:30] * Joins: jochen__ (jochen@nat/google/x-muqrohprpbpcrnxr)</li>
+ <li id="l-301"><a href="#l-301">#</a> [16:50] * Quits: sedovsek (~robert@93-103-104-107.dynamic.t-2.net) (Quit: sedovsek)</li>
+ <li id="l-302"><a href="#l-302">#</a> [16:51] * Joins: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net)</li>
+ <li id="l-303"><a href="#l-303">#</a> [16:53] * Joins: izhak (~izhak@194.176.111.7)</li>
+ <li id="l-304"><a href="#l-304">#</a> [17:05] * Quits: onar (~onar@17.216.36.168) (Ping timeout: 244 seconds)</li>
+ <li id="l-305" _a="Ms2ger" _r="Velmont"><a href="#l-305">#</a> [17:06] &lt;Ms2ger&gt; Velmont, (reverted it, btw)</li>
+ <li id="l-306"><a href="#l-306">#</a> [17:11] * Joins: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net)</li>
+ <li id="l-307"><a href="#l-307">#</a> [17:16] * Joins: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net)</li>
+ <li id="l-308"><a href="#l-308">#</a> [17:19] * Joins: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com)</li>
+ <li id="l-309"><a href="#l-309">#</a> [17:24] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Quit: snowfox)</li>
+ <li id="l-310"><a href="#l-310">#</a> [17:27] * Joins: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com)</li>
+ <li id="l-311" _a="Velmont" _r="Ms2ger"><a href="#l-311">#</a> [17:31] &lt;Velmont&gt; Ms2ger: thanks. yea I am always surprised by hg behaviour. have to be more careful</li>
+ <li id="l-312"><a href="#l-312">#</a> [17:38] * Quits: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com) (Ping timeout: 246 seconds)</li>
+ <li id="l-313"><a href="#l-313">#</a> [17:45] * Joins: jdong_bot_ (~jdong_bot@117.79.233.228)</li>
+ <li id="l-314"><a href="#l-314">#</a> [17:46] * Quits: ehsan (~ehsan@209.20.29.228) (Remote host closed the connection)</li>
+ <li id="l-315"><a href="#l-315">#</a> [17:50] * Quits: hasather_ (~hasather_@cm-84.208.108.107.getinternet.no) (Remote host closed the connection)</li>
+ <li id="l-316"><a href="#l-316">#</a> [17:51] * Joins: hasather_ (~hasather_@cm-84.208.108.107.getinternet.no)</li>
+ <li id="l-317"><a href="#l-317">#</a> [17:51] * Joins: MattWilcox (~MattWilco@elvendil.plus.com)</li>
+ <li id="l-318"><a href="#l-318">#</a> [17:53] * Quits: MattWilcox (~MattWilco@elvendil.plus.com) (Client Quit)</li>
+ <li id="l-319"><a href="#l-319">#</a> [17:55] * Quits: hasather_ (~hasather_@cm-84.208.108.107.getinternet.no) (Ping timeout: 246 seconds)</li>
+ <li id="l-320"><a href="#l-320">#</a> [17:59] * Quits: izhak (~izhak@194.176.111.7) (Ping timeout: 246 seconds)</li>
+ <li id="l-321"><a href="#l-321">#</a> [18:08] * Joins: teleject (~christoph@70.116.86.65)</li>
+ <li id="l-322"><a href="#l-322">#</a> [18:10] * Quits: FireFly (~firefly@firefly.xen.prgmr.com) (Excess Flood)</li>
+ <li id="l-323"><a href="#l-323">#</a> [18:17] * Quits: teleject (~christoph@70.116.86.65) (Remote host closed the connection)</li>
+ <li id="l-324"><a href="#l-324">#</a> [18:17] * Joins: FireFly (~firefly@firefly.xen.prgmr.com)</li>
+ <li id="l-325"><a href="#l-325">#</a> [18:17] * Joins: teleject (~christoph@70.116.86.65)</li>
+ <li id="l-326"><a href="#l-326">#</a> [18:24] * Quits: jdong_bot_ (~jdong_bot@117.79.233.228) (Remote host closed the connection)</li>
+ <li id="l-327"><a href="#l-327">#</a> [18:24] * Joins: shwetank (~shwetank@122.173.180.116)</li>
+ <li id="l-328"><a href="#l-328">#</a> [18:24] * Parts: shwetank (~shwetank@122.173.180.116)</li>
+ <li id="l-329" _a="GPHemsley"><a href="#l-329">#</a> [18:27] &lt;GPHemsley&gt; If there is a runaway &lt;a&gt; element that is inside a block element like &lt;p&gt; or &lt;div&gt;, shouldn't the closing of that element close the &lt;a&gt;?</li>
+ <li id="l-330"><a href="#l-330">#</a> [18:31] * Joins: MattWilcox (~MattWilco@elvendil.plus.com)</li>
+ <li id="l-331"><a href="#l-331">#</a> [18:38] * Joins: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com)</li>
+ <li id="l-332"><a href="#l-332">#</a> [18:50] * Joins: JVoracek (~J_Voracek@cpe-76-184-40-47.tx.res.rr.com)</li>
+ <li id="l-333"><a href="#l-333">#</a> [18:51] * Joins: ehsan (~ehsan@209.20.29.228)</li>
+ <li id="l-334"><a href="#l-334">#</a> [18:52] * Joins: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-335"><a href="#l-335">#</a> [18:53] * Quits: ehsan (~ehsan@209.20.29.228) (Remote host closed the connection)</li>
+ <li id="l-336"><a href="#l-336">#</a> [18:54] * Quits: JVoracek (~J_Voracek@cpe-76-184-40-47.tx.res.rr.com) (Ping timeout: 248 seconds)</li>
+ <li id="l-337"><a href="#l-337">#</a> [19:00] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-338"><a href="#l-338">#</a> [19:03] * Quits: sedovsek (~robert@93-103-104-107.dynamic.t-2.net) (Client Quit)</li>
+ <li id="l-339"><a href="#l-339">#</a> [19:05] * Joins: chriseppstein (~chrisepps@99-6-85-4.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-340"><a href="#l-340">#</a> [19:20] * Quits: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net) (Quit: dydx)</li>
+ <li id="l-341"><a href="#l-341">#</a> [19:21] * Joins: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net)</li>
+ <li id="l-342"><a href="#l-342">#</a> [19:21] * Quits: snowfox (~benschaaf@c-98-243-88-119.hsd1.mi.comcast.net) (Client Quit)</li>
+ <li id="l-343" _a="gsnedders"><a href="#l-343">#</a> [19:29] &lt;gsnedders&gt; Hate __proto__. Hate it.</li>
+ <li id="l-344"><a href="#l-344">#</a> [19:31] * Joins: JVoracek (~J_Voracek@cpe-76-184-40-47.tx.res.rr.com)</li>
+ <li id="l-345"><a href="#l-345">#</a> [19:33] * Quits: JVoracek (~J_Voracek@cpe-76-184-40-47.tx.res.rr.com) (Client Quit)</li>
+ <li id="l-346" _a="Ms2ger"><a href="#l-346">#</a> [19:34] &lt;Ms2ger&gt; Who does e4x again.</li>
+ <li id="l-347" _a="Ms2ger"><a href="#l-347">#</a> [19:34] &lt;Ms2ger&gt; ?</li>
+ <li id="l-348" _a="gsnedders"><a href="#l-348">#</a> [19:35] &lt;gsnedders&gt; SpiderMonkey.</li>
+ <li id="l-349" _a="Ms2ger"><a href="#l-349">#</a> [19:36] &lt;Ms2ger&gt; How silly of us</li>
+ <li id="l-350" _a="gsnedders"><a href="#l-350">#</a> [19:37] &lt;gsnedders&gt; Non-strict only, IIRC</li>
+ <li id="l-351" _a="gsnedders" _r="Ms2ger"><a href="#l-351">#</a> [19:37] &lt;gsnedders&gt; Ms2ger: You and all your ES extensions!</li>
+ <li id="l-352" _a="Ms2ger"><a href="#l-352">#</a> [19:37] &lt;Ms2ger&gt; Possible</li>
+ <li id="l-353" _a="Ms2ger"><a href="#l-353">#</a> [19:37] &lt;Ms2ger&gt; Pff</li>
+ <li id="l-354" _a="Ms2ger"><a href="#l-354">#</a> [19:37] &lt;Ms2ger&gt; I prefer to think of ES as a JS extension ;)</li>
+ <li id="l-355" _a="gsnedders"><a href="#l-355">#</a> [19:38] &lt;gsnedders&gt; ES is a subset of JS :P</li>
+ <li id="l-356" _a="Ms2ger"><a href="#l-356">#</a> [19:38] &lt;Ms2ger&gt; After all, Ope^W Mozilla did it first</li>
+ <li id="l-357" _a="gsnedders"><a href="#l-357">#</a> [19:38] &lt;gsnedders&gt; Operabook^W ? :)</li>
+ <li id="l-358" _a="gsnedders"><a href="#l-358">#</a> [19:47] &lt;gsnedders&gt; Why am I writing emails to es-discuss on a Saturday?</li>
+ <li id="l-359"><a href="#l-359">#</a> [19:48] * Quits: MattWilcox (~MattWilco@elvendil.plus.com) (Quit: Leaving.)</li>
+ <li id="l-360"><a href="#l-360">#</a> [19:50] * Quits: edwardbc (~edward.ba@186.32.50.168)</li>
+ <li id="l-361" _a="Ms2ger"><a href="#l-361">#</a> [19:55] &lt;Ms2ger&gt; You've got exams coming up?</li>
+ <li id="l-362" _a="gsnedders" _r="Nah"><a href="#l-362">#</a> [19:56] &lt;gsnedders&gt; Nah, just going out soon. And it's the weekend, a break is nice at times.</li>
+ <li id="l-363"><a href="#l-363">#</a> [20:03] * Quits: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk) (Quit: sarspazam)</li>
+ <li id="l-364"><a href="#l-364">#</a> [20:05] * Joins: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net)</li>
+ <li id="l-365"><a href="#l-365">#</a> [20:07] * Quits: erichynds (~ehynds@pool-71-184-234-218.bstnma.fios.verizon.net) (Client Quit)</li>
+ <li id="l-366"><a href="#l-366">#</a> [20:16] * Joins: fragile (~fragile@host86-132-138-217.range86-132.btcentralplus.com)</li>
+ <li id="l-367"><a href="#l-367">#</a> [20:24] * Quits: tantek (~tantek@50-0-92-247.dsl.dynamic.sonic.net) (Quit: tantek)</li>
+ <li id="l-368"><a href="#l-368">#</a> [20:26] * Quits: fragile (~fragile@host86-132-138-217.range86-132.btcentralplus.com) (Quit: Linkinus - <a href="http://linkinus.com">http://linkinus.com</a>)</li>
+ <li id="l-369"><a href="#l-369">#</a> [20:27] * Joins: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk)</li>
+ <li id="l-370"><a href="#l-370">#</a> [20:30] * Quits: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-371"><a href="#l-371">#</a> [20:33] * Joins: Bass10 (~Bass10@c-76-113-194-7.hsd1.mn.comcast.net)</li>
+ <li id="l-372"><a href="#l-372">#</a> [20:36] * Quits: maikmerten (~maikmerte@port-92-201-61-100.dynamic.qsc.de) (Quit: Leaving)</li>
+ <li id="l-373"><a href="#l-373">#</a> [20:40] * Quits: graememcc (~chatzilla@host86-147-207-41.range86-147.btcentralplus.com) (Remote host closed the connection)</li>
+ <li id="l-374"><a href="#l-374">#</a> [20:41] * Joins: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net)</li>
+ <li id="l-375"><a href="#l-375">#</a> [20:41] * Quits: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net) (Client Quit)</li>
+ <li id="l-376"><a href="#l-376">#</a> [20:42] * Quits: Stevef (~chatzilla@cpc20-nmal18-2-0-cust76.19-2.cable.virginmedia.com) (Ping timeout: 246 seconds)</li>
+ <li id="l-377"><a href="#l-377">#</a> [20:57] * Joins: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net)</li>
+ <li id="l-378"><a href="#l-378">#</a> [21:03] * Quits: chriseppstein (~chrisepps@99-6-85-4.lightspeed.sntcca.sbcglobal.net) (Quit: chriseppstein)</li>
+ <li id="l-379"><a href="#l-379">#</a> [21:07] * Joins: dydx (~dydz@76-220-18-65.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-380"><a href="#l-380">#</a> [21:14] * Quits: espadrine (~espadrine@63-235-13-3.dia.static.qwest.net) (Quit: espadrine)</li>
+ <li id="l-381"><a href="#l-381">#</a> [21:20] * Quits: timmywil (~timmywil@host-68-169-154-67.WISOLT2.epbfi.com) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-382"><a href="#l-382">#</a> [21:22] * Quits: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-383"><a href="#l-383">#</a> [21:24] * Joins: danbri (~danbri@athedsl-4466001.home.otenet.gr)</li>
+ <li id="l-384"><a href="#l-384">#</a> [21:26] * Joins: timmywil (~timmywil@c-76-127-16-172.hsd1.tn.comcast.net)</li>
+ <li id="l-385"><a href="#l-385">#</a> [21:32] * Quits: LBP (~Mirc@pD9EB057A.dip0.t-ipconnect.de) (Quit: Bye, bye! See you on <a href="http://leanbackplayer.com">http://leanbackplayer.com</a>)</li>
+ <li id="l-386"><a href="#l-386">#</a> [21:32] * Quits: danbri (~danbri@athedsl-4466001.home.otenet.gr) (Read error: Connection reset by peer)</li>
+ <li id="l-387"><a href="#l-387">#</a> [21:33] * Joins: danbri (~danbri@athedsl-4466001.home.otenet.gr)</li>
+ <li id="l-388"><a href="#l-388">#</a> [21:38] * Quits: danbri (~danbri@athedsl-4466001.home.otenet.gr) (Ping timeout: 244 seconds)</li>
+ <li id="l-389"><a href="#l-389">#</a> [21:38] * Quits: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net) (Ping timeout: 244 seconds)</li>
+ <li id="l-390"><a href="#l-390">#</a> [21:40] * Joins: danbri (~danbri@aldemar4.hrs.forthnet.gr)</li>
+ <li id="l-391"><a href="#l-391">#</a> [21:40] * Joins: dgathright (~dgathrigh@c-67-169-92-165.hsd1.ca.comcast.net)</li>
+ <li id="l-392"><a href="#l-392">#</a> [21:40] * Quits: Ms2ger (~Ms2ger@91.181.22.56) (Quit: nn)</li>
+ <li id="l-393"><a href="#l-393">#</a> [21:41] * Quits: danbri (~danbri@aldemar4.hrs.forthnet.gr) (Read error: Connection reset by peer)</li>
+ <li id="l-394"><a href="#l-394">#</a> [21:41] * Joins: danbri (~danbri@athedsl-4486336.home.otenet.gr)</li>
+ <li id="l-395"><a href="#l-395">#</a> [21:45] * Joins: tomasf_ (~tomasf@host-95-199-8-59.mobileonline.telia.com)</li>
+ <li id="l-396"><a href="#l-396">#</a> [21:46] * Quits: danbri (~danbri@athedsl-4486336.home.otenet.gr) (Ping timeout: 250 seconds)</li>
+ <li id="l-397"><a href="#l-397">#</a> [21:51] * Joins: danbri (~danbri@athedsl-4490748.home.otenet.gr)</li>
+ <li id="l-398"><a href="#l-398">#</a> [21:55] * Quits: danbri (~danbri@athedsl-4490748.home.otenet.gr) (Ping timeout: 244 seconds)</li>
+ <li id="l-399"><a href="#l-399">#</a> [21:58] * Quits: jacobolus (~jacobolus@50-0-133-210.dsl.static.sonic.net) (Remote host closed the connection)</li>
+ <li id="l-400"><a href="#l-400">#</a> [21:58] * Joins: danbri (~danbri@athedsl-4472601.home.otenet.gr)</li>
+ <li id="l-401"><a href="#l-401">#</a> [22:02] * Joins: silentimp (~silentimp@182-147-133-95.pool.ukrtel.net)</li>
+ <li id="l-402"><a href="#l-402">#</a> [22:11] * Quits: danbri (~danbri@athedsl-4472601.home.otenet.gr) (Ping timeout: 244 seconds)</li>
+ <li id="l-403"><a href="#l-403">#</a> [22:12] * Joins: danbri (~danbri@athedsl-4470711.home.otenet.gr)</li>
+ <li id="l-404" _a="cbright6062"><a href="#l-404">#</a> [22:22] * cbright6062 reads to see if he's missed anything interesting.</li>
+ <li id="l-405" _a="cbright6062"><a href="#l-405">#</a> [22:22] &lt;cbright6062&gt; hm.</li>
+ <li id="l-406"><a href="#l-406">#</a> [22:27] * Quits: danbri (~danbri@athedsl-4470711.home.otenet.gr) (Ping timeout: 250 seconds)</li>
+ <li id="l-407"><a href="#l-407">#</a> [22:38] * Joins: danbri (~danbri@athedsl-4490748.home.otenet.gr)</li>
+ <li id="l-408"><a href="#l-408">#</a> [22:41] * Quits: saba (~foo@unaffiliated/saba) (Quit: leaving)</li>
+ <li id="l-409"><a href="#l-409">#</a> [22:43] * Quits: danbri (~danbri@athedsl-4490748.home.otenet.gr) (Ping timeout: 245 seconds)</li>
+ <li id="l-410"><a href="#l-410">#</a> [22:50] * Joins: MattWilcox (~MattWilco@elvendil.plus.com)</li>
+ <li id="l-411"><a href="#l-411">#</a> [22:58] * Joins: othermaciej (~mjs@c-24-6-209-189.hsd1.ca.comcast.net)</li>
+ <li id="l-412"><a href="#l-412">#</a> [22:59] * Quits: silentimp (~silentimp@182-147-133-95.pool.ukrtel.net) (Read error: No route to host)</li>
+ <li id="l-413"><a href="#l-413">#</a> [23:00] * Joins: silentimp (~silentimp@182-147-133-95.pool.ukrtel.net)</li>
+ <li id="l-414"><a href="#l-414">#</a> [23:10] * Joins: krit (~krit@c-24-6-231-253.hsd1.ca.comcast.net)</li>
+ <li id="l-415"><a href="#l-415">#</a> [23:22] * Quits: MattWilcox (~MattWilco@elvendil.plus.com) (Quit: Leaving.)</li>
+ <li id="l-416"><a href="#l-416">#</a> [23:36] * Quits: sarspazam (~sarspazam@78-105-183-7.zone3.bethere.co.uk) (Quit: sarspazam)</li>
+ <li id="l-417"><a href="#l-417">#</a> [23:36] * Joins: sedovsek (~robert@93-103-104-107.dynamic.t-2.net)</li>
+ <li id="l-418"><a href="#l-418">#</a> Session Close: Sun May 27 00:00:00 2012</li>
+</ol>
+<p id="end">The end :)

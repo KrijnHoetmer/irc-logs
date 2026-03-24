@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<title>IRC logs: freenode / #whatwg / 20110512</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="freenode/whatwg.20110512.log"><a href="/irc-logs/">/irc-logs</a> / freenode / <a href="irc://irc.freenode.net/whatwg">#whatwg</a> / 2011-05-12 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Thu May 12 00:00:00 2011</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #whatwg</li>
+ <li id="l-3" _a="Hixie"><a href="#l-3">#</a> [00:00] &lt;Hixie&gt; how do you avoid drawing with the system style if you would rather use your own?</li>
+ <li id="l-4" _a="jamesr"><a href="#l-4">#</a> [00:00] &lt;jamesr&gt; that case is a little weirder, but maybe we could define a fallback system for the stroke style so you could say ctx.strokeStyle=&quot;systemFocusRing, mystyle&quot;</li>
+ <li id="l-5" _a="jamesr"><a href="#l-5">#</a> [00:00] &lt;jamesr&gt; i haven't fully understood why you would want to do that</li>
+ <li id="l-6" _a="Hixie"><a href="#l-6">#</a> [00:01] &lt;Hixie&gt; say that what i want is to have the focused menu item be in a bigger font size, or some such</li>
+ <li id="l-7" _a="Hixie"><a href="#l-7">#</a> [00:02] &lt;Hixie&gt; actually that's a bad example</li>
+ <li id="l-8" _a="Hixie"><a href="#l-8">#</a> [00:02] &lt;Hixie&gt; since you would just draw nothing</li>
+ <li id="l-9" _a="Hixie"><a href="#l-9">#</a> [00:02] &lt;Hixie&gt; say that i want to indicate focus by drawing a big arrow</li>
+ <li id="l-10" _a="jamesr"><a href="#l-10">#</a> [00:02] &lt;jamesr&gt; but only if the OS wasn't indicating focus itself?</li>
+ <li id="l-11" _a="Hixie"><a href="#l-11">#</a> [00:03] &lt;Hixie&gt; how do i do that, while still using the high-constrast focus ring if necessary instead, and while still indicating to the accessibility API that the menu item is the one focused, even though it's next to, not inside, the arrow?</li>
+ <li id="l-12" _a="Hixie"><a href="#l-12">#</a> [00:03] &lt;Hixie&gt; (the latter part being needed to make sure the text gets magnified)</li>
+ <li id="l-13" _a="jamesr"><a href="#l-13">#</a> [00:04] &lt;jamesr&gt; i think it's the &quot;using the high-contrast focus ring if necessary _instead_&quot; part that i'm hung up on</li>
+ <li id="l-14" _a="jamesr"><a href="#l-14">#</a> [00:04] &lt;jamesr&gt; why is it not inaddition to?</li>
+ <li id="l-15" _a="jamesr"><a href="#l-15">#</a> [00:04] &lt;jamesr&gt; IOW why not just draw the arrow, then stroke the focus ring?</li>
+ <li id="l-16" _a="jamesr"><a href="#l-16">#</a> [00:04] &lt;jamesr&gt; if that gets you a high-contrast focus ring and tells the AX api to do something else, that's fine</li>
+ <li id="l-17" _a="jamesr"><a href="#l-17">#</a> [00:04] &lt;jamesr&gt; but i'm not sure why you would want to avoid drawing the arrow in that case</li>
+ <li id="l-18" _a="Hixie"><a href="#l-18">#</a> [00:04] &lt;Hixie&gt; fair enough</li>
+ <li id="l-19" _a="Hixie"><a href="#l-19">#</a> [00:05] &lt;Hixie&gt; the problem is authors aren't going to bother calling this api if it doesn't give them anything</li>
+ <li id="l-20" _a="Hixie"><a href="#l-20">#</a> [00:05] &lt;Hixie&gt; and they don't think of accessibility as anything</li>
+ <li id="l-21" _a="Hixie"><a href="#l-21">#</a> [00:05] &lt;Hixie&gt; the idea is to trick the author into using the api for reasons unrelated to accessibility and get accessibility as a side-effect</li>
+ <li id="l-22" _a="jamesr"><a href="#l-22">#</a> [00:05] &lt;jamesr&gt; what if they get native looking focus rings? that seems nice</li>
+ <li id="l-23" _a="Hixie"><a href="#l-23">#</a> [00:06] &lt;Hixie&gt; most games don't do anything native</li>
+ <li id="l-24" _a="jamesr" _r="yeah"><a href="#l-24">#</a> [00:06] &lt;jamesr&gt; yeah, but do you expect games to  use this?</li>
+ <li id="l-25" _a="Hixie"><a href="#l-25">#</a> [00:06] &lt;Hixie&gt; one can hope</li>
+ <li id="l-26" _a="Hixie"><a href="#l-26">#</a> [00:06] &lt;Hixie&gt; the other problem is that if you do it as a style the author has to check the focus of each element</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:06] &lt;Hixie&gt; instead of just calling the api</li>
+ <li id="l-28" _a="Hixie" _r="plus"><a href="#l-28">#</a> [00:07] &lt;Hixie&gt; plus, it means that the focus ring can only ever be a stroke, and not some other kind of indicator</li>
+ <li id="l-29" _a="Hixie"><a href="#l-29">#</a> [00:07] &lt;Hixie&gt; basically i don't really see the problem that using a strokeStyle solves</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:07] * Joins: weinig (~weinig@17.244.27.249)</li>
+ <li id="l-31" _a="jamesr"><a href="#l-31">#</a> [00:07] &lt;jamesr&gt; what other sort of focus ring could you get using a path as input?</li>
+ <li id="l-32" _a="jamesr"><a href="#l-32">#</a> [00:07] &lt;jamesr&gt; other than a stroke + some metadata about the geometry?</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:08] * Quits: ap_ (~ap@17.203.14.199) (Read error: Operation timed out)</li>
+ <li id="l-34" _a="Hixie"><a href="#l-34">#</a> [00:08] &lt;Hixie&gt; e.g. the effect used in mac os x preferences to indicate search results</li>
+ <li id="l-35" _a="jamesr"><a href="#l-35">#</a> [00:09] &lt;jamesr&gt; you mean the white fuzzy area around the matching element(s)?</li>
+ <li id="l-36" _a="jamesr"><a href="#l-36">#</a> [00:09] &lt;jamesr&gt; that effect doesn't change focus</li>
+ <li id="l-37" _a="Hixie" _r="no"><a href="#l-37">#</a> [00:09] &lt;Hixie&gt; no, but you could use that for focus</li>
+ <li id="l-38" _a="Hixie"><a href="#l-38">#</a> [00:09] &lt;Hixie&gt; my point is just that we shouldn't close doors unncessarily</li>
+ <li id="l-39" _a="Hixie"><a href="#l-39">#</a> [00:09] &lt;Hixie&gt; what's the problem with the method?</li>
+ <li id="l-40"><a href="#l-40">#</a> [00:10] * Quits: weinig (~weinig@17.244.27.249) (Client Quit)</li>
+ <li id="l-41"><a href="#l-41">#</a> [00:10] * Joins: ap (~ap@17.244.26.212)</li>
+ <li id="l-42"><a href="#l-42">#</a> [00:11] * Quits: cgcardona (~cgcardona@unaffiliated/cgcardona) (Quit: zzzzz)</li>
+ <li id="l-43"><a href="#l-43">#</a> [00:11] * Joins: weinig (~weinig@17.244.27.249)</li>
+ <li id="l-44"><a href="#l-44">#</a> [00:12] * Joins: ezoe (~ezoe@203-140-89-244f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-45"><a href="#l-45">#</a> [00:13] * Quits: bentruyman (~bentruyma@li159-104.members.linode.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-46"><a href="#l-46">#</a> [00:14] * Quits: benschwarz (~benschwar@adsl-71-141-244-229.dsl.snfc21.pacbell.net) (Quit: Leaving...)</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:14] * Quits: simplicity- (~simpli@unaffiliated/simplicity-) (Quit: simplicity-)</li>
+ <li id="l-48"><a href="#l-48">#</a> [00:17] * Joins: tw2113 (~tw2113@fedora/tw2113)</li>
+ <li id="l-49" _a="TabAtkins" _r="Hixie"><a href="#l-49">#</a> [00:18] &lt;TabAtkins&gt; Hixie: I wonder if you should make it clear that a UA which allows you to apply styling directly to WebVTT content (rather than applying to via an HTML page that embeds a &lt;video&gt; with &lt;track&gt;) should just use the selectors directly, rather than doing something weird with ::cue(), as ::cue() is only used to jump from the HTML doc to the embedded WebVTT doc.</li>
+ <li id="l-50"><a href="#l-50">#</a> [00:18] * Quits: ttepasse (~ttepasse@ip-109-90-161-169.unitymediagroup.de) (Ping timeout: 276 seconds)</li>
+ <li id="l-51" _a="Hixie"><a href="#l-51">#</a> [00:19] &lt;Hixie&gt; given that there's no way to associate a style sheet with a webvtt resource directly currently, that seems rather theoretical :-)</li>
+ <li id="l-52" _a="TabAtkins" _r="Eh"><a href="#l-52">#</a> [00:21] &lt;TabAtkins&gt; Eh, I think they'll arise.  Providing a user stylesheet for your video player seems reasonable.  Heading off future trouble at no real cost is nice. ^^;</li>
+ <li id="l-53"><a href="#l-53">#</a> [00:22] * Quits: bga_ (~bga@ppp78-37-237-120.pppoe.avangarddsl.ru) (Quit: bga_)</li>
+ <li id="l-54"><a href="#l-54">#</a> [00:22] * Joins: bga_ (~bga@ppp78-37-237-120.pppoe.avangarddsl.ru)</li>
+ <li id="l-55"><a href="#l-55">#</a> [00:23] * Joins: benschwarz (~benschwar@adsl-71-141-244-229.dsl.snfc21.pacbell.net)</li>
+ <li id="l-56" _a="TabAtkins"><a href="#l-56">#</a> [00:23] &lt;TabAtkins&gt; I'm just thinking about the organization of the section from a layering standpoint.  It should just involve you defining how to map a WebVTT document into an element-tree, and then defining ::cue() as a way to style into the embedded WebVTT doc that &lt;video&gt; has.</li>
+ <li id="l-57" _a="TabAtkins"><a href="#l-57">#</a> [00:24] &lt;TabAtkins&gt; Essentially an editorial change.  I could even suggest text.</li>
+ <li id="l-58" _a="Hixie"><a href="#l-58">#</a> [00:25] &lt;Hixie&gt; well if you provide a style sheet for a video, as opposed to a particular track, it seems better to use ::cue</li>
+ <li id="l-59" _a="Hixie"><a href="#l-59">#</a> [00:25] &lt;Hixie&gt; that way you can reuse styles from HTML</li>
+ <li id="l-60" _a="TabAtkins"><a href="#l-60">#</a> [00:26] &lt;TabAtkins&gt; It's several characters of unnecessary clutter if you're authoring the stylesheet directly for your player, though.</li>
+ <li id="l-61" _a="Hixie"><a href="#l-61">#</a> [00:27] &lt;Hixie&gt; who does that</li>
+ <li id="l-62" _a="TabAtkins"><a href="#l-62">#</a> [00:27] &lt;TabAtkins&gt; Nobody yet, because no players support styling your WebVTT tracks.</li>
+ <li id="l-63" _a="Hixie"><a href="#l-63">#</a> [00:28] &lt;Hixie&gt; ping me again when it's a real problem :-P</li>
+ <li id="l-64" _a="TabAtkins"><a href="#l-64">#</a> [00:28] &lt;TabAtkins&gt; Bah.</li>
+ <li id="l-65" _a="TabAtkins"><a href="#l-65">#</a> [00:29] &lt;TabAtkins&gt; You won't be able to straight re-use an HTML stylesheet anyway, if you style the tracks of different videos differently (as the selector will then by necessity involve more stuff before ::cue()).</li>
+ <li id="l-66" _a="Hixie"><a href="#l-66">#</a> [00:29] &lt;Hixie&gt; i don't expect anyone to ever write a style sheet for a player that they don't also want to use for the web (for some definition of nobody that is zero plus or minus epsilon)</li>
+ <li id="l-67"><a href="#l-67">#</a> [00:29] * Quits: weinig (~weinig@17.244.27.249) (Quit: weinig)</li>
+ <li id="l-68" _a="TabAtkins" _r="Eh"><a href="#l-68">#</a> [00:31] &lt;TabAtkins&gt; Eh, that's easy.  s/}\n/}\n::cue(/ and s/{/){/.</li>
+ <li id="l-69" _a="Hixie"><a href="#l-69">#</a> [00:31] &lt;Hixie&gt; exactly</li>
+ <li id="l-70" _a="Hixie"><a href="#l-70">#</a> [00:31] &lt;Hixie&gt; so why bother with having two different styles</li>
+ <li id="l-71" _a="Hixie"><a href="#l-71">#</a> [00:31] &lt;Hixie&gt; just use the one file for both</li>
+ <li id="l-72" class="flagged" _a="TabAtkins"><a href="#l-72">#</a> [00:32] &lt;TabAtkins&gt; Because it's theoretically impure! ^_^</li>
+ <li id="l-73" _a="Hixie"><a href="#l-73">#</a> [00:33] &lt;Hixie&gt; define text/webvtt-css which is text/css plus the transformation you just said applied</li>
+ <li id="l-74" _a="Hixie"><a href="#l-74">#</a> [00:33] &lt;Hixie&gt; then it's just a differnet syntax</li>
+ <li id="l-75" _a="Hixie"><a href="#l-75">#</a> [00:33] &lt;Hixie&gt; and is theoretically pure</li>
+ <li id="l-76" _a="TabAtkins"><a href="#l-76">#</a> [00:33] &lt;TabAtkins&gt; You're basically reaching into a shadow on the video.  With shadows currently, styling from within the shadow looks slightly different than styling from outside the shadow, in precisely the way I'm saying cue styling should.</li>
+ <li id="l-77" _a="Hixie"><a href="#l-77">#</a> [00:33] &lt;Hixie&gt; problem solved</li>
+ <li id="l-78" class="flagged" _a="Hixie" _r="man"><a href="#l-78">#</a> [00:34] &lt;Hixie&gt; man, you and dimitri have been taken hostage by shadow trees and developed stockholm syndrome :-P</li>
+ <li id="l-79" _a="TabAtkins" _r="Dude"><a href="#l-79">#</a> [00:34] &lt;TabAtkins&gt; Dude, the platform uses shadows everywhere, in some form or another.</li>
+ <li id="l-80" _a="Hixie"><a href="#l-80">#</a> [00:35] &lt;Hixie&gt; if only that were true in an author-visible sense</li>
+ <li id="l-81" _a="Hixie"><a href="#l-81">#</a> [00:35] &lt;Hixie&gt; anyway</li>
+ <li id="l-82" _a="TabAtkins"><a href="#l-82">#</a> [00:35] &lt;TabAtkins&gt; It will be once we're done!</li>
+ <li id="l-83" _a="Hixie"><a href="#l-83">#</a> [00:35] &lt;Hixie&gt; this is similar to xbl shadow trees, sure</li>
+ <li id="l-84" _a="Hixie"><a href="#l-84">#</a> [00:35] &lt;Hixie&gt; i don't think it's similar enough to be important</li>
+ <li id="l-85" _a="Hixie"><a href="#l-85">#</a> [00:35] &lt;Hixie&gt; and i think the differences are such that it doesn't require the unfortunate difference in styles that xbl does</li>
+ <li id="l-86" _a="Hixie"><a href="#l-86">#</a> [00:36] &lt;Hixie&gt; in particular, it's only ever one level deep</li>
+ <li id="l-87" class="flagged" _a="Hixie" _r="also"><a href="#l-87">#</a> [00:37] &lt;Hixie&gt; also, spec writers trump implementation purity. :-P</li>
+ <li id="l-88" _a="Hixie"><a href="#l-88">#</a> [00:37] &lt;Hixie&gt; er</li>
+ <li id="l-89" class="flagged" _a="Hixie"><a href="#l-89">#</a> [00:37] &lt;Hixie&gt; theoretical purity</li>
+ <li id="l-90" _a="erlehmann"><a href="#l-90">#</a> [00:37] &lt;erlehmann&gt; shadow elements!</li>
+ <li id="l-91" class="flagged" _a="erlehmann"><a href="#l-91">#</a> [00:37] &lt;erlehmann&gt; next we have a shadow spec edited by a shadow working group.</li>
+ <li id="l-92"><a href="#l-92">#</a> [00:37] * Quits: ap (~ap@17.244.26.212) (Quit: ap)</li>
+ <li id="l-93" _a="TabAtkins"><a href="#l-93">#</a> [00:37] &lt;TabAtkins&gt; Aren't we the shadow working group?</li>
+ <li id="l-94" _a="erlehmann"><a href="#l-94">#</a> [00:38] &lt;erlehmann&gt; oh wait, yes.j</li>
+ <li id="l-95" _a="erlehmann"><a href="#l-95">#</a> [00:38] &lt;erlehmann&gt; :D</li>
+ <li id="l-96" _a="Hixie"><a href="#l-96">#</a> [00:38] &lt;Hixie&gt; no we're the LIGHT working group, silly</li>
+ <li id="l-97" _a="Hixie"><a href="#l-97">#</a> [00:38] &lt;Hixie&gt; the w3c group is the shadow group :-P</li>
+ <li id="l-98" class="flagged" _a="TabAtkins"><a href="#l-98">#</a> [00:38] &lt;TabAtkins&gt; And the shadow spec?  You know, the real spec that is used to render the web, but not what authors see unless they look for it.</li>
+ <li id="l-99" _a="erlehmann"><a href="#l-99">#</a> [00:38] &lt;erlehmann&gt; hehehe</li>
+ <li id="l-100" _a="erlehmann"><a href="#l-100">#</a> [00:39] &lt;erlehmann&gt; habari goes all the way and just calls the inner circle “cabal” directly.</li>
+ <li id="l-101" _a="erlehmann"><a href="#l-101">#</a> [00:39] &lt;erlehmann&gt; am i not right, gsnedders? :&gt;</li>
+ <li id="l-102" _a="TabAtkins" _r="Well"><a href="#l-102">#</a> [00:39] &lt;TabAtkins&gt; Well, so do we, though we're joking.</li>
+ <li id="l-103"><a href="#l-103">#</a> [00:44] * Quits: FireFly (~firefly@unaffiliated/firefly) (Quit: swatted to death)</li>
+ <li id="l-104"><a href="#l-104">#</a> [00:44] * Joins: MikeSmith_ (~MikeSmith@EM114-48-16-179.pool.e-mobile.ne.jp)</li>
+ <li id="l-105"><a href="#l-105">#</a> [00:45] * Joins: ryanseddon (~RSeddon@202.126.98.210)</li>
+ <li id="l-106"><a href="#l-106">#</a> [00:48] * Quits: MikeSmith (~MikeSmith@EM1-112-162-14.pool.e-mobile.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-107" _a="MikeSmith_"><a href="#l-107">#</a> [00:48] * MikeSmith_ is now known as MikeSmith</li>
+ <li id="l-108"><a href="#l-108">#</a> [00:48] * Parts: ryanseddon (~RSeddon@202.126.98.210)</li>
+ <li id="l-109"><a href="#l-109">#</a> [00:49] * Quits: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net) (Quit: hij1nx)</li>
+ <li id="l-110"><a href="#l-110">#</a> [00:49] * Joins: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-111"><a href="#l-111">#</a> [00:50] * Joins: miketaylr (~miketaylr@201.54.229.75)</li>
+ <li id="l-112"><a href="#l-112">#</a> [00:50] * Quits: benschwarz (~benschwar@adsl-71-141-244-229.dsl.snfc21.pacbell.net) (Quit: Leaving...)</li>
+ <li id="l-113"><a href="#l-113">#</a> [00:51] * Joins: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net)</li>
+ <li id="l-114"><a href="#l-114">#</a> [00:53] * Joins: jwalden (~waldo@2620:101:8003:200:222:68ff:fe15:af5c)</li>
+ <li id="l-115"><a href="#l-115">#</a> [00:53] * Quits: stefan-_ (~music@trir-4d0d9592.pool.mediaWays.net) (Ping timeout: 258 seconds)</li>
+ <li id="l-116"><a href="#l-116">#</a> [00:57] * Joins: benschwarz (~benschwar@adsl-71-141-244-229.dsl.snfc21.pacbell.net)</li>
+ <li id="l-117"><a href="#l-117">#</a> [01:02] * Quits: zcorpan (~zcorpan@c-039ee355.410-6-64736c14.cust.bredbandsbolaget.se) (Quit: zcorpan)</li>
+ <li id="l-118" _a="gsnedders" _r="erlehmann"><a href="#l-118">#</a> [01:03] &lt;gsnedders&gt; erlehmann: Jokingly. The official name is still the Project Management Committee.</li>
+ <li id="l-119" _a="erlehmann"><a href="#l-119">#</a> [01:03] &lt;erlehmann&gt; pah. everyone knows committees don't get anything done.</li>
+ <li id="l-120" _a="erlehmann"><a href="#l-120">#</a> [01:03] &lt;erlehmann&gt; %)</li>
+ <li id="l-121" _a="gsnedders"><a href="#l-121">#</a> [01:04] &lt;gsnedders&gt; [Insert comment about speed of development drastically slowing down over the past couple of years.]</li>
+ <li id="l-122" _a="erlehmann"><a href="#l-122">#</a> [01:04] &lt;erlehmann&gt; C is for Conspiracy!</li>
+ <li id="l-123"><a href="#l-123">#</a> [01:06] * Quits: boaz (~boaz@75-150-66-249-NewEngland.hfc.comcastbusiness.net) (Quit: boaz)</li>
+ <li id="l-124"><a href="#l-124">#</a> [01:08] * Quits: hober (~ted@unaffiliated/hober) (Ping timeout: 240 seconds)</li>
+ <li id="l-125"><a href="#l-125">#</a> [01:08] * Quits: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no) (Quit: Leaving)</li>
+ <li id="l-126"><a href="#l-126">#</a> [01:08] * Joins: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no)</li>
+ <li id="l-127"><a href="#l-127">#</a> [01:11] * Joins: homata (~homata@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-128"><a href="#l-128">#</a> [01:12] * Quits: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net) (Quit: hij1nx)</li>
+ <li id="l-129"><a href="#l-129">#</a> [01:17] * Joins: Rik` (~Rik`@2a01:e34:ec0f:1570:daa2:5eff:fe97:85ed)</li>
+ <li id="l-130"><a href="#l-130">#</a> [01:17] * Quits: Amorphous (jan@unaffiliated/amorphous) (Ping timeout: 260 seconds)</li>
+ <li id="l-131"><a href="#l-131">#</a> [01:24] * Quits: lhnz (~lhnz@188-223-83-48.zone14.bethere.co.uk) (Ping timeout: 240 seconds)</li>
+ <li id="l-132"><a href="#l-132">#</a> [01:24] * Joins: lhnz (~lhnz@188-223-83-48.zone14.bethere.co.uk)</li>
+ <li id="l-133"><a href="#l-133">#</a> [01:26] * Joins: ap (~ap@17.244.24.55)</li>
+ <li id="l-134"><a href="#l-134">#</a> [01:26] * Quits: ap (~ap@17.244.24.55) (Client Quit)</li>
+ <li id="l-135"><a href="#l-135">#</a> [01:27] * Joins: aho (~nya@fuld-590c6580.pool.mediaWays.net)</li>
+ <li id="l-136"><a href="#l-136">#</a> [01:33] * Joins: boogyman (~boogy@unaffiliated/boogyman)</li>
+ <li id="l-137"><a href="#l-137">#</a> [01:33] * Joins: Amorphous (jan@unaffiliated/amorphous)</li>
+ <li id="l-138"><a href="#l-138">#</a> [01:33] * Quits: miketaylr (~miketaylr@201.54.229.75) (Quit: miketaylr)</li>
+ <li id="l-139"><a href="#l-139">#</a> [01:34] * Joins: miketaylr (~miketaylr@201.54.229.75)</li>
+ <li id="l-140"><a href="#l-140">#</a> [01:34] * Quits: miketaylr (~miketaylr@201.54.229.75) (Client Quit)</li>
+ <li id="l-141"><a href="#l-141">#</a> [01:40] * Joins: alystair (Alystair@24-246-14-18.cable.teksavvy.com)</li>
+ <li id="l-142"><a href="#l-142">#</a> [01:46] * Quits: onar (~onar@17.216.36.168) (Read error: Connection reset by peer)</li>
+ <li id="l-143"><a href="#l-143">#</a> [01:46] * Joins: onar (~onar@17.216.36.168)</li>
+ <li id="l-144"><a href="#l-144">#</a> [01:47] * Joins: onar_ (~onar@17.216.36.168)</li>
+ <li id="l-145"><a href="#l-145">#</a> [01:47] * Quits: onar (~onar@17.216.36.168) (Read error: Connection reset by peer)</li>
+ <li id="l-146" _a="onar_"><a href="#l-146">#</a> [01:47] * onar_ is now known as onar</li>
+ <li id="l-147"><a href="#l-147">#</a> [01:47] * Joins: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net)</li>
+ <li id="l-148"><a href="#l-148">#</a> [01:52] * Joins: twisted (~twisted@205.189.73.45)</li>
+ <li id="l-149"><a href="#l-149">#</a> [01:57] * Quits: boogyman (~boogy@unaffiliated/boogyman) (Ping timeout: 240 seconds)</li>
+ <li id="l-150" _a="bga_"><a href="#l-150">#</a> [01:58] * bga_ is now known as bga_|away</li>
+ <li id="l-151" _a="bga_|away"><a href="#l-151">#</a> [01:58] * bga_|away is now known as bga_</li>
+ <li id="l-152"><a href="#l-152">#</a> [01:58] * Quits: bga_ (~bga@ppp78-37-237-120.pppoe.avangarddsl.ru) (Read error: Connection reset by peer)</li>
+ <li id="l-153"><a href="#l-153">#</a> [02:00] * Joins: boogyman (~boogy@unaffiliated/boogyman)</li>
+ <li id="l-154"><a href="#l-154">#</a> [02:05] * Quits: boogyman (~boogy@unaffiliated/boogyman) (Ping timeout: 240 seconds)</li>
+ <li id="l-155"><a href="#l-155">#</a> [02:09] * Quits: F1LT3R (~F1LT3R@c-76-19-149-201.hsd1.ma.comcast.net) (Quit: Leaving)</li>
+ <li id="l-156"><a href="#l-156">#</a> [02:13] * Quits: exp (~zAyghip8@93-96-170-70.zone4.bethere.co.uk) (Quit: xylophone buggery)</li>
+ <li id="l-157"><a href="#l-157">#</a> [02:16] * Joins: nimbupani (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-158"><a href="#l-158">#</a> [02:16] * Quits: jwalden (~waldo@2620:101:8003:200:222:68ff:fe15:af5c) (Quit: back later)</li>
+ <li id="l-159"><a href="#l-159">#</a> [02:16] * Parts: nimbupani (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-160"><a href="#l-160">#</a> [02:17] * Quits: smaug____ (~chatzilla@a91-154-41-202.elisa-laajakaista.fi) (Ping timeout: 246 seconds)</li>
+ <li id="l-161"><a href="#l-161">#</a> [02:26] * Joins: weinig (~weinig@17.246.19.160)</li>
+ <li id="l-162"><a href="#l-162">#</a> [02:27] * Joins: thornbush (~adriano@187.106.238.168)</li>
+ <li id="l-163"><a href="#l-163">#</a> [02:27] * Joins: homata__ (~homata_@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-164"><a href="#l-164">#</a> [02:30] * Parts: thornbush (~adriano@187.106.238.168)</li>
+ <li id="l-165"><a href="#l-165">#</a> [02:32] * Joins: nimbupani1 (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-166"><a href="#l-166">#</a> [02:33] * Quits: sicking (~chatzilla@2620:101:8003:200:226:bbff:fe05:3fe1) (Ping timeout: 248 seconds)</li>
+ <li id="l-167"><a href="#l-167">#</a> [02:33] * Parts: nimbupani1 (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-168"><a href="#l-168">#</a> [02:35] * Joins: nimbupani (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-169"><a href="#l-169">#</a> [02:45] * Quits: erlehmann (~erlehmann@82.113.99.0) (Quit: Ex-Chat)</li>
+ <li id="l-170"><a href="#l-170">#</a> [02:45] * Quits: weinig (~weinig@17.246.19.160) (Read error: Connection reset by peer)</li>
+ <li id="l-171"><a href="#l-171">#</a> [02:46] * Joins: weinig (~weinig@2620:149:4:401:223:32ff:feaf:7f36)</li>
+ <li id="l-172"><a href="#l-172">#</a> [03:01] * Quits: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net) (Read error: Connection reset by peer)</li>
+ <li id="l-173"><a href="#l-173">#</a> [03:02] * Joins: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net)</li>
+ <li id="l-174"><a href="#l-174">#</a> [03:03] * Joins: hober (~ted@unaffiliated/hober)</li>
+ <li id="l-175"><a href="#l-175">#</a> [03:03] * Parts: nimbupani (~Adium@c-24-18-47-160.hsd1.wa.comcast.net)</li>
+ <li id="l-176"><a href="#l-176">#</a> [03:06] * Quits: weinig (~weinig@2620:149:4:401:223:32ff:feaf:7f36) (Quit: weinig)</li>
+ <li id="l-177"><a href="#l-177">#</a> [03:20] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 248 seconds)</li>
+ <li id="l-178"><a href="#l-178">#</a> [03:22] * Joins: shinyak (~shinyak@220.109.219.244)</li>
+ <li id="l-179"><a href="#l-179">#</a> [03:23] * Joins: ryanseddon (~RSeddon@202.126.98.210)</li>
+ <li id="l-180"><a href="#l-180">#</a> [03:26] * Quits: DaFireball (~Vuurbal@240-216-164-193.fiber.trined.nl)</li>
+ <li id="l-181"><a href="#l-181">#</a> [03:33] * Quits: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net) (Quit: hij1nx)</li>
+ <li id="l-182"><a href="#l-182">#</a> [03:35] * Quits: jamesr (~jamesr@216.239.45.19) (Quit: jamesr)</li>
+ <li id="l-183"><a href="#l-183">#</a> [03:39] * Quits: cying (~cying@173-13-176-101-sfba.hfc.comcastbusiness.net) (Read error: Connection reset by peer)</li>
+ <li id="l-184"><a href="#l-184">#</a> [03:39] * Joins: cying_ (~cying@173-228-29-224.dsl.static.sonic.net)</li>
+ <li id="l-185"><a href="#l-185">#</a> [03:43] * Joins: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net)</li>
+ <li id="l-186"><a href="#l-186">#</a> [03:51] * Quits: cying_ (~cying@173-228-29-224.dsl.static.sonic.net) (Quit: cying_)</li>
+ <li id="l-187"><a href="#l-187">#</a> [03:54] * Quits: benschwarz (~benschwar@adsl-71-141-244-229.dsl.snfc21.pacbell.net) (Quit: Leaving...)</li>
+ <li id="l-188"><a href="#l-188">#</a> [03:57] * Quits: ezoe (~ezoe@203-140-89-244f1.kyt1.eonet.ne.jp) (Ping timeout: 260 seconds)</li>
+ <li id="l-189"><a href="#l-189">#</a> [04:04] * Quits: MikeSmith (~MikeSmith@EM114-48-16-179.pool.e-mobile.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-190"><a href="#l-190">#</a> [04:07] * Quits: homata (~homata@58x158x182x50.ap58.ftth.ucom.ne.jp) (Ping timeout: 258 seconds)</li>
+ <li id="l-191"><a href="#l-191">#</a> [04:10] * Quits: david_carlisle (~chatzilla@dcarlisle.demon.co.uk) (Ping timeout: 252 seconds)</li>
+ <li id="l-192"><a href="#l-192">#</a> [04:13] * Joins: Dashimon (Dashiva@84-72-44-31.dclient.hispeed.ch)</li>
+ <li id="l-193"><a href="#l-193">#</a> [04:13] * Quits: Dashimon (Dashiva@84-72-44-31.dclient.hispeed.ch) (Changing host)</li>
+ <li id="l-194"><a href="#l-194">#</a> [04:13] * Joins: Dashimon (Dashiva@wikia/Dashiva)</li>
+ <li id="l-195"><a href="#l-195">#</a> [04:14] * Quits: Dashiva (Dashiva@wikia/Dashiva) (Ping timeout: 248 seconds)</li>
+ <li id="l-196" _a="Dashimon"><a href="#l-196">#</a> [04:14] * Dashimon is now known as Dashiva</li>
+ <li id="l-197"><a href="#l-197">#</a> [04:19] * Joins: miketaylr (~miketaylr@201.54.229.75)</li>
+ <li id="l-198"><a href="#l-198">#</a> [04:22] * Quits: tomasf (~tom@c-5ed9e555.024-204-6c6b7012.cust.bredbandsbolaget.se) (Quit: tomasf)</li>
+ <li id="l-199"><a href="#l-199">#</a> [04:27] * Quits: othermaciej_ (~mjs@2620:149:4:401:21b:63ff:fe97:5eb) (Ping timeout: 260 seconds)</li>
+ <li id="l-200"><a href="#l-200">#</a> [04:28] * Joins: boaz (~boaz@c-24-147-171-18.hsd1.ma.comcast.net)</li>
+ <li id="l-201"><a href="#l-201">#</a> [04:30] * Joins: homata (~homata@58x158x182x50.ap58.ftth.ucom.ne.jp)</li>
+ <li id="l-202"><a href="#l-202">#</a> [04:30] * Joins: othermaciej_ (~mjs@67.218.110.208)</li>
+ <li id="l-203"><a href="#l-203">#</a> [04:37] * Joins: cying (~cying@c-24-6-96-149.hsd1.ca.comcast.net)</li>
+ <li id="l-204"><a href="#l-204">#</a> [04:39] * Joins: MikeSmith (~MikeSmith@EM114-48-27-9.pool.e-mobile.ne.jp)</li>
+ <li id="l-205"><a href="#l-205">#</a> [04:46] * Quits: boaz (~boaz@c-24-147-171-18.hsd1.ma.comcast.net) (Quit: boaz)</li>
+ <li id="l-206"><a href="#l-206">#</a> [04:59] * Joins: ezoe (~ezoe@203-140-91-93f1.kyt1.eonet.ne.jp)</li>
+ <li id="l-207"><a href="#l-207">#</a> [05:01] * Quits: shinyak (~shinyak@220.109.219.244) (Remote host closed the connection)</li>
+ <li id="l-208"><a href="#l-208">#</a> [05:03] * Quits: cying (~cying@c-24-6-96-149.hsd1.ca.comcast.net) (Quit: cying)</li>
+ <li id="l-209"><a href="#l-209">#</a> [05:11] * Quits: dave_levin (~dave_levi@74.125.59.73) (Quit: dave_levin)</li>
+ <li id="l-210"><a href="#l-210">#</a> [05:13] * Joins: cying (~cying@c-24-6-96-149.hsd1.ca.comcast.net)</li>
+ <li id="l-211"><a href="#l-211">#</a> [05:18] * Quits: MikeSmith (~MikeSmith@EM114-48-27-9.pool.e-mobile.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-212"><a href="#l-212">#</a> [05:23] * Quits: othermaciej_ (~mjs@67.218.110.208) (Quit: othermaciej_)</li>
+ <li id="l-213"><a href="#l-213">#</a> [05:27] * Joins: shinyak (~shinyak@2401:fa00:4:1000:ca2a:14ff:fe0b:baba)</li>
+ <li id="l-214"><a href="#l-214">#</a> [05:27] * Quits: shinyak (~shinyak@2401:fa00:4:1000:ca2a:14ff:fe0b:baba) (Remote host closed the connection)</li>
+ <li id="l-215"><a href="#l-215">#</a> [05:28] * Quits: miketaylr (~miketaylr@201.54.229.75) (Quit: ?ifdi)</li>
+ <li id="l-216"><a href="#l-216">#</a> [05:34] * Joins: othermaciej_ (~mjs@c-24-6-209-6.hsd1.ca.comcast.net)</li>
+ <li id="l-217"><a href="#l-217">#</a> [05:34] * Quits: roc (~chatzilla@203-97-204-82.dsl.clear.net.nz) (Ping timeout: 260 seconds)</li>
+ <li id="l-218"><a href="#l-218">#</a> [05:44] * Quits: othermaciej_ (~mjs@c-24-6-209-6.hsd1.ca.comcast.net) (Quit: othermaciej_)</li>
+ <li id="l-219"><a href="#l-219">#</a> [05:45] * Joins: othermaciej_ (~mjs@c-24-6-209-6.hsd1.ca.comcast.net)</li>
+ <li id="l-220" _a="sephr" _r="Hixie"><a href="#l-220">#</a> [05:51] &lt;sephr&gt; Hixie: what'd the reasoning behind using language-XXX class for programming languages? ( <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-code-element">http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-code-element</a> )</li>
+ <li id="l-221" _a="sephr"><a href="#l-221">#</a> [05:51] &lt;sephr&gt; that's so ambiguous</li>
+ <li id="l-222" _a="sephr"><a href="#l-222">#</a> [05:51] &lt;sephr&gt; why not use media types?</li>
+ <li id="l-223" _a="sephr"><a href="#l-223">#</a> [05:51] &lt;sephr&gt; s/what'd/what's/</li>
+ <li id="l-224"><a href="#l-224">#</a> [05:53] * Joins: KaOSoFt (~KaOSoFt@186.112.9.111)</li>
+ <li id="l-225"><a href="#l-225">#</a> [05:53] * Quits: KaOSoFt (~KaOSoFt@186.112.9.111) (Changing host)</li>
+ <li id="l-226"><a href="#l-226">#</a> [05:53] * Joins: KaOSoFt (~KaOSoFt@unaffiliated/kaosoft)</li>
+ <li id="l-227" _a="sephr"><a href="#l-227">#</a> [05:53] &lt;sephr&gt; some programming languages don't have registered media types, but type=&quot;application/x-pascal&quot; seems much more appropriate than piggybacking on class</li>
+ <li id="l-228"><a href="#l-228">#</a> [05:55] * Quits: heycam (~cam@wok.mcc.id.au) (Read error: Operation timed out)</li>
+ <li id="l-229"><a href="#l-229">#</a> [05:56] * Quits: hij1nx (~hij1nx@c-69-181-2-87.hsd1.ca.comcast.net) (Quit: hij1nx)</li>
+ <li id="l-230"><a href="#l-230">#</a> [05:56] * Joins: heycam (~cam@wok.mcc.id.au)</li>
+ <li id="l-231"><a href="#l-231">#</a> [05:58] * Quits: yijun (~yijun@059148184190.ctinets.com) (Ping timeout: 240 seconds)</li>
+ <li id="l-232"><a href="#l-232">#</a> [05:59] * Joins: yijun (~yijun@211.82.74.16)</li>
+ <li id="l-233"><a href="#l-233">#</a> [06:02] * Quits: yijun (~yijun@211.82.74.16) (Remote host closed the connection)</li>
+ <li id="l-234"><a href="#l-234">#</a> [06:03] * Joins: yijun (~yijun@059148184190.ctinets.com)</li>
+ <li id="l-235"><a href="#l-235">#</a> [06:04] * Joins: agektmr (~Adium@64.1.210.2.ptr.us.xo.net)</li>
+ <li id="l-236"><a href="#l-236">#</a> [06:05] * Joins: MikeSmith (~MikeSmith@EM114-48-27-9.pool.e-mobile.ne.jp)</li>
+ <li id="l-237"><a href="#l-237">#</a> [06:06] * Quits: agektmr (~Adium@64.1.210.2.ptr.us.xo.net) (Read error: Connection reset by peer)</li>
+ <li id="l-238" _a="Hixie" _r="sephr"><a href="#l-238">#</a> [06:07] &lt;Hixie&gt; sephr: there's no type=&quot;&quot; attribute, and the use case isn't important enough to add one just for this</li>
+ <li id="l-239"><a href="#l-239">#</a> [06:07] * Quits: hsivonen (~hsivonen@kekkonen.cs.hut.fi) (Ping timeout: 240 seconds)</li>
+ <li id="l-240" _a="Hixie" _r="sephr"><a href="#l-240">#</a> [06:07] &lt;Hixie&gt; sephr: the idea of using class=&quot;language-*&quot; is just a suggestion for people who need some mechanism anyway</li>
+ <li id="l-241" _a="sephr"><a href="#l-241">#</a> [06:07] &lt;sephr&gt; sure yeah</li>
+ <li id="l-242" _a="sephr"><a href="#l-242">#</a> [06:07] &lt;sephr&gt; what is the standards legality of x-programming-x-{language}?</li>
+ <li id="l-243" _a="Hixie"><a href="#l-243">#</a> [06:08] &lt;Hixie&gt; you mean as a mime type?</li>
+ <li id="l-244" _a="sephr" _r="no"><a href="#l-244">#</a> [06:08] &lt;sephr&gt; no, as a language code</li>
+ <li id="l-245" _a="Hixie"><a href="#l-245">#</a> [06:08] &lt;Hixie&gt; as in lang=&quot;&quot;?</li>
+ <li id="l-246" _a="sephr"><a href="#l-246">#</a> [06:08] &lt;sephr&gt; for example, &lt;code lang=&quot;x-programming-x-python&quot;&gt;</li>
+ <li id="l-247" _a="sephr"><a href="#l-247">#</a> [06:08] &lt;sephr&gt; yeah</li>
+ <li id="l-248" _a="sephr"><a href="#l-248">#</a> [06:08] &lt;sephr&gt; it's valid, but it seems a little wrong to do</li>
+ <li id="l-249" _a="Hixie"><a href="#l-249">#</a> [06:08] &lt;Hixie&gt; programming languages aren't the same as natural languages</li>
+ <li id="l-250" _a="Hixie"><a href="#l-250">#</a> [06:08] &lt;Hixie&gt; they're orthogonal concepts</li>
+ <li id="l-251" _a="sephr"><a href="#l-251">#</a> [06:08] &lt;sephr&gt; yeah</li>
+ <li id="l-252" _a="Hixie"><a href="#l-252">#</a> [06:08] &lt;Hixie&gt; you can have java with french variables, for instance</li>
+ <li id="l-253" _a="sephr"><a href="#l-253">#</a> [06:09] &lt;sephr&gt; then you'd do x-programming-x-java-fr heh</li>
+ <li id="l-254" _a="sephr"><a href="#l-254">#</a> [06:09] &lt;sephr&gt; actually I think you'd start with the fr tag</li>
+ <li id="l-255" _a="Hixie"><a href="#l-255">#</a> [06:09] &lt;Hixie&gt; no better than class=&quot;language-java&quot;, except for being more verbose and being of dubious validity :-)</li>
+ <li id="l-256" _a="sephr"><a href="#l-256">#</a> [06:10] &lt;sephr&gt; I wish you didn't have to put x- before every single subtag</li>
+ <li id="l-257" _a="sephr"><a href="#l-257">#</a> [06:10] &lt;sephr&gt; if you start the first tag off with x-</li>
+ <li id="l-258" class="flagged" _a="Hixie"><a href="#l-258">#</a> [06:10] &lt;Hixie&gt; it's supposed to remind you that you're doing something bad :-)</li>
+ <li id="l-259" _a="sephr"><a href="#l-259">#</a> [06:10] &lt;sephr&gt; heh</li>
+ <li id="l-260" _a="sephr" _r="Hixie"><a href="#l-260">#</a> [06:10] &lt;sephr&gt; Hixie: oh btw, this is a little off-topic, but what are your thoughts on stripping x- internally?</li>
+ <li id="l-261" _a="sephr"><a href="#l-261">#</a> [06:11] &lt;sephr&gt; for localization packages</li>
+ <li id="l-262" _a="Hixie"><a href="#l-262">#</a> [06:11] &lt;Hixie&gt; hm?</li>
+ <li id="l-263" _a="sephr"><a href="#l-263">#</a> [06:11] &lt;sephr&gt; like en-US-x-Hixie and en-US-Hixie being the same</li>
+ <li id="l-264" _a="Hixie"><a href="#l-264">#</a> [06:11] &lt;Hixie&gt; wouldn't that violate the rules of the language tag processing model?</li>
+ <li id="l-265" _a="sephr"><a href="#l-265">#</a> [06:12] &lt;sephr&gt; I know, but if x-Hixie is ever standardized, would it be reasonable to assume it'd be the same as x-Hixie or do you think it would change?</li>
+ <li id="l-266" _a="Hixie"><a href="#l-266">#</a> [06:12] &lt;Hixie&gt; it'd never be standardised</li>
+ <li id="l-267" _a="sephr"><a href="#l-267">#</a> [06:12] &lt;sephr&gt; I strip the x-s in my l10n.js lib (<a href="https://github.com/eligrey/l10n.js">https://github.com/eligrey/l10n.js</a>)</li>
+ <li id="l-268" _a="sephr"><a href="#l-268">#</a> [06:12] &lt;sephr&gt; if I put enough money behind it I'm sure you could get it standardized ;)</li>
+ <li id="l-269" _a="sephr"><a href="#l-269">#</a> [06:13] &lt;sephr&gt; just formalize the spec more and be a little more verbose</li>
+ <li id="l-270" _a="Hixie"><a href="#l-270">#</a> [06:13] &lt;Hixie&gt; if a subtag is ever usefully standardised, the usage of the experimental subtag would be dwarfed by the usage of the official subtag, such that there'd be no reason to care about the experimental one</li>
+ <li id="l-271" _a="Hixie"><a href="#l-271">#</a> [06:13] &lt;Hixie&gt; anyway</li>
+ <li id="l-272" class="flagged" _a="Hixie"><a href="#l-272">#</a> [06:13] &lt;Hixie&gt; it seems clearly in violation of the rules and to be missing the point</li>
+ <li id="l-273" _a="Hixie"><a href="#l-273">#</a> [06:13] &lt;Hixie&gt; but you do what you like :-)</li>
+ <li id="l-274" _a="sephr"><a href="#l-274">#</a> [06:13] &lt;sephr&gt; yeah I think I'll stop stipping the private use tags</li>
+ <li id="l-275" _a="sephr"><a href="#l-275">#</a> [06:14] &lt;sephr&gt; if only we had a prog top tag</li>
+ <li id="l-276" _a="sephr"><a href="#l-276">#</a> [06:15] &lt;sephr&gt; (was unrelated to the other message)</li>
+ <li id="l-277"><a href="#l-277">#</a> [06:16] * Joins: hsivonen (~hsivonen@kekkonen.cs.hut.fi)</li>
+ <li id="l-278"><a href="#l-278">#</a> [06:19] * Quits: sephr (~Eli@c-98-235-63-240.hsd1.pa.comcast.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-279"><a href="#l-279">#</a> [06:48] * Joins: mike][inq (~mike@2001:858:5:303:224:81ff:fe12:b5c4)</li>
+ <li id="l-280"><a href="#l-280">#</a> [06:50] * Quits: mike][inq (~mike@2001:858:5:303:224:81ff:fe12:b5c4) (Client Quit)</li>
+ <li id="l-281"><a href="#l-281">#</a> [06:50] * Joins: mike][inq (~mike@2001:858:5:303:224:81ff:fe12:b5c4)</li>
+ <li id="l-282"><a href="#l-282">#</a> [07:00] * Joins: simplicity- (~simpli@unaffiliated/simplicity-)</li>
+ <li id="l-283"><a href="#l-283">#</a> [07:02] * Joins: shichuan (~Shi_Chuan@cm182.eta124.maxonline.com.sg)</li>
+ <li id="l-284"><a href="#l-284">#</a> [07:03] * Quits: simplicity- (~simpli@unaffiliated/simplicity-) (Client Quit)</li>
+ <li id="l-285" _a="heycam"><a href="#l-285">#</a> [07:03] &lt;heycam&gt; does CSS define whether text decorations are drawn under or over text?</li>
+ <li id="l-286" _a="Hixie"><a href="#l-286">#</a> [07:03] &lt;Hixie&gt; CSS 2.1 Appendix E would be where that would be defined</li>
+ <li id="l-287" _a="Hixie"><a href="#l-287">#</a> [07:03] &lt;Hixie&gt; if it's defined</li>
+ <li id="l-288" _a="heycam"><a href="#l-288">#</a> [07:04] * heycam takes a look</li>
+ <li id="l-289" _a="dglazkov"><a href="#l-289">#</a> [07:04] * dglazkov is now known as dglazkov|away</li>
+ <li id="l-290" _a="heycam"><a href="#l-290">#</a> [07:04] &lt;heycam&gt; it does, thanks Hixie</li>
+ <li id="l-291" class="flagged" _a="heycam"><a href="#l-291">#</a> [07:05] &lt;heycam&gt; and in an order consistent with SVG text, too. happy day. :)</li>
+ <li id="l-292"><a href="#l-292">#</a> [07:08] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-293" _a="Hixie"><a href="#l-293">#</a> [07:10] &lt;Hixie&gt; well that's lucky</li>
+ <li id="l-294"><a href="#l-294">#</a> [07:14] * Quits: cpearce (~chatzilla@203-97-204-82.dsl.clear.net.nz) (Ping timeout: 240 seconds)</li>
+ <li id="l-295"><a href="#l-295">#</a> [07:14] * Quits: KaOSoFt (~KaOSoFt@unaffiliated/kaosoft) (Quit: Liberty is the right to choose, freedom is the result of that choice.)</li>
+ <li id="l-296" _a="heycam"><a href="#l-296">#</a> [07:26] * heycam is now known as heycam|away</li>
+ <li id="l-297"><a href="#l-297">#</a> [07:26] * Joins: Ankheg (~Ankheg@fs91-201-3-30.dubna-net.ru)</li>
+ <li id="l-298"><a href="#l-298">#</a> [07:26] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 276 seconds)</li>
+ <li id="l-299"><a href="#l-299">#</a> [07:28] * Quits: roc (~chatzilla@121.98.230.221) (Read error: Connection reset by peer)</li>
+ <li id="l-300"><a href="#l-300">#</a> [07:29] * Joins: roc (~chatzilla@121.98.230.221)</li>
+ <li id="l-301"><a href="#l-301">#</a> [07:30] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-302"><a href="#l-302">#</a> [07:34] * Joins: roc_ (~chatzilla@121.98.230.221)</li>
+ <li id="l-303"><a href="#l-303">#</a> [07:36] * Joins: micheil (~micheil@124-171-8-197.dyn.iinet.net.au)</li>
+ <li id="l-304"><a href="#l-304">#</a> [07:36] * Quits: micheil (~micheil@124-171-8-197.dyn.iinet.net.au) (Client Quit)</li>
+ <li id="l-305"><a href="#l-305">#</a> [07:36] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 260 seconds)</li>
+ <li id="l-306" _a="roc_"><a href="#l-306">#</a> [07:36] * roc_ is now known as roc</li>
+ <li id="l-307"><a href="#l-307">#</a> [07:41] * Joins: hdhoang (~hdhoang@203.210.156.49)</li>
+ <li id="l-308"><a href="#l-308">#</a> [07:44] * Joins: maikmerten (~merten@ls5dhcp197.cs.uni-dortmund.de)</li>
+ <li id="l-309"><a href="#l-309">#</a> [07:47] * Joins: CvP (CvP@180.234.63.102)</li>
+ <li id="l-310"><a href="#l-310">#</a> [07:51] * Quits: CvP (CvP@180.234.63.102) (Disconnected by services)</li>
+ <li id="l-311"><a href="#l-311">#</a> [07:52] * Joins: xCG (CvP@180.234.42.168)</li>
+ <li id="l-312" _a="xCG"><a href="#l-312">#</a> [07:52] * xCG is now known as CvP</li>
+ <li id="l-313"><a href="#l-313">#</a> [07:52] * Joins: Akilo (~kristof@lit75-1-81-57-239-230.fbx.proxad.net)</li>
+ <li id="l-314" _a="heycam|away"><a href="#l-314">#</a> [07:58] * heycam|away is now known as heycam</li>
+ <li id="l-315"><a href="#l-315">#</a> [08:04] * Quits: aho (~nya@fuld-590c6580.pool.mediaWays.net) (Quit: EXEC_over.METHOD_SUBLIMATION)</li>
+ <li id="l-316"><a href="#l-316">#</a> [08:04] * Joins: lumely_ (~lumely@dhcp2-228.slis.tsukuba.ac.jp)</li>
+ <li id="l-317"><a href="#l-317">#</a> [08:06] * Quits: lumely (~lumely@dhcp2-228.slis.tsukuba.ac.jp) (Ping timeout: 248 seconds)</li>
+ <li id="l-318"><a href="#l-318">#</a> [08:25] * Joins: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl)</li>
+ <li id="l-319"><a href="#l-319">#</a> [08:30] * Joins: ben_h (~ben@150.101.159.22)</li>
+ <li id="l-320"><a href="#l-320">#</a> [08:40] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-321"><a href="#l-321">#</a> [08:43] * Quits: ben_h (~ben@150.101.159.22) (Quit: ben_h)</li>
+ <li id="l-322"><a href="#l-322">#</a> [08:47] * Quits: mike][inq (~mike@2001:858:5:303:224:81ff:fe12:b5c4) (Remote host closed the connection)</li>
+ <li id="l-323"><a href="#l-323">#</a> [08:48] * Quits: Smylers (~smylers@host109-157-249-110.range109-157.btcentralplus.com) (Quit: Leaving.)</li>
+ <li id="l-324"><a href="#l-324">#</a> [08:48] * Joins: mike][inq (~mike@2001:858:5:303:224:81ff:fe12:b5c4)</li>
+ <li id="l-325" _a="heycam"><a href="#l-325">#</a> [08:54] * heycam is now known as heycam|away</li>
+ <li id="l-326"><a href="#l-326">#</a> [09:02] * Quits: roc (~chatzilla@121.98.230.221) (Ping timeout: 240 seconds)</li>
+ <li id="l-327"><a href="#l-327">#</a> [09:06] * Joins: Necrathex (~nectop@82-170-160-25.ip.telfort.nl)</li>
+ <li id="l-328"><a href="#l-328">#</a> [09:09] * Joins: matijsb (~matijsb@44-11.bbned.dsl.internl.net)</li>
+ <li id="l-329"><a href="#l-329">#</a> [09:12] * Joins: zcorpan (~zcorpan@c-039ee355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-330"><a href="#l-330">#</a> [09:12] * Quits: tw2113 (~tw2113@fedora/tw2113) (Quit: I was raided by the FBI and all I got to keep was this lousy quit message!)</li>
+ <li id="l-331"><a href="#l-331">#</a> [09:12] * Joins: matijsb1 (~matijsb@44-11.bbned.dsl.internl.net)</li>
+ <li id="l-332"><a href="#l-332">#</a> [09:15] * Joins: smaug____ (~chatzilla@a91-154-41-202.elisa-laajakaista.fi)</li>
+ <li id="l-333"><a href="#l-333">#</a> [09:15] * Quits: matijsb (~matijsb@44-11.bbned.dsl.internl.net) (Ping timeout: 240 seconds)</li>
+ <li id="l-334"><a href="#l-334">#</a> [09:15] * Quits: matijsb1 (~matijsb@44-11.bbned.dsl.internl.net) (Client Quit)</li>
+ <li id="l-335"><a href="#l-335">#</a> [09:19] * Joins: ben_h (~ben@150.101.159.22)</li>
+ <li id="l-336"><a href="#l-336">#</a> [09:23] * Quits: shichuan (~Shi_Chuan@cm182.eta124.maxonline.com.sg) (Read error: Connection reset by peer)</li>
+ <li id="l-337"><a href="#l-337">#</a> [09:26] * Joins: micheil (~micheil@124-171-8-197.dyn.iinet.net.au)</li>
+ <li id="l-338"><a href="#l-338">#</a> [09:28] * Joins: rimantas (~rimliu@93.93.57.193)</li>
+ <li id="l-339"><a href="#l-339">#</a> [09:28] * Quits: danja_ (~danny@host109-239-static.12-87-b.business.telecomitalia.it) (Ping timeout: 240 seconds)</li>
+ <li id="l-340"><a href="#l-340">#</a> [09:29] * Joins: danja_ (~danny@host109-239-static.12-87-b.business.telecomitalia.it)</li>
+ <li id="l-341"><a href="#l-341">#</a> [09:30] * Joins: MrOpposite (~mropposit@unaffiliated/mropposite)</li>
+ <li id="l-342"><a href="#l-342">#</a> [09:35] * Joins: MrDoublesite (~mropposit@unaffiliated/mropposite)</li>
+ <li id="l-343"><a href="#l-343">#</a> [09:37] * Quits: MrOpposite (~mropposit@unaffiliated/mropposite) (Ping timeout: 240 seconds)</li>
+ <li id="l-344"><a href="#l-344">#</a> [09:41] * Joins: msucan (~robod@89.123.170.122)</li>
+ <li id="l-345"><a href="#l-345">#</a> [09:45] * Quits: MrDoublesite (~mropposit@unaffiliated/mropposite) (Ping timeout: 264 seconds)</li>
+ <li id="l-346"><a href="#l-346">#</a> [09:49] * Quits: ryanseddon (~RSeddon@202.126.98.210) (Quit: Leaving.)</li>
+ <li id="l-347"><a href="#l-347">#</a> [09:50] * Joins: ryanseddon (~RSeddon@202.126.98.210)</li>
+ <li id="l-348"><a href="#l-348">#</a> [09:51] * Quits: othermaciej_ (~mjs@c-24-6-209-6.hsd1.ca.comcast.net) (Quit: othermaciej_)</li>
+ <li id="l-349"><a href="#l-349">#</a> [09:53] * Joins: othermaciej_ (~mjs@c-24-6-209-6.hsd1.ca.comcast.net)</li>
+ <li id="l-350"><a href="#l-350">#</a> [09:54] * Quits: ryanseddon (~RSeddon@202.126.98.210) (Ping timeout: 240 seconds)</li>
+ <li id="l-351"><a href="#l-351">#</a> [10:03] * Joins: MrOpposite (~mropposit@unaffiliated/mropposite)</li>
+ <li id="l-352"><a href="#l-352">#</a> [10:06] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 260 seconds)</li>
+ <li id="l-353"><a href="#l-353">#</a> [10:10] * Quits: temp01 (~temp01@unaffiliated/temp01) (Ping timeout: 240 seconds)</li>
+ <li id="l-354"><a href="#l-354">#</a> [10:15] * Joins: temp01 (~temp01@unaffiliated/temp01)</li>
+ <li id="l-355"><a href="#l-355">#</a> [10:23] * Quits: Akilo (~kristof@lit75-1-81-57-239-230.fbx.proxad.net) (Quit: Ex-Chat)</li>
+ <li id="l-356"><a href="#l-356">#</a> [10:25] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-357"><a href="#l-357">#</a> [10:26] * Quits: ben_h (~ben@150.101.159.22) (Quit: ben_h)</li>
+ <li id="l-358"><a href="#l-358">#</a> [10:28] * Quits: mpt (~mpt@canonical/mpt) (Remote host closed the connection)</li>
+ <li id="l-359"><a href="#l-359">#</a> [10:28] * Quits: cying (~cying@c-24-6-96-149.hsd1.ca.comcast.net) (Quit: cying)</li>
+ <li id="l-360"><a href="#l-360">#</a> [10:30] * Joins: richt (~richt@pat-tdc.opera.com)</li>
+ <li id="l-361"><a href="#l-361">#</a> [10:30] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-362"><a href="#l-362">#</a> [10:31] * Quits: MrOpposite (~mropposit@unaffiliated/mropposite) (Remote host closed the connection)</li>
+ <li id="l-363" class="flagged" _a="MikeSmith" _r="hsivonen"><a href="#l-363">#</a> [10:36] &lt;MikeSmith&gt; hsivonen: I'm reading <a href="http://hsivonen.iki.fi/aria-html5-bis/">http://hsivonen.iki.fi/aria-html5-bis/</a> while working on the ARIA schema updates, and I'm wondering if you ever got responses to the comments and questions you posted to the PFWG comments list</li>
+ <li id="l-364" _a="MikeSmith" _r="e.g"><a href="#l-364">#</a> [10:36] &lt;MikeSmith&gt; e.g, <a href="http://lists.w3.org/Archives/Public/public-pfwg-comments/2008JanMar/0043.html">http://lists.w3.org/Archives/Public/public-pfwg-comments/2008JanMar/0043.html</a></li>
+ <li id="l-365" _a="MikeSmith"><a href="#l-365">#</a> [10:36] &lt;MikeSmith&gt; about whitespace trimming</li>
+ <li id="l-366" _a="MikeSmith" _r="jgraham"><a href="#l-366">#</a> [10:37] &lt;MikeSmith&gt; jgraham: same question for you</li>
+ <li id="l-367" _a="MikeSmith"><a href="#l-367">#</a> [10:37] &lt;MikeSmith&gt; about aria-level</li>
+ <li id="l-368"><a href="#l-368">#</a> [10:41] * Quits: MikeSmith (~MikeSmith@EM114-48-27-9.pool.e-mobile.ne.jp) (Ping timeout: 252 seconds)</li>
+ <li id="l-369"><a href="#l-369">#</a> [10:45] * Quits: mpt (~mpt@canonical/mpt) (Ping timeout: 252 seconds)</li>
+ <li id="l-370"><a href="#l-370">#</a> [10:46] * Joins: MikeSmith (~MikeSmith@EM114-48-130-132.pool.e-mobile.ne.jp)</li>
+ <li id="l-371" _a="jgraham" _r="MikeSmith"><a href="#l-371">#</a> [10:47] &lt;jgraham&gt; MikeSmith: I can't find any evidence I got responses to those specific comments although I did to some other ones. But I may just be missing something</li>
+ <li id="l-372"><a href="#l-372">#</a> [10:54] * Joins: AugustoF (~Augusto@187.37.142.223)</li>
+ <li id="l-373" _a="AugustoF"><a href="#l-373">#</a> [10:54] &lt;AugustoF&gt; Sup</li>
+ <li id="l-374"><a href="#l-374">#</a> [10:54] * Quits: ezoe (~ezoe@203-140-91-93f1.kyt1.eonet.ne.jp) (Ping timeout: 248 seconds)</li>
+ <li id="l-375" _a="hsivonen" _r="MikeSmith"><a href="#l-375">#</a> [10:57] &lt;hsivonen&gt; MikeSmith: there were some responses. I still suggest implementing the ARIA datatypes as HTML5 microsyntaxes rather than XSD datatypes</li>
+ <li id="l-376" class="flagged" _a="MikeSmith" _r="jgraham"><a href="#l-376">#</a> [10:57] &lt;MikeSmith&gt; jgraham: well, frankly, they should have responded to you directly in some way, with a public record of the response</li>
+ <li id="l-377" _a="AugustoF"><a href="#l-377">#</a> [10:57] &lt;AugustoF&gt; I'm working in a project for a video social network in html5, someone aqui working with Video conferencing or peer-to-peer communication?</li>
+ <li id="l-378" _a="MikeSmith" _r="hsivonen"><a href="#l-378">#</a> [10:57] &lt;MikeSmith&gt; hsivonen: OK</li>
+ <li id="l-379" _a="hsivonen"><a href="#l-379">#</a> [10:57] &lt;hsivonen&gt; I still don't believe anyone really wants the XSD behaviors in a browser</li>
+ <li id="l-380" _a="AugustoF"><a href="#l-380">#</a> [10:57] &lt;AugustoF&gt; here*</li>
+ <li id="l-381" _a="MikeSmith" _r="yeah"><a href="#l-381">#</a> [10:57] &lt;MikeSmith&gt; yeah, I tend to agree with you there</li>
+ <li id="l-382" _a="MikeSmith" _r="hsivonen"><a href="#l-382">#</a> [10:58] &lt;MikeSmith&gt; hsivonen: do you recall where you got the responses?</li>
+ <li id="l-383" _a="MikeSmith" _r="e.g."><a href="#l-383">#</a> [10:58] &lt;MikeSmith&gt; e.g., was it private e-mail, or archived on a list</li>
+ <li id="l-384" _a="MikeSmith"><a href="#l-384">#</a> [10:58] &lt;MikeSmith&gt; and if so, which list?</li>
+ <li id="l-385" _a="payman" _r="AugustoF"><a href="#l-385">#</a> [10:59] &lt;payman&gt; AugustoF: Ask your question and find out?</li>
+ <li id="l-386" _a="MikeSmith" _r="jgraham"><a href="#l-386">#</a> [10:59] &lt;MikeSmith&gt; jgraham: I am not sure but I believe it's a requirement that LC comments have to be publicly archived somewhere</li>
+ <li id="l-387" _a="MikeSmith"><a href="#l-387">#</a> [11:00] &lt;MikeSmith&gt; it is definitely a requirement that all LC comments must be responded to</li>
+ <li id="l-388" _a="MikeSmith"><a href="#l-388">#</a> [11:00] &lt;MikeSmith&gt; but even if your comments were not LC comments, the spirit of the process at least requires some formal response</li>
+ <li id="l-389" _a="AugustoF"><a href="#l-389">#</a> [11:01] &lt;AugustoF&gt; payman I don't have just one question, btw I'm searching people to working in my project</li>
+ <li id="l-390" _a="jgraham"><a href="#l-390">#</a> [11:01] &lt;jgraham&gt; I think those were maybe not LC comments?</li>
+ <li id="l-391" _a="jgraham"><a href="#l-391">#</a> [11:01] &lt;jgraham&gt; I got some responses to some LC comments</li>
+ <li id="l-392" _a="jgraham"><a href="#l-392">#</a> [11:01] &lt;jgraham&gt; But nothing abour aria-level</li>
+ <li id="l-393"><a href="#l-393">#</a> [11:02] * Joins: tomasf (~tom@c-5ed9e555.024-204-6c6b7012.cust.bredbandsbolaget.se)</li>
+ <li id="l-394" _a="hsivonen" _r="MikeSmith"><a href="#l-394">#</a> [11:03] &lt;hsivonen&gt; MikeSmith: I think the responses were in their LC comment tracking app</li>
+ <li id="l-395"><a href="#l-395">#</a> [11:04] * Quits: richt (~richt@pat-tdc.opera.com) (Read error: Operation timed out)</li>
+ <li id="l-396"><a href="#l-396">#</a> [11:05] * Joins: richt (~richt@guest.opera.com)</li>
+ <li id="l-397" _a="AugustoF"><a href="#l-397">#</a> [11:05] * AugustoF is now known as Facetalk</li>
+ <li id="l-398" _a="MikeSmith" _r="hsivonen"><a href="#l-398">#</a> [11:06] &lt;MikeSmith&gt; hsivonen: … which I think there is no public facet of…</li>
+ <li id="l-399" _a="MikeSmith"><a href="#l-399">#</a> [11:06] &lt;MikeSmith&gt; but I will check</li>
+ <li id="l-400" _a="MikeSmith"><a href="#l-400">#</a> [11:07] &lt;MikeSmith&gt; if they are using Dom's comment-tracker app, I am pretty sure it has a way to expose a public view while keeping some fields private to the WG</li>
+ <li id="l-401" _a="MikeSmith" _r="jgraham"><a href="#l-401">#</a> [11:07] &lt;MikeSmith&gt; jgraham: OK</li>
+ <li id="l-402"><a href="#l-402">#</a> [11:10] * Quits: Lachy (~Lachlan@cm-84.215.59.50.getinternet.no) (Quit: This computer has gone to sleep)</li>
+ <li id="l-403" _a="Facetalk"><a href="#l-403">#</a> [11:10] &lt;Facetalk&gt; Would anyone be interested in working on a project for make a social video network made ??partly in html5?</li>
+ <li id="l-404" _a="MikeSmith" _r="hsivonen"><a href="#l-404">#</a> [11:10] &lt;MikeSmith&gt; hsivonen, jgraham : the specific problem with aria-level is that it's now mentioned in the HTML5 spec</li>
+ <li id="l-405" _a="MikeSmith"><a href="#l-405">#</a> [11:10] &lt;MikeSmith&gt; <a href="http://dev.w3.org/html5/spec/content-models.html#table-aria-strong">http://dev.w3.org/html5/spec/content-models.html#table-aria-strong</a></li>
+ <li id="l-406" _a="MikeSmith"><a href="#l-406">#</a> [11:10] &lt;MikeSmith&gt; for hgroup</li>
+ <li id="l-407" _a="MikeSmith"><a href="#l-407">#</a> [11:10] &lt;MikeSmith&gt; as is the &quot;heading&quot; role</li>
+ <li id="l-408" _a="MikeSmith" _r="and"><a href="#l-408">#</a> [11:10] &lt;MikeSmith&gt; and, by design, neither aria-level nor the &quot;heading&quot; role are valid in the validator.nu ARIA schema</li>
+ <li id="l-409"><a href="#l-409">#</a> [11:10] * Quits: jacobolus (~jacobolus@208-90-212-203.PUBLIC.monkeybrains.net) (Remote host closed the connection)</li>
+ <li id="l-410"><a href="#l-410">#</a> [11:10] * Quits: richt (~richt@guest.opera.com) (Read error: Connection reset by peer)</li>
+ <li id="l-411" _a="MikeSmith" _r="hsivonen"><a href="#l-411">#</a> [11:11] &lt;MikeSmith&gt; hsivonen, jgraham: and so I would like to know what response if any PFWG gave to you about your comments and questions on those, and on any other ARIA features which are by design not supported in the validator.nu ARIA schema</li>
+ <li id="l-412"><a href="#l-412">#</a> [11:11] * Joins: richt (~richt@guest.opera.com)</li>
+ <li id="l-413"><a href="#l-413">#</a> [11:11] * Quits: zcorpan (~zcorpan@c-039ee355.410-6-64736c14.cust.bredbandsbolaget.se) (Ping timeout: 260 seconds)</li>
+ <li id="l-414"><a href="#l-414">#</a> [11:11] * Joins: jacobolus (~jacobolus@208-90-212-203.PUBLIC.monkeybrains.net)</li>
+ <li id="l-415"><a href="#l-415">#</a> [11:14] * Joins: mpt (~mpt@canonical/mpt)</li>
+ <li id="l-416"><a href="#l-416">#</a> [11:20] * Joins: ZombieLoffe (~e@unaffiliated/zombieloffe)</li>
+ <li id="l-417"><a href="#l-417">#</a> [11:25] * Parts: mpt (~mpt@canonical/mpt) (&quot;Ex-Chat&quot;)</li>
+ <li id="l-418"><a href="#l-418">#</a> [11:26] * Quits: MikeSmith (~MikeSmith@EM114-48-130-132.pool.e-mobile.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-419"><a href="#l-419">#</a> [11:33] * Quits: richt (~richt@guest.opera.com) (Remote host closed the connection)</li>
+ <li id="l-420"><a href="#l-420">#</a> [11:37] * Joins: Lachy (~Lachlan@pat-tdc.opera.com)</li>
+ <li id="l-421"><a href="#l-421">#</a> [11:42] * Joins: richt (~richt@pat-tdc.opera.com)</li>
+ <li id="l-422"><a href="#l-422">#</a> [11:52] * Quits: danbri (~danbri@ip176-48-210-87.adsl2.static.versatel.nl) (Remote host closed the connection)</li>
+ <li id="l-423"><a href="#l-423">#</a> [11:56] * Joins: FireFly (~firefly@unaffiliated/firefly)</li>
+ <li id="l-424"><a href="#l-424">#</a> [11:57] * Quits: Lachy (~Lachlan@pat-tdc.opera.com) (Quit: Leaving)</li>
+ <li id="l-425"><a href="#l-425">#</a> [11:57] * Joins: Lachy (~Lachlan@pat-tdc.opera.com)</li>
+ <li id="l-426"><a href="#l-426">#</a> [12:01] * Joins: Creap (~jacob@jacobrask.net)</li>
+ <li id="l-427" _a="Creap"><a href="#l-427">#</a> [12:01] * Creap is now known as jacobrask</li>
+ <li id="l-428"><a href="#l-428">#</a> [12:04] * Joins: zcorpan (~zcorpan@c-039ee355.410-6-64736c14.cust.bredbandsbolaget.se)</li>
+ <li id="l-429"><a href="#l-429">#</a> [12:23] * Joins: MikeSmith (~MikeSmith@EM114-48-130-132.pool.e-mobile.ne.jp)</li>
+ <li id="l-430"><a href="#l-430">#</a> [12:25] * Joins: Akilo (~kristof@lit75-1-81-57-239-230.fbx.proxad.net)</li>
+ <li id="l-431"><a href="#l-431">#</a> [12:30] * Quits: jochen__ (~jochen@nat/google/x-lirtiynrrekvsfzm) (Remote host closed the connection)</li>
+ <li id="l-432"><a href="#l-432">#</a> [12:31] * Joins: jochen__ (~jochen@nat/google/x-fhtobzueleotfzzu)</li>
+ <li id="l-433"><a href="#l-433">#</a> [12:38] * Joins: xakz (~XaMaD@ARennes-554-1-102-157.w81-53.abo.wanadoo.fr)</li>
+ <li id="l-434" class="flagged" _a="zcorpan" _r="MikeSmith"><a href="#l-434">#</a> [12:42] &lt;zcorpan&gt; MikeSmith: you're going full frontal willful violation against ARIA?</li>
+ <li id="l-435" class="flagged" _a="zcorpan" _r="MikeSmith"><a href="#l-435">#</a> [12:43] &lt;zcorpan&gt; MikeSmith: think of the blind people!</li>
+ <li id="l-436" _a="MikeSmith" _r="zcorpan"><a href="#l-436">#</a> [12:43] &lt;MikeSmith&gt; zcorpan: nothing like that</li>
+ <li id="l-437" _a="zcorpan" _r="MikeSmith"><a href="#l-437">#</a> [12:45] &lt;zcorpan&gt; MikeSmith: only partial willful violation?</li>
+ <li id="l-438"><a href="#l-438">#</a> [12:46] * Joins: MikeSmith_ (~MikeSmith@EM114-48-104-135.pool.e-mobile.ne.jp)</li>
+ <li id="l-439" _a="MikeSmith_" _r="if"><a href="#l-439">#</a> [12:46] &lt;MikeSmith_&gt; if, after reviewing the patch and seeing whether PFWG made changes to address his comments, he agrees that the schema needs to be changed, we can do it then</li>
+ <li id="l-440" _a="MikeSmith_"><a href="#l-440">#</a> [12:46] &lt;MikeSmith_&gt; and/or we file HTML5 spec bugs to not require those attiributes</li>
+ <li id="l-441" _a="MikeSmith_"><a href="#l-441">#</a> [12:46] &lt;MikeSmith_&gt; which actually, I think the spec may not at this point</li>
+ <li id="l-442" _a="MikeSmith_"><a href="#l-442">#</a> [12:47] &lt;MikeSmith_&gt; in the case of aria-level and role=heading</li>
+ <li id="l-443"><a href="#l-443">#</a> [12:47] * Quits: MikeSmith (~MikeSmith@EM114-48-130-132.pool.e-mobile.ne.jp) (Ping timeout: 240 seconds)</li>
+ <li id="l-444" _a="MikeSmith_"><a href="#l-444">#</a> [12:47] * MikeSmith_ is now known as MikeSmith</li>
+ <li id="l-445" _a="MikeSmith"><a href="#l-445">#</a> [12:47] &lt;MikeSmith&gt; I thought it did when I first started putting the patch together but it seems now that the spec may not actually be requiring them</li>
+ <li id="l-446"><a href="#l-446">#</a> [12:52] * Joins: bga_ (~bga@ppp91-122-180-132.pppoe.avangarddsl.ru)</li>
+ <li id="l-447"><a href="#l-447">#</a> [12:53] * Joins: exp (~zAyghip8@93-96-170-70.zone4.bethere.co.uk)</li>
+ <li id="l-448" class="flagged" _a="jgraham"><a href="#l-448">#</a> [12:53] * jgraham doesn't entirely like the words &quot;MikeSmith&quot; and &quot;full frontal&quot; appearing in the same sentence</li>
+ <li id="l-449" _a="MikeSmith"><a href="#l-449">#</a> [12:54] &lt;MikeSmith&gt; heh</li>
+ <li id="l-450"><a href="#l-450">#</a> [13:05] * Joins: shichuan (~Shi_Chuan@cm182.eta124.maxonline.com.sg)</li>
+ <li id="l-451"><a href="#l-451">#</a> [13:07] * Joins: richt_ (~richt@guest.opera.com)</li>
+ <li id="l-452"><a href="#l-452">#</a> [13:08] * Quits: richt (~richt@pat-tdc.opera.com) (Ping timeout: 276 seconds)</li>
+ <li id="l-453"><a href="#l-453">#</a> [13:10] * Quits: richt_ (~richt@guest.opera.com) (Read error: No route to host)</li>
+ <li id="l-454"><a href="#l-454">#</a> [13:10] * Joins: richt (~richt@guest.opera.com)</li>
+ <li id="l-455"><a href="#l-455">#</a> [13:13] * Joins: richt_ (~richt@guest.opera.com)</li>
+ <li id="l-456"><a href="#l-456">#</a> [13:13] * Quits: richt (~richt@guest.opera.com) (Read error: Connection reset by peer)</li>
+ <li id="l-457"><a href="#l-457">#</a> [13:24] * Quits: MikeSmith (~MikeSmith@EM114-48-104-135.pool.e-mobile.ne.jp) (Quit: MikeSmith)</li>
+ <li id="l-458"><a href="#l-458">#</a> [13:35] * Joins: jochen___ (~jochen@nat/google/x-bbeoogovfgliseaq)</li>
+ <li id="l-459"><a href="#l-459">#</a> [13:36] * Quits: jochen__ (~jochen@nat/google/x-fhtobzueleotfzzu) (Ping timeout: 260 seconds)</li>
+ <li id="l-460" _a="jochen___"><a href="#l-460">#</a> [13:36] * jochen___ is now known as jochen__</li>
+ <li id="l-461"><a href="#l-461">#</a> [13:37] * Joins: plainhao (~plainhao@208.75.85.237)</li>
+ <li id="l-462"><a href="#l-462">#</a> [13:37] * Quits: nessy (~Adium@124-171-12-218.dyn.iinet.net.au) (Quit: Leaving.)</li>
+ <li id="l-463"><a href="#l-463">#</a> [13:47] * Joins: richt (~richt@guest.opera.com)</li>
+ <li id="l-464"><a href="#l-464">#</a> [13:47] * Quits: richt_ (~richt@guest.opera.com) (Read error: Connection reset by peer)</li>
+</ol>
+<p id="end">The end :)
