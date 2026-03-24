@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #testing / 20141024</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/testing.20141024.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/testing">#testing</a> / 2014-10-24 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Fri Oct 24 00:00:00 2014</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #testing</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:23] * Joins: mdas_ (~mdas@public.cloak)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:23] * Quits: mdas (~mdas@public.cloak) (Client closed connection)</li>
+ <li id="l-5" _a="jgraham"><a href="#l-5">#</a> [00:24] &lt;jgraham&gt; parameters.find(&amp;&quot;url&quot;.to_string()).unwrap().as_string().unwrap().to_string()</li>
+ <li id="l-6" _a="jgraham"><a href="#l-6">#</a> [00:24] &lt;jgraham&gt; I feel there must be a better way</li>
+ <li id="l-7" _a="jgraham"><a href="#l-7">#</a> [00:25] &lt;jgraham&gt; Maybe I should figure out how to use a custom decoder</li>
+ <li id="l-8" _a="jgraham"><a href="#l-8">#</a> [00:27] &lt;jgraham&gt; (but with a little hacking of the test harness, I did manage to get 4/6 tests to pass)</li>
+ <li id="l-9" _a="jgraham"><a href="#l-9">#</a> [00:29] &lt;jgraham&gt; Is there already some bug about WebDriver duplicating the session ID between the path and the request and the response?</li>
+ <li id="l-10" _a="jgraham"><a href="#l-10">#</a> [00:29] &lt;jgraham&gt; I don't see why it isn't in the path only except for newSession where it would be the value of the response</li>
+ <li id="l-11" _a="jgraham"><a href="#l-11">#</a> [00:30] &lt;jgraham&gt; also I don't really know why &quot;name&quot; exists since it's also redundant with the path</li>
+ <li id="l-12" _a="jgraham"><a href="#l-12">#</a> [00:31] &lt;jgraham&gt; So instead of having a &quot;parameters&quot; property in the request you could just put the parameters at the top level</li>
+ <li id="l-13" _a="AutomatedTester"><a href="#l-13">#</a> [00:36] &lt;AutomatedTester&gt; there was a bug about the duplicating and people agreed that they think its fine</li>
+ <li id="l-14" _a="AutomatedTester"><a href="#l-14">#</a> [00:36] &lt;AutomatedTester&gt; they want the sessionID in the path for easier groking of logs of intermediary nodes</li>
+ <li id="l-15" _a="jgraham"><a href="#l-15">#</a> [00:36] &lt;jgraham&gt; I don't mind it being in the path</li>
+ <li id="l-16" _a="jgraham"><a href="#l-16">#</a> [00:37] &lt;jgraham&gt; Actually I think it basically has to be for HTTP otherwise it breaks caches</li>
+ <li id="l-17" _a="jgraham"><a href="#l-17">#</a> [00:37] &lt;jgraham&gt; I object to it being in the path and the body</li>
+ <li id="l-18" _a="jgraham"><a href="#l-18">#</a> [00:38] &lt;jgraham&gt; Although I think that webdriver is pretty screwed when it comes to caches anyway</li>
+ <li id="l-19" _a="jgraham"><a href="#l-19">#</a> [00:39] &lt;jgraham&gt; I'm not sure how idempotent the GET operations actually are</li>
+ <li id="l-20" _a="jgraham"><a href="#l-20">#</a> [00:39] &lt;jgraham&gt; So probably it needs to be a requirement to send Cache-Control: no-cache with everything</li>
+ <li id="l-21" _a="AutomatedTester"><a href="#l-21">#</a> [00:41] &lt;AutomatedTester&gt; sounds reasonable to me</li>
+ <li id="l-22" _a="jgraham"><a href="#l-22">#</a> [00:42] &lt;jgraham&gt; (for example if you window.open a window, inject a script that closes the window after a random timeout and then GET window_handles, the result you get depends on whether the script has run, so any cached result is non-deterministic)</li>
+ <li id="l-23" _a="jgraham"><a href="#l-23">#</a> [00:42] &lt;jgraham&gt; s/non-deterministic/not sure to be correct/</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:43] * Quits: hober (~ted@public.cloak) (&quot;ERC Version 5.3 (IRC client for Emacs)&quot;)</li>
+ <li id="l-25" _a="jgraham" _r="AutomatedTester"><a href="#l-25">#</a> [00:43] &lt;jgraham&gt; AutomatedTester: FWIW if I were running your meeting at TPAC I would try to dedicate the majority of the first day to pinning down the wire protocol, and in particular the interaction with HTTP</li>
+ <li id="l-26" _a="jgraham"><a href="#l-26">#</a> [00:44] &lt;jgraham&gt; Then I would spend the second day with the editors locked in a room making a spec out of the first day's work</li>
+ <li id="l-27" _a="AutomatedTester"><a href="#l-27">#</a> [00:44] * AutomatedTester goes and adds that to the agenda</li>
+ <li id="l-28" _a="AutomatedTester"><a href="#l-28">#</a> [00:44] &lt;AutomatedTester&gt; does the 2nd day involve a bottle of whiskey?</li>
+ <li id="l-29"><a href="#l-29">#</a> [00:47] * Joins: hober (~ted@public.cloak)</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:49] * Quits: hober (~ted@public.cloak) (&quot;ERC Version 5.3 (IRC client for Emacs)&quot;)</li>
+ <li id="l-31" _a="jgraham"><a href="#l-31">#</a> [00:49] &lt;jgraham&gt; Maybe as a reward at the end</li>
+ <li id="l-32" _a="AutomatedTester"><a href="#l-32">#</a> [00:50] &lt;AutomatedTester&gt; its not a &quot;no&quot; so that means its a yes</li>
+ <li id="l-33" _a="AutomatedTester"><a href="#l-33">#</a> [00:50] &lt;AutomatedTester&gt; :D</li>
+ <li id="l-34"><a href="#l-34">#</a> [00:50] * Joins: hober (~ted@public.cloak)</li>
+ <li id="l-35" _a="jgraham"><a href="#l-35">#</a> [00:52] &lt;jgraham&gt; Anyway time to sleep. Have a meeting in &lt;del&gt;a busy transport hub&lt;/del&gt;&lt;ins&gt;the office just before MozFest&lt;/ins&gt; &quot;early&quot; in the morning.</li>
+ <li id="l-36"><a href="#l-36">#</a> [01:05] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-37"><a href="#l-37">#</a> [01:14] * Quits: mdas_ (~mdas@public.cloak) (Client closed connection)</li>
+ <li id="l-38"><a href="#l-38">#</a> [01:36] * Quits: Ms2ger (~Ms2ger@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-39"><a href="#l-39">#</a> [01:54] * Quits: shepazu (schepers@public.cloak) (&quot;is sleepy&quot;)</li>
+ <li id="l-40"><a href="#l-40">#</a> [01:59] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-41"><a href="#l-41">#</a> [02:02] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-42"><a href="#l-42">#</a> [02:04] * Joins: bhill2_ (~bhill2@public.cloak)</li>
+ <li id="l-43"><a href="#l-43">#</a> [02:10] * Quits: bhill2 (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-44"><a href="#l-44">#</a> [02:11] * Quits: bhill2_ (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-45"><a href="#l-45">#</a> [02:40] * Quits: AutomatedTester (~AutomatedTester@public.cloak) (Client closed connection)</li>
+ <li id="l-46"><a href="#l-46">#</a> [03:06] * Joins: mdas (~mdas@public.cloak)</li>
+ <li id="l-47"><a href="#l-47">#</a> [03:15] * Quits: ArtB (~abarsto@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-48"><a href="#l-48">#</a> [06:05] * Quits: mdas (~mdas@public.cloak) (&quot;Leaving...&quot;)</li>
+ <li id="l-49"><a href="#l-49">#</a> [07:03] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-50"><a href="#l-50">#</a> [07:07] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-51"><a href="#l-51">#</a> [07:17] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-52"><a href="#l-52">#</a> [08:21] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-53"><a href="#l-53">#</a> [09:43] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+ <li id="l-54"><a href="#l-54">#</a> [10:39] * Quits: Lachy (~Lachy@public.cloak) (Lachy)</li>
+ <li id="l-55"><a href="#l-55">#</a> [11:04] * Joins: simons (~simons@public.cloak)</li>
+ <li id="l-56"><a href="#l-56">#</a> [11:16] * Joins: Lachy (~Lachy@public.cloak)</li>
+ <li id="l-57" _a="MikeSmith" _r="jgraham"><a href="#l-57">#</a> [11:33] &lt;MikeSmith&gt; jgraham: when you have time I'd like to get your feedback on a wpt-related agenda item I'd like to add to the Webdriver f2f agenda at TPAC</li>
+ <li id="l-58" _a="MikeSmith" _r="botie"><a href="#l-58">#</a> [11:34] &lt;MikeSmith&gt; botie, inform AutomatedTester I have an proposed agenda item I want to ask you about</li>
+ <li id="l-59" _a="botie"><a href="#l-59">#</a> [11:34] &lt;botie&gt; will do</li>
+ <li id="l-60" _a="jgraham" _r="MikeSmith"><a href="#l-60">#</a> [11:37] &lt;jgraham&gt; MikeSmith: OK. Having a meeting now but should be OK in a litle while</li>
+ <li id="l-61" _a="MikeSmith" _r="jgraham"><a href="#l-61">#</a> [11:37] &lt;MikeSmith&gt; jgraham: thanks, no rush</li>
+ <li id="l-62"><a href="#l-62">#</a> [11:39] * Joins: darobin (rberjon@public.cloak)</li>
+ <li id="l-63"><a href="#l-63">#</a> [12:23] * Joins: abarsto (~abarsto@public.cloak)</li>
+ <li id="l-64" _a="abarsto"><a href="#l-64">#</a> [12:23] * abarsto is now known as ArtB</li>
+ <li id="l-65"><a href="#l-65">#</a> [12:36] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-66"><a href="#l-66">#</a> [12:36] -gitbot:#testing- [web-platform-tests] hallvors closed pull request #1297: Fix XHR server side to actually write a response for chunked output. (master...jgraham/chunked_fixup) <a href="https://github.com/w3c/web-platform-tests/pull/1297">https://github.com/w3c/web-platform-tests/pull/1297</a></li>
+ <li id="l-67"><a href="#l-67">#</a> [12:36] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-68"><a href="#l-68">#</a> [12:36] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-69"><a href="#l-69">#</a> [12:36] -gitbot:#testing- [web-platform-tests] hallvors pushed 1 new commit to master: <a href="https://github.com/w3c/web-platform-tests/commit/6a862ec2ad2dbf42bde55b0b3127114e8543abd1">https://github.com/w3c/web-platform-tests/commit/6a862ec2ad2dbf42bde55b0b3127114e8543abd1</a></li>
+ <li id="l-70"><a href="#l-70">#</a> [12:36] -gitbot:#testing- web-platform-tests/master 6a862ec Hallvord R. M. Steen: Merge pull request #1297 from w3c/jgraham/chunked_fixup...</li>
+ <li id="l-71"><a href="#l-71">#</a> [12:36] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-72"><a href="#l-72">#</a> [13:42] * Joins: scott_gonzalez (~scott_gonzalez@public.cloak)</li>
+ <li id="l-73"><a href="#l-73">#</a> [13:46] * Quits: simons (~simons@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-74" _a="jgraham" _r="MikeSmith"><a href="#l-74">#</a> [13:47] &lt;jgraham&gt; MikeSmith: I'm around now</li>
+ <li id="l-75"><a href="#l-75">#</a> [14:06] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-76"><a href="#l-76">#</a> [14:06] -gitbot:#testing- [web-platform-tests] Ms2ger opened pull request #1305: Add some DOMImplementation#createDocument tests from the DOM level 2 test suite. (master...createDocument) <a href="https://github.com/w3c/web-platform-tests/pull/1305">https://github.com/w3c/web-platform-tests/pull/1305</a></li>
+ <li id="l-77"><a href="#l-77">#</a> [14:06] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-78" _a="Ms2ger" _r="jgraham"><a href="#l-78">#</a> [14:07] &lt;Ms2ger&gt; jgraham, well, if you're around...</li>
+ <li id="l-79" _a="jgraham" _r="Ms2ger"><a href="#l-79">#</a> [14:09] &lt;jgraham&gt; Ms2ger: Need to figure out how I managed to fuck up moving the alternate serve roots patch from my gecko tree to my wpt tree first</li>
+ <li id="l-80" _a="Ms2ger" _r="Alright"><a href="#l-80">#</a> [14:10] &lt;Ms2ger&gt; Alright, but if you need a break from that :)</li>
+ <li id="l-81" _a="MikeSmith" _r="jgraham"><a href="#l-81">#</a> [14:50] &lt;MikeSmith&gt; jgraham: got time now?</li>
+ <li id="l-82"><a href="#l-82">#</a> [14:51] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-83" _a="jgraham" _r="MikeSmith"><a href="#l-83">#</a> [14:52] &lt;jgraham&gt; MikeSmith: I got all the time in the world</li>
+ <li id="l-84" _a="jgraham"><a href="#l-84">#</a> [14:52] &lt;jgraham&gt; (or something)</li>
+ <li id="l-85" _a="MikeSmith"><a href="#l-85">#</a> [14:53] &lt;MikeSmith&gt; heh</li>
+ <li id="l-86" _a="MikeSmith" _r="jgraham"><a href="#l-86">#</a> [14:54] &lt;MikeSmith&gt; jgraham: first off, before I forget, you said you had a fix for the path problem with the URL for the test-runner Web UI</li>
+ <li id="l-87" _a="plh" _r="jgraham"><a href="#l-87">#</a> [14:54] &lt;plh&gt; jgraham, you probably want to exclude _certs/ from the git tracking</li>
+ <li id="l-88" _a="ato"><a href="#l-88">#</a> [14:54] &lt;ato&gt; Presumably you have a flight to catch on Sunday.</li>
+ <li id="l-89" _a="jgraham" _r="plh"><a href="#l-89">#</a> [14:55] &lt;jgraham&gt; plh: Did I not include that in the patch? I'm sure I wrote it :)</li>
+ <li id="l-90" _a="plh" _r="oh"><a href="#l-90">#</a> [14:56] &lt;plh&gt; oh, I'm on the master branch, that's why.</li>
+ <li id="l-91" _a="plh"><a href="#l-91">#</a> [14:56] &lt;plh&gt; sorry</li>
+ <li id="l-92" _a="jgraham" _r="MikeSmith"><a href="#l-92">#</a> [14:56] &lt;jgraham&gt; MikeSmith: Yeah, I do, but that has escalated into another bug because I accidentially lost some code at some point moving between my mozilla-central tree and wpt</li>
+ <li id="l-93" _a="jgraham"><a href="#l-93">#</a> [14:57] &lt;jgraham&gt; So I'm looking at that right now</li>
+ <li id="l-94" _a="jgraham"><a href="#l-94">#</a> [14:57] &lt;jgraham&gt; (basically the whole serving content outside the wpt checkout thing isn't quite working right now)</li>
+ <li id="l-95" _a="jgraham"><a href="#l-95">#</a> [14:58] &lt;jgraham&gt; (which is a thing I really want to get working for Mozilla so we can contribute more easilly)</li>
+ <li id="l-96"><a href="#l-96">#</a> [15:00] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-97"><a href="#l-97">#</a> [15:00] -gitbot:#testing- [web-platform-tests] plehegar pushed 1 new commit to master: <a href="https://github.com/w3c/web-platform-tests/commit/c7f18ded755955eb70be5d0e6903b7649663f34d">https://github.com/w3c/web-platform-tests/commit/c7f18ded755955eb70be5d0e6903b7649663f34d</a></li>
+ <li id="l-98"><a href="#l-98">#</a> [15:00] -gitbot:#testing- web-platform-tests/master c7f18de plehegar: Merged <a href="https://github.com/w3c/web-platform-tests/pull/929">https://github.com/w3c/web-platform-tests/pull/929</a></li>
+ <li id="l-99"><a href="#l-99">#</a> [15:00] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-100"><a href="#l-100">#</a> [15:01] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-101"><a href="#l-101">#</a> [15:01] -gitbot:#testing- [web-platform-tests] plehegar closed pull request #929: Add NodeIterator tests (master...submission/ayg/add-iterator-tests-2) <a href="https://github.com/w3c/web-platform-tests/pull/929">https://github.com/w3c/web-platform-tests/pull/929</a></li>
+ <li id="l-102"><a href="#l-102">#</a> [15:01] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-103" _a="MikeSmith" _r="jgraham"><a href="#l-103">#</a> [15:02] &lt;MikeSmith&gt; jgraham: on that note btw another thing I plan to contribute is whatever CI testing we can put into a .travis.yml to at least do some basic smoke testing of serve.py/wptserve and the test runner Web UI</li>
+ <li id="l-104" _a="jgraham" _r="Yeah"><a href="#l-104">#</a> [15:02] &lt;jgraham&gt; Yeah, that's a great idea</li>
+ <li id="l-105" _a="MikeSmith" _r="plh"><a href="#l-105">#</a> [15:02] &lt;MikeSmith&gt; plh: thanks (for closing out that PR)</li>
+ <li id="l-106" _a="plh"><a href="#l-106">#</a> [15:03] &lt;plh&gt; welcome</li>
+ <li id="l-107" _a="plh"><a href="#l-107">#</a> [15:03] &lt;plh&gt; I foresee some possible headaches with regards to the spec but it's what the spec is at the moment</li>
+ <li id="l-108" _a="MikeSmith" _r="jgraham"><a href="#l-108">#</a> [15:03] &lt;MikeSmith&gt; jgraham: should be super hard to write up some simple checks for now, and i'm happy to spend some time on it</li>
+ <li id="l-109" _a="jgraham"><a href="#l-109">#</a> [15:03] &lt;jgraham&gt; There are a few tests, but I think it should be possible to write some simple functional tests (e.g. &quot;can I generate a manifest&quot;)</li>
+ <li id="l-110" _a="plh"><a href="#l-110">#</a> [15:03] &lt;plh&gt; (ad by headache, I mean the implementations are in rough shape)</li>
+ <li id="l-111" _a="Ms2ger"><a href="#l-111">#</a> [15:04] &lt;Ms2ger&gt; r? <a href="https://critic.hoppipolla.co.uk/r/2965">https://critic.hoppipolla.co.uk/r/2965</a> , anyone? :)</li>
+ <li id="l-112" _a="MikeSmith" _r="jgraham"><a href="#l-112">#</a> [15:04] &lt;MikeSmith&gt; jgraham: OK</li>
+ <li id="l-113" _a="MikeSmith" _r="Ms2ger"><a href="#l-113">#</a> [15:04] &lt;MikeSmith&gt; Ms2ger: that looks like a good one for plh!</li>
+ <li id="l-114" _a="MikeSmith"><a href="#l-114">#</a> [15:05] &lt;MikeSmith&gt; good thing he's here and we have his attention</li>
+ <li id="l-115" _a="jgraham" _r="MikeSmith"><a href="#l-115">#</a> [15:05] &lt;jgraham&gt; MikeSmith: So what was the other thing you wanted to talk about?</li>
+ <li id="l-116" _a="Ms2ger"><a href="#l-116">#</a> [15:06] * Ms2ger assumes grabbing drinks</li>
+ <li id="l-117" _a="plh"><a href="#l-117">#</a> [15:06] * plh is looking</li>
+ <li id="l-118" _a="Ms2ger"><a href="#l-118">#</a> [15:07] &lt;Ms2ger&gt; Thanks :)</li>
+ <li id="l-119" _a="plh"><a href="#l-119">#</a> [15:07] &lt;plh&gt; and I forgot to put the water in the coffee machine, so no drinks yet :)</li>
+ <li id="l-120" _a="jgraham" _r="plh"><a href="#l-120">#</a> [15:07] &lt;jgraham&gt; plh: That would explain the headache ;)</li>
+ <li id="l-121" _a="plh" _r="Ms2ger"><a href="#l-121">#</a> [15:20] &lt;plh&gt; Ms2ger, so you are really testing createElementNS underneath in fact. any thoughts about applying all those tests directly to createElementNS as well?</li>
+ <li id="l-122" _a="Ms2ger"><a href="#l-122">#</a> [15:20] &lt;Ms2ger&gt; I guess that does make sense</li>
+ <li id="l-123" _a="Ms2ger"><a href="#l-123">#</a> [15:21] * Ms2ger thinks</li>
+ <li id="l-124" _a="plh"><a href="#l-124">#</a> [15:21] &lt;plh&gt; I'll keep going through the tests in the meantime anyway. could be improved after.</li>
+ <li id="l-125" _a="Ms2ger"><a href="#l-125">#</a> [15:22] &lt;Ms2ger&gt; Yeah</li>
+ <li id="l-126" _a="MikeSmith" _r="jgraham"><a href="#l-126">#</a> [15:22] &lt;MikeSmith&gt; jgraham: I wanted to ask you about a wptrunner+WebDriver topic I'd like to put on the agenda for the WebDriver f2f at TPAC, and to ask if you'd be able to attend the part of the meeting where it's discussed</li>
+ <li id="l-127" _a="jgraham" _r="MikeSmith"><a href="#l-127">#</a> [15:23] &lt;jgraham&gt; MikeSmith: Yes to attending that part of the meeting</li>
+ <li id="l-128" _a="jgraham"><a href="#l-128">#</a> [15:23] &lt;jgraham&gt; What's the topic?</li>
+ <li id="l-129" _a="MikeSmith" _r="jgraham"><a href="#l-129">#</a> [15:24] &lt;MikeSmith&gt; jgraham: hang on lemme paste in what drafted</li>
+ <li id="l-130" _a="MikeSmith" _r="jgraham"><a href="#l-130">#</a> [15:26] &lt;MikeSmith&gt; jgraham: topic is discussion of &quot;developing a mechanism by which web-platform-tests contributors can make use of Webdriver and wptrunner to automate tests that would otherwise have to be run manually&quot;</li>
+ <li id="l-131" _a="MikeSmith"><a href="#l-131">#</a> [15:26] &lt;MikeSmith&gt; does that wording make sense?</li>
+ <li id="l-132" _a="jgraham"><a href="#l-132">#</a> [15:26] &lt;jgraham&gt; Yes</li>
+ <li id="l-133" _a="jgraham"><a href="#l-133">#</a> [15:27] &lt;jgraham&gt; I am not sure how useful it will be to involve the whole webdriver working group</li>
+ <li id="l-134" _a="MikeSmith"><a href="#l-134">#</a> [15:27] &lt;MikeSmith&gt; well we don't need to take a lot of time out of the agenda</li>
+ <li id="l-135" _a="MikeSmith"><a href="#l-135">#</a> [15:27] &lt;MikeSmith&gt; 20 minutes or something maybe</li>
+ <li id="l-136" _a="jgraham"><a href="#l-136">#</a> [15:28] &lt;jgraham&gt; But if they follow my general schedule suggestion (day 1: figure out the wire protocol. Day 2: Lock simons and AutomatedTester in a room and don't let them go home until they have specced the results of day 1), there should be a lot of time on day 2</li>
+ <li id="l-137" _a="MikeSmith"><a href="#l-137">#</a> [15:28] &lt;MikeSmith&gt; yeah</li>
+ <li id="l-138" _a="MikeSmith"><a href="#l-138">#</a> [15:29] &lt;MikeSmith&gt; so I'll ask for it to be on the agenda for day two</li>
+ <li id="l-139" _a="MikeSmith"><a href="#l-139">#</a> [15:29] &lt;MikeSmith&gt; probably the morning of day 2</li>
+ <li id="l-140" _a="jgraham"><a href="#l-140">#</a> [15:29] &lt;jgraham&gt; K</li>
+ <li id="l-141" _a="MikeSmith"><a href="#l-141">#</a> [15:29] &lt;MikeSmith&gt; because the rest of the day they'll spend working on the spec</li>
+ <li id="l-142" _a="ato" _r="MikeSmith"><a href="#l-142">#</a> [15:29] &lt;ato&gt; MikeSmith, jgraham: It seems like that's a discussion I might want to partake in.</li>
+ <li id="l-143" _a="MikeSmith" _r="jgraham"><a href="#l-143">#</a> [15:30] &lt;MikeSmith&gt; jgraham: so another question is, how long do you think it should take us to get this mechanism made available to wpt test contributors</li>
+ <li id="l-144" _a="MikeSmith" _r="jgraham"><a href="#l-144">#</a> [15:30] &lt;MikeSmith&gt; jgraham: by June 2015? before? after?</li>
+ <li id="l-145" _a="MikeSmith" _r="ato"><a href="#l-145">#</a> [15:30] &lt;MikeSmith&gt; ato: I figured you would at least :) I'm sure others in the WG would find it interesting too and may want to help out</li>
+ <li id="l-146" _a="jgraham" _r="MikeSmith"><a href="#l-146">#</a> [15:31] &lt;jgraham&gt; MikeSmith: Good question</li>
+ <li id="l-147" _a="jgraham" _r="So"><a href="#l-147">#</a> [15:31] &lt;jgraham&gt; So, there are two problems</li>
+ <li id="l-148" _a="jgraham"><a href="#l-148">#</a> [15:32] &lt;jgraham&gt; One is to create a good API for writing webdriver tests</li>
+ <li id="l-149" _a="jgraham"><a href="#l-149">#</a> [15:33] &lt;jgraham&gt; ato has some cool ideas about creating a metacircular API that uses js to call in to wptserve that then emits webdriver commands to control the browser</li>
+ <li id="l-150" _a="jgraham"><a href="#l-150">#</a> [15:33] &lt;jgraham&gt; The other problem is just having a good WebDriver implementation to work against</li>
+ <li id="l-151" _a="jgraham"><a href="#l-151">#</a> [15:33] &lt;jgraham&gt; They seem to be thin on the ground at the moment</li>
+ <li id="l-152" _a="ato"><a href="#l-152">#</a> [15:34] &lt;ato&gt; I have a half-done prototype of that which I showed at SeleniumConf.  Basically you pull in webdriver.js which you use to send commands via XHR to the same browser session.</li>
+ <li id="l-153" _a="plh" _r="Ms2ger"><a href="#l-153">#</a> [15:34] &lt;plh&gt; Ms2ger: for [null, null, false, new TypeError()], why TypeError and not HierarchyRequestError ?</li>
+ <li id="l-154" _a="MikeSmith" _r="ato"><a href="#l-154">#</a> [15:35] &lt;MikeSmith&gt; ato: oh, interesting</li>
+ <li id="l-155" _a="Ms2ger"><a href="#l-155">#</a> [15:35] &lt;Ms2ger&gt; false -&gt; DocumentType throws TypeError</li>
+ <li id="l-156" _a="ato"><a href="#l-156">#</a> [15:35] &lt;ato&gt; Which would allow you to use testharness.js to test things like window resize events, typing, clicking, etc.</li>
+ <li id="l-157" _a="plh"><a href="#l-157">#</a> [15:35] &lt;plh&gt; but the spec says: &quot;If node is not a DocumentFragment, DocumentType, Element, Text, ProcessingInstruction, or Comment node, throw a HierarchyRequestError. &quot;</li>
+ <li id="l-158" _a="Ms2ger"><a href="#l-158">#</a> [15:35] &lt;Ms2ger&gt; That's after IDL did its thing</li>
+ <li id="l-159" _a="plh"><a href="#l-159">#</a> [15:35] &lt;plh&gt; true</li>
+ <li id="l-160" _a="plh"><a href="#l-160">#</a> [15:35] &lt;plh&gt; thank you</li>
+ <li id="l-161" _a="jgraham" _r="MikeSmith"><a href="#l-161">#</a> [15:35] &lt;jgraham&gt; MikeSmith: The motivation is that there is understandable resistance to having to write a test in python just to get a single trusted click event</li>
+ <li id="l-162" _a="MikeSmith" _r="jgraham"><a href="#l-162">#</a> [15:35] &lt;MikeSmith&gt; jgraham: ato I naively thought that this would involve implementing it in pytthon, integrated in some way with wptrunner</li>
+ <li id="l-163" _a="Ms2ger"><a href="#l-163">#</a> [15:36] &lt;Ms2ger&gt; Np</li>
+ <li id="l-164" _a="MikeSmith" _r="jgraham"><a href="#l-164">#</a> [15:36] &lt;MikeSmith&gt; jgraham: ah yeah</li>
+ <li id="l-165" _a="MikeSmith"><a href="#l-165">#</a> [15:36] &lt;MikeSmith&gt; makes sense</li>
+ <li id="l-166" _a="jgraham" _r="MikeSmith"><a href="#l-166">#</a> [15:36] &lt;jgraham&gt; MikeSmith: The problem we might have (with webdriver in general) is that timing could be difficult</li>
+ <li id="l-167" _a="ato" _r="MikeSmith"><a href="#l-167">#</a> [15:36] &lt;ato&gt; MikeSmith: That's what the WG proposes.</li>
+ <li id="l-168" _a="MikeSmith" _r="jgraham"><a href="#l-168">#</a> [15:37] &lt;MikeSmith&gt; jgraham: why would the timing be difficult?</li>
+ <li id="l-169" _a="ato"><a href="#l-169">#</a> [15:39] &lt;ato&gt; Because we need to wait for WebDriver to finish the command we send it, and JS makes that difficult because it's async.</li>
+ <li id="l-170" _a="MikeSmith" _r="ato"><a href="#l-170">#</a> [15:39] &lt;MikeSmith&gt; ato: yeah but I guess in practice that would mean very few contributors would end up writing webdriver-enabled wpt tests, if they had to write some python in addition to the JS code of the test</li>
+ <li id="l-171" _a="MikeSmith"><a href="#l-171">#</a> [15:39] &lt;MikeSmith&gt; ah</li>
+ <li id="l-172" _a="MikeSmith" _r="ato"><a href="#l-172">#</a> [15:39] &lt;MikeSmith&gt; ato: I see</li>
+ <li id="l-173" _a="ato"><a href="#l-173">#</a> [15:39] &lt;ato&gt; I was considering using synchronous XHR, but I didn't get it quite working.</li>
+ <li id="l-174" _a="MikeSmith"><a href="#l-174">#</a> [15:39] &lt;MikeSmith&gt; oh christ</li>
+ <li id="l-175" _a="ato" _r="Yes"><a href="#l-175">#</a> [15:39] &lt;ato&gt; Yes, it's bad for other reasons too (-:</li>
+ <li id="l-176" _a="MikeSmith"><a href="#l-176">#</a> [15:39] &lt;MikeSmith&gt; yeah</li>
+ <li id="l-177" _a="ato"><a href="#l-177">#</a> [15:40] &lt;ato&gt; The alternative is callbacks.  So webdriver.click(function() { assert_event_fired }).</li>
+ <li id="l-178" _a="ato" _r="click(el"><a href="#l-178">#</a> [15:40] &lt;ato&gt; click(el, callback) I mean.</li>
+ <li id="l-179" _a="ato"><a href="#l-179">#</a> [15:40] &lt;ato&gt; Or something.</li>
+ <li id="l-180" _a="MikeSmith"><a href="#l-180">#</a> [15:41] &lt;MikeSmith&gt; right</li>
+ <li id="l-181" _a="jgraham"><a href="#l-181">#</a> [15:41] &lt;jgraham&gt; So something promise based might make sense from that point of view</li>
+ <li id="l-182" _a="ato"><a href="#l-182">#</a> [15:41] &lt;ato&gt; But does something like that exist natively in the browsers we test on?</li>
+ <li id="l-183" _a="MikeSmith"><a href="#l-183">#</a> [15:41] &lt;MikeSmith&gt; right that's the reality</li>
+ <li id="l-184" _a="MikeSmith"><a href="#l-184">#</a> [15:42] &lt;MikeSmith&gt; hmm</li>
+ <li id="l-185" _a="jgraham" _r="ato"><a href="#l-185">#</a> [15:42] &lt;jgraham&gt; ato: Promises? Yes</li>
+ <li id="l-186" _a="MikeSmith"><a href="#l-186">#</a> [15:42] &lt;MikeSmith&gt; IE also?</li>
+ <li id="l-187" _a="jgraham"><a href="#l-187">#</a> [15:42] &lt;jgraham&gt; But you still have the issue that it's hard to tell when the thing you want to happen will actually happen. I think this is a general WebDriver problem rather than a js-api problem</li>
+ <li id="l-188" _a="MikeSmith"><a href="#l-188">#</a> [15:42] &lt;MikeSmith&gt; (Promises)</li>
+ <li id="l-189" _a="jgraham" _r="Dunno"><a href="#l-189">#</a> [15:43] &lt;jgraham&gt; Dunno, but they will soon at least</li>
+ <li id="l-190" _a="MikeSmith"><a href="#l-190">#</a> [15:43] &lt;MikeSmith&gt; <a href="http://caniuse.com/#search=promises">http://caniuse.com/#search=promises</a></li>
+ <li id="l-191" _a="MikeSmith" _r="jgraham"><a href="#l-191">#</a> [15:43] &lt;MikeSmith&gt; jgraham: ah OK</li>
+ <li id="l-192" _a="ato"><a href="#l-192">#</a> [15:44] &lt;ato&gt; I ran into a showstopper with switching to the right window when implementing this however.</li>
+ <li id="l-193" _a="ato"><a href="#l-193">#</a> [15:44] &lt;ato&gt; Where WebDriver would completely freeze up when switching from testharness.html to the modal test window.</li>
+ <li id="l-194" _a="ato"><a href="#l-194">#</a> [15:44] &lt;ato&gt; I'm not sure who or what is to be blamed.</li>
+ <li id="l-195"><a href="#l-195">#</a> [15:44] * Joins: mdas (~mdas@public.cloak)</li>
+ <li id="l-196" _a="ato"><a href="#l-196">#</a> [15:45] &lt;ato&gt; Basically it would switch to the window and return successfully, but then the next command you sent to WebDriver would hang.</li>
+ <li id="l-197" _a="MikeSmith" _r="anyway"><a href="#l-197">#</a> [15:45] &lt;MikeSmith&gt; anyway, until a few minutes ago I had been assuming webdriver-enabled wpt tests couldn't be done just in JS at all. So knowing that it would actually be possible to some degree makes me optimistic that we'll find a way</li>
+ <li id="l-198" _a="ato"><a href="#l-198">#</a> [15:45] &lt;ato&gt; And then I gave up and had to move on to more pressing things.</li>
+ <li id="l-199" _a="jgraham" _r="Yeah"><a href="#l-199">#</a> [15:46] &lt;jgraham&gt; Yeah, it can be done but it needs someone to actually fix it</li>
+ <li id="l-200" _a="ato" _r="MikeSmith"><a href="#l-200">#</a> [15:46] &lt;ato&gt; MikeSmith: I think for the small subset of things that we want to automate in wpt it should be possible.</li>
+ <li id="l-201" _a="jgraham"><a href="#l-201">#</a> [15:46] &lt;jgraham&gt; Possibly that will be me if no one else does it first</li>
+ <li id="l-202" _a="ato" _r="jgraham"><a href="#l-202">#</a> [15:46] &lt;ato&gt; jgraham: So I have some code that I can polish up and push somewhere.</li>
+ <li id="l-203"><a href="#l-203">#</a> [15:47] * Joins: simons (~simons@public.cloak)</li>
+ <li id="l-204"><a href="#l-204">#</a> [15:49] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-205"><a href="#l-205">#</a> [15:49] -gitbot:#testing- [web-platform-tests] plehegar pushed 2 new commits to master: <a href="https://github.com/w3c/web-platform-tests/compare/c7f18ded7559...c45358829402">https://github.com/w3c/web-platform-tests/compare/c7f18ded7559...c45358829402</a></li>
+ <li id="l-206"><a href="#l-206">#</a> [15:49] -gitbot:#testing- web-platform-tests/master 0870fc6 Ms2ger: Add some DOMImplementation#createDocument tests from the DOM level 2 test suite....</li>
+ <li id="l-207"><a href="#l-207">#</a> [15:49] -gitbot:#testing- web-platform-tests/master c453588 Philippe Le Hegaret: Merge pull request #1305 from Ms2ger/createDocument...</li>
+ <li id="l-208"><a href="#l-208">#</a> [15:49] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-209" _a="Ms2ger" _r="plh"><a href="#l-209">#</a> [15:51] &lt;Ms2ger&gt; plh, thanks</li>
+ <li id="l-210" _a="plh"><a href="#l-210">#</a> [15:52] &lt;plh&gt; welcome</li>
+ <li id="l-211"><a href="#l-211">#</a> [15:58] * Quits: simons (~simons@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-212" _a="MikeSmith"><a href="#l-212">#</a> [15:59] &lt;MikeSmith&gt; <a href="http://lists.w3.org/Archives/Public/public-browser-tools-testing/2014OctDec/0019.html">http://lists.w3.org/Archives/Public/public-browser-tools-testing/2014OctDec/0019.html</a></li>
+ <li id="l-213" _a="jgraham" _r="MikeSmith"><a href="#l-213">#</a> [16:00] &lt;jgraham&gt; MikeSmith: Thanks</li>
+ <li id="l-214" _a="MikeSmith" _r="jgraham"><a href="#l-214">#</a> [16:02] &lt;MikeSmith&gt; jgraham: thanks for agreeing to make time to be at that part of the f2f</li>
+ <li id="l-215" _a="MikeSmith" _r="jgraham"><a href="#l-215">#</a> [16:03] &lt;MikeSmith&gt; jgraham: ok one other thing I wanted to ask you is, I can make some minor updates to the wptrunner docs -- basically just to add some example command-line invocations of wptrunner for Firefox and Chrome that work with the current code.</li>
+ <li id="l-216" _a="MikeSmith" _r="jgraham"><a href="#l-216">#</a> [16:03] &lt;MikeSmith&gt; jgraham: it is worth me taking a few minutes today to do that?</li>
+ <li id="l-217"><a href="#l-217">#</a> [16:03] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-218" _a="jgraham" _r="MikeSmith"><a href="#l-218">#</a> [16:04] &lt;jgraham&gt; MikeSmith: I am always happy for people to write docs :)</li>
+ <li id="l-219" _a="MikeSmith"><a href="#l-219">#</a> [16:04] &lt;MikeSmith&gt; ok</li>
+ <li id="l-220" _a="MikeSmith" _r="jgraham"><a href="#l-220">#</a> [16:04] &lt;MikeSmith&gt; jgraham: oh one reason I wanted to ask is, I was planning to put the chrome inovocation that works with the new code in it ato's branch that's not been merged yet</li>
+ <li id="l-221"><a href="#l-221">#</a> [16:05] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-222" _a="MikeSmith" _r="jgraham"><a href="#l-222">#</a> [16:05] &lt;MikeSmith&gt; jgraham: if you think that will be merged before Wednesday</li>
+ <li id="l-223" _a="MikeSmith"><a href="#l-223">#</a> [16:05] &lt;MikeSmith&gt; (when I plan to present about this stuff a bit at the TPAC tech-plenary day)</li>
+ <li id="l-224"><a href="#l-224">#</a> [16:06] * Joins: simons (~simons@public.cloak)</li>
+ <li id="l-225" _a="ato" _r="MikeSmith"><a href="#l-225">#</a> [16:06] &lt;ato&gt; MikeSmith: I can probably prepare a short demo for the WD WG.</li>
+ <li id="l-226" _a="jgraham" _r="MikeSmith"><a href="#l-226">#</a> [16:06] &lt;jgraham&gt; MikeSmith: I will ensure that's merged by Wednesday</li>
+ <li id="l-227" _a="MikeSmith" _r="jgraham"><a href="#l-227">#</a> [16:07] &lt;MikeSmith&gt; jgraham: super, thanks</li>
+ <li id="l-228" _a="MikeSmith" _r="ato"><a href="#l-228">#</a> [16:08] &lt;MikeSmith&gt; ato: that would be great</li>
+ <li id="l-229" _a="ato" _r="MikeSmith"><a href="#l-229">#</a> [16:08] &lt;ato&gt; MikeSmith: (Good thing you thought of bringing it up.  It had been forgotten the heap of other things I'm currently doing. (-: )</li>
+ <li id="l-230" _a="MikeSmith" _r="ato"><a href="#l-230">#</a> [16:08] &lt;MikeSmith&gt; ato: I'm assuming you'll be at GTAC on Wednesday (and so not at the TPAC tech plenary for the testing session)</li>
+ <li id="l-231" _a="MikeSmith"><a href="#l-231">#</a> [16:08] &lt;MikeSmith&gt; heh</li>
+ <li id="l-232" _a="ato"><a href="#l-232">#</a> [16:09] &lt;ato&gt; Correctly assumed, sir.</li>
+ <li id="l-233" _a="MikeSmith"><a href="#l-233">#</a> [16:10] &lt;MikeSmith&gt; ok</li>
+ <li id="l-234" _a="MikeSmith"><a href="#l-234">#</a> [16:10] &lt;MikeSmith&gt; btw you can thank plh for bringing it up with me first, so that I could then bring it up with you guys</li>
+ <li id="l-235" _a="MikeSmith"><a href="#l-235">#</a> [16:11] &lt;MikeSmith&gt; I recently did my annual review with plh, and he reminded me to put some time into helping with this during the coming year</li>
+ <li id="l-236"><a href="#l-236">#</a> [16:20] * Quits: MikeSmith (~MikeSmith@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-237"><a href="#l-237">#</a> [16:23] * Joins: MikeSmith (~MikeSmith@public.cloak)</li>
+ <li id="l-238"><a href="#l-238">#</a> [16:25] * Joins: AutomatedTester (~AutomatedTester@public.cloak)</li>
+ <li id="l-239" _a="botie" _r="AutomatedTester"><a href="#l-239">#</a> [16:25] &lt;botie&gt; AutomatedTester, at 2014-10-24 09:34 UTC, MikeSmith said: I have an proposed agenda item I want to ask you about</li>
+ <li id="l-240" _a="AutomatedTester" _r="MikeSmith"><a href="#l-240">#</a> [16:25] &lt;AutomatedTester&gt; MikeSmith: whats that?</li>
+ <li id="l-241" _a="MikeSmith" _r="AutomatedTester"><a href="#l-241">#</a> [16:26] &lt;MikeSmith&gt; AutomatedTester: send mail</li>
+ <li id="l-242" _a="MikeSmith"><a href="#l-242">#</a> [16:26] &lt;MikeSmith&gt; *sent mail</li>
+ <li id="l-243" _a="MikeSmith"><a href="#l-243">#</a> [16:26] &lt;MikeSmith&gt; <a href="http://lists.w3.org/Archives/Public/public-browser-tools-testing/2014OctDec/0019.html">http://lists.w3.org/Archives/Public/public-browser-tools-testing/2014OctDec/0019.html</a></li>
+ <li id="l-244"><a href="#l-244">#</a> [16:27] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-245"><a href="#l-245">#</a> [16:28] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-246" _a="Ms2ger"><a href="#l-246">#</a> [16:58] * Ms2ger grumbles</li>
+ <li id="l-247"><a href="#l-247">#</a> [16:58] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-248"><a href="#l-248">#</a> [17:04] * Quits: simons (~simons@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-249"><a href="#l-249">#</a> [17:05] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-250"><a href="#l-250">#</a> [17:09] * Joins: simons (~simons@public.cloak)</li>
+ <li id="l-251"><a href="#l-251">#</a> [17:24] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-252"><a href="#l-252">#</a> [17:24] -gitbot:#testing- [web-platform-tests] Ms2ger opened pull request #1306: Share tests for createElementNS and createDocument. (master...createDocument-createElementNS) <a href="https://github.com/w3c/web-platform-tests/pull/1306">https://github.com/w3c/web-platform-tests/pull/1306</a></li>
+ <li id="l-253"><a href="#l-253">#</a> [17:24] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-254" _a="Ms2ger" _r="plh"><a href="#l-254">#</a> [17:24] &lt;Ms2ger&gt; plh, r? :)</li>
+ <li id="l-255"><a href="#l-255">#</a> [17:28] * Quits: Lachy (~Lachy@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-256"><a href="#l-256">#</a> [17:35] * Quits: AutomatedTester (~AutomatedTester@public.cloak) (Client closed connection)</li>
+ <li id="l-257"><a href="#l-257">#</a> [17:36] * Joins: Lachy (~Lachy@public.cloak)</li>
+ <li id="l-258" _a="plh" _r="ms2ger"><a href="#l-258">#</a> [17:56] &lt;plh&gt; ms2ger, busy but will do</li>
+ <li id="l-259" _a="Ms2ger"><a href="#l-259">#</a> [17:56] &lt;Ms2ger&gt; Thanks</li>
+ <li id="l-260" _a="jgraham"><a href="#l-260">#</a> [18:03] &lt;jgraham&gt; In unrelated news, something that W3C could learn from Google: apparently there is a post-GSoC-mentor-summit. It has a chocolate room. TPAC needs a chocolate room. (I believe this is a room in which delegates deposit examples of fine chocolates from their area of the world, and sample those brought by others, rather than literally a room made of chocolate. But that would be good too.)</li>
+ <li id="l-261" _a="MikeSmith"><a href="#l-261">#</a> [18:10] &lt;MikeSmith&gt; Oh manmaybe yes we need that</li>
+ <li id="l-262" _a="MikeSmith"><a href="#l-262">#</a> [18:11] &lt;MikeSmith&gt; I will try to bring some chocolate from Japan at least, even if there is no chocolate room to deposit it in</li>
+ <li id="l-263" _a="Ms2ger" _r="MikeSmith"><a href="#l-263">#</a> [18:13] &lt;Ms2ger&gt; MikeSmith, feel free to deposit it in zcorpan's bag ;)</li>
+ <li id="l-264"><a href="#l-264">#</a> [18:22] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-265"><a href="#l-265">#</a> [18:24] * Quits: Lachy (~Lachy@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-266"><a href="#l-266">#</a> [18:28] * Joins: Lachy (~Lachy@public.cloak)</li>
+ <li id="l-267" _a="jgraham"><a href="#l-267">#</a> [18:30] &lt;jgraham&gt; BTW I put up a wptserve review and a wptrunner review to fix the problems with the in-browser runner path</li>
+ <li id="l-268"><a href="#l-268">#</a> [18:32] * Quits: simons (~simons@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-269"><a href="#l-269">#</a> [18:32] * Quits: Lachy (~Lachy@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-270"><a href="#l-270">#</a> [18:37] * Quits: ArtB (~abarsto@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-271"><a href="#l-271">#</a> [18:39] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-272"><a href="#l-272">#</a> [18:42] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-273"><a href="#l-273">#</a> [18:48] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-274"><a href="#l-274">#</a> [18:48] -gitbot:#testing- [web-platform-tests] Ms2ger opened pull request #1307: Add some DOMImplementation#createDocumentType tests from the DOM level 2 test suite. (master...createDocumentType) <a href="https://github.com/w3c/web-platform-tests/pull/1307">https://github.com/w3c/web-platform-tests/pull/1307</a></li>
+ <li id="l-275"><a href="#l-275">#</a> [18:48] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-276" _a="Ms2ger" _r="r?"><a href="#l-276">#</a> [18:48] &lt;Ms2ger&gt; r?, anyone</li>
+ <li id="l-277" _a="Ms2ger"><a href="#l-277">#</a> [18:51] &lt;Ms2ger&gt; (And that's a 1000 lines of dom level2 core tests dealt with, 14000 to go)</li>
+ <li id="l-278" _a="gsnedders"><a href="#l-278">#</a> [18:58] &lt;gsnedders&gt; am I going to cry if I look at this?</li>
+ <li id="l-279" _a="Ms2ger" _r="gsnedders"><a href="#l-279">#</a> [18:59] &lt;Ms2ger&gt; gsnedders, I doubt it</li>
+ <li id="l-280" _a="Ms2ger" _r="gsnedders"><a href="#l-280">#</a> [18:59] &lt;Ms2ger&gt; gsnedders, you've seen much worse ;)</li>
+ <li id="l-281" _a="gsnedders"><a href="#l-281">#</a> [19:01] &lt;gsnedders&gt; why's there no &quot;pending&quot; link in Critic now?</li>
+ <li id="l-282" _a="Ms2ger" _r="gsnedders"><a href="#l-282">#</a> [19:02] &lt;Ms2ger&gt; gsnedders, refresh</li>
+ <li id="l-283" _a="gsnedders" _r="okay"><a href="#l-283">#</a> [19:02] &lt;gsnedders&gt; okay, so it is down to the filters</li>
+ <li id="l-284" _a="gsnedders"><a href="#l-284">#</a> [19:03] &lt;gsnedders&gt; who let jl design the UI? :P</li>
+ <li id="l-285" _a="Ms2ger"><a href="#l-285">#</a> [19:04] &lt;Ms2ger&gt; You? :)</li>
+ <li id="l-286" _a="gsnedders" _r="Nah"><a href="#l-286">#</a> [19:04] &lt;gsnedders&gt; Nah, pretty sure jl let jl do so. :)</li>
+ <li id="l-287" _a="gsnedders" _r="Ms2ger"><a href="#l-287">#</a> [19:05] &lt;gsnedders&gt; Ms2ger: r+</li>
+ <li id="l-288" _a="Ms2ger"><a href="#l-288">#</a> [19:05] &lt;Ms2ger&gt; Thanks</li>
+ <li id="l-289"><a href="#l-289">#</a> [19:06] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-290"><a href="#l-290">#</a> [19:06] -gitbot:#testing- [web-platform-tests] Ms2ger closed pull request #1307: Add some DOMImplementation#createDocumentType tests from the DOM level 2 test suite. (master...createDocumentType) <a href="https://github.com/w3c/web-platform-tests/pull/1307">https://github.com/w3c/web-platform-tests/pull/1307</a></li>
+ <li id="l-291"><a href="#l-291">#</a> [19:06] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-292" _a="Ms2ger" _r="plh"><a href="#l-292">#</a> [19:11] &lt;Ms2ger&gt; plh, wow, perfect timing :)</li>
+ <li id="l-293" _a="plh"><a href="#l-293">#</a> [19:12] &lt;plh&gt; yep :)</li>
+ <li id="l-294"><a href="#l-294">#</a> [19:12] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-295"><a href="#l-295">#</a> [19:12] -gitbot:#testing- [web-platform-tests] Ms2ger closed pull request #1306: Share tests for createElementNS and createDocument. (master...createDocument-createElementNS) <a href="https://github.com/w3c/web-platform-tests/pull/1306">https://github.com/w3c/web-platform-tests/pull/1306</a></li>
+ <li id="l-296"><a href="#l-296">#</a> [19:12] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-297" _a="plh"><a href="#l-297">#</a> [19:12] &lt;plh&gt; I was about to accept when you added your last commit</li>
+ <li id="l-298" _a="Ms2ger"><a href="#l-298">#</a> [19:14] &lt;Ms2ger&gt; Thanks again</li>
+ <li id="l-299" _a="Ms2ger"><a href="#l-299">#</a> [19:14] &lt;Ms2ger&gt; I think you're off the hook for tonight :)</li>
+ <li id="l-300" _a="Ms2ger"><a href="#l-300">#</a> [19:14] &lt;Ms2ger&gt; Only so much xml you can stare at</li>
+ <li id="l-301"><a href="#l-301">#</a> [19:17] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-302" _a="plh"><a href="#l-302">#</a> [19:18] &lt;plh&gt; indeed. been a long time since I had to look at the xml specs.</li>
+ <li id="l-303" _a="plh"><a href="#l-303">#</a> [19:18] &lt;plh&gt; was really weird.</li>
+ <li id="l-304" _a="Ms2ger"><a href="#l-304">#</a> [19:19] &lt;Ms2ger&gt; XML specs is one thing... The old XML-to-JS-and-Java-with-XSLT DOM tests are worse :)</li>
+ <li id="l-305" _a="plh"><a href="#l-305">#</a> [19:19] &lt;plh&gt; ouch</li>
+ <li id="l-306" _a="Ms2ger"><a href="#l-306">#</a> [19:20] &lt;Ms2ger&gt; I particularly like that most tests have IBM and NIST copies that do roughly the same thing</li>
+ <li id="l-307" _a="gsnedders"><a href="#l-307">#</a> [19:21] &lt;gsnedders&gt; oh god, those tests</li>
+ <li id="l-308" _a="MikeSmith" _r="jgraham"><a href="#l-308">#</a> [19:22] &lt;MikeSmith&gt; jgraham: I'm reviewing the wptserve PR right now</li>
+ <li id="l-309"><a href="#l-309">#</a> [19:23] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-310"><a href="#l-310">#</a> [19:23] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-311"><a href="#l-311">#</a> [19:24] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-312" _a="Ms2ger" _r="Still"><a href="#l-312">#</a> [19:24] &lt;Ms2ger&gt; Still, I should say, kudos to them for writing tests before it was cool</li>
+ <li id="l-313"><a href="#l-313">#</a> [19:24] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-314"><a href="#l-314">#</a> [19:25] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-315"><a href="#l-315">#</a> [19:25] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-316"><a href="#l-316">#</a> [19:25] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-317"><a href="#l-317">#</a> [19:26] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-318"><a href="#l-318">#</a> [19:26] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-319" _a="MikeSmith" _r="jgraham"><a href="#l-319">#</a> [19:27] &lt;MikeSmith&gt; jgraham: btw for the in-browser runner, when no MANIFEST.json exists yet, the delay is quite long between when a user pushes the Start button and when the user sees anything actually start to anything happen</li>
+ <li id="l-320" _a="MikeSmith" _r="jgraham"><a href="#l-320">#</a> [19:28] &lt;MikeSmith&gt; jgraham: the time when the backend is generating the manifest</li>
+ <li id="l-321" _a="MikeSmith" _r="jgraham"><a href="#l-321">#</a> [19:28] &lt;MikeSmith&gt; jgraham: it's too long to go without giving some UI indicator to users to let them know it's not just hanging but that something's in progress</li>
+ <li id="l-322"><a href="#l-322">#</a> [19:29] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-323"><a href="#l-323">#</a> [19:29] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-324"><a href="#l-324">#</a> [19:30] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-325"><a href="#l-325">#</a> [19:30] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-326" _a="MikeSmith" _r="jgraham"><a href="#l-326">#</a> [19:30] &lt;MikeSmith&gt; jgraham: I don't have any great ideas about what UI we should have to indicate that to the user, but it seems like we need something</li>
+ <li id="l-327" _a="jgraham"><a href="#l-327">#</a> [19:33] &lt;jgraham&gt; Maybe there should be a progress bar in indeterminate state or something</li>
+ <li id="l-328" _a="jgraham"><a href="#l-328">#</a> [19:33] &lt;jgraham&gt; There isn't a good way to tell how the generation is getting on</li>
+ <li id="l-329" _a="MikeSmith"><a href="#l-329">#</a> [19:34] &lt;MikeSmith&gt; yeah only a way to know when it's ended</li>
+ <li id="l-330" _a="MikeSmith"><a href="#l-330">#</a> [19:34] &lt;MikeSmith&gt; progress bar in indeterminate state would seem OK</li>
+ <li id="l-331" _a="MikeSmith"><a href="#l-331">#</a> [19:34] &lt;MikeSmith&gt; I don't really know what the UI/UX conventions are for a case like this</li>
+ <li id="l-332" _a="jgraham"><a href="#l-332">#</a> [19:34] &lt;jgraham&gt; &quot;don't do it&quot; I expect</li>
+ <li id="l-333"><a href="#l-333">#</a> [19:35] * Joins: abarsto (~abarsto@public.cloak)</li>
+ <li id="l-334" _a="abarsto"><a href="#l-334">#</a> [19:35] * abarsto is now known as ArtB</li>
+ <li id="l-335" _a="MikeSmith"><a href="#l-335">#</a> [19:35] &lt;MikeSmith&gt; heh</li>
+ <li id="l-336" _a="MikeSmith"><a href="#l-336">#</a> [19:35] &lt;MikeSmith&gt; really almost certainly so</li>
+ <li id="l-337" _a="MikeSmith"><a href="#l-337">#</a> [19:35] &lt;MikeSmith&gt; but doing it we are</li>
+ <li id="l-338" _a="jgraham" _r="Yeah"><a href="#l-338">#</a> [19:37] &lt;jgraham&gt; Yeah, well I'm not really planning to spend enough time on the in-browser runner to win any UI awards</li>
+ <li id="l-339" _a="MikeSmith"><a href="#l-339">#</a> [19:38] &lt;MikeSmith&gt; me neither</li>
+ <li id="l-340" _a="MikeSmith"><a href="#l-340">#</a> [19:40] &lt;MikeSmith&gt; but as long as we're going to have it, it minimally at least shouldn't cause confused people to file bug reports about that initial lag that we'll have to keep responding to every time a new user tries it</li>
+ <li id="l-341" _a="jgraham"><a href="#l-341">#</a> [19:40] &lt;jgraham&gt; Sure</li>
+ <li id="l-342" _a="MikeSmith"><a href="#l-342">#</a> [19:40] &lt;MikeSmith&gt; anyway I'll try to write up some kind of indicator for it</li>
+ <li id="l-343"><a href="#l-343">#</a> [19:41] * Joins: shepazu (schepers@public.cloak)</li>
+ <li id="l-344" _a="MikeSmith" _r="jgraham"><a href="#l-344">#</a> [19:41] &lt;MikeSmith&gt; jgraham: so about the PRs for fixing the problems with the in-browser runner path, I don't see how the wptrunner relates to the in-browser runner</li>
+ <li id="l-345" _a="MikeSmith"><a href="#l-345">#</a> [19:42] &lt;MikeSmith&gt; unless I'm misunderstanding what you mean by &quot;in-browser runner&quot;</li>
+ <li id="l-346" _a="MikeSmith"><a href="#l-346">#</a> [19:43] &lt;MikeSmith&gt; (I took it to mean the <a href="http://web-platform.test:8000/tools/runner/index.html">http://web-platform.test:8000/tools/runner/index.html</a> runner)</li>
+ <li id="l-347" _a="jgraham" _r="MikeSmith"><a href="#l-347">#</a> [19:43] &lt;jgraham&gt; MikeSmith: The wptrunner change is needed to work with the change to wptserve that you just accepted</li>
+ <li id="l-348" _a="MikeSmith"><a href="#l-348">#</a> [19:44] &lt;MikeSmith&gt; d'oh</li>
+ <li id="l-349" _a="MikeSmith"><a href="#l-349">#</a> [19:44] &lt;MikeSmith&gt; sure</li>
+ <li id="l-350" _a="MikeSmith"><a href="#l-350">#</a> [19:45] * MikeSmith tests</li>
+ <li id="l-351"><a href="#l-351">#</a> [20:14] * Joins: bhill2_ (~bhill2@public.cloak)</li>
+ <li id="l-352"><a href="#l-352">#</a> [20:14] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-353"><a href="#l-353">#</a> [20:15] * Quits: bhill2_ (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-354"><a href="#l-354">#</a> [20:15] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-355"><a href="#l-355">#</a> [20:15] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-356"><a href="#l-356">#</a> [20:15] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-357"><a href="#l-357">#</a> [20:16] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-358"><a href="#l-358">#</a> [20:17] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-359"><a href="#l-359">#</a> [20:34] * Joins: Lachy (~Lachy@public.cloak)</li>
+ <li id="l-360"><a href="#l-360">#</a> [21:05] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-361"><a href="#l-361">#</a> [21:07] * Joins: AutomatedTester (~AutomatedTester@public.cloak)</li>
+ <li id="l-362"><a href="#l-362">#</a> [21:35] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-363"><a href="#l-363">#</a> [21:42] * Quits: bhill2 (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-364"><a href="#l-364">#</a> [21:42] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-365"><a href="#l-365">#</a> [21:42] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-366"><a href="#l-366">#</a> [21:48] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-367"><a href="#l-367">#</a> [22:11] * Quits: Lachy (~Lachy@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-368"><a href="#l-368">#</a> [22:13] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-369"><a href="#l-369">#</a> [22:15] * Joins: Lachy (~Lachy@public.cloak)</li>
+ <li id="l-370"><a href="#l-370">#</a> [22:20] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+ <li id="l-371"><a href="#l-371">#</a> [22:23] * Joins: bhill2 (~bhill2@public.cloak)</li>
+ <li id="l-372"><a href="#l-372">#</a> [23:09] * Quits: darobin (rberjon@public.cloak) (Client closed connection)</li>
+ <li id="l-373"><a href="#l-373">#</a> [23:25] * Joins: gitbot (~gitbot@public.cloak)</li>
+ <li id="l-374"><a href="#l-374">#</a> [23:25] -gitbot:#testing- [web-platform-tests] Ms2ger opened pull request #1308: Test for ownerElement in attributes_are. (master...ownerElement) <a href="https://github.com/w3c/web-platform-tests/pull/1308">https://github.com/w3c/web-platform-tests/pull/1308</a></li>
+ <li id="l-375"><a href="#l-375">#</a> [23:25] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+ <li id="l-376"><a href="#l-376">#</a> [23:32] * Quits: rego (~smuxi@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-377"><a href="#l-377">#</a> [23:40] * Quits: Lachy (~Lachy@public.cloak) (&quot;My MacBook Pro has gone to sleep. ZZZzzz…&quot;)</li>
+ <li id="l-378"><a href="#l-378">#</a> [23:45] * Quits: mdas (~mdas@public.cloak) (Client closed connection)</li>
+ <li id="l-379"><a href="#l-379">#</a> [23:46] * Joins: mdas (~mdas@public.cloak)</li>
+ <li id="l-380"><a href="#l-380">#</a> [23:50] * Quits: mdas (~mdas@public.cloak) (Client closed connection)</li>
+ <li id="l-381"><a href="#l-381">#</a> Session Close: Sat Oct 25 00:00:00 2014</li>
+</ol>
+<p id="end">The end :)

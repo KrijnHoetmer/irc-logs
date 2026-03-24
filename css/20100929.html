@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20100929</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/css.20100929.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2010-09-29 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed Sep 29 00:00:00 2010</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #css</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:03] * Joins: karl (karlcow@128.30.54.58)</li>
+ <li id="l-4"><a href="#l-4">#</a> [01:50] * Quits: dbaron (dbaron@63.245.220.240) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-5"><a href="#l-5">#</a> [02:37] * Joins: dbaron (dbaron@63.245.220.240)</li>
+ <li id="l-6" _a="fantasai" _r="hyatt"><a href="#l-6">#</a> [05:00] &lt;fantasai&gt; hyatt: I think for consistency we should either translate *all* x-y pairs of things, or none of them</li>
+ <li id="l-7" _a="hyatt"><a href="#l-7">#</a> [05:00] &lt;hyatt&gt; yeah i agree with that</li>
+ <li id="l-8" _a="hyatt"><a href="#l-8">#</a> [05:00] &lt;hyatt&gt; i have a lot of comments now having worked on this for a couple of weeks</li>
+ <li id="l-9" _a="hyatt"><a href="#l-9">#</a> [05:00] &lt;hyatt&gt; and testing in WinIE</li>
+ <li id="l-10" _a="hyatt"><a href="#l-10">#</a> [05:01] &lt;hyatt&gt; there's some interesting stuff about the initial containing block</li>
+ <li id="l-11" _a="hyatt"><a href="#l-11">#</a> [05:01] &lt;hyatt&gt; you need it to assume the same block-flow as the document element</li>
+ <li id="l-12" _a="hyatt"><a href="#l-12">#</a> [05:01] &lt;hyatt&gt; kind of common sense if you think about it, but probably needs to be written down</li>
+ <li id="l-13" _a="hyatt"><a href="#l-13">#</a> [05:02] &lt;hyatt&gt; like if i say &lt;html style=&quot;logical-height:100px; block-flow:lr&quot;&gt;</li>
+ <li id="l-14" _a="hyatt"><a href="#l-14">#</a> [05:02] &lt;hyatt&gt; that block should be on the left with a width of 100px</li>
+ <li id="l-15" _a="hyatt"><a href="#l-15">#</a> [05:02] &lt;hyatt&gt; and in order for that to happen the ICB has to be block-flow:lr too</li>
+ <li id="l-16" _a="fantasai"><a href="#l-16">#</a> [05:02] &lt;fantasai&gt; are you implementing logical-height/margin-start/etc?</li>
+ <li id="l-17" _a="hyatt"><a href="#l-17">#</a> [05:02] &lt;hyatt&gt; already implemented</li>
+ <li id="l-18" _a="hyatt"><a href="#l-18">#</a> [05:02] &lt;hyatt&gt; every last one</li>
+ <li id="l-19" _a="fantasai"><a href="#l-19">#</a> [05:03] &lt;fantasai&gt; wow</li>
+ <li id="l-20" _a="hyatt"><a href="#l-20">#</a> [05:03] &lt;hyatt&gt; i wasn't sure what to do with replaced elements... i ended up making them have a hardcoded block-flow: tb !important basically</li>
+ <li id="l-21" _a="fantasai"><a href="#l-21">#</a> [05:03] &lt;fantasai&gt; how'd you deal with the cascade?</li>
+ <li id="l-22" _a="fantasai"><a href="#l-22">#</a> [05:03] &lt;fantasai&gt; I don't think that's the right thing to do with replaced elements</li>
+ <li id="l-23" _a="hyatt"><a href="#l-23">#</a> [05:03] &lt;hyatt&gt; yeah i wasn't sure</li>
+ <li id="l-24" _a="fantasai"><a href="#l-24">#</a> [05:03] &lt;fantasai&gt; because the margin-start should still be on the start side</li>
+ <li id="l-25" _a="fantasai"><a href="#l-25">#</a> [05:04] &lt;fantasai&gt; the contents should not be rotated</li>
+ <li id="l-26" _a="fantasai"><a href="#l-26">#</a> [05:04] &lt;fantasai&gt; but everything else should be</li>
+ <li id="l-27" _a="hyatt"><a href="#l-27">#</a> [05:04] &lt;hyatt&gt; you think the borders would rotate etc?</li>
+ <li id="l-28" _a="fantasai"><a href="#l-28">#</a> [05:04] &lt;fantasai&gt; no</li>
+ <li id="l-29" _a="fantasai"><a href="#l-29">#</a> [05:04] &lt;fantasai&gt; sorry</li>
+ <li id="l-30" _a="fantasai"><a href="#l-30">#</a> [05:04] &lt;fantasai&gt; not rotated</li>
+ <li id="l-31" _a="fantasai" _r="but"><a href="#l-31">#</a> [05:04] &lt;fantasai&gt; but, 'start/end' should match the containing block</li>
+ <li id="l-32" _a="fantasai" _r="although"><a href="#l-32">#</a> [05:05] &lt;fantasai&gt; although, hm, maybe that should be the case for all elements</li>
+ <li id="l-33" _a="fantasai"><a href="#l-33">#</a> [05:05] &lt;fantasai&gt; but yeah, how did you handle the cascade?</li>
+ <li id="l-34" _a="fantasai"><a href="#l-34">#</a> [05:05] &lt;fantasai&gt; because that's one of the major sticking points with speccing those things</li>
+ <li id="l-35" _a="hyatt"><a href="#l-35">#</a> [05:05] &lt;hyatt&gt; maybe give me an example and i can tell you if i handled it? :)</li>
+ <li id="l-36" _a="fantasai"><a href="#l-36">#</a> [05:05] &lt;fantasai&gt; p { margin-left: 2em; margin-start: 3em; }</li>
+ <li id="l-37" _a="hyatt"><a href="#l-37">#</a> [05:05] &lt;hyatt&gt; we just map them into the physical property at style resolution time</li>
+ <li id="l-38" _a="hyatt"><a href="#l-38">#</a> [05:05] &lt;hyatt&gt; so yeah in that example margin-left is 3edm</li>
+ <li id="l-39" _a="hyatt"><a href="#l-39">#</a> [05:05] &lt;hyatt&gt; 3em</li>
+ <li id="l-40" _a="fantasai"><a href="#l-40">#</a> [05:06] &lt;fantasai&gt; p { margin-end: 5em; margin-right: 6em; }</li>
+ <li id="l-41" _a="hyatt"><a href="#l-41">#</a> [05:06] &lt;hyatt&gt; we just look at the element's block-flow and direction</li>
+ <li id="l-42" _a="hyatt"><a href="#l-42">#</a> [05:06] &lt;hyatt&gt; and make a decision</li>
+ <li id="l-43" _a="hyatt"><a href="#l-43">#</a> [05:06] &lt;hyatt&gt; and map it to the physical side</li>
+ <li id="l-44" _a="hyatt"><a href="#l-44">#</a> [05:06] &lt;hyatt&gt; which seems to me to be the sensible way to handle it</li>
+ <li id="l-45" _a="fantasai"><a href="#l-45">#</a> [05:06] &lt;fantasai&gt; when?</li>
+ <li id="l-46" _a="fantasai"><a href="#l-46">#</a> [05:06] &lt;fantasai&gt; what's the result for tha bove?</li>
+ <li id="l-47" _a="hyatt"><a href="#l-47">#</a> [05:07] &lt;hyatt&gt; for the 2nd example, 6em would be the right margin...</li>
+ <li id="l-48" _a="hyatt"><a href="#l-48">#</a> [05:07] &lt;hyatt&gt; assuming tb-lr</li>
+ <li id="l-49" _a="fantasai"><a href="#l-49">#</a> [05:07] &lt;fantasai&gt; right</li>
+ <li id="l-50" _a="fantasai"><a href="#l-50">#</a> [05:07] &lt;fantasai&gt; style resolution means what?</li>
+ <li id="l-51" _a="hyatt"><a href="#l-51">#</a> [05:07] &lt;hyatt&gt; when we first compute the style information for the element</li>
+ <li id="l-52" _a="hyatt"><a href="#l-52">#</a> [05:07] &lt;hyatt&gt; when we examine the rules</li>
+ <li id="l-53" _a="hyatt"><a href="#l-53">#</a> [05:08] &lt;hyatt&gt; we do a first pass to determine certain properties (like font, block-flow, direction)</li>
+ <li id="l-54" _a="hyatt"><a href="#l-54">#</a> [05:08] &lt;hyatt&gt; anything that other properties could depend on</li>
+ <li id="l-55" _a="hyatt"><a href="#l-55">#</a> [05:08] &lt;hyatt&gt; and then in the second pass we can resolve direction-aware logical properties to their physical sides</li>
+ <li id="l-56" class="flagged" _a="fantasai"><a href="#l-56">#</a> [05:08] &lt;fantasai&gt; so you cascade twice?</li>
+ <li id="l-57" _a="fantasai"><a href="#l-57">#</a> [05:08] &lt;fantasai&gt; once for the first et of properties, one for the second?</li>
+ <li id="l-58" _a="hyatt"><a href="#l-58">#</a> [05:08] &lt;hyatt&gt; well the set of properties is mutually exclusive</li>
+ <li id="l-59" _a="fantasai"><a href="#l-59">#</a> [05:09] &lt;fantasai&gt; right</li>
+ <li id="l-60" _a="fantasai"><a href="#l-60">#</a> [05:09] &lt;fantasai&gt; but</li>
+ <li id="l-61" _a="hyatt"><a href="#l-61">#</a> [05:09] &lt;hyatt&gt; so it's just that we figure out the values for block-flow and direction</li>
+ <li id="l-62" _a="hyatt"><a href="#l-62">#</a> [05:09] &lt;hyatt&gt; first</li>
+ <li id="l-63" _a="hyatt"><a href="#l-63">#</a> [05:09] &lt;hyatt&gt; and then knowing those we can resolve margin-end etc. correctly</li>
+ <li id="l-64" _a="fantasai"><a href="#l-64">#</a> [05:09] &lt;fantasai&gt; ok</li>
+ <li id="l-65" _a="fantasai"><a href="#l-65">#</a> [05:09] &lt;fantasai&gt; cool</li>
+ <li id="l-66" _a="fantasai"><a href="#l-66">#</a> [05:09] &lt;fantasai&gt; well</li>
+ <li id="l-67" _a="fantasai"><a href="#l-67">#</a> [05:09] &lt;fantasai&gt; I'm glad to hear that's workingout</li>
+ <li id="l-68" _a="hyatt"><a href="#l-68">#</a> [05:09] &lt;hyatt&gt; which is why i really would not want there to be some kind of mismatch at rendering time</li>
+ <li id="l-69" _a="fantasai"><a href="#l-69">#</a> [05:10] &lt;fantasai&gt; so</li>
+ <li id="l-70" _a="fantasai"><a href="#l-70">#</a> [05:10] &lt;fantasai&gt; for x-y coordinate pairs</li>
+ <li id="l-71" _a="hyatt"><a href="#l-71">#</a> [05:10] &lt;hyatt&gt; like if margin-start for a replaced element needs to match teh containing block's margin start</li>
+ <li id="l-72" _a="hyatt"><a href="#l-72">#</a> [05:10] &lt;hyatt&gt; then i'd prefer it do so by having the block-flow match the containing block's block flow</li>
+ <li id="l-73" _a="fantasai"><a href="#l-73">#</a> [05:10] &lt;fantasai&gt; makes sense</li>
+ <li id="l-74" _a="hyatt"><a href="#l-74">#</a> [05:10] &lt;hyatt&gt; i don't happen to think it does need to match though</li>
+ <li id="l-75" _a="fantasai"><a href="#l-75">#</a> [05:10] &lt;fantasai&gt; I think it does</li>
+ <li id="l-76" _a="fantasai"><a href="#l-76">#</a> [05:10] &lt;fantasai&gt; otherwise that logic isn't useful for determining spacing</li>
+ <li id="l-77" _a="fantasai"><a href="#l-77">#</a> [05:11] &lt;fantasai&gt; if I set margin-start and -end on a replaced element expecting it to space the element from its surrounding contents</li>
+ <li id="l-78" _a="fantasai"><a href="#l-78">#</a> [05:11] &lt;fantasai&gt; your !important rule would break that assumption</li>
+ <li id="l-79" _a="fantasai"><a href="#l-79">#</a> [05:11] &lt;fantasai&gt; I think the contents of replaced elements just shouldn't rotate</li>
+ <li id="l-80" _a="hyatt"><a href="#l-80">#</a> [05:12] &lt;hyatt&gt; that would be fine with me</li>
+ <li id="l-81" _a="hyatt"><a href="#l-81">#</a> [05:12] &lt;hyatt&gt; as long as the block-flow of the replaced element was how i determine margin-start / end</li>
+ <li id="l-82" _a="hyatt"><a href="#l-82">#</a> [05:12] &lt;hyatt&gt; i guess i agree with that conceptually</li>
+ <li id="l-83" _a="hyatt"><a href="#l-83">#</a> [05:12] &lt;hyatt&gt; it's kind of like having an upright glyph</li>
+ <li id="l-84" _a="hyatt"><a href="#l-84">#</a> [05:12] &lt;hyatt&gt; if you think of the replaced element as a &quot;glyph&quot;</li>
+ <li id="l-85" _a="fantasai"><a href="#l-85">#</a> [05:12] &lt;fantasai&gt; yeah</li>
+ <li id="l-86" class="flagged" _a="hyatt"><a href="#l-86">#</a> [05:12] &lt;hyatt&gt; but it would mean the borders rotate if you say border-start</li>
+ <li id="l-87" _a="hyatt"><a href="#l-87">#</a> [05:12] &lt;hyatt&gt; border-end</li>
+ <li id="l-88" class="flagged" _a="hyatt"><a href="#l-88">#</a> [05:13] &lt;hyatt&gt; but that makes sense to me</li>
+ <li id="l-89" _a="fantasai"><a href="#l-89">#</a> [05:13] &lt;fantasai&gt; rotate wrt the image, yes</li>
+ <li id="l-90" _a="hyatt"><a href="#l-90">#</a> [05:13] &lt;hyatt&gt; yes</li>
+ <li id="l-91" _a="fantasai"><a href="#l-91">#</a> [05:13] &lt;fantasai&gt; but if you wanted them physical</li>
+ <li id="l-92" _a="hyatt"><a href="#l-92">#</a> [05:13] &lt;hyatt&gt; ok i like this idea</li>
+ <li id="l-93" _a="fantasai"><a href="#l-93">#</a> [05:13] &lt;fantasai&gt; then you use physical properties</li>
+ <li id="l-94" _a="hyatt"><a href="#l-94">#</a> [05:13] &lt;hyatt&gt; sure</li>
+ <li id="l-95" _a="hyatt"><a href="#l-95">#</a> [05:13] &lt;hyatt&gt; i'll implement the rotation</li>
+ <li id="l-96" _a="hyatt"><a href="#l-96">#</a> [05:13] &lt;hyatt&gt; of the contents</li>
+ <li id="l-97" _a="hyatt"><a href="#l-97">#</a> [05:13] &lt;hyatt&gt; oh the other thing is that blocks with different directionality than their parent</li>
+ <li id="l-98" _a="hyatt"><a href="#l-98">#</a> [05:13] &lt;hyatt&gt; differeent block-flow</li>
+ <li id="l-99" _a="hyatt"><a href="#l-99">#</a> [05:14] &lt;hyatt&gt; should establish a block formatting context</li>
+ <li id="l-100" _a="hyatt"><a href="#l-100">#</a> [05:14] &lt;hyatt&gt; i don't know if the spec says that yet</li>
+ <li id="l-101" _a="fantasai"><a href="#l-101">#</a> [05:14] &lt;fantasai&gt; oh</li>
+ <li id="l-102" _a="fantasai"><a href="#l-102">#</a> [05:14] &lt;fantasai&gt; of course</li>
+ <li id="l-103" _a="fantasai"><a href="#l-103">#</a> [05:14] &lt;fantasai&gt; I don't think it does</li>
+ <li id="l-104" _a="fantasai"><a href="#l-104">#</a> [05:14] &lt;fantasai&gt; I haven't really written up that section yet</li>
+ <li id="l-105" _a="fantasai"><a href="#l-105">#</a> [05:14] &lt;fantasai&gt; it's in my notes somewhere :)</li>
+ <li id="l-106" _a="hyatt"><a href="#l-106">#</a> [05:14] &lt;hyatt&gt; yeah so the iCB, replaced elements, block formatting context</li>
+ <li id="l-107" _a="hyatt"><a href="#l-107">#</a> [05:14] &lt;hyatt&gt; what else did i run into</li>
+ <li id="l-108" _a="fantasai"><a href="#l-108">#</a> [05:14] &lt;fantasai&gt; x-y coordinate pairs</li>
+ <li id="l-109" _a="hyatt"><a href="#l-109">#</a> [05:14] &lt;hyatt&gt; when to apply auto margins is interesting</li>
+ <li id="l-110" _a="hyatt"><a href="#l-110">#</a> [05:14] &lt;hyatt&gt; i matched winie</li>
+ <li id="l-111" _a="fantasai"><a href="#l-111">#</a> [05:15] &lt;fantasai&gt; ?</li>
+ <li id="l-112" _a="hyatt"><a href="#l-112">#</a> [05:15] &lt;hyatt&gt; and kind of agree with them</li>
+ <li id="l-113" _a="hyatt"><a href="#l-113">#</a> [05:15] &lt;hyatt&gt; if a child block has different directoinality than a parent block</li>
+ <li id="l-114" _a="fantasai"><a href="#l-114">#</a> [05:15] &lt;fantasai&gt; what do you mean?</li>
+ <li id="l-115" _a="hyatt"><a href="#l-115">#</a> [05:15] &lt;hyatt&gt; auto margins center you in the containing block's inline direction</li>
+ <li id="l-116" _a="hyatt"><a href="#l-116">#</a> [05:15] &lt;hyatt&gt; but not in the child's</li>
+ <li id="l-117" _a="fantasai"><a href="#l-117">#</a> [05:15] &lt;fantasai&gt; right</li>
+ <li id="l-118" _a="fantasai"><a href="#l-118">#</a> [05:15] &lt;fantasai&gt; that makes sense</li>
+ <li id="l-119" _a="hyatt"><a href="#l-119">#</a> [05:15] &lt;hyatt&gt; which makes sense</li>
+ <li id="l-120" _a="hyatt"><a href="#l-120">#</a> [05:15] &lt;hyatt&gt; another thing</li>
+ <li id="l-121" _a="fantasai"><a href="#l-121">#</a> [05:15] &lt;fantasai&gt; if I have a block with vertical writing mode in a horizontal writing mode container</li>
+ <li id="l-122" _a="hyatt"><a href="#l-122">#</a> [05:16] &lt;hyatt&gt; when a child uses percentages on something like margin/border/padding it is relative to the logical width of the containing block</li>
+ <li id="l-123" _a="fantasai"><a href="#l-123">#</a> [05:16] &lt;fantasai&gt; then it lays out as if it were in a container of fixed height and infinite width</li>
+ <li id="l-124" _a="hyatt"><a href="#l-124">#</a> [05:16] &lt;hyatt&gt; regardless of if the block has a different directionality than the containing block</li>
+ <li id="l-125" _a="fantasai"><a href="#l-125">#</a> [05:16] &lt;fantasai&gt; and its margins participate in its containing block's formatting context</li>
+ <li id="l-126" _a="hyatt"><a href="#l-126">#</a> [05:16] &lt;hyatt&gt; which your draft says</li>
+ <li id="l-127" _a="hyatt"><a href="#l-127">#</a> [05:16] &lt;hyatt&gt; but if a child uses percentages on width/height etc., it's relative to the specific physical axis that matches of the containing block</li>
+ <li id="l-128" _a="hyatt"><a href="#l-128">#</a> [05:16] &lt;hyatt&gt; i don't think the draft is so clear about that</li>
+ <li id="l-129" _a="hyatt"><a href="#l-129">#</a> [05:17] &lt;hyatt&gt; so you can't just say logical width of a child percentage uses logical width of container</li>
+ <li id="l-130" _a="hyatt"><a href="#l-130">#</a> [05:17] &lt;hyatt&gt; i didn't do the infinite width thing for now</li>
+ <li id="l-131" _a="hyatt"><a href="#l-131">#</a> [05:17] &lt;hyatt&gt; i matched winie which uses the viewport height/width instead of infinity</li>
+ <li id="l-132" _a="hyatt"><a href="#l-132">#</a> [05:17] &lt;hyatt&gt; but it's easy to change</li>
+ <li id="l-133" _a="hyatt"><a href="#l-133">#</a> [05:17] &lt;hyatt&gt; i put a big fixme in it</li>
+ <li id="l-134" _a="fantasai"><a href="#l-134">#</a> [05:18] &lt;fantasai&gt; heh</li>
+ <li id="l-135" _a="fantasai"><a href="#l-135">#</a> [05:18] &lt;fantasai&gt; um</li>
+ <li id="l-136" _a="hyatt"><a href="#l-136">#</a> [05:18] &lt;hyatt&gt; this is a crazy project</li>
+ <li id="l-137" _a="hyatt"><a href="#l-137">#</a> [05:18] &lt;hyatt&gt; i'm like</li>
+ <li id="l-138" _a="hyatt"><a href="#l-138">#</a> [05:18] &lt;hyatt&gt; renaming every layout function in the fricking engine</li>
+ <li id="l-139" _a="fantasai" _r="ok"><a href="#l-139">#</a> [05:18] &lt;fantasai&gt; ok, I think I understand what you're saying</li>
+ <li id="l-140" _a="fantasai" _r="haha"><a href="#l-140">#</a> [05:18] &lt;fantasai&gt; haha, yeah</li>
+ <li id="l-141" _a="fantasai"><a href="#l-141">#</a> [05:19] * fantasai is glad krijnh is logging</li>
+ <li id="l-142" _a="fantasai" _r="so"><a href="#l-142">#</a> [05:20] &lt;fantasai&gt; so, x-y coordinates...</li>
+ <li id="l-143" _a="hyatt"><a href="#l-143">#</a> [05:20] &lt;hyatt&gt; i couldn't make my mind up about them</li>
+ <li id="l-144" _a="fantasai"><a href="#l-144">#</a> [05:20] &lt;fantasai&gt; My preference is to make them logical</li>
+ <li id="l-145" _a="hyatt"><a href="#l-145">#</a> [05:20] &lt;hyatt&gt; mine is too</li>
+ <li id="l-146" _a="hyatt"><a href="#l-146">#</a> [05:20] &lt;hyatt&gt; it was my first impulse at least</li>
+ <li id="l-147" _a="fantasai"><a href="#l-147">#</a> [05:20] &lt;fantasai&gt; and allow physical by use of a flag</li>
+ <li id="l-148" _a="hyatt"><a href="#l-148">#</a> [05:20] &lt;hyatt&gt; i guess i'm kind of falling into the camp of &quot;it should be easy to write code that flips if you just change block-flow on a root&quot;</li>
+ <li id="l-149" _a="fantasai"><a href="#l-149">#</a> [05:20] &lt;fantasai&gt; [physical | logical]? or something</li>
+ <li id="l-150" _a="fantasai"><a href="#l-150">#</a> [05:21] &lt;fantasai&gt; that's been my camp, but it's hard to fall into it when nobody wants to implement logical properties :)</li>
+ <li id="l-151" _a="hyatt"><a href="#l-151">#</a> [05:21] &lt;hyatt&gt; wow i didn't even know there was a debate</li>
+ <li id="l-152" _a="fantasai"><a href="#l-152">#</a> [05:21] &lt;fantasai&gt; but if you're doing it and Antenna House is doing it, then we have the basis for a standard</li>
+ <li id="l-153" _a="hyatt"><a href="#l-153">#</a> [05:21] &lt;hyatt&gt; they're barely any code to implement</li>
+ <li id="l-154" _a="hyatt"><a href="#l-154">#</a> [05:21] &lt;hyatt&gt; they're a joke</li>
+ <li id="l-155" _a="fantasai"><a href="#l-155">#</a> [05:21] &lt;fantasai&gt; The argument is that it adds too many new properites</li>
+ <li id="l-156" _a="hyatt"><a href="#l-156">#</a> [05:21] &lt;hyatt&gt; oh that's just silly</li>
+ <li id="l-157" _a="fantasai"><a href="#l-157">#</a> [05:22] * fantasai laughs</li>
+ <li id="l-158" _a="hyatt"><a href="#l-158">#</a> [05:22] &lt;hyatt&gt; we add properties like popping candy</li>
+ <li id="l-159" _a="hyatt"><a href="#l-159">#</a> [05:22] &lt;hyatt&gt; so yeah</li>
+ <li id="l-160" _a="hyatt"><a href="#l-160">#</a> [05:22] &lt;hyatt&gt; that doesn't bother me</li>
+ <li id="l-161" _a="hyatt"><a href="#l-161">#</a> [05:22] &lt;hyatt&gt; and they aren't real</li>
+ <li id="l-162" _a="hyatt"><a href="#l-162">#</a> [05:22] &lt;hyatt&gt; they just map to the physical</li>
+ <li id="l-163" _a="hyatt"><a href="#l-163">#</a> [05:22] &lt;hyatt&gt; so in terms of extra engine code</li>
+ <li id="l-164" _a="hyatt"><a href="#l-164">#</a> [05:22] &lt;hyatt&gt; it's nothing</li>
+ <li id="l-165" _a="fantasai"><a href="#l-165">#</a> [05:22] &lt;fantasai&gt; it's just storing the property name keys, pretty much</li>
+ <li id="l-166" _a="hyatt"><a href="#l-166">#</a> [05:22] &lt;hyatt&gt; exactly</li>
+ <li id="l-167" _a="hyatt"><a href="#l-167">#</a> [05:22] &lt;hyatt&gt; and writing one little function to resolve the sides</li>
+ <li id="l-168" _a="fantasai"><a href="#l-168">#</a> [05:22] &lt;fantasai&gt; which is what I tried to argue :)</li>
+ <li id="l-169" _a="hyatt"><a href="#l-169">#</a> [05:22] &lt;hyatt&gt; which is easy</li>
+ <li id="l-170" _a="fantasai"><a href="#l-170">#</a> [05:22] &lt;fantasai&gt; but whatever</li>
+ <li id="l-171" _a="hyatt"><a href="#l-171">#</a> [05:22] &lt;hyatt&gt; well 2 impls</li>
+ <li id="l-172" _a="hyatt"><a href="#l-172">#</a> [05:23] &lt;hyatt&gt; roar</li>
+ <li id="l-173" _a="hyatt"><a href="#l-173">#</a> [05:23] &lt;hyatt&gt; i hate the second solution</li>
+ <li id="l-174" _a="hyatt"><a href="#l-174">#</a> [05:23] &lt;hyatt&gt; hate hate hate</li>
+ <li id="l-175" _a="fantasai"><a href="#l-175">#</a> [05:23] &lt;fantasai&gt; ?</li>
+ <li id="l-176" _a="fantasai"><a href="#l-176">#</a> [05:23] &lt;fantasai&gt; which one?</li>
+ <li id="l-177" _a="hyatt"><a href="#l-177">#</a> [05:23] &lt;hyatt&gt; the logical/physical toggle would be so horrible</li>
+ <li id="l-178" _a="hyatt"><a href="#l-178">#</a> [05:23] &lt;hyatt&gt; if you tell me top means something different</li>
+ <li id="l-179" _a="hyatt"><a href="#l-179">#</a> [05:23] &lt;hyatt&gt; now you force me to abstract painting</li>
+ <li id="l-180" _a="hyatt"><a href="#l-180">#</a> [05:23] &lt;hyatt&gt; the 1st solution just forces me to abstract layout</li>
+ <li id="l-181" _a="hyatt"><a href="#l-181">#</a> [05:23] &lt;hyatt&gt; the 2nd one forces me to abstract the physical access for painting</li>
+ <li id="l-182" _a="hyatt"><a href="#l-182">#</a> [05:23] &lt;hyatt&gt; and other non-layout uses</li>
+ <li id="l-183" _a="hyatt"><a href="#l-183">#</a> [05:23] &lt;hyatt&gt; if borderTop doesn't mean borderTop any more that would just be like.... gah</li>
+ <li id="l-184" _a="hyatt"><a href="#l-184">#</a> [05:24] &lt;hyatt&gt; &quot;directional-mode&quot;</li>
+ <li id="l-185" _a="hyatt"><a href="#l-185">#</a> [05:24] &lt;hyatt&gt; gah</li>
+ <li id="l-186" _a="hyatt"><a href="#l-186">#</a> [05:24] &lt;hyatt&gt; no</li>
+ <li id="l-187" _a="fantasai"><a href="#l-187">#</a> [05:24] &lt;fantasai&gt; got it</li>
+ <li id="l-188" _a="hyatt"><a href="#l-188">#</a> [05:24] &lt;hyatt&gt; like that would be so horrible to implement</li>
+ <li id="l-189" _a="fantasai" _r="Well"><a href="#l-189">#</a> [05:24] &lt;fantasai&gt; Well, that makes my job easier</li>
+ <li id="l-190" _a="hyatt"><a href="#l-190">#</a> [05:24] &lt;hyatt&gt; you'd have to introduce indirection into the access of physical properties</li>
+ <li id="l-191" _a="hyatt"><a href="#l-191">#</a> [05:24] &lt;hyatt&gt; from the engine</li>
+ <li id="l-192" _a="fantasai"><a href="#l-192">#</a> [05:24] &lt;fantasai&gt; Don't have to write two different specs before TPAC</li>
+ <li id="l-193" _a="hyatt"><a href="#l-193">#</a> [05:25] &lt;hyatt&gt; yeah the first proposal is fully implemented</li>
+ <li id="l-194" _a="hyatt"><a href="#l-194">#</a> [05:25] &lt;hyatt&gt; i added every single one</li>
+ <li id="l-195" _a="hyatt"><a href="#l-195">#</a> [05:25] &lt;hyatt&gt; heck i even added new properties for our made-up properties!</li>
+ <li id="l-196" _a="hyatt"><a href="#l-196">#</a> [05:25] &lt;hyatt&gt; margin-top-collapse became margin-before-collapse etc</li>
+ <li id="l-197" _a="hyatt"><a href="#l-197">#</a> [05:25] &lt;hyatt&gt; lol</li>
+ <li id="l-198" _a="fantasai" _r="actually"><a href="#l-198">#</a> [05:26] &lt;fantasai&gt; actually, it probably should just be margin-before-collapse</li>
+ <li id="l-199" _a="fantasai"><a href="#l-199">#</a> [05:26] &lt;fantasai&gt; I don't think margin-top-collapse is necessary</li>
+ <li id="l-200" _a="fantasai"><a href="#l-200">#</a> [05:26] &lt;fantasai&gt; margin-top doesn't collapse unless it's in horizontal mode anyway</li>
+ <li id="l-201" _a="hyatt"><a href="#l-201">#</a> [05:27] &lt;hyatt&gt; you're exactly right</li>
+ <li id="l-202" _a="fantasai"><a href="#l-202">#</a> [05:27] &lt;fantasai&gt; so just rename it :)</li>
+ <li id="l-203" _a="hyatt"><a href="#l-203">#</a> [05:27] &lt;hyatt&gt; what i ended up doing is just aliasing top/bottom to before/after</li>
+ <li id="l-204" _a="fantasai"><a href="#l-204">#</a> [05:27] &lt;fantasai&gt; alias the old version if you need to</li>
+ <li id="l-205" _a="fantasai"><a href="#l-205">#</a> [05:27] &lt;fantasai&gt; yeah</li>
+ <li id="l-206" _a="hyatt"><a href="#l-206">#</a> [05:27] &lt;hyatt&gt; for backwards compat</li>
+ <li id="l-207" _a="hyatt"><a href="#l-207">#</a> [05:27] &lt;hyatt&gt; since this is used by safari rss</li>
+ <li id="l-208" _a="hyatt"><a href="#l-208">#</a> [05:28] &lt;hyatt&gt; i did not add a left/right collapse</li>
+ <li id="l-209" _a="hyatt"><a href="#l-209">#</a> [05:28] &lt;hyatt&gt; just before/after are the real one now</li>
+ <li id="l-210" _a="fantasai"><a href="#l-210">#</a> [05:28] &lt;fantasai&gt; nice</li>
+ <li id="l-211" _a="hyatt"><a href="#l-211">#</a> [05:28] &lt;hyatt&gt; i'm working on margin collapsing now</li>
+ <li id="l-212" _a="hyatt"><a href="#l-212">#</a> [05:28] &lt;hyatt&gt; it's complicated</li>
+ <li id="l-213" _a="fantasai"><a href="#l-213">#</a> [05:28] &lt;fantasai&gt; huh</li>
+ <li id="l-214" _a="hyatt"><a href="#l-214">#</a> [05:28] &lt;hyatt&gt; just making sure i get the correct margin is all</li>
+ <li id="l-215" _a="fantasai"><a href="#l-215">#</a> [05:28] &lt;fantasai&gt; ah</li>
+ <li id="l-216" _a="fantasai"><a href="#l-216">#</a> [05:28] &lt;fantasai&gt; can you send me a dump of your property list?</li>
+ <li id="l-217" _a="fantasai"><a href="#l-217">#</a> [05:29] &lt;fantasai&gt; would like to make sure we have everything listed in the spec</li>
+ <li id="l-218" _a="hyatt"><a href="#l-218">#</a> [05:29] &lt;hyatt&gt; i don't have to. it exactly matches the spec.</li>
+ <li id="l-219" _a="hyatt"><a href="#l-219">#</a> [05:29] &lt;hyatt&gt; there may be something we haven't thought of</li>
+ <li id="l-220" _a="fantasai"><a href="#l-220">#</a> [05:29] &lt;fantasai&gt; k</li>
+ <li id="l-221" _a="hyatt"><a href="#l-221">#</a> [05:29] &lt;hyatt&gt; in which case i haven't implemented it yet :)</li>
+ <li id="l-222" _a="fantasai"><a href="#l-222">#</a> [05:29] &lt;fantasai&gt; do you have start/end keywords for background-position?</li>
+ <li id="l-223" _a="hyatt"><a href="#l-223">#</a> [05:30] &lt;hyatt&gt; no i haven't gotten that far</li>
+ <li id="l-224" _a="fantasai"><a href="#l-224">#</a> [05:30] &lt;fantasai&gt; k</li>
+ <li id="l-225" _a="hyatt"><a href="#l-225">#</a> [05:30] &lt;hyatt&gt; no new keywords for anything</li>
+ <li id="l-226" _a="fantasai"><a href="#l-226">#</a> [05:30] &lt;fantasai&gt; k</li>
+ <li id="l-227" _a="hyatt"><a href="#l-227">#</a> [05:30] &lt;hyatt&gt; i'm kind of going from the outside in</li>
+ <li id="l-228" _a="hyatt"><a href="#l-228">#</a> [05:30] &lt;hyatt&gt; so got the view working in LR mode</li>
+ <li id="l-229" _a="fantasai"><a href="#l-229">#</a> [05:30] &lt;fantasai&gt; makes sense</li>
+ <li id="l-230" _a="hyatt"><a href="#l-230">#</a> [05:30] &lt;hyatt&gt; now i'm doing block layout of block children</li>
+ <li id="l-231" _a="hyatt"><a href="#l-231">#</a> [05:30] &lt;hyatt&gt; so that i can actually get some blocks placed</li>
+ <li id="l-232" _a="hyatt"><a href="#l-232">#</a> [05:30] &lt;hyatt&gt; :)</li>
+ <li id="l-233" _a="fantasai"><a href="#l-233">#</a> [05:30] &lt;fantasai&gt; :)</li>
+ <li id="l-234" _a="hyatt"><a href="#l-234">#</a> [05:30] &lt;hyatt&gt; then i'll do lines</li>
+ <li id="l-235" _a="hyatt"><a href="#l-235">#</a> [05:30] &lt;hyatt&gt; then floats/positioning</li>
+ <li id="l-236" _a="hyatt"><a href="#l-236">#</a> [05:31] &lt;hyatt&gt; probably tables after that</li>
+ <li id="l-237" _a="hyatt"><a href="#l-237">#</a> [05:31] &lt;hyatt&gt; then flex boxes, ruby, marquees, argh</li>
+ <li id="l-238" _a="hyatt"><a href="#l-238">#</a> [05:31] &lt;hyatt&gt; columns</li>
+ <li id="l-239" _a="hyatt"><a href="#l-239">#</a> [05:31] &lt;hyatt&gt; printing</li>
+ <li id="l-240" _a="hyatt"><a href="#l-240">#</a> [05:31] &lt;hyatt&gt; this is not small.</li>
+ <li id="l-241" _a="hyatt"><a href="#l-241">#</a> [05:31] &lt;hyatt&gt; :)</li>
+ <li id="l-242" _a="fantasai"><a href="#l-242">#</a> [05:31] &lt;fantasai&gt; I know :)</li>
+ <li id="l-243" _a="hyatt"><a href="#l-243">#</a> [05:31] &lt;hyatt&gt; so antenna house supports the logical properties? that's good news.</li>
+ <li id="l-244" _a="hyatt"><a href="#l-244">#</a> [05:31] &lt;hyatt&gt; since i support them too</li>
+ <li id="l-245" _a="hyatt"><a href="#l-245">#</a> [05:31] &lt;hyatt&gt; who hated them</li>
+ <li id="l-246" _a="fantasai"><a href="#l-246">#</a> [05:32] &lt;fantasai&gt; I'd say at least half the WG</li>
+ <li id="l-247" _a="hyatt"><a href="#l-247">#</a> [05:32] &lt;hyatt&gt; when they start implementing then they can talk.</li>
+ <li id="l-248" _a="hyatt"><a href="#l-248">#</a> [05:32] &lt;hyatt&gt; ;)</li>
+ <li id="l-249" _a="fantasai"><a href="#l-249">#</a> [05:32] &lt;fantasai&gt; :)</li>
+ <li id="l-250" _a="fantasai"><a href="#l-250">#</a> [05:33] &lt;fantasai&gt; For the position ones... I would suggest to use position-before/start/end/after</li>
+ <li id="l-251" _a="fantasai"><a href="#l-251">#</a> [05:33] &lt;fantasai&gt; rather than just before/start/end/after</li>
+ <li id="l-252" _a="fantasai"><a href="#l-252">#</a> [05:33] &lt;fantasai&gt; I wish top/left/right/bottom did the same</li>
+ <li id="l-253" _a="fantasai"><a href="#l-253">#</a> [05:33] &lt;fantasai&gt; but it gets really ambiguous with the new set</li>
+ <li id="l-254" _a="fantasai"><a href="#l-254">#</a> [05:33] &lt;fantasai&gt; what this property means</li>
+ <li id="l-255" _a="hyatt"><a href="#l-255">#</a> [05:33] &lt;hyatt&gt; you mean position: position-before?</li>
+ <li id="l-256" _a="fantasai"><a href="#l-256">#</a> [05:33] &lt;fantasai&gt; no</li>
+ <li id="l-257" _a="fantasai" _r="position-before"><a href="#l-257">#</a> [05:33] &lt;fantasai&gt; position-before: 40%</li>
+ <li id="l-258" _a="fantasai"><a href="#l-258">#</a> [05:33] &lt;fantasai&gt; instead of</li>
+ <li id="l-259" _a="fantasai" _r="top"><a href="#l-259">#</a> [05:33] &lt;fantasai&gt; top: 40%</li>
+ <li id="l-260" _a="hyatt"><a href="#l-260">#</a> [05:33] &lt;hyatt&gt; left:</li>
+ <li id="l-261" _a="hyatt"><a href="#l-261">#</a> [05:34] &lt;hyatt&gt; i see</li>
+ <li id="l-262" _a="hyatt"><a href="#l-262">#</a> [05:34] &lt;hyatt&gt; i'll just wait for you to write something down and then do it</li>
+ <li id="l-263" _a="fantasai"><a href="#l-263">#</a> [05:34] &lt;fantasai&gt; heh</li>
+ <li id="l-264" _a="hyatt"><a href="#l-264">#</a> [05:34] &lt;hyatt&gt; will be a few weeks before i get to positioned elements</li>
+ <li id="l-265" _a="fantasai"><a href="#l-265">#</a> [05:34] &lt;fantasai&gt; I think today I'm going to work on the intro mostly</li>
+ <li id="l-266" _a="fantasai"><a href="#l-266">#</a> [05:34] &lt;fantasai&gt; and text-orientation</li>
+ <li id="l-267" _a="hyatt"><a href="#l-267">#</a> [05:35] &lt;hyatt&gt; what is text-orientation</li>
+ <li id="l-268" _a="hyatt"><a href="#l-268">#</a> [05:36] &lt;hyatt&gt; is it like the glyph-orientation thign?</li>
+ <li id="l-269" _a="hyatt"><a href="#l-269">#</a> [05:36] &lt;hyatt&gt; thing?</li>
+ <li id="l-270" _a="hyatt"><a href="#l-270">#</a> [05:38] &lt;hyatt&gt; like on the logical properties just to give you an idea</li>
+ <li id="l-271" _a="hyatt"><a href="#l-271">#</a> [05:38] &lt;hyatt&gt; it took me about 45 minutes to add them</li>
+ <li id="l-272" _a="hyatt"><a href="#l-272">#</a> [05:38] &lt;hyatt&gt; including writing tests</li>
+ <li id="l-273" _a="hyatt"><a href="#l-273">#</a> [05:38] &lt;hyatt&gt; so i think it's really silly for people to think they are some great burden</li>
+ <li id="l-274" _a="hyatt"><a href="#l-274">#</a> [05:38] &lt;hyatt&gt; :)</li>
+ <li id="l-275" _a="fantasai"><a href="#l-275">#</a> [05:41] &lt;fantasai&gt; 45 minutes for you equals, what, 5 days for anyone else? ;)</li>
+ <li id="l-276" _a="fantasai"><a href="#l-276">#</a> [05:41] &lt;fantasai&gt; text-orientation is like glyph-orientation</li>
+ <li id="l-277" _a="fantasai"><a href="#l-277">#</a> [05:41] &lt;fantasai&gt; except it's smarter about things</li>
+ <li id="l-278" _a="hyatt"><a href="#l-278">#</a> [05:41] &lt;hyatt&gt; ok</li>
+ <li id="l-279"><a href="#l-279">#</a> [05:41] * Joins: Figaroo (Figaroo@70.234.3.170)</li>
+ <li id="l-280" _a="fantasai"><a href="#l-280">#</a> [05:41] &lt;fantasai&gt; every value of glyph-orientation except 'auto' is ...</li>
+ <li id="l-281" _a="fantasai"><a href="#l-281">#</a> [05:42] &lt;fantasai&gt; not intelligent about correctly handling things the designer of said property hadn't thought of</li>
+ <li id="l-282" _a="Figaroo"><a href="#l-282">#</a> [05:42] &lt;Figaroo&gt; Are there any plans for standardizing webkit's scrollbar psuedoelements?</li>
+ <li id="l-283" _a="hyatt" _r="Figaroo"><a href="#l-283">#</a> [05:45] &lt;hyatt&gt; Figaroo: not really</li>
+ <li id="l-284" _a="hyatt"><a href="#l-284">#</a> [05:45] &lt;hyatt&gt; unless there is a whole lot of interest in them</li>
+ <li id="l-285" _a="Figaroo"><a href="#l-285">#</a> [05:46] &lt;Figaroo&gt; It appears twitter is already taking advantage of webkit's implementation, if that's of any significants?</li>
+ <li id="l-286" _a="hyatt"><a href="#l-286">#</a> [05:46] &lt;hyatt&gt; those were primarily added so itunes could get its custom scrollbar look</li>
+ <li id="l-287" _a="hyatt"><a href="#l-287">#</a> [05:46] &lt;hyatt&gt; heh</li>
+ <li id="l-288" _a="hyatt"><a href="#l-288">#</a> [05:46] &lt;hyatt&gt; twitter is? cool</li>
+ <li id="l-289" _a="Figaroo"><a href="#l-289">#</a> [05:46] &lt;Figaroo&gt; I misspelled significance*</li>
+ <li id="l-290" _a="hyatt"><a href="#l-290">#</a> [05:46] &lt;hyatt&gt; we never really proposed them since we didn't think anyone cared</li>
+ <li id="l-291" _a="Figaroo"><a href="#l-291">#</a> [05:47] &lt;Figaroo&gt; the #newtwitter</li>
+ <li id="l-292" _a="Figaroo"><a href="#l-292">#</a> [05:47] &lt;Figaroo&gt; I still feel that the way webkit does things is a little complicated though.</li>
+ <li id="l-293" _a="hyatt" _r="fantasai"><a href="#l-293">#</a> [05:47] &lt;hyatt&gt; fantasai: another thing i'm kind of terrified about is overflow scrollbars and block-flow</li>
+ <li id="l-294" _a="hyatt" _r="Figaroo"><a href="#l-294">#</a> [05:48] &lt;hyatt&gt; Figaroo: yeah the way webkit does things is to support itunes insanely complicated scrollbar look</li>
+ <li id="l-295" _a="hyatt"><a href="#l-295">#</a> [05:48] &lt;hyatt&gt; there are features no sane person would probably even care about</li>
+ <li id="l-296" _a="Figaroo"><a href="#l-296">#</a> [05:49] &lt;Figaroo&gt; So with some tweeking of the spec it would be fantastic!</li>
+ <li id="l-297" _a="hyatt"><a href="#l-297">#</a> [05:49] &lt;hyatt&gt; yeah although we would have to support enough to keep itunes working</li>
+ <li id="l-298" _a="Figaroo"><a href="#l-298">#</a> [05:49] &lt;Figaroo&gt; What are you talking about overflow and block-flow?</li>
+ <li id="l-299" _a="hyatt"><a href="#l-299">#</a> [05:49] &lt;hyatt&gt; i'm not sure how scrollbars should render for different block-flow values</li>
+ <li id="l-300" _a="hyatt"><a href="#l-300">#</a> [05:49] &lt;hyatt&gt; or how i should implement it</li>
+ <li id="l-301" _a="Figaroo"><a href="#l-301">#</a> [05:50] &lt;Figaroo&gt; I'm not familiar with block-flow, could you give me an example?</li>
+ <li id="l-302" _a="hyatt"><a href="#l-302">#</a> [05:50] &lt;hyatt&gt; <a href="http://dev.w3.org/csswg/css3-text-layout/">http://dev.w3.org/csswg/css3-text-layout/</a></li>
+ <li id="l-303" _a="hyatt"><a href="#l-303">#</a> [05:50] &lt;hyatt&gt; it's vertical text basically</li>
+ <li id="l-304" _a="Figaroo"><a href="#l-304">#</a> [05:51] &lt;Figaroo&gt; Are talking about different block-flow and overflow vallues for each psuedo element in the scrollbar?</li>
+ <li id="l-305" _a="hyatt"><a href="#l-305">#</a> [05:51] &lt;hyatt&gt; nah just about where the scrollbars go in general</li>
+ <li id="l-306" _a="hyatt"><a href="#l-306">#</a> [05:51] &lt;hyatt&gt; brb</li>
+ <li id="l-307" _a="Figaroo"><a href="#l-307">#</a> [05:52] &lt;Figaroo&gt; k</li>
+ <li id="l-308"><a href="#l-308">#</a> [05:53] * Quits: dbaron (dbaron@63.245.220.240) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-309" _a="Figaroo" _r="hyatt"><a href="#l-309">#</a> [05:58] &lt;Figaroo&gt; hyatt, when you get back: What concerns do you have with block-flow and scrollbars?</li>
+ <li id="l-310" _a="fantasai" _r="hyatt"><a href="#l-310">#</a> [06:00] &lt;fantasai&gt; hyatt: I don't think there's anything to be concerned about. scrollbars should be positioned consistently throughout the page, i.e. according to the user's OS settings</li>
+ <li id="l-311" _a="fantasai" _r="hyatt"><a href="#l-311">#</a> [06:01] &lt;fantasai&gt; hyatt: The only difference is which way they're allowed to scroll</li>
+ <li id="l-312" _a="fantasai" _r="hyatt"><a href="#l-312">#</a> [06:01] &lt;fantasai&gt; hyatt: you want the origin in the start before corner and allow scrolling down to the end after corner</li>
+ <li id="l-313" _a="fantasai" _r="hyatt"><a href="#l-313">#</a> [06:10] &lt;fantasai&gt; hyatt: also... I am wondering if we can alter the terms to be more consistent with multicol somehow</li>
+ <li id="l-314" _a="fantasai" _r="hyatt"><a href="#l-314">#</a> [06:10] &lt;fantasai&gt; hyatt: that uses width and length as logical properties</li>
+ <li id="l-315" _a="fantasai" _r="hyatt"><a href="#l-315">#</a> [06:11] &lt;fantasai&gt; hyatt: which would mean height and something else as physical properties</li>
+ <li id="l-316" _a="fantasai"><a href="#l-316">#</a> [06:11] * fantasai can't come up with any synonyms for width though. :/</li>
+ <li id="l-317" _a="fantasai"><a href="#l-317">#</a> [06:12] &lt;fantasai&gt; it would make logical variants of width/height less painful to use, though, if they weren't so awkwardly named</li>
+ <li id="l-318"><a href="#l-318">#</a> [07:21] * Quits: Figaroo (Figaroo@70.234.3.170) (Quit: Leaving)</li>
+ <li id="l-319" _a="hyatt" _r="fantasai"><a href="#l-319">#</a> [07:33] &lt;hyatt&gt; fantasai: yeah winie throws the scrollbars on different box sides</li>
+ <li id="l-320" _a="hyatt" _r="fantasai"><a href="#l-320">#</a> [07:33] &lt;hyatt&gt; fantasai: which i think is nuts</li>
+ <li id="l-321"><a href="#l-321">#</a> [08:19] * Joins: nimbupani (nimbupani@24.22.131.46)</li>
+ <li id="l-322"><a href="#l-322">#</a> [08:28] * Disconnected</li>
+ <li id="l-323" _a="Attempting"><a href="#l-323">#</a> [08:29] * Attempting to rejoin channel #css</li>
+ <li id="l-324" _a="Rejoined"><a href="#l-324">#</a> [08:29] * Rejoined channel #css</li>
+ <li id="l-325" _a="Topic"><a href="#l-325">#</a> [08:29] * Topic is 'CSS Working Group discussion'</li>
+ <li id="l-326" _a="Set"><a href="#l-326">#</a> [08:29] * Set by fantasai on Mon Aug 02 00:49:50</li>
+ <li id="l-327"><a href="#l-327">#</a> [08:32] * Joins: jdaggett (jdaggett@202.221.217.73)</li>
+ <li id="l-328"><a href="#l-328">#</a> [09:31] * Quits: nimbupani (nimbupani@24.22.131.46) (Quit: nimbupani)</li>
+ <li id="l-329"><a href="#l-329">#</a> [10:40] * Quits: karl (karlcow@128.30.54.58) (Ping timeout)</li>
+ <li id="l-330"><a href="#l-330">#</a> [10:41] * Joins: karl (karlcow@128.30.54.58)</li>
+ <li id="l-331"><a href="#l-331">#</a> [10:44] * Quits: arronei (arronei@131.107.0.69) (Ping timeout)</li>
+ <li id="l-332"><a href="#l-332">#</a> [10:49] * Joins: anne (annevk@83.85.115.123)</li>
+ <li id="l-333"><a href="#l-333">#</a> [10:50] * Joins: arronei (arronei@131.107.0.105)</li>
+ <li id="l-334"><a href="#l-334">#</a> [11:12] * Quits: jdaggett (jdaggett@202.221.217.73) (Quit: jdaggett)</li>
+ <li id="l-335"><a href="#l-335">#</a> [12:04] * Quits: kennyluck (kennyluck@128.30.52.28) (Quit: kennyluck)</li>
+ <li id="l-336"><a href="#l-336">#</a> [14:04] * Disconnected</li>
+ <li id="l-337" _a="Attempting"><a href="#l-337">#</a> [14:05] * Attempting to rejoin channel #css</li>
+ <li id="l-338" _a="Rejoined"><a href="#l-338">#</a> [14:05] * Rejoined channel #css</li>
+ <li id="l-339" _a="Topic"><a href="#l-339">#</a> [14:05] * Topic is 'CSS Working Group discussion'</li>
+ <li id="l-340" _a="Set"><a href="#l-340">#</a> [14:05] * Set by fantasai on Mon Aug 02 00:49:50</li>
+ <li id="l-341"><a href="#l-341">#</a> [14:36] * Joins: karl (karlcow@128.30.54.58)</li>
+ <li id="l-342"><a href="#l-342">#</a> [15:01] * Joins: jdaggett (jdaggett@183.77.242.62)</li>
+ <li id="l-343"><a href="#l-343">#</a> [15:30] * Joins: kennyluck (kennyluck@128.30.52.28)</li>
+ <li id="l-344"><a href="#l-344">#</a> [16:05] * Joins: szilles (chatzilla@67.188.27.37)</li>
+ <li id="l-345"><a href="#l-345">#</a> [16:30] * Joins: Ms2ger (Ms2ger@91.181.33.168)</li>
+ <li id="l-346"><a href="#l-346">#</a> [16:31] * Joins: nimbupani (nimbupani@24.22.131.46)</li>
+ <li id="l-347"><a href="#l-347">#</a> [17:31] * Joins: glazou (glazou@82.247.96.19)</li>
+ <li id="l-348"><a href="#l-348">#</a> [17:31] * Joins: Zakim (rrs-bridgg@128.30.52.169)</li>
+ <li id="l-349"><a href="#l-349">#</a> [17:31] * Joins: RRSAgent (rrs-loggee@128.30.52.169)</li>
+ <li id="l-350" _a="RRSAgent"><a href="#l-350">#</a> [17:31] &lt;RRSAgent&gt; logging to <a href="http://www.w3.org/2010/09/29-CSS-irc">http://www.w3.org/2010/09/29-CSS-irc</a></li>
+ <li id="l-351" _a="glazou" _r="Zakim"><a href="#l-351">#</a> [17:31] &lt;glazou&gt; Zakim, this will be Style</li>
+ <li id="l-352" _a="Zakim" _r="ok"><a href="#l-352">#</a> [17:31] &lt;Zakim&gt; ok, glazou; I see Style_CSS FP()12:00PM scheduled to start in 32 minutes</li>
+ <li id="l-353" _a="glazou" _r="RRSAgent"><a href="#l-353">#</a> [17:31] &lt;glazou&gt; RRSAgent, make logs public</li>
+ <li id="l-354" _a="RRSAgent"><a href="#l-354">#</a> [17:31] &lt;RRSAgent&gt; I have made the request, glazou</li>
+ <li id="l-355"><a href="#l-355">#</a> [17:34] * Parts: nimbupani (nimbupani@24.22.131.46)</li>
+ <li id="l-356"><a href="#l-356">#</a> [17:51] * Joins: oyvind (oyvinds@213.236.208.22)</li>
+ <li id="l-357" _a="glazou"><a href="#l-357">#</a> [17:57] &lt;glazou&gt; rhâââ european bridge saturated, as usual</li>
+ <li id="l-358" _a="glazou" _r="Zakim"><a href="#l-358">#</a> [17:57] &lt;glazou&gt; Zakim, code?</li>
+ <li id="l-359" _a="Zakim"><a href="#l-359">#</a> [17:57] &lt;Zakim&gt; the conference code is 78953 (tel:+1.617.761.6200 tel:+33.4.26.46.79.03 tel:+44.203.318.0479), glazou</li>
+ <li id="l-360"><a href="#l-360">#</a> [18:00] * Joins: murakami (murakami@118.154.209.3)</li>
+ <li id="l-361" _a="Zakim"><a href="#l-361">#</a> [18:00] &lt;Zakim&gt; Style_CSS FP()12:00PM has now started</li>
+ <li id="l-362" _a="Zakim"><a href="#l-362">#</a> [18:00] &lt;Zakim&gt; +glazou</li>
+ <li id="l-363"><a href="#l-363">#</a> [18:00] * Joins: bradk (bradk@67.188.133.45)</li>
+ <li id="l-364" _a="Zakim"><a href="#l-364">#</a> [18:01] &lt;Zakim&gt; +[plinss]</li>
+ <li id="l-365"><a href="#l-365">#</a> [18:01] * Joins: dethbakin (dethbakin@76.102.99.47)</li>
+ <li id="l-366"><a href="#l-366">#</a> [18:01] * Joins: ChrisL (ChrisL@128.30.52.169)</li>
+ <li id="l-367" _a="Zakim"><a href="#l-367">#</a> [18:01] &lt;Zakim&gt; +??P12</li>
+ <li id="l-368" _a="fantasai" _r="Zakim"><a href="#l-368">#</a> [18:02] &lt;fantasai&gt; Zakim, ??P12 is me</li>
+ <li id="l-369" _a="Zakim" _r="+fantasai"><a href="#l-369">#</a> [18:02] &lt;Zakim&gt; +fantasai; got it</li>
+ <li id="l-370" _a="Zakim"><a href="#l-370">#</a> [18:02] &lt;Zakim&gt; +bradk</li>
+ <li id="l-371"><a href="#l-371">#</a> [18:02] * Joins: kojiishi (kojiishi@222.158.227.129)</li>
+ <li id="l-372" _a="Zakim"><a href="#l-372">#</a> [18:03] &lt;Zakim&gt; +??P14</li>
+ <li id="l-373" _a="jdaggett" _r="zakim"><a href="#l-373">#</a> [18:03] &lt;jdaggett&gt; zakim, p14 is jdaggett</li>
+ <li id="l-374" _a="Zakim" _r="sorry"><a href="#l-374">#</a> [18:03] &lt;Zakim&gt; sorry, jdaggett, I do not recognize a party named 'p14'</li>
+ <li id="l-375" _a="jdaggett" _r="zakim"><a href="#l-375">#</a> [18:03] &lt;jdaggett&gt; zakim, +??P14 is jdaggett</li>
+ <li id="l-376" _a="Zakim" _r="sorry"><a href="#l-376">#</a> [18:03] &lt;Zakim&gt; sorry, jdaggett, I do not recognize a party named '+??P14'</li>
+ <li id="l-377" _a="Ms2ger" _r="zakim"><a href="#l-377">#</a> [18:03] &lt;Ms2ger&gt; zakim, ??P14 is jdaggett</li>
+ <li id="l-378" _a="Zakim" _r="+jdaggett"><a href="#l-378">#</a> [18:03] &lt;Zakim&gt; +jdaggett; got it</li>
+ <li id="l-379" _a="jdaggett"><a href="#l-379">#</a> [18:04] &lt;jdaggett&gt; thx</li>
+ <li id="l-380" _a="glazou"><a href="#l-380">#</a> [18:04] &lt;glazou&gt; note to self: extra item <a href="http://www.w3.org/mid/4C9CC808.7010402@nokia.com">http://www.w3.org/mid/4C9CC808.7010402@nokia.com</a></li>
+ <li id="l-381" _a="Ms2ger"><a href="#l-381">#</a> [18:04] &lt;Ms2ger&gt; np</li>
+ <li id="l-382"><a href="#l-382">#</a> [18:04] * Joins: smfr (smfr@72.25.91.178)</li>
+ <li id="l-383" _a="Zakim"><a href="#l-383">#</a> [18:04] &lt;Zakim&gt; +??P18</li>
+ <li id="l-384" _a="Zakim"><a href="#l-384">#</a> [18:04] &lt;Zakim&gt; +ChrisL</li>
+ <li id="l-385"><a href="#l-385">#</a> [18:04] * Joins: TabAtkins_ (tabatkins@216.239.45.19)</li>
+ <li id="l-386" _a="Zakim"><a href="#l-386">#</a> [18:05] &lt;Zakim&gt; +[Microsoft]</li>
+ <li id="l-387" _a="Zakim"><a href="#l-387">#</a> [18:05] &lt;Zakim&gt; +smfr</li>
+ <li id="l-388" _a="Zakim"><a href="#l-388">#</a> [18:05] &lt;Zakim&gt; +Bert</li>
+ <li id="l-389" _a="arronei" _r="zakim"><a href="#l-389">#</a> [18:05] &lt;arronei&gt; zakim, microsoft has arronei</li>
+ <li id="l-390" _a="Zakim"><a href="#l-390">#</a> [18:05] &lt;Zakim&gt; + +1.650.214.aaaa</li>
+ <li id="l-391" _a="Zakim" _r="+arronei"><a href="#l-391">#</a> [18:05] &lt;Zakim&gt; +arronei; got it</li>
+ <li id="l-392" _a="TabAtkins_" _r="zakim"><a href="#l-392">#</a> [18:05] &lt;TabAtkins_&gt; zakim, aaaa is me</li>
+ <li id="l-393" _a="Zakim" _r="+TabAtkins_"><a href="#l-393">#</a> [18:05] &lt;Zakim&gt; +TabAtkins_; got it</li>
+ <li id="l-394" _a="glazou" _r="Zakim"><a href="#l-394">#</a> [18:06] &lt;glazou&gt; Zakim, who is here?</li>
+ <li id="l-395" _a="Zakim"><a href="#l-395">#</a> [18:06] &lt;Zakim&gt; On the phone I see glazou, [plinss], fantasai, bradk, jdaggett, ??P18, ChrisL, [Microsoft], smfr, Bert, TabAtkins_</li>
+ <li id="l-396" _a="Zakim"><a href="#l-396">#</a> [18:06] &lt;Zakim&gt; [Microsoft] has arronei</li>
+ <li id="l-397"><a href="#l-397">#</a> [18:06] * Joins: alexmog (alexmog@131.107.0.117)</li>
+ <li id="l-398" _a="Zakim"><a href="#l-398">#</a> [18:06] &lt;Zakim&gt; On IRC I see TabAtkins_, smfr, kojiishi, ChrisL, dethbakin, bradk, murakami, oyvind, RRSAgent, Zakim, glazou, Ms2ger, szilles, kennyluck, jdaggett, karl, krijnh, arronei, anne,</li>
+ <li id="l-399" _a="Zakim"><a href="#l-399">#</a> [18:06] &lt;Zakim&gt; ... hyatt, tabatkins, shepazu, jgraham, fantasai, plinss_, Bert, plinss, lhnz, Hixie, gsnedders, trackbot</li>
+ <li id="l-400" _a="glazou" _r="Zakim"><a href="#l-400">#</a> [18:08] &lt;glazou&gt; Zakim, ??P18 is kojiishi</li>
+ <li id="l-401" _a="Zakim" _r="+kojiishi"><a href="#l-401">#</a> [18:08] &lt;Zakim&gt; +kojiishi; got it</li>
+ <li id="l-402" _a="TabAtkins_" _r="ScribeNick"><a href="#l-402">#</a> [18:08] &lt;TabAtkins_&gt; ScribeNick: TabAtkins_</li>
+ <li id="l-403" _a="Zakim"><a href="#l-403">#</a> [18:09] &lt;Zakim&gt; +SteveZ</li>
+ <li id="l-404" _a="TabAtkins_" _r="glazou"><a href="#l-404">#</a> [18:09] &lt;TabAtkins_&gt; glazou: Request from Art Barstow for extra agenda item.</li>
+ <li id="l-405" _a="glazou"><a href="#l-405">#</a> [18:09] &lt;glazou&gt; <a href="http://www.w3.org/mid/4C9CC808.7010402@nokia.com">http://www.w3.org/mid/4C9CC808.7010402@nokia.com</a></li>
+ <li id="l-406" _a="TabAtkins_" _r="glazou"><a href="#l-406">#</a> [18:10] &lt;TabAtkins_&gt; glazou: Now, CSS2.1.  Where are we with the test suite, IR, etc.?</li>
+ <li id="l-407" _a="TabAtkins_" _r="glazou"><a href="#l-407">#</a> [18:10] &lt;TabAtkins_&gt; glazou: First, test suite.</li>
+ <li id="l-408" _a="TabAtkins_" _r="fantasai"><a href="#l-408">#</a> [18:10] &lt;TabAtkins_&gt; fantasai: There were a bunch of edits checked in by gsnedders about updating metadata.</li>
+ <li id="l-409" _a="TabAtkins_" _r="fantasai"><a href="#l-409">#</a> [18:10] &lt;TabAtkins_&gt; fantasai: And some other fixes.</li>
+ <li id="l-410" _a="Zakim"><a href="#l-410">#</a> [18:10] &lt;Zakim&gt; +howcome</li>
+ <li id="l-411" _a="TabAtkins_" _r="fantasai"><a href="#l-411">#</a> [18:10] &lt;TabAtkins_&gt; fantasai: I'm not certain every issue has been addressed.  If requested, I could publish a snapshot today.</li>
+ <li id="l-412" _a="TabAtkins_" _r="glazou"><a href="#l-412">#</a> [18:10] &lt;TabAtkins_&gt; glazou: What about IR?</li>
+ <li id="l-413" _a="TabAtkins_" _r="smfr"><a href="#l-413">#</a> [18:10] &lt;TabAtkins_&gt; smfr: I anticipate that Apple will be able to do test reports.</li>
+ <li id="l-414"><a href="#l-414">#</a> [18:11] * Joins: howcome (howcome@80.203.20.94)</li>
+ <li id="l-415" _a="TabAtkins_" _r="smfr"><a href="#l-415">#</a> [18:11] &lt;TabAtkins_&gt; smfr: I just need ot know which version to test - we probably won't be able to do this more than once.</li>
+ <li id="l-416" _a="TabAtkins_" _r="arronei"><a href="#l-416">#</a> [18:11] &lt;TabAtkins_&gt; arronei: If we were to publish an update, we'll list only the differences from the previous, so you could just run today's testsuite and then run the handful of tests from the new suite.</li>
+ <li id="l-417" _a="TabAtkins_" _r="smfr"><a href="#l-417">#</a> [18:11] &lt;TabAtkins_&gt; smfr: That would be fine.</li>
+ <li id="l-418" _a="TabAtkins_" _r="glazou"><a href="#l-418">#</a> [18:12] &lt;TabAtkins_&gt; glazou: So for now take the 20100917 version, linked form the testsuite page.</li>
+ <li id="l-419" _a="TabAtkins_" _r="glazou"><a href="#l-419">#</a> [18:12] &lt;TabAtkins_&gt; glazou: I pinged Opera and Moz to ask if we could have an impl report from them.</li>
+ <li id="l-420" _a="TabAtkins_" _r="howcome"><a href="#l-420">#</a> [18:12] &lt;TabAtkins_&gt; howcome: We should be able to do it, I just need to get the right people internally.</li>
+ <li id="l-421" _a="TabAtkins_" _r="glazou"><a href="#l-421">#</a> [18:12] &lt;TabAtkins_&gt; glazou: When do Opera and Apple think they could submit it?</li>
+ <li id="l-422" _a="TabAtkins_" _r="howcome"><a href="#l-422">#</a> [18:13] &lt;TabAtkins_&gt; howcome: That's a much harder question to answer.  ^_^</li>
+ <li id="l-423" _a="TabAtkins_" _r="glazou"><a href="#l-423">#</a> [18:13] &lt;TabAtkins_&gt; glazou: I understand.  Mid november, that would be fine.  Mid Feb, not so fine.</li>
+ <li id="l-424" _a="TabAtkins_" _r="smfr"><a href="#l-424">#</a> [18:13] &lt;TabAtkins_&gt; smfr: We anticipate by the end of Oct, possibly by mid Oct.</li>
+ <li id="l-425" _a="TabAtkins_" _r="howcome"><a href="#l-425">#</a> [18:13] &lt;TabAtkins_&gt; howcome: I can't give a date at this point.</li>
+ <li id="l-426" _a="ChrisL"><a href="#l-426">#</a> [18:14] * ChrisL can run the tests for Mozilla if that will help; end October sounds realistic. Great to head Opera and Apple stepping up</li>
+ <li id="l-427" _a="TabAtkins_" _r="glazou"><a href="#l-427">#</a> [18:14] &lt;TabAtkins_&gt; glazou: Understood; it's not super urgent right now, but we need more IRs more tests that aren't passing in at least 2 yet.</li>
+ <li id="l-428" _a="TabAtkins_" _r="smfr"><a href="#l-428">#</a> [18:14] &lt;TabAtkins_&gt; smfr: I implemented a harness that lets you run through the test suite, with a few extra features.</li>
+ <li id="l-429" _a="TabAtkins_" _r="glazou"><a href="#l-429">#</a> [18:15] &lt;TabAtkins_&gt; glazou: Great; if you could submit it to the group or www-style it could be useful.</li>
+ <li id="l-430" _a="TabAtkins_" _r="glazou"><a href="#l-430">#</a> [18:15] &lt;TabAtkins_&gt; glazou: I would like to warn all members of the WG that some tests require a change of character encoding for the doc, and some browsers reload when they do that.</li>
+ <li id="l-431" _a="TabAtkins_" _r="smfr"><a href="#l-431">#</a> [18:15] &lt;TabAtkins_&gt; smfr: Do we have a flag for tests that require a change in character encoding?</li>
+ <li id="l-432" _a="TabAtkins_" _r="TabAtkins_"><a href="#l-432">#</a> [18:16] &lt;TabAtkins_&gt; TabAtkins_: I don't believe so.</li>
+ <li id="l-433" _a="TabAtkins_" _r="fantasai"><a href="#l-433">#</a> [18:16] &lt;TabAtkins_&gt; fantasai: Do you mean changing character encoding via UI, via HTTP, via @charset, via &lt;meta&gt;...?</li>
+ <li id="l-434" _a="TabAtkins_" _r="glazou"><a href="#l-434">#</a> [18:16] &lt;TabAtkins_&gt; glazou: The ones I was mentioning were about changing it in the UI.</li>
+ <li id="l-435" _a="ChrisL"><a href="#l-435">#</a> [18:16] &lt;ChrisL&gt; The ones where usrer interaction is required</li>
+ <li id="l-436" _a="TabAtkins_" _r="fantasai"><a href="#l-436">#</a> [18:16] &lt;TabAtkins_&gt; fantasai: I think we should mark those as &quot;need user interaction&quot; or do a separate flag.</li>
+ <li id="l-437" _a="TabAtkins_" _r="smfr"><a href="#l-437">#</a> [18:16] &lt;TabAtkins_&gt; smfr: I'd prefer a separate flag.</li>
+ <li id="l-438" _a="TabAtkins_" _r="fantasai"><a href="#l-438">#</a> [18:16] &lt;TabAtkins_&gt; fantasai: Okay.</li>
+ <li id="l-439"><a href="#l-439">#</a> [18:17] * Joins: JohnJan (qw3birc@128.30.52.28)</li>
+ <li id="l-440" _a="TabAtkins_" _r="fantasai"><a href="#l-440">#</a> [18:17] &lt;TabAtkins_&gt; fantasai: Do we need one for general &quot;needs special settings&quot;, or should we split it out?</li>
+ <li id="l-441" _a="glazou"><a href="#l-441">#</a> [18:17] * glazou is really about opera and apple IRs; thanks guys</li>
+ <li id="l-442" _a="glazou"><a href="#l-442">#</a> [18:17] &lt;glazou&gt; really glad</li>
+ <li id="l-443" _a="TabAtkins_" _r="smfr"><a href="#l-443">#</a> [18:17] &lt;TabAtkins_&gt; smfr: I think it's okay to share a flag with user styles.</li>
+ <li id="l-444" _a="TabAtkins_" _r="fantasai"><a href="#l-444">#</a> [18:17] &lt;TabAtkins_&gt; fantasai: Okay.  I can't do that tonight, but I'll look into it.</li>
+ <li id="l-445" _a="Zakim"><a href="#l-445">#</a> [18:17] &lt;Zakim&gt; +[Microsoft.a]</li>
+ <li id="l-446" _a="TabAtkins_" _r="glazou"><a href="#l-446">#</a> [18:17] &lt;TabAtkins_&gt; glazou: Enough about the test suite.  Bert, you had a list of edits to do.</li>
+ <li id="l-447" _a="TabAtkins_" _r="Bert"><a href="#l-447">#</a> [18:18] &lt;TabAtkins_&gt; Bert: I didn't do as much as I had hoped to do.  I've done 6, and I think 20 left.</li>
+ <li id="l-448" _a="ChrisL"><a href="#l-448">#</a> [18:18] * ChrisL did we hear about IR from Microsoft?</li>
+ <li id="l-449" _a="TabAtkins_" _r="Bert"><a href="#l-449">#</a> [18:18] &lt;TabAtkins_&gt; Bert: I assume I can do the remaining edits in 2 weeks.</li>
+ <li id="l-450" _a="TabAtkins_" _r="glazou"><a href="#l-450">#</a> [18:18] &lt;TabAtkins_&gt; glazou: Anything blocking any of these?</li>
+ <li id="l-451" _a="TabAtkins_" _r="Bert"><a href="#l-451">#</a> [18:18] &lt;TabAtkins_&gt; Bert: I don't think so.</li>
+ <li id="l-452" _a="TabAtkins_" _r="Bert"><a href="#l-452">#</a> [18:18] &lt;TabAtkins_&gt; Bert: But I need to review some of Elika's edits.</li>
+ <li id="l-453" _a="Bert"><a href="#l-453">#</a> [18:19] &lt;Bert&gt; s/Elika's edits/Elika's reviews of my edits/</li>
+ <li id="l-454"><a href="#l-454">#</a> [18:19] * Joins: sylvaing (sylvaing@131.107.0.101)</li>
+ <li id="l-455" _a="TabAtkins_" _r="TabAtkins_"><a href="#l-455">#</a> [18:19] &lt;TabAtkins_&gt; TabAtkins_: I will have the rest of my 2.1 issues on the list by today.</li>
+ <li id="l-456" _a="TabAtkins_" _r="szilles"><a href="#l-456">#</a> [18:19] &lt;TabAtkins_&gt; szilles: I sent a message to the list yesterday pointing to the issue I had open.</li>
+ <li id="l-457" _a="sylvaing"><a href="#l-457">#</a> [18:19] * sylvaing is unfashionably late</li>
+ <li id="l-458" _a="TabAtkins_"><a href="#l-458">#</a> [18:20] * TabAtkins_ tsk tsk, Sylvain!</li>
+ <li id="l-459" _a="ChrisL"><a href="#l-459">#</a> [18:20] &lt;ChrisL&gt; <a href="http://wiki.csswg.org/spec/css2.1#issue-198">http://wiki.csswg.org/spec/css2.1#issue-198</a></li>
+ <li id="l-460" _a="sylvaing"><a href="#l-460">#</a> [18:20] * sylvaing GPUs don't squat for traffic</li>
+ <li id="l-461" _a="Bert"><a href="#l-461">#</a> [18:20] &lt;Bert&gt;   <a href="http://lists.w3.org/Archives/Public/www-style/2010Sep/0674.html">http://lists.w3.org/Archives/Public/www-style/2010Sep/0674.html</a></li>
+ <li id="l-462" _a="ChrisL"><a href="#l-462">#</a> [18:20] &lt;ChrisL&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2010Sep/0674.html">http://lists.w3.org/Archives/Public/www-style/2010Sep/0674.html</a></li>
+ <li id="l-463" _a="TabAtkins_" _r="glazou"><a href="#l-463">#</a> [18:20] &lt;TabAtkins_&gt; glazou: Can you summarize, Steve?</li>
+ <li id="l-464" _a="TabAtkins_" _r="szilles"><a href="#l-464">#</a> [18:21] &lt;TabAtkins_&gt; szilles: The problem is that, with runins, floats inside the runins - how do they relate to floats that precede and follow the runin?</li>
+ <li id="l-465" _a="fantasai"><a href="#l-465">#</a> [18:21] * fantasai proposes marking run-in at risk</li>
+ <li id="l-466" _a="TabAtkins_" _r="szilles"><a href="#l-466">#</a> [18:21] &lt;TabAtkins_&gt; szilles: I think we decided in Oslo that runins that run in are rendered/treated as a child of the block.  So a float that originally came between the runin and the block is now treated as preceding the runin.</li>
+ <li id="l-467" _a="TabAtkins_" _r="glazou"><a href="#l-467">#</a> [18:22] &lt;TabAtkins_&gt; glazou: MS, do you think run-in is sufficiently bad to be at risk?</li>
+ <li id="l-468" _a="TabAtkins_" _r="arronei"><a href="#l-468">#</a> [18:23] &lt;TabAtkins_&gt; arronei: runins are pretty much fully implemented in IE and Opera.  A few iffy areas around tables, but otherwise the 100+ tests we have are passed by both, and by Safari for many of them.</li>
+ <li id="l-469" _a="TabAtkins_" _r="glazou"><a href="#l-469">#</a> [18:23] &lt;TabAtkins_&gt; glazou: So, Elika, is it worth putting it at risk?</li>
+ <li id="l-470" _a="TabAtkins_" _r="fantasai"><a href="#l-470">#</a> [18:23] &lt;TabAtkins_&gt; fantasai: Eh, if we have interop in everything but floats, that's probably good enough for most people.</li>
+ <li id="l-471" _a="TabAtkins_" _r="szilles"><a href="#l-471">#</a> [18:24] &lt;TabAtkins_&gt; szilles: That's separate from the issue at hand, though, about runin and float interaction.</li>
+ <li id="l-472" _a="TabAtkins_" _r="glazou"><a href="#l-472">#</a> [18:24] &lt;TabAtkins_&gt; glazou: If it ends up being at risk, we can just mark it undefined.</li>
+ <li id="l-473" _a="TabAtkins_" _r="Bert"><a href="#l-473">#</a> [18:24] &lt;TabAtkins_&gt; Bert: I have two things to say.</li>
+ <li id="l-474" _a="TabAtkins_" _r="Bert"><a href="#l-474">#</a> [18:25] &lt;TabAtkins_&gt; Bert: First is that the &quot;first line&quot; bit is complicated.</li>
+ <li id="l-475" _a="TabAtkins_" _r="Bert"><a href="#l-475">#</a> [18:25] &lt;TabAtkins_&gt; Bert: It's not wrong, it's just unclear I think.</li>
+ <li id="l-476" _a="TabAtkins_" _r="szilles"><a href="#l-476">#</a> [18:25] &lt;TabAtkins_&gt; szilles: I'm okay with juts saying &quot;rendered as an inline (refer to section XX)&quot;.</li>
+ <li id="l-477" _a="TabAtkins_" _r="Bert"><a href="#l-477">#</a> [18:26] &lt;TabAtkins_&gt; Bert: Second was a typo.</li>
+ <li id="l-478" _a="ChrisL"><a href="#l-478">#</a> [18:26] * ChrisL can no-one hear me?</li>
+ <li id="l-479" _a="TabAtkins_"><a href="#l-479">#</a> [18:26] * TabAtkins_ No, we can't here you, Chris.</li>
+ <li id="l-480" _a="ChrisL"><a href="#l-480">#</a> [18:26] * ChrisL redials</li>
+ <li id="l-481" _a="Zakim"><a href="#l-481">#</a> [18:26] &lt;Zakim&gt; -ChrisL</li>
+ <li id="l-482" _a="TabAtkins_"><a href="#l-482">#</a> [18:26] * TabAtkins_ s/here/hear/</li>
+ <li id="l-483" _a="Zakim"><a href="#l-483">#</a> [18:27] &lt;Zakim&gt; +ChrisL</li>
+ <li id="l-484" _a="ChrisL"><a href="#l-484">#</a> [18:28] * ChrisL helooooo????</li>
+ <li id="l-485" _a="glazou"><a href="#l-485">#</a> [18:28] &lt;glazou&gt; we can't hear you</li>
+ <li id="l-486" _a="Zakim"><a href="#l-486">#</a> [18:28] &lt;Zakim&gt; -ChrisL</li>
+ <li id="l-487" _a="TabAtkins_" _r="szilles"><a href="#l-487">#</a> [18:28] &lt;TabAtkins_&gt; szilles: There were comments from bz, but they were just saying that the general area about how floats are painted is undefined, but the actual part I defined is fine.</li>
+ <li id="l-488" _a="glazou"><a href="#l-488">#</a> [18:28] &lt;glazou&gt; type here pls</li>
+ <li id="l-489" _a="ChrisL"><a href="#l-489">#</a> [18:28] &lt;ChrisL&gt; Its is better to me to have normative text included and to put the subfeature at risk</li>
+ <li id="l-490" _a="ChrisL"><a href="#l-490">#</a> [18:28] &lt;ChrisL&gt; rather than the whole feature</li>
+ <li id="l-491" _a="ChrisL"><a href="#l-491">#</a> [18:28] &lt;ChrisL&gt; or having nio definition and thus no guidance for implementors</li>
+ <li id="l-492" _a="glazou"><a href="#l-492">#</a> [18:28] &lt;glazou&gt; yes</li>
+ <li id="l-493" _a="bradk"><a href="#l-493">#</a> [18:29] &lt;bradk&gt; agreed</li>
+ <li id="l-494" _a="TabAtkins_" _r="RESOLVED"><a href="#l-494">#</a> [18:29] &lt;TabAtkins_&gt; RESOLVED: Accept szilles' edits regarding floats and runins, but mark the float/runin interaction as at-risk.</li>
+ <li id="l-495" _a="ChrisL"><a href="#l-495">#</a> [18:30] * ChrisL &quot;sorry, the number you have reached is not in service&quot; sigh</li>
+ <li id="l-496" _a="TabAtkins_" _r="glazou"><a href="#l-496">#</a> [18:30] &lt;TabAtkins_&gt; glazou: Next agenda item would be about CSS3 Color, but tantek isn't on the call and we can't hear Chris.</li>
+ <li id="l-497" _a="TabAtkins_" _r="glazou"><a href="#l-497">#</a> [18:30] &lt;TabAtkins_&gt; glazou: We'll skip it and come back.</li>
+ <li id="l-498" _a="ChrisL"><a href="#l-498">#</a> [18:30] &lt;ChrisL&gt; noo</li>
+ <li id="l-499" _a="TabAtkins_" _r="glazou"><a href="#l-499">#</a> [18:30] &lt;TabAtkins_&gt; glazou: Next is about the style attribute.</li>
+ <li id="l-500" _a="Zakim"><a href="#l-500">#</a> [18:30] &lt;Zakim&gt; +ChrisL</li>
+ <li id="l-501" _a="TabAtkins_" _r="glazou"><a href="#l-501">#</a> [18:30] &lt;TabAtkins_&gt; glazou: Bert, I see you sent a request for PR, anything else need to happen?</li>
+ <li id="l-502" _a="TabAtkins_"><a href="#l-502">#</a> [18:31] * TabAtkins_ Still no good, Chris.</li>
+ <li id="l-503" _a="glazou" _r="ChrisL"><a href="#l-503">#</a> [18:31] &lt;glazou&gt; ChrisL: isn't it YOUR phone ?</li>
+ <li id="l-504" _a="Zakim"><a href="#l-504">#</a> [18:31] &lt;Zakim&gt; -ChrisL</li>
+ <li id="l-505" _a="TabAtkins_" _r="Bert"><a href="#l-505">#</a> [18:31] &lt;TabAtkins_&gt; Bert: No, we just need to wait for the telcon.</li>
+ <li id="l-506" _a="TabAtkins_" _r="glazou"><a href="#l-506">#</a> [18:31] &lt;TabAtkins_&gt; glazou: next is about epub laiason.  Bert?</li>
+ <li id="l-507" _a="TabAtkins_" _r="Bert"><a href="#l-507">#</a> [18:31] &lt;TabAtkins_&gt; Bert: w3c has a laiason with the epub group.  It's handled by MikeSmith on this side.</li>
+ <li id="l-508" _a="TabAtkins_" _r="Bert"><a href="#l-508">#</a> [18:32] &lt;TabAtkins_&gt; Bert: They've asked us to provide more laiason with CSS.</li>
+ <li id="l-509" _a="glazou" _r="plinss_"><a href="#l-509">#</a> [18:32] &lt;glazou&gt; plinss_: could you conference ChrisL  in ?</li>
+ <li id="l-510" _a="TabAtkins_" _r="Bert"><a href="#l-510">#</a> [18:32] &lt;TabAtkins_&gt; Bert: They've shown their schedule for their expected spec, and they seem to be in quite a hurry to get it published.</li>
+ <li id="l-511" _a="ChrisL"><a href="#l-511">#</a> [18:32] * ChrisL calls from another phone</li>
+ <li id="l-512" _a="glazou"><a href="#l-512">#</a> [18:32] &lt;glazou&gt; ok ChrisL</li>
+ <li id="l-513" _a="Zakim"><a href="#l-513">#</a> [18:32] &lt;Zakim&gt; + +39.524.9.aabb</li>
+ <li id="l-514" _a="TabAtkins_" _r="jdaggett"><a href="#l-514">#</a> [18:32] &lt;TabAtkins_&gt; jdaggett: If you dig around in their doc, their set of requirements is fairly jaw-dropping - hyphenation, encoding schemes, etc.</li>
+ <li id="l-515" _a="TabAtkins_" _r="zakim"><a href="#l-515">#</a> [18:33] &lt;TabAtkins_&gt; zakim, aabb is ChrisL</li>
+ <li id="l-516" _a="Zakim" _r="+ChrisL"><a href="#l-516">#</a> [18:33] &lt;Zakim&gt; +ChrisL; got it</li>
+ <li id="l-517" _a="TabAtkins_" _r="jdaggett"><a href="#l-517">#</a> [18:33] &lt;TabAtkins_&gt; jdaggett: So, what is the goal?</li>
+ <li id="l-518" _a="TabAtkins_" _r="Bert"><a href="#l-518">#</a> [18:33] &lt;TabAtkins_&gt; Bert: Good question.  I don't have one.  I'm asking for how best to coordinate with them; we should also discuss what our goal for coordinating with them as well.</li>
+ <li id="l-519" _a="TabAtkins_" _r="Bert"><a href="#l-519">#</a> [18:33] &lt;TabAtkins_&gt; Bert: We should probably tell them that their goal is too high - we can't finish that much of CSS3 in time, but we can do parts of it.</li>
+ <li id="l-520" _a="TabAtkins_" _r="howcome"><a href="#l-520">#</a> [18:34] &lt;TabAtkins_&gt; howcome: hyphenation is finished, for example.</li>
+ <li id="l-521" _a="TabAtkins_" _r="Bert"><a href="#l-521">#</a> [18:34] &lt;TabAtkins_&gt; Bert: We have good proposals, can they be brought to CR in time?</li>
+ <li id="l-522" _a="TabAtkins_" _r="howcome"><a href="#l-522">#</a> [18:34] &lt;TabAtkins_&gt; howcome: I think so, if we fork it out separately.</li>
+ <li id="l-523" _a="TabAtkins_" _r="fantasai"><a href="#l-523">#</a> [18:34] &lt;TabAtkins_&gt; fantasai: I think I agree with howcome that we can get hyphenation to CR.  I'm also trying to get the rest of CSS3 Text to CR, because many of the features they want are in that draft.</li>
+ <li id="l-524" _a="TabAtkins_" _r="Bert"><a href="#l-524">#</a> [18:35] &lt;TabAtkins_&gt; Bert: jdaggett, you said there were more features?</li>
+ <li id="l-525" _a="TabAtkins_" _r="jdaggett"><a href="#l-525">#</a> [18:35] &lt;TabAtkins_&gt; jdaggett: Vertical text - we're still arguing about the fundamental properties.  It needs to be well-defined by the end of the year.</li>
+ <li id="l-526" _a="TabAtkins_" _r="jdaggett"><a href="#l-526">#</a> [18:35] &lt;TabAtkins_&gt; jdaggett: To meet the epub schedule, at least.</li>
+ <li id="l-527" _a="TabAtkins_" _r="fantasai"><a href="#l-527">#</a> [18:35] &lt;TabAtkins_&gt; fantasai: We will have two impls by the end of the year.</li>
+ <li id="l-528" _a="TabAtkins_" _r="jdaggett"><a href="#l-528">#</a> [18:35] &lt;TabAtkins_&gt; jdaggett: Impls of what?</li>
+ <li id="l-529" _a="TabAtkins_" _r="fantasai"><a href="#l-529">#</a> [18:36] &lt;TabAtkins_&gt; fantasai: what Antenna House and what Hyatt wrote for Webkit will be compatible.</li>
+ <li id="l-530" _a="TabAtkins_" _r="jdaggett"><a href="#l-530">#</a> [18:36] &lt;TabAtkins_&gt; jdaggett: What have we agreed upon?</li>
+ <li id="l-531" _a="TabAtkins_" _r="fantasai"><a href="#l-531">#</a> [18:36] &lt;TabAtkins_&gt; fantasai: AH and Hyatt have implemented logical margins.</li>
+ <li id="l-532" _a="TabAtkins_" _r="howcome"><a href="#l-532">#</a> [18:36] &lt;TabAtkins_&gt; howcome: That doens't mean that's what should be defined.</li>
+ <li id="l-533" _a="TabAtkins_" _r="jdaggett"><a href="#l-533">#</a> [18:37] &lt;TabAtkins_&gt; jdaggett: Every time we discuss this we get to a point, but don't put things into a spec.</li>
+ <li id="l-534" _a="TabAtkins_" _r="szilles"><a href="#l-534">#</a> [18:37] &lt;TabAtkins_&gt; szilles: What we agreed in Oslo was to see what your proposal was and then discuss it at TPAC.</li>
+ <li id="l-535" _a="TabAtkins_" _r="fantasai"><a href="#l-535">#</a> [18:37] &lt;TabAtkins_&gt; fantasai: Yes.</li>
+ <li id="l-536" _a="TabAtkins_" _r="Bert"><a href="#l-536">#</a> [18:38] &lt;TabAtkins_&gt; Bert: I'd like to go back to coordination with IDPF.  Koji, what's your role in there?</li>
+ <li id="l-537" _a="TabAtkins_" _r="kojiishi"><a href="#l-537">#</a> [18:38] &lt;TabAtkins_&gt; kojiishi: I'm willing to take over what Shinyu has been doing.</li>
+ <li id="l-538" _a="TabAtkins_" _r="kojiishi"><a href="#l-538">#</a> [18:38] &lt;TabAtkins_&gt; kojiishi: If you have anything else you expect the IPDF laiason to do beyond what Shinyu has been doing, I can do that.</li>
+ <li id="l-539" _a="TabAtkins_" _r="Bert"><a href="#l-539">#</a> [18:38] &lt;TabAtkins_&gt; Bert: You plan to participate in both our meetings and IPDF meetings?</li>
+ <li id="l-540" _a="TabAtkins_" _r="kojiishi"><a href="#l-540">#</a> [18:38] &lt;TabAtkins_&gt; kojiishi: Yes.</li>
+ <li id="l-541" _a="TabAtkins_" _r="kojiishi"><a href="#l-541">#</a> [18:39] &lt;TabAtkins_&gt; kojiishi: [???] is a globalization effort within IPDF.  I talk with him often, but I'm otherwise not very familiar with it.</li>
+ <li id="l-542" _a="kennyluck"><a href="#l-542">#</a> [18:40] * kennyluck I suppose [???] = Murata</li>
+ <li id="l-543" _a="jdaggett"><a href="#l-543">#</a> [18:40] &lt;jdaggett&gt; no ???? = EGLS</li>
+ <li id="l-544" _a="TabAtkins_"><a href="#l-544">#</a> [18:40] &lt;TabAtkins_&gt; s/[???]/EGLS/</li>
+ <li id="l-545" _a="TabAtkins_" _r="kojiishi"><a href="#l-545">#</a> [18:41] &lt;TabAtkins_&gt; kojiishi: i can talk to my contact in IPDF for what they really expect.</li>
+ <li id="l-546" _a="TabAtkins_" _r="howcome"><a href="#l-546">#</a> [18:42] &lt;TabAtkins_&gt; howcome: I think something that might help is to have a set of use-cases.</li>
+ <li id="l-547" _a="TabAtkins_" _r="howcome"><a href="#l-547">#</a> [18:42] &lt;TabAtkins_&gt; howcome: I think what EPUB is looking for is perhaps simpler than the problem we're seeing on our side.</li>
+ <li id="l-548" _a="TabAtkins_" _r="kojiishi"><a href="#l-548">#</a> [18:43] &lt;TabAtkins_&gt; kojiishi: Vertical text and globalization are on our radar.  Hyphenation I'm not tracking right now.</li>
+ <li id="l-549" _a="TabAtkins_" _r="howcome"><a href="#l-549">#</a> [18:43] &lt;TabAtkins_&gt; howcome: That's fine.  I think the biggest issue we have is vertical text.  If we could get proposed use-cases - typical things they need to solve - then we could more easily find a solution for that.</li>
+ <li id="l-550"><a href="#l-550">#</a> [18:43] * Quits: lhnz (lhnz@188.223.83.48) (Ping timeout)</li>
+ <li id="l-551" _a="kojiishi"><a href="#l-551">#</a> [18:43] &lt;kojiishi&gt; <a href="http://code.google.com/p/epub-revision/wiki/EGLS_solutions">http://code.google.com/p/epub-revision/wiki/EGLS_solutions</a></li>
+ <li id="l-552" _a="TabAtkins_" _r="szilles"><a href="#l-552">#</a> [18:43] &lt;TabAtkins_&gt; szilles: There is a requirements doc that epub is putting out.</li>
+ <li id="l-553" _a="TabAtkins_" _r="kojiishi"><a href="#l-553">#</a> [18:44] &lt;TabAtkins_&gt; kojiishi: They haven't finished the prioritization quite yet.  They should have it be their meeting on Oct 5th.</li>
+ <li id="l-554" _a="TabAtkins_" _r="kojiishi"><a href="#l-554">#</a> [18:44] &lt;TabAtkins_&gt; kojiishi: I'll be attending that meeting.</li>
+ <li id="l-555"><a href="#l-555">#</a> [18:45] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-556" _a="TabAtkins_" _r="kojiishi"><a href="#l-556">#</a> [18:45] &lt;TabAtkins_&gt; kojiishi: Hopefully we'll find out what we're missing and what items are high priority.</li>
+ <li id="l-557" _a="TabAtkins_" _r="szilles"><a href="#l-557">#</a> [18:45] &lt;TabAtkins_&gt; szilles: I believe Adobe will also have a rep on that meeting, though not me.</li>
+ <li id="l-558" _a="TabAtkins_" _r="Bert"><a href="#l-558">#</a> [18:45] &lt;TabAtkins_&gt; Bert: Would it be possible to have reps come to our meeting in Lyon in November?</li>
+ <li id="l-559" _a="TabAtkins_" _r="glazou"><a href="#l-559">#</a> [18:45] &lt;TabAtkins_&gt; glazou: That would be fine with me.</li>
+ <li id="l-560" _a="kennyluck"><a href="#l-560">#</a> [18:45] * kennyluck SZilles: Yes, Yamamoto-san from Adobe</li>
+ <li id="l-561" _a="TabAtkins_" _r="Bert"><a href="#l-561">#</a> [18:45] &lt;TabAtkins_&gt; Bert: That we could probably ask via MikeSmith.</li>
+ <li id="l-562" _a="TabAtkins_"><a href="#l-562">#</a> [18:46] &lt;TabAtkins_&gt; Action Bert: Ping MikeSmith about getting IPDF people at TPAC.</li>
+ <li id="l-563" _a="trackbot"><a href="#l-563">#</a> [18:46] * trackbot noticed an ACTION. Trying to create it.</li>
+ <li id="l-564" _a="RRSAgent"><a href="#l-564">#</a> [18:46] * RRSAgent records action 1</li>
+ <li id="l-565" _a="trackbot"><a href="#l-565">#</a> [18:46] &lt;trackbot&gt; Created ACTION-268 - Ping MikeSmith about getting IPDF people at TPAC. [on Bert Bos - due 2010-10-06].</li>
+ <li id="l-566" _a="murakami"><a href="#l-566">#</a> [18:46] &lt;murakami&gt; s/IPDF/IDPF/</li>
+ <li id="l-567" _a="TabAtkins_" _r="glazou"><a href="#l-567">#</a> [18:46] &lt;TabAtkins_&gt; glazou: We need a laiason; the deadlines of CSS and EPUB don't quite match; we need a closer discussion with EPUB people to really decide something.</li>
+ <li id="l-568" _a="TabAtkins_" _r="ChrisL"><a href="#l-568">#</a> [18:47] &lt;TabAtkins_&gt; ChrisL: Are the EPUB deadlines hard, or are they just a guess?</li>
+ <li id="l-569" _a="TabAtkins_" _r="szilles"><a href="#l-569">#</a> [18:47] &lt;TabAtkins_&gt; szilles: I believe they're actually trying to operate toward those deadlines.</li>
+ <li id="l-570" _a="sylvaing"><a href="#l-570">#</a> [18:47] * sylvaing i.e. are they like implementation report deadlines, or are they deadlines ? :)</li>
+ <li id="l-571" _a="TabAtkins_" _r="szilles"><a href="#l-571">#</a> [18:47] &lt;TabAtkins_&gt; szilles: EPUB primarily wants to base their work on existing standards.</li>
+ <li id="l-572" _a="TabAtkins_" _r="szilles"><a href="#l-572">#</a> [18:47] &lt;TabAtkins_&gt; szilles: There was something that Sharp and related companies put together a while back that they're pushing to use.</li>
+ <li id="l-573" _a="TabAtkins_" _r="szilles"><a href="#l-573">#</a> [18:48] &lt;TabAtkins_&gt; szilles: The real problem is having something in the near term that would better align with w3c's tech than some of th ealternatives.</li>
+ <li id="l-574" _a="TabAtkins_" _r="szilles"><a href="#l-574">#</a> [18:48] &lt;TabAtkins_&gt; szilles: That's partly why teh deadlines are so short.</li>
+ <li id="l-575" _a="TabAtkins_"><a href="#l-575">#</a> [18:49] * TabAtkins_ Chris, I missed that part of what you said, unfortunately.</li>
+ <li id="l-576" _a="TabAtkins_"><a href="#l-576">#</a> [18:49] * TabAtkins_ ChrisL ^^^</li>
+ <li id="l-577" _a="TabAtkins_" _r="szilles"><a href="#l-577">#</a> [18:49] &lt;TabAtkins_&gt; szilles: There are certainly a substantial number of people in the EPUB discussion that would prefer an approach that was closer to w3c standards, if they could.</li>
+ <li id="l-578" _a="TabAtkins_" _r="bradk"><a href="#l-578">#</a> [18:50] &lt;TabAtkins_&gt; bradk: Can they align with working drafts, perhaps with an epub prefix?  Or do they have to have PRs?</li>
+ <li id="l-579" _a="ChrisL"><a href="#l-579">#</a> [18:50] &lt;ChrisL&gt; if they dont get the featurs they need from w3c specs would they drop the feature, extebd the deadline, or pick a different source of standards?</li>
+ <li id="l-580" _a="ChrisL"><a href="#l-580">#</a> [18:50] * ChrisL tab ^^</li>
+ <li id="l-581" _a="TabAtkins_" _r="szilles"><a href="#l-581">#</a> [18:50] &lt;TabAtkins_&gt; szilles: If they like what they think they're going to get, they may accept them before CR, because there's really nothing else out there right now except ISO standards.</li>
+ <li id="l-582" _a="TabAtkins_" _r="kojiishi"><a href="#l-582">#</a> [18:50] &lt;TabAtkins_&gt; kojiishi: I think generally they need CR.</li>
+ <li id="l-583" _a="kojiishi"><a href="#l-583">#</a> [18:50] &lt;kojiishi&gt; <a href="http://code.google.com/p/epub-revision/wiki/CSS3Relations">http://code.google.com/p/epub-revision/wiki/CSS3Relations</a></li>
+ <li id="l-584" _a="kennyluck"><a href="#l-584">#</a> [18:50] * kennyluck they might invent their own -&gt; <a href="http://code.google.com/p/epub-revision/wiki/CSS3Relations">http://code.google.com/p/epub-revision/wiki/CSS3Relations</a></li>
+ <li id="l-585" _a="TabAtkins_" _r="kojiishi"><a href="#l-585">#</a> [18:51] &lt;TabAtkins_&gt; kojiishi: As far as I know they haven't decided yet, and they'll be discussing this in Taiwan on Oct 5th.</li>
+ <li id="l-586" _a="fantasai"><a href="#l-586">#</a> [18:51] * fantasai would like to squeeze in a request to publish css3-text before the end of the call</li>
+ <li id="l-587" _a="TabAtkins_" _r="szilles"><a href="#l-587">#</a> [18:52] &lt;TabAtkins_&gt; szilles: So, I believe that Elika and friends are tyring to produce a do we can look at and discuss by TPAC, to see if we have neough consensus to move ahead.</li>
+ <li id="l-588" _a="TabAtkins_" _r="jdaggett"><a href="#l-588">#</a> [18:52] &lt;TabAtkins_&gt; jdaggett: There are two specs here - CSS3 Text and CSS3 Writing Modes.</li>
+ <li id="l-589" _a="TabAtkins_" _r="szilles"><a href="#l-589">#</a> [18:52] &lt;TabAtkins_&gt; szilles: Elika, you were doing Text, not Writing Modes, right?</li>
+ <li id="l-590" _a="glazou"><a href="#l-590">#</a> [18:53] * glazou wants the 7 last minutes on css3-color even if this discussion is not finished</li>
+ <li id="l-591" _a="TabAtkins_" _r="fantasai"><a href="#l-591">#</a> [18:53] &lt;TabAtkins_&gt; fantasai: Right; I've made a lot of edits to Writing Modes, but it's not ready to publish right now.  CSS3 Text is ready to publish as a WD.</li>
+ <li id="l-592" _a="TabAtkins_" _r="fantasai"><a href="#l-592">#</a> [18:53] &lt;TabAtkins_&gt; fantasai: The current CSS3 Text draft is quite outdated.  The new draft has addressed nearly all the issues raised with it.</li>
+ <li id="l-593" _a="TabAtkins_" _r="fantasai"><a href="#l-593">#</a> [18:53] &lt;TabAtkins_&gt; fantasai: I'd like to get a new draft published before the Taiwan meeting next week.</li>
+ <li id="l-594" _a="Zakim"><a href="#l-594">#</a> [18:55] &lt;Zakim&gt; +[Mozilla]</li>
+ <li id="l-595"><a href="#l-595">#</a> [18:55] * Joins: tantek (tantek@63.245.220.240)</li>
+ <li id="l-596" _a="jdaggett" _r="jdaggett"><a href="#l-596">#</a> [18:55] &lt;jdaggett&gt; jdaggett: i'm fine with publishing a new draft of CSS3 Text</li>
+ <li id="l-597" _a="glazou"><a href="#l-597">#</a> [18:55] &lt;glazou&gt; 30 seconds before next item plase</li>
+ <li id="l-598" _a="glazou"><a href="#l-598">#</a> [18:55] &lt;glazou&gt; please</li>
+ <li id="l-599" _a="TabAtkins_" _r="szilles"><a href="#l-599">#</a> [18:55] &lt;TabAtkins_&gt; szilles: I haven't looked at the new Text.  Has it changed?</li>
+ <li id="l-600" class="flagged" _a="tantek"><a href="#l-600">#</a> [18:55] &lt;tantek&gt; also for publishing new draft of CSS3 Text</li>
+ <li id="l-601" _a="TabAtkins_" _r="fantasai"><a href="#l-601">#</a> [18:55] &lt;TabAtkins_&gt; fantasai: Yes, a lot.  [lists changes]</li>
+ <li id="l-602" _a="glazou"><a href="#l-602">#</a> [18:56] &lt;glazou&gt; TIME</li>
+ <li id="l-603" _a="ChrisL"><a href="#l-603">#</a> [18:56] * ChrisL pointer to editors draft?</li>
+ <li id="l-604" _a="jdaggett" _r="glazou"><a href="#l-604">#</a> [18:56] &lt;jdaggett&gt; glazou: let's resolve to publish and move one</li>
+ <li id="l-605" _a="kojiishi"><a href="#l-605">#</a> [18:56] &lt;kojiishi&gt; <a href="http://dev.w3.org/csswg/css3-text/">http://dev.w3.org/csswg/css3-text/</a></li>
+ <li id="l-606" _a="TabAtkins_" _r="RESOLVED"><a href="#l-606">#</a> [18:56] &lt;TabAtkins_&gt; RESOLVED: Publish a new WD of CSS3 Text.</li>
+ <li id="l-607" _a="fantasai"><a href="#l-607">#</a> [18:56] * fantasai thanks jdaggett !</li>
+ <li id="l-608" _a="tantek"><a href="#l-608">#</a> [18:56] &lt;tantek&gt; ChrisL - maybe this: <a href="http://dev.w3.org/csswg/css3-text/">http://dev.w3.org/csswg/css3-text/</a></li>
+ <li id="l-609" _a="TabAtkins_" _r="glazou"><a href="#l-609">#</a> [18:56] &lt;TabAtkins_&gt; glazou: Now, CSS3 Color.</li>
+ <li id="l-610" _a="jdaggett"><a href="#l-610">#</a> [18:56] * jdaggett np</li>
+ <li id="l-611" _a="ChrisL"><a href="#l-611">#</a> [18:57] &lt;ChrisL&gt; <a href="http://dev.w3.org/csswg/css3-color/issues-lc-2008.html">http://dev.w3.org/csswg/css3-color/issues-lc-2008.html</a></li>
+ <li id="l-612" _a="tantek"><a href="#l-612">#</a> [18:57] &lt;tantek&gt; Thanks much Chris!</li>
+ <li id="l-613" _a="TabAtkins_" _r="ChrisL"><a href="#l-613">#</a> [18:57] &lt;TabAtkins_&gt; ChrisL: I spent today making a Disposition of Comments.  It's not in a great shape.</li>
+ <li id="l-614" _a="TabAtkins_" _r="ChrisL"><a href="#l-614">#</a> [18:57] &lt;TabAtkins_&gt; ChrisL: We need what the WG did, what the commenter responded, etc.</li>
+ <li id="l-615" _a="TabAtkins_" _r="ChrisL"><a href="#l-615">#</a> [18:57] &lt;TabAtkins_&gt; ChrisL: We have at least 3 where the commenter said they weren't happy, a bunch where they didn't respond, and 1 from the XSL WG where we didn't respond to them at all (we made edits, but didn't tell them).</li>
+ <li id="l-616" _a="TabAtkins_" _r="ChrisL"><a href="#l-616">#</a> [18:58] &lt;TabAtkins_&gt; ChrisL: We mostly agreed with them, which makes it easy.</li>
+ <li id="l-617" _a="TabAtkins_" _r="ChrisL"><a href="#l-617">#</a> [18:58] &lt;TabAtkins_&gt; ChrisL: I sent out a few others asking for confirmation.</li>
+ <li id="l-618" _a="jdaggett"><a href="#l-618">#</a> [18:59] * jdaggett oh, that's cute...</li>
+ <li id="l-619" _a="sylvaing"><a href="#l-619">#</a> [18:59] * sylvaing ...as long as CSS4 has normative Unicornosity...</li>
+ <li id="l-620" _a="glazou"><a href="#l-620">#</a> [18:59] &lt;glazou&gt; lol</li>
+ <li id="l-621" _a="TabAtkins_" _r="tantek"><a href="#l-621">#</a> [18:59] &lt;TabAtkins_&gt; tantek: The DoC is looking good, thanks for writing it up.</li>
+ <li id="l-622" _a="TabAtkins_" _r="ChrisL"><a href="#l-622">#</a> [19:00] &lt;TabAtkins_&gt; ChrisL: I didn't get the biblio updated, but I will.</li>
+ <li id="l-623" _a="TabAtkins_"><a href="#l-623">#</a> [19:00] * TabAtkins_ we need another color name - 'unicorn'=rgba(255,105,180,.5).</li>
+ <li id="l-624" _a="TabAtkins_" _r="tantek"><a href="#l-624">#</a> [19:01] &lt;TabAtkins_&gt; tantek: Did you see the most recent followup regarding scRGB?</li>
+ <li id="l-625" _a="sylvaing"><a href="#l-625">#</a> [19:01] * sylvaing I was just thinking color:unicorn should map to some nifty gradient</li>
+ <li id="l-626" _a="TabAtkins_" _r="ChrisL"><a href="#l-626">#</a> [19:01] &lt;TabAtkins_&gt; ChrisL: There was a recent discussion about adding a bunch of ICC spaces.</li>
+ <li id="l-627" _a="glazou"><a href="#l-627">#</a> [19:01] * glazou sylvaing with 90° north ?-)</li>
+ <li id="l-628" _a="TabAtkins_" _r="ChrisL"><a href="#l-628">#</a> [19:01] &lt;TabAtkins_&gt; ChrisL: Should we treat it as an LC comment or what?</li>
+ <li id="l-629" _a="sylvaing"><a href="#l-629">#</a> [19:02] * sylvaing 9e1deg you mean ?</li>
+ <li id="l-630" _a="TabAtkins_" _r="tantek"><a href="#l-630">#</a> [19:02] &lt;TabAtkins_&gt; tantek: I think it's out of scope right now.  We should reject it for now, and have it as possible functionality for CSS4 Color.</li>
+ <li id="l-631" _a="glazou" _r="sylvaing"><a href="#l-631">#</a> [19:02] &lt;glazou&gt; sylvaing: lol</li>
+ <li id="l-632" _a="bradk"><a href="#l-632">#</a> [19:02] * bradk lol</li>
+ <li id="l-633" _a="TabAtkins_" _r="tantek"><a href="#l-633">#</a> [19:02] &lt;TabAtkins_&gt; tantek: Does the DoC look good otherwise?</li>
+ <li id="l-634" _a="TabAtkins_" _r="ChrisL"><a href="#l-634">#</a> [19:02] &lt;TabAtkins_&gt; ChrisL: The XSLWG response we should probably wait a week or so for.</li>
+ <li id="l-635" _a="TabAtkins_" _r="tantek"><a href="#l-635">#</a> [19:03] &lt;TabAtkins_&gt; tantek: So we're pretty happy with the DoC, and we'll give commenters a week or two to respond.  What's next?</li>
+ <li id="l-636" _a="TabAtkins_" _r="ChrisL"><a href="#l-636">#</a> [19:04] &lt;TabAtkins_&gt; ChrisL: Then we produce a director's ???, showing that we exit CR correctly.</li>
+ <li id="l-637" _a="TabAtkins_" _r="glazou"><a href="#l-637">#</a> [19:04] &lt;TabAtkins_&gt; glazou: Any normative dependency on CSS2.1?</li>
+ <li id="l-638" _a="TabAtkins_" _r="ChrisL"><a href="#l-638">#</a> [19:04] &lt;TabAtkins_&gt; ChrisL: yes.</li>
+ <li id="l-639" _a="TabAtkins_" _r="glazou"><a href="#l-639">#</a> [19:04] &lt;TabAtkins_&gt; glazou: So it'll be at the same state as CSS3 Selectors?</li>
+ <li id="l-640" _a="TabAtkins_" _r="ChrisL"><a href="#l-640">#</a> [19:04] &lt;TabAtkins_&gt; ChrisL: Yeah.  It precludes PR, but not Rec.</li>
+ <li id="l-641" _a="TabAtkins_" _r="glazou"><a href="#l-641">#</a> [19:04] &lt;TabAtkins_&gt; glazou: So yeah, we need to push CSS2.1 quick.</li>
+ <li id="l-642" _a="TabAtkins_" _r="ChrisL"><a href="#l-642">#</a> [19:05] &lt;TabAtkins_&gt; ChrisL: Selectors already has &quot;provisional Rec&quot; contingent on CSS2.1 going to Rec.</li>
+ <li id="l-643" _a="Zakim"><a href="#l-643">#</a> [19:05] &lt;Zakim&gt; -smfr</li>
+ <li id="l-644" _a="Zakim"><a href="#l-644">#</a> [19:05] &lt;Zakim&gt; -SteveZ</li>
+ <li id="l-645" _a="Zakim"><a href="#l-645">#</a> [19:05] &lt;Zakim&gt; -[Microsoft]</li>
+ <li id="l-646" _a="Zakim"><a href="#l-646">#</a> [19:05] &lt;Zakim&gt; -[Microsoft.a]</li>
+ <li id="l-647" _a="Zakim"><a href="#l-647">#</a> [19:05] &lt;Zakim&gt; -howcome</li>
+ <li id="l-648" _a="Zakim"><a href="#l-648">#</a> [19:05] &lt;Zakim&gt; -jdaggett</li>
+ <li id="l-649" _a="Zakim"><a href="#l-649">#</a> [19:05] &lt;Zakim&gt; -ChrisL</li>
+ <li id="l-650" _a="Zakim"><a href="#l-650">#</a> [19:05] &lt;Zakim&gt; -[Mozilla]</li>
+ <li id="l-651" _a="Zakim"><a href="#l-651">#</a> [19:05] &lt;Zakim&gt; -glazou</li>
+ <li id="l-652" _a="Zakim"><a href="#l-652">#</a> [19:05] &lt;Zakim&gt; -Bert</li>
+ <li id="l-653" _a="Zakim"><a href="#l-653">#</a> [19:05] &lt;Zakim&gt; -kojiishi</li>
+ <li id="l-654" _a="Zakim"><a href="#l-654">#</a> [19:05] &lt;Zakim&gt; -fantasai</li>
+ <li id="l-655" _a="glazou"><a href="#l-655">#</a> [19:05] &lt;glazou&gt; View mode review request for email or next telcon</li>
+ <li id="l-656" _a="Zakim"><a href="#l-656">#</a> [19:05] &lt;Zakim&gt; -TabAtkins_</li>
+ <li id="l-657" _a="Ms2ger"><a href="#l-657">#</a> [19:05] &lt;Ms2ger&gt; ...Adjourned?</li>
+ <li id="l-658" _a="glazou"><a href="#l-658">#</a> [19:05] &lt;glazou&gt; yes</li>
+ <li id="l-659" _a="TabAtkins_" _r="Nope"><a href="#l-659">#</a> [19:06] &lt;TabAtkins_&gt; Nope, simultaneous mass murder.</li>
+ <li id="l-660" _a="glazou"><a href="#l-660">#</a> [19:06] &lt;glazou&gt; lol</li>
+ <li id="l-661" _a="fantasai"><a href="#l-661">#</a> [19:06] &lt;fantasai&gt; lol</li>
+ <li id="l-662" _a="glazou" _r="TabAtkins_"><a href="#l-662">#</a> [19:06] &lt;glazou&gt; TabAtkins_:  saw my private msg?</li>
+ <li id="l-663" _a="TabAtkins_" _r="glazou"><a href="#l-663">#</a> [19:06] &lt;TabAtkins_&gt; glazou: yeah.</li>
+ <li id="l-664" _a="tantek"><a href="#l-664">#</a> [19:06] &lt;tantek&gt; TabAtkins_ to be clear it does NOT preclude PR</li>
+ <li id="l-665" _a="tantek"><a href="#l-665">#</a> [19:06] &lt;tantek&gt; it does preclude REC</li>
+ <li id="l-666" _a="tantek"><a href="#l-666">#</a> [19:06] &lt;tantek&gt; (per minutes above)</li>
+ <li id="l-667" _a="TabAtkins_" _r="Argh"><a href="#l-667">#</a> [19:06] &lt;TabAtkins_&gt; Argh, I reversed them.</li>
+ <li id="l-668" _a="TabAtkins_" _r="fantasai"><a href="#l-668">#</a> [19:07] &lt;TabAtkins_&gt; fantasai: Could you fix that when you prepare minutes?</li>
+ <li id="l-669" _a="tantek"><a href="#l-669">#</a> [19:07] &lt;tantek&gt; glazou - did we record an action for Bert to setup a call with the Director?</li>
+ <li id="l-670" _a="ChrisL"><a href="#l-670">#</a> [19:07] &lt;ChrisL&gt; s/It precludes PR, but not Rec./It precludes Rec, but not PR</li>
+ <li id="l-671" _a="tantek"><a href="#l-671">#</a> [19:07] &lt;tantek&gt; or are we doing that later?</li>
+ <li id="l-672"><a href="#l-672">#</a> [19:07] * Quits: bradk (bradk@67.188.133.45) (Quit: Get MacIrssi - <a href="http://www.sysctl.co.uk/projects/macirssi/">http://www.sysctl.co.uk/projects/macirssi/</a> )</li>
+ <li id="l-673" _a="Bert"><a href="#l-673">#</a> [19:07] &lt;Bert&gt; better wait until we actually have the DoC ready.</li>
+ <li id="l-674" _a="Bert"><a href="#l-674">#</a> [19:08] &lt;Bert&gt; (And maybe Chris and do it himself? That saves me work :-) )</li>
+ <li id="l-675" _a="glazou"><a href="#l-675">#</a> [19:08] * glazou has to go, bye people</li>
+ <li id="l-676" _a="ChrisL" _r="bert"><a href="#l-676">#</a> [19:08] &lt;ChrisL&gt; bert, yes I can do it once DoC is ready</li>
+ <li id="l-677"><a href="#l-677">#</a> [19:08] * Quits: glazou (glazou@82.247.96.19) (Quit: glazou)</li>
+ <li id="l-678"><a href="#l-678">#</a> [19:08] * Quits: kojiishi (kojiishi@222.158.227.129) (Quit: Leaving...)</li>
+ <li id="l-679"><a href="#l-679">#</a> [19:08] * Quits: TabAtkins_ (tabatkins@216.239.45.19) (Quit: Lost terminal)</li>
+ <li id="l-680"><a href="#l-680">#</a> [19:08] * Quits: JohnJan (qw3birc@128.30.52.28) (Quit: Page closed)</li>
+ <li id="l-681"><a href="#l-681">#</a> [19:08] * Parts: murakami (murakami@118.154.209.3) (Leaving...)</li>
+ <li id="l-682" _a="Zakim"><a href="#l-682">#</a> [19:08] &lt;Zakim&gt; -[plinss]</li>
+ <li id="l-683" _a="tantek" _r="Bert"><a href="#l-683">#</a> [19:08] &lt;tantek&gt; Bert, ChrisL - excellent - thanks much!</li>
+ <li id="l-684" _a="tantek"><a href="#l-684">#</a> [19:09] &lt;tantek&gt; ChrisL - how much time did you want to give commenters to follow-up? is a week sufficient or would you be more comfortable with 2 weeks?</li>
+ <li id="l-685" _a="ChrisL"><a href="#l-685">#</a> [19:10] &lt;ChrisL&gt; I think a week is reasonable. Willtalk with xsl fo staff contact</li>
+ <li id="l-686"><a href="#l-686">#</a> [19:10] * Parts: smfr (smfr@72.25.91.178)</li>
+ <li id="l-687" _a="tantek"><a href="#l-687">#</a> [19:11] &lt;tantek&gt; ok</li>
+ <li id="l-688" _a="Zakim"><a href="#l-688">#</a> [19:13] &lt;Zakim&gt; disconnecting the lone participant, bradk, in Style_CSS FP()12:00PM</li>
+ <li id="l-689" _a="Zakim"><a href="#l-689">#</a> [19:13] &lt;Zakim&gt; Style_CSS FP()12:00PM has ended</li>
+ <li id="l-690" _a="Zakim"><a href="#l-690">#</a> [19:14] &lt;Zakim&gt; Attendees were glazou, [plinss], fantasai, bradk, jdaggett, ChrisL, smfr, Bert, +1.650.214.aaaa, arronei, TabAtkins_, kojiishi, SteveZ, howcome, [Microsoft], +39.524.9.aabb,</li>
+ <li id="l-691" _a="Zakim"><a href="#l-691">#</a> [19:14] &lt;Zakim&gt; ... [Mozilla]</li>
+ <li id="l-692"><a href="#l-692">#</a> [19:14] * Quits: ChrisL (ChrisL@128.30.52.169) (Quit: Fire on main board error, client combusted)</li>
+ <li id="l-693"><a href="#l-693">#</a> [19:16] * Quits: oyvind (oyvinds@213.236.208.22) (Quit: oyvind)</li>
+ <li id="l-694"><a href="#l-694">#</a> [19:18] * Quits: dethbakin (dethbakin@76.102.99.47) (Quit: dethbakin)</li>
+ <li id="l-695"><a href="#l-695">#</a> [19:19] * Quits: sylvaing (sylvaing@131.107.0.101) (Connection reset by peer)</li>
+ <li id="l-696" _a="fantasai" _r="RRSAgent"><a href="#l-696">#</a> [19:29] &lt;fantasai&gt; RRSAgent: make minutes</li>
+ <li id="l-697" _a="RRSAgent"><a href="#l-697">#</a> [19:29] &lt;RRSAgent&gt; I have made the request to generate <a href="http://www.w3.org/2010/09/29-CSS-minutes.html">http://www.w3.org/2010/09/29-CSS-minutes.html</a> fantasai</li>
+ <li id="l-698" _a="fantasai" _r="RRSAgent"><a href="#l-698">#</a> [19:29] &lt;fantasai&gt; RRSAgent: make logs public</li>
+ <li id="l-699" _a="RRSAgent"><a href="#l-699">#</a> [19:29] &lt;RRSAgent&gt; I have made the request, fantasai</li>
+ <li id="l-700" _a="fantasai" _r="RRSAgent"><a href="#l-700">#</a> [19:29] &lt;fantasai&gt; RRSAgent: make minutes</li>
+ <li id="l-701" _a="RRSAgent"><a href="#l-701">#</a> [19:29] &lt;RRSAgent&gt; I have made the request to generate <a href="http://www.w3.org/2010/09/29-CSS-minutes.html">http://www.w3.org/2010/09/29-CSS-minutes.html</a> fantasai</li>
+ <li id="l-702"><a href="#l-702">#</a> [19:30] * Joins: sylvaing (sylvaing@131.107.0.80)</li>
+ <li id="l-703"><a href="#l-703">#</a> [19:48] * Quits: szilles (chatzilla@67.188.27.37) (Quit: ChatZilla 0.9.86 [Firefox 3.6.10/20100914125854])</li>
+ <li id="l-704"><a href="#l-704">#</a> [20:19] * Joins: dbaron (dbaron@63.245.220.240)</li>
+ <li id="l-705" _a="hyatt" _r="fantasai"><a href="#l-705">#</a> [20:24] &lt;hyatt&gt; fantasai: ultimately writing-mode will be its own draft right</li>
+ <li id="l-706" _a="hyatt" _r="fantasai"><a href="#l-706">#</a> [20:24] &lt;hyatt&gt; fantasai: and not part of that gigantic text draft?</li>
+ <li id="l-707"><a href="#l-707">#</a> [20:42] * Quits: lhnz (lhnz@188.223.83.48) (Connection reset by peer)</li>
+ <li id="l-708"><a href="#l-708">#</a> [20:42] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-709"><a href="#l-709">#</a> [20:47] * Quits: lhnz (lhnz@188.223.83.48) (Connection reset by peer)</li>
+ <li id="l-710"><a href="#l-710">#</a> [20:47] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-711" _a="Zakim"><a href="#l-711">#</a> [20:49] * Zakim excuses himself; his presence no longer seems to be needed</li>
+ <li id="l-712"><a href="#l-712">#</a> [20:49] * Parts: Zakim (rrs-bridgg@128.30.52.169)</li>
+ <li id="l-713"><a href="#l-713">#</a> [21:57] * Quits: sylvaing (sylvaing@131.107.0.80) (Ping timeout)</li>
+ <li id="l-714"><a href="#l-714">#</a> [22:06] * Joins: ChrisL (ChrisL@128.30.52.169)</li>
+ <li id="l-715"><a href="#l-715">#</a> [22:18] * Quits: karl (karlcow@128.30.54.58) (Client exited)</li>
+ <li id="l-716"><a href="#l-716">#</a> [22:52] * Quits: tantek (tantek@63.245.220.240) (Quit: tantek)</li>
+ <li id="l-717"><a href="#l-717">#</a> [23:13] * Joins: karl (karlcow@128.30.54.58)</li>
+ <li id="l-718"><a href="#l-718">#</a> [23:15] * Quits: lhnz (lhnz@188.223.83.48) (Ping timeout)</li>
+ <li id="l-719"><a href="#l-719">#</a> [23:16] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-720"><a href="#l-720">#</a> [23:21] * Joins: sylvaing (sylvaing@131.107.0.101)</li>
+ <li id="l-721"><a href="#l-721">#</a> [23:23] * Quits: Ms2ger (Ms2ger@91.181.33.168) (Quit: nn)</li>
+ <li id="l-722"><a href="#l-722">#</a> [23:25] * Quits: ChrisL (ChrisL@128.30.52.169) (Quit: Fire on main board error, client combusted)</li>
+ <li id="l-723"><a href="#l-723">#</a> [23:26] * Joins: nimbupani (nimbupani@24.22.131.46)</li>
+ <li id="l-724"><a href="#l-724">#</a> [23:36] * Quits: nimbupani (nimbupani@24.22.131.46) (Quit: nimbupani)</li>
+ <li id="l-725"><a href="#l-725">#</a> Session Close: Thu Sep 30 00:00:00 2010</li>
+</ol>
+<p id="end">The end :)

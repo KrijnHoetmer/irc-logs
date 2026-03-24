@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #testing / 20141231</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="w3c/testing.20141231.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/testing">#testing</a> / 2014-12-31 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20141230>Previous day</a>, <a href=20150101>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Wed Dec 31 00:00:00 2014</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #testing</li>
+<li id=l-3 class=hide _a="heycam|away"><a href=#l-3>#</a> [00:48] * heycam|away is now known as heycam</li>
+<li id=l-4 _a="bhill2"><a href=#l-4>#</a> [01:07] &lt;bhill2&gt; hmm....</li>
+<li id=l-5 _a="bhill2"><a href=#l-5>#</a> [01:07] &lt;bhill2&gt; if someone wants to check in a utility file that is a python script</li>
+<li id=l-6 _a="bhill2"><a href=#l-6>#</a> [01:07] &lt;bhill2&gt; what's the preferred method of doing so?</li>
+<li id=l-7 _a="bhill2"><a href=#l-7>#</a> [01:08] &lt;bhill2&gt; I expect we would prefer it not be just a .py file under the webroot, as that will get treated as an executable content handler by wptserve, yes?</li>
+<li id=l-8 _a="bhill2"><a href=#l-8>#</a> [01:08] &lt;bhill2&gt; (this utility is specific to one set of test cases, not generic for WPT)</li>
+<li id=l-9 _a="MikeSmith" _r="bhill2"><a href=#l-9>#</a> [01:33] &lt;MikeSmith&gt; bhill2: I think the thing to do is just check it in</li>
+<li id=l-10 _a="MikeSmith" _r="bhill2"><a href=#l-10>#</a> [01:34] &lt;MikeSmith&gt; bhill2: if it's in the tree anywhere, I think there's no way to prevent wptserve for treating it as an executable content handler. But that's not a problem</li>
+<li id=l-11 _a="bhill2"><a href=#l-11>#</a> [01:34] &lt;bhill2&gt; should we at least change the extension to other than .py so it won't match the python handler regex?</li>
+<li id=l-12 _a="MikeSmith"><a href=#l-12>#</a> [01:35] &lt;MikeSmith&gt; you could but it's not necessary</li>
+<li id=l-13 _a="MikeSmith"><a href=#l-13>#</a> [01:36] &lt;MikeSmith&gt; we have other python scripts in the tree that aren't meant to be run from the web</li>
+<li id=l-14 _a="MikeSmith"><a href=#l-14>#</a> [01:37] &lt;MikeSmith&gt; stuff in the tools/scripts directory for one</li>
+<li id=l-15 _a="MikeSmith"><a href=#l-15>#</a> [01:37] &lt;MikeSmith&gt; but in various other places as well</li>
+<li id=l-16 _a="MikeSmith"><a href=#l-16>#</a> [01:38] &lt;MikeSmith&gt; <a href="https://github.com/w3c/web-platform-tests/tree/master/tools/scripts">https://github.com/w3c/web-platform-tests/tree/master/tools/scripts</a> -- the manifest.py script and update_html5lib_tests.py and lint.py</li>
+<li id=l-17 _a="MikeSmith"><a href=#l-17>#</a> [01:39] &lt;MikeSmith&gt; stuff in <a href="https://github.com/w3c/web-platform-tests/tree/master/2dcontext/tools">https://github.com/w3c/web-platform-tests/tree/master/2dcontext/tools</a> for generating test cases</li>
+<li id=l-18 _a="bhill2"><a href=#l-18>#</a> [01:41] &lt;bhill2&gt; ok. gives the me the security willies</li>
+<li id=l-19 _a="jgraham"><a href=#l-19>#</a> [01:49] &lt;jgraham&gt; Well any python file is theoretically a security problem if it's unverified</li>
+<li id=l-20 _a="jgraham"><a href=#l-20>#</a> [01:50] &lt;jgraham&gt; If you write your helper file with nothing at the top level and no main() function (or one that won't accept to arguments), it won't be executed by the web handler</li>
+<li id=l-21 _a="jgraham"><a href=#l-21>#</a> [01:51] &lt;jgraham&gt; But things under /tools/ are actually a special case</li>
+<li id=l-22 _a="jgraham"><a href=#l-22>#</a> [01:52] &lt;jgraham&gt; So if you are really concerned you can put files there</li>
+<li id=l-23 _a="bhill2"><a href=#l-23>#</a> [01:52] &lt;bhill2&gt; but a utility script will have a main()</li>
+<li id=l-24 _a="bhill2"><a href=#l-24>#</a> [01:52] &lt;bhill2&gt; since they're generally intended to be run from the command line</li>
+<li id=l-25 _a="jgraham"><a href=#l-25>#</a> [01:54] &lt;jgraham&gt; main() isn't special in python</li>
+<li id=l-26 _a="jgraham"><a href=#l-26>#</a> [01:54] &lt;jgraham&gt; (but it is in the server)</li>
+<li id=l-27 _a="jgraham"><a href=#l-27>#</a> [01:54] &lt;jgraham&gt; you can do:</li>
+<li id=l-28 _a="jgraham"><a href=#l-28>#</a> [01:54] &lt;jgraham&gt; if __name__ == &quot;__main__&quot;:</li>
+<li id=l-29 _a="jgraham"><a href=#l-29>#</a> [01:55] &lt;jgraham&gt;     some_name_that_isnt_main()</li>
+<li id=l-30 _a="jgraham"><a href=#l-30>#</a> [01:55] &lt;jgraham&gt; Which I'm pretty sure won't get execuated in the server context (although I suppose I should check)</li>
+<li id=l-31 _a="jgraham" _r="Yeah"><a href=#l-31>#</a> [01:58] &lt;jgraham&gt; Yeah, it won</li>
+<li id=l-32 _a="jgraham"><a href=#l-32>#</a> [01:58] &lt;jgraham&gt; 't</li>
+<li id=l-33 _a="bhill2" _r="ok"><a href=#l-33>#</a> [02:00] &lt;bhill2&gt; ok, thanks</li>
+<li id=l-34 _a="MikeSmith"><a href=#l-34>#</a> [02:13] &lt;MikeSmith&gt; I guess if we wanted to we could implement support in wptserve for a blacklist of .py scripts in the tree that it won't evaluate</li>
+<li id=l-35 _a="bhill2"><a href=#l-35>#</a> [02:15] &lt;bhill2&gt; if ( inPath('tools') ) ...</li>
+<li id=l-36 _a="MikeSmith"><a href=#l-36>#</a> [02:20] &lt;MikeSmith&gt; I think there's already something like that in the wptserve code actually</li>
+<li id=l-37 _a="MikeSmith"><a href=#l-37>#</a> [02:20] &lt;MikeSmith&gt; not exactly for this case, but it already understands the tools dir is to be handled differently</li>
+<li id=l-38 _a="MikeSmith"><a href=#l-38>#</a> [02:21] &lt;MikeSmith&gt; ah in serve.py actually</li>
+<li id=l-39 _a="MikeSmith"><a href=#l-39>#</a> [02:22] &lt;MikeSmith&gt; ... (any_method, &quot;/tools/*&quot;, handlers.ErrorHandler(404))</li>
+<li id=l-40 _a="MikeSmith" _r="bhill2"><a href=#l-40>#</a> [02:23] &lt;MikeSmith&gt; bhill2: so it seems like it's safe security-wise to just drop them in the tools dir, as jgraham suggested</li>
+<li id=l-41 _a="MikeSmith"><a href=#l-41>#</a> [02:25] &lt;MikeSmith&gt; I guess we should document this</li>
+<li id=l-42 _a="MikeSmith"><a href=#l-42>#</a> [02:26] &lt;MikeSmith&gt; Will write a PR</li>
+<li id=l-43 _a="bhill2"><a href=#l-43>#</a> [02:32] &lt;bhill2&gt; nice</li>
+<li id=l-44 _a="bhill2"><a href=#l-44>#</a> [02:33] &lt;bhill2&gt; but would be better if</li>
+<li id=l-45 _a="bhill2"><a href=#l-45>#</a> [02:33] &lt;bhill2&gt; ... (any_method, &quot;*/tools/*&quot;, handlers.ErrorHandler(404))</li>
+<li id=l-46 _a="bhill2"><a href=#l-46>#</a> [02:33] &lt;bhill2&gt; so you can put utilities close to the files they affect</li>
+<li id=l-47 _a="MikeSmith"><a href=#l-47>#</a> [02:34] &lt;MikeSmith&gt; yeah that'd probably be ok</li>
+<li id=l-48 class=hide _a="heycam"><a href=#l-48>#</a> [02:37] * heycam is now known as heycam|away</li>
+<li id=l-49 _a="bhill2" _r="nope"><a href=#l-49>#</a> [02:40] &lt;bhill2&gt; nope: ValueError: Star seen after star in regexp</li>
+<li id=l-50 class=hide><a href=#l-50>#</a> [02:56] * Joins: bhill2_ (~bhill2@public.cloak)</li>
+<li id=l-51 class=hide><a href=#l-51>#</a> [03:03] * Quits: bhill2 (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-52 class=hide><a href=#l-52>#</a> [03:03] * Quits: bhill2_ (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-53 class=hide _a="heycam|away"><a href=#l-53>#</a> [03:20] * heycam|away is now known as heycam</li>
+<li id=l-54 class=hide _a="heycam"><a href=#l-54>#</a> [06:13] * heycam is now known as heycam|away</li>
+<li id=l-55 class=hide><a href=#l-55>#</a> [09:22] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+<li id=l-56 class=hide><a href=#l-56>#</a> [12:13] * Joins: ptressel (~chatzilla@public.cloak)</li>
+<li id=l-57 class=hide><a href=#l-57>#</a> [12:26] * Quits: ptressel (~chatzilla@public.cloak) (&quot;zzz&quot;)</li>
+<li id=l-58 class=hide><a href=#l-58>#</a> [14:09] * Quits: terri (~terri@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-59 class=hide><a href=#l-59>#</a> [14:12] * Joins: terri_offline (~terri@public.cloak)</li>
+<li id=l-60 class=hide _a="terri_offline"><a href=#l-60>#</a> [14:12] * terri_offline is now known as terri</li>
+<li id=l-61 class=hide><a href=#l-61>#</a> [14:52] * Joins: plh (plehegar@public.cloak)</li>
+<li id=l-62 _a="Ms2ger" _r="plh"><a href=#l-62>#</a> [14:58] &lt;Ms2ger&gt; plh, hey, going to do GSOC this year?</li>
+<li id=l-63 _a="plh"><a href=#l-63>#</a> [15:01] &lt;plh&gt; hi</li>
+<li id=l-64 _a="plh" _r="well"><a href=#l-64>#</a> [15:01] &lt;plh&gt; well, I'm out of budget for traveling :(</li>
+<li id=l-65 _a="Ms2ger"><a href=#l-65>#</a> [15:02] &lt;Ms2ger&gt; Didn't know it involved any</li>
+<li id=l-66 _a="plh" _r="well"><a href=#l-66>#</a> [15:02] &lt;plh&gt; well, unless this is near Boston, that would need some</li>
+<li id=l-67 _a="MikeSmith" _r="plh"><a href=#l-67>#</a> [15:07] &lt;MikeSmith&gt; plh: I think Ms2ger just means does W3C have any plans for sponsoring a student project for GSOC, like we did a couple years ago</li>
+<li id=l-68 _a="MikeSmith" _r="Ms2ger"><a href=#l-68>#</a> [15:07] &lt;MikeSmith&gt; Ms2ger: you have some specific ideas?</li>
+<li id=l-69 _a="Ms2ger"><a href=#l-69>#</a> [15:07] &lt;Ms2ger&gt; Not yet</li>
+<li id=l-70 _a="plh"><a href=#l-70>#</a> [15:08] &lt;plh&gt; oh</li>
+<li id=l-71 _a="Ms2ger"><a href=#l-71>#</a> [15:08] &lt;Ms2ger&gt; But we had a list one year that we didn't end up participating, IIRC</li>
+<li id=l-72 _a="plh"><a href=#l-72>#</a> [15:08] &lt;plh&gt; sorry</li>
+<li id=l-73 _a="plh"><a href=#l-73>#</a> [15:08] &lt;plh&gt; that would be a great idea indeed</li>
+<li id=l-74 _a="plh"><a href=#l-74>#</a> [15:09] &lt;plh&gt; deadline for applications is February 20</li>
+<li id=l-75 _a="MikeSmith"><a href=#l-75>#</a> [16:02] &lt;MikeSmith&gt; 明けましておめでとうございます friends</li>
+<li id=l-76 _a="MikeSmith"><a href=#l-76>#</a> [16:02] &lt;MikeSmith&gt; Happy New Year</li>
+<li id=l-77 _a="Ms2ger"><a href=#l-77>#</a> [16:08] &lt;Ms2ger&gt; And to you!</li>
+<li id=l-78 class=hide><a href=#l-78>#</a> [16:30] * Joins: scott_gonzalez (~scott_gonzalez@public.cloak)</li>
+<li id=l-79 _a="jgraham" _r="MikeSmith"><a href=#l-79>#</a> [17:07] &lt;jgraham&gt; MikeSmith: Happy new year!</li>
+<li id=l-80 _a="jgraham" _r="plh"><a href=#l-80>#</a> [17:07] &lt;jgraham&gt; plh: Yeah, let's sort out GSoC more proactively this year :)</li>
+<li id=l-81 class=hide><a href=#l-81>#</a> [17:27] * Quits: Ms2ger (~Ms2ger@public.cloak) (&quot;Happy New Year!&quot;)</li>
+<li id=l-82 class=hide><a href=#l-82>#</a> [17:43] * Joins: bhill2 (~bhill2@public.cloak)</li>
+<li id=l-83 class=hide><a href=#l-83>#</a> [17:43] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+<li id=l-84 class=hide><a href=#l-84>#</a> [17:43] * Joins: bhill2 (~bhill2@public.cloak)</li>
+<li id=l-85 class=hide><a href=#l-85>#</a> [17:52] * Joins: gitbot (~gitbot@public.cloak)</li>
+<li id=l-86><a href=#l-86>#</a> [17:52] -gitbot:#testing- [web-platform-tests] hillbrad closed pull request #1481: SRI allows base64 and unhyphenated digest names (master...update_sri_tests) <a href="https://github.com/w3c/web-platform-tests/pull/1481">https://github.com/w3c/web-platform-tests/pull/1481</a></li>
+<li id=l-87 class=hide><a href=#l-87>#</a> [17:52] * Parts: gitbot (~gitbot@public.cloak) (gitbot)</li>
+<li id=l-88 class=hide><a href=#l-88>#</a> [18:50] * Joins: bhill2_ (~bhill2@public.cloak)</li>
+<li id=l-89 class=hide><a href=#l-89>#</a> [18:56] * Quits: bhill2 (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-90 class=hide><a href=#l-90>#</a> [18:57] * Quits: bhill2_ (~bhill2@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-91 class=hide><a href=#l-91>#</a> [20:47] * Joins: AutomatedTester (~AutomatedTester@public.cloak)</li>
+<li id=l-92 class=hide><a href=#l-92>#</a> [22:41] * Joins: bhill2 (~bhill2@public.cloak)</li>
+<li id=l-93 class=hide><a href=#l-93>#</a> [22:42] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+<li id=l-94 class=hide><a href=#l-94>#</a> [23:03] * Quits: bhill2 (~bhill2@public.cloak) (Client closed connection)</li>
+<li id=l-95 class=hide><a href=#l-95>#</a> [23:06] * Quits: AutomatedTester (~AutomatedTester@public.cloak) (Client closed connection)</li>
+<li id=l-96 class=hide><a href=#l-96>#</a> [23:07] * Joins: bhill2 (~bhill2@public.cloak)</li>
+<li id=l-97 class=hide><a href=#l-97>#</a> Session Close: Thu Jan 01 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20141230>Previous day</a>, <a href=20150101>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

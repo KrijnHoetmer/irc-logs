@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #html-wg / 20150919</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="w3c/html-wg.20150919.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/html-wg">#html-wg</a> / 2015-09-19 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20150918>Previous day</a>, <a href=20150920>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Sat Sep 19 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #html-wg</li>
+<li id=l-3 _a="gsnedders" _r="AAA_awright"><a href=#l-3>#</a> [01:25] &lt;gsnedders&gt; AAA_awright: the non-web DOM impls are almost uniformly a /long/ way off interoperable with both specs and browsers</li>
+<li id=l-4 _a="gsnedders" _r="AAA_awright"><a href=#l-4>#</a> [01:26] &lt;gsnedders&gt; AAA_awright: and most of them won't change because of backwards compat in their own eco-systems…</li>
+<li id=l-5 _a="AAA_awright"><a href=#l-5>#</a> [01:29] &lt;AAA_awright&gt; Mhm</li>
+<li id=l-6 _a="AAA_awright" _r="gsnedders"><a href=#l-6>#</a> [01:29] &lt;AAA_awright&gt; gsnedders: I don't see it mattering too much because they're entirely different languages typically</li>
+<li id=l-7 _a="gsnedders" _r="AAA_awright"><a href=#l-7>#</a> [01:31] &lt;gsnedders&gt; AAA_awright: also most of them have shown no interest in anything new in the DOM in years, so is it worthwhile making the new specs more ambiguous for those who are actually likely to implement them? certainly WebIDL has gone a long way at helping theoretical portability, but even the Java mapping has been dropped because nobody was actually interested in it</li>
+<li id=l-8 _a="gsnedders" _r="AAA_awright"><a href=#l-8>#</a> [01:31] &lt;gsnedders&gt; AAA_awright: I don't think it's worthwhile keeping stuff agnostic for non-JS impls if no non-JS implementer cares about it</li>
+<li id=l-9 _a="AAA_awright" _r="Well"><a href=#l-9>#</a> [01:33] &lt;AAA_awright&gt; Well, and it's not just languages. Many on the Web Apps WG seem to think browsers are the only kind of user agent in existence</li>
+<li id=l-10 _a="gsnedders"><a href=#l-10>#</a> [01:33] &lt;gsnedders&gt; I don't think that's true. I think many think that web developers will code to what browsers implement, regardless of other UAs.</li>
+<li id=l-11 _a="AAA_awright"><a href=#l-11>#</a> [01:33] &lt;AAA_awright&gt; HTML seems to have these issues too... if less so there's a whole section on how to deal with non-HTML documents. In HTML. I don't get it.</li>
+<li id=l-12 _a="AAA_awright"><a href=#l-12>#</a> [01:38] &lt;AAA_awright&gt; I can provide additional examples when I run into them, I forget off the top of my head... But for instance, in the work of the RDF Javascript Libraries CG, most of the implementation is outside actual browsers</li>
+<li id=l-13 _a="gsnedders"><a href=#l-13>#</a> [01:39] &lt;gsnedders&gt; the entirely of the page loading, etc., stuff seems like it should be easy to split out… except then it turns out that so much web content relies on so much low-level detail of how it very tightly interacts with HTML that it's insane and likely impossible to change how tightly interconnected the specs practically have to be :(</li>
+<li id=l-14 _a="AAA_awright" _r="Oh"><a href=#l-14>#</a> [01:39] &lt;AAA_awright&gt; Oh, the history API? What if I'm inside an SVG document, I should normatively have access to history there, too</li>
+<li id=l-15 _a="gsnedders"><a href=#l-15>#</a> [01:41] &lt;gsnedders&gt; Agreed.</li>
+<li id=l-16 _a="gsnedders"><a href=#l-16>#</a> [01:43] &lt;gsnedders&gt; it'd be nice to try and split the Window object out again, but that just might end up so heavily cross-referenced that it's unclear how much is gained</li>
+<li id=l-17 _a="AAA_awright"><a href=#l-17>#</a> [01:46] &lt;AAA_awright&gt; In my understanding, there's not much you need to do. window is the global object, anything not specified as NoInterfaceObject will populate that object. Just move out all the things relating to logic to a separate document.</li>
+<li id=l-18 _a="gsnedders"><a href=#l-18>#</a> [01:47] &lt;gsnedders&gt; It depends how much you want to include with it, really.</li>
+<li id=l-19 _a="gsnedders"><a href=#l-19>#</a> [01:47] &lt;gsnedders&gt; If you want to include History, for example, you then start needing definitions of browsing contexts so you have a definition of what does and does not create a history item</li>
+<li id=l-20 _a="AAA_awright"><a href=#l-20>#</a> [01:49] &lt;AAA_awright&gt; I'd spec out the Web platform like this: HTTP, XML, DOM, text/html (the syntax), HTML (the vocabulary), CSS (how to visually render a DOM), HTML DOM definitions, CSS OM, User-agent primitives, other scripting stuff as needed...</li>
+<li id=l-21 _a="gsnedders"><a href=#l-21>#</a> [01:49] &lt;gsnedders&gt; And then there's the &quot;navigating a document&quot; stuff with all the special cases for javascript: and about:blank which are just evil, but likely impossible to get rid of</li>
+<li id=l-22 _a="gsnedders" _r="AAA_awright"><a href=#l-22>#</a> [01:50] &lt;gsnedders&gt; AAA_awright: the problem is the syntax depends on the definition of things like document.open and document.write, and script queues, etc.</li>
+<li id=l-23 _a="gsnedders"><a href=#l-23>#</a> [01:50] &lt;gsnedders&gt; It'd be nice to have a nice clean separation, but that's not what we have :(</li>
+<li id=l-24 _a="AAA_awright"><a href=#l-24>#</a> [01:51] &lt;AAA_awright&gt; You can abstractly hook that out. &quot;When a script tag is encountered: Attempt to evaluate the contents, and pass along a reference to the current DOM so it can be modified by the script&quot;</li>
+<li id=l-25 _a="gsnedders" _r="AAA_awright"><a href=#l-25>#</a> [01:51] &lt;gsnedders&gt; AAA_awright: except it's not that simple</li>
+<li id=l-26 _a="AAA_awright"><a href=#l-26>#</a> [01:52] &lt;AAA_awright&gt; That's roughly how I recall reading it in the HTML TR</li>
+<li id=l-27 _a="gsnedders" _r="AAA_awright"><a href=#l-27>#</a> [01:52] &lt;gsnedders&gt; AAA_awright: &lt;script&gt;document.write(&quot;&lt;script&gt;document.write('&lt;script&gt;…&lt;/script&gt;')&lt;\/script&gt;&quot;)&lt;/script&gt; starts to get interesting</li>
+<li id=l-28 _a="gsnedders" _r="AAA_awright"><a href=#l-28>#</a> [01:52] &lt;gsnedders&gt; AAA_awright: which is what the spec uses &quot;pending scripts&quot; and &quot;script nesting level&quot; and such like for</li>
+<li id=l-29 _a="gsnedders" _r="AAA_awright"><a href=#l-29>#</a> [01:53] &lt;gsnedders&gt; AAA_awright: which affect parsing</li>
+<li id=l-30 _a="AAA_awright" _r="gsnedders"><a href=#l-30>#</a> [01:56] &lt;AAA_awright&gt; gsnedders: While we're on the topic of quirks, that's going to result in a parse error because the first &lt;/script&gt; isn't escaped</li>
+<li id=l-31 _a="AAA_awright"><a href=#l-31>#</a> [01:57] &lt;AAA_awright&gt; If browsers can drop e.g. xml:base and MathML because they're not used, can't we just drop &quot;script nesting level&quot;</li>
+<li id=l-32 _a="AAA_awright"><a href=#l-32>#</a> [01:57] &lt;AAA_awright&gt; (idk)</li>
+<li id=l-33 _a="gsnedders" _r="AAA_awright"><a href=#l-33>#</a> [01:57] &lt;gsnedders&gt; AAA_awright: nah, this stuff is relied on all over the place :(</li>
+<li id=l-34 _a="gsnedders" _r="AAA_awright"><a href=#l-34>#</a> [01:59] &lt;gsnedders&gt; AAA_awright: the horrible reality is the most interwound, horrible stuff, is what's hardest to get rid of :(</li>
+<li id=l-35 _a="AAA_awright"><a href=#l-35>#</a> [02:05] &lt;AAA_awright&gt; I'm not finding any good reason this can't slowly be pried apart</li>
+<li id=l-36 _a="AAA_awright"><a href=#l-36>#</a> [02:06] &lt;AAA_awright&gt; HTML parsing has nothing to do with script execution, you can still look at a DOM and say &quot;alright, now render this&quot;</li>
+<li id=l-37 _a="AAA_awright"><a href=#l-37>#</a> [02:07] &lt;AAA_awright&gt; (having not executed any scripts up to that point)</li>
+<li id=l-38 _a="AAA_awright"><a href=#l-38>#</a> [02:07] &lt;AAA_awright&gt; Which is necessary to support anyways, there's plenty of applications that don't execute scripts, like mail clients. Indeed HTML defines &lt;noscript/&gt;</li>
+<li id=l-39 _a="gsnedders" _r="AAA_awright"><a href=#l-39>#</a> [02:15] &lt;gsnedders&gt; AAA_awright: it has to define at the very least what scripts run synchronously, what scripts run when during parsing, where exactly content from document.write ends up, what document.open does to the pre-existing DOM and where content that follows the script element ends up…</li>
+<li id=l-40 _a="gsnedders"><a href=#l-40>#</a> [02:15] &lt;gsnedders&gt; the scripting disabled case is easy, certainly</li>
+<li id=l-41 _a="AAA_awright"><a href=#l-41>#</a> [02:22] &lt;AAA_awright&gt; A theoretical &quot;Scripting evaluation&quot; document could do that... Given a DOM (which may or may not be completely parsed at the time this process begins), execute the scripts inside it. It would also define the nature of the event loop, etc.</li>
+<li id=l-42 _a="AAA_awright"><a href=#l-42>#</a> [02:22] &lt;AAA_awright&gt; What will convince me otherwise is some proof that scripting must be inherently tied to HTML syntax parsing</li>
+<li id=l-43 class=hide><a href=#l-43>#</a> [04:27] * Quits: hgl (~hgl@public.cloak) (&quot;Quit&quot;)</li>
+<li id=l-44 class=hide><a href=#l-44>#</a> [04:41] * Joins: hgl (~hgl@public.cloak)</li>
+<li id=l-45 class=hide><a href=#l-45>#</a> [06:18] * Quits: MikeSmith (~MikeSmith@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-46 class=hide><a href=#l-46>#</a> [06:52] * Joins: MikeSmith (~MikeSmith@public.cloak)</li>
+<li id=l-47 class=hide><a href=#l-47>#</a> [07:03] * Quits: dustinm (~dustinm@public.cloak) (&quot;Leaving&quot;)</li>
+<li id=l-48 class=hide><a href=#l-48>#</a> [07:09] * Quits: hgl (~hgl@public.cloak) (hgl)</li>
+<li id=l-49 class=hide><a href=#l-49>#</a> [07:10] * Joins: hgl (~hgl@public.cloak)</li>
+<li id=l-50 class=hide><a href=#l-50>#</a> [07:15] * Joins: dustinm (~dustinm@public.cloak)</li>
+<li id=l-51 class=hide><a href=#l-51>#</a> [10:33] * Joins: iandevlin (~iandevlin@public.cloak)</li>
+<li id=l-52 class=hide><a href=#l-52>#</a> [15:13] * Quits: iandevlin (~iandevlin@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-53 class=hide><a href=#l-53>#</a> [15:16] * Joins: iandevlin (~iandevlin@public.cloak)</li>
+<li id=l-54 class=hide><a href=#l-54>#</a> [18:00] * Quits: iandevlin (~iandevlin@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-55 class=hide><a href=#l-55>#</a> [18:40] * Quits: hgl (~hgl@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-56 class=hide><a href=#l-56>#</a> [18:42] * Joins: hgl (~hgl@public.cloak)</li>
+<li id=l-57 class=hide><a href=#l-57>#</a> Session Close: Sun Sep 20 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20150918>Previous day</a>, <a href=20150920>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

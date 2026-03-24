@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20140115</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/css.20140115.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2014-01-15 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed Jan 15 00:00:00 2014</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #css</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:06] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:09] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:13] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-6"><a href="#l-6">#</a> [00:14] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:15] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-8" _a="TabAtkins" _r="paul___irish"><a href="#l-8">#</a> [00:19] &lt;TabAtkins&gt; paul___irish: Ah, you're right, we can't use font-size as a discriminator in @font-face, at least.  So yeah, doesn't really make sense.</li>
+ <li id="l-9" _a="TabAtkins"><a href="#l-9">#</a> [00:19] &lt;TabAtkins&gt; I'll think on it and see if it makes sense to special-case the grammar to not force the inclusion of font-size.</li>
+ <li id="l-10"><a href="#l-10">#</a> [00:20] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-11"><a href="#l-11">#</a> [00:20] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-12" _a="TabAtkins" _r="paul___irish"><a href="#l-12">#</a> [00:22] &lt;TabAtkins&gt; paul___irish: Ah, fantasai just pointed out *why* font-size is required.</li>
+ <li id="l-13" _a="TabAtkins"><a href="#l-13">#</a> [00:22] &lt;TabAtkins&gt; It's a grammar disambiguator.</li>
+ <li id="l-14" _a="TabAtkins"><a href="#l-14">#</a> [00:22] &lt;TabAtkins&gt; Blame the ability to have unquoted font names.</li>
+ <li id="l-15" _a="TabAtkins"><a href="#l-15">#</a> [00:22] &lt;TabAtkins&gt; We can't tell whether &quot;bold Arial&quot; is dictating the bold variant of &quot;Arial&quot;, or a font named &quot;bold Arial&quot;.</li>
+ <li id="l-16" _a="TabAtkins"><a href="#l-16">#</a> [00:23] &lt;TabAtkins&gt; Requiring a font-size between them disambiguates this.</li>
+ <li id="l-17" _a="TabAtkins"><a href="#l-17">#</a> [00:23] &lt;TabAtkins&gt; So no, we can't remove the font-size from the grammar for .match().</li>
+ <li id="l-18" _a="TabAtkins"><a href="#l-18">#</a> [00:23] &lt;TabAtkins&gt; I'll put a note in the Font Load Events spec about this, recommending just using &quot;1em&quot; or whatever.</li>
+ <li id="l-19"><a href="#l-19">#</a> [00:27] * Quits: teoli (~teoli@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-20" _a="paul___irish" _r="TabAtkins"><a href="#l-20">#</a> [00:27] &lt;paul___irish&gt; TabAtkins: that'd be awesome. thank you</li>
+ <li id="l-21" _a="paul___irish"><a href="#l-21">#</a> [00:28] &lt;paul___irish&gt; tried out our impl in blink this weekend. pretty fun. :)</li>
+ <li id="l-22"><a href="#l-22">#</a> [00:36] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+ <li id="l-23"><a href="#l-23">#</a> [00:58] * Joins: dwim (~dwim@public.cloak)</li>
+ <li id="l-24"><a href="#l-24">#</a> [01:06] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-25"><a href="#l-25">#</a> [01:08] * Joins: zcorpan_ (~zcorpan@public.cloak)</li>
+ <li id="l-26"><a href="#l-26">#</a> [01:08] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-27"><a href="#l-27">#</a> [01:15] * Quits: zcorpan_ (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-28"><a href="#l-28">#</a> [01:24] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-29"><a href="#l-29">#</a> [01:38] * Joins: sgalineau (~sgalineau@public.cloak)</li>
+ <li id="l-30"><a href="#l-30">#</a> [01:40] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-31"><a href="#l-31">#</a> [01:50] * Joins: adenilson (~anonymous@public.cloak)</li>
+ <li id="l-32"><a href="#l-32">#</a> [01:53] * Joins: eliezerb_2nd (~Eliezer@public.cloak)</li>
+ <li id="l-33"><a href="#l-33">#</a> [01:53] * Quits: eliezerb (~Eliezer@public.cloak) (Client closed connection)</li>
+ <li id="l-34"><a href="#l-34">#</a> [01:59] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+ <li id="l-35"><a href="#l-35">#</a> [02:09] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-36"><a href="#l-36">#</a> [02:10] * Quits: jet (~junglecode@public.cloak) (jet)</li>
+ <li id="l-37"><a href="#l-37">#</a> [02:10] * Quits: sgalineau (~sgalineau@public.cloak) (Client closed connection)</li>
+ <li id="l-38"><a href="#l-38">#</a> [02:16] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-39"><a href="#l-39">#</a> [02:29] * Quits: lmcliste_ (~lmclister@public.cloak) (&quot;&quot;)</li>
+ <li id="l-40"><a href="#l-40">#</a> [02:33] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-41"><a href="#l-41">#</a> [02:33] * Joins: adenilson (~anonymous@public.cloak)</li>
+ <li id="l-42"><a href="#l-42">#</a> [02:42] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-43"><a href="#l-43">#</a> [02:42] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-44"><a href="#l-44">#</a> [02:42] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-45"><a href="#l-45">#</a> [03:00] * Quits: dwim (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-46"><a href="#l-46">#</a> [03:00] * Joins: dwim (~dwim@public.cloak)</li>
+ <li id="l-47"><a href="#l-47">#</a> [03:03] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-48"><a href="#l-48">#</a> [03:03] * Quits: eliezerb_2nd (~Eliezer@public.cloak) (Client closed connection)</li>
+ <li id="l-49"><a href="#l-49">#</a> [03:10] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-50"><a href="#l-50">#</a> [03:16] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+ <li id="l-51"><a href="#l-51">#</a> [03:17] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-52"><a href="#l-52">#</a> [03:18] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-53"><a href="#l-53">#</a> [03:26] * Quits: eliezerb (~Eliezer@public.cloak) (Client closed connection)</li>
+ <li id="l-54"><a href="#l-54">#</a> [03:26] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-55"><a href="#l-55">#</a> [03:26] * Joins: adenilson (~anonymous@public.cloak)</li>
+ <li id="l-56"><a href="#l-56">#</a> [03:26] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+ <li id="l-57"><a href="#l-57">#</a> [03:39] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-58"><a href="#l-58">#</a> [03:40] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-59"><a href="#l-59">#</a> [03:42] * Quits: dwim (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-60"><a href="#l-60">#</a> [03:43] * Quits: dbaron (~dbaron@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-61"><a href="#l-61">#</a> [03:46] * Quits: eliezerb (~Eliezer@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-62"><a href="#l-62">#</a> [04:10] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-63"><a href="#l-63">#</a> [04:18] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-64"><a href="#l-64">#</a> [05:11] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-65"><a href="#l-65">#</a> [05:18] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-66"><a href="#l-66">#</a> [05:31] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-67"><a href="#l-67">#</a> [05:31] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-68"><a href="#l-68">#</a> [05:32] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-69"><a href="#l-69">#</a> [05:32] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-70"><a href="#l-70">#</a> [05:32] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-71"><a href="#l-71">#</a> [05:44] * Joins: jet (~junglecode@public.cloak)</li>
+ <li id="l-72"><a href="#l-72">#</a> [05:47] * Quits: darktears (~darktears@public.cloak) (Client closed connection)</li>
+ <li id="l-73"><a href="#l-73">#</a> [06:11] * Joins: dauwhe_ (~dauwhe@public.cloak)</li>
+ <li id="l-74"><a href="#l-74">#</a> [06:11] * Quits: dauwhe (~dauwhe@public.cloak) (Client closed connection)</li>
+ <li id="l-75"><a href="#l-75">#</a> [06:12] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-76"><a href="#l-76">#</a> [06:19] * Joins: zcorpan_ (~zcorpan@public.cloak)</li>
+ <li id="l-77"><a href="#l-77">#</a> [06:19] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-78"><a href="#l-78">#</a> [06:24] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-79"><a href="#l-79">#</a> [08:43] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+ <li id="l-80" _a="plinss"><a href="#l-80">#</a> [08:53] * plinss changes topic to '15-jan-2014 Telcon Canceled'</li>
+ <li id="l-81" _a="fantasai"><a href="#l-81">#</a> [08:55] * fantasai waves to Ms2ger</li>
+ <li id="l-82" _a="Ms2ger"><a href="#l-82">#</a> [08:55] &lt;Ms2ger&gt; Good morning</li>
+ <li id="l-83" _a="fantasai"><a href="#l-83">#</a> [08:56] &lt;fantasai&gt; Good evening :)</li>
+ <li id="l-84" _a="Ms2ger"><a href="#l-84">#</a> [08:56] &lt;Ms2ger&gt; How are you?</li>
+ <li id="l-85" _a="fantasai"><a href="#l-85">#</a> [08:57] &lt;fantasai&gt; sleepy</li>
+ <li id="l-86"><a href="#l-86">#</a> [08:57] * Quits: jet (~junglecode@public.cloak) (jet)</li>
+ <li id="l-87" _a="fantasai"><a href="#l-87">#</a> [08:57] &lt;fantasai&gt; I should go to bed, but have to convince myself to move first, heh</li>
+ <li id="l-88" _a="Ms2ger"><a href="#l-88">#</a> [08:59] &lt;Ms2ger&gt; Can't argue with that :)</li>
+ <li id="l-89" _a="fantasai"><a href="#l-89">#</a> [08:59] * fantasai overcomes static friction</li>
+ <li id="l-90" _a="Ms2ger"><a href="#l-90">#</a> [09:00] &lt;Ms2ger&gt; Good night :)</li>
+ <li id="l-91"><a href="#l-91">#</a> [09:06] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-92"><a href="#l-92">#</a> [09:07] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-93"><a href="#l-93">#</a> [09:07] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-94"><a href="#l-94">#</a> [09:07] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-95"><a href="#l-95">#</a> [09:11] * Quits: jdaggett (~jdaggett@public.cloak) (jdaggett)</li>
+ <li id="l-96"><a href="#l-96">#</a> [09:32] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-97"><a href="#l-97">#</a> [09:33] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-98"><a href="#l-98">#</a> [09:45] * Quits: zcorpan_ (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-99"><a href="#l-99">#</a> [09:45] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-100"><a href="#l-100">#</a> [09:52] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-101"><a href="#l-101">#</a> [10:32] * Quits: dbaron (~dbaron@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-102"><a href="#l-102">#</a> [10:55] * Joins: darktears (~darktears@public.cloak)</li>
+ <li id="l-103"><a href="#l-103">#</a> [12:30] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-104"><a href="#l-104">#</a> [12:51] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-105"><a href="#l-105">#</a> [12:51] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-106"><a href="#l-106">#</a> [12:58] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-107"><a href="#l-107">#</a> [13:01] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-108"><a href="#l-108">#</a> [13:13] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-109"><a href="#l-109">#</a> [13:13] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-110"><a href="#l-110">#</a> [13:45] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-111"><a href="#l-111">#</a> [14:00] * Quits: dauwhe_ (~dauwhe@public.cloak) (Client closed connection)</li>
+ <li id="l-112"><a href="#l-112">#</a> [14:01] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-113"><a href="#l-113">#</a> [14:24] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-114"><a href="#l-114">#</a> [14:47] * Quits: eliezerb (~Eliezer@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-115"><a href="#l-115">#</a> [15:00] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-116"><a href="#l-116">#</a> [15:07] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-117"><a href="#l-117">#</a> [15:21] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-118"><a href="#l-118">#</a> [15:40] * Quits: eliezerb (~Eliezer@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-119"><a href="#l-119">#</a> [15:55] * Quits: dwim_ (~dwim@public.cloak) (Client closed connection)</li>
+ <li id="l-120"><a href="#l-120">#</a> [15:55] * Joins: dwim_ (~dwim@public.cloak)</li>
+ <li id="l-121"><a href="#l-121">#</a> [16:00] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-122"><a href="#l-122">#</a> [16:05] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-123"><a href="#l-123">#</a> [16:07] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-124"><a href="#l-124">#</a> [16:28] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-125"><a href="#l-125">#</a> [16:29] * Joins: eliezerb_2nd (~Eliezer@public.cloak)</li>
+ <li id="l-126"><a href="#l-126">#</a> [16:34] * Quits: eliezerb (~Eliezer@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-127"><a href="#l-127">#</a> [17:00] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-128"><a href="#l-128">#</a> [17:04] * Joins: nvdbleek (~nvdbleek@public.cloak)</li>
+ <li id="l-129" _a="nvdbleek"><a href="#l-129">#</a> [17:05] * nvdbleek i'm going to  a sep room to do the call</li>
+ <li id="l-130"><a href="#l-130">#</a> [17:07] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-131" _a="SimonSapin" _r="nvdbleek"><a href="#l-131">#</a> [17:10] &lt;SimonSapin&gt; nvdbleek: the call is cancelled <a href="https://lists.w3.org/Archives/Member/w3c-css-wg/2014JanMar/0032.html">https://lists.w3.org/Archives/Member/w3c-css-wg/2014JanMar/0032.html</a></li>
+ <li id="l-132"><a href="#l-132">#</a> [17:29] * Joins: lmcliste_ (~lmclister@public.cloak)</li>
+ <li id="l-133"><a href="#l-133">#</a> [17:33] * Joins: eliezerb (~Eliezer@public.cloak)</li>
+ <li id="l-134"><a href="#l-134">#</a> [17:38] * Quits: eliezerb_2nd (~Eliezer@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-135"><a href="#l-135">#</a> [17:48] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-136"><a href="#l-136">#</a> [17:51] * Joins: sgalineau (~sgalineau@public.cloak)</li>
+ <li id="l-137" _a="krit" _r="SimonSapin"><a href="#l-137">#</a> [17:53] &lt;krit&gt; SimonSapin: oh, thanks</li>
+ <li id="l-138"><a href="#l-138">#</a> [17:55] * Joins: MaRakow (~MaRakow@public.cloak)</li>
+ <li id="l-139"><a href="#l-139">#</a> [17:56] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-140"><a href="#l-140">#</a> [17:56] * Quits: MaRakow (~MaRakow@public.cloak) (&quot;Page closed&quot;)</li>
+ <li id="l-141"><a href="#l-141">#</a> [17:56] * Quits: nvdbleek (~nvdbleek@public.cloak) (nvdbleek)</li>
+ <li id="l-142"><a href="#l-142">#</a> [17:57] * Joins: glenn (~gadams@public.cloak)</li>
+ <li id="l-143"><a href="#l-143">#</a> [17:59] * Joins: BradK (~bradk@public.cloak)</li>
+ <li id="l-144"><a href="#l-144">#</a> [18:00] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-145"><a href="#l-145">#</a> [18:00] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-146"><a href="#l-146">#</a> [18:01] * Parts: BradK (~bradk@public.cloak) (BradK)</li>
+ <li id="l-147"><a href="#l-147">#</a> [18:06] * Joins: adenilson (~anonymous@public.cloak)</li>
+ <li id="l-148"><a href="#l-148">#</a> [18:21] * Joins: Rossen_ (~Rossen@public.cloak)</li>
+ <li id="l-149"><a href="#l-149">#</a> [18:22] * Joins: israelh (~israelh@public.cloak)</li>
+ <li id="l-150"><a href="#l-150">#</a> [18:22] * Quits: israelh (~israelh@public.cloak) (&quot;Page closed&quot;)</li>
+ <li id="l-151"><a href="#l-151">#</a> [18:32] * Joins: jet (~junglecode@public.cloak)</li>
+ <li id="l-152"><a href="#l-152">#</a> [18:34] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-153"><a href="#l-153">#</a> [18:35] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-154"><a href="#l-154">#</a> [18:37] * Joins: teoli_ (~teoli@public.cloak)</li>
+ <li id="l-155"><a href="#l-155">#</a> [18:37] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-156"><a href="#l-156">#</a> [18:45] * Quits: jet (~junglecode@public.cloak) (jet)</li>
+ <li id="l-157"><a href="#l-157">#</a> [18:53] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-158"><a href="#l-158">#</a> [19:02] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-159"><a href="#l-159">#</a> [19:09] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-160" _a="fantasai"><a href="#l-160">#</a> [19:24] &lt;fantasai&gt; ping astearns</li>
+ <li id="l-161" _a="astearns" _r="fantasai"><a href="#l-161">#</a> [19:24] &lt;astearns&gt; fantasai: heya</li>
+ <li id="l-162" _a="fantasai" _r="astearns"><a href="#l-162">#</a> [19:24] &lt;fantasai&gt; astearns: So...</li>
+ <li id="l-163" _a="fantasai" _r="astearns"><a href="#l-163">#</a> [19:24] &lt;fantasai&gt; astearns: Serialization is supposed to be defined in CSSOM</li>
+ <li id="l-164" _a="fantasai"><a href="#l-164">#</a> [19:25] &lt;fantasai&gt; we explicitly didn't include it in css3-background</li>
+ <li id="l-165"><a href="#l-165">#</a> [19:25] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+ <li id="l-166" _a="fantasai"><a href="#l-166">#</a> [19:25] &lt;fantasai&gt; because of that</li>
+ <li id="l-167" _a="fantasai"><a href="#l-167">#</a> [19:25] &lt;fantasai&gt; I can add a statement for background-position</li>
+ <li id="l-168" _a="fantasai"><a href="#l-168">#</a> [19:25] &lt;fantasai&gt; but I don't want to go through and add serialization rules for all the properties...</li>
+ <li id="l-169" _a="fantasai"><a href="#l-169">#</a> [19:25] &lt;fantasai&gt; because it shouldn't be in this spec</li>
+ <li id="l-170" _a="astearns"><a href="#l-170">#</a> [19:25] &lt;astearns&gt; I just posted an additional serialization question on background-position</li>
+ <li id="l-171" _a="astearns"><a href="#l-171">#</a> [19:25] &lt;astearns&gt; (in a [css-shapes] post, unfortunately)</li>
+ <li id="l-172" _a="astearns"><a href="#l-172">#</a> [19:26] &lt;astearns&gt; I'm mainly (only?) concerned with &lt;position&gt; because the computed value makes serialization tricky</li>
+ <li id="l-173" _a="fantasai"><a href="#l-173">#</a> [19:26] &lt;fantasai&gt; Yes</li>
+ <li id="l-174" _a="fantasai"><a href="#l-174">#</a> [19:26] &lt;fantasai&gt; but</li>
+ <li id="l-175" _a="fantasai"><a href="#l-175">#</a> [19:27] &lt;fantasai&gt; it should be fixed in CSSOM</li>
+ <li id="l-176" _a="Ms2ger"><a href="#l-176">#</a> [19:27] &lt;Ms2ger&gt; Why?</li>
+ <li id="l-177" _a="fantasai"><a href="#l-177">#</a> [19:27] &lt;fantasai&gt; where we define the serialization of all the other types</li>
+ <li id="l-178" _a="fantasai" _r="Ms2ger"><a href="#l-178">#</a> [19:28] &lt;fantasai&gt; Ms2ger: Because CSSOM is where the serialization rules are, for the most part</li>
+ <li id="l-179" _a="krit" _r="fantasai"><a href="#l-179">#</a> [19:28] &lt;krit&gt; fantasai: unless we republish an updated version every couples of month, we maybe need to think how it should be done per spec and property</li>
+ <li id="l-180" _a="fantasai" _r="krit"><a href="#l-180">#</a> [19:29] &lt;fantasai&gt; krit: I think that was the goal, to get there eventualy</li>
+ <li id="l-181" _a="Ms2ger"><a href="#l-181">#</a> [19:29] &lt;Ms2ger&gt; The serialization rules should be there because they should be there?</li>
+ <li id="l-182" _a="fantasai" _r="krit"><a href="#l-182">#</a> [19:29] &lt;fantasai&gt; krit: but CSS2.1's rules aren't in 2.1</li>
+ <li id="l-183" _a="astearns"><a href="#l-183">#</a> [19:29] &lt;astearns&gt; I agree that CSSOM should define serialization, but if/when modules make new things that require changes, I think it's fine to describe those changes in those modules</li>
+ <li id="l-184" _a="fantasai" _r="krit"><a href="#l-184">#</a> [19:29] &lt;fantasai&gt; krit: so they have to be covered by CSSOM</li>
+ <li id="l-185" _a="fantasai" _r="krit"><a href="#l-185">#</a> [19:29] &lt;fantasai&gt; krit: CSS3 Backgrounds was similarly grandfathered in</li>
+ <li id="l-186" _a="fantasai" _r="krit"><a href="#l-186">#</a> [19:29] &lt;fantasai&gt; krit: adding serialization rules to it would expand the scope</li>
+ <li id="l-187" _a="fantasai" _r="krit"><a href="#l-187">#</a> [19:30] &lt;fantasai&gt; krit: which I don't really want to do right now, I want to just fix the things that are wrong in it righ tnow</li>
+ <li id="l-188" _a="krit" _r="fantasai"><a href="#l-188">#</a> [19:30] &lt;krit&gt; fantasai: I totally understand your point</li>
+ <li id="l-189" _a="krit" _r="fantasai"><a href="#l-189">#</a> [19:31] &lt;krit&gt; fantasai: the problem is that we don’t even have a stable version of CSSOM today… how can we expect that we get an updated version in short amount of times?</li>
+ <li id="l-190" _a="fantasai"><a href="#l-190">#</a> [19:31] &lt;fantasai&gt; The answer to that question is right in your statement.</li>
+ <li id="l-191" _a="fantasai"><a href="#l-191">#</a> [19:31] &lt;fantasai&gt; CSSOM is unstable, so we can updated it whenever we please :P</li>
+ <li id="l-192" _a="fantasai"><a href="#l-192">#</a> [19:31] &lt;fantasai&gt; I was looking through it actually, and I can't see that it handles serialization properly for a lot of things</li>
+ <li id="l-193" _a="fantasai"><a href="#l-193">#</a> [19:31] &lt;fantasai&gt; any property with more than one component value</li>
+ <li id="l-194" _a="fantasai"><a href="#l-194">#</a> [19:31] &lt;fantasai&gt; :/</li>
+ <li id="l-195" _a="fantasai"><a href="#l-195">#</a> [19:32] &lt;fantasai&gt; or at least, more than one component value and not a defined order of them</li>
+ <li id="l-196" _a="fantasai"><a href="#l-196">#</a> [19:32] &lt;fantasai&gt; counter-reset is an ordered list, so it's handled...</li>
+ <li id="l-197" _a="fantasai"><a href="#l-197">#</a> [19:32] &lt;fantasai&gt; but background-position</li>
+ <li id="l-198" _a="fantasai"><a href="#l-198">#</a> [19:32] &lt;fantasai&gt; and border-spacing</li>
+ <li id="l-199" _a="fantasai"><a href="#l-199">#</a> [19:32] &lt;fantasai&gt; aren't</li>
+ <li id="l-200" _a="fantasai"><a href="#l-200">#</a> [19:33] &lt;fantasai&gt; s/defined order/defined order and size/</li>
+ <li id="l-201" _a="fantasai"><a href="#l-201">#</a> [19:33] &lt;fantasai&gt; s/size/number/</li>
+ <li id="l-202" _a="fantasai"><a href="#l-202">#</a> [19:33] &lt;fantasai&gt; because they have optional components</li>
+ <li id="l-203" _a="krit" _r="fantasai"><a href="#l-203">#</a> [19:33] &lt;krit&gt; fantasai: I guess the question is can our specs get to CR, even if a part is not specified (meaning CSSOM no in LC)</li>
+ <li id="l-204" _a="astearns"><a href="#l-204">#</a> [19:33] &lt;astearns&gt; what I want to avoid happening again: we go to LC on Shapes, defining things in a reasonable way for &lt;position&gt;, then those things about &lt;position&gt; change out from under us, so we have to go to LC again. Last time it was computed value. I don't want to do the same dance with serialization</li>
+ <li id="l-205" _a="astearns"><a href="#l-205">#</a> [19:33] &lt;astearns&gt; where it gets defined doesn't matter to me</li>
+ <li id="l-206" _a="krit" _r="astearns"><a href="#l-206">#</a> [19:34] &lt;krit&gt; astearns: agree</li>
+ <li id="l-207" _a="fantasai" _r="astearns"><a href="#l-207">#</a> [19:34] &lt;fantasai&gt; astearns: Where in your spec are you relying on serialization such that changing the serialization rules would break your spec?</li>
+ <li id="l-208" _a="astearns"><a href="#l-208">#</a> [19:35] &lt;astearns&gt; I wouldn't characterize it as a break, just a change. I define the computed value and serialization of circle() and ellipse()</li>
+ <li id="l-209" _a="fantasai"><a href="#l-209">#</a> [19:36] &lt;fantasai&gt; OK</li>
+ <li id="l-210" _a="fantasai" _r="astearns"><a href="#l-210">#</a> [19:36] &lt;fantasai&gt; astearns: Are you OK for CSS3 Background to go to LC, and we work on serialization of &lt;position&gt; in CSSOM?</li>
+ <li id="l-211" _a="fantasai" _r="astearns"><a href="#l-211">#</a> [19:37] &lt;fantasai&gt; astearns: We can refile the issue against LC if it turns out to be a problem.</li>
+ <li id="l-212" _a="astearns"><a href="#l-212">#</a> [19:37] &lt;astearns&gt; I'd like to see the serialization rules for background-position set down somewhere before we go to LC on Backgrounds</li>
+ <li id="l-213" _a="sgalineau"><a href="#l-213">#</a> [19:38] * sgalineau remembers when 'put it in CSSOM' was the other 'put it in GCPM'. Thank you, Simon Pieters</li>
+ <li id="l-214" _a="fantasai" _r="sgalineau"><a href="#l-214">#</a> [19:38] &lt;fantasai&gt; sgalineau, it was never that bad. Amything we wanted to put in CSSOM was something we seriously wanted someone to work on. Except nobody did</li>
+ <li id="l-215" _a="sgalineau"><a href="#l-215">#</a> [19:39] * sgalineau oh yeah, I see the huge difference :)</li>
+ <li id="l-216" _a="sgalineau"><a href="#l-216">#</a> [19:39] * sgalineau stands corrected. There was GCPM. And there was piping work to /dev/nul.</li>
+ <li id="l-217"><a href="#l-217">#</a> [19:39] * Quits: teoli_ (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-218"><a href="#l-218">#</a> [19:40] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-219"><a href="#l-219">#</a> [19:40] * Joins: teoli_ (~teoli@public.cloak)</li>
+ <li id="l-220"><a href="#l-220">#</a> [19:40] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-221" _a="fantasai"><a href="#l-221">#</a> [19:40] &lt;fantasai&gt; We were piping it to the zcorpan of the future :)</li>
+ <li id="l-222" _a="fantasai"><a href="#l-222">#</a> [19:40] &lt;fantasai&gt; We just didn't know it yet.</li>
+ <li id="l-223"><a href="#l-223">#</a> [19:40] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-224"><a href="#l-224">#</a> [19:41] * Quits: dauwhe (~dauwhe@public.cloak) (Client closed connection)</li>
+ <li id="l-225" _a="sgalineau" _r="Yeah"><a href="#l-225">#</a> [19:41] &lt;sgalineau&gt; Yeah, I could think of CSSWG as the Matrix crossed with Back To The Future</li>
+ <li id="l-226" _a="sgalineau"><a href="#l-226">#</a> [19:42] &lt;sgalineau&gt; side note: it feels odd to have computed values depend on serialization definitions. But for that I'll have to stop by astearns' office so he educates me</li>
+ <li id="l-227" _a="fantasai"><a href="#l-227">#</a> [19:42] &lt;fantasai&gt; They shouldn't</li>
+ <li id="l-228" _a="astearns"><a href="#l-228">#</a> [19:43] &lt;astearns&gt; they do not</li>
+ <li id="l-229" _a="fantasai"><a href="#l-229">#</a> [19:43] &lt;fantasai&gt; I think he just wants them defined somewhere, and they're not currently</li>
+ <li id="l-230" _a="astearns"><a href="#l-230">#</a> [19:43] &lt;astearns&gt; serializations can depend on computed values, though</li>
+ <li id="l-231" _a="sgalineau"><a href="#l-231">#</a> [19:43] &lt;sgalineau&gt; they do not. but they can. :)</li>
+ <li id="l-232" _a="sgalineau"><a href="#l-232">#</a> [19:44] &lt;sgalineau&gt; anyway. to be discussed later. (side note of side note: never understood why we want or need to define serialized values either but oh well)</li>
+ <li id="l-233" _a="fantasai"><a href="#l-233">#</a> [19:47] &lt;fantasai&gt; they usually do, because getComputedStyle usually returns some serialization of the computed value</li>
+ <li id="l-234" _a="krit" _r="sgalineau"><a href="#l-234">#</a> [19:47] &lt;krit&gt; sgalineau: there is a lot you still need to learn young padawan</li>
+ <li id="l-235" _a="sgalineau" _r="fantasai"><a href="#l-235">#</a> [19:51] &lt;sgalineau&gt; fantasai, sure. I understand why an editor wants a clear definition of a computed value. Not sure why they need to worry about how it's serialized. I understand animations/transitions can be a reason but that seems brittle.</li>
+ <li id="l-236" _a="astearns" _r="sgalineau"><a href="#l-236">#</a> [19:52] &lt;astearns&gt; sgalineau: in my case it's because I have conscientious engineers who want to implement serialization correctly :)</li>
+ <li id="l-237" _a="astearns"><a href="#l-237">#</a> [19:52] &lt;astearns&gt; and ideally, once</li>
+ <li id="l-238" _a="sgalineau"><a href="#l-238">#</a> [19:54] &lt;sgalineau&gt; if the result is getComputedStyle() can be used in a static stylesheet to obtain the exact same result, isn't it correct?</li>
+ <li id="l-239" _a="fantasai"><a href="#l-239">#</a> [20:01] * fantasai rereads astearns' message</li>
+ <li id="l-240" _a="fantasai" _r="astearns"><a href="#l-240">#</a> [20:01] &lt;fantasai&gt; astearns: is the getComputedStyle result really 'right 10px' and not '100% 10px'?</li>
+ <li id="l-241" _a="fantasai"><a href="#l-241">#</a> [20:02] &lt;fantasai&gt; or is this something that we need tests for...</li>
+ <li id="l-242" _a="fantasai"><a href="#l-242">#</a> [20:02] &lt;fantasai&gt; to figure out what it actually is</li>
+ <li id="l-243" _a="astearns" _r="fantasai"><a href="#l-243">#</a> [20:02] &lt;astearns&gt; fantasai: good question</li>
+ <li id="l-244" _a="fantasai" _r="astearns"><a href="#l-244">#</a> [20:03] &lt;fantasai&gt; astearns: background-position has always computed to percentage/length, no keywords</li>
+ <li id="l-245" _a="fantasai"><a href="#l-245">#</a> [20:03] &lt;fantasai&gt; <a href="http://www.w3.org/TR/CSS21/colors.html#propdef-background-position">http://www.w3.org/TR/CSS21/colors.html#propdef-background-position</a></li>
+ <li id="l-246" _a="astearns"><a href="#l-246">#</a> [20:06] &lt;astearns&gt; 100% 10px isn't correct - that's equivalent to right top 10px</li>
+ <li id="l-247" _a="astearns"><a href="#l-247">#</a> [20:08] &lt;astearns&gt; the serialization would either be 'right 10px' or 'calc(100%-10px)'</li>
+ <li id="l-248" _a="astearns"><a href="#l-248">#</a> [20:08] &lt;astearns&gt; with an omitted 'center' for the vertical component</li>
+ <li id="l-249" _a="fantasai" _r="oh"><a href="#l-249">#</a> [20:14] &lt;fantasai&gt; oh, maybe I meant &quot;10px 100%&quot; :)</li>
+ <li id="l-250" _a="fantasai"><a href="#l-250">#</a> [20:14] * fantasai forgets the order</li>
+ <li id="l-251" _a="astearns"><a href="#l-251">#</a> [20:14] &lt;astearns&gt; the 10px is the offset from the right edge in my example</li>
+ <li id="l-252" _a="fantasai"><a href="#l-252">#</a> [20:14] &lt;fantasai&gt; ...</li>
+ <li id="l-253" _a="fantasai"><a href="#l-253">#</a> [20:14] &lt;fantasai&gt; I don't think that's valid</li>
+ <li id="l-254" _a="fantasai"><a href="#l-254">#</a> [20:14] &lt;fantasai&gt; if it's valid, I made a mistake somewhere</li>
+ <li id="l-255" _a="fantasai"><a href="#l-255">#</a> [20:15] &lt;fantasai&gt; two-value positions are always interpreted per CSS2.1 rules, or should be</li>
+ <li id="l-256" _a="fantasai"><a href="#l-256">#</a> [20:15] * fantasai is annoyed that the /TR copy is missing various corrections over the last 2 years</li>
+ <li id="l-257" _a="fantasai"><a href="#l-257">#</a> [20:15] &lt;fantasai&gt; :/</li>
+ <li id="l-258" _a="Ms2ger" _r="Well"><a href="#l-258">#</a> [20:16] &lt;Ms2ger&gt; Well, it is the TR copy</li>
+ <li id="l-259" _a="Ms2ger"><a href="#l-259">#</a> [20:16] &lt;Ms2ger&gt; That's its purpose</li>
+ <li id="l-260" _a="fantasai" _r="um"><a href="#l-260">#</a> [20:16] &lt;fantasai&gt; um, no</li>
+ <li id="l-261" _a="fantasai"><a href="#l-261">#</a> [20:16] &lt;fantasai&gt; that is what it has degenerated to</li>
+ <li id="l-262" _a="astearns"><a href="#l-262">#</a> [20:16] &lt;astearns&gt; ah right, I should have used a three-value example. I'll post a correction</li>
+ <li id="l-263" _a="astearns"><a href="#l-263">#</a> [20:16] &lt;astearns&gt; (or four)</li>
+ <li id="l-264" _a="fantasai" _r="Ms2ger"><a href="#l-264">#</a> [20:16] &lt;fantasai&gt; Ms2ger: it's purpose, originally, was to be an up to date latest draft of what the WG is working on :)</li>
+ <li id="l-265" _a="Ms2ger"><a href="#l-265">#</a> [20:17] &lt;Ms2ger&gt; Of course</li>
+ <li id="l-266" _a="fantasai" _r="astearns"><a href="#l-266">#</a> [20:19] &lt;fantasai&gt; astearns: Maybe post into the new thread on serialization? :)</li>
+ <li id="l-267" _a="fantasai"><a href="#l-267">#</a> [20:19] * fantasai needs zcorpan to get involved</li>
+ <li id="l-268" _a="fantasai"><a href="#l-268">#</a> [20:19] &lt;fantasai&gt; I'm not OM expert</li>
+ <li id="l-269" _a="astearns"><a href="#l-269">#</a> [20:22] &lt;astearns&gt; I think the main question is whether it's useful to have a single defined serialization where multiple possible serializations could be used</li>
+ <li id="l-270" _a="sgalineau"><a href="#l-270">#</a> [20:22] &lt;sgalineau&gt; exactly!</li>
+ <li id="l-271" _a="Ms2ger"><a href="#l-271">#</a> [20:22] &lt;Ms2ger&gt; Yes it is</li>
+ <li id="l-272" _a="sgalineau"><a href="#l-272">#</a> [20:22] &lt;sgalineau&gt; you *can* define serialization. I don't get why we *must*</li>
+ <li id="l-273" _a="Ms2ger"><a href="#l-273">#</a> [20:22] &lt;Ms2ger&gt; ...</li>
+ <li id="l-274" _a="astearns"><a href="#l-274">#</a> [20:23] &lt;astearns&gt; I agree with Ms2ger, so I think we must :)</li>
+ <li id="l-275" _a="Ms2ger"><a href="#l-275">#</a> [20:23] &lt;Ms2ger&gt; Because the goal of a specification is interop?</li>
+ <li id="l-276" _a="sgalineau"><a href="#l-276">#</a> [20:23] &lt;sgalineau&gt; what interop are you specifically talking about?</li>
+ <li id="l-277" _a="Ms2ger"><a href="#l-277">#</a> [20:23] &lt;Ms2ger&gt; getComputedStyle?</li>
+ <li id="l-278" _a="astearns"><a href="#l-278">#</a> [20:24] &lt;astearns&gt; a script that depends on manipulating the string you get from getComputedStyle</li>
+ <li id="l-279" _a="astearns"><a href="#l-279">#</a> [20:24] &lt;astearns&gt; if different browsers give you different strings, it's bad</li>
+ <li id="l-280" _a="sgalineau"><a href="#l-280">#</a> [20:24] &lt;sgalineau&gt; that scripts have to manipulate strings is a bug</li>
+ <li id="l-281" _a="astearns"><a href="#l-281">#</a> [20:24] &lt;astearns&gt; s/a bug/unfortunate reality/</li>
+ <li id="l-282" _a="Ms2ger"><a href="#l-282">#</a> [20:24] &lt;Ms2ger&gt; That doesn't excuse you from defining it</li>
+ <li id="l-283" _a="Ms2ger"><a href="#l-283">#</a> [20:25] &lt;Ms2ger&gt; That quirks mode exists is a bug, yet we still spec it</li>
+ <li id="l-284" _a="sgalineau"><a href="#l-284">#</a> [20:25] &lt;sgalineau&gt; browsers parse strings into concrete values. which we then serialize to strings so script can parse them back into integers and then deserialize them. it's insane.</li>
+ <li id="l-285" _a="Ms2ger" _r="Hell"><a href="#l-285">#</a> [20:25] &lt;Ms2ger&gt; Hell, most of the HTML spec is bugs</li>
+ <li id="l-286" _a="Ms2ger"><a href="#l-286">#</a> [20:25] &lt;Ms2ger&gt; But if you're going to design the new cssom, go for it!</li>
+ <li id="l-287" _a="sgalineau" _r="well"><a href="#l-287">#</a> [20:25] &lt;sgalineau&gt; well, here is the question I'm really asking</li>
+ <li id="l-288" _a="astearns" _r="sgalineau"><a href="#l-288">#</a> [20:25] &lt;astearns&gt; sgalineau: I agree - I'd like to have a new CSSOM with parsed values</li>
+ <li id="l-289" _a="astearns"><a href="#l-289">#</a> [20:26] &lt;astearns&gt; but there's legacy to support as well</li>
+ <li id="l-290" _a="sgalineau"><a href="#l-290">#</a> [20:26] &lt;sgalineau&gt; is the work of 1) defining serialization 2) agreeing to it 3) writing all the testcases 4) achieving interop really that much cheaper than defining an OM for value types?</li>
+ <li id="l-291" _a="Ms2ger"><a href="#l-291">#</a> [20:26] &lt;Ms2ger&gt; So</li>
+ <li id="l-292" _a="Ms2ger"><a href="#l-292">#</a> [20:26] &lt;Ms2ger&gt; What do you want to do when someone has an old script that getComputedStyles background</li>
+ <li id="l-293" _a="Ms2ger"><a href="#l-293">#</a> [20:27] &lt;Ms2ger&gt; And wants to use the new fancy b&amp;b-4 stuff</li>
+ <li id="l-294" _a="Ms2ger"><a href="#l-294">#</a> [20:27] &lt;Ms2ger&gt; Throw an exception? Return half the position?</li>
+ <li id="l-295" _a="sgalineau"><a href="#l-295">#</a> [20:28] &lt;sgalineau&gt; that's not a new problem and I don't see how defining serialization avoids that problem</li>
+ <li id="l-296" _a="sgalineau"><a href="#l-296">#</a> [20:28] &lt;sgalineau&gt; you have no control on how anyone will parse those values</li>
+ <li id="l-297" _a="sgalineau"><a href="#l-297">#</a> [20:28] * sgalineau recalls the number of times changing serialization in IE broke something somewhere. good luck convincing browsers to align to some new thing.</li>
+ <li id="l-298" _a="Ms2ger"><a href="#l-298">#</a> [20:29] &lt;Ms2ger&gt; Right</li>
+ <li id="l-299"><a href="#l-299">#</a> [20:29] * Quits: eliezerb (~Eliezer@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-300" _a="Ms2ger"><a href="#l-300">#</a> [20:29] &lt;Ms2ger&gt; So you're saying that pages depend on a particular serialization?</li>
+ <li id="l-301" _a="sgalineau"><a href="#l-301">#</a> [20:29] &lt;sgalineau&gt; they even depend on more than one</li>
+ <li id="l-302" _a="Ms2ger"><a href="#l-302">#</a> [20:29] &lt;Ms2ger&gt; That's why you define it</li>
+ <li id="l-303" _a="Ms2ger"><a href="#l-303">#</a> [20:30] &lt;Ms2ger&gt; So that there's only one</li>
+ <li id="l-304" _a="Ms2ger"><a href="#l-304">#</a> [20:30] &lt;Ms2ger&gt; And so that I don't have to figure it out by myself when Servo implements it</li>
+ <li id="l-305" _a="sgalineau" _r="ok"><a href="#l-305">#</a> [20:30] &lt;sgalineau&gt; ok, let's fast forward to the day all browsers emit the same computed value string</li>
+ <li id="l-306" _a="sgalineau"><a href="#l-306">#</a> [20:31] &lt;sgalineau&gt; that's certainly nice for the people who write JS to parse it - no doubt - but it still gives you no control on the level of brokeness of the JS code that parses it</li>
+ <li id="l-307"><a href="#l-307">#</a> [20:31] * Quits: plh (plehegar@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-308" _a="sgalineau"><a href="#l-308">#</a> [20:31] &lt;sgalineau&gt; …and how sensitive that code will be to new updates from future levels etc.</li>
+ <li id="l-309" _a="sgalineau"><a href="#l-309">#</a> [20:31] &lt;sgalineau&gt; so we're not fixing the bit that's most likely to break down</li>
+ <li id="l-310" _a="astearns"><a href="#l-310">#</a> [20:32] &lt;astearns&gt; so? we're fixing the bit we have some control over</li>
+ <li id="l-311" _a="sgalineau" _r="ah"><a href="#l-311">#</a> [20:32] &lt;sgalineau&gt; ah, so what matters is what we have control over, not whether it fixes the main problem?</li>
+ <li id="l-312" _a="astearns"><a href="#l-312">#</a> [20:32] &lt;astearns&gt; (and incidentally, making cross-browser animation tests slightly easier to write)</li>
+ <li id="l-313" _a="astearns"><a href="#l-313">#</a> [20:33] &lt;astearns&gt; just because we can't fix the whole problem doesn't mean we should throw up our hands on our portion of the problem</li>
+ <li id="l-314" _a="sgalineau"><a href="#l-314">#</a> [20:34] &lt;sgalineau&gt; that's not the point</li>
+ <li id="l-315"><a href="#l-315">#</a> [20:34] * Quits: glenn (~gadams@public.cloak) (Client closed connection)</li>
+ <li id="l-316" _a="sgalineau"><a href="#l-316">#</a> [20:34] &lt;sgalineau&gt; you're assuming you *can* fix this problem</li>
+ <li id="l-317" _a="sgalineau"><a href="#l-317">#</a> [20:34] &lt;sgalineau&gt; using strings</li>
+ <li id="l-318" _a="Ms2ger"><a href="#l-318">#</a> [20:34] &lt;Ms2ger&gt; No</li>
+ <li id="l-319" _a="Ms2ger"><a href="#l-319">#</a> [20:34] &lt;Ms2ger&gt; I'm assuming that there exists an API that spits out those strings</li>
+ <li id="l-320" _a="Ms2ger"><a href="#l-320">#</a> [20:34] &lt;Ms2ger&gt; And that people use it</li>
+ <li id="l-321" _a="Ms2ger"><a href="#l-321">#</a> [20:35] &lt;Ms2ger&gt; And that browsers need to implement it</li>
+ <li id="l-322" _a="sgalineau" _r="again"><a href="#l-322">#</a> [20:35] &lt;sgalineau&gt; again, I spent 5 years dealing with breakage related to small changes to computed value strings. looking at other's bug databases it's not an isolated experience</li>
+ <li id="l-323" _a="Ms2ger"><a href="#l-323">#</a> [20:35] &lt;Ms2ger&gt; And that pages depend on the particulars of the output</li>
+ <li id="l-324" _a="Ms2ger"><a href="#l-324">#</a> [20:35] &lt;Ms2ger&gt; So that browsers that want pages to work need to get the output right</li>
+ <li id="l-325" _a="Ms2ger"><a href="#l-325">#</a> [20:35] &lt;Ms2ger&gt; THAT'S WHY YOU SPEC IT NOW</li>
+ <li id="l-326" _a="sgalineau"><a href="#l-326">#</a> [20:35] &lt;sgalineau&gt; so what is the benefit browser vendors get of dealing with all the pain of convering on some common serialization format? I don't get it.</li>
+ <li id="l-327" _a="Ms2ger"><a href="#l-327">#</a> [20:36] &lt;Ms2ger&gt; So that they don't need to converge *after* pages rely on different formats</li>
+ <li id="l-328" _a="sgalineau"><a href="#l-328">#</a> [20:36] &lt;sgalineau&gt; i don't give a shit about speccing it. any monkey can write the spec. WILL IT BE IMPLEMENTED and why is my question.</li>
+ <li id="l-329" _a="Ms2ger"><a href="#l-329">#</a> [20:36] &lt;Ms2ger&gt; Because you need to implement something?</li>
+ <li id="l-330" _a="sgalineau" _r="er"><a href="#l-330">#</a> [20:36] &lt;sgalineau&gt; er, pages already rely on different formats</li>
+ <li id="l-331" _a="Ms2ger"><a href="#l-331">#</a> [20:37] &lt;Ms2ger&gt; Because it wasn't specced in the first place!</li>
+ <li id="l-332" _a="sgalineau"><a href="#l-332">#</a> [20:37] &lt;sgalineau&gt; it's already been implemented many times</li>
+ <li id="l-333" _a="sgalineau"><a href="#l-333">#</a> [20:37] &lt;sgalineau&gt; without any specs</li>
+ <li id="l-334" _a="astearns"><a href="#l-334">#</a> [20:37] &lt;astearns&gt; scoping my portion of the problem, I don't expect to fix background-position. I want to specify the serialization of circle() at the outset so that we don't get different implementations that people have to deal with</li>
+ <li id="l-335" _a="Ms2ger"><a href="#l-335">#</a> [20:37] &lt;Ms2ger&gt; And that's why you're having this issue</li>
+ <li id="l-336" _a="sgalineau"><a href="#l-336">#</a> [20:37] &lt;sgalineau&gt; i don't' have any issues!</li>
+ <li id="l-337" _a="sgalineau"><a href="#l-337">#</a> [20:37] &lt;sgalineau&gt; jesus</li>
+ <li id="l-338" _a="sgalineau"><a href="#l-338">#</a> [20:37] &lt;sgalineau&gt; my issue is having to deal with fucking strings</li>
+ <li id="l-339" _a="Ms2ger"><a href="#l-339">#</a> [20:38] &lt;Ms2ger&gt; Then fix that!</li>
+ <li id="l-340" _a="Ms2ger"><a href="#l-340">#</a> [20:38] &lt;Ms2ger&gt; But in the meantime, don't complain when people spec the thing that's actually used</li>
+ <li id="l-341" _a="astearns" _r="&quot;sgalineau&gt"><a href="#l-341">#</a> [20:38] &lt;astearns&gt; &quot;sgalineau&gt; i don't' have any issues!&quot; is a fine start for a W3C meme</li>
+ <li id="l-342" _a="sgalineau"><a href="#l-342">#</a> [20:38] &lt;sgalineau&gt; LOL</li>
+ <li id="l-343" _a="sgalineau"><a href="#l-343">#</a> [20:38] &lt;sgalineau&gt; yes</li>
+ <li id="l-344" _a="sgalineau"><a href="#l-344">#</a> [20:39] &lt;sgalineau&gt; I'm not complaining. I'm asking why this needs to be defined. I'm still not getting an answer except 'we're doing this because it can be done and specifying how things should work is a nice thing to do irrespective of whether or not this is the biggest problem for authors, and irrespective of whether or not anyone will implement the thing to begin with'</li>
+ <li id="l-345" _a="Ms2ger" _r="No"><a href="#l-345">#</a> [20:40] &lt;Ms2ger&gt; No, it needs to be implemented, that's the main thing</li>
+ <li id="l-346" _a="astearns"><a href="#l-346">#</a> [20:40] &lt;astearns&gt; my engineers are implementing circle(), and asking how they should serialize it</li>
+ <li id="l-347" _a="Ms2ger"><a href="#l-347">#</a> [20:40] &lt;Ms2ger&gt; And it needs to be specced so that we can get it implemented the same way</li>
+ <li id="l-348" _a="Ms2ger"><a href="#l-348">#</a> [20:40] &lt;Ms2ger&gt; I don't want all browser engines to serialize circle() differently</li>
+ <li id="l-349" _a="Ms2ger"><a href="#l-349">#</a> [20:41] &lt;Ms2ger&gt; Because then you get something that apparently is not an issue, not sure what it is then, where pages need to handle different formats</li>
+ <li id="l-350"><a href="#l-350">#</a> [20:41] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-351" _a="sgalineau"><a href="#l-351">#</a> [20:41] &lt;sgalineau&gt; so that parsing is easier, something which everyone agrees is wrong</li>
+ <li id="l-352" _a="Ms2ger" _r="Because"><a href="#l-352">#</a> [20:41] &lt;Ms2ger&gt; Because, in the real world, there is no replacement yet</li>
+ <li id="l-353" _a="Ms2ger"><a href="#l-353">#</a> [20:42] &lt;Ms2ger&gt; You can't tell people &quot;don't write any code until we've implemented the replacement in ten years&quot;</li>
+ <li id="l-354" _a="sgalineau"><a href="#l-354">#</a> [20:42] &lt;sgalineau&gt; it's not what I'm saying at all</li>
+ <li id="l-355" _a="sgalineau"><a href="#l-355">#</a> [20:42] &lt;sgalineau&gt; so never mind</li>
+ <li id="l-356" _a="Ms2ger"><a href="#l-356">#</a> [20:42] &lt;Ms2ger&gt; Parsing needs to be easier, yes</li>
+ <li id="l-357" _a="Ms2ger"><a href="#l-357">#</a> [20:42] &lt;Ms2ger&gt; Because parsing is the only way to do it</li>
+ <li id="l-358" _a="sgalineau"><a href="#l-358">#</a> [20:42] &lt;sgalineau&gt; nobody should write JS to parse computed values</li>
+ <li id="l-359" _a="Ms2ger"><a href="#l-359">#</a> [20:43] &lt;Ms2ger&gt; What should they do?</li>
+ <li id="l-360" _a="Ms2ger"><a href="#l-360">#</a> [20:43] &lt;Ms2ger&gt; Not do any dynamic styling?</li>
+ <li id="l-361" _a="Ms2ger"><a href="#l-361">#</a> [20:43] &lt;Ms2ger&gt; Use dart?</li>
+ <li id="l-362" _a="sgalineau"><a href="#l-362">#</a> [20:43] &lt;sgalineau&gt; WTF?</li>
+ <li id="l-363"><a href="#l-363">#</a> [20:43] * Quits: teoli_ (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-364" _a="sgalineau"><a href="#l-364">#</a> [20:43] &lt;sgalineau&gt; why should anyone have to produce &quot;100px&quot; then &quot;101px&quot; then &quot;102px&quot; in a loop?</li>
+ <li id="l-365" _a="sgalineau"><a href="#l-365">#</a> [20:44] &lt;sgalineau&gt; instead of incrementing e.g. style.width.px ?</li>
+ <li id="l-366"><a href="#l-366">#</a> [20:44] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-367" _a="Ms2ger"><a href="#l-367">#</a> [20:44] &lt;Ms2ger&gt; Did someone implement the non-string-based cssom while I wasn't looking?</li>
+ <li id="l-368" _a="Ms2ger"><a href="#l-368">#</a> [20:44] &lt;Ms2ger&gt; Because their boss says they have to support IE6?</li>
+ <li id="l-369" _a="Ms2ger"><a href="#l-369">#</a> [20:44] &lt;Ms2ger&gt; Incrementing style.width.px right now is a ReferenceError</li>
+ <li id="l-370" _a="sgalineau" _r="oh"><a href="#l-370">#</a> [20:44] &lt;sgalineau&gt; oh, I''m sorry. I sort of thought we defined new features in the platform. I forgot IE6 defined the scope of everything we do</li>
+ <li id="l-371"><a href="#l-371">#</a> [20:45] * Joins: teoli_ (~teoli@public.cloak)</li>
+ <li id="l-372" _a="Ms2ger" _r="No"><a href="#l-372">#</a> [20:45] &lt;Ms2ger&gt; No, we also spec legacy features</li>
+ <li id="l-373" _a="sgalineau"><a href="#l-373">#</a> [20:45] &lt;sgalineau&gt; of course it is. until we define it and then polyfill it for older versions.</li>
+ <li id="l-374" _a="Ms2ger"><a href="#l-374">#</a> [20:45] &lt;Ms2ger&gt; Then go ahead and define it</li>
+ <li id="l-375"><a href="#l-375">#</a> [20:45] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-376" _a="sgalineau"><a href="#l-376">#</a> [20:45] &lt;sgalineau&gt; circle() is not a legacy feature</li>
+ <li id="l-377" _a="sgalineau"><a href="#l-377">#</a> [20:46] &lt;sgalineau&gt; and the serialization work I've seen so far is not specifying how things work today either (since it varies anyway).</li>
+ <li id="l-378" _a="sgalineau"><a href="#l-378">#</a> [20:46] &lt;sgalineau&gt; so since we're doing new work anyway, why not do new work that also moves the platform forward</li>
+ <li id="l-379" _a="Ms2ger" _r="Sure"><a href="#l-379">#</a> [20:46] &lt;Ms2ger&gt; Sure, do it</li>
+ <li id="l-380" _a="sgalineau"><a href="#l-380">#</a> [20:46] &lt;sgalineau&gt; it's called a WG</li>
+ <li id="l-381" _a="sgalineau"><a href="#l-381">#</a> [20:47] &lt;sgalineau&gt; the WG prefers to define strings. I'm asking why. If you don't like my asking that's too bad</li>
+ <li id="l-382" _a="Ms2ger"><a href="#l-382">#</a> [20:47] &lt;Ms2ger&gt; I've heard people say we need a better cssom ever since I first subscribed to www-style 6 years ago</li>
+ <li id="l-383" _a="Ms2ger"><a href="#l-383">#</a> [20:47] &lt;Ms2ger&gt; I've never seen it happen</li>
+ <li id="l-384" _a="sgalineau"><a href="#l-384">#</a> [20:47] &lt;sgalineau&gt; so what?</li>
+ <li id="l-385" _a="sgalineau"><a href="#l-385">#</a> [20:47] &lt;sgalineau&gt; does that prove we don't need a better cssom?</li>
+ <li id="l-386" _a="Ms2ger"><a href="#l-386">#</a> [20:47] &lt;Ms2ger&gt; No</li>
+ <li id="l-387" _a="Ms2ger"><a href="#l-387">#</a> [20:47] &lt;Ms2ger&gt; That suggests that it isn't going to happen soon</li>
+ <li id="l-388" _a="Ms2ger"><a href="#l-388">#</a> [20:47] &lt;Ms2ger&gt; And that people will need to use strings</li>
+ <li id="l-389" _a="sgalineau"><a href="#l-389">#</a> [20:48] &lt;sgalineau&gt; doing something that doesn't fix the problem is unlikely to make it happen sooner</li>
+ <li id="l-390" _a="Ms2ger"><a href="#l-390">#</a> [20:48] &lt;Ms2ger&gt; Not defining serialization won't make it happen any sooner either</li>
+ <li id="l-391" _a="Ms2ger"><a href="#l-391">#</a> [20:48] &lt;Ms2ger&gt; If you want to improve the cssom, step up and do the work</li>
+ <li id="l-392"><a href="#l-392">#</a> [20:48] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-393" _a="fantasai"><a href="#l-393">#</a> [20:49] * fantasai would like Animations finished, too</li>
+ <li id="l-394" _a="sgalineau"><a href="#l-394">#</a> [20:50] &lt;sgalineau&gt; I heard you irrelevant 'step up and do the work' dismissal the first 12 times.</li>
+ <li id="l-395" _a="fantasai"><a href="#l-395">#</a> [20:50] &lt;fantasai&gt; It's not irrelevant</li>
+ <li id="l-396" _a="fantasai"><a href="#l-396">#</a> [20:50] &lt;fantasai&gt; It's the reason it's not done yet</li>
+ <li id="l-397" _a="fantasai"><a href="#l-397">#</a> [20:50] &lt;fantasai&gt; Nobody's stepped up to do the work</li>
+ <li id="l-398" _a="sgalineau"><a href="#l-398">#</a> [20:51] &lt;sgalineau&gt; no. that it's not done is not a reason to agonize over strings that people will keep parsing wrong in a broken way.</li>
+ <li id="l-399" _a="SimonSapin"><a href="#l-399">#</a> [20:51] &lt;SimonSapin&gt; I don’t think the WG prefers strings, it’s just the only thing we have so far</li>
+ <li id="l-400" _a="sgalineau" _r="er"><a href="#l-400">#</a> [20:51] &lt;sgalineau&gt; er, yeah, if we don't commit to the work what is there today is all we have :)</li>
+ <li id="l-401" _a="sgalineau"><a href="#l-401">#</a> [20:51] &lt;sgalineau&gt; that bit makes sense :)</li>
+ <li id="l-402" _a="astearns"><a href="#l-402">#</a> [20:52] &lt;astearns&gt; even if we commit to that work, what's there today will still be around for a long long time</li>
+ <li id="l-403" _a="Ms2ger"><a href="#l-403">#</a> [20:52] &lt;Ms2ger&gt; Genuinely curious: how do you think this better cssom is going to happen if nobody starts working on it?</li>
+ <li id="l-404" _a="sgalineau" _r="asteans"><a href="#l-404">#</a> [20:53] &lt;sgalineau&gt; asteans, sure. but I don't see anyone doing the work for what we have either. Is there any work going on to document what browsers serialize today that I missed?</li>
+ <li id="l-405" _a="astearns" _r="sgalineau"><a href="#l-405">#</a> [20:54] &lt;astearns&gt; sgalineau: that part I don't care as much about, actually. I just want to do the new things in a consistent way</li>
+ <li id="l-406" _a="sgalineau"><a href="#l-406">#</a> [20:55] &lt;sgalineau&gt; fair enough. better make sure people pay attention to CSSOM then. because the things was neglected for so long it stopped being true some time ago for quite a few people.</li>
+ <li id="l-407"><a href="#l-407">#</a> [20:56] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-408" _a="sgalineau"><a href="#l-408">#</a> [20:57] &lt;sgalineau&gt; IE9 actually followed anne's first set of CSSOM rules years ago. first it caused all kinds of breakage. then we were told 'oh no, this was just what anne thought. the WG didn't agree to that'. needless to say, the mistake of paying attention to serialization in CSSOM was not made again.</li>
+ <li id="l-409" _a="sgalineau"><a href="#l-409">#</a> [20:57] * sgalineau is likely overly bias due to the amount of needless serialization shit he shoveled over the years.</li>
+ <li id="l-410" _a="Ms2ger"><a href="#l-410">#</a> [20:58] &lt;Ms2ger&gt; I guess it would have been good if, at the time, there had been tests that could be run cross-browser to check what others did</li>
+ <li id="l-411"><a href="#l-411">#</a> [20:59] * Joins: plh3 (plehegar@public.cloak)</li>
+ <li id="l-412" _a="Ms2ger"><a href="#l-412">#</a> [20:59] * Ms2ger doesn't feel like &quot;the wg agreed to it&quot; is a relevant argument anyway</li>
+ <li id="l-413" _a="sgalineau"><a href="#l-413">#</a> [20:59] &lt;sgalineau&gt; tests are very nice. whether they will generate willingness to change code and deal with the compat fallout or impede it is another story. but i suppose that's a separate story from whether new features should define their serialization.</li>
+ <li id="l-414" _a="fantasai" _r="Ms2ger"><a href="#l-414">#</a> [20:59] &lt;fantasai&gt; Ms2ger: it usually means there was more review of the thing than if there wasn't</li>
+ <li id="l-415" _a="fantasai"><a href="#l-415">#</a> [21:00] &lt;fantasai&gt; and more review usually means fewere bugs than less review :)</li>
+ <li id="l-416" _a="Ms2ger" _r="Sure"><a href="#l-416">#</a> [21:00] &lt;Ms2ger&gt; Sure, review is good</li>
+ <li id="l-417" _a="sgalineau"><a href="#l-417">#</a> [21:00] &lt;sgalineau&gt; it was the argument used for others - mozilla, in fact - to not care about it or make any changes. so it was relevant at one time.</li>
+ <li id="l-418" _a="sgalineau"><a href="#l-418">#</a> [21:01] &lt;sgalineau&gt; anyway. this horse is beaten silly. later.</li>
+ <li id="l-419" _a="Ms2ger"><a href="#l-419">#</a> [21:01] &lt;Ms2ger&gt; Bye</li>
+ <li id="l-420"><a href="#l-420">#</a> [21:05] * Quits: plh (plehegar@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-421"><a href="#l-421">#</a> [21:31] * Quits: teoli_ (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-422"><a href="#l-422">#</a> [21:31] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-423"><a href="#l-423">#</a> [21:38] * Quits: teoli (~teoli@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-424"><a href="#l-424">#</a> [21:42] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-425" _a="TabAtkins"><a href="#l-425">#</a> [21:48] &lt;TabAtkins&gt; I'm extremely confused by this entire conversation.</li>
+ <li id="l-426"><a href="#l-426">#</a> [21:49] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-427" _a="TabAtkins"><a href="#l-427">#</a> [21:49] * TabAtkins doesn't understand how &quot;We have a feature that we can't kill, *of course* we have to spec it.&quot; isn't a sufficient answer.</li>
+ <li id="l-428" _a="Ms2ger"><a href="#l-428">#</a> [21:49] &lt;Ms2ger&gt; I was half of it and I'm confused too</li>
+ <li id="l-429" _a="astearns"><a href="#l-429">#</a> [21:51] &lt;astearns&gt; we've gone along for many years without specifying background-position syntax, so 'why now' could be a reasonable response</li>
+ <li id="l-430" _a="astearns"><a href="#l-430">#</a> [21:51] &lt;astearns&gt; but I don't mind being the forcing function</li>
+ <li id="l-431" _a="astearns"><a href="#l-431">#</a> [21:51] &lt;astearns&gt; s/syntax/serialization/</li>
+ <li id="l-432" _a="TabAtkins" _r="Ah"><a href="#l-432">#</a> [21:52] &lt;TabAtkins&gt; Ah, &quot;why now&quot; is &quot;Because fuck us for not doing it earlier, that's why.&quot;</li>
+ <li id="l-433"><a href="#l-433">#</a> [21:53] * Quits: dbaron (~dbaron@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-434" _a="Ms2ger"><a href="#l-434">#</a> [21:55] &lt;Ms2ger&gt; &quot;Because you can't build a house without a foundation, as much as the CSSWG likes to&quot;? :)</li>
+ <li id="l-435"><a href="#l-435">#</a> [21:58] * Joins: glenn (~gadams@public.cloak)</li>
+ <li id="l-436"><a href="#l-436">#</a> [21:58] * Quits: glenn (~gadams@public.cloak) (Client closed connection)</li>
+ <li id="l-437"><a href="#l-437">#</a> [21:58] * Joins: glenn (~gadams@public.cloak)</li>
+ <li id="l-438"><a href="#l-438">#</a> [22:24] * Joins: glenn_ (~gadams@public.cloak)</li>
+ <li id="l-439"><a href="#l-439">#</a> [22:30] * Quits: glenn (~gadams@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-440"><a href="#l-440">#</a> [22:41] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-441"><a href="#l-441">#</a> [22:48] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-442"><a href="#l-442">#</a> [22:56] * Joins: jet (~junglecode@public.cloak)</li>
+ <li id="l-443"><a href="#l-443">#</a> [22:56] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-444"><a href="#l-444">#</a> [22:59] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-445"><a href="#l-445">#</a> [23:00] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-446"><a href="#l-446">#</a> [23:03] * Quits: glenn_ (~gadams@public.cloak) (Client closed connection)</li>
+ <li id="l-447" _a="sgalineau"><a href="#l-447">#</a> [23:14] &lt;sgalineau&gt; that isn't a sufficient answer for perfectly pragmatic reasons I did a shit job explaining</li>
+ <li id="l-448" _a="sgalineau"><a href="#l-448">#</a> [23:15] &lt;sgalineau&gt; for instance, that the compat impact of messing with serialization was not random</li>
+ <li id="l-449" _a="TabAtkins"><a href="#l-449">#</a> [23:15] &lt;TabAtkins&gt; Compat impact is what you choose to allow it to be.</li>
+ <li id="l-450" _a="sgalineau"><a href="#l-450">#</a> [23:16] &lt;sgalineau&gt; by messing with serialization, I mean messing with the serialization of exiting properties</li>
+ <li id="l-451" _a="TabAtkins"><a href="#l-451">#</a> [23:16] &lt;TabAtkins&gt; Having a defined serialization, and not following it, is no worse than having no defined serialization at all.</li>
+ <li id="l-452" _a="sgalineau"><a href="#l-452">#</a> [23:16] &lt;sgalineau&gt; bear with me</li>
+ <li id="l-453" _a="TabAtkins"><a href="#l-453">#</a> [23:16] &lt;TabAtkins&gt; And it's better, because new browsers can just follow the spec.</li>
+ <li id="l-454" _a="sgalineau"><a href="#l-454">#</a> [23:17] &lt;sgalineau&gt; in particular - and we're talking years ago - those sites that used widely used JS libraries to animate properties were generally unaffected by our messing with serialization. those libs learned the hard way to parse things nearly as defensively as a browser so you could move things around without troubling them</li>
+ <li id="l-455" _a="sgalineau"><a href="#l-455">#</a> [23:18] &lt;sgalineau&gt; and since then, the amount of such fiddling that goes through such hardened code has only increased i.e. the amount of new code that directly interpolates and updates an animating width is very, very, very small</li>
+ <li id="l-456" _a="sgalineau"><a href="#l-456">#</a> [23:18] &lt;sgalineau&gt; of course 'not zero' on the web can still be pretty large</li>
+ <li id="l-457" _a="sgalineau"><a href="#l-457">#</a> [23:21] &lt;sgalineau&gt; and there will still be people who, for whatever reason, roll out their own. outputting one common format is a benefit for them; it lets them use regex a lot more safely.</li>
+ <li id="l-458" _a="TabAtkins"><a href="#l-458">#</a> [23:21] &lt;TabAtkins&gt; You appear to be agreeing that serialization should be defined.  Are you building up to a counter-argument?</li>
+ <li id="l-459" _a="sgalineau"><a href="#l-459">#</a> [23:21] &lt;sgalineau&gt; I never said it shouldn't be. I'm questioning whether it's actually worth the effort. or how many people's lives it really helps</li>
+ <li id="l-460" _a="sgalineau"><a href="#l-460">#</a> [23:22] &lt;sgalineau&gt; If most looping dynamic updates go through hardened frameworks whose developers know how to parse and will keep parsing defensively and carefully whether there is one computed style format or 3, I'm not sure I care</li>
+ <li id="l-461" _a="sgalineau"><a href="#l-461">#</a> [23:22] &lt;sgalineau&gt; but *if* there is data showing that, to this day, a massive load of CSS properties are updated in loops by people who learned regex yesterday and use it everywhere then I see more value in it</li>
+ <li id="l-462" _a="sgalineau"><a href="#l-462">#</a> [23:23] &lt;sgalineau&gt; my experience suggests the world is far closer to the former i.e. I think it's more agonizing than it's worth</li>
+ <li id="l-463" _a="sgalineau"><a href="#l-463">#</a> [23:24] &lt;sgalineau&gt; bottom line: the perfect is not the enemy of the good. but just because it looks good doesn't make it worth your time if the world has long ago well adapted to the conspicuous absence of said perfect for years on end</li>
+ <li id="l-464" _a="sgalineau"><a href="#l-464">#</a> [23:25] &lt;sgalineau&gt; I'm afraid we're mostly doing something because it feels better than doing nothing and we feel bad about doing nothing</li>
+ <li id="l-465" _a="TabAtkins"><a href="#l-465">#</a> [23:27] &lt;TabAtkins&gt; I don't think leaving everything alone because people have partially, badly adapted to it being broken is a good state of affairs.</li>
+ <li id="l-466" _a="sgalineau"><a href="#l-466">#</a> [23:29] &lt;sgalineau&gt; the point is that they haven't badly adapted to it</li>
+ <li id="l-467" _a="TabAtkins"><a href="#l-467">#</a> [23:29] &lt;TabAtkins&gt; I know that I wrote fragile code some time ago to parse color values, because every single browser returned a different format.</li>
+ <li id="l-468" _a="TabAtkins"><a href="#l-468">#</a> [23:30] &lt;TabAtkins&gt; I don't want to write that code again.</li>
+ <li id="l-469" _a="TabAtkins"><a href="#l-469">#</a> [23:30] &lt;TabAtkins&gt; And anyway, it'll break if we ever add new color functions or keywords, because IE returned the exact value used for input.</li>
+ <li id="l-470"><a href="#l-470">#</a> [23:31] * Joins: teoli (~teoli@public.cloak)</li>
+ <li id="l-471" _a="TabAtkins"><a href="#l-471">#</a> [23:31] &lt;TabAtkins&gt; We of course should do a value-based API.  I'm working on that right now, and it's a hard problem.  But it doesn't excuse or remove the need for the string-based API.</li>
+ <li id="l-472" _a="sgalineau"><a href="#l-472">#</a> [23:31] &lt;sgalineau&gt; the point is that it isn't fragile code; if most such loops are handled by well established frameworks with very solid code that is extremely resilient to format differences, standardizing that serialization format may be of very little consequence in practice</li>
+ <li id="l-473" _a="sgalineau" _r="yes"><a href="#l-473">#</a> [23:32] &lt;sgalineau&gt; yes, maybe jQuery &amp; friends can use regex to parse these new values now. great. they might use that. or they might not if it's slower.</li>
+ <li id="l-474" _a="TabAtkins"><a href="#l-474">#</a> [23:32] &lt;TabAtkins&gt; Giving up on standardizing because frameworks have done the grunt work isn't a good answer.</li>
+ <li id="l-475" _a="sgalineau" _r="well"><a href="#l-475">#</a> [23:33] &lt;sgalineau&gt; well, the argument for standardizing strings is that 'this is what we have'. that everyone does this through frameworks is what we have too.</li>
+ <li id="l-476" _a="TabAtkins"><a href="#l-476">#</a> [23:33] &lt;TabAtkins&gt; For weird values of &quot;everyone&quot; that exclude a whole bunch of people.</li>
+ <li id="l-477" _a="TabAtkins"><a href="#l-477">#</a> [23:33] &lt;TabAtkins&gt; jQuery is massively used, but it's far from &quot;everyone&quot;.</li>
+ <li id="l-478" _a="sgalineau"><a href="#l-478">#</a> [23:33] &lt;sgalineau&gt; and I'm not saying 'don't standardize'. I'm saying 'the value of standardizing thing may be very small.</li>
+ <li id="l-479" _a="TabAtkins"><a href="#l-479">#</a> [23:34] &lt;TabAtkins&gt; And I think you're underestimating the value, especially over the long term.</li>
+ <li id="l-480" _a="sgalineau" _r="yes"><a href="#l-480">#</a> [23:34] &lt;sgalineau&gt; yes; it may leave a good-size group. having one format instead of 2+ is good. it reduces the scope for mess but thousands of people each parsing strings their own way will still mess it up often.</li>
+ <li id="l-481" _a="sgalineau"><a href="#l-481">#</a> [23:35] &lt;sgalineau&gt; so the syntax convergence is nice but in aggregate it may still be marginal</li>
+ <li id="l-482" _a="TabAtkins"><a href="#l-482">#</a> [23:35] &lt;TabAtkins&gt; You're welcome to not help, then.</li>
+ <li id="l-483" _a="sgalineau"><a href="#l-483">#</a> [23:36] &lt;sgalineau&gt; I sure am not :) but may I try to understand why others think it valuable? you're welcome to not answer if that bothers you, too</li>
+ <li id="l-484" _a="sgalineau"><a href="#l-484">#</a> [23:36] &lt;sgalineau&gt; when people go deep into things I don't grok based on experience I'll ask why. insistently if needed. sorry.</li>
+ <li id="l-485" _a="TabAtkins"><a href="#l-485">#</a> [23:36] &lt;TabAtkins&gt; You already know why I and others find it valuable, because we've already said so in this conversation and it's the stock answer: standardization reduces divergence in implementation, saving authors work, and makes it easier for new UAs to enter the market.</li>
+ <li id="l-486" _a="sgalineau"><a href="#l-486">#</a> [23:37] &lt;sgalineau&gt; stock answers apply to a lot of things. including things we don't do. so they're not sufficient.</li>
+ <li id="l-487" _a="TabAtkins" _r="Well"><a href="#l-487">#</a> [23:38] &lt;TabAtkins&gt; Well, stop asking if you're going to reject the answer.</li>
+ <li id="l-488" _a="TabAtkins"><a href="#l-488">#</a> [23:38] &lt;TabAtkins&gt; I don't need a special unicorn snowflake of an answer.</li>
+ <li id="l-489"><a href="#l-489">#</a> [23:38] * Quits: teoli (~teoli@public.cloak) (Client closed connection)</li>
+ <li id="l-490" _a="sgalineau"><a href="#l-490">#</a> [23:38] &lt;sgalineau&gt; when I don't get enough of an answer i'll ask for a better one.</li>
+ <li id="l-491" _a="sgalineau"><a href="#l-491">#</a> [23:38] &lt;sgalineau&gt; if you can't provide one, or don't want to, then don't.</li>
+ <li id="l-492" _a="TabAtkins"><a href="#l-492">#</a> [23:38] &lt;TabAtkins&gt; This shit's valuable for both present and future. Done.</li>
+ <li id="l-493" _a="sgalineau"><a href="#l-493">#</a> [23:39] &lt;sgalineau&gt; You believe it is. Your belief is not sufficient to me. Done.</li>
+ <li id="l-494" _a="TabAtkins" _r="Dude"><a href="#l-494">#</a> [23:39] &lt;TabAtkins&gt; Dude, look, you ask me why, I tell you why, you reject the answer and keep asking why. Forgive me if I'm not exactly happy about the way this conversation is going.</li>
+ <li id="l-495" _a="TabAtkins"><a href="#l-495">#</a> [23:39] &lt;TabAtkins&gt; I get that *you* don't think it's worthwhile *enough* to be worth doing. I do.</li>
+ <li id="l-496" _a="TabAtkins" _r="So"><a href="#l-496">#</a> [23:39] &lt;TabAtkins&gt; So, hey, value judgement.</li>
+ <li id="l-497" _a="sgalineau"><a href="#l-497">#</a> [23:40] &lt;sgalineau&gt; Telling me 'this is the stock answer so shot up' is supposed to be satisfying to me? think again.</li>
+ <li id="l-498" _a="TabAtkins"><a href="#l-498">#</a> [23:40] &lt;TabAtkins&gt; Stop pretending that your particular valuation is objectively true and sufficient to reject my answer and demand more.</li>
+ <li id="l-499" _a="sgalineau"><a href="#l-499">#</a> [23:40] &lt;sgalineau&gt; I'm not interested in what you think I'm 'pretending'</li>
+ <li id="l-500" _a="TabAtkins" _r="Again"><a href="#l-500">#</a> [23:40] &lt;TabAtkins&gt; Again, I don't need to give a special snowflake answer.  This isn't a special snowflake situation.  There's a thing, which isn't standardized, and has divergence as a result, which causes pain. We can stop this.</li>
+ <li id="l-501" _a="TabAtkins"><a href="#l-501">#</a> [23:40] &lt;TabAtkins&gt; THAT'S MY WHOLE ANSWER.</li>
+ <li id="l-502" _a="TabAtkins"><a href="#l-502">#</a> [23:40] &lt;TabAtkins&gt; I'm sorry that you don't like it.</li>
+ <li id="l-503" _a="sgalineau"><a href="#l-503">#</a> [23:40] &lt;sgalineau&gt; You can call things you don't want to consider 'snowflakes' all you want.</li>
+ <li id="l-504" _a="sgalineau"><a href="#l-504">#</a> [23:41] &lt;sgalineau&gt; likewise</li>
+ <li id="l-505" _a="TabAtkins"><a href="#l-505">#</a> [23:41] &lt;TabAtkins&gt; For fucks sake, I don't understand what you're going on about.</li>
+ <li id="l-506" _a="TabAtkins"><a href="#l-506">#</a> [23:41] &lt;TabAtkins&gt; What is so unique about this situation, in your estimation, that it requires an extraordinary justification beyond what I gave you?</li>
+ <li id="l-507" _a="sgalineau"><a href="#l-507">#</a> [23:41] &lt;sgalineau&gt; And given your tone you're completely uninterested in even trying so let's end this here.</li>
+ <li id="l-508" _a="TabAtkins"><a href="#l-508">#</a> [23:43] &lt;TabAtkins&gt; This entire conversation is exactly as confusing as the one I read from earlier.</li>
+ <li id="l-509" _a="sgalineau"><a href="#l-509">#</a> [23:43] &lt;sgalineau&gt; My justification, Tab, is based on years of working on a browser with a long tail of shit. And finding out that certain problems - like this one - did not happen for sites that depended on code that has since become a de facto standard. What is confusing about that?</li>
+ <li id="l-510" _a="TabAtkins" _r="So"><a href="#l-510">#</a> [23:44] &lt;TabAtkins&gt; So, boiling that down, your response is again &quot;I don't think the value is sufficient to justify working on it&quot;. Correct?</li>
+ <li id="l-511" _a="sgalineau"><a href="#l-511">#</a> [23:44] &lt;sgalineau&gt; Does it mean it should absolutely not be fixed? of course not. but it may mean it may not matter anymore. The end.</li>
+ <li id="l-512" _a="TabAtkins"><a href="#l-512">#</a> [23:45] &lt;TabAtkins&gt; THAT IS A COMPLETELY VALID AND SUFFICIENT RESPONSE, WHICH DOES NOT NEGATE MY OWN RESPONSE THAT I FIND IT SUFFICIENTLY VALUABLE.</li>
+ <li id="l-513" _a="TabAtkins"><a href="#l-513">#</a> [23:45] &lt;TabAtkins&gt; We don't need to agree on precisely how valuable it is, because this isn't a topic which requires us to synchronize our beliefs.</li>
+ <li id="l-514" _a="sgalineau"><a href="#l-514">#</a> [23:46] &lt;sgalineau&gt; So WHAT? I can't ask others why *they* believe it important? Are you the oracle or something?</li>
+ <li id="l-515" _a="TabAtkins"><a href="#l-515">#</a> [23:46] &lt;TabAtkins&gt; You *have* asked others. *Repeatedly*. And they, and I, have told you why we think it's important. FOR THE SAME REASONS IT ALWAYS IS.</li>
+ <li id="l-516" _a="TabAtkins"><a href="#l-516">#</a> [23:46] &lt;TabAtkins&gt; There's nothing new or special about this situation that demands a unique reason.</li>
+ <li id="l-517" _a="sgalineau"><a href="#l-517">#</a> [23:46] &lt;sgalineau&gt; When?</li>
+ <li id="l-518" _a="TabAtkins"><a href="#l-518">#</a> [23:46] &lt;TabAtkins&gt; Scrollback.</li>
+ <li id="l-519" _a="TabAtkins"><a href="#l-519">#</a> [23:47] &lt;TabAtkins&gt; This isn't a face-to-face conversation. You can just go read what we've already discussed.</li>
+ <li id="l-520" _a="sgalineau"><a href="#l-520">#</a> [23:47] &lt;sgalineau&gt; So to figure out what a large group of people think you pop up on IRC and take the opinion of the first two or three?</li>
+ <li id="l-521" _a="sgalineau"><a href="#l-521">#</a> [23:47] &lt;sgalineau&gt; that explains a lot</li>
+ <li id="l-522" _a="sgalineau"><a href="#l-522">#</a> [23:48] &lt;sgalineau&gt; seriously man, if you don't want to talk about it, don't.</li>
+ <li id="l-523" _a="TabAtkins"><a href="#l-523">#</a> [23:48] &lt;TabAtkins&gt; What large group are you polling? You just asked me, I told you, and you asked me again. And I told you again. And you asked me again.</li>
+ <li id="l-524" _a="TabAtkins"><a href="#l-524">#</a> [23:48] &lt;TabAtkins&gt; You won't stop asking, for some reason, and then you get offended that I'm tired of repeating myself.</li>
+ <li id="l-525" _a="sgalineau"><a href="#l-525">#</a> [23:48] &lt;sgalineau&gt; You just aid I shouldn't ask you because others already answered the same thing.</li>
+ <li id="l-526" _a="TabAtkins"><a href="#l-526">#</a> [23:49] &lt;TabAtkins&gt; You certainly shouldn't ask me a *second* time, especially when my first answer is identical to others.</li>
+ <li id="l-527" _a="sgalineau"><a href="#l-527">#</a> [23:49] &lt;sgalineau&gt; I didn't ask you a second time. you seem to misunderstand my argument. so I went for another round.</li>
+ <li id="l-528" _a="TabAtkins"><a href="#l-528">#</a> [23:52] &lt;TabAtkins&gt; I did understand you, I reiterated my point which counters your own argument (at least for myself), and you continued to pretend that I'm not giving &quot;enough of an answer&quot;.</li>
+ <li id="l-529" _a="TabAtkins"><a href="#l-529">#</a> [23:52] &lt;TabAtkins&gt; And insinuated that I'm either deliberately being vague, or don't understand my own position enough to know when I'm being vague.</li>
+ <li id="l-530" _a="sgalineau"><a href="#l-530">#</a> [23:53] &lt;sgalineau&gt; Not how that went on my end. Sorry. All I heard could be summarized as 'there is no justification for arguing against this'. So I explained what I see as a reasonable justification to question the priority of this.</li>
+ <li id="l-531" _a="TabAtkins"><a href="#l-531">#</a> [23:53] &lt;TabAtkins&gt; 14:43 &lt;sgalineau&gt; when I don't get enough of an answer i'll ask for a better one.</li>
+ <li id="l-532" _a="TabAtkins"><a href="#l-532">#</a> [23:53] &lt;TabAtkins&gt; 14:43 &lt;sgalineau&gt; if you can't provide one, or don't want to, then don't.</li>
+ <li id="l-533" _a="TabAtkins"><a href="#l-533">#</a> [23:53] &lt;TabAtkins&gt; That's how it went on both our ends.</li>
+ <li id="l-534" _a="sgalineau"><a href="#l-534">#</a> [23:53] &lt;sgalineau&gt; I'm about as interested as arguing about what you think I insinuated on IRC as you are about what I think I heard you say</li>
+ <li id="l-535" _a="TabAtkins"><a href="#l-535">#</a> [23:53] &lt;TabAtkins&gt; I accepted, explicitly, that you don't find enough value in it.</li>
+ <li id="l-536" _a="sgalineau"><a href="#l-536">#</a> [23:54] &lt;sgalineau&gt; I'm pretty sure we can agree that'd be fucking boring. so let's leave it at that.</li>
+ <li id="l-537"><a href="#l-537">#</a> [23:54] * Quits: Ms2ger (~Ms2ger@public.cloak) (&quot;nn&quot;)</li>
+ <li id="l-538" _a="TabAtkins"><a href="#l-538">#</a> [23:54] &lt;TabAtkins&gt; If you chose to read that as me dismissing your justification, I don't understand what you're doing.</li>
+ <li id="l-539" _a="sgalineau"><a href="#l-539">#</a> [23:54] &lt;sgalineau&gt; as for the quotes better, I was not saying I'd ask more answers from you. I'll ask multiple people what they think.</li>
+ <li id="l-540" _a="sgalineau"><a href="#l-540">#</a> [23:55] &lt;sgalineau&gt; when people tell you 'this is the stock answer. stop asking' it can be interpreted in different ways</li>
+ <li id="l-541" _a="sgalineau"><a href="#l-541">#</a> [23:55] &lt;sgalineau&gt; such as 'this is the stock answer so stop asking me and everyone else'</li>
+ <li id="l-542" _a="sgalineau"><a href="#l-542">#</a> [23:55] &lt;sgalineau&gt; not just 'stop asking *me*'</li>
+ <li id="l-543" _a="TabAtkins"><a href="#l-543">#</a> [23:55] &lt;TabAtkins&gt; If by:</li>
+ <li id="l-544" _a="TabAtkins"><a href="#l-544">#</a> [23:55] &lt;TabAtkins&gt; 14:40 &lt;sgalineau&gt; I sure am not :) but may I try to understand why others think it valuable? you're welcome to not answer if that bothers you, too</li>
+ <li id="l-545" _a="TabAtkins"><a href="#l-545">#</a> [23:56] &lt;TabAtkins&gt; ...you meant &quot;Okay, that's cool. I'm interested in what others might think about this too, so I'll ask them later as well.&quot; then that's fine.</li>
+ <li id="l-546" _a="sgalineau"><a href="#l-546">#</a> [23:56] &lt;sgalineau&gt; YES</li>
+ <li id="l-547" _a="sgalineau"><a href="#l-547">#</a> [23:56] &lt;sgalineau&gt; that's all there is to it</li>
+ <li id="l-548" _a="TabAtkins"><a href="#l-548">#</a> [23:56] &lt;TabAtkins&gt; If that *is* what you meant, then you have quick the knack for phrasing things in relatively offensive ways when you mean innocuous things.</li>
+ <li id="l-549" _a="sgalineau" _r="dude"><a href="#l-549">#</a> [23:56] &lt;sgalineau&gt; dude, you did the same</li>
+ <li id="l-550" _a="TabAtkins"><a href="#l-550">#</a> [23:57] &lt;TabAtkins&gt; &quot;you're welcome to not ansdwer if that bothers you&quot; if a blow-off phrase that implies someone's being unreasonable.</li>
+ <li id="l-551" _a="sgalineau"><a href="#l-551">#</a> [23:57] &lt;sgalineau&gt; 'this is the stock answer so stop asking' is not a blow-off answer that could be construed as 'just STFU' in this context?</li>
+ <li id="l-552" _a="TabAtkins"><a href="#l-552">#</a> [23:57] &lt;TabAtkins&gt; We can go quote-mine to establish that I didn't say anything of the sort.</li>
+ <li id="l-553" _a="TabAtkins"><a href="#l-553">#</a> [23:57] &lt;TabAtkins&gt; I said *my* answer was the stock answer.</li>
+ <li id="l-554" _a="TabAtkins"><a href="#l-554">#</a> [23:57] &lt;TabAtkins&gt; So you can quit asking *me*.</li>
+ <li id="l-555" _a="sgalineau"><a href="#l-555">#</a> [23:58] &lt;sgalineau&gt; i doubt I have a monopoly of bad phrasing in an IRC argument</li>
+ <li id="l-556" _a="sgalineau"><a href="#l-556">#</a> [23:58] &lt;sgalineau&gt; the meaning of your communication is up to your recipient. and vice-versa.</li>
+ <li id="l-557" _a="TabAtkins" _r="Well"><a href="#l-557">#</a> [23:59] &lt;TabAtkins&gt; Well, now that we're done with the phrasing wankfest: I think it's valuable for the stock reason.  So does Alan and Ms2ger, apparently.</li>
+ <li id="l-558" _a="sgalineau" _r="Sadly"><a href="#l-558">#</a> [23:59] &lt;sgalineau&gt; Sadly, yes. Oh well.</li>
+ <li id="l-559"><a href="#l-559">#</a> Session Close: Thu Jan 16 00:00:01 2014</li>
+</ol>
+<p id="end">The end :)

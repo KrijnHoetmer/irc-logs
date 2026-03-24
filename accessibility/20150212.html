@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<title>IRC logs: mozilla / #accessibility / 20150212</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="mozilla/accessibility.20150212.log"><a href="/irc-logs/">/irc-logs</a> / mozilla / #accessibility / 2015-02-12 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20150211>Previous day</a>, <a href=20150213>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Thu Feb 12 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #accessibility</li>
+<li id=l-3 class=hide><a href=#l-3>#</a> [00:19] * Quits: newtron (newtron@moz-6lh.c31.71.199.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-4 _a="tbsaunde" _r="smaug"><a href=#l-4>#</a> [00:22] &lt;tbsaunde&gt; smaug: so, there's an interesting trick with IDToHyperText(), if you can't find the the ID that could be fine (think case it has been removed but parent hasn't seen notification yet, but id is present but not a hyper text has to be a bug in the child</li>
+<li id=l-5 _a="tbsaunde"><a href=#l-5>#</a> [00:22] &lt;tbsaunde&gt; or a bug in the parent</li>
+<li id=l-6 _a="smaug" _r="tbsaunde"><a href=#l-6>#</a> [00:24] &lt;smaug&gt; tbsaunde: trick?</li>
+<li id=l-7 _a="tbsaunde" _r="smaug"><a href=#l-7>#</a> [00:25] &lt;tbsaunde&gt; smaug: well, I guess more with its return value</li>
+<li id=l-8 _a="tbsaunde" _r="smaug"><a href=#l-8>#</a> [00:25] &lt;tbsaunde&gt; smaug: if it returns null its not right to just return false</li>
+<li id=l-9 _a="smaug" _r="oh"><a href=#l-9>#</a> [00:26] &lt;smaug&gt; oh, I didn't change that part</li>
+<li id=l-10 _a="smaug"><a href=#l-10>#</a> [00:26] &lt;smaug&gt; I was just wondering the same, why there is return false</li>
+<li id=l-11 class=hide><a href=#l-11>#</a> [00:26] * Quits: Justin_o (uid14648@moz-pd2b8l.charlton.irccloud.com) (Quit: Connection closed for inactivity)</li>
+<li id=l-12 _a="tbsaunde" _r="smaug"><a href=#l-12>#</a> [00:26] &lt;tbsaunde&gt; smaug: yeah, more my fault, but you made me realize it</li>
+<li id=l-13 _a="smaug"><a href=#l-13>#</a> [00:27] &lt;smaug&gt; I wish ipc methods returned some enum value</li>
+<li id=l-14 _a="smaug"><a href=#l-14>#</a> [00:27] &lt;smaug&gt; eSUCCEED or eKillChildProcess</li>
+<li id=l-15 _a="smaug"><a href=#l-15>#</a> [00:27] &lt;smaug&gt; or some such</li>
+<li id=l-16 _a="tbsaunde" _r="smaug"><a href=#l-16>#</a> [00:31] &lt;tbsaunde&gt; smaug: yeah, maybe, killing the child of this would be a little silly imo</li>
+<li id=l-17 _a="tbsaunde"><a href=#l-17>#</a> [00:32] &lt;tbsaunde&gt; s/of/over/</li>
+<li id=l-18 _a="joanie" _r="tbsaunde"><a href=#l-18>#</a> [00:33] &lt;joanie&gt; tbsaunde: you happen to know what MaiAtkType139 is? Apparently load_complete is invalid for that type.</li>
+<li id=l-19 _a="joanie"><a href=#l-19>#</a> [00:34] * joanie loves console spewage</li>
+<li id=l-20 _a="tbsaunde" _r="joanie"><a href=#l-20>#</a> [00:34] &lt;tbsaunde&gt; joanie: give me a minute</li>
+<li id=l-21 _a="tbsaunde" _r="joanie"><a href=#l-21>#</a> [00:36] &lt;tbsaunde&gt; joanie: I think its a random thing implplementing text / hyper text / hyper link</li>
+<li id=l-22 _a="joanie"><a href=#l-22>#</a> [00:36] &lt;joanie&gt; huh</li>
+<li id=l-23 _a="tbsaunde" _r="joanie"><a href=#l-23>#</a> [00:36] &lt;tbsaunde&gt; joanie: my bet is this the thing were we try to send load complete for role=document</li>
+<li id=l-24 _a="joanie"><a href=#l-24>#</a> [00:37] &lt;joanie&gt; ohhhh</li>
+<li id=l-25 _a="joanie"><a href=#l-25>#</a> [00:37] &lt;joanie&gt; huh</li>
+<li id=l-26 _a="joanie"><a href=#l-26>#</a> [00:37] &lt;joanie&gt; lemme see if I can find it. It's a dojo test</li>
+<li id=l-27 class=hide><a href=#l-27>#</a> [00:53] * Joins: davidb (davidb@moz-vect2u.dsl.bell.ca)</li>
+<li id=l-28 _a="ChanServ"><a href=#l-28>#</a> [00:53] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-29 _a="smaug" _r="tbsaunde"><a href=#l-29>#</a> [00:57] &lt;smaug&gt; tbsaunde: what is ia2</li>
+<li id=l-30 _a="smaug"><a href=#l-30>#</a> [00:58] &lt;smaug&gt; apparently I'm working on stuff used only there and in MainInterfaceText</li>
+<li id=l-31 _a="smaug" _r="oh"><a href=#l-31>#</a> [00:58] &lt;smaug&gt; oh, maybe not</li>
+<li id=l-32 _a="smaug"><a href=#l-32>#</a> [01:00] &lt;smaug&gt; AccessiblePivot seems to use it</li>
+<li id=l-33 _a="smaug"><a href=#l-33>#</a> [01:00] &lt;smaug&gt; (no idea what AccessiblePivot is :) )</li>
+<li id=l-34 class=hide><a href=#l-34>#</a> [01:11] * Quits: smaug (chatzilla@moz-7dv8tf.bb.dnainternet.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-35 class=hide><a href=#l-35>#</a> [01:20] * Quits: ~davidb (davidb@moz-vect2u.dsl.bell.ca) (Quit: Blah blah blah)</li>
+<li id=l-36 class=hide><a href=#l-36>#</a> [01:24] * Joins: scott_gonzalez (scott_gonza@moz-5t7jkp.fios.verizon.net)</li>
+<li id=l-37 class=hide><a href=#l-37>#</a> [01:37] * Joins: surkov (surkov@moz-v8g78c.cpe.teksavvy.com)</li>
+<li id=l-38 _a="ChanServ"><a href=#l-38>#</a> [01:37] * ChanServ sets mode: +o surkov</li>
+<li id=l-39 class=hide><a href=#l-39>#</a> [01:49] * Quits: @surkov (surkov@moz-v8g78c.cpe.teksavvy.com) (Client exited)</li>
+<li id=l-40 class=hide><a href=#l-40>#</a> [03:10] * Joins: surkov (surkov@moz-v8g78c.cpe.teksavvy.com)</li>
+<li id=l-41 _a="ChanServ"><a href=#l-41>#</a> [03:10] * ChanServ sets mode: +o surkov</li>
+<li id=l-42 class=hide><a href=#l-42>#</a> [03:21] * Joins: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net)</li>
+<li id=l-43 class=hide><a href=#l-43>#</a> [03:25] * Quits: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-44 class=hide><a href=#l-44>#</a> [03:28] * Joins: newtron (newtron@moz-1ojn08.dsl.teksavvy.com)</li>
+<li id=l-45 class=hide><a href=#l-45>#</a> [04:09] * Quits: @surkov (surkov@moz-v8g78c.cpe.teksavvy.com) (Client exited)</li>
+<li id=l-46 class=hide><a href=#l-46>#</a> [04:39] * Joins: surkov (surkov@moz-v8g78c.cpe.teksavvy.com)</li>
+<li id=l-47 _a="ChanServ"><a href=#l-47>#</a> [04:39] * ChanServ sets mode: +o surkov</li>
+<li id=l-48 class=hide><a href=#l-48>#</a> [05:21] * Quits: @surkov (surkov@moz-v8g78c.cpe.teksavvy.com) (Client exited)</li>
+<li id=l-49 class=hide><a href=#l-49>#</a> [05:54] * Joins: icaaq (icaaq@moz-t231nb.cust.bredbandsbolaget.se)</li>
+<li id=l-50 class=hide _a="icaaq"><a href=#l-50>#</a> [06:55] * icaaq is now known as icaaq|afk</li>
+<li id=l-51 class=hide _a="icaaq|afk"><a href=#l-51>#</a> [06:57] * icaaq|afk is now known as icaaq</li>
+<li id=l-52 class=hide><a href=#l-52>#</a> [07:07] * Joins: ioanachiorean (ioanachiore@moz-ohb.65e.79.82.IP)</li>
+<li id=l-53 class=hide _a="icaaq"><a href=#l-53>#</a> [08:45] * icaaq is now known as icaaq|afk</li>
+<li id=l-54 class=hide _a="icaaq|afk"><a href=#l-54>#</a> [09:01] * icaaq|afk is now known as icaaq</li>
+<li id=l-55 class=hide><a href=#l-55>#</a> [09:21] * Joins: yliao (yliao@moz-aj9ejj.HINET-IP.hinet.net)</li>
+<li id=l-56 class=hide><a href=#l-56>#</a> [09:25] * Quits: yliao (yliao@moz-aj9ejj.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-57 class=hide><a href=#l-57>#</a> [10:15] * Joins: agibson (agibson@moz-j04gi9.cable.virginm.net)</li>
+<li id=l-58 class=hide><a href=#l-58>#</a> [10:42] * Joins: Gijs (chatzilla@moz-7ep.e16.80.5.IP)</li>
+<li id=l-59 class=hide><a href=#l-59>#</a> [12:21] * Joins: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net)</li>
+<li id=l-60 class=hide><a href=#l-60>#</a> [12:25] * Quits: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-61 class=hide><a href=#l-61>#</a> [12:27] * Quits: dustinm` (dustinm@moz-1c1j82.fu2o.sj0n.5300.2607.IP) (Connection closed)</li>
+<li id=l-62 class=hide><a href=#l-62>#</a> [12:29] * Joins: smaug (chatzilla@moz-7dv8tf.bb.dnainternet.fi)</li>
+<li id=l-63 class=hide _a="icaaq"><a href=#l-63>#</a> [12:57] * icaaq is now known as icaaq|afk</li>
+<li id=l-64 class=hide _a="icaaq|afk"><a href=#l-64>#</a> [12:59] * icaaq|afk is now known as icaaq</li>
+<li id=l-65 class=hide><a href=#l-65>#</a> [13:07] * Joins: surkov (surkov@moz-i5m.05u.207.66.IP)</li>
+<li id=l-66 _a="ChanServ"><a href=#l-66>#</a> [13:07] * ChanServ sets mode: +o surkov</li>
+<li id=l-67 class=hide _a="agibson"><a href=#l-67>#</a> [13:16] * agibson is now known as agibson|afk</li>
+<li id=l-68 class=hide><a href=#l-68>#</a> [13:19] * Joins: dustinm` (dustinm@moz-1c1j82.fu2o.sj0n.5300.2607.IP)</li>
+<li id=l-69 class=hide><a href=#l-69>#</a> [14:13] * Quits: ioanachiorean (ioanachiore@moz-ohb.65e.79.82.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-70 class=hide><a href=#l-70>#</a> [14:13] * Joins: ioanachiorean_ (ioanachiore@moz-spd.8ed.34.89.IP)</li>
+<li id=l-71 class=hide><a href=#l-71>#</a> [14:14] * Joins: Justin_o (uid14648@moz-pd2b8l.charlton.irccloud.com)</li>
+<li id=l-72 class=hide><a href=#l-72>#</a> [14:15] * Quits: ioanachiorean_ (ioanachiore@moz-spd.8ed.34.89.IP) (Connection closed)</li>
+<li id=l-73 class=hide _a="agibson|afk"><a href=#l-73>#</a> [14:33] * agibson|afk is now known as agibson</li>
+<li id=l-74 class=hide><a href=#l-74>#</a> [14:36] * Joins: ioanachiorean (ioanachiore@moz-spd.8ed.34.89.IP)</li>
+<li id=l-75 class=hide><a href=#l-75>#</a> [14:41] * Joins: anvk (anovak@moz-871.mvk.11.204.IP)</li>
+<li id=l-76 class=hide><a href=#l-76>#</a> [14:43] * Quits: smaug (chatzilla@moz-7dv8tf.bb.dnainternet.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-77 class=hide><a href=#l-77>#</a> [14:51] * Quits: ioanachiorean (ioanachiore@moz-spd.8ed.34.89.IP) (Connection closed)</li>
+<li id=l-78 class=hide><a href=#l-78>#</a> [14:55] * Joins: ioanachiorean (ioanachiore@moz-spd.8ed.34.89.IP)</li>
+<li id=l-79 class=hide><a href=#l-79>#</a> [15:06] * Joins: MarcoZ (marco.zehe@moz-73livd.dip0.t-ipconnect.de)</li>
+<li id=l-80 _a="ChanServ"><a href=#l-80>#</a> [15:06] * ChanServ sets mode: +ao MarcoZ MarcoZ</li>
+<li id=l-81 _a="&amp;MarcoZ"><a href=#l-81>#</a> [15:07] &lt;&amp;MarcoZ&gt; Hi!</li>
+<li id=l-82 class=hide><a href=#l-82>#</a> [15:07] * Joins: davidb (davidb@moz-vect2u.dsl.bell.ca)</li>
+<li id=l-83 _a="ChanServ"><a href=#l-83>#</a> [15:07] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-84 _a="~davidb"><a href=#l-84>#</a> [15:08] &lt;~davidb&gt; heyo</li>
+<li id=l-85 _a="&amp;MarcoZ"><a href=#l-85>#</a> [15:14] &lt;&amp;MarcoZ&gt; Heyo davidb!</li>
+<li id=l-86 _a="~davidb"><a href=#l-86>#</a> [15:15] &lt;~davidb&gt; hi hi</li>
+<li id=l-87 _a="~davidb" _r="MarcoZ"><a href=#l-87>#</a> [15:15] &lt;~davidb&gt; MarcoZ, I PMed ya about an admin detail</li>
+<li id=l-88 class=hide><a href=#l-88>#</a> [15:30] * Joins: yzen (yzen@moz-i5m.05u.207.66.IP)</li>
+<li id=l-89 _a="ChanServ"><a href=#l-89>#</a> [15:30] * ChanServ sets mode: +o yzen</li>
+<li id=l-90 _a="@firebot"><a href=#l-90>#</a> [15:40] &lt;@firebot&gt; cbook@mozilla.com changed the Resolution on bug 1132134 from --- to FIXED.</li>
+<li id=l-91 _a="@firebot"><a href=#l-91>#</a> [15:40] &lt;@firebot&gt; cbook@mozilla.com changed the Status on bug 1132134 from NEW to RESOLVED.</li>
+<li id=l-92 _a="@firebot"><a href=#l-92>#</a> [15:40] &lt;@firebot&gt; cbook@mozilla.com set status-firefox38 to fixed on bug 1132134.</li>
+<li id=l-93 _a="@firebot"><a href=#l-93>#</a> [15:40] &lt;@firebot&gt; cbook@mozilla.com changed the Target Milestone on bug 1132134 from --- to mozilla38.</li>
+<li id=l-94 _a="@firebot"><a href=#l-94>#</a> [15:40] &lt;@firebot&gt; <a href="https://bugzil.la/1132134">https://bugzil.la/1132134</a> — FIXED, bugs@pettay.fi — Get Accessible value from the child process</li>
+<li id=l-95 class=hide><a href=#l-95>#</a> [15:49] * Quits: ioanachiorean (ioanachiore@moz-spd.8ed.34.89.IP) (Connection closed)</li>
+<li id=l-96 class=hide><a href=#l-96>#</a> [15:52] * Joins: ioanachiorean_ (ioanachiore@moz-ohb.65e.79.82.IP)</li>
+<li id=l-97 class=hide><a href=#l-97>#</a> [15:55] * Joins: clown (clown@moz-v6m.c3o.211.205.IP)</li>
+<li id=l-98 class=hide _a="clown"><a href=#l-98>#</a> [15:56] * clown is now known as clown_mtg</li>
+<li id=l-99 class=hide><a href=#l-99>#</a> [15:56] * Joins: smaug (chatzilla@moz-7dv8tf.bb.dnainternet.fi)</li>
+<li id=l-100 class=hide><a href=#l-100>#</a> [16:10] * Joins: slee (chatzilla@moz-996.342.251.137.IP)</li>
+<li id=l-101 _a="smaug" _r="tbsaunde"><a href=#l-101>#</a> [16:15] &lt;smaug&gt; tbsaunde: why we want the setup where AccessibleWrap.cpp needs to explicitly check for ipc proxy stuff? Why not move the check to Accessible?</li>
+<li id=l-102 _a="tbsaunde" _r="smaug"><a href=#l-102>#</a> [16:36] &lt;tbsaunde&gt; smaug: how would you make that work?</li>
+<li id=l-103 _a="smaug"><a href=#l-103>#</a> [16:37] &lt;smaug&gt; not quite sure :)</li>
+<li id=l-104 _a="smaug" _r="tbsaunde"><a href=#l-104>#</a> [16:38] &lt;smaug&gt; tbsaunde:  Accessible object would have a pointer to the proxy</li>
+<li id=l-105 _a="smaug" _r="tbsaunde"><a href=#l-105>#</a> [16:38] &lt;smaug&gt; tbsaunde: so either mContent or mProxy would be non-null</li>
+<li id=l-106 _a="tbsaunde" _r="smaug"><a href=#l-106>#</a> [16:39] &lt;tbsaunde&gt; smaug: that'd burn a lot of memory, sizeof(Accessible is 136 or so in 64bit</li>
+<li id=l-107 _a="tbsaunde"><a href=#l-107>#</a> [16:39] &lt;tbsaunde&gt; and say for even small web pages you'll have a bunch</li>
+<li id=l-108 _a="smaug"><a href=#l-108>#</a> [16:40] &lt;smaug&gt; but would in theory make the implementation a lot simpler</li>
+<li id=l-109 _a="smaug"><a href=#l-109>#</a> [16:40] &lt;smaug&gt; no need to hack each backend</li>
+<li id=l-110 _a="tbsaunde"><a href=#l-110>#</a> [16:40] &lt;tbsaunde&gt; you'd also need to figure out something for methods only available on subclasses</li>
+<li id=l-111 _a="smaug"><a href=#l-111>#</a> [16:41] &lt;smaug&gt; the proxy would be just called there</li>
+<li id=l-112 _a="tbsaunde"><a href=#l-112>#</a> [16:41] &lt;tbsaunde&gt; e.g. there are methods only available on documents, and others only on tables</li>
+<li id=l-113 _a="smaug"><a href=#l-113>#</a> [16:42] &lt;smaug&gt; there would be FooAccessible objects on parent side</li>
+<li id=l-114 _a="tbsaunde"><a href=#l-114>#</a> [16:43] &lt;tbsaunde&gt; and you'd have them implement all interfaces and require everything to be virtual? that might work</li>
+<li id=l-115 _a="smaug"><a href=#l-115>#</a> [16:44] &lt;smaug&gt; everything to be virtual?</li>
+<li id=l-116 _a="smaug"><a href=#l-116>#</a> [16:44] &lt;smaug&gt; hmm</li>
+<li id=l-117 _a="smaug"><a href=#l-117>#</a> [16:44] &lt;smaug&gt; don't know where that virtual-ness comes</li>
+<li id=l-118 _a="smaug"><a href=#l-118>#</a> [16:44] &lt;smaug&gt; basically just have similar Accessible trees on parent and child</li>
+<li id=l-119 _a="smaug"><a href=#l-119>#</a> [16:45] &lt;smaug&gt; and on parent side the implementation would have a pointer to the proxy</li>
+<li id=l-120 _a="tbsaunde" _r="smaug"><a href=#l-120>#</a> [16:46] &lt;tbsaunde&gt; smaug: then I'm not sure I see how you deal with interfaces</li>
+<li id=l-121 _a="tbsaunde"><a href=#l-121>#</a> [16:48] &lt;tbsaunde&gt; I'm sure you could in theory make this work, but its seems to me at least for now hacking up ia2AccessibleFoo.cpp and nsMaiInterfaceFoo.cpp is easier</li>
+<li id=l-122 _a="smaug" _r="tbsaunde"><a href=#l-122>#</a> [16:48] &lt;smaug&gt; tbsaunde: say for AccessibleText stuff we have HyperTextAccessible object</li>
+<li id=l-123 class=hide _a="davidb"><a href=#l-123>#</a> [16:48] * davidb is now known as davidb|afk</li>
+<li id=l-124 _a="smaug"><a href=#l-124>#</a> [16:48] &lt;smaug&gt; that type of object would be created both sides</li>
+<li id=l-125 _a="smaug"><a href=#l-125>#</a> [16:48] &lt;smaug&gt; whether or not there is something virtual doesn't matter</li>
+<li id=l-126 _a="smaug"><a href=#l-126>#</a> [16:49] &lt;smaug&gt; if it is virtual now, it would stay virtual</li>
+<li id=l-127 _a="smaug"><a href=#l-127>#</a> [16:49] &lt;smaug&gt; perhaps I'm missing what you mean</li>
+<li id=l-128 class=hide><a href=#l-128>#</a> [16:49] * Quits: slee (chatzilla@moz-996.342.251.137.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-129 _a="tbsaunde" _r="smaug"><a href=#l-129>#</a> [16:49] &lt;tbsaunde&gt; smaug: true, but now you need to figure out what other stuff  gets over riden from Accessible and make sure that's handled properly</li>
+<li id=l-130 _a="smaug" _r="tbsaunde"><a href=#l-130>#</a> [16:49] &lt;smaug&gt; tbsaunde: it would be handled in the HyperTextAccessible implementation</li>
+<li id=l-131 _a="smaug"><a href=#l-131>#</a> [16:50] &lt;smaug&gt; but sure, one would need to go through what all is overridden</li>
+<li id=l-132 _a="smaug"><a href=#l-132>#</a> [16:50] &lt;smaug&gt; but all this stuff requires going through all the cases anyway</li>
+<li id=l-133 class=hide><a href=#l-133>#</a> [16:53] * Joins: slee (chatzilla@moz-996.342.251.137.IP)</li>
+<li id=l-134 _a="smaug" _r="tbsaunde"><a href=#l-134>#</a> [16:53] &lt;smaug&gt; tbsaunde: the current setup is risky for inconsistent behavior too. If I read the code correctly, atk case handles a11y attributes differently depending on e10s or not</li>
+<li id=l-135 _a="tbsaunde" _r="smaug"><a href=#l-135>#</a> [16:53] &lt;tbsaunde&gt; smaug: I suspect its easier to go through the cases this way though since basically you can just go through {ia2/,atk/,mac/}*.cpp</li>
+<li id=l-136 _a="smaug" _r="tbsaunde"><a href=#l-136>#</a> [16:54] &lt;smaug&gt; tbsaunde: because in non-e10s case there is a special case for states::HASPOPUP</li>
+<li id=l-137 _a="tbsaunde" _r="smaug"><a href=#l-137>#</a> [16:54] &lt;tbsaunde&gt; smaug: hm? I don't think it does, but convince me I miss something</li>
+<li id=l-138 _a="smaug"><a href=#l-138>#</a> [16:54] &lt;smaug&gt; and &quot;haspopup&quot; string is added to the attribute set explicitly</li>
+<li id=l-139 _a="tbsaunde" _r="smaug"><a href=#l-139>#</a> [16:57] &lt;tbsaunde&gt; smaug: opps yeah, though I think that's just as much a bug in the way that code is written</li>
+<li id=l-140 class=hide _a="davidb|afk"><a href=#l-140>#</a> [16:57] * davidb|afk is now known as davidb</li>
+<li id=l-141 class=hide _a="davidb"><a href=#l-141>#</a> [16:57] * davidb is now known as davidb|afk</li>
+<li id=l-142 class=hide _a="davidb|afk"><a href=#l-142>#</a> [16:57] * davidb|afk is now known as davidb</li>
+<li id=l-143 _a="tbsaunde"><a href=#l-143>#</a> [16:58] &lt;tbsaunde&gt; if you create Accessibles in the parent you also probably need to hide them on android / b2g so they don't screw up jsat</li>
+<li id=l-144 _a="tbsaunde"><a href=#l-144>#</a> [16:58] &lt;tbsaunde&gt; which is doable, certainly</li>
+<li id=l-145 _a="smaug"><a href=#l-145>#</a> [16:58] &lt;smaug&gt; right</li>
+<li id=l-146 _a="smaug" _r="tbsaunde"><a href=#l-146>#</a> [16:59] &lt;smaug&gt; tbsaunde: I'm just hoping we could reduce the number of platform specific changes</li>
+<li id=l-147 _a="tbsaunde"><a href=#l-147>#</a> [16:59] &lt;tbsaunde&gt; I'm not going to argue its a great design, but I think I'd rather hold off on refactoring until stuff works</li>
+<li id=l-148 _a="smaug"><a href=#l-148>#</a> [16:59] &lt;smaug&gt; feel free to convince this is a bad idea :)</li>
+<li id=l-149 _a="smaug" _r="tbsaunde"><a href=#l-149>#</a> [16:59] &lt;smaug&gt; tbsaunde: ok</li>
+<li id=l-150 _a="smaug" _r="tbsaunde"><a href=#l-150>#</a> [17:00] &lt;smaug&gt; tbsaunde: btw, I wonder in which order stuff should be added to proxy</li>
+<li id=l-151 _a="smaug"><a href=#l-151>#</a> [17:00] &lt;smaug&gt; should I focus on the stuff atk uses?</li>
+<li id=l-152 _a="tbsaunde"><a href=#l-152>#</a> [17:00] &lt;tbsaunde&gt; I'd really like to see ProxyAccessible get unified into Accessible inheritance somehow</li>
+<li id=l-153 _a="smaug"><a href=#l-153>#</a> [17:00] &lt;smaug&gt; since atk seems to use only a subset</li>
+<li id=l-154 _a="tbsaunde"><a href=#l-154>#</a> [17:00] &lt;tbsaunde&gt; each thing uses a subset</li>
+<li id=l-155 _a="smaug"><a href=#l-155>#</a> [17:00] &lt;smaug&gt; or perhaps I'll keep just converting everything</li>
+<li id=l-156 _a="tbsaunde"><a href=#l-156>#</a> [17:00] &lt;tbsaunde&gt; but ia2 and atk should be fairly similar</li>
+<li id=l-157 _a="smaug"><a href=#l-157>#</a> [17:01] &lt;smaug&gt; and we platforms are then mapped to use proxy separately</li>
+<li id=l-158 _a="tbsaunde" _r="smaug"><a href=#l-158>#</a> [17:02] &lt;tbsaunde&gt; smaug: I'm not going to object if you come up with a great design, I just think its tricky and there's decent reason to care about memory usage at a first aproximation you get an accessible per element + text node</li>
+<li id=l-159 _a="tbsaunde"><a href=#l-159>#</a> [17:05] * tbsaunde needs to show + run to office</li>
+<li id=l-160 _a="smaug" _r="ok"><a href=#l-160>#</a> [17:06] &lt;smaug&gt; ok, I'm not familiar with the issues in memory usage in a11y</li>
+<li id=l-161 class=hide _a="clown_mtg"><a href=#l-161>#</a> [17:13] * clown_mtg is now known as clown</li>
+<li id=l-162 class=hide _a="Gijs"><a href=#l-162>#</a> [17:13] * Gijs is now known as Gijs_away</li>
+<li id=l-163 _a="@firebot"><a href=#l-163>#</a> [17:15] &lt;@firebot&gt; New Core - Disability Access APIs bug 1132485 filed by bugs@pettay.fi.</li>
+<li id=l-164 _a="@firebot"><a href=#l-164>#</a> [17:15] &lt;@firebot&gt; <a href="https://bugzil.la/1132485">https://bugzil.la/1132485</a> — NEW, bugs@pettay.fi — IPC proxy for GetText*Offset</li>
+<li id=l-165 _a="smaug" _r="surkov"><a href=#l-165>#</a> [17:15] &lt;smaug&gt; surkov: curious, are you ok reviewing e10s+a11y patches</li>
+<li id=l-166 _a="smaug"><a href=#l-166>#</a> [17:15] &lt;smaug&gt; or should I ask tbsaunde</li>
+<li id=l-167 _a="@surkov" _r="smaug"><a href=#l-167>#</a> [17:16] &lt;@surkov&gt; smaug: I think tbsaune is right choise as reviwer since he did most of work there while I didn’t look into it for a while</li>
+<li id=l-168 _a="smaug"><a href=#l-168>#</a> [17:17] &lt;smaug&gt; ok</li>
+<li id=l-169 class=hide><a href=#l-169>#</a> [17:19] * Quits: slee (chatzilla@moz-996.342.251.137.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-170 class=hide><a href=#l-170>#</a> [17:21] * Joins: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net)</li>
+<li id=l-171 class=hide><a href=#l-171>#</a> [17:25] * Quits: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-172 class=hide><a href=#l-172>#</a> [17:51] * Quits: newtron (newtron@moz-1ojn08.dsl.teksavvy.com) (Connection closed)</li>
+<li id=l-173 _a="~davidb" _r="tbsaunde"><a href=#l-173>#</a> [17:51] &lt;~davidb&gt; tbsaunde, going to the e10s meeting in 9 mins?</li>
+<li id=l-174 class=hide _a="davidb"><a href=#l-174>#</a> [17:52] * davidb is now known as davidb|afk</li>
+<li id=l-175 class=hide><a href=#l-175>#</a> [18:10] * Quits: clown (clown@moz-v6m.c3o.211.205.IP) (Quit: Leaving.)</li>
+<li id=l-176 class=hide><a href=#l-176>#</a> [18:17] * Quits: &amp;MarcoZ (marco.zehe@moz-73livd.dip0.t-ipconnect.de) (Quit: l8er)</li>
+<li id=l-177 class=hide><a href=#l-177>#</a> [18:18] * Joins: clown (clown@moz-v6m.c3o.211.205.IP)</li>
+<li id=l-178 class=hide _a="clown"><a href=#l-178>#</a> [18:18] * clown is now known as clown_mgt</li>
+<li id=l-179 class=hide _a="clown_mgt"><a href=#l-179>#</a> [18:19] * clown_mgt is now known as clown_mtg</li>
+<li id=l-180 class=hide _a="icaaq"><a href=#l-180>#</a> [18:26] * icaaq is now known as icaaq|afk</li>
+<li id=l-181 class=hide _a="davidb|afk"><a href=#l-181>#</a> [18:30] * davidb|afk is now known as davidb</li>
+<li id=l-182 class=hide><a href=#l-182>#</a> [18:44] * Joins: jongund (chatzilla@moz-emft4q.dres.uiuc.edu)</li>
+<li id=l-183 class=hide><a href=#l-183>#</a> [18:59] * Quits: ioanachiorean_ (ioanachiore@moz-ohb.65e.79.82.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-184 class=hide><a href=#l-184>#</a> [19:03] * Joins: newtron (newtron@moz-6lh.c31.71.199.IP)</li>
+<li id=l-185 class=hide><a href=#l-185>#</a> [19:14] * Joins: yzen_ (yzen@moz-i5m.05u.207.66.IP)</li>
+<li id=l-186 _a="ChanServ"><a href=#l-186>#</a> [19:14] * ChanServ sets mode: +o yzen_</li>
+<li id=l-187 class=hide><a href=#l-187>#</a> [19:16] * Quits: ~davidb (davidb@moz-vect2u.dsl.bell.ca) (Quit: Blah blah blah)</li>
+<li id=l-188 class=hide><a href=#l-188>#</a> [19:16] * Quits: @yzen_ (yzen@moz-i5m.05u.207.66.IP) (Connection closed)</li>
+<li id=l-189 class=hide><a href=#l-189>#</a> [19:17] * Joins: yzen_ (yzen@moz-i5m.05u.207.66.IP)</li>
+<li id=l-190 _a="ChanServ"><a href=#l-190>#</a> [19:17] * ChanServ sets mode: +o yzen_</li>
+<li id=l-191 class=hide><a href=#l-191>#</a> [19:17] * Quits: @yzen (yzen@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-192 class=hide _a="agibson"><a href=#l-192>#</a> [19:28] * agibson is now known as agibson|afk</li>
+<li id=l-193 _a="tbsaunde" _r="joanie"><a href=#l-193>#</a> [19:28] &lt;tbsaunde&gt; joanie: so, in those slider examplers where your choosing between options how is the text value you are on present other than as the text content of the element?</li>
+<li id=l-194 _a="joanie" _r="tbsaunde"><a href=#l-194>#</a> [19:28] &lt;joanie&gt; tbsaunde: in a call</li>
+<li id=l-195 _a="tbsaunde"><a href=#l-195>#</a> [19:29] &lt;tbsaunde&gt; k</li>
+<li id=l-196 _a="@firebot"><a href=#l-196>#</a> [19:29] &lt;@firebot&gt; New Firefox - Keyboard Navigation bug 1132543 filed by beneficentone@gmail.com.</li>
+<li id=l-197 _a="@firebot"><a href=#l-197>#</a> [19:29] &lt;@firebot&gt; <a href="https://bugzil.la/1132543">https://bugzil.la/1132543</a> — UNCONFIRMED, nobody@mozilla.org — Add shortcut to set focus to current tab</li>
+<li id=l-198 _a="joanie" _r="tbsaunde"><a href=#l-198>#</a> [19:36] &lt;joanie&gt; tbsaunde: still in the call, but I think it implements AtkValue and because the old ATK doesn't have text as an option, it's exposed as an object attribute. Ultimately, that should be exposed via the latest AtkValue.</li>
+<li id=l-199 _a="joanie"><a href=#l-199>#</a> [19:37] &lt;joanie&gt; so it's exposed and not via AtkText</li>
+<li id=l-200 _a="tbsaunde" _r="joanie"><a href=#l-200>#</a> [19:39] &lt;tbsaunde&gt; joanie: hm ok</li>
+<li id=l-201 _a="tbsaunde"><a href=#l-201>#</a> [19:40] &lt;tbsaunde&gt; on one hand I worry about use cases like web devs who want to know the formating of that text</li>
+<li id=l-202 _a="tbsaunde"><a href=#l-202>#</a> [19:41] &lt;tbsaunde&gt; and I feel like presenting that text is kind of too policyish to be in firefox</li>
+<li id=l-203 _a="tbsaunde"><a href=#l-203>#</a> [19:41] &lt;tbsaunde&gt; but on the ohter hand its obviously silly to do work when nobody will benefit</li>
+<li id=l-204 _a="tbsaunde"><a href=#l-204>#</a> [19:42] &lt;tbsaunde&gt; and people will be unhappy with you for doing it</li>
+<li id=l-205 class=hide><a href=#l-205>#</a> [19:46] * Quits: jongund (chatzilla@moz-emft4q.dres.uiuc.edu) (Connection closed)</li>
+<li id=l-206 class=hide><a href=#l-206>#</a> [19:48] * Joins: jongund (chatzilla@moz-emft4q.dres.uiuc.edu)</li>
+<li id=l-207 class=hide><a href=#l-207>#</a> [20:04] * Joins: davidb (davidb@moz-vect2u.dsl.bell.ca)</li>
+<li id=l-208 _a="ChanServ"><a href=#l-208>#</a> [20:04] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-209 _a="joanie" _r="tbsaunde"><a href=#l-209>#</a> [20:06] &lt;joanie&gt; tbsaunde: yeah, we can never ever win.</li>
+<li id=l-210 _a="tbsaunde" _r="joanie"><a href=#l-210>#</a> [20:08] &lt;tbsaunde&gt; joanie: its too bad we need to care about perf</li>
+<li id=l-211 _a="joanie"><a href=#l-211>#</a> [20:09] &lt;joanie&gt; yeah</li>
+<li id=l-212 _a="tbsaunde"><a href=#l-212>#</a> [20:09] &lt;tbsaunde&gt; otherwise I'd say we really should have those things implement AtkText</li>
+<li id=l-213 _a="tbsaunde"><a href=#l-213>#</a> [20:09] &lt;tbsaunde&gt; because you know that's what they are on screen</li>
+<li id=l-214 _a="joanie"><a href=#l-214>#</a> [20:10] &lt;joanie&gt; maybe the displayed labels -- which might. I'd have to look.</li>
+<li id=l-215 _a="joanie"><a href=#l-215>#</a> [20:10] &lt;joanie&gt; The objects functioning as the slider, however, no</li>
+<li id=l-216 class=hide><a href=#l-216>#</a> [20:10] * Quits: clown_mtg (clown@moz-v6m.c3o.211.205.IP) (Quit: Leaving.)</li>
+<li id=l-217 _a="tbsaunde" _r="joanie"><a href=#l-217>#</a> [20:11] &lt;tbsaunde&gt; joanie: isn't it the same object?</li>
+<li id=l-218 _a="joanie"><a href=#l-218>#</a> [20:11] &lt;joanie&gt; lemme look</li>
+<li id=l-219 _a="joanie"><a href=#l-219>#</a> [20:13] &lt;joanie&gt; ah maybe</li>
+<li id=l-220 _a="joanie"><a href=#l-220>#</a> [20:13] &lt;joanie&gt; I cannot highlight the text with a mouse</li>
+<li id=l-221 _a="joanie"><a href=#l-221>#</a> [20:13] * joanie launches accerciser</li>
+<li id=l-222 _a="tbsaunde"><a href=#l-222>#</a> [20:14] &lt;tbsaunde&gt; that suprises me, they're just say setting input.value I assume</li>
+<li id=l-223 _a="tbsaunde"><a href=#l-223>#</a> [20:14] &lt;tbsaunde&gt; though this probably all depends on which exact implementation of the slider you choose</li>
+<li id=l-224 _a="joanie"><a href=#l-224>#</a> [20:14] &lt;joanie&gt; lemme get some more details first. then I'll explain.</li>
+<li id=l-225 _a="joanie"><a href=#l-225>#</a> [20:16] &lt;joanie&gt; so the terrible, bad, decent, good, and excellent are exposed (this saddens me) as paragraph children of a list</li>
+<li id=l-226 _a="joanie"><a href=#l-226>#</a> [20:16] &lt;joanie&gt; the first child of the list is a list item</li>
+<li id=l-227 _a="joanie"><a href=#l-227>#</a> [20:16] &lt;joanie&gt; the five siblings of the list item have role paragraph</li>
+<li id=l-228 _a="joanie"><a href=#l-228>#</a> [20:16] &lt;joanie&gt; a list should not have as its immediate children, paragraphs.</li>
+<li id=l-229 _a="tbsaunde"><a href=#l-229>#</a> [20:17] &lt;tbsaunde&gt; I'll agree with that</li>
+<li id=l-230 _a="joanie"><a href=#l-230>#</a> [20:17] &lt;joanie&gt; having said that, those paragraphs do implement atktext</li>
+<li id=l-231 _a="joanie"><a href=#l-231>#</a> [20:17] &lt;joanie&gt; the list is a sibling of the slider</li>
+<li id=l-232 _a="tbsaunde"><a href=#l-232>#</a> [20:17] &lt;tbsaunde&gt; of course if you do &lt;div role=list&gt;&lt;p&gt;hello&lt;/p&gt;&lt;/div&gt;</li>
+<li id=l-233 _a="joanie"><a href=#l-233>#</a> [20:17] &lt;joanie&gt; not descendant from the slider</li>
+<li id=l-234 _a="joanie"><a href=#l-234>#</a> [20:17] &lt;joanie&gt; if you do that then you suck</li>
+<li id=l-235 _a="joanie"><a href=#l-235>#</a> [20:17] * joanie smiles</li>
+<li id=l-236 _a="joanie" _r="anyhoo"><a href=#l-236>#</a> [20:18] &lt;joanie&gt; anyhoo, in answer to your original question (as I understood it)</li>
+<li id=l-237 _a="tbsaunde" _r="joanie"><a href=#l-237>#</a> [20:18] &lt;tbsaunde&gt; joanie: sure</li>
+<li id=l-238 _a="joanie"><a href=#l-238>#</a> [20:18] &lt;joanie&gt; the text that is displayed does indeed implement atktext</li>
+<li id=l-239 _a="joanie"><a href=#l-239>#</a> [20:18] &lt;joanie&gt; and is not part of the slider</li>
+<li id=l-240 _a="tbsaunde"><a href=#l-240>#</a> [20:18] &lt;tbsaunde&gt; oic</li>
+<li id=l-241 _a="joanie"><a href=#l-241>#</a> [20:18] * joanie shrugs</li>
+<li id=l-242 _a="tbsaunde"><a href=#l-242>#</a> [20:19] &lt;tbsaunde&gt; have I mentioned lately how much I dislike ARIA compared to you know fixing html</li>
+<li id=l-243 _a="joanie"><a href=#l-243>#</a> [20:19] &lt;joanie&gt; I would agree</li>
+<li id=l-244 _a="joanie" _r="well"><a href=#l-244>#</a> [20:19] &lt;joanie&gt; well, I don't dislike ARIA</li>
+<li id=l-245 _a="joanie"><a href=#l-245>#</a> [20:19] &lt;joanie&gt; I dislike designers</li>
+<li id=l-246 _a="joanie"><a href=#l-246>#</a> [20:19] &lt;joanie&gt; if the designers would make HTML have lovely awesome widgets of beauty</li>
+<li id=l-247 _a="joanie"><a href=#l-247>#</a> [20:20] &lt;joanie&gt; you and I could fight about other things</li>
+<li id=l-248 _a="joanie"><a href=#l-248>#</a> [20:20] * joanie smiles</li>
+<li id=l-249 _a="tbsaunde" _r="yeah"><a href=#l-249>#</a> [20:20] &lt;tbsaunde&gt; yeah, well the designers will just use what they're given</li>
+<li id=l-250 _a="tbsaunde"><a href=#l-250>#</a> [20:20] &lt;tbsaunde&gt; which is html + aria stuff instead of giving them stuff in html so they don't need aria</li>
+<li id=l-251 _a="joanie"><a href=#l-251>#</a> [20:21] &lt;joanie&gt; right</li>
+<li id=l-252 class=hide><a href=#l-252>#</a> [20:21] * Joins: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net)</li>
+<li id=l-253 _a="tbsaunde" _r="joanie"><a href=#l-253>#</a> [20:22] &lt;tbsaunde&gt; joanie: anyhow for this thing where the text isn't a child of the slider do you still get text change events on the slider? I'd expect not</li>
+<li id=l-254 _a="joanie"><a href=#l-254>#</a> [20:22] &lt;joanie&gt; I think we don't at the AT-SPI2/Orca level</li>
+<li id=l-255 _a="joanie"><a href=#l-255>#</a> [20:22] &lt;joanie&gt; but I think they are getting spewed by the slider</li>
+<li id=l-256 _a="joanie"><a href=#l-256>#</a> [20:22] &lt;joanie&gt; or something</li>
+<li id=l-257 _a="joanie"><a href=#l-257>#</a> [20:22] &lt;joanie&gt; because of the console errors</li>
+<li id=l-258 _a="joanie"><a href=#l-258>#</a> [20:23] &lt;joanie&gt; in other words, I think you're firing the signals</li>
+<li id=l-259 _a="joanie"><a href=#l-259>#</a> [20:23] &lt;joanie&gt; which is work you do not have to be doing</li>
+<li id=l-260 _a="joanie"><a href=#l-260>#</a> [20:23] &lt;joanie&gt; unless it's more work to figuring out you don't have to be doing it</li>
+<li id=l-261 _a="tbsaunde" _r="joanie"><a href=#l-261>#</a> [20:23] &lt;tbsaunde&gt; joanie: yeah, I guess I should separate out test cases, and see exactly which sliders do and don't</li>
+<li id=l-262 _a="joanie"><a href=#l-262>#</a> [20:24] &lt;joanie&gt; and later I can probably help you figure out what the trigger is</li>
+<li id=l-263 _a="joanie"><a href=#l-263>#</a> [20:24] &lt;joanie&gt; right now I cannot, however. I just see the spewage and pass it along ;)</li>
+<li id=l-264 _a="tbsaunde" _r="joanie"><a href=#l-264>#</a> [20:25] &lt;tbsaunde&gt; joanie: yeah, I can sit down and figure out which sliders do and don't fiarly easily I think</li>
+<li id=l-265 class=hide><a href=#l-265>#</a> [20:25] * Quits: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-266 class=hide _a="agibson|afk"><a href=#l-266>#</a> [20:27] * agibson|afk is now known as agibson</li>
+<li id=l-267 _a="smaug" _r="tbsaunde"><a href=#l-267>#</a> [20:30] &lt;smaug&gt; tbsaunde: you mean why I didn't change nsMaiInterfaceText.cpp?</li>
+<li id=l-268 _a="smaug"><a href=#l-268>#</a> [20:30] &lt;smaug&gt; because ... I missed that :)</li>
+<li id=l-269 _a="tbsaunde" _r="smaug"><a href=#l-269>#</a> [20:33] &lt;tbsaunde&gt; smaug: yeah, no worries</li>
+<li id=l-270 class=hide><a href=#l-270>#</a> [20:35] * Joins: clown (clown@moz-v6m.c3o.211.205.IP)</li>
+<li id=l-271 _a="@yzen_"><a href=#l-271>#</a> [20:41] &lt;@yzen_&gt; eeejay hi</li>
+<li id=l-272 _a="@eeejay" _r="yzen_"><a href=#l-272>#</a> [20:41] &lt;@eeejay&gt; yzen_: yo</li>
+<li id=l-273 _a="@yzen_"><a href=#l-273>#</a> [20:42] &lt;@yzen_&gt; eeejay has any one of the apps have an issue of the footer being in front of the main content in the markup ?</li>
+<li id=l-274 _a="@yzen_"><a href=#l-274>#</a> [20:42] &lt;@yzen_&gt; eeejay the media ones that you've touched</li>
+<li id=l-275 _a="@eeejay" _r="yzen_"><a href=#l-275>#</a> [20:43] &lt;@eeejay&gt; yzen_: yeah gallery</li>
+<li id=l-276 _a="@yzen_"><a href=#l-276>#</a> [20:43] &lt;@yzen_&gt; eeejay did you end up re ordering the markup ?</li>
+<li id=l-277 _a="@eeejay" _r="yzen_"><a href=#l-277>#</a> [20:44] &lt;@eeejay&gt; yzen_: bug 1068973</li>
+<li id=l-278 _a="@eeejay" _r="yzen_"><a href=#l-278>#</a> [20:44] &lt;@eeejay&gt; yzen_: yes</li>
+<li id=l-279 _a="@firebot"><a href=#l-279>#</a> [20:44] &lt;@firebot&gt; <a href="https://bugzil.la/1068973">https://bugzil.la/1068973</a> — FIXED, eitan@monotonous.org — Footer appears before thumbnails in markup</li>
+<li id=l-280 _a="@eeejay"><a href=#l-280>#</a> [20:44] &lt;@eeejay&gt; its a headache for sure</li>
+<li id=l-281 class=hide _a="Gijs_away"><a href=#l-281>#</a> [20:46] * Gijs_away is now known as Gijs</li>
+<li id=l-282 _a="@yzen_"><a href=#l-282>#</a> [20:47] &lt;@yzen_&gt; eeejay cool thanks</li>
+<li id=l-283 _a="@eeejay" _r="yzen_"><a href=#l-283>#</a> [20:47] &lt;@eeejay&gt; yzen_: you see this in the video app?</li>
+<li id=l-284 _a="@yzen_" _r="yeah"><a href=#l-284>#</a> [20:47] &lt;@yzen_&gt; yeah, multiple modes with their headers and footers</li>
+<li id=l-285 _a="@eeejay"><a href=#l-285>#</a> [20:48] &lt;@eeejay&gt; same in gallery</li>
+<li id=l-286 _a="@eeejay"><a href=#l-286>#</a> [20:48] &lt;@eeejay&gt; might even be copied</li>
+<li id=l-287 class=hide _a="icaaq|afk"><a href=#l-287>#</a> [20:50] * icaaq|afk is now known as icaaq</li>
+<li id=l-288 _a="@yzen_"><a href=#l-288>#</a> [20:54] &lt;@yzen_&gt; eeejay it's actually almost identical :)</li>
+<li id=l-289 class=hide><a href=#l-289>#</a> [21:00] * Quits: @surkov (surkov@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-290 class=hide><a href=#l-290>#</a> [21:02] * Joins: surkov (surkov@moz-i5m.05u.207.66.IP)</li>
+<li id=l-291 _a="ChanServ"><a href=#l-291>#</a> [21:02] * ChanServ sets mode: +o surkov</li>
+<li id=l-292 _a="tbsaunde" _r="smaug"><a href=#l-292>#</a> [21:07] &lt;tbsaunde&gt; smaug: when you propose hidding proxies behind Accessible interface you should also consider things like ia2Accessible::get_relation which would cause several more sync IPC messages your way</li>
+<li id=l-293 class=hide><a href=#l-293>#</a> [21:10] * Quits: ~davidb (davidb@moz-vect2u.dsl.bell.ca) (Quit: Blah blah blah)</li>
+<li id=l-294 _a="smaug"><a href=#l-294>#</a> [21:11] &lt;smaug&gt; right</li>
+<li id=l-295 class=hide _a="icaaq"><a href=#l-295>#</a> [21:13] * icaaq is now known as icaaq|afk</li>
+<li id=l-296 class=hide _a="agibson"><a href=#l-296>#</a> [21:25] * agibson is now known as agibson|afk</li>
+<li id=l-297 class=hide _a="icaaq|afk"><a href=#l-297>#</a> [21:27] * icaaq|afk is now known as icaaq</li>
+<li id=l-298 class=hide _a="agibson|afk"><a href=#l-298>#</a> [21:42] * agibson|afk is now known as agibson</li>
+<li id=l-299 class=hide _a="icaaq"><a href=#l-299>#</a> [21:48] * icaaq is now known as icaaq|afk</li>
+<li id=l-300 _a="@firebot"><a href=#l-300>#</a> [21:53] &lt;@firebot&gt; bugs@pettay.fi changed the Assignee on bug 1132223 from nobody@mozilla.org to bugs@pettay.fi.</li>
+<li id=l-301 _a="@firebot"><a href=#l-301>#</a> [21:53] &lt;@firebot&gt; <a href="https://bugzil.la/1132223">https://bugzil.la/1132223</a> — NEW, bugs@pettay.fi — Add IdToAccessible and IdToHyperTextAccessible to DocAccessibleChild to reduce code duplication</li>
+<li id=l-302 class=hide><a href=#l-302>#</a> [21:57] * Joins: davidb (davidb@moz-vect2u.dsl.bell.ca)</li>
+<li id=l-303 _a="ChanServ"><a href=#l-303>#</a> [21:57] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-304 class=hide><a href=#l-304>#</a> [22:14] * Joins: yzen (yzen@moz-i5m.05u.207.66.IP)</li>
+<li id=l-305 _a="ChanServ"><a href=#l-305>#</a> [22:14] * ChanServ sets mode: +o yzen</li>
+<li id=l-306 class=hide><a href=#l-306>#</a> [22:16] * Quits: @yzen_ (yzen@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-307 _a="~davidb" _r="surkov"><a href=#l-307>#</a> [22:25] &lt;~davidb&gt; surkov, did you join an ARIA call today?</li>
+<li id=l-308 _a="@surkov"><a href=#l-308>#</a> [22:26] &lt;@surkov&gt; I was there</li>
+<li id=l-309 _a="~davidb"><a href=#l-309>#</a> [22:26] &lt;~davidb&gt; cool. useful?</li>
+<li id=l-310 _a="@surkov"><a href=#l-310>#</a> [22:26] &lt;@surkov&gt; that was interesting</li>
+<li id=l-311 _a="@surkov"><a href=#l-311>#</a> [22:27] &lt;@surkov&gt; I listened sort of in background</li>
+<li id=l-312 _a="@surkov"><a href=#l-312>#</a> [22:27] &lt;@surkov&gt; so I didn’t follow whole discussion</li>
+<li id=l-313 _a="~davidb"><a href=#l-313>#</a> [22:28] * ~davidb nods</li>
+<li id=l-314 _a="@surkov" _r="davidb"><a href=#l-314>#</a> [22:28] &lt;@surkov&gt; davidb: where the news come from?</li>
+<li id=l-315 _a="~davidb"><a href=#l-315>#</a> [22:28] &lt;~davidb&gt; saw the log email in my inbox</li>
+<li id=l-316 _a="@surkov"><a href=#l-316>#</a> [22:28] &lt;@surkov&gt; I see</li>
+<li id=l-317 _a="~davidb"><a href=#l-317>#</a> [22:28] &lt;~davidb&gt; log/draft minutes</li>
+<li id=l-318 class=hide><a href=#l-318>#</a> [22:35] * Quits: @surkov (surkov@moz-i5m.05u.207.66.IP) (Client exited)</li>
+<li id=l-319 class=hide _a="davidb"><a href=#l-319>#</a> [22:40] * davidb is now known as davidb|afk</li>
+<li id=l-320 class=hide><a href=#l-320>#</a> [22:44] * Parts: clown (clown@moz-v6m.c3o.211.205.IP)</li>
+<li id=l-321 _a="@firebot"><a href=#l-321>#</a> [22:47] &lt;@firebot&gt; New Core - Disability Access APIs bug 1132668 filed by jdiggs@igalia.com.</li>
+<li id=l-322 _a="@firebot"><a href=#l-322>#</a> [22:47] &lt;@firebot&gt; <a href="https://bugzil.la/1132668">https://bugzil.la/1132668</a> — NEW, nobody@mozilla.org — Incorrect name calculation(?) for cells in ARIA grid</li>
+<li id=l-323 _a="joanie"><a href=#l-323>#</a> [22:47] &lt;joanie&gt; hmmm no surkov.</li>
+<li id=l-324 _a="joanie"><a href=#l-324>#</a> [22:47] &lt;joanie&gt; The bug I just filed is pretty bad</li>
+<li id=l-325 class=hide><a href=#l-325>#</a> [22:59] * Quits: agibson (agibson@moz-j04gi9.cable.virginm.net) (Quit: )</li>
+<li id=l-326 class=hide _a="davidb|afk"><a href=#l-326>#</a> [23:14] * davidb|afk is now known as davidb</li>
+<li id=l-327 class=hide><a href=#l-327>#</a> [23:15] * Quits: ~davidb (davidb@moz-vect2u.dsl.bell.ca) (Quit: Blah blah blah)</li>
+<li id=l-328 class=hide><a href=#l-328>#</a> [23:15] * Quits: anvk (anovak@moz-871.mvk.11.204.IP) (Quit: Leaving.)</li>
+<li id=l-329 class=hide><a href=#l-329>#</a> [23:21] * Joins: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net)</li>
+<li id=l-330 class=hide><a href=#l-330>#</a> [23:24] * Quits: jongund (chatzilla@moz-emft4q.dres.uiuc.edu) (Quit: ChatZilla 0.9.91.1 [Firefox 35.0.1/20150122214805])</li>
+<li id=l-331 class=hide><a href=#l-331>#</a> [23:25] * Quits: yliao (yliao@moz-2hf62a.HINET-IP.hinet.net) (Ping timeout: 121 seconds)</li>
+<li id=l-332 class=hide _a="yzen"><a href=#l-332>#</a> [23:32] * yzen is now known as yzen_</li>
+<li id=l-333 class=hide><a href=#l-333>#</a> [23:36] * Quits: @yzen_ (yzen@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-334 class=hide><a href=#l-334>#</a> [23:58] * Quits: Gijs (chatzilla@moz-7ep.e16.80.5.IP) (Quit: sleep)</li>
+<li id=l-335 class=hide><a href=#l-335>#</a> Session Close: Fri Feb 13 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20150211>Previous day</a>, <a href=20150213>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #html-wg / 20070920</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/html-wg.20070920.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/html-wg">#html-wg</a> / 2007-09-20 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Thu Sep 20 00:00:00 2007</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #html-wg</li>
+ <li id="l-3"><a href="#l-3">#</a> [00:09] * Quits: MikeSmith (MikeSmith@mcclure.w3.org) (Quit: Less talk, more pimp walk.)</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:14] * Quits: Sander (svl@86.87.68.167) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-5"><a href="#l-5">#</a> [00:18] * Quits: briansuda_ (briansuda@194.144.106.194) (Quit: briansuda_)</li>
+ <li id="l-6" _a="Hixie" _r="Philip"><a href="#l-6">#</a> [00:19] &lt;Hixie&gt; Philip: so the main problem is that we don't actually want scripting to run during the creation of the generated tree</li>
+ <li id="l-7" _a="Hixie"><a href="#l-7">#</a> [00:19] &lt;Hixie&gt; since it could _really_ fuck with the UA</li>
+ <li id="l-8" _a="Philip"><a href="#l-8">#</a> [00:24] &lt;Philip&gt; Why wouldn't it work if UAs just followed the algorithm and ran the scripts in the text-expansion steps, and if the scripts modify the DOM then weird things may happen but that's just their problem?</li>
+ <li id="l-9" class="flagged" _a="Hixie"><a href="#l-9">#</a> [00:25] &lt;Hixie&gt; because you could trivially cause an infinite loop</li>
+ <li id="l-10" _a="Hixie"><a href="#l-10">#</a> [00:25] &lt;Hixie&gt; and the algorithm would never return</li>
+ <li id="l-11" _a="anne"><a href="#l-11">#</a> [00:28] &lt;anne&gt; how is this different from other inifite loops?</li>
+ <li id="l-12" _a="anne"><a href="#l-12">#</a> [00:28] &lt;anne&gt; such as those you can create with document.write()</li>
+ <li id="l-13" _a="Hixie"><a href="#l-13">#</a> [00:29] &lt;Hixie&gt; document.write() infinite loops always go all the way back to the UA's main event loop before recursing</li>
+ <li id="l-14" _a="Hixie"><a href="#l-14">#</a> [00:29] &lt;Hixie&gt; as far as i am aware</li>
+ <li id="l-15" _a="Philip"><a href="#l-15">#</a> [00:31] &lt;Philip&gt;     &lt;div id=&quot;data&quot;&gt;&lt;/div&gt;</li>
+ <li id="l-16" _a="Philip"><a href="#l-16">#</a> [00:31] &lt;Philip&gt;     &lt;datatemplate id=&quot;t&quot;&gt;</li>
+ <li id="l-17" _a="Philip"><a href="#l-17">#</a> [00:31] &lt;Philip&gt;       &lt;rule&gt;&lt;div template=&quot;#t&quot; ref=&quot;#data&quot;&gt;&lt;/div&gt;&lt;/rule&gt;</li>
+ <li id="l-18" _a="Philip"><a href="#l-18">#</a> [00:31] &lt;Philip&gt;     &lt;/datatemplate&gt;</li>
+ <li id="l-19" _a="Philip"><a href="#l-19">#</a> [00:31] &lt;Philip&gt;     &lt;div template=&quot;#t&quot; ref=&quot;#data&quot;&gt;&lt;/div&gt;</li>
+ <li id="l-20" _a="Philip"><a href="#l-20">#</a> [00:32] &lt;Philip&gt; Is that an infinite loop?</li>
+ <li id="l-21" _a="Hixie" _r="yes"><a href="#l-21">#</a> [00:32] &lt;Hixie&gt; yes, but again, it goes all the way back to the main event loop before recursing</li>
+ <li id="l-22" _a="Hixie"><a href="#l-22">#</a> [00:32] &lt;Hixie&gt; so the UA can still remain responsive</li>
+ <li id="l-23" _a="anne"><a href="#l-23">#</a> [00:33] &lt;anne&gt; depending on how you program it, it can always remain responsive, no?</li>
+ <li id="l-24" _a="Philip" _r="&lt;script&gt;while(1);&lt;/script&gt"><a href="#l-24">#</a> [00:33] &lt;Philip&gt; &lt;script&gt;while(1);&lt;/script&gt; is an infinite loop too, and UAs already cope with that</li>
+ <li id="l-25" _a="Hixie" _r="Philip"><a href="#l-25">#</a> [00:34] &lt;Hixie&gt; Philip: yeah but that one doesn't involve interrupting UA code</li>
+ <li id="l-26" _a="Philip"><a href="#l-26">#</a> [00:35] &lt;Philip&gt; Why can't UA code do the same that the JS interpreter does, to let the user cancel if it's taking too long?</li>
+ <li id="l-27" _a="Hixie"><a href="#l-27">#</a> [00:36] &lt;Hixie&gt; we could, but i'd be better to design it in such a way that that isn't an issue</li>
+ <li id="l-28" _a="Philip" _r="Okay"><a href="#l-28">#</a> [00:38] &lt;Philip&gt; Okay, if it can be done without introducing any new issues or making things worse for other constituencies then that would be better :-)</li>
+ <li id="l-29"><a href="#l-29">#</a> [00:43] * Joins: mjs (mjs@17.255.98.200)</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:47] * Joins: mjs_ (mjs@17.203.14.225)</li>
+ <li id="l-31"><a href="#l-31">#</a> [00:48] * Quits: mjs (mjs@17.255.98.200) (Ping timeout)</li>
+ <li id="l-32"><a href="#l-32">#</a> [00:49] * Quits: hasather (hasather@90.227.221.48) (Client exited)</li>
+ <li id="l-33"><a href="#l-33">#</a> [01:11] * Disconnected</li>
+ <li id="l-34" _a="Attempting"><a href="#l-34">#</a> [01:12] * Attempting to rejoin channel #html-wg</li>
+ <li id="l-35" _a="Rejoined"><a href="#l-35">#</a> [01:12] * Rejoined channel #html-wg</li>
+ <li id="l-36" _a="Topic"><a href="#l-36">#</a> [01:12] * Topic is 'HTML WG <a href="http://www.w3.org/html/wg/">http://www.w3.org/html/wg/</a> also logged: <a href="http://krijnhoetmer.nl/irc-logs/">http://krijnhoetmer.nl/irc-logs/</a>'</li>
+ <li id="l-37" _a="Set"><a href="#l-37">#</a> [01:12] * Set by DanC on Thu Sep 06 23:39:27</li>
+ <li id="l-38"><a href="#l-38">#</a> [01:12] * Quits: gsnedders (gsnedders@86.137.237.196) (Ping timeout)</li>
+ <li id="l-39"><a href="#l-39">#</a> [01:12] * Quits: anne (annevk@81.68.67.12) (Ping timeout)</li>
+ <li id="l-40"><a href="#l-40">#</a> [01:12] * Quits: krijnh (krijnhoetm@213.84.148.98) (Ping timeout)</li>
+ <li id="l-41"><a href="#l-41">#</a> [01:13] * Quits: beowulf (beowulf@194.74.230.217) (Ping timeout)</li>
+ <li id="l-42"><a href="#l-42">#</a> [01:14] * Joins: beowulf (beowulf@194.74.230.217)</li>
+ <li id="l-43"><a href="#l-43">#</a> [01:17] * Quits: billmason (billmason@69.30.57.156) (Quit: .)</li>
+ <li id="l-44"><a href="#l-44">#</a> [01:25] * Quits: tH (Rob@87.102.117.116) (Quit: ChatZilla 0.9.78.1-rdmsoft [XULRunner 1.8.0.9/2006120508])</li>
+ <li id="l-45"><a href="#l-45">#</a> [01:34] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-46"><a href="#l-46">#</a> [01:36] * Joins: mjs (mjs@17.255.98.200)</li>
+ <li id="l-47"><a href="#l-47">#</a> [01:38] * Quits: mjs_ (mjs@17.203.14.225) (Ping timeout)</li>
+ <li id="l-48"><a href="#l-48">#</a> [01:39] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-49"><a href="#l-49">#</a> [01:43] * Joins: matt (matt@128.30.52.30)</li>
+ <li id="l-50"><a href="#l-50">#</a> [01:45] * Joins: Lionheart (robin@66.57.69.65)</li>
+ <li id="l-51"><a href="#l-51">#</a> [01:56] * Parts: Lionheart (robin@66.57.69.65)</li>
+ <li id="l-52"><a href="#l-52">#</a> [02:03] * Joins: sbuluf (ypi@200.49.140.238)</li>
+ <li id="l-53"><a href="#l-53">#</a> [02:18] * Quits: kingryan (rking3@208.66.64.47) (Quit: kingryan)</li>
+ <li id="l-54"><a href="#l-54">#</a> [02:19] * Joins: mjs_ (mjs@17.203.14.225)</li>
+ <li id="l-55"><a href="#l-55">#</a> [02:21] * Quits: mjs (mjs@17.255.98.200) (Ping timeout)</li>
+ <li id="l-56"><a href="#l-56">#</a> [02:33] * Joins: heycam (cam@130.194.72.84)</li>
+ <li id="l-57"><a href="#l-57">#</a> [02:41] * Joins: MikeSmith (MikeSmith@mcclure.w3.org)</li>
+ <li id="l-58"><a href="#l-58">#</a> [02:51] * Joins: olivier (ot@128.30.52.30)</li>
+ <li id="l-59" _a="Philip" _r="Actually"><a href="#l-59">#</a> [03:13] &lt;Philip&gt; Actually, the &amp;{...} syntax is rubbish since you'll usually have to write the &lt;datatemplate&gt; in XML to make it parse correctly when you're doing anything non-trivial, so the syntax should be optimised primarily for XML</li>
+ <li id="l-60" _a="Philip"><a href="#l-60">#</a> [03:14] &lt;Philip&gt; (but I don't really like plain {...} because then you'd need some new way to write literal { characters)</li>
+ <li id="l-61" _a="Hixie"><a href="#l-61">#</a> [03:22] &lt;Hixie&gt; yeah i don't know what syntax to use really</li>
+ <li id="l-62"><a href="#l-62">#</a> [03:41] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-63"><a href="#l-63">#</a> [03:43] * Quits: heycam (cam@130.194.72.84) (Quit: bye)</li>
+ <li id="l-64"><a href="#l-64">#</a> [03:46] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-65"><a href="#l-65">#</a> [03:48] * Joins: heycam (cam@130.194.72.84)</li>
+ <li id="l-66"><a href="#l-66">#</a> [03:50] * Quits: schepers (schepers@128.30.52.30) (Quit: Trillian (<a href="http://www.ceruleanstudios.com">http://www.ceruleanstudios.com</a>)</li>
+ <li id="l-67"><a href="#l-67">#</a> [04:02] * Joins: Shunsuke (Shunsuke@123.176.107.50)</li>
+ <li id="l-68"><a href="#l-68">#</a> [04:02] * Quits: Shunsuke (Shunsuke@123.176.107.50) (Quit: Tiarra 0: SIGTERM received; exit)</li>
+ <li id="l-69"><a href="#l-69">#</a> [04:03] * Joins: Shunsuke (Shunsuke@123.176.107.50)</li>
+ <li id="l-70"><a href="#l-70">#</a> [04:10] * Quits: matt (matt@128.30.52.30) (Quit: matt)</li>
+ <li id="l-71"><a href="#l-71">#</a> [04:37] * Quits: mjs_ (mjs@17.203.14.225) (Quit: mjs_)</li>
+ <li id="l-72"><a href="#l-72">#</a> [04:37] * Quits: sbuluf (ypi@200.49.140.238) (Ping timeout)</li>
+ <li id="l-73"><a href="#l-73">#</a> [04:46] * Joins: sbuluf (khjulbh@200.49.140.174)</li>
+ <li id="l-74"><a href="#l-74">#</a> [05:49] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-75"><a href="#l-75">#</a> [05:52] * Joins: mjs (mjs@64.81.48.145)</li>
+ <li id="l-76"><a href="#l-76">#</a> [05:54] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-77"><a href="#l-77">#</a> [05:57] * Quits: MikeSmith (MikeSmith@mcclure.w3.org) (Quit: Less talk, more pimp walk.)</li>
+ <li id="l-78"><a href="#l-78">#</a> [06:44] * Quits: Lachy (chatzilla@124.170.65.144) (Quit: ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518])</li>
+ <li id="l-79"><a href="#l-79">#</a> [07:08] * Joins: Lachy (chatzilla@124.170.94.29)</li>
+ <li id="l-80"><a href="#l-80">#</a> [07:57] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-81"><a href="#l-81">#</a> [08:02] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-82"><a href="#l-82">#</a> [08:13] * Joins: Lachy_ (chatzilla@124.170.94.29)</li>
+ <li id="l-83"><a href="#l-83">#</a> [08:13] * Quits: Lachy (chatzilla@124.170.94.29) (Ping timeout)</li>
+ <li id="l-84" _a="Lachy_"><a href="#l-84">#</a> [08:13] * Lachy_ is now known as Lachy</li>
+ <li id="l-85"><a href="#l-85">#</a> [08:16] * Joins: Sander (svl@86.87.68.167)</li>
+ <li id="l-86"><a href="#l-86">#</a> [09:09] * Quits: jmb (jmb@152.78.71.152) (Ping timeout)</li>
+ <li id="l-87"><a href="#l-87">#</a> [09:10] * Joins: jmb (jmb@152.78.71.152)</li>
+ <li id="l-88"><a href="#l-88">#</a> [09:28] * Joins: anne (annevk@81.68.67.12)</li>
+ <li id="l-89"><a href="#l-89">#</a> [09:30] * Quits: olivier (ot@128.30.52.30) (Quit: Leaving)</li>
+ <li id="l-90"><a href="#l-90">#</a> [09:52] * Quits: heycam (cam@130.194.72.84) (Quit: bye)</li>
+ <li id="l-91"><a href="#l-91">#</a> [10:04] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-92"><a href="#l-92">#</a> [10:09] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-93"><a href="#l-93">#</a> [10:22] * Joins: timbl (timbl@82.111.149.2)</li>
+ <li id="l-94" _a="anne" _r="mjs"><a href="#l-94">#</a> [10:25] &lt;anne&gt; mjs, something like sql.onresult = ...; sql.execute(...)?</li>
+ <li id="l-95" _a="anne"><a href="#l-95">#</a> [10:25] &lt;anne&gt; and prolly sql.onerror</li>
+ <li id="l-96" _a="mjs" _r="anne"><a href="#l-96">#</a> [10:26] &lt;mjs&gt; anne: or executeSql(callback, statement, arguments...)</li>
+ <li id="l-97" _a="anne"><a href="#l-97">#</a> [10:26] &lt;anne&gt; that's not really in line with other APIs</li>
+ <li id="l-98" _a="anne" _r="although"><a href="#l-98">#</a> [10:27] &lt;anne&gt; although, timer APIs... :)</li>
+ <li id="l-99" _a="anne"><a href="#l-99">#</a> [10:28] &lt;anne&gt; I suppose it depends on whether you ever want to do more than a single thing with the results</li>
+ <li id="l-100"><a href="#l-100">#</a> [10:29] * Joins: heycam (cam@203.214.105.232)</li>
+ <li id="l-101" _a="mjs"><a href="#l-101">#</a> [10:34] &lt;mjs&gt; I am not sure events make sense for this</li>
+ <li id="l-102" _a="mjs"><a href="#l-102">#</a> [10:35] &lt;mjs&gt; if the only event is that you finished, I think a single callback that would have been the return value is better</li>
+ <li id="l-103" _a="anne"><a href="#l-103">#</a> [10:36] &lt;anne&gt; the other would be failure, but I suppose you can handle that in the callback as well</li>
+ <li id="l-104" _a="mjs" _r="well"><a href="#l-104">#</a> [10:36] &lt;mjs&gt; well, the sync version presumably expresses failure with a return value</li>
+ <li id="l-105" _a="anne"><a href="#l-105">#</a> [10:37] &lt;anne&gt; or throws, maybe, dunno</li>
+ <li id="l-106" _a="mjs"><a href="#l-106">#</a> [10:37] &lt;mjs&gt; either is ok, but if there is a SQL object people will want things like the ability to &quot;prepare&quot; statements or rebind arguments</li>
+ <li id="l-107" _a="anne"><a href="#l-107">#</a> [10:38] &lt;anne&gt; failure doesn't seem to be addressed</li>
+ <li id="l-108" _a="anne"><a href="#l-108">#</a> [10:38] &lt;anne&gt; only if the amount of additional arguments doesn't match the amount of ? characters</li>
+ <li id="l-109" _a="anne"><a href="#l-109">#</a> [10:40] &lt;anne&gt; it doesn't really tell what to do with bogus SQL statements or SQL statements that are valid but are not supported for security reasons etc.</li>
+ <li id="l-110" _a="mjs"><a href="#l-110">#</a> [10:40] &lt;mjs&gt; true</li>
+ <li id="l-111" _a="mjs"><a href="#l-111">#</a> [10:40] &lt;mjs&gt; SQL statements can fail for all sorts of reasons</li>
+ <li id="l-112" _a="mjs"><a href="#l-112">#</a> [10:40] &lt;mjs&gt; invalid row ID in a query for instance</li>
+ <li id="l-113" class="flagged" _a="anne"><a href="#l-113">#</a> [10:40] &lt;anne&gt; that too isn't addressed</li>
+ <li id="l-114" _a="mjs"><a href="#l-114">#</a> [10:40] &lt;mjs&gt; are you gonna send this to the list?</li>
+ <li id="l-115" _a="anne"><a href="#l-115">#</a> [10:41] &lt;anne&gt; I suppose I can quickly e-mail the WHATWG, sure</li>
+ <li id="l-116" _a="mjs"><a href="#l-116">#</a> [10:41] &lt;mjs&gt; thanks</li>
+ <li id="l-117"><a href="#l-117">#</a> [11:02] * Joins: zcorpan_ (zcorpan@88.131.66.80)</li>
+ <li id="l-118"><a href="#l-118">#</a> [11:06] * Joins: ROBOd (robod@89.123.53.137)</li>
+ <li id="l-119"><a href="#l-119">#</a> [11:13] * Quits: Thezilch (fuz007@68.52.119.203) (Connection reset by peer)</li>
+ <li id="l-120"><a href="#l-120">#</a> [11:16] * Joins: Thezilch (fuz007@68.52.119.203)</li>
+ <li id="l-121"><a href="#l-121">#</a> [12:11] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-122"><a href="#l-122">#</a> [12:16] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-123"><a href="#l-123">#</a> [12:41] * Quits: sbuluf (khjulbh@200.49.140.174) (Quit: sbuluf)</li>
+ <li id="l-124"><a href="#l-124">#</a> [13:31] * Joins: myakura (myakura@123.224.93.225)</li>
+ <li id="l-125"><a href="#l-125">#</a> [13:37] * Joins: olivier (ot@128.30.52.30)</li>
+ <li id="l-126"><a href="#l-126">#</a> [13:58] * Joins: tH_ (Rob@87.102.117.116)</li>
+ <li id="l-127" _a="tH_"><a href="#l-127">#</a> [13:58] * tH_ is now known as tH</li>
+ <li id="l-128"><a href="#l-128">#</a> [14:01] * Joins: matt (matt@128.30.52.30)</li>
+ <li id="l-129"><a href="#l-129">#</a> [14:17] * Joins: gsnedders (gsnedders@86.137.237.196)</li>
+ <li id="l-130"><a href="#l-130">#</a> [14:18] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-131"><a href="#l-131">#</a> [14:23] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-132"><a href="#l-132">#</a> [14:45] * Quits: timbl (timbl@82.111.149.2) (Quit: timbl)</li>
+ <li id="l-133"><a href="#l-133">#</a> [15:45] * Joins: schepers (schepers@128.30.52.30)</li>
+ <li id="l-134"><a href="#l-134">#</a> [15:56] * Joins: karl (karlcow@128.30.52.30)</li>
+ <li id="l-135"><a href="#l-135">#</a> [16:08] * Quits: olivier (ot@128.30.52.30) (Quit: Leaving)</li>
+ <li id="l-136"><a href="#l-136">#</a> [16:26] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-137"><a href="#l-137">#</a> [16:31] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-138"><a href="#l-138">#</a> [16:32] * Joins: billmason (billmason@69.30.57.156)</li>
+ <li id="l-139"><a href="#l-139">#</a> [16:40] * Joins: hasather (hasather@90.227.221.48)</li>
+ <li id="l-140"><a href="#l-140">#</a> [16:42] * Quits: Lachy (chatzilla@124.170.94.29) (Quit: ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518])</li>
+ <li id="l-141"><a href="#l-141">#</a> [17:06] * Joins: Lionhear1 (robin@66.57.69.65)</li>
+ <li id="l-142"><a href="#l-142">#</a> [17:07] * Parts: Lionhear1 (robin@66.57.69.65)</li>
+ <li id="l-143"><a href="#l-143">#</a> [17:18] * Joins: hober (ted@68.107.112.172)</li>
+ <li id="l-144"><a href="#l-144">#</a> [17:23] * Joins: Lachy (chatzilla@124.170.94.29)</li>
+ <li id="l-145"><a href="#l-145">#</a> [17:23] * Quits: Lachy (chatzilla@124.170.94.29) (Quit: ChatZilla 0.9.78.1 [Firefox 2.0.0.6/2007072518])</li>
+ <li id="l-146"><a href="#l-146">#</a> [17:24] * Joins: Lachy (chatzilla@124.170.94.29)</li>
+ <li id="l-147"><a href="#l-147">#</a> [17:41] * Quits: karl (karlcow@128.30.52.30) (Quit: Where dwelt Ymir, or wherein did he find sustenance?)</li>
+ <li id="l-148" _a="drry"><a href="#l-148">#</a> [17:47] * drry is now known as drry0</li>
+ <li id="l-149" _a="drry0"><a href="#l-149">#</a> [17:47] * drry0 is now known as drry_</li>
+ <li id="l-150" _a="drry_"><a href="#l-150">#</a> [17:47] * drry_ is now known as drry_0</li>
+ <li id="l-151" _a="drry_0"><a href="#l-151">#</a> [17:47] * drry_0 is now known as drry0</li>
+ <li id="l-152" _a="drry0"><a href="#l-152">#</a> [17:47] * drry0 is now known as drry__</li>
+ <li id="l-153" _a="drry__"><a href="#l-153">#</a> [17:47] * drry__ is now known as drry___</li>
+ <li id="l-154" _a="drry___"><a href="#l-154">#</a> [17:47] * drry___ is now known as drry_00</li>
+ <li id="l-155" _a="drry_00"><a href="#l-155">#</a> [17:47] * drry_00 is now known as drry____</li>
+ <li id="l-156" _a="drry____"><a href="#l-156">#</a> [17:47] * drry____ is now known as drry00</li>
+ <li id="l-157" _a="drry00"><a href="#l-157">#</a> [17:47] * drry00 is now known as drry_____</li>
+ <li id="l-158" _a="drry_____"><a href="#l-158">#</a> [17:47] * drry_____ is now known as drry__0</li>
+ <li id="l-159" _a="drry__0"><a href="#l-159">#</a> [17:47] * drry__0 is now known as drr______</li>
+ <li id="l-160" _a="drr______"><a href="#l-160">#</a> [17:47] * drr______ is now known as drry___0</li>
+ <li id="l-161" _a="drry___0"><a href="#l-161">#</a> [17:47] * drry___0 is now known as dr_______</li>
+ <li id="l-162"><a href="#l-162">#</a> [17:47] * Quits: dr_______ (drry@211.9.170.225) (Quit: dr_______)</li>
+ <li id="l-163"><a href="#l-163">#</a> [17:49] * Joins: drry (drry@211.9.170.225)</li>
+ <li id="l-164"><a href="#l-164">#</a> [18:07] * Quits: myakura (myakura@123.224.93.225) (Quit: Leaving...)</li>
+ <li id="l-165"><a href="#l-165">#</a> [18:33] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-166"><a href="#l-166">#</a> [18:38] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-167"><a href="#l-167">#</a> [18:41] * Quits: schepers (schepers@128.30.52.30) (Client exited)</li>
+ <li id="l-168"><a href="#l-168">#</a> [19:03] * Joins: oedipus (oedipus@70.21.186.99)</li>
+ <li id="l-169"><a href="#l-169">#</a> [19:12] * Joins: Roger (roger@213.64.74.230)</li>
+ <li id="l-170"><a href="#l-170">#</a> [19:15] * Joins: Julian (chatzilla@217.91.35.233)</li>
+ <li id="l-171"><a href="#l-171">#</a> [19:54] * Quits: Roger (roger@213.64.74.230) (Quit: Roger)</li>
+ <li id="l-172"><a href="#l-172">#</a> [19:56] * Joins: dbaron (dbaron@63.245.220.241)</li>
+ <li id="l-173"><a href="#l-173">#</a> [19:57] * Quits: oedipus (oedipus@70.21.186.99) (Quit: oedipus)</li>
+ <li id="l-174"><a href="#l-174">#</a> [20:04] * Quits: mjs (mjs@64.81.48.145) (Quit: mjs)</li>
+ <li id="l-175"><a href="#l-175">#</a> [20:06] * Joins: Roger (roger@213.64.74.230)</li>
+ <li id="l-176"><a href="#l-176">#</a> [20:10] * Quits: Julian (chatzilla@217.91.35.233) (Ping timeout)</li>
+ <li id="l-177"><a href="#l-177">#</a> [20:40] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-178"><a href="#l-178">#</a> [20:45] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-179"><a href="#l-179">#</a> [21:03] * Joins: mjs (mjs@17.203.14.225)</li>
+ <li id="l-180"><a href="#l-180">#</a> [21:11] * Joins: kingryan (rking3@208.66.64.47)</li>
+ <li id="l-181"><a href="#l-181">#</a> [21:28] * Quits: gsnedders (gsnedders@86.137.237.196) (Quit: gsnedders)</li>
+ <li id="l-182"><a href="#l-182">#</a> [21:31] * Quits: zcorpan_ (zcorpan@88.131.66.80) (Ping timeout)</li>
+ <li id="l-183"><a href="#l-183">#</a> [21:34] * Joins: gsnedders (gsnedders@86.137.237.196)</li>
+ <li id="l-184"><a href="#l-184">#</a> [21:44] * Quits: mjs (mjs@17.203.14.225) (Quit: mjs)</li>
+ <li id="l-185"><a href="#l-185">#</a> [21:49] * Quits: Roger (roger@213.64.74.230) (Quit: Roger)</li>
+ <li id="l-186"><a href="#l-186">#</a> [21:58] * Quits: heycam (cam@203.214.105.232) (Ping timeout)</li>
+ <li id="l-187"><a href="#l-187">#</a> [22:15] * Joins: heycam (cam@203.214.12.23)</li>
+ <li id="l-188"><a href="#l-188">#</a> [22:18] * Quits: ROBOd (robod@89.123.53.137) (Quit: <a href="http://www.robodesign.ro">http://www.robodesign.ro</a> )</li>
+ <li id="l-189"><a href="#l-189">#</a> [22:30] * Quits: matt (matt@128.30.52.30) (Quit: matt)</li>
+ <li id="l-190"><a href="#l-190">#</a> [22:47] * Quits: jgraham (jgraham@81.86.212.88) (Ping timeout)</li>
+ <li id="l-191"><a href="#l-191">#</a> [22:47] * Quits: gavin_ (gavin@99.226.75.20) (Ping timeout)</li>
+ <li id="l-192"><a href="#l-192">#</a> [22:52] * Joins: gavin_ (gavin@99.226.75.20)</li>
+ <li id="l-193"><a href="#l-193">#</a> [23:01] * Joins: jgraham (jgraham@81.86.209.202)</li>
+ <li id="l-194"><a href="#l-194">#</a> [23:04] * Joins: polin8 (polin8@75.71.72.175)</li>
+ <li id="l-195"><a href="#l-195">#</a> [23:05] * Joins: kingryan_ (rking3@208.66.64.47)</li>
+ <li id="l-196"><a href="#l-196">#</a> [23:06] * Quits: kingryan (rking3@208.66.64.47) (Ping timeout)</li>
+ <li id="l-197"><a href="#l-197">#</a> [23:16] * Quits: kingryan_ (rking3@208.66.64.47) (Quit: kingryan_)</li>
+ <li id="l-198"><a href="#l-198">#</a> [23:20] * Joins: kingryan (rking3@208.66.64.47)</li>
+ <li id="l-199"><a href="#l-199">#</a> [23:20] * Quits: kingryan (rking3@208.66.64.47) (Quit: kingryan)</li>
+ <li id="l-200"><a href="#l-200">#</a> [23:21] * Joins: kingryan (rking3@208.66.64.47)</li>
+ <li id="l-201"><a href="#l-201">#</a> [23:21] * Quits: kingryan (rking3@208.66.64.47) (Quit: kingryan)</li>
+ <li id="l-202"><a href="#l-202">#</a> [23:34] * Joins: mjs (mjs@17.203.14.225)</li>
+ <li id="l-203"><a href="#l-203">#</a> [23:34] * Joins: kingryan (rking3@208.66.64.47)</li>
+ <li id="l-204"><a href="#l-204">#</a> [23:43] * Joins: briansuda (briansuda@194.144.106.194)</li>
+ <li id="l-205"><a href="#l-205">#</a> [23:57] * Quits: mjs (mjs@17.203.14.225) (Ping timeout)</li>
+ <li id="l-206"><a href="#l-206">#</a> Session Close: Fri Sep 21 00:00:00 2007</li>
+</ol>
+<p id="end">The end :)

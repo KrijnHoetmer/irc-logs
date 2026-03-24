@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<title>IRC logs: mozilla / #accessibility / 20151005</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="mozilla/accessibility.20151005.log"><a href="/irc-logs/">/irc-logs</a> / mozilla / #accessibility / 2015-10-05 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20151004>Previous day</a>, <a href=20151006>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Mon Oct 05 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #accessibility</li>
+<li id=l-3 class=hide><a href=#l-3>#</a> [00:06] * Joins: kkus (kkus@moz-7u2hvh.fios.verizon.net)</li>
+<li id=l-4 _a="smaug" _r="tbsaunde"><a href=#l-4>#</a> [01:14] &lt;smaug&gt; tbsaunde: sure</li>
+<li id=l-5 _a="smaug"><a href=#l-5>#</a> [01:14] &lt;smaug&gt; no idea when it should be used and when not</li>
+<li id=l-6 _a="smaug"><a href=#l-6>#</a> [01:17] &lt;smaug&gt; getObjectCB doesn't seem to  g_object_ref either</li>
+<li id=l-7 _a="smaug"><a href=#l-7>#</a> [01:18] &lt;smaug&gt; but refAccessibleAtPointHelper does</li>
+<li id=l-8 _a="smaug"><a href=#l-8>#</a> [01:19] &lt;smaug&gt; I guess if the callback has ref in it, g_object_ref should be used</li>
+<li id=l-9 _a="@tbsaunde" _r="smaug"><a href=#l-9>#</a> [01:20] &lt;@tbsaunde&gt; smaug: yeah, the short version is the existing code is very likely ocrrect if it needs to ref or not</li>
+<li id=l-10 _a="@tbsaunde"><a href=#l-10>#</a> [01:20] &lt;@tbsaunde&gt; and yeah, if the name starts with ref, then the returned objjjject should be refed aiui</li>
+<li id=l-11 _a="smaug"><a href=#l-11>#</a> [01:21] &lt;smaug&gt; and otherwise not?</li>
+<li id=l-12 _a="smaug" _r="tbsaunde"><a href=#l-12>#</a> [01:21] &lt;smaug&gt; tbsaunde: do you happen to know where this is documented/defined?</li>
+<li id=l-13 _a="@tbsaunde"><a href=#l-13>#</a> [01:21] &lt;@tbsaunde&gt; yeah</li>
+<li id=l-14 _a="smaug"><a href=#l-14>#</a> [01:21] &lt;smaug&gt; I couldn't find any documentation about this behavior</li>
+<li id=l-15 _a="@tbsaunde" _r="smaug"><a href=#l-15>#</a> [01:21] &lt;@tbsaunde&gt; smaug: I believe the atk docs, document it, now where those are let me see</li>
+<li id=l-16 _a="@tbsaunde" _r="smaug"><a href=#l-16>#</a> [01:22] &lt;@tbsaunde&gt; smaug: aiui this is the standard way gobject stuff works</li>
+<li id=l-17 _a="smaug"><a href=#l-17>#</a> [01:22] * smaug was looking some gnome and gtk.org docs</li>
+<li id=l-18 _a="smaug" _r="tbsaunde"><a href=#l-18>#</a> [01:22] &lt;smaug&gt; tbsaunde: ok, not too familiar with gtk. (I used to hack Qt long ago)</li>
+<li id=l-19 _a="@tbsaunde" _r="smaug"><a href=#l-19>#</a> [01:26] &lt;@tbsaunde&gt; smaug: sure, me either really</li>
+<li id=l-20 _a="smaug"><a href=#l-20>#</a> [01:27] &lt;smaug&gt; still no luck finding any documentation ...</li>
+<li id=l-21 _a="@tbsaunde" _r="smaug"><a href=#l-21>#</a> [01:27] &lt;@tbsaunde&gt; smaug: I believe these are the docs <a href="https://developer.gnome.org/atk/2.18/AtkTable.html">https://developer.gnome.org/atk/2.18/AtkTable.html</a> I think the transfer full / none thing is what tells you if it takes a ref</li>
+<li id=l-22 _a="smaug"><a href=#l-22>#</a> [01:27] &lt;smaug&gt; oh</li>
+<li id=l-23 _a="smaug" _r="hmm"><a href=#l-23>#</a> [01:29] &lt;smaug&gt; hmm, clicking &quot;transfer full&quot; doesn't give any information :/</li>
+<li id=l-24 _a="@tbsaunde" _r="smaug"><a href=#l-24>#</a> [01:30] &lt;@tbsaunde&gt; smaug: can't help you there :( but I'd say its very unlikely the existing code was incorrect, it would mean there was a bug nobody has noticed in 5 years or something</li>
+<li id=l-25 _a="smaug" _r="tbsaunde"><a href=#l-25>#</a> [01:31] &lt;smaug&gt; tbsaunde: ok, I'll write a followup patch to that bug then</li>
+<li id=l-26 _a="@tbsaunde" _r="smaug"><a href=#l-26>#</a> [01:33] &lt;@tbsaunde&gt; smaug: ok, I haven't looked at what's in the bug yet :) its the weekend, and I'll probably be off tomorrow ;)</li>
+<li id=l-27 class=hide><a href=#l-27>#</a> [02:07] * Quits: Jayflux (Jayflux@moz-9bf122.dsl.as9105.com) (Connection closed)</li>
+<li id=l-28 class=hide><a href=#l-28>#</a> [02:59] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-29 class=hide><a href=#l-29>#</a> [03:39] * Quits: kkus (kkus@moz-7u2hvh.fios.verizon.net) (Connection closed)</li>
+<li id=l-30 class=hide><a href=#l-30>#</a> [05:35] * Quits: ugly_cat (quassel@moz-0s097l.wa.comcast.net) (Client exited)</li>
+<li id=l-31 class=hide><a href=#l-31>#</a> [06:10] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-32 _a="ChanServ"><a href=#l-32>#</a> [06:10] * ChanServ sets mode: +o yzen</li>
+<li id=l-33 class=hide _a="yzen"><a href=#l-33>#</a> [07:10] * yzen is now known as yzen_</li>
+<li id=l-34 class=hide><a href=#l-34>#</a> [07:14] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-35 class=hide _a="Tomcat|afk"><a href=#l-35>#</a> [08:04] * Tomcat|afk is now known as Tomcat</li>
+<li id=l-36 class=hide><a href=#l-36>#</a> [09:48] * Joins: ioanachiorean (ioanachiore@moz-q23.52n.2.5.IP)</li>
+<li id=l-37 class=hide><a href=#l-37>#</a> [09:55] * Quits: ioanachiorean (ioanachiore@moz-q23.52n.2.5.IP) (Connection closed)</li>
+<li id=l-38 class=hide><a href=#l-38>#</a> [09:56] * Joins: ioanachiorean (ioanachiore@moz-q23.52n.2.5.IP)</li>
+<li id=l-39 class=hide><a href=#l-39>#</a> [10:42] * Joins: Gijs (chatzilla@moz-v0lust.cable.virginm.net)</li>
+<li id=l-40 class=hide><a href=#l-40>#</a> [11:03] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-41 class=hide><a href=#l-41>#</a> [11:14] * Quits: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com) (Ping timeout: 121 seconds)</li>
+<li id=l-42 _a="@firebot"><a href=#l-42>#</a> [11:43] &lt;@firebot&gt; cbook@mozilla.com set status-firefox43 to fixed on bug 1208779.</li>
+<li id=l-43 _a="@firebot"><a href=#l-43>#</a> [11:43] &lt;@firebot&gt; <a href="https://bugzil.la/1208779">https://bugzil.la/1208779</a> — FIXED, nobody@mozilla.org — crash in mozilla::a11y::Accessible::IsProxy()</li>
+<li id=l-44 class=hide _a="Tomcat"><a href=#l-44>#</a> [11:57] * Tomcat is now known as Tomcat|sheriffduty</li>
+<li id=l-45 _a="@firebot"><a href=#l-45>#</a> [12:11] &lt;@firebot&gt; cbook@mozilla.com changed the Resolution on bug 1204836 from --- to FIXED.</li>
+<li id=l-46 _a="@firebot"><a href=#l-46>#</a> [12:12] &lt;@firebot&gt; cbook@mozilla.com changed the Status on bug 1204836 from NEW to RESOLVED.</li>
+<li id=l-47 _a="@firebot"><a href=#l-47>#</a> [12:12] &lt;@firebot&gt; cbook@mozilla.com set status-firefox44 to fixed on bug 1204836.</li>
+<li id=l-48 _a="@firebot"><a href=#l-48>#</a> [12:12] &lt;@firebot&gt; cbook@mozilla.com changed the Target Milestone on bug 1204836 from --- to Firefox 44.</li>
+<li id=l-49 _a="@firebot"><a href=#l-49>#</a> [12:12] &lt;@firebot&gt; <a href="https://bugzil.la/1204836">https://bugzil.la/1204836</a> — FIXED, steffen.wilberg@web.de — In about:home, make any searchable keypress focus the search box, and restore ctrl+f to invoke the f</li>
+<li id=l-50 class=hide><a href=#l-50>#</a> [12:29] * Joins: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com)</li>
+<li id=l-51 class=hide><a href=#l-51>#</a> [12:33] * Joins: Jayflux (Jayflux@moz-9bf122.dsl.as9105.com)</li>
+<li id=l-52 class=hide _a="Tomcat|sheriffduty"><a href=#l-52>#</a> [12:47] * Tomcat|sheriffduty is now known as Tomcat|sheriffduty|lunch</li>
+<li id=l-53 class=hide><a href=#l-53>#</a> [13:03] * Quits: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com) (Ping timeout: 121 seconds)</li>
+<li id=l-54 class=hide _a="Tomcat|sheriffduty|lunch"><a href=#l-54>#</a> [13:49] * Tomcat|sheriffduty|lunch is now known as Tomcat|sheriffduty</li>
+<li id=l-55 class=hide><a href=#l-55>#</a> [14:06] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-56 class=hide><a href=#l-56>#</a> [14:22] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-57 _a="ChanServ"><a href=#l-57>#</a> [14:22] * ChanServ sets mode: +o yzen</li>
+<li id=l-58 class=hide><a href=#l-58>#</a> [14:27] * Quits: @yzen (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-59 class=hide><a href=#l-59>#</a> [14:28] * Joins: Justin_o (uid14648@moz-c6vipl.ealing.irccloud.com)</li>
+<li id=l-60 class=hide><a href=#l-60>#</a> [15:09] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-61 class=hide><a href=#l-61>#</a> [15:14] * Joins: sixtyten (quassel@moz-ulpjmu.sentoris.de)</li>
+<li id=l-62 class=hide><a href=#l-62>#</a> [15:30] * Joins: yzen (yzen@moz-i5m.05u.207.66.IP)</li>
+<li id=l-63 _a="ChanServ"><a href=#l-63>#</a> [15:30] * ChanServ sets mode: +o yzen</li>
+<li id=l-64 class=hide><a href=#l-64>#</a> [15:48] * Joins: davidb (davidb@moz-i5m.05u.207.66.IP)</li>
+<li id=l-65 _a="ChanServ"><a href=#l-65>#</a> [15:48] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-66 class=hide _a="davidb"><a href=#l-66>#</a> [15:49] * davidb is now known as davidb|afk</li>
+<li id=l-67 class=hide _a="davidb|afk"><a href=#l-67>#</a> [15:52] * davidb|afk is now known as davidb</li>
+<li id=l-68 _a="~davidb"><a href=#l-68>#</a> [15:52] &lt;~davidb&gt; heyo</li>
+<li id=l-69 _a="&amp;MarcoZ" _r="davidb"><a href=#l-69>#</a> [16:00] &lt;&amp;MarcoZ&gt; davidb: Hi!</li>
+<li id=l-70 _a="&amp;MarcoZ" _r="davidb"><a href=#l-70>#</a> [16:01] &lt;&amp;MarcoZ&gt; davidb: 1:1?</li>
+<li id=l-71 _a="~davidb" _r="MarcoZ"><a href=#l-71>#</a> [16:03] &lt;~davidb&gt; MarcoZ, yep! 1 min</li>
+<li id=l-72 _a="~davidb" _r="MarcoZ"><a href=#l-72>#</a> [16:04] &lt;~davidb&gt; MarcoZ, ready when you are</li>
+<li id=l-73 class=hide><a href=#l-73>#</a> [16:35] * Joins: anvk (anovak@moz-040.mvk.11.204.IP)</li>
+<li id=l-74 class=hide _a="davidb"><a href=#l-74>#</a> [16:55] * davidb is now known as davidb|afk</li>
+<li id=l-75 class=hide><a href=#l-75>#</a> [16:59] * Joins: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com)</li>
+<li id=l-76 class=hide _a="Tomcat|sheriffduty"><a href=#l-76>#</a> [17:01] * Tomcat|sheriffduty is now known as Tomcat</li>
+<li id=l-77 class=hide _a="Tomcat"><a href=#l-77>#</a> [17:01] * Tomcat is now known as Tomcat|afk</li>
+<li id=l-78 class=hide _a="davidb|afk"><a href=#l-78>#</a> [17:13] * davidb|afk is now known as davidb</li>
+<li id=l-79 class=hide><a href=#l-79>#</a> [17:31] * Quits: sixtyten (quassel@moz-ulpjmu.sentoris.de) (Ping timeout: 121 seconds)</li>
+<li id=l-80 class=hide><a href=#l-80>#</a> [17:36] * Joins: davidb_ (davidb@moz-i5m.05u.207.66.IP)</li>
+<li id=l-81 _a="ChanServ"><a href=#l-81>#</a> [17:36] * ChanServ sets mode: +qo davidb_ davidb_</li>
+<li id=l-82 class=hide><a href=#l-82>#</a> [17:38] * Quits: ~davidb (davidb@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-83 class=hide _a="davidb_"><a href=#l-83>#</a> [17:58] * davidb_ is now known as davidb</li>
+<li id=l-84 class=hide _a="davidb"><a href=#l-84>#</a> [17:58] * davidb is now known as davidb|afk</li>
+<li id=l-85 class=hide _a="mconley"><a href=#l-85>#</a> [18:01] * mconley is now known as mconley|food</li>
+<li id=l-86 class=hide><a href=#l-86>#</a> [18:56] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-87 class=hide><a href=#l-87>#</a> [18:58] * Quits: ioanachiorean (ioanachiore@moz-q23.52n.2.5.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-88 class=hide _a="yzen"><a href=#l-88>#</a> [19:01] * yzen is now known as yzen_</li>
+<li id=l-89 class=hide _a="yzen_"><a href=#l-89>#</a> [19:03] * yzen_ is now known as yzen</li>
+<li id=l-90 class=hide _a="davidb|afk"><a href=#l-90>#</a> [19:03] * davidb|afk is now known as davidb</li>
+<li id=l-91 class=hide _a="mconley|food"><a href=#l-91>#</a> [19:04] * mconley|food is now known as mconley</li>
+<li id=l-92 _a="@firebot"><a href=#l-92>#</a> [19:10] &lt;@firebot&gt; enndeakin@gmail.com changed the Assignee on bug 782547 from enndeakin@gmail.com to nobody@mozilla.org.</li>
+<li id=l-93 _a="@firebot"><a href=#l-93>#</a> [19:10] &lt;@firebot&gt; <a href="https://bugzil.la/782547">https://bugzil.la/782547</a> — NEW, nobody@mozilla.org — Accessible focus not fired after dismissing modal OS dialogs (e.g. file chooser and print dialogs)</li>
+<li id=l-94 class=hide><a href=#l-94>#</a> [19:25] * Quits: ~davidb (davidb@moz-i5m.05u.207.66.IP) (Quit: Blah blah blah)</li>
+<li id=l-95 class=hide _a="yzen"><a href=#l-95>#</a> [19:36] * yzen is now known as yzen_</li>
+<li id=l-96 class=hide><a href=#l-96>#</a> [19:40] * Quits: @yzen_ (yzen@moz-i5m.05u.207.66.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-97 _a="@firebot"><a href=#l-97>#</a> [19:44] &lt;@firebot&gt; enndeakin@gmail.com changed the Resolution on bug 319929 from --- to FIXED.</li>
+<li id=l-98 _a="@firebot"><a href=#l-98>#</a> [19:44] &lt;@firebot&gt; enndeakin@gmail.com changed the Status on bug 319929 from REOPENED to RESOLVED.</li>
+<li id=l-99 _a="@firebot"><a href=#l-99>#</a> [19:44] &lt;@firebot&gt; <a href="https://bugzil.la/319929">https://bugzil.la/319929</a> — FIXED, enndeakin@gmail.com — accessibility.accesskeycausesactivation is broken</li>
+<li id=l-100 class=hide><a href=#l-100>#</a> [19:55] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-101 _a="ChanServ"><a href=#l-101>#</a> [19:55] * ChanServ sets mode: +o yzen</li>
+<li id=l-102 class=hide><a href=#l-102>#</a> [20:00] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-103 class=hide><a href=#l-103>#</a> [20:04] * Quits: Jayflux (Jayflux@moz-9bf122.dsl.as9105.com) (Ping timeout: 121 seconds)</li>
+<li id=l-104 class=hide><a href=#l-104>#</a> [20:10] * Joins: davidb (davidb@moz-lsu4ch.dsl.bell.ca)</li>
+<li id=l-105 _a="ChanServ"><a href=#l-105>#</a> [20:10] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-106 class=hide><a href=#l-106>#</a> [20:23] * Joins: surkov (surkov@moz-an5vm5.cable.teksavvy.com)</li>
+<li id=l-107 _a="ChanServ"><a href=#l-107>#</a> [20:23] * ChanServ sets mode: +o surkov</li>
+<li id=l-108 class=hide><a href=#l-108>#</a> [20:25] * Joins: eeejay_test (uid15838@moz-aiaqim.highgate.irccloud.com)</li>
+<li id=l-109 class=hide><a href=#l-109>#</a> [20:37] * Joins: bernard (bernard@moz-nkkk7o.81.in-addr.arpa)</li>
+<li id=l-110 class=hide><a href=#l-110>#</a> [20:50] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Connection closed)</li>
+<li id=l-111 class=hide><a href=#l-111>#</a> [20:51] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-112 class=hide _a="davidb"><a href=#l-112>#</a> [21:03] * davidb is now known as davidb|afk</li>
+<li id=l-113 class=hide _a="davidb|afk"><a href=#l-113>#</a> [21:03] * davidb|afk is now known as davidb</li>
+<li id=l-114 class=hide _a="davidb"><a href=#l-114>#</a> [21:03] * davidb is now known as davidb|afk</li>
+<li id=l-115 class=hide _a="davidb|afk"><a href=#l-115>#</a> [21:36] * davidb|afk is now known as davidb</li>
+<li id=l-116 _a="smaug" _r="tbsaunde"><a href=#l-116>#</a> [21:37] &lt;smaug&gt; tbsaunde: I put the atk specific static methods to *Wrap so that it is really clear they aren't suppose to be cross-platform</li>
+<li id=l-117 _a="smaug"><a href=#l-117>#</a> [21:37] &lt;smaug&gt; both *Action and *Table patches have such</li>
+<li id=l-118 class=hide><a href=#l-118>#</a> [21:39] * Quits: Gijs (chatzilla@moz-v0lust.cable.virginm.net) (Quit: sleep etc.)</li>
+<li id=l-119 class=hide><a href=#l-119>#</a> [21:45] * Quits: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com) (Ping timeout: 121 seconds)</li>
+<li id=l-120 _a="@yzen"><a href=#l-120>#</a> [21:48] &lt;@yzen&gt; surkov when we have aria-owns, does it come after the actual subtree ?</li>
+<li id=l-121 _a="@surkov"><a href=#l-121>#</a> [21:57] &lt;@surkov&gt; yes</li>
+<li id=l-122 class=hide><a href=#l-122>#</a> [22:03] * Joins: Jayflux (Jayflux@moz-9bf122.dsl.as9105.com)</li>
+<li id=l-123 _a="@firebot"><a href=#l-123>#</a> [22:04] &lt;@firebot&gt; wkocher@mozilla.com changed the Resolution on bug 1178272 from --- to FIXED.</li>
+<li id=l-124 _a="@firebot"><a href=#l-124>#</a> [22:04] &lt;@firebot&gt; wkocher@mozilla.com changed the Status on bug 1178272 from NEW to RESOLVED.</li>
+<li id=l-125 _a="@firebot"><a href=#l-125>#</a> [22:04] &lt;@firebot&gt; wkocher@mozilla.com set status-firefox44 to fixed on bug 1178272.</li>
+<li id=l-126 _a="@firebot"><a href=#l-126>#</a> [22:04] &lt;@firebot&gt; wkocher@mozilla.com changed the Target Milestone on bug 1178272 from --- to mozilla44.</li>
+<li id=l-127 _a="@firebot"><a href=#l-127>#</a> [22:05] &lt;@firebot&gt; <a href="https://bugzil.la/1178272">https://bugzil.la/1178272</a> — FIXED, fred.wang@free.fr — Move table semantics to a separate mozTableAccessible.mm file</li>
+<li id=l-128 _a="@firebot"><a href=#l-128>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Resolution on bug 1177640 from --- to FIXED.</li>
+<li id=l-129 _a="@firebot"><a href=#l-129>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Status on bug 1177640 from ASSIGNED to RESOLVED.</li>
+<li id=l-130 _a="@firebot"><a href=#l-130>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com set status-firefox44 to fixed on bug 1177640.</li>
+<li id=l-131 _a="@firebot"><a href=#l-131>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Target Milestone on bug 1177640 from --- to mozilla44.</li>
+<li id=l-132 _a="@firebot"><a href=#l-132>#</a> [22:05] &lt;@firebot&gt; <a href="https://bugzil.la/1177640">https://bugzil.la/1177640</a> — FIXED, fred.wang@free.fr — [Mac] Do not expose HTML table semantics for &quot;layout&quot; tables</li>
+<li id=l-133 _a="@firebot"><a href=#l-133>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Resolution on bug 718637 from --- to FIXED.</li>
+<li id=l-134 _a="@firebot"><a href=#l-134>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Status on bug 718637 from ASSIGNED to RESOLVED.</li>
+<li id=l-135 _a="@firebot"><a href=#l-135>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com set status-firefox44 to fixed on bug 718637.</li>
+<li id=l-136 _a="@firebot"><a href=#l-136>#</a> [22:05] &lt;@firebot&gt; wkocher@mozilla.com changed the Target Milestone on bug 718637 from --- to mozilla44.</li>
+<li id=l-137 _a="@firebot"><a href=#l-137>#</a> [22:05] &lt;@firebot&gt; <a href="https://bugzil.la/718637">https://bugzil.la/718637</a> — FIXED, fred.wang@free.fr — [Mac] Firefox doesn't tell VoiceOver when a page has finished loading.</li>
+<li id=l-138 class=hide><a href=#l-138>#</a> [22:13] * Quits: bernard (bernard@moz-nkkk7o.81.in-addr.arpa) (Connection closed)</li>
+<li id=l-139 class=hide><a href=#l-139>#</a> [22:14] * Joins: bernard1 (bernard@moz-nkkk7o.81.in-addr.arpa)</li>
+<li id=l-140 class=hide><a href=#l-140>#</a> [22:22] * Quits: bernard1 (bernard@moz-nkkk7o.81.in-addr.arpa) (Quit: Leaving.)</li>
+<li id=l-141 class=hide><a href=#l-141>#</a> [22:24] * Joins: bernard (bernard@moz-nkkk7o.81.in-addr.arpa)</li>
+<li id=l-142 class=hide><a href=#l-142>#</a> [22:46] * Quits: anvk (anovak@moz-040.mvk.11.204.IP) (Quit: Leaving.)</li>
+<li id=l-143 class=hide><a href=#l-143>#</a> [22:46] * Quits: bernard (bernard@moz-nkkk7o.81.in-addr.arpa) (Quit: Leaving.)</li>
+<li id=l-144 class=hide><a href=#l-144>#</a> [22:57] * Quits: eeejay_test (uid15838@moz-aiaqim.highgate.irccloud.com) (Quit: Connection closed for inactivity)</li>
+<li id=l-145 class=hide><a href=#l-145>#</a> [23:01] * Joins: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com)</li>
+<li id=l-146 _a="@tbsaunde" _r="smaug"><a href=#l-146>#</a> [23:08] &lt;@tbsaunde&gt; smaug: sure, it just come at the price of ifdefs and code that is only buitl on one OS</li>
+<li id=l-147 _a="smaug" _r="tbsaunde"><a href=#l-147>#</a> [23:11] &lt;smaug&gt; tbsaunde: well, that is the whole point ;)</li>
+<li id=l-148 _a="smaug"><a href=#l-148>#</a> [23:11] &lt;smaug&gt; since the behavior seems to be atk only thing</li>
+<li id=l-149 class=hide><a href=#l-149>#</a> [23:11] * Quits: ~davidb (davidb@moz-lsu4ch.dsl.bell.ca) (Quit: Blah blah blah)</li>
+<li id=l-150 _a="@tbsaunde" _r="smaug"><a href=#l-150>#</a> [23:18] &lt;@tbsaunde&gt; smaug: sure, but it kind of sucks  to make code hard to compile on other platforms, but no big deal I guess</li>
+<li id=l-151 class=hide><a href=#l-151>#</a> [23:45] * Joins: askalski (akuda@moz-n4g.ea7.238.91.IP)</li>
+<li id=l-152 class=hide><a href=#l-152>#</a> [23:46] * Quits: askalski (akuda@moz-n4g.ea7.238.91.IP) (Quit: Wychodzi)</li>
+<li id=l-153 class=hide><a href=#l-153>#</a> [23:46] * Joins: askalski (akuda@moz-n4g.ea7.238.91.IP)</li>
+<li id=l-154 class=hide><a href=#l-154>#</a> Session Close: Tue Oct 06 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20151004>Previous day</a>, <a href=20151006>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

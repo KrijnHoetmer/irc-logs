@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<title>IRC logs: mozilla / #developers / 20120901</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="mozilla/developers.20120901.log"><a href="/irc-logs/">/irc-logs</a> / mozilla / #developers / 2012-09-01 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Sat Sep 01 00:00:00 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #developers</li>
+ <li id="l-3" _a="glandium" _r="bz"><a href="#l-3">#</a> [00:00] &lt;glandium&gt; bz: when you have several programs fighting to create the same file, you can have some fun</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:00] * Joins: dherman (dherman@760AC4C2.91CA4A91.90924F23.IP)</li>
+ <li id="l-5" _a="@bz"><a href="#l-5">#</a> [00:00] &lt;@bz&gt; sure</li>
+ <li id="l-6" _a="glandium" _r="bz"><a href="#l-6">#</a> [00:00] &lt;glandium&gt; bz: specifically, it depends how GlobalGen.py creates the file</li>
+ <li id="l-7" _a="sid0"><a href="#l-7">#</a> [00:00] &lt;sid0&gt; basically recursive make considered harmful</li>
+ <li id="l-8" _a="@bz"><a href="#l-8">#</a> [00:00] &lt;@bz&gt; but why are they fighting?</li>
+ <li id="l-9" _a="sid0" _r="glandium"><a href="#l-9">#</a> [00:00] &lt;sid0&gt; glandium: it's a standard open wb</li>
+ <li id="l-10" _a="@bz"><a href="#l-10">#</a> [00:00] &lt;@bz&gt; It should have been created once by the initial build in dom/bindings</li>
+ <li id="l-11" _a="@bz"><a href="#l-11">#</a> [00:01] &lt;@bz&gt; and should now be up to date</li>
+ <li id="l-12" _a="@bz"><a href="#l-12">#</a> [00:01] &lt;@bz&gt; right?</li>
+ <li id="l-13" _a="sid0"><a href="#l-13">#</a> [00:01] &lt;sid0&gt; yeah :s</li>
+ <li id="l-14" _a="glandium" _r="bz"><a href="#l-14">#</a> [00:01] &lt;glandium&gt; bz: because you have n invocations of $(MAKE) -C .. somethingBinding.h, with four different something</li>
+ <li id="l-15" _a="khuey"><a href="#l-15">#</a> [00:01] * khuey is now known as khuey|away</li>
+ <li id="l-16" _a="sid0" _r="glandium"><a href="#l-16">#</a> [00:01] &lt;sid0&gt; glandium: no, no, before that</li>
+ <li id="l-17"><a href="#l-17">#</a> [00:01] * Quits: cjones (cjones@11E71FBB.B8F00FAF.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-18" _a="@bz"><a href="#l-18">#</a> [00:01] &lt;@bz&gt; right</li>
+ <li id="l-19" _a="sid0" _r="glandium"><a href="#l-19">#</a> [00:01] &lt;sid0&gt; glandium: while dom/bindings was being build</li>
+ <li id="l-20" _a="sid0" _r="er"><a href="#l-20">#</a> [00:01] &lt;sid0&gt; er, built</li>
+ <li id="l-21"><a href="#l-21">#</a> [00:01] * Quits: pcwalton (pcwalton@moz-7B0110AD.mv.mozilla.com) (Quit: nbvcx)</li>
+ <li id="l-22" _a="@bz"><a href="#l-22">#</a> [00:01] &lt;@bz&gt; and all of those depend on ParserResults.pkl</li>
+ <li id="l-23" _a="@bz"><a href="#l-23">#</a> [00:01] &lt;@bz&gt; which should already be up to date</li>
+ <li id="l-24"><a href="#l-24">#</a> [00:01] * Joins: odin_ (Odin@moz-66D3502E.zone5.bethere.co.uk)</li>
+ <li id="l-25" _a="@bz"><a href="#l-25">#</a> [00:01] &lt;@bz&gt; clearly it's not, since there's code rebuilding it!</li>
+ <li id="l-26" _a="@bz"><a href="#l-26">#</a> [00:01] * @bz is trying to understand why</li>
+ <li id="l-27"><a href="#l-27">#</a> [00:02] * Quits: capella (chatzilla@moz-DD0C7E4F.twcny.res.rr.com) (Quit: ChatZilla 0.9.88.2 [Firefox 18.0a1/20120831080444])</li>
+ <li id="l-28" _a="sid0"><a href="#l-28">#</a> [00:02] &lt;sid0&gt; is there any chance one of its deps gets touched?</li>
+ <li id="l-29" _a="glandium"><a href="#l-29">#</a> [00:02] &lt;glandium&gt; that could be a genuine bug in pymake</li>
+ <li id="l-30" _a="glandium"><a href="#l-30">#</a> [00:02] &lt;glandium&gt; or a pure race condition</li>
+ <li id="l-31" _a="sid0" _r="glandium"><a href="#l-31">#</a> [00:02] &lt;sid0&gt; glandium: gnu make does the same thing</li>
+ <li id="l-32" _a="sid0"><a href="#l-32">#</a> [00:02] &lt;sid0&gt; I think</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:02] * Joins: cjones (cjones@11E71FBB.B8F00FAF.56644CA2.IP)</li>
+ <li id="l-34" _a="glandium"><a href="#l-34">#</a> [00:02] &lt;glandium&gt; look what i had to do for nsinstall <a href="https://bug784262.bugzilla.mozilla.org/attachment.cgi?id=656913">https://bug784262.bugzilla.mozilla.org/attachment.cgi?id=656913</a> because several processes were fighting to compile it</li>
+ <li id="l-35" _a="glandium"><a href="#l-35">#</a> [00:03] &lt;glandium&gt; and without that, i even was getting segfaults !</li>
+ <li id="l-36"><a href="#l-36">#</a> [00:03] * Quits: sliv (spyros@moz-EAB86BCB.cti.gr) (Connection reset by peer)</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:03] * Joins: jeremyhu (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-38" _a="glandium" _r="like"><a href="#l-38">#</a> [00:03] &lt;glandium&gt; like, nsinstall was there, ran once, twice, and kaboom segfault</li>
+ <li id="l-39"><a href="#l-39">#</a> [00:03] * Joins: sliv (livathinos@moz-EAB86BCB.cti.gr)</li>
+ <li id="l-40" _a="glandium"><a href="#l-40">#</a> [00:04] &lt;glandium&gt; because a gcc that started before the two runs overwrote the program that was built and used by another instance of make</li>
+ <li id="l-41" _a="glandium"><a href="#l-41">#</a> [00:05] &lt;glandium&gt; and not atomically at that, so the file was not complete by the time the kernel was trying to execute it</li>
+ <li id="l-42"><a href="#l-42">#</a> [00:05] * Quits: jeremyhu (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-43" _a="catlee"><a href="#l-43">#</a> [00:05] * catlee is now known as catlee-away</li>
+ <li id="l-44"><a href="#l-44">#</a> [00:05] * Joins: capella (chatzilla@moz-DD0C7E4F.twcny.res.rr.com)</li>
+ <li id="l-45"><a href="#l-45">#</a> [00:05] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Quit: Leaving)</li>
+ <li id="l-46"><a href="#l-46">#</a> [00:06] * Joins: pcwalton (pcwalton@moz-7B0110AD.mv.mozilla.com)</li>
+ <li id="l-47"><a href="#l-47">#</a> [00:07] * Quits: Archaeopteryx (itsme@moz-756328DB.cust.telecolumbus.net) (Quit: Too much information in my brain driving me insane)</li>
+ <li id="l-48"><a href="#l-48">#</a> [00:09] * Quits: cjones (cjones@11E71FBB.B8F00FAF.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-49"><a href="#l-49">#</a> [00:09] * Quits: fs (Elchi3@B9C9103E.56629902.2EC4CA51.IP) (Quit: Leaving)</li>
+ <li id="l-50" _a="AaronMT|away"><a href="#l-50">#</a> [00:09] * AaronMT|away is now known as AaronMT|afk</li>
+ <li id="l-51" _a="sid0" _r="glandium"><a href="#l-51">#</a> [00:09] &lt;sid0&gt; glandium: see this build log for example: <a href="https://tbpl.mozilla.org/php/getParsedLog.php?id=14881812&amp;tree=Firefox&amp;full=1">https://tbpl.mozilla.org/php/getParsedLog.php?id=14881812&amp;tree=Firefox&amp;full=1</a></li>
+ <li id="l-52" _a="sid0" _r="glandium"><a href="#l-52">#</a> [00:10] &lt;sid0&gt; glandium: this generates GlobalGen.py twice</li>
+ <li id="l-53" _a="sid0"><a href="#l-53">#</a> [00:10] &lt;sid0&gt; er</li>
+ <li id="l-54" _a="sid0"><a href="#l-54">#</a> [00:10] &lt;sid0&gt; the pkl file twice</li>
+ <li id="l-55" _a="JonathanS"><a href="#l-55">#</a> [00:10] &lt;JonathanS&gt; <a href="http://tirania.org/blog/archive/2012/Aug-29.html">http://tirania.org/blog/archive/2012/Aug-29.html</a> Funny, was he is a part of GNOME foundation?</li>
+ <li id="l-56" _a="sid0" _r="glandium"><a href="#l-56">#</a> [00:10] &lt;sid0&gt; glandium: and the two are pretty spaced apart so it's maybe not a race</li>
+ <li id="l-57" _a="sid0"><a href="#l-57">#</a> [00:10] &lt;sid0&gt; maybe some dependency does seem out of date to make</li>
+ <li id="l-58" _a="sid0"><a href="#l-58">#</a> [00:10] &lt;sid0&gt; :|</li>
+ <li id="l-59" _a="mbrubeck" _r="JonathanS"><a href="#l-59">#</a> [00:11] &lt;mbrubeck&gt; JonathanS: He was the founder of the GNOME project. :/</li>
+ <li id="l-60" _a="glandium" _r="sid0"><a href="#l-60">#</a> [00:11] &lt;glandium&gt; sid0: mmmm these are far from each other</li>
+ <li id="l-61" _a="sid0" _r="glandium"><a href="#l-61">#</a> [00:11] &lt;sid0&gt; glandium: exactly</li>
+ <li id="l-62" _a="sid0" _r="glandium"><a href="#l-62">#</a> [00:11] &lt;sid0&gt; glandium: I think a make/pymake debug run will help</li>
+ <li id="l-63"><a href="#l-63">#</a> [00:11] * Joins: cjones (cjones@15798911.D822C0E9.56644CA2.IP)</li>
+ <li id="l-64" _a="sid0"><a href="#l-64">#</a> [00:11] &lt;sid0&gt; I'll try to do one tomorrow</li>
+ <li id="l-65" _a="JonathanS" _r="mbrubeck"><a href="#l-65">#</a> [00:11] &lt;JonathanS&gt; mbrubeck, so it was his fault to make GNOME sucks?</li>
+ <li id="l-66" _a="mbrubeck" _r="JonathanS"><a href="#l-66">#</a> [00:12] &lt;mbrubeck&gt; JonathanS: And yes, he was one of the original board members of the GNOME Foundation</li>
+ <li id="l-67"><a href="#l-67">#</a> [00:13] * Joins: Mossop_ (mossop@E9758364.9EC0A5AF.CFE928A7.IP)</li>
+ <li id="l-68"><a href="#l-68">#</a> [00:13] * Quits: Mossop (mossop@E9758364.9EC0A5AF.CFE928A7.IP) (Ping timeout)</li>
+ <li id="l-69"><a href="#l-69">#</a> [00:14] * Quits: aki (aki@moz-A18C1E59.members.linode.com) (Quit: ZNC - <a href="http://znc.sourceforge.net">http://znc.sourceforge.net</a>)</li>
+ <li id="l-70" _a="joduinn-food"><a href="#l-70">#</a> [00:14] * joduinn-food is now known as joduinn</li>
+ <li id="l-71" _a="Mossop_"><a href="#l-71">#</a> [00:14] * Mossop_ is now known as Mossop</li>
+ <li id="l-72"><a href="#l-72">#</a> [00:14] * Quits: evilpie (chatzilla@moz-6C259A01.pools.arcor-ip.net) (Quit: ChatZilla 0.9.88.2 [Firefox 15.0/20120825192204])</li>
+ <li id="l-73"><a href="#l-73">#</a> [00:15] * Quits: KWierso|Home (chatzilla@moz-296B3117.hsd1.ca.comcast.net) (Ping timeout)</li>
+ <li id="l-74"><a href="#l-74">#</a> [00:15] * Joins: brendan (brendaneic@A2C92C1B.6A726B95.DCA7D3F.IP)</li>
+ <li id="l-75"><a href="#l-75">#</a> [00:15] * Quits: ishan_jain (ishan@8E6C34C1.A3F9767A.1C37C358.IP) (Connection reset by peer)</li>
+ <li id="l-76" _a="jesup"><a href="#l-76">#</a> [00:15] &lt;jesup&gt; !seen standard8</li>
+ <li id="l-77" _a="firebot"><a href="#l-77">#</a> [00:15] &lt;firebot&gt; standard8 was last seen 4 hours, 38 minutes and 14 seconds ago, changing nick to Standard8Away.</li>
+ <li id="l-78" _a="JonathanS" _r="mbrubeck"><a href="#l-78">#</a> [00:16] &lt;JonathanS&gt; mbrubeck, I'm not keen of GNOME and Ubuntu.</li>
+ <li id="l-79"><a href="#l-79">#</a> [00:16] * Joins: KWierso|Home (chatzilla@moz-296B3117.hsd1.ca.comcast.net)</li>
+ <li id="l-80"><a href="#l-80">#</a> [00:17] * Joins: JeroenDeDauw (jeroen@3D8B249.714666EF.52AB9A83.IP)</li>
+ <li id="l-81" _a="glandium" _r="sid0"><a href="#l-81">#</a> [00:17] &lt;glandium&gt; sid0: running make in dom/bindings runs BindingGen for each file each time</li>
+ <li id="l-82" _a="rail"><a href="#l-82">#</a> [00:17] * rail is now known as rail_away</li>
+ <li id="l-83" _a="glandium"><a href="#l-83">#</a> [00:17] &lt;glandium&gt; but not GlobalGen. at least not here</li>
+ <li id="l-84" _a="philor|away"><a href="#l-84">#</a> [00:18] * philor|away is now known as philor</li>
+ <li id="l-85"><a href="#l-85">#</a> [00:18] * Quits: beaufour (beaufour@moz-DC1D9B4C.nycmny.fios.verizon.net) (Quit: beaufour)</li>
+ <li id="l-86" _a="bz"><a href="#l-86">#</a> [00:18] * bz is now known as bz_away</li>
+ <li id="l-87" _a="glandium" _r="sid0"><a href="#l-87">#</a> [00:19] &lt;glandium&gt; sid0: it doesn't seem to happen on my builds (i don't know if it's old or new, but an aurora build from today (which i have the full log for) ran GlobalGen only once</li>
+ <li id="l-88" _a="sid0"><a href="#l-88">#</a> [00:20] &lt;sid0&gt; :s</li>
+ <li id="l-89"><a href="#l-89">#</a> [00:20] * Joins: bnicholson (bnicholson@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net)</li>
+ <li id="l-90"><a href="#l-90">#</a> [00:20] * Quits: @smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi) (Ping timeout)</li>
+ <li id="l-91" _a="glandium" _r="sid0"><a href="#l-91">#</a> [00:21] &lt;glandium&gt; sid0: i found it, i think</li>
+ <li id="l-92" class="flagged" _a="glandium" _r="sid0"><a href="#l-92">#</a> [00:22] &lt;glandium&gt; sid0: looks like the python scripts are trying to be smart, and don't touch the file if they don't change in content</li>
+ <li id="l-93" class="flagged" _a="glandium"><a href="#l-93">#</a> [00:22] &lt;glandium&gt; since they don't touch the file... make will try to recreate them because their dependencies are still newer</li>
+ <li id="l-94" _a="sid0"><a href="#l-94">#</a> [00:22] &lt;sid0&gt; fffffuuuuuuuu</li>
+ <li id="l-95" _a="glandium"><a href="#l-95">#</a> [00:23] &lt;glandium&gt; at least, that's what happens with bindinggen</li>
+ <li id="l-96" _a="glandium"><a href="#l-96">#</a> [00:23] &lt;glandium&gt; i guess globalgen does the same</li>
+ <li id="l-97" _a="jcranmer|away"><a href="#l-97">#</a> [00:23] * jcranmer|away is now known as jcranmer</li>
+ <li id="l-98"><a href="#l-98">#</a> [00:23] * Joins: pwalton (pcwalton@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-99" _a="glandium" _r="indeed"><a href="#l-99">#</a> [00:23] &lt;glandium&gt; indeed, it does</li>
+ <li id="l-100" _a="sid0"><a href="#l-100">#</a> [00:23] &lt;sid0&gt; bah</li>
+ <li id="l-101"><a href="#l-101">#</a> [00:24] * Quits: pcwalton (pcwalton@moz-7B0110AD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-102" _a="pwalton"><a href="#l-102">#</a> [00:24] * pwalton is now known as pcwalton</li>
+ <li id="l-103" _a="@bz_away"><a href="#l-103">#</a> [00:24] &lt;@bz_away&gt; globalgen always writes the pkl, no?</li>
+ <li id="l-104"><a href="#l-104">#</a> [00:25] * Quits: teoli_ (teoli@EDB1D55.195E6A26.F1085784.IP) (Input/output error)</li>
+ <li id="l-105" _a="@bz_away"><a href="#l-105">#</a> [00:25] * @bz_away did check that</li>
+ <li id="l-106" _a="glandium" _r="bz_away"><a href="#l-106">#</a> [00:25] &lt;glandium&gt; bz_away: if replaceFileIfChanged(filename, code):</li>
+ <li id="l-107" _a="glandium"><a href="#l-107">#</a> [00:25] &lt;glandium&gt; ah ParserResults.pkl is always written, true</li>
+ <li id="l-108"><a href="#l-108">#</a> [00:27] * Quits: RealRaven (Thunderbir@C6BC2410.D3E479AE.C3498625.IP) (Client exited)</li>
+ <li id="l-109"><a href="#l-109">#</a> [00:28] * Joins: aki (aki@moz-A18C1E59.members.linode.com)</li>
+ <li id="l-110"><a href="#l-110">#</a> [00:28] * Quits: ketas (ketas@195.20.191.90.dyn.estpak.ee) (Quit: Changing server)</li>
+ <li id="l-111"><a href="#l-111">#</a> [00:28] * Quits: JeroenDeDauw (jeroen@3D8B249.714666EF.52AB9A83.IP) (Ping timeout)</li>
+ <li id="l-112"><a href="#l-112">#</a> [00:28] * Joins: bmoss (bmoss@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-113"><a href="#l-113">#</a> [00:29] * Quits: smooney (smooney@moz-57825793.hsd1.ca.comcast.net) (Ping timeout)</li>
+ <li id="l-114"><a href="#l-114">#</a> [00:29] * Quits: lmandel (lmandel@moz-E928DD26.dsl.bell.ca) (Quit: lmandel)</li>
+ <li id="l-115" _a="glandium" _r="sid0"><a href="#l-115">#</a> [00:31] &lt;glandium&gt; sid0: wait, that log you linked... obviously it's going to run twice on a osx universal build, where we build the tree once for x86 and once for x86-64, in two different objdirs</li>
+ <li id="l-116" _a="sid0" _r="glandium"><a href="#l-116">#</a> [00:32] &lt;sid0&gt; glandium: I'm pretty sure I found Linux builds too</li>
+ <li id="l-117" _a="sid0"><a href="#l-117">#</a> [00:32] &lt;sid0&gt; hmm</li>
+ <li id="l-118"><a href="#l-118">#</a> [00:32] * Quits: myk (myk@moz-BBE3ABD.mv.mozilla.com) (Connection reset by peer)</li>
+ <li id="l-119"><a href="#l-119">#</a> [00:32] * Quits: dherman (dherman@760AC4C2.91CA4A91.90924F23.IP) (Ping timeout)</li>
+ <li id="l-120"><a href="#l-120">#</a> [00:32] * Joins: myk (myk@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-121" _a="sid0" _r="glandium"><a href="#l-121">#</a> [00:32] &lt;sid0&gt; glandium: but yes I'll look at it tomorrow</li>
+ <li id="l-122" _a="glandium" _r="sid0"><a href="#l-122">#</a> [00:33] &lt;glandium&gt; sid0: i still think race conditions can happen</li>
+ <li id="l-123"><a href="#l-123">#</a> [00:33] * Quits: brendan (brendaneic@A2C92C1B.6A726B95.DCA7D3F.IP) (Quit: brendan)</li>
+ <li id="l-124" _a="sid0"><a href="#l-124">#</a> [00:33] &lt;sid0&gt; I'm sure they can</li>
+ <li id="l-125" _a="glandium" _r="sid0"><a href="#l-125">#</a> [00:33] &lt;glandium&gt; sid0: but two clearly separate runs shouldn't be happening</li>
+ <li id="l-126" _a="sid0"><a href="#l-126">#</a> [00:33] &lt;sid0&gt; I don't see the point of replaceFileIfChanged *at all*</li>
+ <li id="l-127" _a="sid0"><a href="#l-127">#</a> [00:34] &lt;sid0&gt; if you're called to make it you obviously *must* touch it</li>
+ <li id="l-128" _a="sid0"><a href="#l-128">#</a> [00:34] &lt;sid0&gt; that's the entire point of your existence</li>
+ <li id="l-129" _a="sid0"><a href="#l-129">#</a> [00:34] &lt;sid0&gt; unless I'm missing something</li>
+ <li id="l-130" _a="glandium"><a href="#l-130">#</a> [00:34] &lt;glandium&gt; you'd be rebuilding the world</li>
+ <li id="l-131" _a="glandium"><a href="#l-131">#</a> [00:34] &lt;glandium&gt; or whatever includes these bindings</li>
+ <li id="l-132" _a="sid0"><a href="#l-132">#</a> [00:34] &lt;sid0&gt; well if the target were up to date you'd not be run in the first place</li>
+ <li id="l-133" _a="sid0"><a href="#l-133">#</a> [00:35] &lt;sid0&gt; that's my point</li>
+ <li id="l-134" _a="glandium" _r="sid0"><a href="#l-134">#</a> [00:35] &lt;glandium&gt; sid0: look at the dependencies for these files</li>
+ <li id="l-135" _a="glandium"><a href="#l-135">#</a> [00:35] &lt;glandium&gt; any of these deps can have modifications that do not impact the content of the resulting files</li>
+ <li id="l-136" _a="sid0"><a href="#l-136">#</a> [00:35] &lt;sid0&gt; well then why is it a dependency</li>
+ <li id="l-137" _a="firebot" _r="Check-in"><a href="#l-137">#</a> [00:35] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/d0789db68c77">http://hg.mozilla.org/integration/mozilla-inbound/rev/d0789db68c77</a> - Luke Wagner - Bug 787246 - rm OffTheBooks/Foreground/UnwantedForeground gunk (r=billm)</li>
+ <li id="l-138" _a="glandium" _r="Like"><a href="#l-138">#</a> [00:35] &lt;glandium&gt; Like, changing the MPL license on the py script :)</li>
+ <li id="l-139" _a="firebot"><a href="#l-139">#</a> [00:35] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/949ade2a2ea1">http://hg.mozilla.org/integration/mozilla-inbound/rev/949ade2a2ea1</a> - Luke Wagner - Bug 787291 - add pod_malloc&lt;T&gt; et al (r=billm)</li>
+ <li id="l-140"><a href="#l-140">#</a> [00:36] * Quits: StockHunter (StockHunte@moz-C0D4659B.ldv-co.client.bresnan.net) (Quit: KVIrc 4.0.4 Insomnia <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>)</li>
+ <li id="l-141" _a="sid0"><a href="#l-141">#</a> [00:36] &lt;sid0&gt; the result should absolutely be touched</li>
+ <li id="l-142" _a="sid0"><a href="#l-142">#</a> [00:36] &lt;sid0&gt; the world should absolutely be rebuilt if you're changing a comment</li>
+ <li id="l-143" _a="glandium" _r="sid0"><a href="#l-143">#</a> [00:36] &lt;glandium&gt; sid0: i don't agree</li>
+ <li id="l-144" _a="sid0"><a href="#l-144">#</a> [00:36] &lt;sid0&gt; that's how make works!</li>
+ <li id="l-145" _a="sid0"><a href="#l-145">#</a> [00:36] &lt;sid0&gt; make expects recipes to leave targets newer than dependencies</li>
+ <li id="l-146" _a="glandium" _r="sid0"><a href="#l-146">#</a> [00:36] &lt;glandium&gt; sid0: look at it this way: you have a script that generates headers</li>
+ <li id="l-147" _a="glandium"><a href="#l-147">#</a> [00:36] &lt;glandium&gt; you change the script to handle a new type, for a new header</li>
+ <li id="l-148" _a="glandium"><a href="#l-148">#</a> [00:37] &lt;glandium&gt; do you want the other headers to be regenerated?</li>
+ <li id="l-149" _a="sid0"><a href="#l-149">#</a> [00:37] &lt;sid0&gt; yes!</li>
+ <li id="l-150" _a="gps"><a href="#l-150">#</a> [00:37] &lt;gps&gt; yes</li>
+ <li id="l-151" _a="sid0"><a href="#l-151">#</a> [00:37] &lt;sid0&gt; otherwise the entire premise of make falls apart</li>
+ <li id="l-152"><a href="#l-152">#</a> [00:37] * Quits: xakz (XaMaD@moz-34FBE388.fbx.proxad.net) (Ping timeout)</li>
+ <li id="l-153" _a="glandium"><a href="#l-153">#</a> [00:38] &lt;glandium&gt; i certainly don't</li>
+ <li id="l-154" _a="@roc"><a href="#l-154">#</a> [00:38] &lt;@roc&gt; tjereno need</li>
+ <li id="l-155" _a="@roc"><a href="#l-155">#</a> [00:38] &lt;@roc&gt; blah</li>
+ <li id="l-156"><a href="#l-156">#</a> [00:38] * Quits: Yoric (Yoric@moz-920DB13B.fbx.proxad.net) (Connection reset by peer)</li>
+ <li id="l-157" _a="sid0"><a href="#l-157">#</a> [00:38] &lt;sid0&gt; at the end of a recipe, the target should be newer than all the dependencies</li>
+ <li id="l-158" _a="@roc"><a href="#l-158">#</a> [00:38] &lt;@roc&gt; there's no need to nag me for reviews less than one hour after requesting the review. Especially during the weekend.</li>
+ <li id="l-159"><a href="#l-159">#</a> [00:38] * Quits: bmoss (bmoss@moz-BBE3ABD.mv.mozilla.com) (Quit: bmoss)</li>
+ <li id="l-160" _a="@gavin"><a href="#l-160">#</a> [00:39] &lt;@gavin&gt; oh. I thought &quot;tjereno need&quot; was your password.</li>
+ <li id="l-161" _a="sid0" _r="glandium"><a href="#l-161">#</a> [00:39] &lt;sid0&gt; glandium: if your compiler changed wouldn't you want to rebuild the world?</li>
+ <li id="l-162" _a="sid0"><a href="#l-162">#</a> [00:39] &lt;sid0&gt; regardless of whether the object file is the same</li>
+ <li id="l-163" _a="glandium" _r="sid0"><a href="#l-163">#</a> [00:39] &lt;glandium&gt; sid0: in practice, in our case, it's not so much of a problem, because it just means you may be running the rule again a few times and, more importantly, avoid rebuilding a lot of files</li>
+ <li id="l-164"><a href="#l-164">#</a> [00:39] * Joins: ketas (ketas@195.20.191.90.dyn.estpak.ee)</li>
+ <li id="l-165" _a="sid0"><a href="#l-165">#</a> [00:39] &lt;sid0&gt; well then these sorts of problems are always going to happen</li>
+ <li id="l-166" _a="sid0"><a href="#l-166">#</a> [00:40] &lt;sid0&gt; you either buy into how make works or you don't</li>
+ <li id="l-167" _a="glandium" _r="sid0"><a href="#l-167">#</a> [00:40] &lt;glandium&gt; sid0: no, because they only happen because we do recursive make</li>
+ <li id="l-168"><a href="#l-168">#</a> [00:40] * Joins: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr)</li>
+ <li id="l-169" _a="@roc" _r="gavin"><a href="#l-169">#</a> [00:40] &lt;@roc&gt; gavin: hey, that is a good password. I think I'll useit.</li>
+ <li id="l-170" _a="sid0"><a href="#l-170">#</a> [00:40] &lt;sid0&gt; well it's a combination</li>
+ <li id="l-171"><a href="#l-171">#</a> [00:41] * Quits: mkaply (mkaply@moz-92EDDD02.lightspeed.austtx.sbcglobal.net) (Quit: mkaply)</li>
+ <li id="l-172" _a="glandium"><a href="#l-172">#</a> [00:41] &lt;glandium&gt; non-recursive make doesn't need the target to even exist to consider it fulfilled once run</li>
+ <li id="l-173"><a href="#l-173">#</a> [00:41] * Joins: luke (andhow@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-174" _a="glandium"><a href="#l-174">#</a> [00:41] &lt;glandium&gt; even when not phony</li>
+ <li id="l-175" _a="sid0"><a href="#l-175">#</a> [00:41] &lt;sid0&gt; sure I agree</li>
+ <li id="l-176" _a="luke" _r="dbaron"><a href="#l-176">#</a> [00:41] &lt;luke&gt; dbaron: RAMPAGE</li>
+ <li id="l-177" _a="sid0"><a href="#l-177">#</a> [00:41] &lt;sid0&gt; absolutely</li>
+ <li id="l-178" _a="sid0" _r="ok"><a href="#l-178">#</a> [00:42] &lt;sid0&gt; ok, let me rephrase -- it's the entire premise of recursive make, where there's a good chance a target will be run multiple times</li>
+ <li id="l-179" _a="sid0"><a href="#l-179">#</a> [00:42] &lt;sid0&gt; and it had better be newer than its deps after the first time</li>
+ <li id="l-180" _a="glandium" _r="sid0"><a href="#l-180">#</a> [00:43] &lt;glandium&gt; sid0: and in our case, running a few rules a couple times is better then rebuilding everything</li>
+ <li id="l-181" _a="sid0"><a href="#l-181">#</a> [00:43] &lt;sid0&gt; hm</li>
+ <li id="l-182" _a="firebot" _r="Check-in"><a href="#l-182">#</a> [00:43] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/ec63d3b35553">http://hg.mozilla.org/integration/mozilla-inbound/rev/ec63d3b35553</a> - Brian Nicholson - Bug 786842 - Fix replaceBrs() typo for checking whitespace. r=lucasr</li>
+ <li id="l-183" _a="nmatsakis"><a href="#l-183">#</a> [00:44] * nmatsakis is now known as nmatsakis-away</li>
+ <li id="l-184" _a="sid0"><a href="#l-184">#</a> [00:44] &lt;sid0&gt; I wonder how hard it would be to switch over just dom/ to non-recursive make</li>
+ <li id="l-185" _a="padenot"><a href="#l-185">#</a> [00:45] * padenot is now known as padenot|away</li>
+ <li id="l-186" _a="billm" _r="dbaron"><a href="#l-186">#</a> [00:45] &lt;billm&gt; dbaron: ping</li>
+ <li id="l-187" _a="@dbaron" _r="billm"><a href="#l-187">#</a> [00:45] &lt;@dbaron&gt; billm, pong</li>
+ <li id="l-188" _a="billm" _r="dbaron"><a href="#l-188">#</a> [00:45] &lt;billm&gt; dbaron: do you have a list of all the bugs you're closing?</li>
+ <li id="l-189"><a href="#l-189">#</a> [00:46] * Quits: lduros (lduros@moz-D41962F7.phil.east.verizon.net) (Ping timeout)</li>
+ <li id="l-190" _a="@dbaron" _r="billm"><a href="#l-190">#</a> [00:46] &lt;@dbaron&gt; billm, yes</li>
+ <li id="l-191" _a="billm" _r="dbaron"><a href="#l-191">#</a> [00:46] &lt;billm&gt; dbaron: could you post it in the bad slave bug?</li>
+ <li id="l-192" _a="@dbaron" _r="billm"><a href="#l-192">#</a> [00:46] &lt;@dbaron&gt; billm, I'm trying to figure out how to turn the result of a query into a list</li>
+ <li id="l-193" _a="firebot" _r="Check-in"><a href="#l-193">#</a> [00:46] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/d474bda79729">http://hg.mozilla.org/integration/mozilla-inbound/rev/d474bda79729</a> - Brian Nicholson - Bug 786623 - Use mobile UA for YouTube on tablets. r=mfinkle</li>
+ <li id="l-194" _a="billm" _r="dbaron"><a href="#l-194">#</a> [00:47] &lt;billm&gt; dbaron: it looks like you can get query results in XML (and maybe CSV)</li>
+ <li id="l-195"><a href="#l-195">#</a> [00:48] * Joins: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-196" _a="billm" _r="dbaron"><a href="#l-196">#</a> [00:48] &lt;billm&gt; dbaron: the csv looks pretty simple. could you just post that?</li>
+ <li id="l-197" _a="padenot|away"><a href="#l-197">#</a> [00:49] * padenot|away is now known as padenot</li>
+ <li id="l-198"><a href="#l-198">#</a> [00:49] * Quits: jimm (jmathies@moz-7F164CA1.pn.at.cox.net) (Quit: )</li>
+ <li id="l-199" _a="@dbaron" _r="billm"><a href="#l-199">#</a> [00:51] &lt;@dbaron&gt; billm, posted to bug</li>
+ <li id="l-200" _a="billm" _r="dbaron"><a href="#l-200">#</a> [00:51] &lt;billm&gt; dbaron: thanks</li>
+ <li id="l-201" _a="@dbaron" _r="billm"><a href="#l-201">#</a> [00:53] &lt;@dbaron&gt; billm, er, sorry, there was a midair collision... now it's really posted</li>
+ <li id="l-202"><a href="#l-202">#</a> [00:56] * Quits: karl (karl@moz-8FA687C8.jetstream.xtra.co.nz) (Ping timeout)</li>
+ <li id="l-203" _a="Misanthrope"><a href="#l-203">#</a> [00:57] * Misanthrope is now known as John-Galt</li>
+ <li id="l-204"><a href="#l-204">#</a> [00:58] * Joins: Yoric (Yoric@moz-920DB13B.fbx.proxad.net)</li>
+ <li id="l-205"><a href="#l-205">#</a> [00:59] * Quits: florian (Instantbir@moz-87C33FDA.kimsufi.com) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-206"><a href="#l-206">#</a> [01:01] * Quits: Yoric (Yoric@moz-920DB13B.fbx.proxad.net) (Ping timeout)</li>
+ <li id="l-207" _a="padenot"><a href="#l-207">#</a> [01:02] * padenot is now known as padenot|away</li>
+ <li id="l-208"><a href="#l-208">#</a> [01:03] * Quits: bjacob (bjacob@F2D29657.F60B0462.67AC9B1.IP) (Ping timeout)</li>
+ <li id="l-209"><a href="#l-209">#</a> [01:04] * Quits: Mossop (mossop@E9758364.9EC0A5AF.CFE928A7.IP) (Ping timeout)</li>
+ <li id="l-210"><a href="#l-210">#</a> [01:04] * Quits: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Quit: This computer has gone to sleep)</li>
+ <li id="l-211"><a href="#l-211">#</a> [01:04] * Joins: Yoric (Yoric@moz-920DB13B.fbx.proxad.net)</li>
+ <li id="l-212"><a href="#l-212">#</a> [01:05] * Quits: jgriffin (jgriffin@moz-DD9CBA45.hsd1.wa.comcast.net) (Quit: jgriffin)</li>
+ <li id="l-213" _a="@gavin" _r="jdm"><a href="#l-213">#</a> [01:05] &lt;@gavin&gt; jdm: did I do the whiteboard annotations right on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721165">https://bugzilla.mozilla.org/show_bug.cgi?id=721165</a> ?</li>
+ <li id="l-214"><a href="#l-214">#</a> [01:05] * Joins: jgriffin (jgriffin@moz-DD9CBA45.hsd1.wa.comcast.net)</li>
+ <li id="l-215" _a="davehunt|away"><a href="#l-215">#</a> [01:06] * davehunt|away is now known as davehunt</li>
+ <li id="l-216"><a href="#l-216">#</a> [01:06] * Quits: robhawkes (robhawkes@moz-33A339B7.dsl.cnl.uk.net) (Quit: Leaving...)</li>
+ <li id="l-217" _a="@roc"><a href="#l-217">#</a> [01:07] &lt;@roc&gt; why am I getting &quot;zip error: Nothing to do! (/home/roc/obj-central/obj-fennec-debug/mobile/android/installer/../../../dist/gecko.ap_)&quot; trying to &quot;make package&quot; a Fennec debug build?</li>
+ <li id="l-218" _a="jdm" _r="gavin"><a href="#l-218">#</a> [01:11] &lt;jdm&gt; gavin: yep!</li>
+ <li id="l-219"><a href="#l-219">#</a> [01:13] * Quits: AaronMT|afk (AaronMT@moz-5DF3A271.cpe.net.cable.rogers.com) (Quit: Textual IRC Client: www.textualapp.com)</li>
+ <li id="l-220" _a="callek-afk"><a href="#l-220">#</a> [01:15] * callek-afk is now known as Callek</li>
+ <li id="l-221"><a href="#l-221">#</a> [01:15] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-222"><a href="#l-222">#</a> [01:15] * Quits: jdm (jdm@F2D29657.F60B0462.67AC9B1.IP) (Quit: Lost terminal)</li>
+ <li id="l-223" _a="davehunt"><a href="#l-223">#</a> [01:16] * davehunt is now known as davehunt|away</li>
+ <li id="l-224"><a href="#l-224">#</a> [01:16] * Joins: merinui (merinui@moz-1D8A7606.osk2.eonet.ne.jp)</li>
+ <li id="l-225"><a href="#l-225">#</a> [01:16] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-226"><a href="#l-226">#</a> [01:17] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Quit: ChatZilla 0.9.88-rdmsoft [XULRunner 1.9.0.17/2009122204])</li>
+ <li id="l-227" _a="firebot" _r="Check-in"><a href="#l-227">#</a> [01:21] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/a412d39f5526">http://hg.mozilla.org/integration/mozilla-inbound/rev/a412d39f5526</a> - Rafael Ávila de Espíndola - Bug 787568 - Upgrade clang to r161152. r=rail.</li>
+ <li id="l-228" _a="firebot"><a href="#l-228">#</a> [01:21] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/98a37bb0fbdc">http://hg.mozilla.org/integration/mozilla-inbound/rev/98a37bb0fbdc</a> - Rafael Ávila de Espíndola - Bug 787568 - Upgrade clang to r161152. r=rail.</li>
+ <li id="l-229"><a href="#l-229">#</a> [01:22] * Quits: Yoric (Yoric@moz-920DB13B.fbx.proxad.net) (Connection timed out)</li>
+ <li id="l-230"><a href="#l-230">#</a> [01:22] * Quits: jrmuizel (jrmuizel@F2D29657.F60B0462.67AC9B1.IP) (Client exited)</li>
+ <li id="l-231"><a href="#l-231">#</a> [01:22] * Quits: ircloggr (nodebot@moz-96935DC4.compute-1.amazonaws.com) (Client exited)</li>
+ <li id="l-232"><a href="#l-232">#</a> [01:23] * Quits: Nikopol (nikopol@moz-68B53A37.chaosorigin.com) (Ping timeout)</li>
+ <li id="l-233"><a href="#l-233">#</a> [01:23] * Joins: Nikopol (nikopol@moz-68B53A37.chaosorigin.com)</li>
+ <li id="l-234"><a href="#l-234">#</a> [01:23] * Joins: ircloggr (nodebot@moz-61E413B7.compute-1.amazonaws.com)</li>
+ <li id="l-235" _a="padenot|away"><a href="#l-235">#</a> [01:23] * padenot|away is now known as padenot</li>
+ <li id="l-236" _a="padenot"><a href="#l-236">#</a> [01:24] * padenot is now known as padenot|away</li>
+ <li id="l-237"><a href="#l-237">#</a> [01:26] * Quits: ehsan (ehsan@F2D29657.F60B0462.67AC9B1.IP) (Input/output error)</li>
+ <li id="l-238" _a="firebot" _r="Check-in"><a href="#l-238">#</a> [01:26] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/26e4b997779e">http://hg.mozilla.org/integration/mozilla-inbound/rev/26e4b997779e</a> - Wes Johnston - backout 58b937c070d6</li>
+ <li id="l-239"><a href="#l-239">#</a> [01:26] * Quits: ejpbruel (ejpbruel@E9758364.9EC0A5AF.CFE928A7.IP) (Ping timeout)</li>
+ <li id="l-240"><a href="#l-240">#</a> [01:26] * Joins: Mano (mano@4AE6E53A.EC757A99.39716721.IP)</li>
+ <li id="l-241"><a href="#l-241">#</a> [01:32] * Joins: jeremyhu (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-242"><a href="#l-242">#</a> [01:32] * Joins: jeremyhu|nanake (jeremyhu@moz-BA77680E.cs.berkeley.edu)</li>
+ <li id="l-243"><a href="#l-243">#</a> [01:34] * Quits: jeremyhu (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-244" _a="Callek" _r="espindola"><a href="#l-244">#</a> [01:35] &lt;Callek&gt; espindola: I'm realy busy right now, but my point with |To make our infra use something from in tree is a much different/bigger problem, and would need to change whether we did that from in talos or in m-c as far as &quot;where does the code live&quot;.| was not that we shouldn't/can't make the changes to make it better -- only that &quot;move talos from here to there&quot; is a net 0 win, doesn't make that...</li>
+ <li id="l-245" _a="Callek"><a href="#l-245">#</a> [01:35] &lt;Callek&gt; ...easier at all, like was said in the comment I replied against</li>
+ <li id="l-246" _a="espindola" _r="Callek"><a href="#l-246">#</a> [01:36] &lt;espindola&gt; Callek, and my point is that it is a way</li>
+ <li id="l-247" _a="espindola"><a href="#l-247">#</a> [01:36] &lt;espindola&gt; I have idea how hard it is</li>
+ <li id="l-248" _a="espindola"><a href="#l-248">#</a> [01:36] &lt;espindola&gt; and yes, I am really busy too</li>
+ <li id="l-249"><a href="#l-249">#</a> [01:36] * Joins: azakai (alon@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-250" _a="Callek" _r="espindola"><a href="#l-250">#</a> [01:37] &lt;Callek&gt; espindola: &quot;it is a way&quot; doesn't translate to &quot;it makes that easier&quot;</li>
+ <li id="l-251"><a href="#l-251">#</a> [01:38] * Joins: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net)</li>
+ <li id="l-252" _a="espindola"><a href="#l-252">#</a> [01:38] &lt;espindola&gt; lets please discuss on the bug, not everyone is reading #developers</li>
+ <li id="l-253" _a="padenot|away"><a href="#l-253">#</a> [01:39] * padenot|away is now known as padenot</li>
+ <li id="l-254"><a href="#l-254">#</a> [01:40] * Joins: lmandel (lmandel@moz-E928DD26.dsl.bell.ca)</li>
+ <li id="l-255"><a href="#l-255">#</a> [01:40] * Joins: jgilbert (jgilbert@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-256"><a href="#l-256">#</a> [01:41] * Quits: Mano (mano@4AE6E53A.EC757A99.39716721.IP) (Client exited)</li>
+ <li id="l-257"><a href="#l-257">#</a> [01:41] * Joins: brendan (brendaneic@moz-41BA54D6.dynamic.adsl.gvt.net.br)</li>
+ <li id="l-258" _a="nmatsakis-away"><a href="#l-258">#</a> [01:41] * nmatsakis-away is now known as nmatsakis</li>
+ <li id="l-259"><a href="#l-259">#</a> [01:42] * Quits: tn (tn@moz-2E73ACE4.wp.shawcable.net) (Ping timeout)</li>
+ <li id="l-260" _a="padenot"><a href="#l-260">#</a> [01:42] * padenot is now known as padenot|away</li>
+ <li id="l-261"><a href="#l-261">#</a> [01:42] * Quits: lmandel (lmandel@moz-E928DD26.dsl.bell.ca) (Ping timeout)</li>
+ <li id="l-262"><a href="#l-262">#</a> [01:44] * Quits: todesschaf (hurley@moz-E76806A0.dsl.static.sonic.net) (Quit: todesschaf)</li>
+ <li id="l-263"><a href="#l-263">#</a> [01:44] * Quits: Asa (asa@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-264"><a href="#l-264">#</a> [01:46] * Joins: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com)</li>
+ <li id="l-265"><a href="#l-265">#</a> [01:46] * Joins: darktrojan (geoff@moz-30B3CCFD.telstraclear.net)</li>
+ <li id="l-266"><a href="#l-266">#</a> [01:49] * Quits: smagnin (pike@moz-DEF53BC9.fbx.proxad.net) (Client exited)</li>
+ <li id="l-267"><a href="#l-267">#</a> [01:50] * Quits: mccr8 (mccr8@moz-BBE3ABD.mv.mozilla.com) (Quit: mccr8)</li>
+ <li id="l-268"><a href="#l-268">#</a> [01:51] * Quits: odin_ (Odin@moz-66D3502E.zone5.bethere.co.uk) (Ping timeout)</li>
+ <li id="l-269" _a="mattwoodrow|away"><a href="#l-269">#</a> [01:51] * mattwoodrow|away is now known as mattwoodrow</li>
+ <li id="l-270"><a href="#l-270">#</a> [01:52] * Joins: tn (tn@moz-2E73ACE4.wp.shawcable.net)</li>
+ <li id="l-271"><a href="#l-271">#</a> [01:53] * Joins: RealRaven (Thunderbir@C6BC2410.D3E479AE.C3498625.IP)</li>
+ <li id="l-272"><a href="#l-272">#</a> [01:53] * Quits: cpeterson (cpeterson@moz-175D1473.hsd1.ca.comcast.net) (Input/output error)</li>
+ <li id="l-273"><a href="#l-273">#</a> [01:53] * Quits: jimb (user@9E727688.17C2F9C.163DC5C6.IP) (Input/output error)</li>
+ <li id="l-274"><a href="#l-274">#</a> [01:54] * Quits: RealRaven (Thunderbir@C6BC2410.D3E479AE.C3498625.IP) (Client exited)</li>
+ <li id="l-275" _a="firebot" _r="Check-in"><a href="#l-275">#</a> [01:54] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/fb8074886fb0">http://hg.mozilla.org/integration/mozilla-inbound/rev/fb8074886fb0</a> - Jeff Gilbert - Bug 784925 - Add MakeCurrent for OGL Layers Readback path - r=bjacob</li>
+ <li id="l-276" _a="padenot|away"><a href="#l-276">#</a> [01:56] * padenot|away is now known as padenot</li>
+ <li id="l-277" _a="firebot" _r="Check-in"><a href="#l-277">#</a> [01:57] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/7f57250ac7d1">http://hg.mozilla.org/integration/mozilla-inbound/rev/7f57250ac7d1</a> - Jeff Gilbert - Bug 735932 - Fix no-alpha ReadPixels on Mac+nVidia - r=bjacob</li>
+ <li id="l-278" _a="padenot"><a href="#l-278">#</a> [01:57] * padenot is now known as padenot|away</li>
+ <li id="l-279"><a href="#l-279">#</a> [01:59] * Quits: sfink (chatzilla@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-280"><a href="#l-280">#</a> [02:00] * Quits: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com) (Ping timeout)</li>
+ <li id="l-281"><a href="#l-281">#</a> [02:01] * Joins: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com)</li>
+ <li id="l-282" _a="padenot|away"><a href="#l-282">#</a> [02:02] * padenot|away is now known as padenot</li>
+ <li id="l-283" _a="Callek" _r="dbaron"><a href="#l-283">#</a> [02:02] &lt;Callek&gt; dbaron: without looking [yet] does your bad slave script have any protection for short lived intermittents taht are obsolete now -- as well?</li>
+ <li id="l-284" _a="@dbaron" _r="Callek"><a href="#l-284">#</a> [02:02] &lt;@dbaron&gt; Callek, the script doesn't directly blame a particular slave; there's an assumption that there will be some of those</li>
+ <li id="l-285" _a="Callek"><a href="#l-285">#</a> [02:03] &lt;Callek&gt; incase they were single or twice-only marked to a slave, but long since code-fixed, and said slave ran 1,000's of jobs since then</li>
+ <li id="l-286"><a href="#l-286">#</a> [02:03] * Quits: bdahl (bdahl@moz-BBE3ABD.mv.mozilla.com) (Client exited)</li>
+ <li id="l-287" _a="@dbaron" _r="Callek"><a href="#l-287">#</a> [02:03] &lt;@dbaron&gt; Callek, What I was looking at were slaves that had a disproportionate number of &quot;this slave was the only slave ever to see a particular bug&quot;</li>
+ <li id="l-288" _a="Callek" _r="dbaron"><a href="#l-288">#</a> [02:03] &lt;Callek&gt; dbaron: I guess more &quot;did you check on those types of issues as you called out slaves&quot;</li>
+ <li id="l-289" _a="@dbaron" _r="Callek"><a href="#l-289">#</a> [02:03] &lt;@dbaron&gt; Callek, e.g., in many cases, almost all the slaves have 0-3 occurrences of being the only slave to see a bug</li>
+ <li id="l-290" _a="@dbaron" _r="Callek"><a href="#l-290">#</a> [02:03] &lt;@dbaron&gt; Callek, and then there was a slave with 15 and another with 20</li>
+ <li id="l-291" _a="Callek"><a href="#l-291">#</a> [02:03] &lt;Callek&gt; if you think its irrelevant I'll take your word for it here</li>
+ <li id="l-292" _a="@dbaron" _r="Callek"><a href="#l-292">#</a> [02:04] &lt;@dbaron&gt; Callek, I think it's not relevant.</li>
+ <li id="l-293" _a="@dbaron" _r="Callek"><a href="#l-293">#</a> [02:04] &lt;@dbaron&gt; Callek, as I went through the bugs, there were quite a few that had only happened once</li>
+ <li id="l-294" _a="Callek"><a href="#l-294">#</a> [02:04] &lt;Callek&gt; yea 15 bugs for one slave, in a relatively recent date is a good indicator of &quot;bad slave&quot;</li>
+ <li id="l-295" _a="Callek"><a href="#l-295">#</a> [02:04] &lt;Callek&gt; :-)</li>
+ <li id="l-296"><a href="#l-296">#</a> [02:04] * Quits: gaston (landry@moz-2911F07A.rhaalovely.net) (Ping timeout)</li>
+ <li id="l-297" _a="geekboy"><a href="#l-297">#</a> [02:04] * geekboy is now known as geekboy|afk</li>
+ <li id="l-298" _a="@dbaron" _r="Callek"><a href="#l-298">#</a> [02:04] &lt;@dbaron&gt; Callek, but there were also quite a few that happened multiple times but only on one or two particular slaves</li>
+ <li id="l-299" _a="Callek" _r="dbaron"><a href="#l-299">#</a> [02:04] &lt;Callek&gt; dbaron: thanks for that script/investigation btw. really helpful!</li>
+ <li id="l-300" _a="@dbaron"><a href="#l-300">#</a> [02:05] &lt;@dbaron&gt; sure</li>
+ <li id="l-301"><a href="#l-301">#</a> [02:05] * Joins: bdahl (bdahl@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-302"><a href="#l-302">#</a> [02:08] * Quits: tanvi (tanvi@moz-9440AA69.hsd1.ca.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-303"><a href="#l-303">#</a> [02:09] * Quits: andersh_ (andersh@moz-E9E49875.bredband.3.dk) (Connection reset by peer)</li>
+ <li id="l-304"><a href="#l-304">#</a> [02:10] * Quits: myk (myk@moz-BBE3ABD.mv.mozilla.com) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-305"><a href="#l-305">#</a> [02:10] * Quits: jgriffin (jgriffin@moz-DD9CBA45.hsd1.wa.comcast.net) (Quit: goes to refill his long margarita)</li>
+ <li id="l-306"><a href="#l-306">#</a> [02:11] * Joins: gaston (landry@moz-2911F07A.rhaalovely.net)</li>
+ <li id="l-307"><a href="#l-307">#</a> [02:12] * Quits: sworkman (sworkman@moz-825EC923.hsd1.ca.comcast.net) (Quit: sworkman)</li>
+ <li id="l-308"><a href="#l-308">#</a> [02:13] * Joins: mccr8 (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net)</li>
+ <li id="l-309"><a href="#l-309">#</a> [02:14] * Quits: bdahl (bdahl@moz-BBE3ABD.mv.mozilla.com) (Client exited)</li>
+ <li id="l-310"><a href="#l-310">#</a> [02:16] * Joins: jimb (user@9E727688.17C2F9C.163DC5C6.IP)</li>
+ <li id="l-311"><a href="#l-311">#</a> [02:17] * Quits: akeybl (akeybl@moz-BBE3ABD.mv.mozilla.com) (Quit: Leaving...)</li>
+ <li id="l-312"><a href="#l-312">#</a> [02:18] * Joins: mccr8_ (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net)</li>
+ <li id="l-313"><a href="#l-313">#</a> [02:18] * Quits: mccr8_ (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net) (Quit: mccr8_)</li>
+ <li id="l-314"><a href="#l-314">#</a> [02:19] * Quits: mccr8 (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net) (Ping timeout)</li>
+ <li id="l-315"><a href="#l-315">#</a> [02:19] * Joins: mccr8 (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net)</li>
+ <li id="l-316"><a href="#l-316">#</a> [02:19] * Joins: akeybl (akeybl@moz-BBE3ABD.mv.mozilla.com)</li>
+ <li id="l-317"><a href="#l-317">#</a> [02:19] * Joins: Yoric (Yoric@moz-920DB13B.fbx.proxad.net)</li>
+ <li id="l-318"><a href="#l-318">#</a> [02:19] * Joins: reuben (reuben@moz-3D306503.res-com.wayinternet.com.br)</li>
+ <li id="l-319"><a href="#l-319">#</a> [02:19] * Quits: bnicholson (bnicholson@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net) (Quit: Leaving)</li>
+ <li id="l-320" _a="reuben"><a href="#l-320">#</a> [02:20] &lt;reuben&gt; !seen jdm</li>
+ <li id="l-321" _a="firebot"><a href="#l-321">#</a> [02:20] &lt;firebot&gt; jdm was last seen 68 minutes and 14 seconds ago, saying 'gavin: yep!' in #developers.</li>
+ <li id="l-322"><a href="#l-322">#</a> [02:20] * Quits: akeybl (akeybl@moz-BBE3ABD.mv.mozilla.com) (Quit: Leaving...)</li>
+ <li id="l-323"><a href="#l-323">#</a> [02:21] * Quits: mcomella (mcomella@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net) (Quit: Leaving.)</li>
+ <li id="l-324"><a href="#l-324">#</a> [02:21] * Quits: brendan (brendaneic@moz-41BA54D6.dynamic.adsl.gvt.net.br) (Quit: brendan)</li>
+ <li id="l-325"><a href="#l-325">#</a> [02:22] * Joins: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net)</li>
+ <li id="l-326"><a href="#l-326">#</a> [02:22] * Quits: darin (darin@moz-CD91E596.google.com) (Ping timeout)</li>
+ <li id="l-327"><a href="#l-327">#</a> [02:23] * Quits: TheLink (TheLink@moz-7DF028C8.pools.arcor-ip.net) (Client exited)</li>
+ <li id="l-328"><a href="#l-328">#</a> [02:23] * Quits: jhammel (jhammel@moz-E31CD2CB.mozilla.org) (Quit: leaving)</li>
+ <li id="l-329"><a href="#l-329">#</a> [02:23] * Quits: lduros (lduros@moz-D41962F7.phil.east.verizon.net) (Client exited)</li>
+ <li id="l-330" _a="NeilAway"><a href="#l-330">#</a> [02:26] * NeilAway wonders whether froydnj read hg revsets and (more importantly) whether it was actually helpful</li>
+ <li id="l-331"><a href="#l-331">#</a> [02:28] * Quits: Mardak (Mardak@moz-BBE3ABD.mv.mozilla.com) (Quit: Mardak)</li>
+ <li id="l-332"><a href="#l-332">#</a> [02:29] * Quits: ctopper (craig@C3495DA.BA3DBA56.AE2B2F80.IP) (Quit: ctopper)</li>
+ <li id="l-333"><a href="#l-333">#</a> [02:30] * Quits: stevee (Miranda@moz-17087BE2.cable.virginmedia.com) (Quit: Miranda IM - Multi protocol instant messenger @ www.miranda-im.org)</li>
+ <li id="l-334" _a="firebot" _r="Check-in"><a href="#l-334">#</a> [02:33] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/7a86d43be76f">http://hg.mozilla.org/integration/mozilla-inbound/rev/7a86d43be76f</a> - Shane Caraveo - Bug 787093 - Some links from social dialogs open in the current tab. r=gavin</li>
+ <li id="l-335" _a="firebot"><a href="#l-335">#</a> [02:33] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/7a3368523776">http://hg.mozilla.org/integration/mozilla-inbound/rev/7a3368523776</a> - Jonathan Griffin - Bug 787520 - Fix test_log.py, a=test-only, DONTBUILD because NPOTB</li>
+ <li id="l-336" _a="firebot"><a href="#l-336">#</a> [02:33] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/e3e7f8f7796d">http://hg.mozilla.org/integration/mozilla-inbound/rev/e3e7f8f7796d</a> - Jonathan Griffin - Bug 779011 - Clean up properly after JS exceptions during async_execute calls, a=test-only, DONTBUILD because NPOTB</li>
+ <li id="l-337" _a="firebot"><a href="#l-337">#</a> [02:33] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/62bfaa4500ca">http://hg.mozilla.org/integration/mozilla-inbound/rev/62bfaa4500ca</a> - Ryan VanderMeulen - Merge m-c to inbound.</li>
+ <li id="l-338" _a="firebot"><a href="#l-338">#</a> [02:33] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/e56edfeb2bb4">http://hg.mozilla.org/integration/mozilla-inbound/rev/e56edfeb2bb4</a> - Philipp von Weitershausen - Back out 982d02faef3f (bug 777145) for B2G marionette bustage</li>
+ <li id="l-339" _a="firebot"><a href="#l-339">#</a> [02:33] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/b772555c0fcc">http://hg.mozilla.org/integration/mozilla-inbound/rev/b772555c0fcc</a> - Philipp von Weitershausen - Merge a PGO-green inbound changeset to m-c.</li>
+ <li id="l-340"><a href="#l-340">#</a> [02:34] * Quits: Yoric (Yoric@moz-920DB13B.fbx.proxad.net) (Input/output error)</li>
+ <li id="l-341"><a href="#l-341">#</a> [02:38] * Quits: @roc (chatzilla@C0ACF8B.5E1E9EEA.613E47D1.IP) (Ping timeout)</li>
+ <li id="l-342"><a href="#l-342">#</a> [02:39] * Joins: roc (chatzilla@C0ACF8B.5E1E9EEA.613E47D1.IP)</li>
+ <li id="l-343" _a="ChanServ"><a href="#l-343">#</a> [02:39] * ChanServ sets mode: +o roc</li>
+ <li id="l-344"><a href="#l-344">#</a> [02:40] * Quits: espadrine (thaddee_ty@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-345"><a href="#l-345">#</a> [02:42] * Quits: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com) (Ping timeout)</li>
+ <li id="l-346" _a="khuey|away"><a href="#l-346">#</a> [02:42] * khuey|away is now known as khuey</li>
+ <li id="l-347"><a href="#l-347">#</a> [02:44] * Joins: ekr_ (ekr@moz-D7997EC8.rtfm.com)</li>
+ <li id="l-348"><a href="#l-348">#</a> [02:44] * Quits: hobophobe (hobophobe@CEB7969B.BA9CDF59.295A79F4.IP) (Quit: Ommm.......)</li>
+ <li id="l-349"><a href="#l-349">#</a> [02:47] * Joins: odin_ (Odin@moz-66D3502E.zone5.bethere.co.uk)</li>
+ <li id="l-350"><a href="#l-350">#</a> [02:47] * Quits: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-351"><a href="#l-351">#</a> [02:48] * Quits: valenting (Thunderbir@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-352"><a href="#l-352">#</a> [02:49] * Joins: Mardak (Mardak@moz-2BCEAB1.dsl.static.sonic.net)</li>
+ <li id="l-353"><a href="#l-353">#</a> [02:50] * Joins: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net)</li>
+ <li id="l-354"><a href="#l-354">#</a> [02:52] * Joins: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP)</li>
+ <li id="l-355" _a="philor"><a href="#l-355">#</a> [02:52] * philor is now known as philor|away</li>
+ <li id="l-356"><a href="#l-356">#</a> [02:53] * Joins: sfink (chatzilla@moz-AB059898.dsl.pltn13.sbcglobal.net)</li>
+ <li id="l-357"><a href="#l-357">#</a> [02:53] * Quits: marco (Thunderbir@3A4EDD25.A00BAEB.10DC0B64.IP) (Quit: marco)</li>
+ <li id="l-358"><a href="#l-358">#</a> [02:54] * Quits: Mook_as (mook@moz-1FCC0032.activestate.com) (Quit: ChatZilla 0.9.88-rdmsoft [XULRunner 1.9.2.13/20101203074205])</li>
+ <li id="l-359"><a href="#l-359">#</a> [02:54] * Joins: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com)</li>
+ <li id="l-360"><a href="#l-360">#</a> [02:58] * Quits: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net) (Quit: ekr)</li>
+ <li id="l-361" _a="ekr_"><a href="#l-361">#</a> [02:58] * ekr_ is now known as ekr</li>
+ <li id="l-362"><a href="#l-362">#</a> [02:58] * Joins: ericjung (Mibbit@moz-F14FA912.bstnma.fios.verizon.net)</li>
+ <li id="l-363"><a href="#l-363">#</a> [02:59] * Joins: Asa (asa@D13E5E3F.A1EC5031.204CA821.IP)</li>
+ <li id="l-364" _a="ewong|away"><a href="#l-364">#</a> [02:59] * ewong|away is now known as ewong</li>
+ <li id="l-365"><a href="#l-365">#</a> [03:03] * Quits: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-366" _a="mattwoodrow"><a href="#l-366">#</a> [03:04] * mattwoodrow is now known as mattwoodrow|away</li>
+ <li id="l-367"><a href="#l-367">#</a> [03:05] * Quits: jeremyhu|nanake (jeremyhu@moz-BA77680E.cs.berkeley.edu) (Input/output error)</li>
+ <li id="l-368"><a href="#l-368">#</a> [03:05] * Joins: jeremyhu (jeremyhu@moz-BA77680E.cs.berkeley.edu)</li>
+ <li id="l-369"><a href="#l-369">#</a> [03:06] * Quits: jimb (user@9E727688.17C2F9C.163DC5C6.IP) (Input/output error)</li>
+ <li id="l-370"><a href="#l-370">#</a> [03:06] * Quits: jeremyhu (jeremyhu@moz-BA77680E.cs.berkeley.edu) (Input/output error)</li>
+ <li id="l-371"><a href="#l-371">#</a> [03:08] * Quits: TheOne (one@moz-C7043CC6.dip.t-dialin.net) (Input/output error)</li>
+ <li id="l-372"><a href="#l-372">#</a> [03:08] * Joins: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr)</li>
+ <li id="l-373"><a href="#l-373">#</a> [03:09] * Joins: jeremyhu (jeremyhu@moz-BA77680E.cs.berkeley.edu)</li>
+ <li id="l-374"><a href="#l-374">#</a> [03:10] * Quits: @dbaron (dbaron@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net) (Ping timeout)</li>
+ <li id="l-375" _a="firebot" _r="Check-in"><a href="#l-375">#</a> [03:10] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/078f3af11d13">http://hg.mozilla.org/integration/mozilla-inbound/rev/078f3af11d13</a> - Boris Zbarsky - Bug 786105.  Setting inline style properties to null should remove them, just like setting them to empty string does.  r=peterv</li>
+ <li id="l-376"><a href="#l-376">#</a> [03:10] * Quits: jduell (jduell@moz-88E2A9EB.hsd1.wa.comcast.net) (Ping timeout)</li>
+ <li id="l-377"><a href="#l-377">#</a> [03:12] * Quits: reuben (reuben@moz-3D306503.res-com.wayinternet.com.br) (Ping timeout)</li>
+ <li id="l-378"><a href="#l-378">#</a> [03:14] * Quits: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP) (Quit: FusedTogether)</li>
+ <li id="l-379"><a href="#l-379">#</a> [03:14] * Quits: sewardj (sewardj@moz-6B3F705D.dip.t-dialin.net) (Ping timeout)</li>
+ <li id="l-380"><a href="#l-380">#</a> [03:15] * Joins: sewardj (sewardj@moz-59562E5C.dip.t-dialin.net)</li>
+ <li id="l-381"><a href="#l-381">#</a> [03:15] * Quits: Boriss (FlyingToas@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net) (Quit: Boriss)</li>
+ <li id="l-382"><a href="#l-382">#</a> [03:19] * Quits: Mardak (Mardak@moz-2BCEAB1.dsl.static.sonic.net) (Quit: Mardak)</li>
+ <li id="l-383"><a href="#l-383">#</a> [03:19] * Quits: pcwalton (pcwalton@moz-BBE3ABD.mv.mozilla.com) (Quit: pcwalton)</li>
+ <li id="l-384"><a href="#l-384">#</a> [03:20] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-385"><a href="#l-385">#</a> [03:20] * Joins: Mardak (Mardak@moz-2BCEAB1.dsl.static.sonic.net)</li>
+ <li id="l-386"><a href="#l-386">#</a> [03:21] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-387"><a href="#l-387">#</a> [03:21] * Quits: philipp64|laptop (chatzilla@moz-B40B9015.ctcweb.net) (Ping timeout)</li>
+ <li id="l-388"><a href="#l-388">#</a> [03:22] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-389" _a="firebot" _r="Check-in"><a href="#l-389">#</a> [03:22] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/77c30c1388ee">http://hg.mozilla.org/integration/mozilla-inbound/rev/77c30c1388ee</a> - Siddharth Agarwal - Bug 787600 - Pymake: Shell commands in submakes don't honour exported PATH and don't receive exported envvars. r=gps</li>
+ <li id="l-390" _a="firebot"><a href="#l-390">#</a> [03:22] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/f51b4777dbf8">http://hg.mozilla.org/integration/mozilla-inbound/rev/f51b4777dbf8</a> - Siddharth Agarwal - Bug 784910 - Pymake: adjust sys.path so that native commands can load other modules from their own directories. r=ted</li>
+ <li id="l-391"><a href="#l-391">#</a> [03:22] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-392"><a href="#l-392">#</a> [03:23] * Quits: cjones (cjones@15798911.D822C0E9.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-393"><a href="#l-393">#</a> [03:23] * Joins: cjones (cjones@15798911.D822C0E9.56644CA2.IP)</li>
+ <li id="l-394"><a href="#l-394">#</a> [03:24] * Joins: philipp64|laptop (chatzilla@moz-BBAB109F.redfish-solutions.com)</li>
+ <li id="l-395"><a href="#l-395">#</a> [03:25] * Quits: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Ping timeout)</li>
+ <li id="l-396" _a="padenot"><a href="#l-396">#</a> [03:25] * padenot is now known as padenot|away</li>
+ <li id="l-397"><a href="#l-397">#</a> [03:26] * Quits: odin_ (Odin@moz-66D3502E.zone5.bethere.co.uk) (Ping timeout)</li>
+ <li id="l-398"><a href="#l-398">#</a> [03:27] * Quits: ericjung (Mibbit@moz-F14FA912.bstnma.fios.verizon.net) (Quit: <a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client)</li>
+ <li id="l-399"><a href="#l-399">#</a> [03:27] * Quits: azakai (alon@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-400"><a href="#l-400">#</a> [03:31] * Quits: Mardak (Mardak@moz-2BCEAB1.dsl.static.sonic.net) (Quit: Mardak)</li>
+ <li id="l-401"><a href="#l-401">#</a> [03:31] * Quits: cjones (cjones@15798911.D822C0E9.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-402"><a href="#l-402">#</a> [03:32] * Quits: mccr8 (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net) (Quit: mccr8)</li>
+ <li id="l-403"><a href="#l-403">#</a> [03:32] * Quits: mdas|train (mdas@CAB30FBD.8F96AEA7.2D179A7D.IP) (Quit: mdas|train)</li>
+ <li id="l-404"><a href="#l-404">#</a> [03:32] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-405"><a href="#l-405">#</a> [03:33] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-406"><a href="#l-406">#</a> [03:34] * Joins: mdas (mdas@CAB30FBD.8F96AEA7.2D179A7D.IP)</li>
+ <li id="l-407"><a href="#l-407">#</a> [03:35] * Quits: mdas (mdas@CAB30FBD.8F96AEA7.2D179A7D.IP) (Quit: mdas)</li>
+ <li id="l-408"><a href="#l-408">#</a> [03:36] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-409"><a href="#l-409">#</a> [03:36] * Quits: ekr (ekr@moz-D7997EC8.rtfm.com) (Ping timeout)</li>
+ <li id="l-410"><a href="#l-410">#</a> [03:38] * Quits: shedammit (shedammit@moz-A95F12B1.members.linode.com) (Ping timeout)</li>
+ <li id="l-411"><a href="#l-411">#</a> [03:40] * Joins: shedammit (shedammit@moz-A95F12B1.members.linode.com)</li>
+ <li id="l-412"><a href="#l-412">#</a> [03:40] * Quits: mats (chatzilla@E8A3702C.D5022173.8500CC29.IP) (Quit: ChatZilla 0.9.88.2 [Firefox 15.0/20120824154833])</li>
+ <li id="l-413" _a="padenot|away"><a href="#l-413">#</a> [03:44] * padenot|away is now known as padenot</li>
+ <li id="l-414"><a href="#l-414">#</a> [03:45] * Quits: terrence (terrence@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-415"><a href="#l-415">#</a> [03:46] * Joins: cjones (cjones@731B316.A0248ED6.56644CA2.IP)</li>
+ <li id="l-416"><a href="#l-416">#</a> [03:47] * Quits: jorendorff (jorendorff@moz-91590D94.hsd1.tn.comcast.net) (Quit: jorendorff)</li>
+ <li id="l-417"><a href="#l-417">#</a> [03:50] * Quits: zzzzz_ (chatzilla@moz-107FCDBA.hfc.comcastbusiness.net) (Quit: ChatZilla 0.9.87 [Firefox 15.0/20120824154833])</li>
+ <li id="l-418"><a href="#l-418">#</a> [03:51] * Quits: chewey (chewey@moz-4D013E9A.dip0.t-ipconnect.de) (NickServ (GHOST command used by chewey_))</li>
+ <li id="l-419"><a href="#l-419">#</a> [03:51] * Joins: chewey (chewey@moz-5D1C938C.dip0.t-ipconnect.de)</li>
+ <li id="l-420" _a="jmaher|afk"><a href="#l-420">#</a> [03:54] * jmaher|afk is now known as jmaher</li>
+ <li id="l-421" _a="joduinn"><a href="#l-421">#</a> [03:55] * joduinn is now known as joduinn-afk</li>
+ <li id="l-422" _a="khuey"><a href="#l-422">#</a> [03:55] * khuey is now known as khuey|away</li>
+ <li id="l-423"><a href="#l-423">#</a> [03:58] * Joins: Boriss (FlyingToas@moz-62AAA429.hsd1.ca.comcast.net)</li>
+ <li id="l-424"><a href="#l-424">#</a> [03:58] * Joins: benjamin (bpeterson@moz-DB4A9C19.scl3.mozilla.com)</li>
+ <li id="l-425"><a href="#l-425">#</a> [03:58] * Parts: benjamin (bpeterson@moz-DB4A9C19.scl3.mozilla.com)</li>
+ <li id="l-426" _a="khuey|away"><a href="#l-426">#</a> [03:59] * khuey|away is now known as khuey</li>
+ <li id="l-427"><a href="#l-427">#</a> [04:00] * Quits: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net) (Ping timeout)</li>
+ <li id="l-428"><a href="#l-428">#</a> [04:02] * Joins: hub (hub@moz-E2FCA694.figuiere.net)</li>
+ <li id="l-429"><a href="#l-429">#</a> [04:03] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-430"><a href="#l-430">#</a> [04:05] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-431"><a href="#l-431">#</a> [04:07] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-432"><a href="#l-432">#</a> [04:13] * Quits: cjones (cjones@731B316.A0248ED6.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-433" _a="coop"><a href="#l-433">#</a> [04:13] * coop is now known as coop|afk</li>
+ <li id="l-434"><a href="#l-434">#</a> [04:13] * Joins: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net)</li>
+ <li id="l-435"><a href="#l-435">#</a> [04:14] * Joins: dbaron (dbaron@moz-9221B6DD.dsl.dynamic.sonic.net)</li>
+ <li id="l-436" _a="ChanServ"><a href="#l-436">#</a> [04:14] * ChanServ sets mode: +o dbaron</li>
+ <li id="l-437"><a href="#l-437">#</a> [04:14] * Quits: kmoir-afk (chatzilla@moz-B0E71877.wireless.telus.com) (Ping timeout)</li>
+ <li id="l-438"><a href="#l-438">#</a> [04:15] * Joins: kmoir-afk (chatzilla@moz-ED3249A4.dmz.releng.scl3.mozilla.com)</li>
+ <li id="l-439"><a href="#l-439">#</a> [04:17] * Joins: cpeterson (cpeterson@moz-175D1473.hsd1.ca.comcast.net)</li>
+ <li id="l-440"><a href="#l-440">#</a> [04:18] * Joins: cjones (cjones@731B316.A0248ED6.56644CA2.IP)</li>
+ <li id="l-441"><a href="#l-441">#</a> [04:18] * Joins: brendan_ (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-442"><a href="#l-442">#</a> [04:18] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Connection reset by peer)</li>
+ <li id="l-443" _a="brendan_"><a href="#l-443">#</a> [04:18] * brendan_ is now known as brendan</li>
+ <li id="l-444"><a href="#l-444">#</a> [04:20] * Quits: Waldo (waldo@moz-BBE3ABD.mv.mozilla.com) (Quit: ChatZilla 0.9.87-5.1450hg.fc17 [XULRunner 14.0.1/20120717123646])</li>
+ <li id="l-445"><a href="#l-445">#</a> [04:20] * Quits: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-446"><a href="#l-446">#</a> [04:22] * Quits: nmatsakis (nmatsakis@31F52E50.3AD3A61B.2321E71E.IP) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-447"><a href="#l-447">#</a> [04:22] * Quits: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-448" _a="shorlander"><a href="#l-448">#</a> [04:24] * shorlander is now known as shorlander-away</li>
+ <li id="l-449"><a href="#l-449">#</a> [04:24] * Joins: nmatsakis (nmatsakis@31F52E50.3AD3A61B.2321E71E.IP)</li>
+ <li id="l-450"><a href="#l-450">#</a> [04:24] * Quits: bonnie (bbsurender@3035F4A5.3753335A.B66DD36E.IP) (Quit: Ex-Chat)</li>
+ <li id="l-451"><a href="#l-451">#</a> [04:24] * Quits: shorlander-away (shorlander@moz-853043D6.dhcp.insightbb.com) (Quit: Quit)</li>
+ <li id="l-452" _a="khuey"><a href="#l-452">#</a> [04:26] * khuey is now known as khuey|away</li>
+ <li id="l-453"><a href="#l-453">#</a> [04:32] * Joins: karl (karl@moz-C24B2728.jetstream.xtra.co.nz)</li>
+ <li id="l-454"><a href="#l-454">#</a> [04:33] * Quits: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net) (Ping timeout)</li>
+ <li id="l-455"><a href="#l-455">#</a> [04:34] * Joins: bonnie (bbsurender@3035F4A5.3753335A.B66DD36E.IP)</li>
+ <li id="l-456"><a href="#l-456">#</a> [04:34] * Quits: azakai|far (alon@moz-8D0CC798.lightspeed.sntcca.sbcglobal.net) (Ping timeout)</li>
+ <li id="l-457"><a href="#l-457">#</a> [04:35] * Quits: bonnie (bbsurender@3035F4A5.3753335A.B66DD36E.IP) (Quit: Ex-Chat)</li>
+ <li id="l-458" _a="jmaher"><a href="#l-458">#</a> [04:35] * jmaher is now known as jmaher|afk</li>
+ <li id="l-459"><a href="#l-459">#</a> [04:36] * Joins: azakai|far (alon@moz-8D0CC798.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-460"><a href="#l-460">#</a> [04:37] * Quits: coop|afk (Chris@moz-ED3249A4.dmz.releng.scl3.mozilla.com) (Ping timeout)</li>
+ <li id="l-461"><a href="#l-461">#</a> [04:38] * Joins: dao (dao@moz-7AD9D13C.superkabel.de)</li>
+ <li id="l-462"><a href="#l-462">#</a> [04:46] * Quits: ewong (chatzilla@moz-E5D50C2E.static.netvigator.com) (Input/output error)</li>
+ <li id="l-463"><a href="#l-463">#</a> [04:47] * Joins: ewong (chatzilla@moz-E5D50C2E.static.netvigator.com)</li>
+ <li id="l-464"><a href="#l-464">#</a> [04:48] * Joins: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net)</li>
+ <li id="l-465"><a href="#l-465">#</a> [04:49] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-466"><a href="#l-466">#</a> [04:51] * Joins: bnicholson (bnicholson@moz-DB4A9C19.scl3.mozilla.com)</li>
+ <li id="l-467"><a href="#l-467">#</a> [04:52] * Quits: rjohnson19 (chatzilla@moz-9148485F.hsd1.ma.comcast.net) (Quit: ChatZilla 0.9.88-rdmsoft [XULRunner 1.9.0.17/2009122204])</li>
+ <li id="l-468"><a href="#l-468">#</a> [04:54] * Quits: cjones (cjones@731B316.A0248ED6.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-469" _a="philor|away"><a href="#l-469">#</a> [04:56] * philor|away is now known as philor</li>
+ <li id="l-470"><a href="#l-470">#</a> [04:57] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-471"><a href="#l-471">#</a> [04:58] * Joins: mib_gsxfbh (Mibbit@388D987B.394FADDA.341544B3.IP)</li>
+ <li id="l-472"><a href="#l-472">#</a> [04:59] * Quits: mib_gsxfbh (Mibbit@388D987B.394FADDA.341544B3.IP) (Quit: <a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client)</li>
+ <li id="l-473"><a href="#l-473">#</a> [05:01] * Quits: JonathanS (JonathanS@17EDFC35.8737F162.521902B0.IP) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-474"><a href="#l-474">#</a> [05:05] * Joins: cjones (cjones@731B316.A0248ED6.56644CA2.IP)</li>
+ <li id="l-475"><a href="#l-475">#</a> [05:05] * Joins: Mook (Daily@moz-8F011215.dsl.teksavvy.com)</li>
+ <li id="l-476"><a href="#l-476">#</a> [05:07] * Joins: jdm (jdm@F2D29657.F60B0462.67AC9B1.IP)</li>
+ <li id="l-477"><a href="#l-477">#</a> [05:15] * Joins: kk1fff (kk1fff@moz-5C9F220D.dynamic.hinet.net)</li>
+ <li id="l-478"><a href="#l-478">#</a> [05:16] * Quits: nigelb (nigel@moz-8640053A.me) (Client exited)</li>
+ <li id="l-479"><a href="#l-479">#</a> [05:18] * Joins: nigelb (nigel@moz-8640053A.me)</li>
+ <li id="l-480" _a="philor"><a href="#l-480">#</a> [05:20] * philor is now known as philor|away</li>
+ <li id="l-481"><a href="#l-481">#</a> [05:21] * Quits: cjones (cjones@731B316.A0248ED6.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-482"><a href="#l-482">#</a> [05:23] * Quits: kmoir-afk (chatzilla@moz-ED3249A4.dmz.releng.scl3.mozilla.com) (Ping timeout)</li>
+ <li id="l-483"><a href="#l-483">#</a> [05:25] * Quits: dao (dao@moz-7AD9D13C.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-484" _a="philor|away"><a href="#l-484">#</a> [05:29] * philor|away is now known as philor</li>
+ <li id="l-485"><a href="#l-485">#</a> [05:30] * Joins: cjones (cjones@731B316.A0248ED6.56644CA2.IP)</li>
+ <li id="l-486"><a href="#l-486">#</a> [05:35] * Quits: kk1fff (kk1fff@moz-5C9F220D.dynamic.hinet.net) (Quit: Leaving.)</li>
+ <li id="l-487"><a href="#l-487">#</a> [05:38] * Joins: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net)</li>
+ <li id="l-488" _a="philor"><a href="#l-488">#</a> [05:40] * philor is now known as philor|away</li>
+ <li id="l-489"><a href="#l-489">#</a> [05:43] * Quits: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-490"><a href="#l-490">#</a> [05:49] * Quits: bnicholson (bnicholson@moz-DB4A9C19.scl3.mozilla.com) (Quit: Leaving)</li>
+ <li id="l-491"><a href="#l-491">#</a> [05:50] * Quits: espindola (espindola@moz-BCBD8315.dsl.teksavvy.com) (Quit: Ex-Chat)</li>
+ <li id="l-492"><a href="#l-492">#</a> [05:55] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-493" _a="khuey|away"><a href="#l-493">#</a> [05:56] * khuey|away is now known as khuey</li>
+ <li id="l-494"><a href="#l-494">#</a> [05:56] * Quits: gustavold (gustavold@AACA9B2.3CA89884.FBFF2E6D.IP) (Ping timeout)</li>
+ <li id="l-495"><a href="#l-495">#</a> [05:56] * Joins: kk1fff (kk1fff@moz-5C9F220D.dynamic.hinet.net)</li>
+ <li id="l-496"><a href="#l-496">#</a> [05:56] * Joins: gustavold (gustavold@AACA9B2.3CA89884.FBFF2E6D.IP)</li>
+ <li id="l-497"><a href="#l-497">#</a> [05:57] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-498"><a href="#l-498">#</a> [05:58] * Quits: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP) (Quit: surkov)</li>
+ <li id="l-499"><a href="#l-499">#</a> [06:00] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-500" _a="mattwoodrow|away"><a href="#l-500">#</a> [06:01] * mattwoodrow|away is now known as mattwoodrow</li>
+ <li id="l-501"><a href="#l-501">#</a> [06:02] * Joins: harth (harth@moz-FF915E69.bb.sky.com)</li>
+ <li id="l-502"><a href="#l-502">#</a> [06:05] * Quits: harth (harth@moz-FF915E69.bb.sky.com) (Input/output error)</li>
+ <li id="l-503"><a href="#l-503">#</a> [06:07] * Joins: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net)</li>
+ <li id="l-504"><a href="#l-504">#</a> [06:07] * Quits: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net) (Quit: ekr)</li>
+ <li id="l-505"><a href="#l-505">#</a> [06:07] * Joins: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net)</li>
+ <li id="l-506"><a href="#l-506">#</a> [06:09] * Quits: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com) (Client exited)</li>
+ <li id="l-507"><a href="#l-507">#</a> [06:15] * Joins: bnicholson (bnicholson@moz-F08A2DE.hsd1.ca.comcast.net)</li>
+ <li id="l-508"><a href="#l-508">#</a> [06:15] * Quits: cjones (cjones@731B316.A0248ED6.56644CA2.IP) (Quit: Leaving)</li>
+ <li id="l-509" _a="khuey"><a href="#l-509">#</a> [06:26] * khuey is now known as khuey|away</li>
+ <li id="l-510"><a href="#l-510">#</a> [06:29] * Quits: cpeterson (cpeterson@moz-175D1473.hsd1.ca.comcast.net) (Input/output error)</li>
+ <li id="l-511"><a href="#l-511">#</a> [06:36] * Quits: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net) (Ping timeout)</li>
+ <li id="l-512"><a href="#l-512">#</a> [06:37] * Joins: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net)</li>
+ <li id="l-513"><a href="#l-513">#</a> [06:39] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-514"><a href="#l-514">#</a> [06:41] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-515"><a href="#l-515">#</a> [06:41] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-516"><a href="#l-516">#</a> [06:42] * Joins: lmandel (lmandel@moz-E928DD26.dsl.bell.ca)</li>
+ <li id="l-517"><a href="#l-517">#</a> [06:43] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-518"><a href="#l-518">#</a> [06:44] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-519" _a="firebot" _r="Check-in"><a href="#l-519">#</a> [06:48] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/c2e7034b1f86">http://hg.mozilla.org/integration/mozilla-inbound/rev/c2e7034b1f86</a> - Shu-yu Guo - Bug 787282 - Initialize all slots in ParallelArray constructor when GC might trigger (r=billm)</li>
+ <li id="l-520"><a href="#l-520">#</a> [06:57] * Joins: harth (harth@moz-FF915E69.bb.sky.com)</li>
+ <li id="l-521"><a href="#l-521">#</a> [06:59] * Quits: nmatsakis (nmatsakis@31F52E50.3AD3A61B.2321E71E.IP) (Quit: Computer has gone to sleep.)</li>
+ <li id="l-522"><a href="#l-522">#</a> [06:59] * Quits: harth (harth@moz-FF915E69.bb.sky.com) (Input/output error)</li>
+ <li id="l-523"><a href="#l-523">#</a> [07:00] * Quits: jdm (jdm@F2D29657.F60B0462.67AC9B1.IP) (Ping timeout)</li>
+ <li id="l-524"><a href="#l-524">#</a> [07:01] * Quits: biesi_ (cbiesinger@moz-5EE692A7.ca.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-525"><a href="#l-525">#</a> [07:02] * Joins: Yoric (Yoric@moz-920DB13B.fbx.proxad.net)</li>
+ <li id="l-526"><a href="#l-526">#</a> [07:10] * Quits: wesj (Instantbir@moz-C03D0C61.vlan426.asr1.sfo1.gblx.net) (Ping timeout)</li>
+ <li id="l-527"><a href="#l-527">#</a> [07:11] * Joins: JonathanS (JonathanS@17EDFC35.8737F162.521902B0.IP)</li>
+ <li id="l-528" _a="jcranmer"><a href="#l-528">#</a> [07:23] * jcranmer is now known as jcranmer|away</li>
+ <li id="l-529"><a href="#l-529">#</a> [07:25] * Joins: bjacob (bjacob@moz-ADCA75DC.cpe.net.cable.rogers.com)</li>
+ <li id="l-530"><a href="#l-530">#</a> [07:28] * Quits: @dbaron (dbaron@moz-9221B6DD.dsl.dynamic.sonic.net) (Ping timeout)</li>
+ <li id="l-531"><a href="#l-531">#</a> [07:30] * Joins: jwilde (Earlybird@moz-23E1A364.aton.com)</li>
+ <li id="l-532"><a href="#l-532">#</a> [07:31] * Joins: damons (gnubeard@moz-37F0FA87.hsd1.ca.comcast.net)</li>
+ <li id="l-533"><a href="#l-533">#</a> [07:33] * Joins: mconley (mconley@moz-D640D16C.cable.teksavvy.com)</li>
+ <li id="l-534"><a href="#l-534">#</a> [07:34] * Quits: karl (karl@moz-C24B2728.jetstream.xtra.co.nz) (Ping timeout)</li>
+ <li id="l-535"><a href="#l-535">#</a> [07:34] * Quits: @roc (chatzilla@C0ACF8B.5E1E9EEA.613E47D1.IP) (Ping timeout)</li>
+ <li id="l-536"><a href="#l-536">#</a> [07:35] * Quits: Yoric (Yoric@moz-920DB13B.fbx.proxad.net) (Input/output error)</li>
+ <li id="l-537"><a href="#l-537">#</a> [07:36] * Joins: akeybl (akeybl@moz-52D39FF6.hsd1.ca.comcast.net)</li>
+ <li id="l-538"><a href="#l-538">#</a> [07:37] * Quits: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-539"><a href="#l-539">#</a> [07:37] * Quits: mconley (mconley@moz-D640D16C.cable.teksavvy.com) (Input/output error)</li>
+ <li id="l-540"><a href="#l-540">#</a> [07:40] * Quits: ekr (ekr@moz-A62EC22B.hfc.comcastbusiness.net) (Quit: ekr)</li>
+ <li id="l-541"><a href="#l-541">#</a> [07:45] * Joins: nrc (nrc@4B76F2B0.D05BE748.613E47D1.IP)</li>
+ <li id="l-542" _a="heycam"><a href="#l-542">#</a> [07:45] * heycam is now known as heycam|away</li>
+ <li id="l-543"><a href="#l-543">#</a> [07:46] * Quits: akeybl (akeybl@moz-52D39FF6.hsd1.ca.comcast.net) (Quit: Leaving...)</li>
+ <li id="l-544"><a href="#l-544">#</a> [07:49] * Joins: wesj (Instantbir@moz-135A9FA9.hsd1.ca.comcast.net)</li>
+ <li id="l-545"><a href="#l-545">#</a> [07:50] * Joins: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-546" _a="mjschranz_away"><a href="#l-546">#</a> [07:51] * mjschranz_away is now known as mjschranz</li>
+ <li id="l-547"><a href="#l-547">#</a> [07:52] * Quits: wesj (Instantbir@moz-135A9FA9.hsd1.ca.comcast.net) (Input/output error)</li>
+ <li id="l-548"><a href="#l-548">#</a> [07:58] * Joins: ctopper (craig@C3495DA.BA3DBA56.AE2B2F80.IP)</li>
+ <li id="l-549"><a href="#l-549">#</a> [08:01] * Joins: mike5w3c (MikeS@moz-2D8D6CA8.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-550"><a href="#l-550">#</a> [08:01] * Joins: teoli (teoli@EDB1D55.195E6A26.F1085784.IP)</li>
+ <li id="l-551"><a href="#l-551">#</a> [08:01] * Quits: bjacob (bjacob@moz-ADCA75DC.cpe.net.cable.rogers.com) (Ping timeout)</li>
+ <li id="l-552"><a href="#l-552">#</a> [08:03] * Quits: bb10 (bb10@moz-C7B05616.org) (Ping timeout)</li>
+ <li id="l-553"><a href="#l-553">#</a> [08:04] * Joins: atte (atte@moz-401E92F1.dhcp.inet.fi)</li>
+ <li id="l-554"><a href="#l-554">#</a> [08:04] * Joins: bb10 (bb10@moz-C7B05616.org)</li>
+ <li id="l-555"><a href="#l-555">#</a> [08:05] * Quits: jwilde (Earlybird@moz-23E1A364.aton.com) (Quit: jwilde)</li>
+ <li id="l-556"><a href="#l-556">#</a> [08:05] * Joins: jwilde (Earlybird@moz-23E1A364.aton.com)</li>
+ <li id="l-557"><a href="#l-557">#</a> [08:05] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-558"><a href="#l-558">#</a> [08:06] * Quits: trevorh (trevor@moz-AEB41D93.lns4.woo.bigpond.net.au) (Ping timeout)</li>
+ <li id="l-559"><a href="#l-559">#</a> [08:06] * Joins: Mardak (Mardak@moz-4FA48382.hsd1.ca.comcast.net)</li>
+ <li id="l-560" _a="mjschranz"><a href="#l-560">#</a> [08:08] * mjschranz is now known as mjschranz_away</li>
+ <li id="l-561"><a href="#l-561">#</a> [08:10] * Quits: lmandel (lmandel@moz-E928DD26.dsl.bell.ca) (Quit: lmandel)</li>
+ <li id="l-562"><a href="#l-562">#</a> [08:10] * Quits: kk1fff (kk1fff@moz-5C9F220D.dynamic.hinet.net) (Quit: Leaving.)</li>
+ <li id="l-563" _a="ewong"><a href="#l-563">#</a> [08:11] * ewong is now known as ewong|away</li>
+ <li id="l-564"><a href="#l-564">#</a> [08:11] * Quits: fitzgen (fitzgen@moz-BBE3ABD.mv.mozilla.com) (Quit: zzzzzzzzz)</li>
+ <li id="l-565"><a href="#l-565">#</a> [08:13] * Quits: hub (hub@moz-E2FCA694.figuiere.net) (Ping timeout)</li>
+ <li id="l-566" _a="Fallen|away"><a href="#l-566">#</a> [08:13] * Fallen|away is now known as Fallen</li>
+ <li id="l-567"><a href="#l-567">#</a> [08:20] * Quits: chewey (chewey@moz-5D1C938C.dip0.t-ipconnect.de) (Input/output error)</li>
+ <li id="l-568"><a href="#l-568">#</a> [08:23] * Joins: trevorh (trevor@moz-AA211701.lns2.woo.bigpond.net.au)</li>
+ <li id="l-569"><a href="#l-569">#</a> [08:25] * Joins: chewey (chewey@moz-5D1C938C.dip0.t-ipconnect.de)</li>
+ <li id="l-570"><a href="#l-570">#</a> [08:30] * Quits: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net) (Ping timeout)</li>
+ <li id="l-571"><a href="#l-571">#</a> [08:33] * Joins: fitzgen (fitzgen@moz-85EBB8A.dia.static.qwest.net)</li>
+ <li id="l-572"><a href="#l-572">#</a> [08:38] * Quits: jgilbert (jgilbert@moz-BBE3ABD.mv.mozilla.com) (Ping timeout)</li>
+ <li id="l-573"><a href="#l-573">#</a> [08:39] * Joins: dbaron (dbaron@moz-9221B6DD.dsl.dynamic.sonic.net)</li>
+ <li id="l-574" _a="ChanServ"><a href="#l-574">#</a> [08:39] * ChanServ sets mode: +o dbaron</li>
+ <li id="l-575"><a href="#l-575">#</a> [08:44] * Joins: teoli_ (teoli@EDB1D55.195E6A26.F1085784.IP)</li>
+ <li id="l-576"><a href="#l-576">#</a> [08:45] * Quits: teoli (teoli@EDB1D55.195E6A26.F1085784.IP) (Ping timeout)</li>
+ <li id="l-577"><a href="#l-577">#</a> [08:46] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-578"><a href="#l-578">#</a> [08:47] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-579"><a href="#l-579">#</a> [09:01] * Quits: Mook (Daily@moz-8F011215.dsl.teksavvy.com) (Quit: Mook)</li>
+ <li id="l-580"><a href="#l-580">#</a> [09:04] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-581"><a href="#l-581">#</a> [09:05] * Joins: biesi_ (cbiesinger@moz-5EE692A7.ca.hfc.comcastbusiness.net)</li>
+ <li id="l-582"><a href="#l-582">#</a> [09:10] * Joins: Ms2ger (Ms2ger@4346D5C2.336EB8AC.37724B0D.IP)</li>
+ <li id="l-583"><a href="#l-583">#</a> [09:13] * Quits: fitzgen (fitzgen@moz-85EBB8A.dia.static.qwest.net) (Ping timeout)</li>
+ <li id="l-584"><a href="#l-584">#</a> [09:19] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-585" _a="firebot" _r="Check-in"><a href="#l-585">#</a> [09:20] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/43e3314f1da8">http://hg.mozilla.org/integration/mozilla-inbound/rev/43e3314f1da8</a> - Landry Breuil - Bug 786588: Readd 32 bits padding for non-methodjit 32 bits archs. r=njn</li>
+ <li id="l-586"><a href="#l-586">#</a> [09:20] * Quits: @dbaron (dbaron@moz-9221B6DD.dsl.dynamic.sonic.net) (Ping timeout)</li>
+ <li id="l-587"><a href="#l-587">#</a> [09:21] * Quits: mikeperry (mikeperry@moz-F65CEB14.snydernet.net) (Quit: leaving)</li>
+ <li id="l-588"><a href="#l-588">#</a> [09:24] * Joins: |Stan| (Stan@moz-5533C8F1.dip.t-dialin.net)</li>
+ <li id="l-589"><a href="#l-589">#</a> [09:24] * Quits: Stan_ (Stan@moz-D596A80E.dip.t-dialin.net) (Ping timeout)</li>
+ <li id="l-590"><a href="#l-590">#</a> [09:32] * Quits: biesi_ (cbiesinger@moz-5EE692A7.ca.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-591"><a href="#l-591">#</a> [09:37] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-592" _a="Ms2ger"><a href="#l-592">#</a> [09:37] &lt;Ms2ger&gt; dbaron++</li>
+ <li id="l-593"><a href="#l-593">#</a> [09:43] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-594"><a href="#l-594">#</a> [09:44] * Quits: ctopper (craig@C3495DA.BA3DBA56.AE2B2F80.IP) (Quit: ctopper)</li>
+ <li id="l-595"><a href="#l-595">#</a> [09:47] * Joins: sankha93 (sankha93@CAF6D3FF.9C875DCD.9105FBCF.IP)</li>
+ <li id="l-596"><a href="#l-596">#</a> [09:53] * Joins: victorporof (victorporo@A3CC5C2.F695A43D.79933D60.IP)</li>
+ <li id="l-597"><a href="#l-597">#</a> [09:56] * Joins: Mossop (mossop@E9758364.9EC0A5AF.CFE928A7.IP)</li>
+ <li id="l-598" _a="philor|away"><a href="#l-598">#</a> [09:59] * philor|away is now known as philor</li>
+ <li id="l-599"><a href="#l-599">#</a> [10:00] * Quits: KWierso (KWierso@E9758364.9EC0A5AF.CFE928A7.IP) (Ping timeout)</li>
+ <li id="l-600"><a href="#l-600">#</a> [10:00] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-601"><a href="#l-601">#</a> [10:02] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-602"><a href="#l-602">#</a> [10:03] * Joins: jorendorff (jorendorff@moz-91590D94.hsd1.tn.comcast.net)</li>
+ <li id="l-603"><a href="#l-603">#</a> [10:09] * Joins: fredw (fredw@moz-B9C110E2.fbx.proxad.net)</li>
+ <li id="l-604"><a href="#l-604">#</a> [10:16] * Quits: Mardak (Mardak@moz-4FA48382.hsd1.ca.comcast.net) (Quit: Mardak)</li>
+ <li id="l-605"><a href="#l-605">#</a> [10:18] * Joins: Sander (chatzilla@moz-B871F4D3.direct-adsl.nl)</li>
+ <li id="l-606"><a href="#l-606">#</a> [10:18] * Joins: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com)</li>
+ <li id="l-607"><a href="#l-607">#</a> [10:19] * Joins: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net)</li>
+ <li id="l-608"><a href="#l-608">#</a> [10:23] * Quits: nrc (nrc@4B76F2B0.D05BE748.613E47D1.IP) (Ping timeout)</li>
+ <li id="l-609"><a href="#l-609">#</a> [10:25] * Quits: Elen (El@moz-729280DD.dhcp.inet.fi) (Ping timeout)</li>
+ <li id="l-610"><a href="#l-610">#</a> [10:25] * Quits: jorendorff (jorendorff@moz-91590D94.hsd1.tn.comcast.net) (Quit: Eaten by grue.)</li>
+ <li id="l-611"><a href="#l-611">#</a> [10:25] * Joins: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net)</li>
+ <li id="l-612"><a href="#l-612">#</a> [10:32] * Quits: kinetik (kinetik@B0506AEA.F200EF31.613E47D1.IP) (Ping timeout)</li>
+ <li id="l-613"><a href="#l-613">#</a> [10:33] * Quits: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-614"><a href="#l-614">#</a> [10:35] * Joins: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP)</li>
+ <li id="l-615"><a href="#l-615">#</a> [10:35] * Joins: kinetik (kinetik@B0506AEA.F200EF31.613E47D1.IP)</li>
+ <li id="l-616"><a href="#l-616">#</a> [10:37] * Joins: florian (Instantbir@moz-87C33FDA.kimsufi.com)</li>
+ <li id="l-617"><a href="#l-617">#</a> [10:38] * Quits: bnicholson (bnicholson@moz-F08A2DE.hsd1.ca.comcast.net) (Quit: Leaving)</li>
+ <li id="l-618" _a="philor"><a href="#l-618">#</a> [10:40] * philor is now known as philor|away</li>
+ <li id="l-619"><a href="#l-619">#</a> [10:40] * Joins: Mano (mano@4AE6E53A.EC757A99.39716721.IP)</li>
+ <li id="l-620"><a href="#l-620">#</a> [10:43] * Quits: jhopkins (jhopkins@moz-216F9986.tb.shawcable.net) (Connection reset by peer)</li>
+ <li id="l-621"><a href="#l-621">#</a> [10:43] * Joins: jhopkins (jhopkins@moz-216F9986.tb.shawcable.net)</li>
+ <li id="l-622"><a href="#l-622">#</a> [10:43] * Joins: cdiehl_ (cdiehl@moz-D00DE29.pool.mediaways.net)</li>
+ <li id="l-623"><a href="#l-623">#</a> [10:45] * Quits: cdiehl (cdiehl@moz-96842B0A.pool.mediaways.net) (Ping timeout)</li>
+ <li id="l-624" _a="cdiehl_"><a href="#l-624">#</a> [10:45] * cdiehl_ is now known as cdiehl</li>
+ <li id="l-625"><a href="#l-625">#</a> [10:46] * Joins: Mardak (Mardak@moz-4FA48382.hsd1.ca.comcast.net)</li>
+ <li id="l-626" _a="Fallen"><a href="#l-626">#</a> [10:46] * Fallen is now known as Fallen|away</li>
+ <li id="l-627"><a href="#l-627">#</a> [10:47] * Quits: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP) (Quit: surkov)</li>
+ <li id="l-628"><a href="#l-628">#</a> [10:52] * Quits: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP) (Ping timeout)</li>
+ <li id="l-629"><a href="#l-629">#</a> [10:53] * Joins: GinaYeh-laptop (GinaYeh@moz-76E845E1.dynamic.hinet.net)</li>
+ <li id="l-630"><a href="#l-630">#</a> [10:53] * Joins: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP)</li>
+ <li id="l-631"><a href="#l-631">#</a> [10:54] * Joins: Archaeopteryx (itsme@moz-756328DB.cust.telecolumbus.net)</li>
+ <li id="l-632"><a href="#l-632">#</a> [10:55] * Quits: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP) (Quit: surkov)</li>
+ <li id="l-633"><a href="#l-633">#</a> [10:55] * Quits: damons (gnubeard@moz-37F0FA87.hsd1.ca.comcast.net) (Quit: damons)</li>
+ <li id="l-634"><a href="#l-634">#</a> [10:55] * Joins: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP)</li>
+ <li id="l-635"><a href="#l-635">#</a> [10:56] * Quits: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP) (Quit: surkov)</li>
+ <li id="l-636"><a href="#l-636">#</a> [10:58] * Joins: msucan (mihai@17969768.DD17A642.B4CEF140.IP)</li>
+ <li id="l-637"><a href="#l-637">#</a> [11:01] * Quits: Mossop (mossop@E9758364.9EC0A5AF.CFE928A7.IP) (Quit: Fleeing the scene)</li>
+ <li id="l-638"><a href="#l-638">#</a> [11:02] * Joins: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-639"><a href="#l-639">#</a> [11:03] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-640"><a href="#l-640">#</a> [11:04] * Joins: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-641"><a href="#l-641">#</a> [11:05] * Quits: Sander (chatzilla@moz-B871F4D3.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-642"><a href="#l-642">#</a> [11:06] * Joins: thbet (kvirc@moz-20AEDF17.omega118.maxonline.com.sg)</li>
+ <li id="l-643"><a href="#l-643">#</a> [11:06] * Quits: fredw (fredw@moz-B9C110E2.fbx.proxad.net) (Quit: Leaving.)</li>
+ <li id="l-644" _a="thbet" _r="hi"><a href="#l-644">#</a> [11:06] &lt;thbet&gt; hi, can anyone help me with this error on line 1?</li>
+ <li id="l-645" _a="thbet"><a href="#l-645">#</a> [11:06] &lt;thbet&gt; <a href="http://pastebin.mozilla.org/1795558">http://pastebin.mozilla.org/1795558</a></li>
+ <li id="l-646" _a="thbet"><a href="#l-646">#</a> [11:07] &lt;thbet&gt; my project uses NSS library. do I have to export NSS symbols in .mozconfig?</li>
+ <li id="l-647"><a href="#l-647">#</a> [11:08] * Joins: Darwesh (chatzilla@49B1B402.E8EF102F.901B3F5.IP)</li>
+ <li id="l-648"><a href="#l-648">#</a> [11:09] * Quits: Enn (enn@moz-A875DFED.cpe.net.cable.rogers.com) (Quit: ChatZilla 0.9.88.2 [Firefox 15.0/20120824154833])</li>
+ <li id="l-649"><a href="#l-649">#</a> [11:12] * Joins: xakz (XaMaD@moz-34FBE388.fbx.proxad.net)</li>
+ <li id="l-650"><a href="#l-650">#</a> [11:13] * Joins: robhawkes (robhawkes@moz-33A339B7.dsl.cnl.uk.net)</li>
+ <li id="l-651"><a href="#l-651">#</a> [11:20] * Quits: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net) (Ping timeout)</li>
+ <li id="l-652" _a="Fallen|away"><a href="#l-652">#</a> [11:23] * Fallen|away is now known as Fallen</li>
+ <li id="l-653"><a href="#l-653">#</a> [11:27] * Quits: Mano (mano@4AE6E53A.EC757A99.39716721.IP) (Client exited)</li>
+ <li id="l-654"><a href="#l-654">#</a> [11:28] * Joins: squeakytoy (christoffe@moz-79070305.dynamic.se.alltele.net)</li>
+ <li id="l-655"><a href="#l-655">#</a> [11:29] * Joins: stefanh_netbook (chatzilla@moz-3EED0162.customers.ownit.se)</li>
+ <li id="l-656"><a href="#l-656">#</a> [11:29] * Joins: smagnin (pike@moz-DEF53BC9.fbx.proxad.net)</li>
+ <li id="l-657"><a href="#l-657">#</a> [11:31] * Quits: thbet (kvirc@moz-20AEDF17.omega118.maxonline.com.sg) (Quit: KVIrc 4.0.4 Insomnia <a href="http://www.kvirc.net/">http://www.kvirc.net/</a>)</li>
+ <li id="l-658"><a href="#l-658">#</a> [11:32] * Quits: victorporof (victorporo@A3CC5C2.F695A43D.79933D60.IP) (Quit: victorporof)</li>
+ <li id="l-659"><a href="#l-659">#</a> [11:33] * Quits: teoli_ (teoli@EDB1D55.195E6A26.F1085784.IP) (Input/output error)</li>
+ <li id="l-660"><a href="#l-660">#</a> [11:35] * Quits: xakz (XaMaD@moz-34FBE388.fbx.proxad.net) (Quit: Lost terminal)</li>
+ <li id="l-661"><a href="#l-661">#</a> [11:36] * Joins: xakz (XaMaD@moz-34FBE388.fbx.proxad.net)</li>
+ <li id="l-662"><a href="#l-662">#</a> [11:36] * Joins: TheLink (TheLink@moz-7DF028C8.pools.arcor-ip.net)</li>
+ <li id="l-663"><a href="#l-663">#</a> [11:38] * Quits: Archaeopteryx (itsme@moz-756328DB.cust.telecolumbus.net) (Quit: Too much information in my brain driving me insane)</li>
+ <li id="l-664"><a href="#l-664">#</a> [11:39] * Joins: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net)</li>
+ <li id="l-665"><a href="#l-665">#</a> [11:39] * Quits: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net) (Input/output error)</li>
+ <li id="l-666"><a href="#l-666">#</a> [11:39] * Joins: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net)</li>
+ <li id="l-667"><a href="#l-667">#</a> [11:41] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-668"><a href="#l-668">#</a> [11:42] * Joins: Mano (mano@4AE6E53A.EC757A99.39716721.IP)</li>
+ <li id="l-669"><a href="#l-669">#</a> [11:43] * Joins: fs (Elchi3@B9C9103E.56629902.2EC4CA51.IP)</li>
+ <li id="l-670"><a href="#l-670">#</a> [11:43] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-671"><a href="#l-671">#</a> [11:47] * Joins: maikmerten (maikmerten@moz-5C84B979.dynamic.qsc.de)</li>
+ <li id="l-672"><a href="#l-672">#</a> [11:49] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-673"><a href="#l-673">#</a> [11:49] * Quits: stefanh_netbook (chatzilla@moz-3EED0162.customers.ownit.se) (Quit: ChatZilla 0.9.88.2 [Firefox 14.0.1/20120713224749])</li>
+ <li id="l-674"><a href="#l-674">#</a> [11:50] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-675"><a href="#l-675">#</a> [11:52] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-676"><a href="#l-676">#</a> [11:53] * Joins: dao (dao@moz-D61FA145.superkabel.de)</li>
+ <li id="l-677"><a href="#l-677">#</a> [11:54] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-678"><a href="#l-678">#</a> [11:54] * Quits: Mano (mano@4AE6E53A.EC757A99.39716721.IP) (Client exited)</li>
+ <li id="l-679"><a href="#l-679">#</a> [11:57] * Quits: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net) (Ping timeout)</li>
+ <li id="l-680"><a href="#l-680">#</a> [11:58] * Quits: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Quit: This computer has gone to sleep)</li>
+ <li id="l-681"><a href="#l-681">#</a> [12:02] * Joins: Elen (El@moz-729280DD.dhcp.inet.fi)</li>
+ <li id="l-682"><a href="#l-682">#</a> [12:04] * Quits: GinaYeh-laptop (GinaYeh@moz-76E845E1.dynamic.hinet.net) (Quit: Leaving)</li>
+ <li id="l-683"><a href="#l-683">#</a> [12:05] * Quits: schien-laptop_ (schien@moz-51ED10AE.dynamic.hinet.net) (Input/output error)</li>
+ <li id="l-684"><a href="#l-684">#</a> [12:13] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-685"><a href="#l-685">#</a> [12:15] * Joins: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net)</li>
+ <li id="l-686"><a href="#l-686">#</a> [12:24] * Quits: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net) (Quit: Ex-Chat)</li>
+ <li id="l-687" _a="Ms2ger"><a href="#l-687">#</a> [12:26] &lt;Ms2ger&gt; Hey guys, today is International Bacon Day!</li>
+ <li id="l-688"><a href="#l-688">#</a> [12:28] * Quits: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Ping timeout)</li>
+ <li id="l-689" _a="NeilAway"><a href="#l-689">#</a> [12:29] &lt;NeilAway&gt; Ms2ger--</li>
+ <li id="l-690" _a="NeilAway"><a href="#l-690">#</a> [12:29] &lt;NeilAway&gt; (wrong channel)</li>
+ <li id="l-691" _a="Ms2ger"><a href="#l-691">#</a> [12:29] &lt;Ms2ger&gt; Every channel is a bacon channel, heretic</li>
+ <li id="l-692" _a="darktrojan"><a href="#l-692">#</a> [12:29] &lt;darktrojan&gt; bacon is relevant to #developers</li>
+ <li id="l-693"><a href="#l-693">#</a> [12:29] * Quits: florian (Instantbir@moz-87C33FDA.kimsufi.com) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-694"><a href="#l-694">#</a> [12:30] * Joins: zzzzz_ (chatzilla@moz-107FCDBA.hfc.comcastbusiness.net)</li>
+ <li id="l-695"><a href="#l-695">#</a> [12:31] * Quits: mike5w3c (MikeS@moz-2D8D6CA8.xgsspn.imtp.tachikawa.spmode.ne.jp) (Ping timeout)</li>
+ <li id="l-696" _a="mattwoodrow"><a href="#l-696">#</a> [12:31] * mattwoodrow is now known as mattwoodrow|away</li>
+ <li id="l-697" _a="darktrojan"><a href="#l-697">#</a> [12:31] &lt;darktrojan&gt; maybe not #vegetarian, Ms2ger</li>
+ <li id="l-698"><a href="#l-698">#</a> [12:31] * Joins: mike5w3c (MikeS@moz-C3194FE8.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-699"><a href="#l-699">#</a> [12:33] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-700"><a href="#l-700">#</a> [12:35] * Joins: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr)</li>
+ <li id="l-701"><a href="#l-701">#</a> [12:37] * Joins: smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi)</li>
+ <li id="l-702" _a="ChanServ"><a href="#l-702">#</a> [12:37] * ChanServ sets mode: +o smaug</li>
+ <li id="l-703"><a href="#l-703">#</a> [12:37] * Joins: rajul (quassel@3AF75EA2.8AB0B0A3.F44414AF.IP)</li>
+ <li id="l-704" _a="mattwoodrow|away"><a href="#l-704">#</a> [12:39] * mattwoodrow|away is now known as mattwoodrow</li>
+ <li id="l-705"><a href="#l-705">#</a> [12:41] * Quits: @smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi) (Ping timeout)</li>
+ <li id="l-706"><a href="#l-706">#</a> [12:44] * Joins: willyaranda (willyarand@moz-D4AE0008.dynamic.jazztel.es)</li>
+ <li id="l-707"><a href="#l-707">#</a> [12:47] * Joins: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net)</li>
+ <li id="l-708"><a href="#l-708">#</a> [12:48] * Joins: kaze` (kaze@C70B5B95.3364AC41.56644CA2.IP)</li>
+ <li id="l-709"><a href="#l-709">#</a> [12:52] * Joins: karl (karl@moz-3C01C372.jetstream.xtra.co.nz)</li>
+ <li id="l-710"><a href="#l-710">#</a> [12:53] * Quits: AryehGregor (AryehGrego@F3B92AD6.C1A33F19.C605BBF7.IP) (Ping timeout)</li>
+ <li id="l-711"><a href="#l-711">#</a> [12:53] * Joins: TheOne (one@moz-556B8D33.dip.t-dialin.net)</li>
+ <li id="l-712"><a href="#l-712">#</a> [12:53] * Quits: sankha93 (sankha93@CAF6D3FF.9C875DCD.9105FBCF.IP) (Quit: Leaving.)</li>
+ <li id="l-713"><a href="#l-713">#</a> [12:53] * Joins: AryehGregor (AryehGrego@4A76B368.F2D2BE0C.78D2F5C4.IP)</li>
+ <li id="l-714"><a href="#l-714">#</a> [12:55] * Joins: andersh (andersh@moz-BC1E5091.bredband.oister.dk)</li>
+ <li id="l-715"><a href="#l-715">#</a> [12:55] * Quits: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP) (Connection reset by peer)</li>
+ <li id="l-716"><a href="#l-716">#</a> [12:56] * Joins: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-717"><a href="#l-717">#</a> [12:59] * Joins: jacek (jacek@moz-5D707D3B.psi.wroc.pl)</li>
+ <li id="l-718"><a href="#l-718">#</a> [13:00] * Quits: karl (karl@moz-3C01C372.jetstream.xtra.co.nz) (Ping timeout)</li>
+ <li id="l-719"><a href="#l-719">#</a> [13:00] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-720"><a href="#l-720">#</a> [13:12] * Joins: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP)</li>
+ <li id="l-721"><a href="#l-721">#</a> [13:15] * Quits: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP) (Ping timeout)</li>
+ <li id="l-722"><a href="#l-722">#</a> [13:16] * Quits: decoder (quassel@moz-216446B9.own-hero.net) (Ping timeout)</li>
+ <li id="l-723"><a href="#l-723">#</a> [13:16] * Joins: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP)</li>
+ <li id="l-724"><a href="#l-724">#</a> [13:18] * Joins: decoder (quassel@moz-216446B9.own-hero.net)</li>
+ <li id="l-725"><a href="#l-725">#</a> [13:19] * Quits: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Quit: This computer has gone to sleep)</li>
+ <li id="l-726" _a="mattwoodrow"><a href="#l-726">#</a> [13:20] * mattwoodrow is now known as mattwoodrow|away</li>
+ <li id="l-727"><a href="#l-727">#</a> [13:21] * Joins: aleth (aleth@moz-24EE697D.ictp.it)</li>
+ <li id="l-728" _a="aleth"><a href="#l-728">#</a> [13:22] * aleth wonders what happened to the 'new' FF download panel (is it still preffed off?)</li>
+ <li id="l-729"><a href="#l-729">#</a> [13:23] * Joins: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP)</li>
+ <li id="l-730" _a="marco" _r="aleth"><a href="#l-730">#</a> [13:24] &lt;marco&gt; aleth: bug 747422</li>
+ <li id="l-731" _a="aleth" _r="marco"><a href="#l-731">#</a> [13:26] &lt;aleth&gt; marco: Thanks! Only asking because it was briefly turned on for Aurora 16...</li>
+ <li id="l-732" _a="mjschranz_away"><a href="#l-732">#</a> [13:33] * mjschranz_away is now known as mjschranz</li>
+ <li id="l-733"><a href="#l-733">#</a> [13:35] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-734"><a href="#l-734">#</a> [13:36] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-735"><a href="#l-735">#</a> [13:36] * Parts: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk) (Leaving)</li>
+ <li id="l-736" _a="mjschranz"><a href="#l-736">#</a> [13:36] * mjschranz is now known as mjschranz_away</li>
+ <li id="l-737"><a href="#l-737">#</a> [13:37] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-738"><a href="#l-738">#</a> [13:39] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-739"><a href="#l-739">#</a> [13:41] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-740"><a href="#l-740">#</a> [13:45] * Quits: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP) (Quit: marco)</li>
+ <li id="l-741"><a href="#l-741">#</a> [13:45] * Joins: fabrice (fabrice@C70B5B95.3364AC41.56644CA2.IP)</li>
+ <li id="l-742"><a href="#l-742">#</a> [13:46] * Joins: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP)</li>
+ <li id="l-743"><a href="#l-743">#</a> [13:49] * Quits: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP) (Ping timeout)</li>
+ <li id="l-744"><a href="#l-744">#</a> [13:50] * Quits: WG9s (bill@moz-D750CC69.maine.res.rr.com) (Quit: ChatZilla 0.9.87-5.1450hg.fc17 [XULRunner 15.0/20120827125645])</li>
+ <li id="l-745" _a="Callek" _r="aleth"><a href="#l-745">#</a> [13:50] &lt;Callek&gt; aleth: yes, that it was turned on, on aurora at all, was a bug</li>
+ <li id="l-746"><a href="#l-746">#</a> [13:50] * Joins: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-747" _a="Callek"><a href="#l-747">#</a> [13:51] &lt;Callek&gt; (you shouldn't have gotten an aurora update at all with it turned on, -- it was our fault that that happened)</li>
+ <li id="l-748" _a="Callek"><a href="#l-748">#</a> [13:51] &lt;Callek&gt; the download button will not be in its new locations for end-users without the new download panel... fwiw</li>
+ <li id="l-749"><a href="#l-749">#</a> [13:51] * Quits: jwilde (Earlybird@moz-23E1A364.aton.com) (Ping timeout)</li>
+ <li id="l-750"><a href="#l-750">#</a> [13:52] * Quits: kaze` (kaze@C70B5B95.3364AC41.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-751"><a href="#l-751">#</a> [13:53] * Joins: kmoir-afk (chatzilla@moz-ECBAC1F2.wireless.telus.com)</li>
+ <li id="l-752"><a href="#l-752">#</a> [13:56] * Quits: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-753"><a href="#l-753">#</a> [13:58] * Joins: odin_ (Odin@moz-66D3502E.zone5.bethere.co.uk)</li>
+ <li id="l-754"><a href="#l-754">#</a> [14:04] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-755"><a href="#l-755">#</a> [14:10] * Quits: rajul (quassel@3AF75EA2.8AB0B0A3.F44414AF.IP) (Client exited)</li>
+ <li id="l-756"><a href="#l-756">#</a> [14:11] * Quits: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP) (Ping timeout)</li>
+ <li id="l-757" _a="mounir" _r="baku"><a href="#l-757">#</a> [14:17] &lt;mounir&gt; baku: ping</li>
+ <li id="l-758"><a href="#l-758">#</a> [14:18] * Joins: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com)</li>
+ <li id="l-759"><a href="#l-759">#</a> [14:20] * Quits: gustavold (gustavold@AACA9B2.3CA89884.FBFF2E6D.IP) (Quit: Leaving.)</li>
+ <li id="l-760"><a href="#l-760">#</a> [14:21] * Quits: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP) (Ping timeout)</li>
+ <li id="l-761"><a href="#l-761">#</a> [14:21] * Joins: victorporof (victorporo@5E3230DC.6D2FB7A4.79933D60.IP)</li>
+ <li id="l-762"><a href="#l-762">#</a> [14:25] * Joins: FusedTogether (Thunderbir@8BD12562.EB20C806.D39A8B3F.IP)</li>
+ <li id="l-763"><a href="#l-763">#</a> [14:25] * Quits: tonymec|away (tonymec@moz-63372887.adsl-dyn.isp.belgacom.be) (Ping timeout)</li>
+ <li id="l-764"><a href="#l-764">#</a> [14:29] * Joins: stevee (Miranda@moz-17087BE2.cable.virginmedia.com)</li>
+ <li id="l-765"><a href="#l-765">#</a> [14:30] * Joins: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP)</li>
+ <li id="l-766"><a href="#l-766">#</a> [14:31] * Joins: smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi)</li>
+ <li id="l-767" _a="ChanServ"><a href="#l-767">#</a> [14:31] * ChanServ sets mode: +o smaug</li>
+ <li id="l-768"><a href="#l-768">#</a> [14:33] * Quits: FusedTogether (Thunderbir@8BD12562.EB20C806.D39A8B3F.IP) (Ping timeout)</li>
+ <li id="l-769"><a href="#l-769">#</a> [14:34] * Joins: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se)</li>
+ <li id="l-770"><a href="#l-770">#</a> [14:37] * Joins: FusedTogether (Thunderbir@8BD12562.EB20C806.D39A8B3F.IP)</li>
+ <li id="l-771"><a href="#l-771">#</a> [14:39] * Quits: @smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi) (Ping timeout)</li>
+ <li id="l-772"><a href="#l-772">#</a> [14:39] * Quits: fabrice (fabrice@C70B5B95.3364AC41.56644CA2.IP) (Ping timeout)</li>
+ <li id="l-773"><a href="#l-773">#</a> [14:40] * Joins: stefanh (stefanh@moz-3EED0162.customers.ownit.se)</li>
+ <li id="l-774" _a="stefanh"><a href="#l-774">#</a> [14:41] * stefanh is now known as stefanh|away</li>
+ <li id="l-775"><a href="#l-775">#</a> [14:41] * Joins: fabrice (fabrice@2D9B2328.2BDEAC60.56644CA2.IP)</li>
+ <li id="l-776"><a href="#l-776">#</a> [14:41] * Quits: dao (dao@moz-D61FA145.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-777"><a href="#l-777">#</a> [14:44] * Quits: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se) (Connection reset by peer)</li>
+ <li id="l-778"><a href="#l-778">#</a> [14:45] * Joins: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se)</li>
+ <li id="l-779"><a href="#l-779">#</a> [14:46] * Joins: srini533 (Mibbit@DACDBB41.D0DE5103.BD94A9D5.IP)</li>
+ <li id="l-780"><a href="#l-780">#</a> [14:49] * Joins: Thomasy (chatzilla@moz-B53403DD.dynamic.kbronet.com.tw)</li>
+ <li id="l-781"><a href="#l-781">#</a> [14:50] * Quits: Thomasy (chatzilla@moz-B53403DD.dynamic.kbronet.com.tw) (Client exited)</li>
+ <li id="l-782"><a href="#l-782">#</a> [14:52] * Quits: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-783"><a href="#l-783">#</a> [14:54] * Joins: brendan (brendaneic@C2BDF0E7.F79BB743.6057D976.IP)</li>
+ <li id="l-784"><a href="#l-784">#</a> [14:54] * Joins: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr)</li>
+ <li id="l-785"><a href="#l-785">#</a> [14:58] * Quits: cc (cc@moz-C24560BF.w92-140.abo.wanadoo.fr) (Ping timeout)</li>
+ <li id="l-786" _a="sid0"><a href="#l-786">#</a> [14:59] &lt;sid0&gt; posted about pymake to m.d.platform and m.d.builds</li>
+ <li id="l-787"><a href="#l-787">#</a> [14:59] * Quits: mw22 (chatzilla@moz-FB753258.adsl.wanadoo.nl) (Ping timeout)</li>
+ <li id="l-788"><a href="#l-788">#</a> [15:00] * Quits: FusedTogether (Thunderbir@8BD12562.EB20C806.D39A8B3F.IP) (Ping timeout)</li>
+ <li id="l-789"><a href="#l-789">#</a> [15:01] * Joins: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-790"><a href="#l-790">#</a> [15:04] * Quits: srini533 (Mibbit@DACDBB41.D0DE5103.BD94A9D5.IP) (Quit: <a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client)</li>
+ <li id="l-791"><a href="#l-791">#</a> [15:04] * Joins: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP)</li>
+ <li id="l-792"><a href="#l-792">#</a> [15:06] * Joins: rjohnson19 (chatzilla@moz-9148485F.hsd1.ma.comcast.net)</li>
+ <li id="l-793" _a="darktrojan"><a href="#l-793">#</a> [15:07] &lt;darktrojan&gt; sid0++</li>
+ <li id="l-794"><a href="#l-794">#</a> [15:08] * Joins: Suresh (chatzilla@5690A85B.6095F024.EB06F97B.IP)</li>
+ <li id="l-795" _a="darktrojan" _r="sid0"><a href="#l-795">#</a> [15:08] &lt;darktrojan&gt; sid0, I don't suppose that means they got a python upgrade, does it?</li>
+ <li id="l-796" _a="sid0" _r="darktrojan"><a href="#l-796">#</a> [15:09] &lt;sid0&gt; darktrojan: well the windows builders were already on 2.6</li>
+ <li id="l-797" _a="darktrojan"><a href="#l-797">#</a> [15:09] &lt;darktrojan&gt; oh</li>
+ <li id="l-798" _a="sid0"><a href="#l-798">#</a> [15:09] &lt;sid0&gt; pymake needs 2.6+</li>
+ <li id="l-799" _a="darktrojan"><a href="#l-799">#</a> [15:10] &lt;darktrojan&gt; what are the windows test machines running?</li>
+ <li id="l-800" _a="sid0"><a href="#l-800">#</a> [15:10] &lt;sid0&gt; uh</li>
+ <li id="l-801" _a="sid0"><a href="#l-801">#</a> [15:10] &lt;sid0&gt; I'm not sure</li>
+ <li id="l-802" _a="sid0"><a href="#l-802">#</a> [15:10] &lt;sid0&gt; but they don't use make!</li>
+ <li id="l-803" _a="darktrojan" _r="k"><a href="#l-803">#</a> [15:10] &lt;darktrojan&gt; k, nm</li>
+ <li id="l-804"><a href="#l-804">#</a> [15:10] * Parts: aleth (aleth@moz-24EE697D.ictp.it)</li>
+ <li id="l-805" _a="darktrojan"><a href="#l-805">#</a> [15:12] &lt;darktrojan&gt; I was working on parallel xpcshell tests, but I stopped since some of the testers run 2.5 and I need 2.6</li>
+ <li id="l-806" _a="sid0"><a href="#l-806">#</a> [15:13] &lt;sid0&gt; aqh</li>
+ <li id="l-807" _a="sid0"><a href="#l-807">#</a> [15:13] &lt;sid0&gt; er</li>
+ <li id="l-808" _a="sid0"><a href="#l-808">#</a> [15:13] &lt;sid0&gt; ah</li>
+ <li id="l-809" _a="sid0"><a href="#l-809">#</a> [15:13] &lt;sid0&gt; there's a bug to upgrade everything to 2.7</li>
+ <li id="l-810"><a href="#l-810">#</a> [15:13] * Joins: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-811" _a="darktrojan"><a href="#l-811">#</a> [15:13] &lt;darktrojan&gt; yeah I know</li>
+ <li id="l-812"><a href="#l-812">#</a> [15:14] * Quits: darktrojan (geoff@moz-30B3CCFD.telstraclear.net) (Quit: darktrojan)</li>
+ <li id="l-813"><a href="#l-813">#</a> [15:15] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-814" _a="Ms2ger"><a href="#l-814">#</a> [15:17] &lt;Ms2ger&gt; There's been one for ages</li>
+ <li id="l-815"><a href="#l-815">#</a> [15:17] * Quits: brendan (brendaneic@C2BDF0E7.F79BB743.6057D976.IP) (Quit: brendan)</li>
+ <li id="l-816"><a href="#l-816">#</a> [15:17] * Quits: lerc (quassel@121-74-245-130.telstraclear.net) (Ping timeout)</li>
+ <li id="l-817"><a href="#l-817">#</a> [15:21] * Quits: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com) (Client exited)</li>
+ <li id="l-818"><a href="#l-818">#</a> [15:25] * Joins: deLta30_ (quassel@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-819"><a href="#l-819">#</a> [15:25] * Quits: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP) (Connection reset by peer)</li>
+ <li id="l-820"><a href="#l-820">#</a> [15:28] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-821"><a href="#l-821">#</a> [15:32] * Quits: TheOne (one@moz-556B8D33.dip.t-dialin.net) (Input/output error)</li>
+ <li id="l-822"><a href="#l-822">#</a> [15:33] * Joins: StockHunter (StockHunte@moz-C0D4659B.ldv-co.client.bresnan.net)</li>
+ <li id="l-823"><a href="#l-823">#</a> [15:36] * Joins: mike5w3c_ (MikeS@moz-4D5F5A07.xgsspn.imtp.tachikawa.spmode.ne.jp)</li>
+ <li id="l-824" _a="mjschranz_away"><a href="#l-824">#</a> [15:36] * mjschranz_away is now known as mjschranz</li>
+ <li id="l-825"><a href="#l-825">#</a> [15:36] * Quits: mike5w3c (MikeS@moz-C3194FE8.xgsspn.imtp.tachikawa.spmode.ne.jp) (Ping timeout)</li>
+ <li id="l-826" _a="mike5w3c_"><a href="#l-826">#</a> [15:36] * mike5w3c_ is now known as mike5w3c</li>
+ <li id="l-827"><a href="#l-827">#</a> [15:38] * Joins: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP)</li>
+ <li id="l-828"><a href="#l-828">#</a> [15:38] * Joins: RyanVM (RyanVM@moz-403902F0.phlapa.fios.verizon.net)</li>
+ <li id="l-829"><a href="#l-829">#</a> [15:44] * Quits: mikeratcliffe (mikeratcli@moz-70EA295B.evosurge.com) (Client exited)</li>
+ <li id="l-830"><a href="#l-830">#</a> [15:47] * Joins: brendan (brendaneic@C2BDF0E7.F79BB743.6057D976.IP)</li>
+ <li id="l-831"><a href="#l-831">#</a> [15:49] * Quits: kmoir-afk (chatzilla@moz-ECBAC1F2.wireless.telus.com) (Ping timeout)</li>
+ <li id="l-832"><a href="#l-832">#</a> [15:51] * Joins: dao (dao@moz-D61FA145.superkabel.de)</li>
+ <li id="l-833"><a href="#l-833">#</a> [15:51] * Quits: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se) (Quit: Ex-Chat)</li>
+ <li id="l-834"><a href="#l-834">#</a> [15:52] * Quits: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-835"><a href="#l-835">#</a> [15:52] * Joins: WG9s (bill@moz-D750CC69.maine.res.rr.com)</li>
+ <li id="l-836" _a="ewong|sleep"><a href="#l-836">#</a> [15:53] * ewong|sleep is now known as ewong</li>
+ <li id="l-837" _a="ewong" _r="mbrubeck"><a href="#l-837">#</a> [15:54] &lt;ewong&gt; mbrubeck: ping</li>
+ <li id="l-838"><a href="#l-838">#</a> [15:54] * Quits: valenting (Thunderbir@moz-85EBB8A.dia.static.qwest.net) (Ping timeout)</li>
+ <li id="l-839"><a href="#l-839">#</a> [15:56] * Quits: dao (dao@moz-D61FA145.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-840" _a="ewong"><a href="#l-840">#</a> [15:58] &lt;ewong&gt; mbrubeck actually nvm..  wanted to ask you about bug #683833 and how I have no idea how to get it to refresh.. but I'll catch you later..  unping</li>
+ <li id="l-841" _a="ewong"><a href="#l-841">#</a> [15:58] * ewong is now known as ewong|sleep</li>
+ <li id="l-842" _a="ewong|sleep"><a href="#l-842">#</a> [16:03] * ewong|sleep is now known as ewong</li>
+ <li id="l-843"><a href="#l-843">#</a> [16:05] * Quits: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP) (Ping timeout)</li>
+ <li id="l-844"><a href="#l-844">#</a> [16:05] * Joins: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP)</li>
+ <li id="l-845"><a href="#l-845">#</a> [16:06] * Quits: WG9s (bill@moz-D750CC69.maine.res.rr.com) (Quit: ChatZilla 0.9.87-5.1450hg.fc17 [XULRunner 15.0/20120827125645])</li>
+ <li id="l-846"><a href="#l-846">#</a> [16:06] * Quits: brendan (brendaneic@C2BDF0E7.F79BB743.6057D976.IP) (Quit: brendan)</li>
+ <li id="l-847"><a href="#l-847">#</a> [16:07] * Joins: JeroenDeDauw (jeroen@moz-54A77D60.dip.t-dialin.net)</li>
+ <li id="l-848"><a href="#l-848">#</a> [16:11] * Joins: jdm (jdm@moz-4F4DD68.cable.teksavvy.com)</li>
+ <li id="l-849"><a href="#l-849">#</a> [16:17] * Joins: mconley (mconley@moz-D640D16C.cable.teksavvy.com)</li>
+ <li id="l-850"><a href="#l-850">#</a> [16:17] * Joins: RealRaven (Thunderbir@4F68D432.50CFDD29.C3498625.IP)</li>
+ <li id="l-851"><a href="#l-851">#</a> [16:20] * Joins: ekr (ekr@moz-D7997EC8.rtfm.com)</li>
+ <li id="l-852"><a href="#l-852">#</a> [16:20] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-853"><a href="#l-853">#</a> [16:22] * Joins: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net)</li>
+ <li id="l-854"><a href="#l-854">#</a> [16:22] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Ping timeout)</li>
+ <li id="l-855"><a href="#l-855">#</a> [16:23] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-856"><a href="#l-856">#</a> [16:24] * Quits: macmaN (chezburger@moz-DA23949E.dyn.estpak.ee) (Ping timeout)</li>
+ <li id="l-857"><a href="#l-857">#</a> [16:25] * Quits: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com) (Client exited)</li>
+ <li id="l-858"><a href="#l-858">#</a> [16:26] * Joins: mikeratcliffe (mikeratcli@moz-70EA295B.evosurge.com)</li>
+ <li id="l-859"><a href="#l-859">#</a> [16:26] * Joins: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-860"><a href="#l-860">#</a> [16:26] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-861" _a="Fallen"><a href="#l-861">#</a> [16:26] * Fallen is now known as Fallen|away</li>
+ <li id="l-862"><a href="#l-862">#</a> [16:32] * Quits: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net) (Quit: ChatZilla 0.9.88-rdmsoft [XULRunner 1.9.0.17/2009122204])</li>
+ <li id="l-863"><a href="#l-863">#</a> [16:32] * Joins: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net)</li>
+ <li id="l-864" _a="ewong"><a href="#l-864">#</a> [16:38] * ewong is now known as ewong|sleep</li>
+ <li id="l-865"><a href="#l-865">#</a> [16:39] * Quits: zzzzz_ (chatzilla@moz-107FCDBA.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-866"><a href="#l-866">#</a> [16:39] * Joins: zzzzz_ (chatzilla@moz-107FCDBA.hfc.comcastbusiness.net)</li>
+ <li id="l-867"><a href="#l-867">#</a> [16:40] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-868"><a href="#l-868">#</a> [16:42] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-869" _a="mjschranz"><a href="#l-869">#</a> [16:44] * mjschranz is now known as mjschranz_away</li>
+ <li id="l-870"><a href="#l-870">#</a> [16:46] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-871" _a="Fallen|away"><a href="#l-871">#</a> [16:47] * Fallen|away is now known as Fallen</li>
+ <li id="l-872"><a href="#l-872">#</a> [16:49] * Quits: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP) (Connection reset by peer)</li>
+ <li id="l-873"><a href="#l-873">#</a> [16:52] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Ping timeout)</li>
+ <li id="l-874"><a href="#l-874">#</a> [16:55] * Joins: TheOne (one@moz-556B8D33.dip.t-dialin.net)</li>
+ <li id="l-875"><a href="#l-875">#</a> [16:55] * Quits: surkov (surkov@CE4382E5.84614B10.33A1AC3C.IP) (Quit: surkov)</li>
+ <li id="l-876"><a href="#l-876">#</a> [16:59] * Joins: smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi)</li>
+ <li id="l-877" _a="ChanServ"><a href="#l-877">#</a> [16:59] * ChanServ sets mode: +o smaug</li>
+ <li id="l-878" _a="marco"><a href="#l-878">#</a> [17:02] &lt;marco&gt; how can I get a pointer to a nsRefPtr object?</li>
+ <li id="l-879" _a="sid0" _r="marco"><a href="#l-879">#</a> [17:03] &lt;sid0&gt; marco: do you mean the underlying pointer?</li>
+ <li id="l-880"><a href="#l-880">#</a> [17:03] * Joins: schien-laptop (schien@moz-51ED10AE.dynamic.hinet.net)</li>
+ <li id="l-881" _a="sid0"><a href="#l-881">#</a> [17:03] &lt;sid0&gt; I think it's .get() or something</li>
+ <li id="l-882" _a="Ms2ger" _r="marco"><a href="#l-882">#</a> [17:04] &lt;Ms2ger&gt; marco, .get(), but why do you need it?</li>
+ <li id="l-883"><a href="#l-883">#</a> [17:05] * Quits: ewong|sleep (chatzilla@moz-5B0EF77B.static.netvigator.com) (Ping timeout)</li>
+ <li id="l-884" _a="marco" _r="Ms2ger"><a href="#l-884">#</a> [17:05] &lt;marco&gt; Ms2ger: I've a nsRefPtr object that I want to static cast</li>
+ <li id="l-885" _a="Ms2ger"><a href="#l-885">#</a> [17:05] &lt;Ms2ger&gt; Ah</li>
+ <li id="l-886"><a href="#l-886">#</a> [17:06] * Joins: ewong|sleep (chatzilla@moz-5B0EF77B.static.netvigator.com)</li>
+ <li id="l-887"><a href="#l-887">#</a> [17:07] * Quits: fabrice (fabrice@2D9B2328.2BDEAC60.56644CA2.IP) (Quit: Leaving.)</li>
+ <li id="l-888"><a href="#l-888">#</a> [17:07] * Quits: mconley (mconley@moz-D640D16C.cable.teksavvy.com) (Input/output error)</li>
+ <li id="l-889"><a href="#l-889">#</a> [17:08] * Quits: @smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi) (Ping timeout)</li>
+ <li id="l-890"><a href="#l-890">#</a> [17:08] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-891"><a href="#l-891">#</a> [17:09] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-892"><a href="#l-892">#</a> [17:10] * Quits: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-893"><a href="#l-893">#</a> [17:15] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-894"><a href="#l-894">#</a> [17:16] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Quit: Leaving)</li>
+ <li id="l-895"><a href="#l-895">#</a> [17:18] * Quits: Suresh (chatzilla@5690A85B.6095F024.EB06F97B.IP) (Ping timeout)</li>
+ <li id="l-896"><a href="#l-896">#</a> [17:21] * Joins: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se)</li>
+ <li id="l-897"><a href="#l-897">#</a> [17:23] * Joins: dao (dao@moz-B16A317D.superkabel.de)</li>
+ <li id="l-898"><a href="#l-898">#</a> [17:24] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-899"><a href="#l-899">#</a> [17:24] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Client exited)</li>
+ <li id="l-900"><a href="#l-900">#</a> [17:24] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-901"><a href="#l-901">#</a> [17:32] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-902"><a href="#l-902">#</a> [17:39] * Quits: dao (dao@moz-B16A317D.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-903"><a href="#l-903">#</a> [17:39] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-904"><a href="#l-904">#</a> [17:42] * Joins: bjacob (bjacob@moz-ADCA75DC.cpe.net.cable.rogers.com)</li>
+ <li id="l-905" _a="jcranmer|away"><a href="#l-905">#</a> [17:45] * jcranmer|away is now known as jcranmer</li>
+ <li id="l-906" _a="Fallen"><a href="#l-906">#</a> [17:45] * Fallen is now known as Fallen|away</li>
+ <li id="l-907" _a="firebot" _r="Check-in"><a href="#l-907">#</a> [17:46] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/72e7dbce3872">http://hg.mozilla.org/integration/mozilla-inbound/rev/72e7dbce3872</a> - Marco Castelluccio - Bug 778029 - Fix distorted windowless flash with X11 GL layers. r=BenWa</li>
+ <li id="l-908" _a="firebot"><a href="#l-908">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/304f86e12b60">http://hg.mozilla.org/integration/mozilla-inbound/rev/304f86e12b60</a> - Gene Lian - Bug 785298 - Tests for carrying a customized message to notify &quot;mozsettings-changed&quot; observers. r=gwagner</li>
+ <li id="l-909" _a="firebot"><a href="#l-909">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/12b61cd59f69">http://hg.mozilla.org/integration/mozilla-inbound/rev/12b61cd59f69</a> - Atte Kemppila - Bug 771888 - Fix tree selection handling in Page Info &gt; Media. r=adw</li>
+ <li id="l-910" _a="Ms2ger" _r="Nope"><a href="#l-910">#</a> [17:46] &lt;Ms2ger&gt; Nope, doesn't look like the leak in browser_bug784142.js is going to get filed</li>
+ <li id="l-911" _a="firebot"><a href="#l-911">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/ebc0ba34959d">http://hg.mozilla.org/integration/mozilla-inbound/rev/ebc0ba34959d</a> - Michael Kohler - Bug 610017 - _isCmdLineEmpty should not clobber window.arguments[0]. r=ttaubert</li>
+ <li id="l-912" _a="firebot"><a href="#l-912">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/dff1055c2f50">http://hg.mozilla.org/integration/mozilla-inbound/rev/dff1055c2f50</a> - Gene Lian - Bug 785298 - Settings API: set() can carry a customized message to notify &quot;mozsettings-changed&quot; observers. r=gwagner</li>
+ <li id="l-913" _a="firebot"><a href="#l-913">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/a88c590a2c0b">http://hg.mozilla.org/integration/mozilla-inbound/rev/a88c590a2c0b</a> - David Rajchenbach-Teller - Bug 769191 - Have OS.File.prototype.{readTo, write} extrapolate a default length. r=froydnj</li>
+ <li id="l-914" _a="Ms2ger"><a href="#l-914">#</a> [17:46] * Ms2ger looks for someone to blame for browser_DeferredTask.js instead</li>
+ <li id="l-915" _a="firebot"><a href="#l-915">#</a> [17:46] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/978761f9b84e">http://hg.mozilla.org/integration/mozilla-inbound/rev/978761f9b84e</a> - Paul Adenot - Bug 783953 - Rename MOZ_SAMPLE_TYPE_S16LE to MOZ_SAMPLE_TYPE_S16. r=kinetik,roc</li>
+ <li id="l-916"><a href="#l-916">#</a> [17:47] * Quits: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com) (Ping timeout)</li>
+ <li id="l-917"><a href="#l-917">#</a> [17:48] * Quits: deLta30_ (quassel@8E6C34C1.A3F9767A.1C37C358.IP) (Ping timeout)</li>
+ <li id="l-918" _a="Ms2ger"><a href="#l-918">#</a> [17:49] * Ms2ger complains in bug 775328</li>
+ <li id="l-919"><a href="#l-919">#</a> [17:52] * Joins: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com)</li>
+ <li id="l-920"><a href="#l-920">#</a> [17:53] * Quits: eeejay (eeejay@254285E4.737470A8.A0C1B52F.IP) (Ping timeout)</li>
+ <li id="l-921"><a href="#l-921">#</a> [17:53] * Joins: Mook (Daily@moz-8F011215.dsl.teksavvy.com)</li>
+ <li id="l-922" _a="Fallen|away"><a href="#l-922">#</a> [17:54] * Fallen|away is now known as Fallen</li>
+ <li id="l-923"><a href="#l-923">#</a> [18:00] * Joins: eeejay (eeejay@254285E4.737470A8.A0C1B52F.IP)</li>
+ <li id="l-924"><a href="#l-924">#</a> [18:01] * Joins: mconley (mconley@moz-D640D16C.cable.teksavvy.com)</li>
+ <li id="l-925"><a href="#l-925">#</a> [18:02] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Client exited)</li>
+ <li id="l-926" _a="RyanVM" _r="Ms2ger"><a href="#l-926">#</a> [18:08] &lt;RyanVM&gt; Ms2ger: feel free to file too ;)</li>
+ <li id="l-927" _a="Ms2ger"><a href="#l-927">#</a> [18:08] &lt;Ms2ger&gt; Wasn't someone doing a tool?</li>
+ <li id="l-928"><a href="#l-928">#</a> [18:08] * Joins: WG9s (bill@moz-D750CC69.maine.res.rr.com)</li>
+ <li id="l-929"><a href="#l-929">#</a> [18:09] * Quits: ekr (ekr@moz-D7997EC8.rtfm.com) (Ping timeout)</li>
+ <li id="l-930" _a="jdm"><a href="#l-930">#</a> [18:10] &lt;jdm&gt; it sounded like edmorley's plans were in motion, so I stopped working on mine</li>
+ <li id="l-931"><a href="#l-931">#</a> [18:11] * Quits: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com) (Client exited)</li>
+ <li id="l-932"><a href="#l-932">#</a> [18:11] * Joins: evilpie (chatzilla@moz-C21AD520.pools.arcor-ip.net)</li>
+ <li id="l-933"><a href="#l-933">#</a> [18:14] * Quits: tchevalier (Daily@moz-CB77F747.w81-251.abo.wanadoo.fr) (Quit: tchevalier)</li>
+ <li id="l-934"><a href="#l-934">#</a> [18:14] * Joins: tchevalier (Daily@moz-CB77F747.w81-251.abo.wanadoo.fr)</li>
+ <li id="l-935"><a href="#l-935">#</a> [18:23] * Quits: mbrubeck (mbrubeck@moz-755AD63.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-936"><a href="#l-936">#</a> [18:26] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-937"><a href="#l-937">#</a> [18:28] * Quits: jacek (jacek@moz-5D707D3B.psi.wroc.pl) (Quit: Konversation terminated!)</li>
+ <li id="l-938"><a href="#l-938">#</a> [18:29] * Joins: mbrubeck (mbrubeck@moz-755AD63.hsd1.wa.comcast.net)</li>
+ <li id="l-939"><a href="#l-939">#</a> [18:30] * Quits: mbrubeck (mbrubeck@moz-755AD63.hsd1.wa.comcast.net) (Quit: Leaving.)</li>
+ <li id="l-940"><a href="#l-940">#</a> [18:33] * Quits: mconley (mconley@moz-D640D16C.cable.teksavvy.com) (Input/output error)</li>
+ <li id="l-941"><a href="#l-941">#</a> [18:34] * Joins: twi (Adium@moz-59F9C571.cust.dsl.vodafone.it)</li>
+ <li id="l-942"><a href="#l-942">#</a> [18:35] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-943"><a href="#l-943">#</a> [18:41] * Quits: TheOne (one@moz-556B8D33.dip.t-dialin.net) (Input/output error)</li>
+ <li id="l-944"><a href="#l-944">#</a> [18:43] * Joins: macmaN (chezburger@moz-DA23949E.dyn.estpak.ee)</li>
+ <li id="l-945"><a href="#l-945">#</a> [18:45] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-946"><a href="#l-946">#</a> [18:47] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-947"><a href="#l-947">#</a> [18:51] * Joins: ctopper (craig@C3495DA.BA3DBA56.AE2B2F80.IP)</li>
+ <li id="l-948"><a href="#l-948">#</a> [18:54] * Joins: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net)</li>
+ <li id="l-949"><a href="#l-949">#</a> [18:54] * Joins: kdeeq (chatzilla@moz-937443ED.elisa-laajakaista.fi)</li>
+ <li id="l-950"><a href="#l-950">#</a> [18:55] * Joins: jwilde (Earlybird@moz-23E1A364.aton.com)</li>
+ <li id="l-951"><a href="#l-951">#</a> [18:55] * Joins: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-952"><a href="#l-952">#</a> [18:59] * Joins: smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi)</li>
+ <li id="l-953" _a="ChanServ"><a href="#l-953">#</a> [18:59] * ChanServ sets mode: +o smaug</li>
+ <li id="l-954"><a href="#l-954">#</a> [19:00] * Joins: Mano (mano@4AE6E53A.EC757A99.39716721.IP)</li>
+ <li id="l-955"><a href="#l-955">#</a> [19:00] * Quits: marco (Thunderbir@6D86B2BF.60DCEFAD.10DC0B64.IP) (Quit: marco)</li>
+ <li id="l-956"><a href="#l-956">#</a> [19:04] * Joins: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-957"><a href="#l-957">#</a> [19:04] * Quits: RyanVM (RyanVM@moz-403902F0.phlapa.fios.verizon.net) (Quit: ChatZilla 0.9.88.2 [Firefox 18.0a1/20120827163248])</li>
+ <li id="l-958"><a href="#l-958">#</a> [19:06] * Joins: automata (automata@3E0AB089.8DDD1F9.16867D26.IP)</li>
+ <li id="l-959" _a="firebot" _r="Check-in"><a href="#l-959">#</a> [19:08] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/e4d15fd2146d">http://hg.mozilla.org/integration/mozilla-inbound/rev/e4d15fd2146d</a> - Abhishek Potnis - Bug 785319 - Don't throw when setting WebSocket.binaryType to an invalid value; f=Ms2ger r=smaug</li>
+ <li id="l-960" _a="firebot"><a href="#l-960">#</a> [19:08] &lt;firebot&gt; <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/ed82d3fb789c">http://hg.mozilla.org/integration/mozilla-inbound/rev/ed82d3fb789c</a> - Zuhao(Joe) Chen - Bug 784602 - Add identity prefs to about:config. r=MattN</li>
+ <li id="l-961"><a href="#l-961">#</a> [19:11] * Parts: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-962"><a href="#l-962">#</a> [19:12] * Quits: ctopper (craig@C3495DA.BA3DBA56.AE2B2F80.IP) (Quit: ctopper)</li>
+ <li id="l-963"><a href="#l-963">#</a> [19:13] * Joins: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-964"><a href="#l-964">#</a> [19:13] * Parts: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-965"><a href="#l-965">#</a> [19:13] * Joins: lduros (lduros@moz-D41962F7.phil.east.verizon.net)</li>
+ <li id="l-966"><a href="#l-966">#</a> [19:14] * Quits: deLta30 (quassel@8E6C34C1.A3F9767A.1C37C358.IP) (Client exited)</li>
+ <li id="l-967" _a="decoder"><a href="#l-967">#</a> [19:15] &lt;decoder&gt; how do I run a single crashtest like content/xul/templates/src/crashtests/329335-1.xul</li>
+ <li id="l-968" _a="decoder"><a href="#l-968">#</a> [19:16] &lt;decoder&gt; that also requires chrome privs I think?</li>
+ <li id="l-969" _a="Ms2ger"><a href="#l-969">#</a> [19:16] &lt;Ms2ger&gt; You don't run a single crashtest</li>
+ <li id="l-970" _a="Ms2ger"><a href="#l-970">#</a> [19:17] &lt;Ms2ger&gt; TEST_PATH=content/xul/templates/src/crashtests/crashtests.list make crashtest</li>
+ <li id="l-971" _a="Ms2ger"><a href="#l-971">#</a> [19:17] &lt;Ms2ger&gt; is close, though</li>
+ <li id="l-972" _a="decoder" _r="Ms2ger"><a href="#l-972">#</a> [19:17] &lt;decoder&gt; Ms2ger: I tried that</li>
+ <li id="l-973" _a="decoder"><a href="#l-973">#</a> [19:17] &lt;decoder&gt; im seeing lots of security errors there</li>
+ <li id="l-974" _a="Ms2ger"><a href="#l-974">#</a> [19:17] &lt;Ms2ger&gt; How silly</li>
+ <li id="l-975" _a="Ms2ger"><a href="#l-975">#</a> [19:17] &lt;Ms2ger&gt; That shouldn't happen</li>
+ <li id="l-976" _a="decoder"><a href="#l-976">#</a> [19:17] &lt;decoder&gt; i guess it's because xul is disabled by default?</li>
+ <li id="l-977" _a="Ms2ger"><a href="#l-977">#</a> [19:18] &lt;Ms2ger&gt; No issues here</li>
+ <li id="l-978" _a="decoder"><a href="#l-978">#</a> [19:20] &lt;decoder&gt; hm *double checks*</li>
+ <li id="l-979" _a="decoder"><a href="#l-979">#</a> [19:20] &lt;decoder&gt; im running make crashtest right now without test path to compare</li>
+ <li id="l-980"><a href="#l-980">#</a> [19:20] * Quits: maikmerten (maikmerten@moz-5C84B979.dynamic.qsc.de) (Client exited)</li>
+ <li id="l-981"><a href="#l-981">#</a> [19:24] * Quits: andreasn (andreasn@moz-171E5C3D.a336.priv.bahnhof.se) (Ping timeout)</li>
+ <li id="l-982"><a href="#l-982">#</a> [19:26] * Joins: dbaron (dbaron@moz-9221B6DD.dsl.dynamic.sonic.net)</li>
+ <li id="l-983" _a="ChanServ"><a href="#l-983">#</a> [19:26] * ChanServ sets mode: +o dbaron</li>
+ <li id="l-984"><a href="#l-984">#</a> [19:26] * Quits: jdm (jdm@moz-4F4DD68.cable.teksavvy.com) (Quit: Lost terminal)</li>
+ <li id="l-985"><a href="#l-985">#</a> [19:27] * Quits: zzzzz_ (chatzilla@moz-107FCDBA.hfc.comcastbusiness.net) (Quit: ChatZilla 0.9.87 [Firefox 15.0/20120824154833])</li>
+ <li id="l-986"><a href="#l-986">#</a> [19:27] * Joins: jwatt (roslea@jwatt.irc.users.mozilla.org)</li>
+ <li id="l-987"><a href="#l-987">#</a> [19:28] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-988"><a href="#l-988">#</a> [19:28] * Quits: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com) (Client exited)</li>
+ <li id="l-989"><a href="#l-989">#</a> [19:31] * Quits: twi (Adium@moz-59F9C571.cust.dsl.vodafone.it) (Quit: Leaving.)</li>
+ <li id="l-990"><a href="#l-990">#</a> [19:33] * Quits: Mano (mano@4AE6E53A.EC757A99.39716721.IP) (Broken pipe)</li>
+ <li id="l-991"><a href="#l-991">#</a> [19:35] * Joins: twi (Adium@moz-59F9C571.cust.dsl.vodafone.it)</li>
+ <li id="l-992"><a href="#l-992">#</a> [19:35] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-993"><a href="#l-993">#</a> [19:35] * Quits: twi (Adium@moz-59F9C571.cust.dsl.vodafone.it) (Quit: Leaving.)</li>
+ <li id="l-994"><a href="#l-994">#</a> [19:35] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-995"><a href="#l-995">#</a> [19:36] * Joins: twi (Adium@moz-59F9C571.cust.dsl.vodafone.it)</li>
+ <li id="l-996"><a href="#l-996">#</a> [19:36] * Joins: jrmuizel (jrmuizel@moz-20EF8EAA.cpe.net.cable.rogers.com)</li>
+ <li id="l-997"><a href="#l-997">#</a> [19:39] * Joins: gustavold (gustavold@AACA9B2.3CA89884.FBFF2E6D.IP)</li>
+ <li id="l-998"><a href="#l-998">#</a> [19:40] * Quits: kdeeq (chatzilla@moz-937443ED.elisa-laajakaista.fi) (Client exited)</li>
+ <li id="l-999"><a href="#l-999">#</a> [19:44] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-1000"><a href="#l-1000">#</a> [19:46] * Quits: jhopkins (jhopkins@moz-216F9986.tb.shawcable.net) (Quit: jhopkins)</li>
+ <li id="l-1001"><a href="#l-1001">#</a> [19:47] * Quits: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org) (Ping timeout)</li>
+ <li id="l-1002"><a href="#l-1002">#</a> [19:48] * Quits: evilpie (chatzilla@moz-C21AD520.pools.arcor-ip.net) (Input/output error)</li>
+ <li id="l-1003"><a href="#l-1003">#</a> [19:48] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-1004"><a href="#l-1004">#</a> [19:49] * Quits: capella (chatzilla@moz-DD0C7E4F.twcny.res.rr.com) (Quit: ChatZilla 0.9.88.2 [Firefox 18.0a1/20120831080444])</li>
+ <li id="l-1005"><a href="#l-1005">#</a> [19:49] * Joins: capella (chatzilla@moz-DD0C7E4F.twcny.res.rr.com)</li>
+ <li id="l-1006"><a href="#l-1006">#</a> [19:50] * Joins: lahabana (charlymolt@moz-AAF2BBD1.studby.ntnu.no)</li>
+ <li id="l-1007"><a href="#l-1007">#</a> [19:51] * Joins: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP)</li>
+ <li id="l-1008"><a href="#l-1008">#</a> [19:52] * Quits: AryehGregor (AryehGrego@4A76B368.F2D2BE0C.78D2F5C4.IP) (Ping timeout)</li>
+ <li id="l-1009"><a href="#l-1009">#</a> [19:52] * Joins: AryehGregor (AryehGrego@4A76B368.F2D2BE0C.78D2F5C4.IP)</li>
+ <li id="l-1010"><a href="#l-1010">#</a> [19:52] * Quits: lahabana (charlymolt@moz-AAF2BBD1.studby.ntnu.no) (Connection reset by peer)</li>
+ <li id="l-1011"><a href="#l-1011">#</a> [19:52] * Joins: lahabana (charlymolt@moz-AAF2BBD1.studby.ntnu.no)</li>
+ <li id="l-1012"><a href="#l-1012">#</a> [19:53] * Quits: brendan (brendaneic@29D68D0B.41C58073.748B6D8D.IP) (Quit: brendan)</li>
+ <li id="l-1013"><a href="#l-1013">#</a> [19:55] * Quits: macmaN (chezburger@moz-DA23949E.dyn.estpak.ee) (Ping timeout)</li>
+ <li id="l-1014"><a href="#l-1014">#</a> [19:58] * Quits: sfink (chatzilla@moz-AB059898.dsl.pltn13.sbcglobal.net) (Ping timeout)</li>
+ <li id="l-1015"><a href="#l-1015">#</a> [20:00] * Joins: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP)</li>
+ <li id="l-1016"><a href="#l-1016">#</a> [20:01] * Joins: dao (dao@moz-F4FB0916.superkabel.de)</li>
+ <li id="l-1017"><a href="#l-1017">#</a> [20:02] * Joins: mkaply (mkaply@moz-92EDDD02.lightspeed.austtx.sbcglobal.net)</li>
+ <li id="l-1018" _a="Fallen"><a href="#l-1018">#</a> [20:02] * Fallen is now known as Fallen|away</li>
+ <li id="l-1019"><a href="#l-1019">#</a> [20:03] * Quits: Mook (Daily@moz-8F011215.dsl.teksavvy.com) (Quit: Mook)</li>
+ <li id="l-1020"><a href="#l-1020">#</a> [20:05] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-1021"><a href="#l-1021">#</a> [20:05] * Quits: JPeterson (JPeterson@moz-68CC06AD.cust.tele2.se) (Ping timeout)</li>
+ <li id="l-1022"><a href="#l-1022">#</a> [20:05] * Quits: victorporof (victorporo@5E3230DC.6D2FB7A4.79933D60.IP) (Quit: victorporof)</li>
+ <li id="l-1023"><a href="#l-1023">#</a> [20:07] * Joins: victorporof (victorporo@5E3230DC.6D2FB7A4.79933D60.IP)</li>
+ <li id="l-1024"><a href="#l-1024">#</a> [20:09] * Joins: myk (myk@moz-64D96850.dsl.dynamic.sonic.net)</li>
+ <li id="l-1025"><a href="#l-1025">#</a> [20:10] * Joins: mats (chatzilla@E8A3702C.D5022173.8500CC29.IP)</li>
+ <li id="l-1026"><a href="#l-1026">#</a> [20:11] * Quits: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-1027"><a href="#l-1027">#</a> [20:11] * Quits: mats (chatzilla@E8A3702C.D5022173.8500CC29.IP) (Quit: ChatZilla 0.9.88.2 [Firefox 15.0/20120824154833])</li>
+ <li id="l-1028"><a href="#l-1028">#</a> [20:12] * Joins: mats (Earlybird@E8A3702C.D5022173.8500CC29.IP)</li>
+ <li id="l-1029"><a href="#l-1029">#</a> [20:14] * Quits: AryehGregor (AryehGrego@4A76B368.F2D2BE0C.78D2F5C4.IP) (Ping timeout)</li>
+ <li id="l-1030"><a href="#l-1030">#</a> [20:14] * Joins: AryehGregor (AryehGrego@4A76B368.F2D2BE0C.78D2F5C4.IP)</li>
+ <li id="l-1031"><a href="#l-1031">#</a> [20:17] * Quits: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP) (Ping timeout)</li>
+ <li id="l-1032"><a href="#l-1032">#</a> [20:18] * Joins: bc (bc@454BDC37.1D5E8529.AC69809B.IP)</li>
+ <li id="l-1033"><a href="#l-1033">#</a> [20:19] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-1034" _a="khuey|away"><a href="#l-1034">#</a> [20:21] * khuey|away is now known as khuey</li>
+ <li id="l-1035"><a href="#l-1035">#</a> [20:21] * Quits: dao (dao@moz-F4FB0916.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-1036"><a href="#l-1036">#</a> [20:22] * Joins: mats_ (chatzilla@E8A3702C.D5022173.8500CC29.IP)</li>
+ <li id="l-1037"><a href="#l-1037">#</a> [20:22] * Quits: vikash (vikash@DBCA04FE.38F0169.5D9ABA9F.IP) (Quit: Leaving)</li>
+ <li id="l-1038" _a="NeilAway"><a href="#l-1038">#</a> [20:23] * NeilAway wonders whether anyone has run the clang static analyser</li>
+ <li id="l-1039"><a href="#l-1039">#</a> [20:24] * Joins: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP)</li>
+ <li id="l-1040"><a href="#l-1040">#</a> [20:25] * Joins: raccettura (raccettura@moz-660B8F4B.hsd1.nj.comcast.net)</li>
+ <li id="l-1041"><a href="#l-1041">#</a> [20:27] * Quits: mats (Earlybird@E8A3702C.D5022173.8500CC29.IP) (Quit: mats)</li>
+ <li id="l-1042" _a="mats_"><a href="#l-1042">#</a> [20:27] * mats_ is now known as mats</li>
+ <li id="l-1043"><a href="#l-1043">#</a> [20:27] * Quits: mats (chatzilla@E8A3702C.D5022173.8500CC29.IP) (Quit: ChatZilla 0.9.88.2 [Firefox 15.0/20120824154833])</li>
+ <li id="l-1044" _a="Ms2ger" _r="NeilAway"><a href="#l-1044">#</a> [20:27] &lt;Ms2ger&gt; NeilAway, I've seen bugs filed about its output</li>
+ <li id="l-1045" _a="Ms2ger"><a href="#l-1045">#</a> [20:27] &lt;Ms2ger&gt; That was a while back, though</li>
+ <li id="l-1046" _a="drexler" _r="Ms2ger"><a href="#l-1046">#</a> [20:29] &lt;drexler&gt; Ms2ger: quick question.</li>
+ <li id="l-1047" _a="Ms2ger"><a href="#l-1047">#</a> [20:29] &lt;Ms2ger&gt; Shoot</li>
+ <li id="l-1048" _a="drexler" _r="Ms2ger"><a href="#l-1048">#</a> [20:29] &lt;drexler&gt; Ms2ger: do you know where the code for an alert pop up lives in content?</li>
+ <li id="l-1049" _a="Ms2ger"><a href="#l-1049">#</a> [20:30] &lt;Ms2ger&gt; nsGlobalWindow::Alert</li>
+ <li id="l-1050" _a="drexler"><a href="#l-1050">#</a> [20:30] &lt;drexler&gt; thanks.</li>
+ <li id="l-1051" _a="Ms2ger"><a href="#l-1051">#</a> [20:30] &lt;Ms2ger&gt; At least the first layer :)</li>
+ <li id="l-1052" _a="mjschranz_away"><a href="#l-1052">#</a> [20:30] * mjschranz_away is now known as mjschranz</li>
+ <li id="l-1053"><a href="#l-1053">#</a> [20:30] * Joins: fabrice (fabrice@E2AD0C0E.78DF3BC0.56644CA2.IP)</li>
+ <li id="l-1054"><a href="#l-1054">#</a> [20:33] * Joins: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP)</li>
+ <li id="l-1055" _a="mjschranz"><a href="#l-1055">#</a> [20:33] * mjschranz is now known as mjschranz_away</li>
+ <li id="l-1056" _a="WG9s" _r="drexler"><a href="#l-1056">#</a> [20:33] &lt;WG9s&gt; drexler, but are ou looiing for alert or notification.</li>
+ <li id="l-1057" _a="drexler" _r="WG9s"><a href="#l-1057">#</a> [20:34] &lt;drexler&gt; WG9s:  alert from JS</li>
+ <li id="l-1058" _a="WG9s"><a href="#l-1058">#</a> [20:34] &lt;WG9s&gt; hmm my bad typing took over.</li>
+ <li id="l-1059" _a="WG9s"><a href="#l-1059">#</a> [20:35] &lt;WG9s&gt; ok wanted top make sure alert form javascript was what you were loking for.</li>
+ <li id="l-1060" _a="drexler" _r="WG9s"><a href="#l-1060">#</a> [20:35] &lt;drexler&gt; WG9s:  np</li>
+ <li id="l-1061" _a="WG9s"><a href="#l-1061">#</a> [20:35] &lt;WG9s&gt; sometimes people ask about things very loosely using terms and we pint them in entirely the worng direction si all.</li>
+ <li id="l-1062"><a href="#l-1062">#</a> [20:37] * Joins: jeremyhu|nanake (jeremyhu@moz-75C113CA.outersquare.org)</li>
+ <li id="l-1063" _a="WG9s"><a href="#l-1063">#</a> [20:37] &lt;WG9s&gt; and i have continued to point out that i really seem to have no typing ability (where actually the issue is I learned to touch type back when there were largely manual typewriters) and I rally have never been able to get used to a flat keyboard at all.</li>
+ <li id="l-1064"><a href="#l-1064">#</a> [20:42] * Joins: sankha93 (sankha93@7061CD01.D6BD0D91.22D41759.IP)</li>
+ <li id="l-1065"><a href="#l-1065">#</a> [20:42] * Joins: sfink (chatzilla@moz-BD9FC79C.hfc.comcastbusiness.net)</li>
+ <li id="l-1066"><a href="#l-1066">#</a> [20:44] * Joins: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net)</li>
+ <li id="l-1067" _a="drexler" _r="WG9s"><a href="#l-1067">#</a> [20:48] &lt;drexler&gt; WG9s: specifically i'm looking for the place when an OK is pressed in the alert. probably asking too much. (going line by line to find it)</li>
+ <li id="l-1068" _a="Ms2ger" _r="Mm"><a href="#l-1068">#</a> [20:48] &lt;Ms2ger&gt; Mm, that's probably somewhere in browser/</li>
+ <li id="l-1069"><a href="#l-1069">#</a> [20:49] * Quits: @smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi) (Ping timeout)</li>
+ <li id="l-1070"><a href="#l-1070">#</a> [20:49] * Joins: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br)</li>
+ <li id="l-1071" _a="Ms2ger"><a href="#l-1071">#</a> [20:49] &lt;Ms2ger&gt; gavin or dao might know</li>
+ <li id="l-1072"><a href="#l-1072">#</a> [20:49] * Quits: WG9s (bill@moz-D750CC69.maine.res.rr.com) (Quit: ChatZilla 0.9.87-5.1450hg.fc17 [XULRunner 15.0/20120827125645])</li>
+ <li id="l-1073"><a href="#l-1073">#</a> [20:49] * Joins: bnicholson (bnicholson@moz-F08A2DE.hsd1.ca.comcast.net)</li>
+ <li id="l-1074"><a href="#l-1074">#</a> [20:50] * Quits: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP) (Quit: FusedTogether)</li>
+ <li id="l-1075"><a href="#l-1075">#</a> [20:50] * Joins: WG9s (bill@moz-D750CC69.maine.res.rr.com)</li>
+ <li id="l-1076" _a="drexler"><a href="#l-1076">#</a> [20:51] &lt;drexler&gt; probably get them when they hop online tonight.  thanks :)</li>
+ <li id="l-1077" _a="WG9s"><a href="#l-1077">#</a> [20:51] &lt;WG9s&gt; was loking for other channels like either javascirpt or ecma, neither seems to exist. :-(</li>
+ <li id="l-1078" _a="WG9s"><a href="#l-1078">#</a> [20:52] &lt;WG9s&gt; and somehow trying to connect got me disconnected form moznet.  not at all sure why.</li>
+ <li id="l-1079" _a="Fallen|away"><a href="#l-1079">#</a> [20:52] * Fallen|away is now known as Fallen</li>
+ <li id="l-1080"><a href="#l-1080">#</a> [20:52] * Quits: bb10 (bb10@moz-C7B05616.org) (Ping timeout)</li>
+ <li id="l-1081"><a href="#l-1081">#</a> [20:53] * Joins: bb10 (bb10@moz-C7B05616.org)</li>
+ <li id="l-1082"><a href="#l-1082">#</a> [20:57] * Quits: shedammit (shedammit@moz-A95F12B1.members.linode.com) (Ping timeout)</li>
+ <li id="l-1083"><a href="#l-1083">#</a> [20:59] * Joins: fitzgen (fitzgen@moz-85EBB8A.dia.static.qwest.net)</li>
+ <li id="l-1084"><a href="#l-1084">#</a> [21:00] * Quits: sankha93 (sankha93@7061CD01.D6BD0D91.22D41759.IP) (Quit: Leaving.)</li>
+ <li id="l-1085"><a href="#l-1085">#</a> [21:00] * Quits: drexler (chatzilla@moz-BD26ECCD.hsd1.vt.comcast.net) (Ping timeout)</li>
+ <li id="l-1086"><a href="#l-1086">#</a> [21:03] * Joins: macmaN (chezburger@moz-DA23949E.dyn.estpak.ee)</li>
+ <li id="l-1087"><a href="#l-1087">#</a> [21:06] * Quits: mkaply (mkaply@moz-92EDDD02.lightspeed.austtx.sbcglobal.net) (Quit: mkaply)</li>
+ <li id="l-1088"><a href="#l-1088">#</a> [21:07] * Quits: jwatt (roslea@jwatt.irc.users.mozilla.org) (Ping timeout)</li>
+ <li id="l-1089"><a href="#l-1089">#</a> [21:09] * Quits: sfink (chatzilla@moz-BD9FC79C.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-1090" _a="sheeri-afk"><a href="#l-1090">#</a> [21:14] * sheeri-afk is now known as sheeri</li>
+ <li id="l-1091"><a href="#l-1091">#</a> [21:15] * Quits: jduell (jduell@moz-F20EC42A.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-1092"><a href="#l-1092">#</a> [21:18] * Joins: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr)</li>
+ <li id="l-1093"><a href="#l-1093">#</a> [21:18] * Quits: cc (cc@moz-9BCC1559.w90-46.abo.wanadoo.fr) (Quit: cc)</li>
+ <li id="l-1094"><a href="#l-1094">#</a> [21:21] * Quits: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br) (Quit: brendan)</li>
+ <li id="l-1095"><a href="#l-1095">#</a> [21:21] * Joins: reuben (reuben@moz-3D306503.res-com.wayinternet.com.br)</li>
+ <li id="l-1096"><a href="#l-1096">#</a> [21:22] * Joins: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP)</li>
+ <li id="l-1097" _a="firebot" _r="Check-in"><a href="#l-1097">#</a> [21:23] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/b1f9a8d75e20">http://hg.mozilla.org/integration/mozilla-inbound/rev/b1f9a8d75e20</a> - Shu-yu Guo - Bug 787667 - Fix bounds checking on multidimensional ParallelArray (r=dvander)</li>
+ <li id="l-1098"><a href="#l-1098">#</a> [21:24] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-1099"><a href="#l-1099">#</a> [21:25] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-1100"><a href="#l-1100">#</a> [21:25] * Joins: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br)</li>
+ <li id="l-1101"><a href="#l-1101">#</a> [21:26] * Joins: merike|away (quassel@moz-4199E140.cable.starman.ee)</li>
+ <li id="l-1102" _a="merike|away"><a href="#l-1102">#</a> [21:26] * merike|away is now known as merike</li>
+ <li id="l-1103"><a href="#l-1103">#</a> [21:32] * Quits: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br) (Quit: brendan)</li>
+ <li id="l-1104"><a href="#l-1104">#</a> [21:35] * Quits: Ms2ger (Ms2ger@4346D5C2.336EB8AC.37724B0D.IP) (Quit: nn)</li>
+ <li id="l-1105"><a href="#l-1105">#</a> [21:35] * Quits: loadRPi (pi@moz-17FFE1EB.range81-151.btcentralplus.com) (Ping timeout)</li>
+ <li id="l-1106"><a href="#l-1106">#</a> [21:35] * Quits: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP) (Quit: gwagner)</li>
+ <li id="l-1107"><a href="#l-1107">#</a> [21:35] * Joins: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br)</li>
+ <li id="l-1108"><a href="#l-1108">#</a> [21:36] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-1109" _a="firebot" _r="Check-in"><a href="#l-1109">#</a> [21:38] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/24d7f059eed2">http://hg.mozilla.org/integration/mozilla-inbound/rev/24d7f059eed2</a> - Frank Yan - Bug 782324 - Add support in JarMaker for file names that contain '@'. r=khuey</li>
+ <li id="l-1110"><a href="#l-1110">#</a> [21:39] * Joins: ekr (ekr@moz-D7997EC8.rtfm.com)</li>
+ <li id="l-1111"><a href="#l-1111">#</a> [21:42] * Joins: sfink (chatzilla@moz-BD9FC79C.hfc.comcastbusiness.net)</li>
+ <li id="l-1112"><a href="#l-1112">#</a> [21:45] * Joins: shedammit (shedammit@moz-A95F12B1.members.linode.com)</li>
+ <li id="l-1113" _a="khuey"><a href="#l-1113">#</a> [21:47] * khuey is now known as khuey|away</li>
+ <li id="l-1114"><a href="#l-1114">#</a> [21:48] * Quits: fabrice (fabrice@E2AD0C0E.78DF3BC0.56644CA2.IP) (Quit: Leaving.)</li>
+ <li id="l-1115"><a href="#l-1115">#</a> [21:51] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-1116"><a href="#l-1116">#</a> [21:55] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-1117"><a href="#l-1117">#</a> [21:56] * Joins: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP)</li>
+ <li id="l-1118"><a href="#l-1118">#</a> [21:56] * Joins: smaug (chatzilla@moz-3C907DEA.elisa-laajakaista.fi)</li>
+ <li id="l-1119" _a="ChanServ"><a href="#l-1119">#</a> [21:56] * ChanServ sets mode: +o smaug</li>
+ <li id="l-1120" _a="sheeri"><a href="#l-1120">#</a> [21:57] * sheeri is now known as sheeri-afk</li>
+ <li id="l-1121"><a href="#l-1121">#</a> [21:58] * Joins: Sander (chatzilla@moz-B871F4D3.direct-adsl.nl)</li>
+ <li id="l-1122"><a href="#l-1122">#</a> [21:59] * Quits: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br) (Quit: brendan)</li>
+ <li id="l-1123"><a href="#l-1123">#</a> [22:01] * Joins: janv (varga@moz-B6E52297.flarion.as5628.telecom.sk)</li>
+ <li id="l-1124"><a href="#l-1124">#</a> [22:02] * Joins: aleth (aleth@moz-24EE697D.ictp.it)</li>
+ <li id="l-1125"><a href="#l-1125">#</a> [22:02] * Quits: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP) (Quit: gwagner)</li>
+ <li id="l-1126" _a="aleth"><a href="#l-1126">#</a> [22:02] &lt;aleth&gt; What function do I need to call to trigger a recalculation of the coordinates of all the listitems in a listbox? It's clear this happens sometimes, but I can't find it in the code.</li>
+ <li id="l-1127"><a href="#l-1127">#</a> [22:03] * Joins: loadRPi (pi@moz-9D605755.range86-148.btcentralplus.com)</li>
+ <li id="l-1128"><a href="#l-1128">#</a> [22:04] * Quits: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net) (Ping timeout)</li>
+ <li id="l-1129"><a href="#l-1129">#</a> [22:05] * Quits: clokep (Instantbir@moz-69FB3955.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-1130"><a href="#l-1130">#</a> [22:05] * Joins: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net)</li>
+ <li id="l-1131"><a href="#l-1131">#</a> [22:08] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-1132"><a href="#l-1132">#</a> [22:08] * Quits: cpearce (chatzilla@moz-8CBCCDA6.xdsl.xnet.co.nz) (Client exited)</li>
+ <li id="l-1133"><a href="#l-1133">#</a> [22:08] * Quits: WG9s (bill@moz-D750CC69.maine.res.rr.com) (Quit: ChatZilla 0.9.87-5.1450hg.fc17 [XULRunner 15.0/20120827125645])</li>
+ <li id="l-1134"><a href="#l-1134">#</a> [22:09] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-1135"><a href="#l-1135">#</a> [22:12] * Joins: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP)</li>
+ <li id="l-1136"><a href="#l-1136">#</a> [22:13] * Joins: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br)</li>
+ <li id="l-1137" _a="decoder"><a href="#l-1137">#</a> [22:15] &lt;decoder&gt; can anyone tell me what component nsPermissionManager is? and who to cc for problems?</li>
+ <li id="l-1138"><a href="#l-1138">#</a> [22:16] * Quits: gwagner (idefix2@BD043B9E.6910ADCF.56644CA2.IP) (Quit: gwagner)</li>
+ <li id="l-1139"><a href="#l-1139">#</a> [22:17] * Joins: jet (junglecode@moz-79F891EE.hsd1.ca.comcast.net)</li>
+ <li id="l-1140"><a href="#l-1140">#</a> [22:18] * Quits: merinui (merinui@moz-1D8A7606.osk2.eonet.ne.jp) (Quit: Leaving...)</li>
+ <li id="l-1141" _a="reuben" _r="decoder"><a href="#l-1141">#</a> [22:22] &lt;reuben&gt; decoder, <a href="https://wiki.mozilla.org/Modules/All#Cookies_and_Permissions">https://wiki.mozilla.org/Modules/All#Cookies_and_Permissions</a></li>
+ <li id="l-1142"><a href="#l-1142">#</a> [22:22] * Quits: garnacho (carlos@moz-800BEE18.static.user.ono.com) (Ping timeout)</li>
+ <li id="l-1143"><a href="#l-1143">#</a> [22:26] * Joins: dao (dao@moz-F4FB0916.superkabel.de)</li>
+ <li id="l-1144" _a="Fallen"><a href="#l-1144">#</a> [22:26] * Fallen is now known as Fallen|away</li>
+ <li id="l-1145"><a href="#l-1145">#</a> [22:27] * Quits: sfink (chatzilla@moz-BD9FC79C.hfc.comcastbusiness.net) (Ping timeout)</li>
+ <li id="l-1146"><a href="#l-1146">#</a> [22:27] * Joins: lerc (quassel@moz-25860754.telstraclear.net)</li>
+ <li id="l-1147" _a="merike"><a href="#l-1147">#</a> [22:29] * merike is now known as merike|away</li>
+ <li id="l-1148"><a href="#l-1148">#</a> [22:31] * Quits: brendan (brendaneic@moz-BD851B6A.cslce300.ipd.brasiltelecom.net.br) (Quit: brendan)</li>
+ <li id="l-1149"><a href="#l-1149">#</a> [22:31] * Quits: @bz_away (bzbarsky@moz-F9F3C337.bstnma.fios.verizon.net) (Ping timeout)</li>
+ <li id="l-1150"><a href="#l-1150">#</a> [22:32] * Joins: bz_away (bzbarsky@moz-F9F3C337.bstnma.fios.verizon.net)</li>
+ <li id="l-1151"><a href="#l-1151">#</a> [22:32] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-1152" _a="decoder" _r="reuben"><a href="#l-1152">#</a> [22:32] &lt;decoder&gt; reuben: thanks!</li>
+ <li id="l-1153"><a href="#l-1153">#</a> [22:32] * Joins: mib_38cmcp (Mibbit@F1C96834.3A343ADF.B1EC621E.IP)</li>
+ <li id="l-1154" _a="mib_38cmcp"><a href="#l-1154">#</a> [22:32] &lt;mib_38cmcp&gt; hi</li>
+ <li id="l-1155"><a href="#l-1155">#</a> [22:33] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-1156"><a href="#l-1156">#</a> [22:33] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1157"><a href="#l-1157">#</a> [22:36] * Quits: adev (adev@moz-24EE697D.ictp.it) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-1158"><a href="#l-1158">#</a> [22:37] * Quits: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net) (Ping timeout)</li>
+ <li id="l-1159"><a href="#l-1159">#</a> [22:37] * Quits: mib_38cmcp (Mibbit@F1C96834.3A343ADF.B1EC621E.IP) (Quit: <a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client)</li>
+ <li id="l-1160"><a href="#l-1160">#</a> [22:39] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-1161"><a href="#l-1161">#</a> [22:40] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1162"><a href="#l-1162">#</a> [22:42] * Quits: jet (junglecode@moz-79F891EE.hsd1.ca.comcast.net) (Quit: jet)</li>
+ <li id="l-1163" _a="mattwoodrow|away"><a href="#l-1163">#</a> [22:43] * mattwoodrow|away is now known as mattwoodrow</li>
+ <li id="l-1164"><a href="#l-1164">#</a> [22:44] * Quits: adev (adev@moz-24EE697D.ictp.it) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-1165"><a href="#l-1165">#</a> [22:45] * Joins: rajul (quassel@8544EA09.78EE3644.9DA13C14.IP)</li>
+ <li id="l-1166"><a href="#l-1166">#</a> [22:45] * Joins: sfink (chatzilla@moz-BD9FC79C.hfc.comcastbusiness.net)</li>
+ <li id="l-1167" _a="mjschranz_away"><a href="#l-1167">#</a> [22:49] * mjschranz_away is now known as mjschranz</li>
+ <li id="l-1168"><a href="#l-1168">#</a> [22:52] * Joins: hub (hub@moz-E2FCA694.figuiere.net)</li>
+ <li id="l-1169" _a="mattwoodrow"><a href="#l-1169">#</a> [22:52] * mattwoodrow is now known as mattwoodrow|away</li>
+ <li id="l-1170" _a="mjschranz"><a href="#l-1170">#</a> [22:53] * mjschranz is now known as mjschranz_away</li>
+ <li id="l-1171" _a="Fallen|away"><a href="#l-1171">#</a> [22:53] * Fallen|away is now known as Fallen</li>
+ <li id="l-1172"><a href="#l-1172">#</a> [22:56] * Quits: atte (atte@moz-401E92F1.dhcp.inet.fi) (Client exited)</li>
+ <li id="l-1173"><a href="#l-1173">#</a> [22:57] * Joins: tonymec__ (tonymec@30279589.A54F7B7E.277517C1.IP)</li>
+ <li id="l-1174" _a="tonymec__"><a href="#l-1174">#</a> [22:57] * tonymec__ is now known as tonymec|away</li>
+ <li id="l-1175"><a href="#l-1175">#</a> [22:58] * Quits: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP) (Ping timeout)</li>
+ <li id="l-1176"><a href="#l-1176">#</a> [22:58] * Quits: bz_away (bzbarsky@moz-F9F3C337.bstnma.fios.verizon.net) (Ping timeout)</li>
+ <li id="l-1177"><a href="#l-1177">#</a> [22:59] * Joins: Goldorak (chatzilla@5DBDFA7B.6D3510EC.187A1082.IP)</li>
+ <li id="l-1178"><a href="#l-1178">#</a> [23:00] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1179"><a href="#l-1179">#</a> [23:01] * Joins: Mook (Daily@moz-8F011215.dsl.teksavvy.com)</li>
+ <li id="l-1180"><a href="#l-1180">#</a> [23:02] * Quits: StockHunter (StockHunte@moz-C0D4659B.ldv-co.client.bresnan.net) (Quit: Leaving)</li>
+ <li id="l-1181"><a href="#l-1181">#</a> [23:03] * Quits: adev (adev@moz-24EE697D.ictp.it) (Input/output error)</li>
+ <li id="l-1182"><a href="#l-1182">#</a> [23:03] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1183"><a href="#l-1183">#</a> [23:05] * Quits: Sander (chatzilla@moz-B871F4D3.direct-adsl.nl) (Quit: And back he spurred like a madman, shrieking a curse to the sky.)</li>
+ <li id="l-1184"><a href="#l-1184">#</a> [23:09] * Joins: FusedTogether (Thunderbir@8CCD9A70.E49ADE39.2D7E49EB.IP)</li>
+ <li id="l-1185"><a href="#l-1185">#</a> [23:09] * Joins: ekr_ (ekr@moz-A62EC22B.hfc.comcastbusiness.net)</li>
+ <li id="l-1186"><a href="#l-1186">#</a> [23:11] * Joins: tonymec (tonymec@30279589.A54F7B7E.277517C1.IP)</li>
+ <li id="l-1187"><a href="#l-1187">#</a> [23:12] * Quits: jwilde (Earlybird@moz-23E1A364.aton.com) (Input/output error)</li>
+ <li id="l-1188"><a href="#l-1188">#</a> [23:12] * Joins: jwilde (Earlybird@moz-23E1A364.aton.com)</li>
+ <li id="l-1189"><a href="#l-1189">#</a> [23:13] * Quits: reuben (reuben@moz-3D306503.res-com.wayinternet.com.br) (Quit: Textual IRC Client: www.textualapp.com)</li>
+ <li id="l-1190"><a href="#l-1190">#</a> [23:15] * Quits: rajul (quassel@8544EA09.78EE3644.9DA13C14.IP) (Client exited)</li>
+ <li id="l-1191"><a href="#l-1191">#</a> [23:15] * Quits: bnicholson (bnicholson@moz-F08A2DE.hsd1.ca.comcast.net) (Ping timeout)</li>
+ <li id="l-1192"><a href="#l-1192">#</a> [23:16] * Joins: chrisccoulson (chr1s@moz-6A3A134E.cust-13020.ip.static.uno.uk.net)</li>
+ <li id="l-1193"><a href="#l-1193">#</a> [23:17] * Quits: jwilde (Earlybird@moz-23E1A364.aton.com) (Quit: jwilde)</li>
+ <li id="l-1194"><a href="#l-1194">#</a> [23:17] * Joins: jwilde (Thunderbir@moz-23E1A364.aton.com)</li>
+ <li id="l-1195"><a href="#l-1195">#</a> [23:25] * Joins: WG9s (bill@moz-D750CC69.maine.res.rr.com)</li>
+ <li id="l-1196"><a href="#l-1196">#</a> [23:25] * Quits: jhk (jhk@8E6C34C1.A3F9767A.1C37C358.IP) (Ping timeout)</li>
+ <li id="l-1197" _a="@dbaron"><a href="#l-1197">#</a> [23:26] &lt;@dbaron&gt; Assertion failure: mDocument-&gt;IsXUL() || mDocument-&gt;GetReadyStateEnum() == nsIDocument::READYSTATE_INTERACTIVE || (mDocument-&gt;GetReadyStateEnum() == nsIDocument::READYSTATE_UNINITIALIZED &amp;&amp; NS_IsAboutBlank(mDocument-&gt;GetDocumentURI())) (Bad readystate), at /home/dbaron/builds/ssd/mozilla-central/mozilla/layout/base/nsDocumentViewer.cpp:1017</li>
+ <li id="l-1198"><a href="#l-1198">#</a> [23:26] * Quits: adev (adev@moz-24EE697D.ictp.it) (Quit: Instantbird 1.3a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+ <li id="l-1199"><a href="#l-1199">#</a> [23:26] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1200"><a href="#l-1200">#</a> [23:26] * Quits: adev (adev@moz-24EE697D.ictp.it) (Input/output error)</li>
+ <li id="l-1201"><a href="#l-1201">#</a> [23:28] * Joins: azakai (alon@moz-8D0CC798.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-1202"><a href="#l-1202">#</a> [23:28] * Quits: azakai|far (alon@moz-8D0CC798.lightspeed.sntcca.sbcglobal.net) (Ping timeout)</li>
+ <li id="l-1203"><a href="#l-1203">#</a> [23:28] * Quits: azakai (alon@moz-8D0CC798.lightspeed.sntcca.sbcglobal.net) (Client exited)</li>
+ <li id="l-1204"><a href="#l-1204">#</a> [23:28] * Quits: martyn (martyn@moz-B7D2E286.webport-cl2-hg5.ilford.mdip.bt.net) (Ping timeout)</li>
+ <li id="l-1205"><a href="#l-1205">#</a> [23:30] * Quits: Darwesh (chatzilla@49B1B402.E8EF102F.901B3F5.IP) (Ping timeout)</li>
+ <li id="l-1206"><a href="#l-1206">#</a> [23:31] * Joins: Darwesh (chatzilla@49B1B402.E8EF102F.901B3F5.IP)</li>
+ <li id="l-1207"><a href="#l-1207">#</a> [23:31] * Quits: bc (bc@454BDC37.1D5E8529.AC69809B.IP) (Ping timeout)</li>
+ <li id="l-1208"><a href="#l-1208">#</a> [23:32] * Quits: dao (dao@moz-F4FB0916.superkabel.de) (Quit: Leaving.)</li>
+ <li id="l-1209"><a href="#l-1209">#</a> [23:32] * Joins: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net)</li>
+ <li id="l-1210"><a href="#l-1210">#</a> [23:32] * Joins: karl (karl@moz-7156AB2B.jetstream.xtra.co.nz)</li>
+ <li id="l-1211"><a href="#l-1211">#</a> [23:33] * Joins: nmatsakis (nmatsakis@31F52E50.3AD3A61B.2321E71E.IP)</li>
+ <li id="l-1212" _a="firebot" _r="Check-in"><a href="#l-1212">#</a> [23:34] &lt;firebot&gt; Check-in: <a href="http://hg.mozilla.org/integration/mozilla-inbound/rev/eba09afbc1f4">http://hg.mozilla.org/integration/mozilla-inbound/rev/eba09afbc1f4</a> - Wellington Fernando de Macedo - Bug 740862 - &quot;ASSERTION: Freeze() failed&quot; in nsEventSource::Observe(dom-window-frozen). r=smaug</li>
+ <li id="l-1213"><a href="#l-1213">#</a> [23:37] * Quits: RealRaven (Thunderbir@4F68D432.50CFDD29.C3498625.IP) (Client exited)</li>
+ <li id="l-1214"><a href="#l-1214">#</a> [23:40] * Quits: msucan (mihai@17969768.DD17A642.B4CEF140.IP) (Quit: Leaving.)</li>
+ <li id="l-1215"><a href="#l-1215">#</a> [23:41] * Joins: ferongr (ferongr@moz-4781AFE1.tellas.gr)</li>
+ <li id="l-1216"><a href="#l-1216">#</a> [23:42] * Quits: ferongr (ferongr@moz-4781AFE1.tellas.gr) (NickServ (GHOST command used by `ferongr))</li>
+ <li id="l-1217"><a href="#l-1217">#</a> [23:42] * Joins: ferongr (ferongr@moz-4781AFE1.tellas.gr)</li>
+ <li id="l-1218"><a href="#l-1218">#</a> [23:42] * Joins: dzbarsky (Adium@moz-59812CB1.hsd1.pa.comcast.net)</li>
+ <li id="l-1219"><a href="#l-1219">#</a> [23:42] * Joins: wesj (Daily@moz-FC9D6E4.hsd1.ca.comcast.net)</li>
+ <li id="l-1220"><a href="#l-1220">#</a> [23:43] * Quits: wesj (Daily@moz-FC9D6E4.hsd1.ca.comcast.net) (Quit: wesj)</li>
+ <li id="l-1221" _a="@smaug" _r="dbaron"><a href="#l-1221">#</a> [23:43] &lt;@smaug&gt; dbaron: you'd want hsivonen, but he is away</li>
+ <li id="l-1222"><a href="#l-1222">#</a> [23:43] * Joins: wesj (Daily@moz-FC9D6E4.hsd1.ca.comcast.net)</li>
+ <li id="l-1223"><a href="#l-1223">#</a> [23:45] * Quits: Elen (El@moz-729280DD.dhcp.inet.fi) (Ping timeout)</li>
+ <li id="l-1224"><a href="#l-1224">#</a> [23:46] * Quits: xakz (XaMaD@moz-34FBE388.fbx.proxad.net) (Ping timeout)</li>
+ <li id="l-1225" _a="khuey|away"><a href="#l-1225">#</a> [23:47] * khuey|away is now known as khuey</li>
+ <li id="l-1226"><a href="#l-1226">#</a> [23:47] * Joins: Jesse (jruderman@moz-BBB5DE6B.san.res.rr.com)</li>
+ <li id="l-1227"><a href="#l-1227">#</a> [23:48] * Joins: adev (adev@moz-24EE697D.ictp.it)</li>
+ <li id="l-1228"><a href="#l-1228">#</a> [23:48] * Joins: RealRaven (Thunderbir@4F68D432.50CFDD29.C3498625.IP)</li>
+ <li id="l-1229"><a href="#l-1229">#</a> [23:49] * Quits: automata (automata@3E0AB089.8DDD1F9.16867D26.IP) (Ping timeout)</li>
+ <li id="l-1230"><a href="#l-1230">#</a> [23:50] * Joins: Elen (El@moz-729280DD.dhcp.inet.fi)</li>
+ <li id="l-1231"><a href="#l-1231">#</a> [23:50] * Joins: merinui (merinui@moz-1D8A7606.osk2.eonet.ne.jp)</li>
+ <li id="l-1232"><a href="#l-1232">#</a> [23:51] * Joins: Archaeopteryx (itsme@moz-756328DB.cust.telecolumbus.net)</li>
+ <li id="l-1233"><a href="#l-1233">#</a> [23:51] * Quits: adev (adev@moz-24EE697D.ictp.it) (Input/output error)</li>
+ <li id="l-1234"><a href="#l-1234">#</a> [23:51] * Joins: azakai|far (alon@moz-90E3042.lightspeed.sntcca.sbcglobal.net)</li>
+ <li id="l-1235"><a href="#l-1235">#</a> [23:53] * Joins: jwatt (roslea@jwatt.irc.users.mozilla.org)</li>
+ <li id="l-1236"><a href="#l-1236">#</a> [23:55] * Joins: loadbang (loadbang@moz-9D605755.range86-148.btcentralplus.com)</li>
+ <li id="l-1237"><a href="#l-1237">#</a> [23:55] * Joins: Jesse_ (jruderman@moz-BBB5DE6B.san.res.rr.com)</li>
+ <li id="l-1238"><a href="#l-1238">#</a> [23:55] * Quits: bdahl (bdahl@moz-E197F13B.hsd1.ca.comcast.net) (Client exited)</li>
+ <li id="l-1239"><a href="#l-1239">#</a> [23:56] * Quits: Jesse (jruderman@moz-BBB5DE6B.san.res.rr.com) (Ping timeout)</li>
+ <li id="l-1240"><a href="#l-1240">#</a> [23:56] * Quits: karl (karl@moz-7156AB2B.jetstream.xtra.co.nz) (Ping timeout)</li>
+ <li id="l-1241"><a href="#l-1241">#</a> [23:58] * Joins: mccr8 (mccr8@moz-EB2F197F.dsl.dynamic.sonic.net)</li>
+ <li id="l-1242"><a href="#l-1242">#</a> Session Close: Sun Sep 02 00:00:00 2012</li>
+</ol>
+<p id="end">The end :)

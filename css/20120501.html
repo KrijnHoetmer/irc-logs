@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20120501</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/css.20120501.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2012-05-01 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Tue May 01 00:00:00 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #css</li>
+ <li id="l-3" _a="krit" _r="Bert"><a href="#l-3">#</a> [00:00] &lt;krit&gt; Bert: ping</li>
+ <li id="l-4"><a href="#l-4">#</a> [00:02] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-5" _a="isherman" _r="tantek"><a href="#l-5">#</a> [00:38] &lt;isherman&gt; tantek: Not sure if you saw [ <a href="https://bugs.webkit.org/show_bug.cgi?id=85150">https://bugs.webkit.org/show_bug.cgi?id=85150</a> ] — wanted to get your thoughts on it</li>
+ <li id="l-6" _a="tantek"><a href="#l-6">#</a> [00:40] &lt;tantek&gt; isherman - that's interesting</li>
+ <li id="l-7" _a="tantek"><a href="#l-7">#</a> [00:40] &lt;tantek&gt; btw I believe the comment #2 about specificity is wrong</li>
+ <li id="l-8" _a="tantek"><a href="#l-8">#</a> [00:40] &lt;tantek&gt; e.g. try this</li>
+ <li id="l-9" _a="tantek"><a href="#l-9">#</a> [00:40] &lt;tantek&gt; a { color: red }</li>
+ <li id="l-10" _a="tantek"><a href="#l-10">#</a> [00:40] &lt;tantek&gt; does it turn your links red? no, because the UA rules trigger off of :visited and :link, which have higher specificity</li>
+ <li id="l-11" _a="tantek"><a href="#l-11">#</a> [00:41] &lt;tantek&gt; so mitz is mistaken</li>
+ <li id="l-12" _a="isherman" _r="hmm"><a href="#l-12">#</a> [00:41] &lt;isherman&gt; hmm, interesting</li>
+ <li id="l-13" _a="tantek"><a href="#l-13">#</a> [00:41] &lt;tantek&gt; nothing you can do about input[type=text] overriding the input:-webkit-autofill however</li>
+ <li id="l-14" _a="leaverou" _r="TabAtkins_"><a href="#l-14">#</a> [00:42] &lt;leaverou&gt; TabAtkins_: It would break many existing use cases though I'm afraid. Transitions with transition-property: all; and transition-delay &gt; 0</li>
+ <li id="l-15" _a="tantek"><a href="#l-15">#</a> [00:42] &lt;tantek&gt; isherman - sounds like correct behavior, site is behaving as authored.</li>
+ <li id="l-16" _a="tantek"><a href="#l-16">#</a> [00:43] &lt;tantek&gt; so if the site *does* want the default UA handling of the input background, it shouldn't set it in the site style sheet</li>
+ <li id="l-17" _a="isherman" _r="tantek"><a href="#l-17">#</a> [00:43] &lt;isherman&gt; tantek: Regarding the specificity issue, my read of <a href="http://www.w3.org/TR/CSS21/cascade.html#cascading-order">http://www.w3.org/TR/CSS21/cascade.html#cascading-order</a> is that author declarations are supposed to always take precedence over UA declarations — am I misreading the spec, or is the link coloring behavior an exception?</li>
+ <li id="l-18" _a="tantek"><a href="#l-18">#</a> [00:43] &lt;tantek&gt; misreading the spec</li>
+ <li id="l-19" _a="tantek"><a href="#l-19">#</a> [00:44] &lt;tantek&gt; specificity still works as expected, per my trival A vs. :link styling example above</li>
+ <li id="l-20" _a="tantek"><a href="#l-20">#</a> [00:44] &lt;tantek&gt; that's consistent cross-browser also</li>
+ <li id="l-21" _a="isherman" _r="tantek"><a href="#l-21">#</a> [00:44] &lt;isherman&gt; tantek: so what does the &quot;sort according to importance step&quot; actually achieve?  Is that for rules of equal specificity?</li>
+ <li id="l-22" _a="tantek"><a href="#l-22">#</a> [00:44] &lt;tantek&gt; that's my understanding yes</li>
+ <li id="l-23" _a="tantek"><a href="#l-23">#</a> [00:45] &lt;tantek&gt; though frankly, that algorithm is a bit too complex to fully follow in one's head</li>
+ <li id="l-24" _a="isherman" _r="hmm"><a href="#l-24">#</a> [00:45] &lt;isherman&gt; hmm, ok...</li>
+ <li id="l-25" _a="isherman" _r="tantek"><a href="#l-25">#</a> [00:48] &lt;isherman&gt; tantek: testing in WebKit with just the author stylesheet styling &quot;input&quot; (not &quot;input[type=text]&quot;) seems to override the UA's input:-webkit-autofill styling</li>
+ <li id="l-26" _a="isherman" _r="tantek"><a href="#l-26">#</a> [00:48] &lt;isherman&gt; tantek: so it seems like the A element's behavior might be a special case, that's just consistently special across all the UAs?</li>
+ <li id="l-27" _a="tantek"><a href="#l-27">#</a> [00:49] &lt;tantek&gt; odd</li>
+ <li id="l-28" _a="tantek"><a href="#l-28">#</a> [00:49] &lt;tantek&gt; like *that's* not confusing to web authors</li>
+ <li id="l-29" _a="isherman"><a href="#l-29">#</a> [00:49] &lt;isherman&gt; yeah...</li>
+ <li id="l-30" _a="isherman" _r="so"><a href="#l-30">#</a> [00:52] &lt;isherman&gt; so, the ideally desired behavior for the autofill case is to have authors explicitly override the :-webkit-autofill styling; otherwise to use the UA's styling</li>
+ <li id="l-31" _a="isherman"><a href="#l-31">#</a> [00:53] &lt;isherman&gt; this is because for most websites, the autofill styling is helpful to users, even if the site styles non-autofilled elements — the common case is that the site author would want the autofill styling to be the UA's styling</li>
+ <li id="l-32" _a="tantek"><a href="#l-32">#</a> [00:53] &lt;tantek&gt; sure - but that's supposed to work due to the greater specificity I'm pretty sure</li>
+ <li id="l-33" _a="isherman"><a href="#l-33">#</a> [00:54] &lt;isherman&gt; I think even input[type=text] probably shouldn't be overridden</li>
+ <li id="l-34" _a="tantek"><a href="#l-34">#</a> [00:54] &lt;tantek&gt; worth constructing a test case (with input:-webkit-autofill vs. input and :link vs. a) and emailing www-style</li>
+ <li id="l-35" _a="isherman"><a href="#l-35">#</a> [00:54] &lt;isherman&gt; I mean I guess we could add input[type=text]:-webkit-autofilled to the UA style sheet</li>
+ <li id="l-36" _a="fantasai"><a href="#l-36">#</a> [00:54] * fantasai looks up</li>
+ <li id="l-37" _a="tantek"><a href="#l-37">#</a> [00:54] &lt;tantek&gt; especially if you find that true in other browsers</li>
+ <li id="l-38" _a="isherman" _r="ok"><a href="#l-38">#</a> [00:54] &lt;isherman&gt; ok, I can do that :)</li>
+ <li id="l-39" _a="TabAtkins_" _r="leaverou"><a href="#l-39">#</a> [00:54] &lt;TabAtkins_&gt; leaverou: Yes, done naively it would.</li>
+ <li id="l-40" _a="tantek"><a href="#l-40">#</a> [00:54] &lt;tantek&gt; isherman and [type=password]</li>
+ <li id="l-41" _a="fantasai" _r="tantek"><a href="#l-41">#</a> [00:55] &lt;fantasai&gt; tantek: your example works fine</li>
+ <li id="l-42" _a="fantasai" _r="tantek"><a href="#l-42">#</a> [00:55] &lt;fantasai&gt; tantek: the links are red</li>
+ <li id="l-43" _a="isherman" _r="fantasai"><a href="#l-43">#</a> [00:55] &lt;isherman&gt; fantasai: including visited links?</li>
+ <li id="l-44" _a="TabAtkins_" _r="leaverou"><a href="#l-44">#</a> [00:55] &lt;TabAtkins_&gt; leaverou: I think it'll be done with a special timing-function, perhaps 'discrete', that explicitly opts you into the &quot;Animate me as a single jump, regardless.&quot; mode.</li>
+ <li id="l-45" _a="tantek" _r="ok"><a href="#l-45">#</a> [00:55] &lt;tantek&gt; ok, fantasai - then how were UA style sheets supposed to work at all?</li>
+ <li id="l-46" _a="tantek"><a href="#l-46">#</a> [00:55] &lt;tantek&gt; seems pretty broken</li>
+ <li id="l-47" _a="isherman"><a href="#l-47">#</a> [00:55] * isherman checks the links case</li>
+ <li id="l-48" _a="fantasai" _r="isherman"><a href="#l-48">#</a> [00:55] &lt;fantasai&gt; isherman: yes</li>
+ <li id="l-49" _a="isherman" _r="hmm"><a href="#l-49">#</a> [00:56] &lt;isherman&gt; hmm, ok :/</li>
+ <li id="l-50" _a="fantasai" _r="tantek"><a href="#l-50">#</a> [00:56] &lt;fantasai&gt; tantek: I don't understand what you mean</li>
+ <li id="l-51" _a="fantasai" _r="tantek"><a href="#l-51">#</a> [00:56] &lt;fantasai&gt; tantek: they work fine</li>
+ <li id="l-52" _a="fantasai" _r="tantek"><a href="#l-52">#</a> [00:56] &lt;fantasai&gt; tantek: they style :link and :visited separately</li>
+ <li id="l-53" _a="fantasai" _r="tantek"><a href="#l-53">#</a> [00:56] &lt;fantasai&gt; tantek: if the author styles &lt;a&gt;, then they both get restyled</li>
+ <li id="l-54" _a="fantasai" _r="tantek"><a href="#l-54">#</a> [00:56] &lt;fantasai&gt; tantek: but if the author doesn't style &lt;a&gt;, then the UA stylesheet rules apply</li>
+ <li id="l-55" _a="isherman" _r="fantasai"><a href="#l-55">#</a> [01:06] &lt;isherman&gt; fantasai: in the case of :-autofill, we'd like to have the UA rule take precedence over any rules of lower specificity</li>
+ <li id="l-56" _a="isherman" _r="fantasai"><a href="#l-56">#</a> [01:06] &lt;isherman&gt; fantasai: is there any way to achieve that in the CSS model?</li>
+ <li id="l-57" _a="isherman" _r="(sorry"><a href="#l-57">#</a> [01:07] &lt;isherman&gt; (sorry, was afk for a bit)</li>
+ <li id="l-58"><a href="#l-58">#</a> [01:11] * Joins: isherman-book (Adium@216.239.45.4)</li>
+ <li id="l-59"><a href="#l-59">#</a> [01:11] * Parts: isherman-book (Adium@216.239.45.4)</li>
+ <li id="l-60" _a="fantasai" _r="isherman"><a href="#l-60">#</a> [01:25] &lt;fantasai&gt; isherman: I don't believe so</li>
+ <li id="l-61" _a="fantasai" _r="isherman"><a href="#l-61">#</a> [01:25] &lt;fantasai&gt; isherman: I'd poke bzbarsky for ideas</li>
+ <li id="l-62" _a="isherman" _r="fantasai"><a href="#l-62">#</a> [01:27] &lt;isherman&gt; fantasai: ok, I'll try getting his thoughts — thanks</li>
+ <li id="l-63"><a href="#l-63">#</a> [01:27] * Quits: tantek (tantek@159.63.23.38) (Quit: tantek)</li>
+ <li id="l-64"><a href="#l-64">#</a> [01:31] * Quits: miketaylr (miketaylr@70.112.101.224) (Quit: Leaving...)</li>
+ <li id="l-65"><a href="#l-65">#</a> [02:26] * Quits: krit (krit@192.150.10.201) (Quit: Leaving.)</li>
+ <li id="l-66" _a="hober" _r="isherman"><a href="#l-66">#</a> [02:32] &lt;hober&gt; isherman: in the meantime, <a href="http://trac.webkit.org/changeset/113511">http://trac.webkit.org/changeset/113511</a> should be reverted.</li>
+ <li id="l-67" _a="hober" _r="isherman"><a href="#l-67">#</a> [02:35] &lt;hober&gt; isherman: Longer-term, it would be good for CSS to have a feature or set of features that let you achieve what you're trying to achieve. but shorter-term, r113511 breaks too much content.</li>
+ <li id="l-68" _a="isherman" _r="hober"><a href="#l-68">#</a> [02:36] &lt;isherman&gt; hober: I agree, just haven't gotten around to submitting the revert</li>
+ <li id="l-69" _a="isherman"><a href="#l-69">#</a> [02:36] &lt;isherman&gt; coming soon...</li>
+ <li id="l-70" _a="hober" _r="isherman"><a href="#l-70">#</a> [02:36] &lt;hober&gt; isherman: thanks</li>
+ <li id="l-71" _a="leaverou" _r="TabAtkins_"><a href="#l-71">#</a> [02:39] &lt;leaverou&gt; TabAtkins_: That is confusing. So you'll have to tell authors that all timing functions operate on a subset of properties except that one?!</li>
+ <li id="l-72"><a href="#l-72">#</a> [02:55] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-73"><a href="#l-73">#</a> [02:59] * Quits: drublic (drublic@95.115.29.59) (Client exited)</li>
+ <li id="l-74"><a href="#l-74">#</a> [03:02] * Joins: nimbu (Adium@67.169.39.98)</li>
+ <li id="l-75"><a href="#l-75">#</a> [03:04] * Joins: nimbu1 (Adium@192.150.10.200)</li>
+ <li id="l-76"><a href="#l-76">#</a> [03:05] * Quits: nimbu (Adium@67.169.39.98) (Ping timeout)</li>
+ <li id="l-77"><a href="#l-77">#</a> [03:15] * Joins: nimbu (Adium@67.169.39.98)</li>
+ <li id="l-78"><a href="#l-78">#</a> [03:17] * Quits: nimbu1 (Adium@192.150.10.200) (Ping timeout)</li>
+ <li id="l-79"><a href="#l-79">#</a> [03:18] * Quits: nimbu (Adium@67.169.39.98) (Ping timeout)</li>
+ <li id="l-80" _a="TabAtkins_" _r="leaverou"><a href="#l-80">#</a> [03:40] &lt;TabAtkins_&gt; leaverou: Yes.  All other timing functions operate on &quot;animatable&quot; properties only.  'discrete' operates on all of them, because it doesn't actually animate them. ^_^</li>
+ <li id="l-81" _a="leaverou" _r="TabAtkins_"><a href="#l-81">#</a> [03:41] &lt;leaverou&gt; TabAtkins_: but that's basically step-end</li>
+ <li id="l-82" _a="leaverou"><a href="#l-82">#</a> [03:41] &lt;leaverou&gt; except the restriction on how it operates</li>
+ <li id="l-83" _a="TabAtkins_" _r="Yes"><a href="#l-83">#</a> [03:42] &lt;TabAtkins_&gt; Yes, though we'll probably have a start and stop variant of 'discrete' as well.</li>
+ <li id="l-84" _a="leaverou"><a href="#l-84">#</a> [03:42] &lt;leaverou&gt; but changing step-start and step-end to operate on all properties would be more sensible and wouldn't make websites break</li>
+ <li id="l-85" _a="leaverou"><a href="#l-85">#</a> [03:42] &lt;leaverou&gt; as very few currently use it</li>
+ <li id="l-86" _a="TabAtkins_"><a href="#l-86">#</a> [03:42] &lt;TabAtkins_&gt; If we do it quickly, maybe.</li>
+ <li id="l-87" _a="leaverou" _r="TabAtkins_"><a href="#l-87">#</a> [03:43] &lt;leaverou&gt; TabAtkins_: even if the intention of changing it becomes public quickly, it's sufficient</li>
+ <li id="l-88" _a="leaverou"><a href="#l-88">#</a> [03:44] &lt;leaverou&gt; authors will be careful when using it</li>
+ <li id="l-89" _a="TabAtkins_"><a href="#l-89">#</a> [03:44] &lt;TabAtkins_&gt; I doubt it. ^_^  People won't avoid relying on it just because we announce we'll change it in the future.</li>
+ <li id="l-90" _a="leaverou"><a href="#l-90">#</a> [03:46] &lt;leaverou&gt; it doesn't have a huge number of use cases as it currently stands anyway. Or at least I can't see them. I might be wrong, obviously.</li>
+ <li id="l-91" _a="TabAtkins_" _r="fantasai"><a href="#l-91">#</a> [03:46] &lt;TabAtkins_&gt; fantasai: isherman: The way to achieve it in CSS is to hook the styling on a pseudo-element, so it's not overridden unless they do so explicitly.</li>
+ <li id="l-92" _a="TabAtkins_"><a href="#l-92">#</a> [03:46] &lt;TabAtkins_&gt; This is how placeholder should be styled.</li>
+ <li id="l-93" _a="TabAtkins_"><a href="#l-93">#</a> [03:47] &lt;TabAtkins_&gt; If the placeholder text is shown, the input generates a ::placeholder pseudo.</li>
+ <li id="l-94" _a="TabAtkins_"><a href="#l-94">#</a> [03:47] &lt;TabAtkins_&gt; UA colors on ::placeholder than override author colors on input.</li>
+ <li id="l-95" _a="TabAtkins_"><a href="#l-95">#</a> [03:47] &lt;TabAtkins_&gt; You can do the same with autofill - make an input generate an ::autofill pseudo when it's been autofilled.</li>
+ <li id="l-96"><a href="#l-96">#</a> [03:49] * Joins: tantek (tantek@66.87.7.144)</li>
+ <li id="l-97"><a href="#l-97">#</a> [04:37] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-98" _a="TabAtkins_" _r="fantasai"><a href="#l-98">#</a> [05:03] &lt;TabAtkins_&gt; fantasai: I finished out the multi-line row case, so pull again if you're interested.</li>
+ <li id="l-99"><a href="#l-99">#</a> [05:10] * Joins: miketaylr (miketaylr@70.112.101.224)</li>
+ <li id="l-100"><a href="#l-100">#</a> [05:17] * Quits: tantek (tantek@66.87.7.144) (Quit: tantek)</li>
+ <li id="l-101"><a href="#l-101">#</a> [05:49] * Joins: myakura (myakura@221.171.5.98)</li>
+ <li id="l-102"><a href="#l-102">#</a> [05:51] * Joins: tantek (tantek@50.1.62.23)</li>
+ <li id="l-103"><a href="#l-103">#</a> [05:55] * Joins: krit (krit@24.6.231.253)</li>
+ <li id="l-104"><a href="#l-104">#</a> [06:11] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-105"><a href="#l-105">#</a> [06:50] * Joins: krit1 (krit@192.150.10.201)</li>
+ <li id="l-106"><a href="#l-106">#</a> [06:51] * Quits: krit (krit@24.6.231.253) (Ping timeout)</li>
+ <li id="l-107"><a href="#l-107">#</a> [07:23] * Quits: miketaylr (miketaylr@70.112.101.224) (Quit: Leaving...)</li>
+ <li id="l-108"><a href="#l-108">#</a> [07:31] * Quits: krit1 (krit@192.150.10.201) (Connection reset by peer)</li>
+ <li id="l-109"><a href="#l-109">#</a> [08:39] * Joins: Ms2ger (Ms2ger@91.181.73.242)</li>
+ <li id="l-110"><a href="#l-110">#</a> [08:51] * Quits: myakura (myakura@221.171.5.98) (Client exited)</li>
+ <li id="l-111"><a href="#l-111">#</a> [08:52] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-112"><a href="#l-112">#</a> [09:05] * Quits: kojiishi (kojiishi@222.158.227.129) (Connection reset by peer)</li>
+ <li id="l-113"><a href="#l-113">#</a> [09:06] * Joins: kojiishi (kojiishi@222.158.227.129)</li>
+ <li id="l-114"><a href="#l-114">#</a> [09:31] * Quits: Ms2ger (Ms2ger@91.181.73.242) (Ping timeout)</li>
+ <li id="l-115"><a href="#l-115">#</a> [09:39] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-116"><a href="#l-116">#</a> [11:13] * Joins: drublic (drublic@93.132.247.218)</li>
+ <li id="l-117"><a href="#l-117">#</a> [11:46] * Quits: kojiishi (kojiishi@222.158.227.129) (Connection reset by peer)</li>
+ <li id="l-118"><a href="#l-118">#</a> [11:49] * Joins: kojiishi (kojiishi@222.158.227.129)</li>
+ <li id="l-119"><a href="#l-119">#</a> [12:44] * Joins: Ms2ger (Ms2ger@94.226.71.4)</li>
+ <li id="l-120"><a href="#l-120">#</a> [12:57] * Joins: myakura (myakura@221.171.5.98)</li>
+ <li id="l-121"><a href="#l-121">#</a> [13:06] * Quits: Ms2ger (Ms2ger@94.226.71.4) (Ping timeout)</li>
+ <li id="l-122"><a href="#l-122">#</a> [13:27] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-123"><a href="#l-123">#</a> [14:07] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-124"><a href="#l-124">#</a> [14:25] * Joins: jdaggett (jdaggett@180.235.8.216)</li>
+ <li id="l-125"><a href="#l-125">#</a> [14:41] * Joins: dbaron (dbaron@72.94.180.111)</li>
+ <li id="l-126"><a href="#l-126">#</a> [15:08] * Quits: lhnz (lhnz@188.223.83.48) (Ping timeout)</li>
+ <li id="l-127"><a href="#l-127">#</a> [15:08] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-128"><a href="#l-128">#</a> [15:37] * Joins: krit (krit@24.6.231.253)</li>
+ <li id="l-129"><a href="#l-129">#</a> [15:38] * Joins: krit1 (krit@24.6.231.253)</li>
+ <li id="l-130"><a href="#l-130">#</a> [15:41] * Quits: krit (krit@24.6.231.253) (Ping timeout)</li>
+ <li id="l-131"><a href="#l-131">#</a> [16:16] * Joins: miketaylr (miketaylr@70.112.101.224)</li>
+ <li id="l-132"><a href="#l-132">#</a> [16:31] * Quits: tantek (tantek@50.1.62.23) (Quit: tantek)</li>
+ <li id="l-133"><a href="#l-133">#</a> [16:33] * Joins: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-134"><a href="#l-134">#</a> [16:33] * Parts: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-135"><a href="#l-135">#</a> [16:43] * Quits: lhnz (lhnz@188.223.83.48) (Quit: Leaving)</li>
+ <li id="l-136"><a href="#l-136">#</a> [16:49] * Joins: nimbu (Adium@192.150.10.200)</li>
+ <li id="l-137"><a href="#l-137">#</a> [16:57] * Quits: krit1 (krit@24.6.231.253) (Quit: Leaving.)</li>
+ <li id="l-138" _a="miketaylr"><a href="#l-138">#</a> [17:57] * miketaylr is now known as miketaylrawaylol</li>
+ <li id="l-139" _a="miketaylrawaylol"><a href="#l-139">#</a> [17:59] * miketaylrawaylol is now known as miketaylr</li>
+ <li id="l-140"><a href="#l-140">#</a> [18:04] * Quits: myakura (myakura@221.171.5.98) (Client exited)</li>
+ <li id="l-141"><a href="#l-141">#</a> [18:05] * Joins: tantek (tantek@66.87.7.184)</li>
+ <li id="l-142"><a href="#l-142">#</a> [18:22] * Joins: tantek_ (tantek@66.87.7.184)</li>
+ <li id="l-143"><a href="#l-143">#</a> [18:22] * Quits: tantek (tantek@66.87.7.184) (Connection reset by peer)</li>
+ <li id="l-144" _a="tantek_"><a href="#l-144">#</a> [18:22] * tantek_ is now known as tantek</li>
+ <li id="l-145"><a href="#l-145">#</a> [18:25] * Joins: dglazkov (u4270@88.198.6.68)</li>
+ <li id="l-146"><a href="#l-146">#</a> [18:30] * Joins: glenn (gadams@205.248.100.252)</li>
+ <li id="l-147"><a href="#l-147">#</a> [18:33] * Joins: krit (krit@192.150.10.201)</li>
+ <li id="l-148"><a href="#l-148">#</a> [18:47] * Quits: tantek (tantek@66.87.7.184) (Quit: tantek)</li>
+ <li id="l-149"><a href="#l-149">#</a> [18:48] * Joins: jet (jet@159.63.23.38)</li>
+ <li id="l-150"><a href="#l-150">#</a> [18:55] * Joins: tantek (tantek@205.248.100.252)</li>
+ <li id="l-151"><a href="#l-151">#</a> [19:07] * Quits: krit (krit@192.150.10.201) (Quit: Leaving.)</li>
+ <li id="l-152"><a href="#l-152">#</a> [19:09] * Joins: shepazu (shepazu@128.30.52.169)</li>
+ <li id="l-153"><a href="#l-153">#</a> [19:09] * Quits: shepazu (shepazu@128.30.52.169) (Client exited)</li>
+ <li id="l-154"><a href="#l-154">#</a> [19:09] * Joins: shepazu (shepazu@128.30.52.169)</li>
+ <li id="l-155"><a href="#l-155">#</a> [19:15] * Joins: krit (krit@192.150.10.201)</li>
+ <li id="l-156"><a href="#l-156">#</a> [19:55] * Joins: arronei_ (arronei@131.107.192.154)</li>
+ <li id="l-157"><a href="#l-157">#</a> [19:55] * Quits: drublic (drublic@93.132.247.218) (Client exited)</li>
+ <li id="l-158"><a href="#l-158">#</a> [19:55] * Quits: arronei (arronei@131.107.192.154) (Ping timeout)</li>
+ <li id="l-159"><a href="#l-159">#</a> [21:32] * Quits: tantek (tantek@205.248.100.252) (Ping timeout)</li>
+ <li id="l-160"><a href="#l-160">#</a> [21:36] * Quits: shepazu (shepazu@128.30.52.169) (Ping timeout)</li>
+ <li id="l-161"><a href="#l-161">#</a> [21:39] * Quits: glenn (gadams@205.248.100.252) (Connection reset by peer)</li>
+ <li id="l-162"><a href="#l-162">#</a> [21:50] * Joins: Ms2ger (Ms2ger@94.226.71.4)</li>
+ <li id="l-163"><a href="#l-163">#</a> [22:02] * Joins: tantek (tantek@66.87.2.85)</li>
+ <li id="l-164"><a href="#l-164">#</a> [22:03] * Quits: jet (jet@159.63.23.38) (Quit: jet)</li>
+ <li id="l-165"><a href="#l-165">#</a> [22:08] * Joins: jet (jet@159.63.23.38)</li>
+ <li id="l-166"><a href="#l-166">#</a> [22:09] * Quits: tantek (tantek@66.87.2.85) (Ping timeout)</li>
+ <li id="l-167"><a href="#l-167">#</a> [22:09] * Joins: tantek (tantek@66.87.4.133)</li>
+ <li id="l-168"><a href="#l-168">#</a> [22:24] * Quits: tantek (tantek@66.87.4.133) (Ping timeout)</li>
+ <li id="l-169"><a href="#l-169">#</a> [22:29] * Quits: Ms2ger (Ms2ger@94.226.71.4) (Ping timeout)</li>
+ <li id="l-170"><a href="#l-170">#</a> [22:34] * Joins: tantek (tantek@66.87.4.176)</li>
+ <li id="l-171"><a href="#l-171">#</a> [22:41] * Joins: glenn (gadams@205.248.100.252)</li>
+ <li id="l-172"><a href="#l-172">#</a> [22:43] * Quits: tantek (tantek@66.87.4.176) (Ping timeout)</li>
+ <li id="l-173"><a href="#l-173">#</a> [22:44] * Joins: tantek (tantek@205.248.100.252)</li>
+ <li id="l-174"><a href="#l-174">#</a> [22:45] * Quits: dbaron (dbaron@72.94.180.111) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-175"><a href="#l-175">#</a> [22:51] * Joins: shepazu (shepazu@128.30.52.169)</li>
+ <li id="l-176"><a href="#l-176">#</a> [23:26] * Joins: drublic (drublic@93.132.247.218)</li>
+ <li id="l-177"><a href="#l-177">#</a> Session Close: Wed May 02 00:00:31 2012</li>
+</ol>
+<p id="end">The end :)

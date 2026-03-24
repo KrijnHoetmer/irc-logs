@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20120522</title>
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/css.20120522.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2012-05-22 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Tue May 22 00:00:00 2012</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #css</li>
+ <li id="l-3" _a="sylvaing"><a href="#l-3">#</a> [00:19] * sylvaing is now known as sylvaing_away</li>
+ <li id="l-4" _a="fantasai" _r="heycam|away"><a href="#l-4">#</a> [00:51] &lt;fantasai&gt; heycam|away: if resolving the percentage would require doing layout, it must stay as a percentage</li>
+ <li id="l-5" _a="fantasai" _r="heycam|away"><a href="#l-5">#</a> [00:51] &lt;fantasai&gt; heycam|away: (as a result, most percentages stay as percentages)</li>
+ <li id="l-6" _a="heycam|away"><a href="#l-6">#</a> [00:54] * heycam|away is now known as heycam</li>
+ <li id="l-7" _a="heycam" _r="fantasai"><a href="#l-7">#</a> [00:57] &lt;heycam&gt; fantasai, ok, otherwise is it preferred to convert it? most (all?) SVG properties aren't going to affect layout I guess.</li>
+ <li id="l-8" _a="fantasai" _r="mmm"><a href="#l-8">#</a> [00:57] &lt;fantasai&gt; mmm, I'm not sure about that one :)</li>
+ <li id="l-9" _a="fantasai"><a href="#l-9">#</a> [00:57] &lt;fantasai&gt; what properties were you thinking of?</li>
+ <li id="l-10" _a="heycam"><a href="#l-10">#</a> [00:58] &lt;heycam&gt; the first one I was looking at (as I'm reformatting all the property definition tables in the spec to have Computed Value lines) is stroke-width</li>
+ <li id="l-11" _a="heycam"><a href="#l-11">#</a> [00:58] &lt;heycam&gt; oh but hang on -- percentages there refer to the viewport size, and perhaps that can be set by layout affecting how big the outer svg box is</li>
+ <li id="l-12" _a="heycam"><a href="#l-12">#</a> [01:01] &lt;heycam&gt; that and stroke-dashoffset seem to be the only two properties we have that take percentages, surprisingly</li>
+ <li id="l-13" _a="heycam"><a href="#l-13">#</a> [01:02] &lt;heycam&gt; (until we come to promoting a bunch of them)</li>
+ <li id="l-14" _a="heycam"><a href="#l-14">#</a> [01:02] &lt;heycam&gt; s/them/attributes/</li>
+ <li id="l-15" _a="TabAtkins_" _r="heycam"><a href="#l-15">#</a> [01:23] &lt;TabAtkins_&gt; heycam: Layout can't currently affect the viewport size, no?</li>
+ <li id="l-16" _a="TabAtkins_"><a href="#l-16">#</a> [01:23] &lt;TabAtkins_&gt; It's always set by the root element and nothing else.</li>
+ <li id="l-17" _a="heycam" _r="TabAtkins_"><a href="#l-17">#</a> [01:24] &lt;heycam&gt; TabAtkins_, I'm wondering about when you leave off the viewBox attribute</li>
+ <li id="l-18" _a="TabAtkins_"><a href="#l-18">#</a> [01:24] &lt;TabAtkins_&gt; But &lt;svg&gt; nested inside of HTML can indeed depend on layout, if that's what you are referring to.</li>
+ <li id="l-19" _a="heycam" _r="TabAtkins_"><a href="#l-19">#</a> [01:24] &lt;heycam&gt; TabAtkins_, there's some magic that determines the viewport depending on the width/height</li>
+ <li id="l-20" _a="heycam"><a href="#l-20">#</a> [01:24] &lt;heycam&gt; yeah</li>
+ <li id="l-21" _a="TabAtkins_"><a href="#l-21">#</a> [01:25] &lt;TabAtkins_&gt; Excluding nesting in another language, I think that's well-defined before layout.</li>
+ <li id="l-22" _a="TabAtkins_"><a href="#l-22">#</a> [01:25] &lt;TabAtkins_&gt; But since it can depend on the outer language doing layout, yeah, it should stay a used value.</li>
+ <li id="l-23" _a="sylvaing_away"><a href="#l-23">#</a> [01:25] * sylvaing_away is now known as sylvaing</li>
+ <li id="l-24" _a="heycam"><a href="#l-24">#</a> [01:26] &lt;heycam&gt; in general, do we want to compute percentages to absolute values, except in the cases where it requires layout?</li>
+ <li id="l-25" _a="TabAtkins_"><a href="#l-25">#</a> [01:26] &lt;TabAtkins_&gt; Yes.  Any value which *can* be resolved without layout, *should* be resolved at computed-value time.</li>
+ <li id="l-26" _a="TabAtkins_"><a href="#l-26">#</a> [01:27] &lt;TabAtkins_&gt; That way you can depend fully on computed values being &quot;correct&quot; except when they depend on layout.</li>
+ <li id="l-27" _a="heycam"><a href="#l-27">#</a> [01:27] &lt;heycam&gt; ok</li>
+ <li id="l-28" _a="heycam"><a href="#l-28">#</a> [01:27] &lt;heycam&gt; and what about other kinds of values? any general rules?</li>
+ <li id="l-29" _a="TabAtkins_"><a href="#l-29">#</a> [01:28] &lt;TabAtkins_&gt; And then specs refer solely to the computed or used values, as appropriate, except in very special circumstances when they need to refer to earlier value computation steps.</li>
+ <li id="l-30" _a="heycam"><a href="#l-30">#</a> [01:29] &lt;heycam&gt; I noticed for example color does some things</li>
+ <li id="l-31" _a="TabAtkins_"><a href="#l-31">#</a> [01:29] &lt;TabAtkins_&gt; The CSS value pipeline is cascaded-&gt;specified-&gt;computed-&gt;used-&gt;actual.  Cascaded is the one that wins the cascade.  Specified is same as cascaded, except with global keywords swapped out.  Computed and used are as I said.  Actual is used, but with values corrected for limitations of the display device (like rounding to integer pixels).</li>
+ <li id="l-32" _a="heycam"><a href="#l-32">#</a> [01:30] &lt;heycam&gt; does color do the computed thing that it does because there are multiple ways to specify the same colour, and there's general desire to canonicalise the computed value?</li>
+ <li id="l-33" _a="TabAtkins_"><a href="#l-33">#</a> [01:32] &lt;TabAtkins_&gt; Yes.</li>
+ <li id="l-34" _a="heycam"><a href="#l-34">#</a> [01:33] &lt;heycam&gt; ok cool, these sound like rules I can apply, thanks (and to fantasai)</li>
+ <li id="l-35"><a href="#l-35">#</a> [01:33] * Quits: drublic (drublic@77.2.150.78) (Client exited)</li>
+ <li id="l-36"><a href="#l-36">#</a> [01:34] * Joins: drublic (drublic@77.2.150.78)</li>
+ <li id="l-37" _a="TabAtkins_"><a href="#l-37">#</a> [01:34] &lt;TabAtkins_&gt; You want to canonicalize the computed value so that you can do comparisons correctly for e.g. Transitions or toggle().</li>
+ <li id="l-38" _a="TabAtkins_" _r="Note"><a href="#l-38">#</a> [01:34] &lt;TabAtkins_&gt; Note, as always, that this doesn't necessarily have any bearing on the serialized value gotten from various APIs.</li>
+ <li id="l-39" _a="heycam"><a href="#l-39">#</a> [01:34] &lt;heycam&gt; ok</li>
+ <li id="l-40"><a href="#l-40">#</a> [01:35] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-41"><a href="#l-41">#</a> [01:37] * Quits: drublic (drublic@77.2.150.78) (Ping timeout)</li>
+ <li id="l-42"><a href="#l-42">#</a> [01:38] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-43" _a="TabAtkins_" _r="fantasai"><a href="#l-43">#</a> [01:42] &lt;TabAtkins_&gt; fantasai: While writing the note about computed value comparison for toggle(), I was going to use box-shadow as an example, but I realized it actually has a badly-written computed value line.</li>
+ <li id="l-44" _a="TabAtkins_"><a href="#l-44">#</a> [01:43] &lt;TabAtkins_&gt; It says &quot;as specified&quot;, which means that &quot;0px 0px blue&quot; and &quot;0px 0px 0px blue&quot; would compute as different values.</li>
+ <li id="l-45" _a="fantasai"><a href="#l-45">#</a> [01:43] &lt;fantasai&gt; ah</li>
+ <li id="l-46" _a="TabAtkins_"><a href="#l-46">#</a> [01:43] &lt;TabAtkins_&gt; Mind if I make an editorial tweak to the wording?</li>
+ <li id="l-47" _a="fantasai" _r="yes"><a href="#l-47">#</a> [01:44] &lt;fantasai&gt; yes, I want to know what you're tweaking it to :)</li>
+ <li id="l-48" _a="fantasai"><a href="#l-48">#</a> [01:44] &lt;fantasai&gt; and also Bert will need to incorporate it into the diffs</li>
+ <li id="l-49" _a="fantasai"><a href="#l-49">#</a> [01:44] &lt;fantasai&gt; so</li>
+ <li id="l-50" _a="fantasai"><a href="#l-50">#</a> [01:44] &lt;fantasai&gt; please post an issue</li>
+ <li id="l-51" _a="TabAtkins_"><a href="#l-51">#</a> [01:44] &lt;TabAtkins_&gt; Okay.  A www-style post sufficient?</li>
+ <li id="l-52" _a="fantasai"><a href="#l-52">#</a> [01:44] &lt;fantasai&gt; yep</li>
+ <li id="l-53" _a="TabAtkins_" _r="k"><a href="#l-53">#</a> [01:45] &lt;TabAtkins_&gt; k, one sec</li>
+ <li id="l-54"><a href="#l-54">#</a> [01:51] * Joins: jdaggett (jdaggett@202.221.217.73)</li>
+ <li id="l-55"><a href="#l-55">#</a> [02:14] * Quits: stearns (anonymous@192.150.22.5) (Quit: stearns)</li>
+ <li id="l-56"><a href="#l-56">#</a> [02:14] * Joins: stearns (anonymous@192.150.22.5)</li>
+ <li id="l-57" _a="fantasai"><a href="#l-57">#</a> [02:14] * fantasai waves to jdaggett</li>
+ <li id="l-58" _a="jdaggett"><a href="#l-58">#</a> [02:15] &lt;jdaggett&gt; hiya</li>
+ <li id="l-59" _a="jdaggett"><a href="#l-59">#</a> [02:15] &lt;jdaggett&gt; now reading about unquoted font family names over coffee</li>
+ <li id="l-60" _a="jdaggett"><a href="#l-60">#</a> [02:15] &lt;jdaggett&gt; need stronger coffee...</li>
+ <li id="l-61" _a="fantasai"><a href="#l-61">#</a> [02:22] * fantasai is attempting to create order out of INBOX chaos today</li>
+ <li id="l-62" _a="jdaggett"><a href="#l-62">#</a> [02:23] * jdaggett submits to chaos, for it is my lord and master...</li>
+ <li id="l-63" _a="dbaron"><a href="#l-63">#</a> [02:23] &lt;dbaron&gt; at least the sun isn't going away today while you're trying to drink your coffee</li>
+ <li id="l-64" _a="jdaggett"><a href="#l-64">#</a> [02:25] &lt;jdaggett&gt; this is true.  very bummed i couldn't find eclipse glasses when i went looking for them sunday night...</li>
+ <li id="l-65" _a="jdaggett"><a href="#l-65">#</a> [02:25] &lt;jdaggett&gt; an eclipse seen via the tv just looks like another movie effect</li>
+ <li id="l-66" _a="jdaggett"><a href="#l-66">#</a> [02:27] &lt;jdaggett&gt; although i did enjoy the clips of rather large americans eating bbq while viewing the eclipse that were shown on the news last night</li>
+ <li id="l-67"><a href="#l-67">#</a> [02:34] * Quits: dbaron (dbaron@206.15.76.122) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-68"><a href="#l-68">#</a> [02:53] * Quits: tantek (tantek@206.15.76.122) (Quit: tantek)</li>
+ <li id="l-69"><a href="#l-69">#</a> [03:01] * Quits: arno (arno@192.150.10.201) (Quit: Leaving.)</li>
+ <li id="l-70"><a href="#l-70">#</a> [03:17] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-71" _a="sylvaing"><a href="#l-71">#</a> [03:28] * sylvaing is now known as sylvaing_away</li>
+ <li id="l-72"><a href="#l-72">#</a> [03:36] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-73"><a href="#l-73">#</a> [03:39] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-74"><a href="#l-74">#</a> [03:43] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-75"><a href="#l-75">#</a> [03:44] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-76"><a href="#l-76">#</a> [03:44] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-77"><a href="#l-77">#</a> [03:50] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-78"><a href="#l-78">#</a> [04:05] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-79"><a href="#l-79">#</a> [04:11] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-80"><a href="#l-80">#</a> [04:15] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-81"><a href="#l-81">#</a> [04:15] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-82"><a href="#l-82">#</a> [04:21] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-83"><a href="#l-83">#</a> [04:21] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-84" _a="heycam"><a href="#l-84">#</a> [04:39] * heycam is now known as heycam|away</li>
+ <li id="l-85"><a href="#l-85">#</a> [04:39] * Quits: nimbu (Adium@60.241.8.154) (Quit: Leaving.)</li>
+ <li id="l-86"><a href="#l-86">#</a> [05:01] * Joins: jet (jet@67.169.43.128)</li>
+ <li id="l-87"><a href="#l-87">#</a> [05:05] * Quits: jet (jet@67.169.43.128) (Quit: jet)</li>
+ <li id="l-88" _a="heycam|away"><a href="#l-88">#</a> [05:22] * heycam|away is now known as heycam</li>
+ <li id="l-89"><a href="#l-89">#</a> [05:33] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-90"><a href="#l-90">#</a> [05:36] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-91"><a href="#l-91">#</a> [05:39] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-92"><a href="#l-92">#</a> [05:42] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-93"><a href="#l-93">#</a> [05:42] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-94"><a href="#l-94">#</a> [05:46] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-95"><a href="#l-95">#</a> [05:46] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-96" _a="heycam"><a href="#l-96">#</a> [05:49] &lt;heycam&gt; what does the Applies To line mean exactly? is it that setting the property on the listed elements can have some sort of effect?</li>
+ <li id="l-97" _a="heycam"><a href="#l-97">#</a> [05:49] &lt;heycam&gt; I'm looking at removing the duplicated property definitions from the SVG spec, like &quot;display&quot;</li>
+ <li id="l-98" _a="heycam"><a href="#l-98">#</a> [05:50] &lt;heycam&gt; in CSS, it says that display applies to all elements, but in SVG setting say display:inline on certain elements will still not make them render anything</li>
+ <li id="l-99" _a="heycam"><a href="#l-99">#</a> [05:50] &lt;heycam&gt; so it is accurate to say that display applies to all elements?</li>
+ <li id="l-100" _a="heycam"><a href="#l-100">#</a> [05:56] &lt;heycam&gt; another question: is there an index to let me know what's the most recent spec that defines a given property (so I don't have to trawl through dev.w3.org/csswg/ looking for them)?</li>
+ <li id="l-101"><a href="#l-101">#</a> [05:57] * Quits: glenn (gadams@71.218.125.40) (Client exited)</li>
+ <li id="l-102" _a="Liam" _r="heycam"><a href="#l-102">#</a> [05:58] &lt;Liam&gt; heycam, might be a little late at night for some people here</li>
+ <li id="l-103" _a="heycam" _r="Liam"><a href="#l-103">#</a> [05:58] &lt;heycam&gt; Liam, fair point. I can wait. :)</li>
+ <li id="l-104" _a="Liam"><a href="#l-104">#</a> [05:58] &lt;Liam&gt; I don't know of a regularly maintained index unfortunately, have been thinking about that too</li>
+ <li id="l-105" _a="heycam"><a href="#l-105">#</a> [05:58] &lt;heycam&gt; ok</li>
+ <li id="l-106" _a="Liam"><a href="#l-106">#</a> [05:59] &lt;Liam&gt; I think the implication is that the property is ignored (or just inherits from) elements to which it does not apply, we were looking at doing something similar for XSL-FO</li>
+ <li id="l-107" _a="Liam"><a href="#l-107">#</a> [05:59] &lt;Liam&gt; getting rid of the duplicate defs, that is</li>
+ <li id="l-108"><a href="#l-108">#</a> [06:00] * Quits: nimbu (Adium@60.241.8.154) (Quit: Leaving.)</li>
+ <li id="l-109" _a="heycam" _r="ok"><a href="#l-109">#</a> [06:00] &lt;heycam&gt; ok, so no rendering/behaviour effect</li>
+ <li id="l-110"><a href="#l-110">#</a> [06:36] * Joins: tantek (tantek@50.0.92.247)</li>
+ <li id="l-111"><a href="#l-111">#</a> [07:12] * Joins: macpherson (macpherson@74.125.56.17)</li>
+ <li id="l-112"><a href="#l-112">#</a> [07:36] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-113"><a href="#l-113">#</a> [07:39] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-114"><a href="#l-114">#</a> [09:19] * Joins: Ms2ger (Ms2ger@91.181.125.136)</li>
+ <li id="l-115" _a="heycam"><a href="#l-115">#</a> [09:35] * heycam is now known as heycam|away</li>
+ <li id="l-116"><a href="#l-116">#</a> [09:37] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-117"><a href="#l-117">#</a> [09:40] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-118"><a href="#l-118">#</a> [09:42] * Joins: Ms2ger` (Ms2ger@91.181.125.136)</li>
+ <li id="l-119"><a href="#l-119">#</a> [09:42] * Quits: Ms2ger (Ms2ger@91.181.125.136) (Ping timeout)</li>
+ <li id="l-120"><a href="#l-120">#</a> [09:45] * Quits: Ms2ger` (Ms2ger@91.181.125.136) (Ping timeout)</li>
+ <li id="l-121"><a href="#l-121">#</a> [09:45] * Joins: Ms2ger` (Ms2ger@91.181.125.136)</li>
+ <li id="l-122"><a href="#l-122">#</a> [09:49] * Joins: drublic (drublic@77.2.137.227)</li>
+ <li id="l-123"><a href="#l-123">#</a> [09:52] * Quits: drublic (drublic@77.2.137.227) (Ping timeout)</li>
+ <li id="l-124"><a href="#l-124">#</a> [10:02] * Quits: Ms2ger` (Ms2ger@91.181.125.136) (Ping timeout)</li>
+ <li id="l-125"><a href="#l-125">#</a> [10:15] * Quits: jdaggett (jdaggett@202.221.217.73) (Quit: jdaggett)</li>
+ <li id="l-126"><a href="#l-126">#</a> [10:18] * Joins: drublic (drublic@93.132.242.243)</li>
+ <li id="l-127"><a href="#l-127">#</a> [10:19] * Joins: Ms2ger` (Ms2ger@91.181.125.136)</li>
+ <li id="l-128"><a href="#l-128">#</a> [10:57] * Joins: florianr (florianr@213.236.208.22)</li>
+ <li id="l-129"><a href="#l-129">#</a> [11:07] * Joins: SimonSapin (simon@82.232.219.95)</li>
+ <li id="l-130"><a href="#l-130">#</a> [11:28] * Quits: ed (ed@88.131.66.80) (Quit: ZNC - <a href="http://znc.sourceforge.net">http://znc.sourceforge.net</a>)</li>
+ <li id="l-131"><a href="#l-131">#</a> [11:37] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-132"><a href="#l-132">#</a> [11:40] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-133"><a href="#l-133">#</a> [12:34] * Joins: ed (ed@88.131.66.80)</li>
+ <li id="l-134"><a href="#l-134">#</a> [13:38] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-135"><a href="#l-135">#</a> [15:08] * Joins: lhnz (lhnz@188.223.83.48)</li>
+ <li id="l-136"><a href="#l-136">#</a> [15:56] * Joins: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-137"><a href="#l-137">#</a> [16:14] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-138"><a href="#l-138">#</a> [16:14] * Quits: nimbu (Adium@220.244.185.73) (Quit: Leaving.)</li>
+ <li id="l-139"><a href="#l-139">#</a> [16:32] * Parts: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-140"><a href="#l-140">#</a> [16:52] * Joins: arno (arno@192.150.10.201)</li>
+ <li id="l-141"><a href="#l-141">#</a> [17:08] * Quits: florianr (florianr@213.236.208.22) (Quit: Leaving.)</li>
+ <li id="l-142"><a href="#l-142">#</a> [17:11] * Joins: glenn (gadams@71.218.125.40)</li>
+ <li id="l-143"><a href="#l-143">#</a> [17:20] * Quits: dglazkov (u4270@88.198.6.68) (Client exited)</li>
+ <li id="l-144"><a href="#l-144">#</a> [17:33] * Quits: lhnz (lhnz@188.223.83.48) (Quit: Leaving)</li>
+ <li id="l-145"><a href="#l-145">#</a> [17:39] * Joins: dglazkov (u4270@88.198.6.68)</li>
+ <li id="l-146" _a="stearns" _r="heycam"><a href="#l-146">#</a> [17:41] &lt;stearns&gt; heycam: MDN has &quot;Specifications&quot; links from each property to what defines it</li>
+ <li id="l-147" _a="stearns" _r="heycam"><a href="#l-147">#</a> [17:42] &lt;stearns&gt; heycam: and <a href="http://dochub.io/#css/">http://dochub.io/#css/</a> is a good index to each property page</li>
+ <li id="l-148"><a href="#l-148">#</a> [17:43] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-149"><a href="#l-149">#</a> [17:52] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-150"><a href="#l-150">#</a> [17:52] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-151"><a href="#l-151">#</a> [17:56] * Joins: miketaylr (miketaylr@70.112.101.224)</li>
+ <li id="l-152"><a href="#l-152">#</a> [18:02] * Joins: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-153" _a="sylvaing_away"><a href="#l-153">#</a> [18:03] * sylvaing_away is now known as sylvaing</li>
+ <li id="l-154"><a href="#l-154">#</a> [18:05] * Parts: ksweeney (ksweeney@63.119.10.10)</li>
+ <li id="l-155"><a href="#l-155">#</a> [18:12] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-156"><a href="#l-156">#</a> [18:12] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-157"><a href="#l-157">#</a> [18:39] * Quits: miketaylr (miketaylr@70.112.101.224) (Quit: dflk;adfslkj;alsiekfj;laiskdf)</li>
+ <li id="l-158"><a href="#l-158">#</a> [18:43] * Joins: jet (jet@206.15.76.122)</li>
+ <li id="l-159"><a href="#l-159">#</a> [18:45] * Quits: jet (jet@206.15.76.122) (Connection reset by peer)</li>
+ <li id="l-160"><a href="#l-160">#</a> [18:45] * Joins: jet (jet@206.15.76.122)</li>
+ <li id="l-161"><a href="#l-161">#</a> [18:45] * Quits: jet (jet@206.15.76.122) (Quit: jet)</li>
+ <li id="l-162"><a href="#l-162">#</a> [18:46] * Joins: jet (jet@206.15.76.122)</li>
+ <li id="l-163"><a href="#l-163">#</a> [18:52] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-164"><a href="#l-164">#</a> [18:52] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-165"><a href="#l-165">#</a> [19:10] * Quits: myakura (myakura@122.130.129.42) (Client exited)</li>
+ <li id="l-166"><a href="#l-166">#</a> [19:11] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-167"><a href="#l-167">#</a> [19:11] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-168"><a href="#l-168">#</a> [19:13] * Quits: arno (arno@192.150.10.201) (Quit: Leaving.)</li>
+ <li id="l-169"><a href="#l-169">#</a> [19:13] * Joins: arno (arno@192.150.10.201)</li>
+ <li id="l-170"><a href="#l-170">#</a> [19:13] * Quits: arno (arno@192.150.10.201) (Quit: Leaving.)</li>
+ <li id="l-171"><a href="#l-171">#</a> [19:14] * Joins: arno (arno@192.150.10.201)</li>
+ <li id="l-172"><a href="#l-172">#</a> [19:32] * Quits: drublic (drublic@93.132.242.243) (Client exited)</li>
+ <li id="l-173"><a href="#l-173">#</a> [19:32] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-174"><a href="#l-174">#</a> [19:32] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-175"><a href="#l-175">#</a> [19:32] * Joins: drublic (drublic@93.132.242.243)</li>
+ <li id="l-176"><a href="#l-176">#</a> [19:33] * Quits: SimonSapin (simon@82.232.219.95) (Ping timeout)</li>
+ <li id="l-177"><a href="#l-177">#</a> [19:36] * Quits: drublic (drublic@93.132.242.243) (Ping timeout)</li>
+ <li id="l-178"><a href="#l-178">#</a> [19:37] * Joins: dbaron (dbaron@206.15.76.122)</li>
+ <li id="l-179"><a href="#l-179">#</a> [19:42] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-180"><a href="#l-180">#</a> [19:42] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-181"><a href="#l-181">#</a> [19:52] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-182"><a href="#l-182">#</a> [19:52] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-183"><a href="#l-183">#</a> [19:59] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-184"><a href="#l-184">#</a> [20:07] * Quits: jet (jet@206.15.76.122) (Quit: jet)</li>
+ <li id="l-185"><a href="#l-185">#</a> [20:09] * Joins: jet (jet@206.15.76.122)</li>
+ <li id="l-186"><a href="#l-186">#</a> [20:11] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-187"><a href="#l-187">#</a> [20:11] * Joins: nimbu (Adium@27.32.173.105)</li>
+ <li id="l-188"><a href="#l-188">#</a> [20:20] * Joins: nimbu1 (Adium@60.241.8.154)</li>
+ <li id="l-189"><a href="#l-189">#</a> [20:20] * Quits: nimbu (Adium@27.32.173.105) (Connection reset by peer)</li>
+ <li id="l-190"><a href="#l-190">#</a> [20:35] * Joins: miketaylr (miketaylr@70.112.101.224)</li>
+ <li id="l-191"><a href="#l-191">#</a> [20:36] * Quits: dbaron (dbaron@206.15.76.122) (Quit: 8403864 bytes have been tenured, next gc will be global.)</li>
+ <li id="l-192"><a href="#l-192">#</a> [20:36] * Joins: dbaron (dbaron@206.15.76.122)</li>
+ <li id="l-193" _a="sylvaing"><a href="#l-193">#</a> [20:37] * sylvaing is now known as sylvaing_away</li>
+ <li id="l-194"><a href="#l-194">#</a> [20:47] * Quits: myakura (myakura@122.130.129.42) (Client exited)</li>
+ <li id="l-195"><a href="#l-195">#</a> [20:57] * Joins: danielfilho (danielfilh@187.31.77.7)</li>
+ <li id="l-196" _a="miketaylr"><a href="#l-196">#</a> [21:01] * miketaylr is now known as miketaylrawaylol</li>
+ <li id="l-197" _a="miketaylrawaylol"><a href="#l-197">#</a> [21:09] * miketaylrawaylol is now known as miketaylr</li>
+ <li id="l-198"><a href="#l-198">#</a> [21:23] * Quits: nimbu1 (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-199"><a href="#l-199">#</a> [21:23] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-200" _a="sylvaing_away"><a href="#l-200">#</a> [21:34] * sylvaing_away is now known as sylvaing</li>
+ <li id="l-201"><a href="#l-201">#</a> [21:52] * Quits: danielfilho (danielfilh@187.31.77.7) (Quit: &lt;/html&gt;)</li>
+ <li id="l-202"><a href="#l-202">#</a> [21:52] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-203"><a href="#l-203">#</a> [21:52] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-204"><a href="#l-204">#</a> [21:56] * Joins: drublic (drublic@77.2.137.227)</li>
+ <li id="l-205"><a href="#l-205">#</a> [22:02] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-206"><a href="#l-206">#</a> [22:02] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-207"><a href="#l-207">#</a> [22:11] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-208"><a href="#l-208">#</a> [22:12] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-209" _a="TabAtkins_" _r="heycam|away"><a href="#l-209">#</a> [22:19] &lt;TabAtkins_&gt; heycam|away: The Applies To line is informative only - it just gives a hint about the kinds of elements that the property has an effect on.</li>
+ <li id="l-210"><a href="#l-210">#</a> [22:21] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-211"><a href="#l-211">#</a> [22:21] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-212"><a href="#l-212">#</a> [22:23] * Quits: Liam (liam@128.30.52.169) (Ping timeout)</li>
+ <li id="l-213"><a href="#l-213">#</a> [22:33] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-214"><a href="#l-214">#</a> [22:33] * Joins: nimbu (Adium@27.32.173.220)</li>
+ <li id="l-215" _a="fantasai" _r="TabAtkins_"><a href="#l-215">#</a> [22:38] &lt;fantasai&gt; TabAtkins_, heycam|away: The Applies-to line is normative. <a href="http://www.w3.org/TR/CSS21/about.html#applies-to">http://www.w3.org/TR/CSS21/about.html#applies-to</a></li>
+ <li id="l-216" _a="TabAtkins_"><a href="#l-216">#</a> [22:38] &lt;TabAtkins_&gt; That section has no normative text. ^_^</li>
+ <li id="l-217" _a="fantasai"><a href="#l-217">#</a> [22:38] &lt;fantasai&gt; It defines which parts of the propdef tables are normative and informative</li>
+ <li id="l-218" _a="fantasai"><a href="#l-218">#</a> [22:38] &lt;fantasai&gt; and 1.4 is indeed normative</li>
+ <li id="l-219" _a="tantek"><a href="#l-219">#</a> [22:40] &lt;tantek&gt; Perhaps it should read &quot;MUST apply to:&quot; :P</li>
+ <li id="l-220" _a="fantasai"><a href="#l-220">#</a> [22:41] &lt;fantasai&gt; it's also MUST NOT apply to things not listed there..</li>
+ <li id="l-221" _a="tantek"><a href="#l-221">#</a> [22:41] &lt;tantek&gt; fantasai - I think historically we've treated such experimentation as within the realm of browser innovation</li>
+ <li id="l-222" _a="tantek"><a href="#l-222">#</a> [22:41] &lt;tantek&gt; sometimes browsers will figure out how to make a feature apply to more types of elements</li>
+ <li id="l-223" _a="tantek"><a href="#l-223">#</a> [22:42] &lt;tantek&gt; whereas the spec in question only requires that it apply to *some*</li>
+ <li id="l-224" _a="fantasai"><a href="#l-224">#</a> [22:42] &lt;fantasai&gt; while working on 2.1, we tighted up a lot of that</li>
+ <li id="l-225" _a="fantasai"><a href="#l-225">#</a> [22:42] &lt;fantasai&gt; and in areas where the UA was allowed to do more, we said so explicitly</li>
+ <li id="l-226"><a href="#l-226">#</a> [22:42] * Quits: nimbu (Adium@27.32.173.220) (Ping timeout)</li>
+ <li id="l-227" _a="fantasai"><a href="#l-227">#</a> [22:42] &lt;fantasai&gt; e.g. page-break</li>
+ <li id="l-228" _a="tantek"><a href="#l-228">#</a> [22:42] &lt;tantek&gt; over time as more browsers expand beyond the required apply to, we can expand the spec accordingly</li>
+ <li id="l-229"><a href="#l-229">#</a> [22:42] * Joins: nimbu (Adium@60.241.8.154)</li>
+ <li id="l-230" _a="tantek" _r="ok"><a href="#l-230">#</a> [22:42] &lt;tantek&gt; ok, so now a property must say explicitly whether a UA may do more?</li>
+ <li id="l-231" _a="fantasai" _r="generally"><a href="#l-231">#</a> [22:42] &lt;fantasai&gt; generally, if it doesn't make sense to apply the property to an element, it's not allowed</li>
+ <li id="l-232" _a="fantasai"><a href="#l-232">#</a> [22:42] &lt;fantasai&gt; yes</li>
+ <li id="l-233" _a="fantasai" _r="otherwise"><a href="#l-233">#</a> [22:43] &lt;fantasai&gt; otherwise, it's allowed</li>
+ <li id="l-234" _a="tantek"><a href="#l-234">#</a> [22:43] &lt;tantek&gt; hmm</li>
+ <li id="l-235" _a="tantek"><a href="#l-235">#</a> [22:43] &lt;tantek&gt; I'd rather err on the other side</li>
+ <li id="l-236" _a="fantasai"><a href="#l-236">#</a> [22:43] &lt;fantasai&gt; clip would be a lot more useful if your interpretation was the case ^_^</li>
+ <li id="l-237" _a="tantek"><a href="#l-237">#</a> [22:43] &lt;tantek&gt; that is, expliclty require putting MUST NOT</li>
+ <li id="l-238" _a="tantek"><a href="#l-238">#</a> [22:43] &lt;tantek&gt; rather than explicitly require putting in MAY</li>
+ <li id="l-239" _a="tantek" _r="reasoning"><a href="#l-239">#</a> [22:44] &lt;tantek&gt; reasoning: adding MUST NOT actually adds a conformance requirement, whereas saying &quot;MAY&quot; does not</li>
+ <li id="l-240" _a="fantasai"><a href="#l-240">#</a> [22:44] &lt;fantasai&gt; ???</li>
+ <li id="l-241" _a="tantek"><a href="#l-241">#</a> [22:44] &lt;tantek&gt; so if a property MAY apply beyond what the spec says, just don't say anything, that's the default</li>
+ <li id="l-242" _a="tantek"><a href="#l-242">#</a> [22:44] &lt;tantek&gt; but if a property MUST NOT apply beyond what the spec says, than explicitly say so, on the apply to line.</li>
+ <li id="l-243" _a="tantek"><a href="#l-243">#</a> [22:45] &lt;tantek&gt; clip was a syntax problem, not an applies to problem</li>
+ <li id="l-244" _a="fantasai" _r="tantek"><a href="#l-244">#</a> [22:47] &lt;fantasai&gt; tantek: <a href="http://www.w3.org/TR/CSS21/visufx.html#clipping">http://www.w3.org/TR/CSS21/visufx.html#clipping</a> &quot;Applies to: absolutely positioned elements&quot;</li>
+ <li id="l-245"><a href="#l-245">#</a> [22:47] * Quits: kennyluck (kennyluck@114.43.114.125) (Ping timeout)</li>
+ <li id="l-246" _a="fantasai"><a href="#l-246">#</a> [22:47] &lt;fantasai&gt; and yes, the syntax is awful too, but that's not really want makes it so useless</li>
+ <li id="l-247"><a href="#l-247">#</a> [22:48] * Joins: myakura (myakura@122.130.129.42)</li>
+ <li id="l-248"><a href="#l-248">#</a> [22:48] * Joins: Liam (liam@128.30.52.169)</li>
+ <li id="l-249"><a href="#l-249">#</a> [22:51] * Quits: myakura (myakura@122.130.129.42) (Ping timeout)</li>
+ <li id="l-250" _a="tantek"><a href="#l-250">#</a> [22:51] &lt;tantek&gt; when we last discussed 'clip' seriously IIRC it was at a f2f at Microsoft SVC - and there's an infamous line about Chris Lilley running screaming from the room (I think it got minuted)</li>
+ <li id="l-251" _a="tantek"><a href="#l-251">#</a> [22:51] &lt;tantek&gt; and scope wasn't the issue blocking us</li>
+ <li id="l-252" _a="tantek"><a href="#l-252">#</a> [22:51] &lt;tantek&gt; it was both syntax</li>
+ <li id="l-253" _a="tantek"><a href="#l-253">#</a> [22:51] &lt;tantek&gt; and interpretation of whether bottom and right values were relative to top/left or bottom/right</li>
+ <li id="l-254"><a href="#l-254">#</a> [22:52] * Quits: nimbu (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-255"><a href="#l-255">#</a> [22:52] * Joins: nimbu (Adium@27.32.173.105)</li>
+ <li id="l-256" _a="tantek"><a href="#l-256">#</a> [22:52] &lt;tantek&gt; anyway - you're arguing a counterfactual which isn't particularly useful</li>
+ <li id="l-257" _a="tantek"><a href="#l-257">#</a> [22:52] &lt;tantek&gt; on the contrary here is a positive example</li>
+ <li id="l-258" _a="tantek"><a href="#l-258">#</a> [22:52] &lt;tantek&gt; applies to scope-expansion is how we got white-space to apply to inline elements</li>
+ <li id="l-259" _a="tantek"><a href="#l-259">#</a> [22:52] &lt;tantek&gt; CSS1 said it applied to only to &quot;block level&quot; elements</li>
+ <li id="l-260" _a="tantek"><a href="#l-260">#</a> [22:53] &lt;tantek&gt; someone slipped in a test case in the CSS1 test suite that tested it on an inline element</li>
+ <li id="l-261" _a="tantek"><a href="#l-261">#</a> [22:53] &lt;tantek&gt; browsers seemingly were able to interoperably implement it</li>
+ <li id="l-262" _a="tantek"><a href="#l-262">#</a> [22:53] &lt;tantek&gt; we expanded the spec accordingly</li>
+ <li id="l-263" _a="tantek"><a href="#l-263">#</a> [22:53] &lt;tantek&gt; (despite Bert saying it was never his intent that white-space could apply to inline elements)</li>
+ <li id="l-264"><a href="#l-264">#</a> [23:00] * Joins: nimbu1 (Adium@60.241.8.154)</li>
+ <li id="l-265"><a href="#l-265">#</a> [23:00] * Quits: nimbu (Adium@27.32.173.105) (Connection reset by peer)</li>
+ <li id="l-266"><a href="#l-266">#</a> [23:00] * Joins: kennyluck (kennyluck@114.25.240.46)</li>
+ <li id="l-267"><a href="#l-267">#</a> [23:12] * Quits: nimbu1 (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-268"><a href="#l-268">#</a> [23:12] * Joins: nimbu (Adium@220.244.185.73)</li>
+ <li id="l-269"><a href="#l-269">#</a> [23:22] * Quits: nimbu (Adium@220.244.185.73) (Ping timeout)</li>
+ <li id="l-270"><a href="#l-270">#</a> [23:22] * Joins: nimbu (Adium@27.32.173.105)</li>
+ <li id="l-271"><a href="#l-271">#</a> [23:26] * Quits: Ms2ger` (Ms2ger@91.181.125.136) (Quit: nn)</li>
+ <li id="l-272"><a href="#l-272">#</a> [23:30] * Joins: nimbu1 (Adium@60.241.8.154)</li>
+ <li id="l-273"><a href="#l-273">#</a> [23:30] * Quits: nimbu (Adium@27.32.173.105) (Connection reset by peer)</li>
+ <li id="l-274"><a href="#l-274">#</a> [23:41] * Quits: nimbu1 (Adium@60.241.8.154) (Ping timeout)</li>
+ <li id="l-275"><a href="#l-275">#</a> [23:41] * Joins: nimbu (Adium@27.32.173.105)</li>
+ <li id="l-276"><a href="#l-276">#</a> [23:51] * Joins: nimbu1 (Adium@220.244.185.73)</li>
+ <li id="l-277"><a href="#l-277">#</a> [23:51] * Quits: nimbu (Adium@27.32.173.105) (Connection reset by peer)</li>
+ <li id="l-278"><a href="#l-278">#</a> Session Close: Wed May 23 00:00:00 2012</li>
+</ol>
+<p id="end">The end :)

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20140820</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<script src="/irc-logs/s.js"></script>
+<h1 id="w3c/css.20140820.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2014-08-20 / <a href="#end">end</a></h1>
+<p>Options: 
+<ol id="lines">
+ <li id="l-1"><a href="#l-1">#</a> Session Start: Wed Aug 20 00:00:00 2014</li>
+ <li id="l-2"><a href="#l-2">#</a> Session Ident: #css</li>
+ <li id="l-3" _a="fantasai" _r="dholbert"><a href="#l-3">#</a> [00:13] &lt;fantasai&gt; dholbert: well, as usual, let us know if that seems right/wrong :)</li>
+ <li id="l-4" _a="dholbert" _r="fantasai"><a href="#l-4">#</a> [00:15] &lt;dholbert&gt; fantasai, I think it seems wrong...</li>
+ <li id="l-5" _a="dholbert" _r="fantasai"><a href="#l-5">#</a> [00:15] &lt;dholbert&gt; fantasai, for widths at least, we honor percent sizes on children of indefinitely-sized things, in non-flexbox contexts</li>
+ <li id="l-6" _a="dholbert" _r="fantasai"><a href="#l-6">#</a> [00:16] &lt;dholbert&gt; fantasai, e.g. data:text/html,&lt;div%20style=&quot;float:left;%20border:%201px%20solid%20black&quot;&gt;&lt;div%20style=&quot;width:%2050%;%20border:%201px%20solid%20purple&quot;&gt;abc&lt;/div&gt;</li>
+ <li id="l-7"><a href="#l-7">#</a> [00:16] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-8" _a="dholbert" _r="fantasai"><a href="#l-8">#</a> [00:17] &lt;dholbert&gt; fantasai, (chrome &amp; firefox both render that with the purple div sized to 50% of the black div's width)</li>
+ <li id="l-9" _a="dholbert"><a href="#l-9">#</a> [00:18] &lt;dholbert&gt; seems odd that we'd do something different if the container were an intrinsically-sized flex item instead of an intrinsically-sized floated div</li>
+ <li id="l-10" _a="fantasai"><a href="#l-10">#</a> [00:18] &lt;fantasai&gt; fair point</li>
+ <li id="l-11" _a="fantasai"><a href="#l-11">#</a> [00:18] &lt;fantasai&gt; So I guess we're going with C?</li>
+ <li id="l-12" _a="fantasai"><a href="#l-12">#</a> [00:18] &lt;fantasai&gt; and same for the main-size?</li>
+ <li id="l-13" _a="dholbert"><a href="#l-13">#</a> [00:18] &lt;dholbert&gt; I'm not sure :)</li>
+ <li id="l-14" _a="dholbert"><a href="#l-14">#</a> [00:18] &lt;dholbert&gt; on the other hand:</li>
+ <li id="l-15" _a="dholbert"><a href="#l-15">#</a> [00:19] &lt;dholbert&gt; for vertically intrinsically-sized things (no flexboxes involved), e.g. data:text/html,&lt;!DOCTYPE%20html&gt;&lt;div%20style=&quot;float:left;border:%201px%20solid%20black&quot;&gt;&lt;div%20style=&quot;height:%2050%;%20border:%201px%20solid%20purple&quot;&gt;abc&lt;/div&gt;, we ignore the percentage height</li>
+ <li id="l-16" _a="fantasai"><a href="#l-16">#</a> [00:19] &lt;fantasai&gt; right</li>
+ <li id="l-17" _a="fantasai"><a href="#l-17">#</a> [00:20] &lt;fantasai&gt; we could try to do something roughly equivalent</li>
+ <li id="l-18" _a="dholbert"><a href="#l-18">#</a> [00:20] &lt;dholbert&gt; so maybe we need to ignore it in both vertical &amp; horizontal flexbox, for internal consistency &amp; to stay performant</li>
+ <li id="l-19" _a="fantasai"><a href="#l-19">#</a> [00:20] &lt;fantasai&gt; but I'm happy with performant consistency as an argument here as well...</li>
+ <li id="l-20" _a="fantasai"><a href="#l-20">#</a> [00:20] &lt;fantasai&gt; what do you do in Gecko?</li>
+ <li id="l-21" _a="fantasai"><a href="#l-21">#</a> [00:21] * fantasai thinks we need to poll msft, too</li>
+ <li id="l-22" _a="fantasai"><a href="#l-22">#</a> [00:21] * fantasai is really happy to have you and the msft guys helping on this spec</li>
+ <li id="l-23" _a="dholbert"><a href="#l-23">#</a> [00:21] &lt;dholbert&gt; for flexbox? we resolve the flex item's main/cross size first, and then reflow it children with that stuffed in as the computed width &amp; height</li>
+ <li id="l-24" _a="dholbert"><a href="#l-24">#</a> [00:21] &lt;dholbert&gt; so the children see their container (the flex item) as having a definite size</li>
+ <li id="l-25"><a href="#l-25">#</a> [00:21] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-26" _a="dholbert" _r="sorry"><a href="#l-26">#</a> [00:22] &lt;dholbert&gt; sorry, s/reflow it children/reflow it (including its children)/</li>
+ <li id="l-27" _a="dholbert"><a href="#l-27">#</a> [00:22] &lt;dholbert&gt; and &quot;resolve the flex item's main/cross size&quot; may involve a 'measuring reflow', if we e.g. need to get the auto-height</li>
+ <li id="l-28" _a="dholbert"><a href="#l-28">#</a> [00:22] &lt;dholbert&gt; for min-height:auto</li>
+ <li id="l-29"><a href="#l-29">#</a> [00:24] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-30"><a href="#l-30">#</a> [00:25] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-31"><a href="#l-31">#</a> [00:25] * Quits: tantek (~tantek@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-32"><a href="#l-32">#</a> [00:28] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-33"><a href="#l-33">#</a> [00:28] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-34"><a href="#l-34">#</a> [00:32] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-35" _a="SimonSapin" _r="plinss"><a href="#l-35">#</a> [00:50] &lt;SimonSapin&gt; plinss, TabAtkins: I just released <a href="https://pythonhosted.org/tinycss2/">https://pythonhosted.org/tinycss2/</a> 0.5, it now preserves whitespace and comments</li>
+ <li id="l-36" _a="SimonSapin"><a href="#l-36">#</a> [00:50] &lt;SimonSapin&gt; except those between the name and ':' of a declaration :)</li>
+ <li id="l-37"><a href="#l-37">#</a> [00:51] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+ <li id="l-38" _a="fantasai"><a href="#l-38">#</a> [01:05] * fantasai waves to jdaggett</li>
+ <li id="l-39"><a href="#l-39">#</a> [01:22] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-40"><a href="#l-40">#</a> [01:29] * Quits: dauwhe (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-41"><a href="#l-41">#</a> [01:30] * Joins: jdaggett_ (~jdaggett@public.cloak)</li>
+ <li id="l-42"><a href="#l-42">#</a> [01:35] * Quits: jdaggett (~jdaggett@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-43" _a="jdaggett_"><a href="#l-43">#</a> [01:35] * jdaggett_ is now known as jdaggett</li>
+ <li id="l-44"><a href="#l-44">#</a> [01:40] * Quits: glenn_ (~gadams@public.cloak) (Client closed connection)</li>
+ <li id="l-45"><a href="#l-45">#</a> [01:42] * Quits: jdaggett (~jdaggett@public.cloak) (jdaggett)</li>
+ <li id="l-46"><a href="#l-46">#</a> [01:42] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-47"><a href="#l-47">#</a> [01:42] * Quits: dauwhe (~dauwhe@public.cloak) (&quot;&quot;)</li>
+ <li id="l-48"><a href="#l-48">#</a> [01:43] * Joins: glenn_ (~gadams@public.cloak)</li>
+ <li id="l-49"><a href="#l-49">#</a> [02:25] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+ <li id="l-50" _a="plinss"><a href="#l-50">#</a> [02:26] * plinss is now known as plinss_away</li>
+ <li id="l-51"><a href="#l-51">#</a> [02:27] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-52" _a="plinss_away"><a href="#l-52">#</a> [02:30] * plinss_away is now known as plinss</li>
+ <li id="l-53"><a href="#l-53">#</a> [03:25] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-54"><a href="#l-54">#</a> [03:32] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-55"><a href="#l-55">#</a> [03:39] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-56"><a href="#l-56">#</a> [03:46] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-57"><a href="#l-57">#</a> [03:49] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-58"><a href="#l-58">#</a> [04:01] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-59"><a href="#l-59">#</a> [04:21] * Quits: dbaron (~dbaron@public.cloak) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-60"><a href="#l-60">#</a> [04:24] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-61"><a href="#l-61">#</a> [04:39] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-62"><a href="#l-62">#</a> [04:40] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-63"><a href="#l-63">#</a> [04:40] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-64"><a href="#l-64">#</a> [04:41] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-65"><a href="#l-65">#</a> [04:41] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-66"><a href="#l-66">#</a> [04:48] * Quits: liam (liam@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-67"><a href="#l-67">#</a> [04:48] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-68"><a href="#l-68">#</a> [04:49] * Quits: shepazu (schepers@public.cloak) (Client closed connection)</li>
+ <li id="l-69"><a href="#l-69">#</a> [04:54] * Joins: shepazu (schepers@public.cloak)</li>
+ <li id="l-70"><a href="#l-70">#</a> [04:59] * Joins: liam (liam@public.cloak)</li>
+ <li id="l-71"><a href="#l-71">#</a> [05:16] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-72"><a href="#l-72">#</a> [05:17] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-73"><a href="#l-73">#</a> [05:17] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-74"><a href="#l-74">#</a> [05:19] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-75"><a href="#l-75">#</a> [05:25] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-76"><a href="#l-76">#</a> [05:26] * Quits: gsnedders (~gsnedders@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-77"><a href="#l-77">#</a> [05:36] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-78"><a href="#l-78">#</a> [05:36] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-79"><a href="#l-79">#</a> [05:47] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-80"><a href="#l-80">#</a> [05:53] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-81"><a href="#l-81">#</a> [05:59] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-82"><a href="#l-82">#</a> [06:05] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-83"><a href="#l-83">#</a> [06:16] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-84"><a href="#l-84">#</a> [06:17] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-85"><a href="#l-85">#</a> [06:24] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-86"><a href="#l-86">#</a> [06:30] * Quits: paul___irish (~paul___irish@public.cloak) (&quot;ZNC - <a href="http://znc.sourceforge.net">http://znc.sourceforge.net</a>&quot;)</li>
+ <li id="l-87"><a href="#l-87">#</a> [06:31] * Joins: paul___irish (~paul___irish@public.cloak)</li>
+ <li id="l-88"><a href="#l-88">#</a> [06:47] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-89"><a href="#l-89">#</a> [07:10] * Quits: darktears (~darktears@public.cloak) (Client closed connection)</li>
+ <li id="l-90"><a href="#l-90">#</a> [07:17] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-91"><a href="#l-91">#</a> [07:44] * Joins: gsnedders (~gsnedders@public.cloak)</li>
+ <li id="l-92"><a href="#l-92">#</a> [08:00] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-93"><a href="#l-93">#</a> [08:23] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-94"><a href="#l-94">#</a> [08:38] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-95"><a href="#l-95">#</a> [08:40] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-96"><a href="#l-96">#</a> [08:42] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-97"><a href="#l-97">#</a> [08:49] * Quits: tantek (~tantek@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-98"><a href="#l-98">#</a> [09:12] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+ <li id="l-99"><a href="#l-99">#</a> [09:45] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-100"><a href="#l-100">#</a> [09:49] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-101"><a href="#l-101">#</a> [10:02] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-102"><a href="#l-102">#</a> [10:05] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-103"><a href="#l-103">#</a> [10:19] * Quits: dbaron (~dbaron@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-104"><a href="#l-104">#</a> [10:32] * Joins: jdaggett_ (~jdaggett@public.cloak)</li>
+ <li id="l-105"><a href="#l-105">#</a> [10:34] * Quits: jdaggett (~jdaggett@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-106" _a="jdaggett_"><a href="#l-106">#</a> [10:34] * jdaggett_ is now known as jdaggett</li>
+ <li id="l-107"><a href="#l-107">#</a> [10:45] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-108"><a href="#l-108">#</a> [10:45] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-109"><a href="#l-109">#</a> [10:45] * Quits: jdaggett (~jdaggett@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-110"><a href="#l-110">#</a> [10:57] * Quits: Ms2ger (~Ms2ger@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-111"><a href="#l-111">#</a> [10:57] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+ <li id="l-112"><a href="#l-112">#</a> [11:17] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-113"><a href="#l-113">#</a> [11:17] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-114" _a="leaverou_away"><a href="#l-114">#</a> [11:33] * leaverou_away is now known as leaverou</li>
+ <li id="l-115"><a href="#l-115">#</a> [11:38] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-116"><a href="#l-116">#</a> [11:44] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-117"><a href="#l-117">#</a> [12:02] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-118"><a href="#l-118">#</a> [12:02] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-119"><a href="#l-119">#</a> [12:21] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-120"><a href="#l-120">#</a> [12:21] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-121"><a href="#l-121">#</a> [12:45] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-122"><a href="#l-122">#</a> [12:45] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-123"><a href="#l-123">#</a> [12:48] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-124"><a href="#l-124">#</a> [12:48] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-125"><a href="#l-125">#</a> [12:57] * Joins: darktears (~darktears@public.cloak)</li>
+ <li id="l-126"><a href="#l-126">#</a> [12:59] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-127"><a href="#l-127">#</a> [12:59] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-128"><a href="#l-128">#</a> [13:01] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-129"><a href="#l-129">#</a> [13:01] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-130"><a href="#l-130">#</a> [13:01] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-131"><a href="#l-131">#</a> [13:01] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-132" _a="leaverou"><a href="#l-132">#</a> [13:02] * leaverou is now known as leaverou_away</li>
+ <li id="l-133"><a href="#l-133">#</a> [13:08] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-134" _a="leaverou_away"><a href="#l-134">#</a> [13:15] * leaverou_away is now known as leaverou</li>
+ <li id="l-135"><a href="#l-135">#</a> [13:22] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+ <li id="l-136"><a href="#l-136">#</a> [14:02] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-137"><a href="#l-137">#</a> [14:03] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-138"><a href="#l-138">#</a> [14:15] * Quits: jdaggett (~jdaggett@public.cloak) (jdaggett)</li>
+ <li id="l-139"><a href="#l-139">#</a> [14:28] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-140"><a href="#l-140">#</a> [14:32] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-141" _a="leaverou"><a href="#l-141">#</a> [14:41] * leaverou is now known as leaverou_away</li>
+ <li id="l-142"><a href="#l-142">#</a> [15:13] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-143"><a href="#l-143">#</a> [15:23] * Quits: anssik (~uid10742@public.cloak) (&quot;Connection closed for inactivity&quot;)</li>
+ <li id="l-144" _a="leaverou_away"><a href="#l-144">#</a> [15:28] * leaverou_away is now known as leaverou</li>
+ <li id="l-145"><a href="#l-145">#</a> [15:28] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-146"><a href="#l-146">#</a> [15:39] * Quits: darktears (~darktears@public.cloak) (Client closed connection)</li>
+ <li id="l-147"><a href="#l-147">#</a> [15:39] * Joins: darktears (~darktears@public.cloak)</li>
+ <li id="l-148"><a href="#l-148">#</a> [15:42] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-149"><a href="#l-149">#</a> [15:51] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-150" _a="leaverou"><a href="#l-150">#</a> [15:52] * leaverou is now known as leaverou_away</li>
+ <li id="l-151"><a href="#l-151">#</a> [15:58] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-152"><a href="#l-152">#</a> [15:58] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-153"><a href="#l-153">#</a> [16:05] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-154"><a href="#l-154">#</a> [16:24] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-155"><a href="#l-155">#</a> [16:27] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-156"><a href="#l-156">#</a> [16:30] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-157"><a href="#l-157">#</a> [16:37] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-158"><a href="#l-158">#</a> [16:40] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-159"><a href="#l-159">#</a> [16:41] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-160"><a href="#l-160">#</a> [16:44] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-161"><a href="#l-161">#</a> [16:44] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-162"><a href="#l-162">#</a> [16:45] * Parts: florian (~Florian@public.cloak) (florian)</li>
+ <li id="l-163"><a href="#l-163">#</a> [16:46] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-164" _a="leaverou_away"><a href="#l-164">#</a> [16:49] * leaverou_away is now known as leaverou</li>
+ <li id="l-165"><a href="#l-165">#</a> [16:49] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-166"><a href="#l-166">#</a> [16:51] * Parts: florian (~Florian@public.cloak) (florian)</li>
+ <li id="l-167"><a href="#l-167">#</a> [16:51] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-168"><a href="#l-168">#</a> [16:51] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-169"><a href="#l-169">#</a> [16:52] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-170"><a href="#l-170">#</a> [16:56] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-171"><a href="#l-171">#</a> [17:12] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-172"><a href="#l-172">#</a> [17:13] * Joins: glazou (~glazou@public.cloak)</li>
+ <li id="l-173" _a="glazou"><a href="#l-173">#</a> [17:13] * glazou changes topic to 'http://lists.w3.org/Archives/Public/www-style/2014Aug/0313.html'</li>
+ <li id="l-174"><a href="#l-174">#</a> [17:15] * Joins: RRSAgent (rrsagent@public.cloak)</li>
+ <li id="l-175" _a="RRSAgent"><a href="#l-175">#</a> [17:15] &lt;RRSAgent&gt; logging to <a href="http://www.w3.org/2014/08/20-css-irc">http://www.w3.org/2014/08/20-css-irc</a></li>
+ <li id="l-176"><a href="#l-176">#</a> [17:15] * Joins: Zakim (zakim@public.cloak)</li>
+ <li id="l-177" _a="glazou" _r="Zakim"><a href="#l-177">#</a> [17:15] &lt;glazou&gt; Zakim, this will be Style</li>
+ <li id="l-178" _a="Zakim" _r="ok"><a href="#l-178">#</a> [17:15] &lt;Zakim&gt; ok, glazou; I see Style_CSS FP()12:00PM scheduled to start in 42 minutes</li>
+ <li id="l-179" _a="glazou" _r="RRSAgent"><a href="#l-179">#</a> [17:15] &lt;glazou&gt; RRSAgent, make logs public</li>
+ <li id="l-180" _a="RRSAgent"><a href="#l-180">#</a> [17:15] &lt;RRSAgent&gt; I have made the request, glazou</li>
+ <li id="l-181" _a="leaverou"><a href="#l-181">#</a> [17:22] * leaverou is now known as leaverou_away</li>
+ <li id="l-182"><a href="#l-182">#</a> [17:23] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-183" _a="plh"><a href="#l-183">#</a> [17:24] * plh is now known as plh-away</li>
+ <li id="l-184"><a href="#l-184">#</a> [17:27] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+ <li id="l-185"><a href="#l-185">#</a> [17:30] * Quits: plh-away (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-186"><a href="#l-186">#</a> [17:31] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-187" _a="leaverou_away"><a href="#l-187">#</a> [17:45] * leaverou_away is now known as leaverou</li>
+ <li id="l-188" _a="glazou" _r="Zakim"><a href="#l-188">#</a> [17:46] &lt;glazou&gt; Zakim, code?</li>
+ <li id="l-189" _a="Zakim"><a href="#l-189">#</a> [17:46] &lt;Zakim&gt; the conference code is 78953 (tel:+1.617.761.6200 sip:zakim@voip.w3.org), glazou</li>
+ <li id="l-190"><a href="#l-190">#</a> [17:50] * Joins: AH_Miller (~mike@public.cloak)</li>
+ <li id="l-191" _a="Zakim"><a href="#l-191">#</a> [17:51] &lt;Zakim&gt; Style_CSS FP()12:00PM has now started</li>
+ <li id="l-192" _a="Zakim"><a href="#l-192">#</a> [17:51] &lt;Zakim&gt; +mike_miller</li>
+ <li id="l-193"><a href="#l-193">#</a> [17:52] * Joins: dael (~dael@public.cloak)</li>
+ <li id="l-194" _a="Zakim"><a href="#l-194">#</a> [17:52] &lt;Zakim&gt; +??P2</li>
+ <li id="l-195" _a="glazou" _r="Zakim"><a href="#l-195">#</a> [17:52] &lt;glazou&gt; Zakim, ??P2 is me</li>
+ <li id="l-196" _a="Zakim" _r="+glazou"><a href="#l-196">#</a> [17:52] &lt;Zakim&gt; +glazou; got it</li>
+ <li id="l-197" _a="Zakim"><a href="#l-197">#</a> [17:53] &lt;Zakim&gt; +dael</li>
+ <li id="l-198"><a href="#l-198">#</a> [17:54] * Joins: murakami (~769ad103@public.cloak)</li>
+ <li id="l-199" _a="Ms2ger"><a href="#l-199">#</a> [17:54] * Ms2ger waves at glazou</li>
+ <li id="l-200" _a="glazou"><a href="#l-200">#</a> [17:54] &lt;glazou&gt; hi Ms2ger</li>
+ <li id="l-201" _a="glazou" _r="murakami"><a href="#l-201">#</a> [17:55] &lt;glazou&gt; murakami, congrats for the launch of the company</li>
+ <li id="l-202"><a href="#l-202">#</a> [17:55] * Joins: alex_antennahouse (~458c94ae@public.cloak)</li>
+ <li id="l-203" _a="murakami"><a href="#l-203">#</a> [17:55] &lt;murakami&gt; Thanks!</li>
+ <li id="l-204" _a="Zakim"><a href="#l-204">#</a> [17:55] &lt;Zakim&gt; +glenn</li>
+ <li id="l-205" _a="Zakim"><a href="#l-205">#</a> [17:56] &lt;Zakim&gt; +??P12</li>
+ <li id="l-206" _a="Zakim"><a href="#l-206">#</a> [17:56] &lt;Zakim&gt; + +1.479.764.aaaa</li>
+ <li id="l-207" _a="leaverou" _r="murakami"><a href="#l-207">#</a> [17:56] &lt;leaverou&gt; murakami: congrats from me too!</li>
+ <li id="l-208" _a="florian" _r="Zakim"><a href="#l-208">#</a> [17:56] &lt;florian&gt; Zakim, ??P12 is me</li>
+ <li id="l-209" _a="Zakim" _r="+florian"><a href="#l-209">#</a> [17:56] &lt;Zakim&gt; +florian; got it</li>
+ <li id="l-210"><a href="#l-210">#</a> [17:56] * Joins: antonp (~Thunderbird@public.cloak)</li>
+ <li id="l-211" _a="Zakim"><a href="#l-211">#</a> [17:56] &lt;Zakim&gt; +SGalineau</li>
+ <li id="l-212" _a="Zakim"><a href="#l-212">#</a> [17:56] &lt;Zakim&gt; -florian</li>
+ <li id="l-213" _a="Zakim"><a href="#l-213">#</a> [17:56] &lt;Zakim&gt; + +1.206.675.aabb</li>
+ <li id="l-214" _a="Zakim"><a href="#l-214">#</a> [17:56] &lt;Zakim&gt; + +1.917.207.aacc</li>
+ <li id="l-215" _a="astearns" _r="zakim"><a href="#l-215">#</a> [17:57] &lt;astearns&gt; zakim, aabb is me</li>
+ <li id="l-216" _a="Zakim" _r="+astearns"><a href="#l-216">#</a> [17:57] &lt;Zakim&gt; +astearns; got it</li>
+ <li id="l-217" _a="dauwhe" _r="Zakim"><a href="#l-217">#</a> [17:57] &lt;dauwhe&gt; Zakim, aacc is me</li>
+ <li id="l-218" _a="Zakim" _r="+dauwhe"><a href="#l-218">#</a> [17:57] &lt;Zakim&gt; +dauwhe; got it</li>
+ <li id="l-219" _a="Zakim"><a href="#l-219">#</a> [17:57] &lt;Zakim&gt; +Lea</li>
+ <li id="l-220"><a href="#l-220">#</a> [17:57] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-221"><a href="#l-221">#</a> [17:58] * Joins: arybka (~arybka@public.cloak)</li>
+ <li id="l-222"><a href="#l-222">#</a> [17:58] * Quits: zcorpan (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-223"><a href="#l-223">#</a> [17:58] * Parts: florian (~Florian@public.cloak) (florian)</li>
+ <li id="l-224"><a href="#l-224">#</a> [17:58] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-225" _a="Zakim"><a href="#l-225">#</a> [17:58] &lt;Zakim&gt; +??P28</li>
+ <li id="l-226" _a="Zakim"><a href="#l-226">#</a> [17:58] &lt;Zakim&gt; +plinss</li>
+ <li id="l-227" _a="glazou" _r="Zakim"><a href="#l-227">#</a> [17:58] &lt;glazou&gt; Zakim, who is here?</li>
+ <li id="l-228" _a="Zakim"><a href="#l-228">#</a> [17:58] &lt;Zakim&gt; On the phone I see mike_miller, glazou, dael, glenn, +1.479.764.aaaa, SGalineau, astearns, dauwhe, Lea, ??P28, plinss</li>
+ <li id="l-229" _a="murakami"><a href="#l-229">#</a> [17:58] &lt;murakami&gt; zakim,??P28 is me</li>
+ <li id="l-230" _a="Zakim"><a href="#l-230">#</a> [17:58] &lt;Zakim&gt; On IRC I see florian, arybka, tantek, antonp, alex_antennahouse, murakami, dael, AH_Miller, dauwhe, dbaron, Zakim, RRSAgent, glazou, tommyjtl_, darktears, Ms2ger, gsnedders,</li>
+ <li id="l-231" _a="Zakim"><a href="#l-231">#</a> [17:58] &lt;Zakim&gt; ... paul___irish, liam, shepazu, glenn_, dholbert, CSSWG_LogBot, Bert, ato, birtles, Teoli__, nikos_office, ed, kangil, dwim, krijnhoetmer, fantasai, mihnea___, abucur__, amtiskaw,</li>
+ <li id="l-232" _a="Zakim"><a href="#l-232">#</a> [17:58] &lt;Zakim&gt; ... renoirb, achicu_____, timeless, astearns, Hixie, TabAtkins, lmclister_____, jacobg______, logbot, alexmog, mvujovic____, slightlyoff, sgalineau, plinss, projector, shans,</li>
+ <li id="l-233" _a="Zakim"><a href="#l-233">#</a> [17:58] &lt;Zakim&gt; ... leaverou</li>
+ <li id="l-234" _a="Zakim" _r="+murakami"><a href="#l-234">#</a> [17:58] &lt;Zakim&gt; +murakami; got it</li>
+ <li id="l-235" _a="Zakim"><a href="#l-235">#</a> [17:59] &lt;Zakim&gt; + +1.281.305.aadd</li>
+ <li id="l-236" _a="Zakim"><a href="#l-236">#</a> [17:59] &lt;Zakim&gt; +??P31</li>
+ <li id="l-237" _a="Zakim"><a href="#l-237">#</a> [17:59] &lt;Zakim&gt; +Bert</li>
+ <li id="l-238" _a="TabAtkins"><a href="#l-238">#</a> [17:59] * TabAtkins zakim, aadd is me</li>
+ <li id="l-239" _a="Zakim"><a href="#l-239">#</a> [17:59] * Zakim +TabAtkins; got it</li>
+ <li id="l-240" _a="TabAtkins"><a href="#l-240">#</a> [17:59] * TabAtkins Zakim, I swear to god you recognize this number like half the time.</li>
+ <li id="l-241" _a="Zakim"><a href="#l-241">#</a> [17:59] * Zakim I don't understand you, TabAtkins</li>
+ <li id="l-242" _a="TabAtkins"><a href="#l-242">#</a> [17:59] * TabAtkins You never do, Zakim. You never do.</li>
+ <li id="l-243"><a href="#l-243">#</a> [17:59] * Joins: bkardell_ (~uid10373@public.cloak)</li>
+ <li id="l-244" _a="TabAtkins"><a href="#l-244">#</a> [18:00] * TabAtkins That's why our relationship is on the rocks.</li>
+ <li id="l-245" _a="Zakim"><a href="#l-245">#</a> [18:00] &lt;Zakim&gt; + +1.631.398.aaee</li>
+ <li id="l-246" _a="sgalineau"><a href="#l-246">#</a> [18:00] * sgalineau I think this is the preeemptive 'it's not you it's me' talk</li>
+ <li id="l-247" _a="antonp" _r="Zakim"><a href="#l-247">#</a> [18:00] &lt;antonp&gt; Zakim, ??P31 is me</li>
+ <li id="l-248" _a="Zakim" _r="+antonp"><a href="#l-248">#</a> [18:00] &lt;Zakim&gt; +antonp; got it</li>
+ <li id="l-249" _a="liam"><a href="#l-249">#</a> [18:00] * liam zakim, call liam-617</li>
+ <li id="l-250" _a="Zakim"><a href="#l-250">#</a> [18:00] * Zakim ok, liam; the call is being made</li>
+ <li id="l-251" _a="Zakim"><a href="#l-251">#</a> [18:00] &lt;Zakim&gt; +Liam</li>
+ <li id="l-252" _a="Zakim"><a href="#l-252">#</a> [18:00] &lt;Zakim&gt; + +aaff</li>
+ <li id="l-253" _a="dael" _r="glazou"><a href="#l-253">#</a> [18:01] &lt;dael&gt; glazou: Let's start.</li>
+ <li id="l-254" _a="Zakim"><a href="#l-254">#</a> [18:01] &lt;Zakim&gt; -Lea</li>
+ <li id="l-255" _a="SimonSapin" _r="Zakim"><a href="#l-255">#</a> [18:01] &lt;SimonSapin&gt; Zakim, +aaff is me</li>
+ <li id="l-256" _a="Zakim" _r="+SimonSapin"><a href="#l-256">#</a> [18:01] &lt;Zakim&gt; +SimonSapin; got it</li>
+ <li id="l-257" _a="Zakim"><a href="#l-257">#</a> [18:01] &lt;Zakim&gt; + +1.301.526.aagg</li>
+ <li id="l-258" _a="SimonSapin"><a href="#l-258">#</a> [18:01] &lt;SimonSapin&gt; maybe</li>
+ <li id="l-259" _a="dael" _r="glazou"><a href="#l-259">#</a> [18:01] &lt;dael&gt; glazou: Extra items?</li>
+ <li id="l-260"><a href="#l-260">#</a> [18:01] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+ <li id="l-261"><a href="#l-261">#</a> [18:01] * Parts: jacobg______ (~sid14856@public.cloak)</li>
+ <li id="l-262" _a="dael" _r="glazou"><a href="#l-262">#</a> [18:01] &lt;dael&gt; glazou: I have one.</li>
+ <li id="l-263"><a href="#l-263">#</a> [18:01] * Joins: koji (~koji@public.cloak)</li>
+ <li id="l-264" _a="dael" _r="glazou"><a href="#l-264">#</a> [18:01] &lt;dael&gt; glazou: We're not far from the F2F and we need to add topics on the wiki</li>
+ <li id="l-265" _a="dael" _r="glazou"><a href="#l-265">#</a> [18:02] &lt;dael&gt; glazou: Please spend a few minutes thinking about it and adding items.</li>
+ <li id="l-266" _a="glazou"><a href="#l-266">#</a> [18:02] &lt;glazou&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2014Aug/0194.html">http://lists.w3.org/Archives/Public/www-style/2014Aug/0194.html</a></li>
+ <li id="l-267" _a="dael" _r="Topic"><a href="#l-267">#</a> [18:02] &lt;dael&gt; Topic: COunter Styles</li>
+ <li id="l-268"><a href="#l-268">#</a> [18:02] * Joins: jacobg______ (~sid14856@public.cloak)</li>
+ <li id="l-269" _a="dael" _r="TabAtkins"><a href="#l-269">#</a> [18:02] &lt;dael&gt; TabAtkins: It was pub as LC a year ago.</li>
+ <li id="l-270" _a="Zakim"><a href="#l-270">#</a> [18:02] &lt;Zakim&gt; +dbaron</li>
+ <li id="l-271" _a="dael" _r="TabAtkins"><a href="#l-271">#</a> [18:02] &lt;dael&gt; TabAtkins: When the period ended, there was still lots of issues being produced. We think it's stable now, so we need to pub again.</li>
+ <li id="l-272"><a href="#l-272">#</a> [18:02] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-273" _a="Zakim"><a href="#l-273">#</a> [18:02] &lt;Zakim&gt; + +1.415.231.aahh</li>
+ <li id="l-274" _a="dael" _r="TabAtkins"><a href="#l-274">#</a> [18:02] &lt;dael&gt; TabAtkins: Obv there's subtantive changes, so we want another LC. Standard 4 weeks I think</li>
+ <li id="l-275" _a="alex_antennahouse"><a href="#l-275">#</a> [18:02] &lt;alex_antennahouse&gt; i think 526 aagg is me</li>
+ <li id="l-276" _a="jacobg______"><a href="#l-276">#</a> [18:03] * jacobg______ is now known as jacobg</li>
+ <li id="l-277" _a="koji" _r="zakim"><a href="#l-277">#</a> [18:03] &lt;koji&gt; zakim, +1.415.231.aahh is me</li>
+ <li id="l-278" _a="Zakim" _r="+koji"><a href="#l-278">#</a> [18:03] &lt;Zakim&gt; +koji; got it</li>
+ <li id="l-279" _a="dael" _r="glazou"><a href="#l-279">#</a> [18:03] &lt;dael&gt; glazou: DoC shows mostly green. I saw Xidoran (sp?) a few messages to the list.</li>
+ <li id="l-280" _a="Zakim"><a href="#l-280">#</a> [18:03] &lt;Zakim&gt; +??P43</li>
+ <li id="l-281" _a="dael" _r="TabAtkins"><a href="#l-281">#</a> [18:03] &lt;dael&gt; TabAtkins: I think the last was &quot;have you pub a new draft&quot; but let's see</li>
+ <li id="l-282" _a="dael" _r="TabAtkins"><a href="#l-282">#</a> [18:03] &lt;dael&gt; TabAtkins: Most recent were June and they were in the DoC</li>
+ <li id="l-283"><a href="#l-283">#</a> [18:03] * Joins: MaRakow (~MaRakow@public.cloak)</li>
+ <li id="l-284"><a href="#l-284">#</a> [18:03] * Joins: Rossen_ (~Rossen@public.cloak)</li>
+ <li id="l-285" _a="dael" _r="glazou"><a href="#l-285">#</a> [18:04] &lt;dael&gt; glazou: He has one on the 29th of July. Was it addressed?</li>
+ <li id="l-286" _a="dael" _r="TabAtkins"><a href="#l-286">#</a> [18:04] &lt;dael&gt; TabAtkins: That was the can you do a new LC.</li>
+ <li id="l-287" _a="dael" _r="glazou"><a href="#l-287">#</a> [18:04] &lt;dael&gt; glazou: No, there was one thing to be fixed.</li>
+ <li id="l-288" _a="Zakim"><a href="#l-288">#</a> [18:04] &lt;Zakim&gt; +[Microsoft]</li>
+ <li id="l-289" _a="dael" _r="TabAtkins"><a href="#l-289">#</a> [18:04] &lt;dael&gt; TabAtkins: Yeah. Those were typos and they were fixed.</li>
+ <li id="l-290" _a="dael" _r="glazou"><a href="#l-290">#</a> [18:04] &lt;dael&gt; glazou: Okay.</li>
+ <li id="l-291" _a="dael" _r="glazou"><a href="#l-291">#</a> [18:04] &lt;dael&gt; glazou: Opinions or qs about publishing?</li>
+ <li id="l-292" _a="MaRakow" _r="Zakim"><a href="#l-292">#</a> [18:04] &lt;MaRakow&gt; Zakim, [Microsoft] is me</li>
+ <li id="l-293" _a="Zakim" _r="+MaRakow"><a href="#l-293">#</a> [18:04] &lt;Zakim&gt; +MaRakow; got it</li>
+ <li id="l-294"><a href="#l-294">#</a> [18:04] * Joins: ChrisL (clilley@public.cloak)</li>
+ <li id="l-295" _a="dael" _r="??"><a href="#l-295">#</a> [18:04] &lt;dael&gt; ??: I'm in favor</li>
+ <li id="l-296" _a="astearns"><a href="#l-296">#</a> [18:04] &lt;astearns&gt; +1 to publish</li>
+ <li id="l-297" _a="Zakim"><a href="#l-297">#</a> [18:04] &lt;Zakim&gt; +[Microsoft]</li>
+ <li id="l-298" _a="dael" _r="glazou"><a href="#l-298">#</a> [18:04] &lt;dael&gt; glazou: Me too.</li>
+ <li id="l-299" _a="dael"><a href="#l-299">#</a> [18:04] &lt;dael&gt; s/??/Bert</li>
+ <li id="l-300" _a="Rossen_" _r="zakim"><a href="#l-300">#</a> [18:04] &lt;Rossen_&gt; zakim, microsoft has me</li>
+ <li id="l-301" _a="Zakim" _r="+Rossen_"><a href="#l-301">#</a> [18:04] &lt;Zakim&gt; +Rossen_; got it</li>
+ <li id="l-302" _a="sgalineau"><a href="#l-302">#</a> [18:05] &lt;sgalineau&gt; no objection</li>
+ <li id="l-303" _a="dael" _r="florian"><a href="#l-303">#</a> [18:05] &lt;dael&gt; florian: I haven't been able to see details</li>
+ <li id="l-304" _a="dael" _r="dbaron"><a href="#l-304">#</a> [18:05] &lt;dael&gt; dbaron: I'm in favor. I'd like to see it go to CR</li>
+ <li id="l-305" _a="dael" _r="TabAtkins"><a href="#l-305">#</a> [18:05] &lt;dael&gt; TabAtkins: Me too, but per our req we need another CR</li>
+ <li id="l-306" _a="Zakim"><a href="#l-306">#</a> [18:05] &lt;Zakim&gt; +ChrisL</li>
+ <li id="l-307" _a="florian"><a href="#l-307">#</a> [18:05] &lt;florian&gt; … But at a high level it looked fine</li>
+ <li id="l-308" _a="dael" _r="Rossen_"><a href="#l-308">#</a> [18:05] &lt;dael&gt; Rossen_: I just joined, what's this?</li>
+ <li id="l-309"><a href="#l-309">#</a> [18:05] * Joins: tantek (~tantek@public.cloak)</li>
+ <li id="l-310" _a="ChrisL"><a href="#l-310">#</a> [18:05] &lt;ChrisL&gt; +1 to publish</li>
+ <li id="l-311" _a="dael" _r="glazou"><a href="#l-311">#</a> [18:05] &lt;dael&gt; glazou: Counter Styles</li>
+ <li id="l-312" _a="dael" _r="Rossen_"><a href="#l-312">#</a> [18:05] &lt;dael&gt; Rossen_: It's fine.</li>
+ <li id="l-313" _a="Zakim"><a href="#l-313">#</a> [18:05] &lt;Zakim&gt; +[Microsoft.a]</li>
+ <li id="l-314" _a="dael" _r="RESOLVED"><a href="#l-314">#</a> [18:06] &lt;dael&gt; RESOLVED: New LCWD for Counter Styles</li>
+ <li id="l-315"><a href="#l-315">#</a> [18:06] * Joins: Bogdan_Brinza (~Bogdan_Brinza@public.cloak)</li>
+ <li id="l-316" _a="dael" _r="TabAtkins"><a href="#l-316">#</a> [18:06] &lt;dael&gt; TabAtkins: I'll put it together this afternoon, bert</li>
+ <li id="l-317" _a="dael" _r="Bert"><a href="#l-317">#</a> [18:06] &lt;dael&gt; Bert: Okay.</li>
+ <li id="l-318"><a href="#l-318">#</a> [18:06] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-319" _a="ChrisL" _r="Bert"><a href="#l-319">#</a> [18:06] &lt;ChrisL&gt; Bert, I will be travellig tomorrow so best if you do it</li>
+ <li id="l-320" _a="glazou"><a href="#l-320">#</a> [18:06] &lt;glazou&gt; <a href="https://lists.w3.org/Archives/Member/w3c-css-wg/2014JulSep/0119.html">https://lists.w3.org/Archives/Member/w3c-css-wg/2014JulSep/0119.html</a></li>
+ <li id="l-321" _a="dael" _r="Topic"><a href="#l-321">#</a> [18:06] &lt;dael&gt; Topic: Backgrounds and Borders</li>
+ <li id="l-322" _a="dael" _r="TabAtkins"><a href="#l-322">#</a> [18:06] &lt;dael&gt; TabAtkins: Is fantasai around?</li>
+ <li id="l-323" _a="Zakim"><a href="#l-323">#</a> [18:06] &lt;Zakim&gt; +fantasai</li>
+ <li id="l-324" _a="dael"><a href="#l-324">#</a> [18:06] &lt;dael&gt; [silence]</li>
+ <li id="l-325" _a="ChrisL"><a href="#l-325">#</a> [18:06] * ChrisL summoned!</li>
+ <li id="l-326" _a="dael" _r="TabAtkins"><a href="#l-326">#</a> [18:06] &lt;dael&gt; TabAtkins: I can do the pub request</li>
+ <li id="l-327"><a href="#l-327">#</a> [18:06] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-328" _a="glazou"><a href="#l-328">#</a> [18:07] &lt;glazou&gt; <a href="http://dev.w3.org/csswg/css-counter-styles/issues-lc-20130718">http://dev.w3.org/csswg/css-counter-styles/issues-lc-20130718</a></li>
+ <li id="l-329" _a="dael" _r="fantasai"><a href="#l-329">#</a> [18:07] &lt;dael&gt; fantasai: We have a...we're ready for a new pub for B&amp;B. Let me see if I can pull DoC</li>
+ <li id="l-330"><a href="#l-330">#</a> [18:07] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-331"><a href="#l-331">#</a> [18:07] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-332" _a="fantasai"><a href="#l-332">#</a> [18:07] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-backgrounds-3/issues-lc-2014">http://dev.w3.org/csswg/css-backgrounds-3/issues-lc-2014</a></li>
+ <li id="l-333" _a="Bert"><a href="#l-333">#</a> [18:07] * Bert to ChrisL: OK</li>
+ <li id="l-334" _a="dael" _r="fantasai"><a href="#l-334">#</a> [18:07] &lt;dael&gt; fantasai: If you look at DoC...Main things we accepted most of the requests. We rejected comments from i18n about logical keywords because that's level 4. We regected focus rings as out of skope, but explained how it works.</li>
+ <li id="l-335" _a="Zakim"><a href="#l-335">#</a> [18:08] &lt;Zakim&gt; +SteveZ</li>
+ <li id="l-336" _a="dael" _r="fantasai"><a href="#l-336">#</a> [18:08] &lt;dael&gt; fantasai: The main thing I'm concerned about is the spread radius formula that we didn't get a lot of feedback on, but all the comments were addressed</li>
+ <li id="l-337" _a="dael" _r="glazou"><a href="#l-337">#</a> [18:08] &lt;dael&gt; glazou: opinions? questions?</li>
+ <li id="l-338" _a="dael" _r="??"><a href="#l-338">#</a> [18:08] &lt;dael&gt; ??: i18n was okay with defer to level 4?</li>
+ <li id="l-339" _a="dael" _r="fantasai"><a href="#l-339">#</a> [18:08] &lt;dael&gt; fantasai: Yes.</li>
+ <li id="l-340" _a="dael" _r="TabAtkins"><a href="#l-340">#</a> [18:09] &lt;dael&gt; TabAtkins: I helped prep the draft, so I approve of publication.</li>
+ <li id="l-341" _a="ChrisL"><a href="#l-341">#</a> [18:09] &lt;ChrisL&gt; no objection then</li>
+ <li id="l-342" _a="Bert"><a href="#l-342">#</a> [18:09] &lt;Bert&gt; +1 to CR</li>
+ <li id="l-343"><a href="#l-343">#</a> [18:09] * Joins: SteveZ (~SteveZ@public.cloak)</li>
+ <li id="l-344"><a href="#l-344">#</a> [18:09] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-345" _a="dael" _r="???"><a href="#l-345">#</a> [18:09] &lt;dael&gt; ???: What was the problem with spread radius? Just no comments?</li>
+ <li id="l-346" _a="glazou"><a href="#l-346">#</a> [18:09] &lt;glazou&gt; s/???/ChrisL</li>
+ <li id="l-347" _a="ChrisL"><a href="#l-347">#</a> [18:09] &lt;ChrisL&gt; ok if its implemented then fine</li>
+ <li id="l-348"><a href="#l-348">#</a> [18:09] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-349" _a="dael" _r="fantasai"><a href="#l-349">#</a> [18:10] &lt;dael&gt; fantasai: We believe it's correct, it's just no one on the author side said it was good or bad except bradK said he was skeptical and leaverou was in favor</li>
+ <li id="l-350" _a="astearns"><a href="#l-350">#</a> [18:10] &lt;astearns&gt; we implemented it for the margin-box value of shape-outside</li>
+ <li id="l-351" _a="dael" _r="?"><a href="#l-351">#</a> [18:10] &lt;dael&gt; ?: I gave feedback a while ago but didn't get a chance to look at it, but I think it would be okay.</li>
+ <li id="l-352" _a="ChrisL"><a href="#l-352">#</a> [18:10] &lt;ChrisL&gt; <a href="http://www.w3.org/TR/2014/WD-css3-background-20140116/">http://www.w3.org/TR/2014/WD-css3-background-20140116/</a> is 404</li>
+ <li id="l-353" _a="fantasai"><a href="#l-353">#</a> [18:10] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-backgrounds-3/">http://dev.w3.org/csswg/css-backgrounds-3/</a></li>
+ <li id="l-354" _a="glazou"><a href="#l-354">#</a> [18:10] &lt;glazou&gt; <a href="http://dev.w3.org/csswg/css-backgrounds/">http://dev.w3.org/csswg/css-backgrounds/</a></li>
+ <li id="l-355" _a="dael" _r="ChrisL"><a href="#l-355">#</a> [18:10] &lt;dael&gt; ChrisL: Can I have a good like to the DoC?</li>
+ <li id="l-356" _a="fantasai"><a href="#l-356">#</a> [18:10] * fantasai will fix that</li>
+ <li id="l-357" _a="glazou"><a href="#l-357">#</a> [18:10] &lt;glazou&gt; s/like/link</li>
+ <li id="l-358" _a="dael"><a href="#l-358">#</a> [18:11] &lt;dael&gt; s/like/link</li>
+ <li id="l-359" _a="Rossen_"><a href="#l-359">#</a> [18:11] &lt;Rossen_&gt; s/?/MaRakow/</li>
+ <li id="l-360" _a="MaRakow"><a href="#l-360">#</a> [18:11] &lt;MaRakow&gt; s/?/MaRakow</li>
+ <li id="l-361" _a="dael"><a href="#l-361">#</a> [18:11] * dael has really bad audio today, sorry.</li>
+ <li id="l-362" _a="dael" _r="glazou"><a href="#l-362">#</a> [18:11] &lt;dael&gt; glazou: Any obj against a new CR?</li>
+ <li id="l-363" _a="ChrisL"><a href="#l-363">#</a> [18:11] &lt;ChrisL&gt; +1 to publish</li>
+ <li id="l-364" _a="dael"><a href="#l-364">#</a> [18:11] &lt;dael&gt; [silence]</li>
+ <li id="l-365" _a="leaverou"><a href="#l-365">#</a> [18:11] &lt;leaverou&gt; +1 to publish</li>
+ <li id="l-366" _a="dael" _r="glazou"><a href="#l-366">#</a> [18:11] &lt;dael&gt; glazou: Are people in favor?</li>
+ <li id="l-367" _a="dael" _r="RESOLVED"><a href="#l-367">#</a> [18:11] &lt;dael&gt; RESOLVED: New CR for Backgrounds and Borders</li>
+ <li id="l-368"><a href="#l-368">#</a> [18:12] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-369" _a="glazou"><a href="#l-369">#</a> [18:12] &lt;glazou&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2014Aug/0214.html">http://lists.w3.org/Archives/Public/www-style/2014Aug/0214.html</a></li>
+ <li id="l-370" _a="dael" _r="Topic"><a href="#l-370">#</a> [18:12] &lt;dael&gt; Topic: Display Module</li>
+ <li id="l-371" _a="Bert"><a href="#l-371">#</a> [18:12] * Bert to Chris: shall I start the CR process? Or do you want to do it?</li>
+ <li id="l-372" _a="dael" _r="TabAtkins"><a href="#l-372">#</a> [18:12] &lt;dael&gt; TabAtkins: We technically got a resolution to pub in January, but I've made enough changes...I'm sorry, we did pub FPWD in Jan.</li>
+ <li id="l-373" _a="dael" _r="TabAtkins"><a href="#l-373">#</a> [18:12] &lt;dael&gt; TabAtkins: I hadn't made the edits we talked about in Jan F2F. Since then I've done a few other weeks. I'd like to request a first WD. And fantasai this is where you wanted tot alk about merging?</li>
+ <li id="l-374"><a href="#l-374">#</a> [18:13] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-375"><a href="#l-375">#</a> [18:13] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-376" _a="dael" _r="fantasai"><a href="#l-376">#</a> [18:13] &lt;dael&gt; fantasai: That was f2F. But we wanted an update witht he changes from F2F and we made some changes. We defined blockification and inlinification. We explain how it works for all display types.</li>
+ <li id="l-377" _a="sgalineau"><a href="#l-377">#</a> [18:13] * sgalineau likes the sound of blockification</li>
+ <li id="l-378" _a="dael" _r="fantasai"><a href="#l-378">#</a> [18:13] &lt;dael&gt; fantasai: WE added a glossary of CSS2.1 terms. We folded in entire proposal as asked. WE also added hide value.</li>
+ <li id="l-379" _a="dael" _r="fantasai"><a href="#l-379">#</a> [18:14] &lt;dael&gt; fantasai: WE wanted to have this make the box appear and disappear, not about display. This is the name we came up with. It's box-suppress with show, hide, and none.</li>
+ <li id="l-380" _a="glazou"><a href="#l-380">#</a> [18:14] * glazou was expecting a comment on names :-D</li>
+ <li id="l-381" _a="dael" _r="???"><a href="#l-381">#</a> [18:14] &lt;dael&gt; ???: I think the value names are fine, but for the property name I like the old one better.</li>
+ <li id="l-382" _a="glazou"><a href="#l-382">#</a> [18:14] &lt;glazou&gt; s/??/Florian</li>
+ <li id="l-383"><a href="#l-383">#</a> [18:14] * Quits: tommyjtl (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-384" _a="dael" _r="TabAtkins"><a href="#l-384">#</a> [18:14] &lt;dael&gt; TabAtkins: It seems odd to make it look like a long hand when it's not.</li>
+ <li id="l-385" _a="dael" _r="fantasai"><a href="#l-385">#</a> [18:15] &lt;dael&gt; fantasai: That prefix might not be a bad thing. We wanted to make it clear this is about making hte box go away or come back.</li>
+ <li id="l-386" _a="sgalineau"><a href="#l-386">#</a> [18:15] * sgalineau blockified: always;</li>
+ <li id="l-387" _a="dael" _r="florian"><a href="#l-387">#</a> [18:15] &lt;dael&gt; florian: I think I liked it better prefixed with display, but the values and behavious ar fine to me.</li>
+ <li id="l-388" _a="dael" _r="fantasai"><a href="#l-388">#</a> [18:15] &lt;dael&gt; fantasai: Other comments?</li>
+ <li id="l-389" _a="bkardell_"><a href="#l-389">#</a> [18:15] &lt;bkardell_&gt; +1 seems odd to look longhand and not be</li>
+ <li id="l-390" _a="dael" _r="florian"><a href="#l-390">#</a> [18:15] &lt;dael&gt; florian: Since we're moving away from LC, maybe we should bikeshed earlier.</li>
+ <li id="l-391" _a="dael" _r="fantasai"><a href="#l-391">#</a> [18:15] &lt;dael&gt; fantasai: I think we can publich and bikeshed at F2F</li>
+ <li id="l-392" _a="dael" _r="glazou"><a href="#l-392">#</a> [18:16] &lt;dael&gt; glazou: Previous WD is quite old so we should repub.</li>
+ <li id="l-393" _a="dael" _r="glazou"><a href="#l-393">#</a> [18:16] &lt;dael&gt; glazou: Any obj to publishing?</li>
+ <li id="l-394" _a="dael" _r="RESOLVED"><a href="#l-394">#</a> [18:16] &lt;dael&gt; RESOLVED: New WD for Display Module</li>
+ <li id="l-395" _a="glazou"><a href="#l-395">#</a> [18:16] &lt;glazou&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2014Aug/0286.html">http://lists.w3.org/Archives/Public/www-style/2014Aug/0286.html</a></li>
+ <li id="l-396" _a="dael" _r="Topic"><a href="#l-396">#</a> [18:16] &lt;dael&gt; Topic: overflow issue</li>
+ <li id="l-397" _a="dael" _r="TabAtkins"><a href="#l-397">#</a> [18:16] &lt;dael&gt; TabAtkins: This was earlier.</li>
+ <li id="l-398" _a="dael" _r="TabAtkins"><a href="#l-398">#</a> [18:17] &lt;dael&gt; TabAtkins: dholbert had the reverse flex box. If it's column-reverse the initial scroll is set to the bottom. He says this makse sense and would like flexbox to do this and create interop</li>
+ <li id="l-399" _a="dael" _r="TabAtkins"><a href="#l-399">#</a> [18:17] &lt;dael&gt; TabAtkins: fantasai said she thinks it should be defined properly in alignment so that the Chrome behviour would fall out.</li>
+ <li id="l-400" _a="fantasai"><a href="#l-400">#</a> [18:18] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-align/#overflow-scroll-position">http://dev.w3.org/csswg/css-align/#overflow-scroll-position</a></li>
+ <li id="l-401" _a="dael" _r="TabAtkins"><a href="#l-401">#</a> [18:18] &lt;dael&gt; TabAtkins: So it now says if you align with an edge, you align initial scroll position with that edge. That makes the correct behviour for flex happen because the flex start begins at the end. So it current would work correctly.</li>
+ <li id="l-402" _a="dael" _r="TabAtkins"><a href="#l-402">#</a> [18:18] &lt;dael&gt; TabAtkins: We think this is reasonable and we captured it in alignment already. We wanted to see if there are any objections to this approach.</li>
+ <li id="l-403" _a="dael" _r="glazou"><a href="#l-403">#</a> [18:18] &lt;dael&gt; glazou: Questions?</li>
+ <li id="l-404" _a="dael" _r="fantasai"><a href="#l-404">#</a> [18:19] &lt;dael&gt; fantasai: This means that if you have a scrollable thing or don't, the initial alignment looks the same. The overflow is off tot he other side from the alignment.</li>
+ <li id="l-405" _a="dael" _r="Rossen_"><a href="#l-405">#</a> [18:19] &lt;dael&gt; Rossen_: What happens when you have alignment and writing mode direction as opposite.</li>
+ <li id="l-406" _a="sgalineau"><a href="#l-406">#</a> [18:19] * sgalineau overflow: audio;</li>
+ <li id="l-407" _a="dael" _r="fantasai"><a href="#l-407">#</a> [18:20] &lt;dael&gt; fantasai: You set hte scroll position according to the alignment and that accounts for the writing mode. So the default will match aligning to the start-start corner. This is about aligning on the scrollable element itself.</li>
+ <li id="l-408" _a="dael" _r="fantasai"><a href="#l-408">#</a> [18:20] &lt;dael&gt; fantasai: This is the prop that says all my contents are aligned this way So a scrollable box all contents are the scrollable area.</li>
+ <li id="l-409" _a="dael" _r="dbaron"><a href="#l-409">#</a> [18:21] &lt;dael&gt; dbaron: Key point is that the default references is, to the alignment does matter.</li>
+ <li id="l-410"><a href="#l-410">#</a> [18:21] * Quits: arybka (~arybka@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-411" _a="dael" _r="dbaron"><a href="#l-411">#</a> [18:21] &lt;dael&gt; dbaron: I'm worried that this affects margin auto, but not text align, but I think I'm okay.</li>
+ <li id="l-412" _a="dael" _r="TabAtkins"><a href="#l-412">#</a> [18:21] &lt;dael&gt; TabAtkins: I think it's okay. Text alignment is another thing, but not as big of a deal. I could be wrong.</li>
+ <li id="l-413" _a="fantasai"><a href="#l-413">#</a> [18:21] &lt;fantasai&gt; s/affects/doesn't affect/</li>
+ <li id="l-414" _a="fantasai"><a href="#l-414">#</a> [18:21] &lt;fantasai&gt; s/but not/or/</li>
+ <li id="l-415" _a="dbaron"><a href="#l-415">#</a> [18:21] &lt;dbaron&gt; s/worried/a little worried/</li>
+ <li id="l-416" _a="fantasai"><a href="#l-416">#</a> [18:22] &lt;fantasai&gt; s/or not/or/</li>
+ <li id="l-417" _a="dael" _r="Rossen_"><a href="#l-417">#</a> [18:22] &lt;dael&gt; Rossen_: I'm okay with it as well. It makes sense.</li>
+ <li id="l-418" _a="dael" _r="glazou"><a href="#l-418">#</a> [18:22] &lt;dael&gt; glazou: Anyone with an opinion or comment? Anyone else? No objection?</li>
+ <li id="l-419" _a="dael" _r="RESOLVED"><a href="#l-419">#</a> [18:22] &lt;dael&gt; RESOLVED: Adopt proposal</li>
+ <li id="l-420" _a="dael" _r="TabAtkins"><a href="#l-420">#</a> [18:22] &lt;dael&gt; TabAtkins: Anyone with comments later, bring them to the ML. This is large and I want to make sure everyone is aware.</li>
+ <li id="l-421" _a="glazou"><a href="#l-421">#</a> [18:22] &lt;glazou&gt; <a href="https://lists.w3.org/Archives/Member/w3c-css-wg/2014JulSep/0123.html">https://lists.w3.org/Archives/Member/w3c-css-wg/2014JulSep/0123.html</a></li>
+ <li id="l-422" _a="dael" _r="Topic"><a href="#l-422">#</a> [18:22] &lt;dael&gt; Topic: CSS Text</li>
+ <li id="l-423" _a="dael" _r="fantasai"><a href="#l-423">#</a> [18:23] &lt;dael&gt; fantasai: Let me find the message</li>
+ <li id="l-424" _a="glazou"><a href="#l-424">#</a> [18:23] &lt;glazou&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2014Aug/0256.html">http://lists.w3.org/Archives/Public/www-style/2014Aug/0256.html</a></li>
+ <li id="l-425" _a="dael" _r="glazou"><a href="#l-425">#</a> [18:23] &lt;dael&gt; glazou: The message is linked from what I posted. That one?</li>
+ <li id="l-426" _a="dael" _r="fantasai"><a href="#l-426">#</a> [18:23] &lt;dael&gt; fantasai: Yes. I wanted to go over somet hings to make sure everyone is aware.</li>
+ <li id="l-427" _a="dael" _r="fantasai"><a href="#l-427">#</a> [18:24] &lt;dael&gt; fantasai: There's two issues about UAX14. We accepted something that breaks UAX14. There's the break character that's supposed to rep images and glue character which is no break. So we interop ignore the no break when it's between that character and a replaced element</li>
+ <li id="l-428" _a="dael" _r="fantasai"><a href="#l-428">#</a> [18:24] &lt;dael&gt; fantasai: We had to change to spec to say we're reordering so that you violate the glue rule.</li>
+ <li id="l-429" _a="dael" _r="florian"><a href="#l-429">#</a> [18:24] &lt;dael&gt; florian: Do we have usage data?</li>
+ <li id="l-430" _a="sgalineau"><a href="#l-430">#</a> [18:25] * sgalineau likes the smell of UAX14 in the morning</li>
+ <li id="l-431" _a="dael" _r="fantasai"><a href="#l-431">#</a> [18:25] &lt;dael&gt; fantasai: I suspect this is well embedded because it's been around for a long time. We could dig out netscape to figure out how long.</li>
+ <li id="l-432" _a="sgalineau"><a href="#l-432">#</a> [18:25] * sgalineau ok maybe not</li>
+ <li id="l-433" _a="dael" _r="fantasai"><a href="#l-433">#</a> [18:25] &lt;dael&gt; fantasai: People have relied on this in tables to put images together a lot.</li>
+ <li id="l-434" _a="dael" _r="fantasai"><a href="#l-434">#</a> [18:25] &lt;dael&gt; fantasai: I don't know how else to get usage data.</li>
+ <li id="l-435" _a="dael" _r="florian"><a href="#l-435">#</a> [18:25] &lt;dael&gt; florian: But there's a reasonable assuption it's common.</li>
+ <li id="l-436" _a="dael" _r="fantasai"><a href="#l-436">#</a> [18:26] &lt;dael&gt; fantasai: I think anyone trying to get not breaking would be frustrated.</li>
+ <li id="l-437" _a="dael" _r="glenn_"><a href="#l-437">#</a> [18:26] &lt;dael&gt; glenn_: Have you disucess with unicode?</li>
+ <li id="l-438"><a href="#l-438">#</a> [18:26] * Joins: zcorpan_ (~zcorpan@public.cloak)</li>
+ <li id="l-439" _a="dael" _r="fantasai"><a href="#l-439">#</a> [18:26] &lt;dael&gt; fantasai: I haven't All browsers are interop. People have been relying on images doing this so we should change the spec. I'm not happy witht he result, it would be great to follow unicode.</li>
+ <li id="l-440" _a="dael" _r="fantasai"><a href="#l-440">#</a> [18:26] &lt;dael&gt; fantasai: If impl have a way to evaluate breakage that would be great.</li>
+ <li id="l-441" _a="dael" _r="ChrisL"><a href="#l-441">#</a> [18:27] &lt;dael&gt; ChrisL: Is it possible the unicode is wrong and we should contact them?</li>
+ <li id="l-442" _a="glazou"><a href="#l-442">#</a> [18:27] * glazou notices that TabAtkins  just closed agenda item 7 on www-style…</li>
+ <li id="l-443"><a href="#l-443">#</a> [18:27] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-444" _a="ChrisL"><a href="#l-444">#</a> [18:27] &lt;ChrisL&gt; OK that seems fair enough as justification to me</li>
+ <li id="l-445" _a="dael" _r="fantasai"><a href="#l-445">#</a> [18:27] &lt;dael&gt; fantasai: I don't think we should encourage anyone that isn't backwards...The unicode makes sense. I'd prefer what unicode is correct and we have backwards compat constraint. If browser impl think we can change that's great. WE're stuck for web browser, but no one else should have to deal.</li>
+ <li id="l-446"><a href="#l-446">#</a> [18:28] * Parts: florian (~Florian@public.cloak) (florian)</li>
+ <li id="l-447" _a="dael" _r="ChrisL"><a href="#l-447">#</a> [18:28] &lt;dael&gt; ChrisL: That seems fine to me.</li>
+ <li id="l-448" _a="dael" _r="glazou"><a href="#l-448">#</a> [18:28] &lt;dael&gt; glazou: Any obj?</li>
+ <li id="l-449" _a="dael" _r="fantasai"><a href="#l-449">#</a> [18:28] &lt;dael&gt; fantasai: Or does anyone think we chan change?</li>
+ <li id="l-450" _a="dael" _r="glenn_"><a href="#l-450">#</a> [18:28] &lt;dael&gt; glenn_: Have you talked with browser vendors about changing?</li>
+ <li id="l-451" _a="dael"><a href="#l-451">#</a> [18:28] &lt;dael&gt; [silence]</li>
+ <li id="l-452" _a="TabAtkins"><a href="#l-452">#</a> [18:28] * TabAtkins glazou: Thanks for the reminder. ^_^</li>
+ <li id="l-453" _a="dael" _r="glazou"><a href="#l-453">#</a> [18:28] &lt;dael&gt; glazou: So, let's accept the resolution</li>
+ <li id="l-454" _a="dael" _r="RESOLVED"><a href="#l-454">#</a> [18:29] &lt;dael&gt; RESOLVED: Accept the proposal</li>
+ <li id="l-455" _a="fantasai"><a href="#l-455">#</a> [18:29] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-69">http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-69</a></li>
+ <li id="l-456" _a="dael" _r="fantasai"><a href="#l-456">#</a> [18:29] &lt;dael&gt; fantasai: Next was the i18n group asked us to nomitively reference UAX14. We say here's some references...</li>
+ <li id="l-457" _a="dael" _r="fantasai"><a href="#l-457">#</a> [18:30] &lt;dael&gt; fantasai: The problem is we're not sure if UAX14 is web compat. Second is a lot of the breaks in the pairs table aren't okay without prioritization. You'll get weird results. Browsers don't do prioritization.</li>
+ <li id="l-458" _a="dael" _r="fantasai"><a href="#l-458">#</a> [18:31] &lt;dael&gt; fantasai: So we said no we won't normatively reference. We need to evaluate and we don't want to tackle that in this level of text. I think i18n didn't respond to that.</li>
+ <li id="l-459" _a="koji"><a href="#l-459">#</a> [18:31] &lt;koji&gt; I think this is actually issue #51 file:///Users/kojiishi/src/csswg/specs/css-text/issues-lc-2013.html#issue-51</li>
+ <li id="l-460" _a="dael" _r="fantasai"><a href="#l-460">#</a> [18:31] &lt;dael&gt; fantasai: It's not issue 69...sorry.</li>
+ <li id="l-461" _a="dael" _r="fantasai"><a href="#l-461">#</a> [18:31] &lt;dael&gt; fantasai: That's that.</li>
+ <li id="l-462" _a="fantasai"><a href="#l-462">#</a> [18:31] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-51">http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-51</a></li>
+ <li id="l-463" _a="dael" _r="glenn_"><a href="#l-463">#</a> [18:31] &lt;dael&gt; glenn_: What do we tell users that don't want to break?</li>
+ <li id="l-464" _a="dael" _r="fantasai"><a href="#l-464">#</a> [18:31] &lt;dael&gt; fantasai: We don't normatively define line breaking rules in CSS.</li>
+ <li id="l-465" _a="dael" _r="fantasai"><a href="#l-465">#</a> [18:32] &lt;dael&gt; fantasai: If people want ot not break, some characters are normatively referenced. the ones that are about control characters for line breaking. The others are informatively referenced.</li>
+ <li id="l-466" _a="fantasai"><a href="#l-466">#</a> [18:32] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-text/#line-break-details">http://dev.w3.org/csswg/css-text/#line-break-details</a></li>
+ <li id="l-467" _a="fantasai" _r="glenn"><a href="#l-467">#</a> [18:32] &lt;fantasai&gt; glenn,  BK, CR, LF, CM, NL, and SG are normatively referenced</li>
+ <li id="l-468" _a="dael" _r="dbaron"><a href="#l-468">#</a> [18:32] &lt;dael&gt; dbaron: My experience has been when people try and impl a new set of line breaking rules it has behviour that people don't expect. I don't remember which, but people would try a new line breaker and it didn't match the expected results.</li>
+ <li id="l-469" _a="fantasai"><a href="#l-469">#</a> [18:33] &lt;fantasai&gt; also WJ, ZW, and GL</li>
+ <li id="l-470" _a="dbaron"><a href="#l-470">#</a> [18:33] &lt;dbaron&gt; s/remember which/how much of it was JIS X 4051 and how much was UAX 14/</li>
+ <li id="l-471" _a="dael" _r="glazou"><a href="#l-471">#</a> [18:33] &lt;dael&gt; glazou: Let's go back to the current issue, 51. Anyone object againt a rejection of the original comment?</li>
+ <li id="l-472" _a="dbaron"><a href="#l-472">#</a> [18:33] &lt;dbaron&gt; s/how much/remember how much/</li>
+ <li id="l-473" _a="dael" _r="??"><a href="#l-473">#</a> [18:33] &lt;dael&gt; ??: I'm fine with that.</li>
+ <li id="l-474" _a="glenn_"><a href="#l-474">#</a> [18:33] &lt;glenn_&gt; abstain</li>
+ <li id="l-475" _a="dael" _r="glazou"><a href="#l-475">#</a> [18:33] &lt;dael&gt; glazou: So the proposal is to back that rejection.</li>
+ <li id="l-476" _a="SteveZ"><a href="#l-476">#</a> [18:33] &lt;SteveZ&gt; I agree that we are not ready to normatively define line breaking</li>
+ <li id="l-477" _a="dael" _r="RESOLVED"><a href="#l-477">#</a> [18:33] &lt;dael&gt; RESOLVED: Reject issue 51</li>
+ <li id="l-478" _a="glazou"><a href="#l-478">#</a> [18:34] &lt;glazou&gt; <a href="http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-21">http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-21</a></li>
+ <li id="l-479" _a="dael" _r="fantasai"><a href="#l-479">#</a> [18:34] &lt;dael&gt; fantasai: Next was soft hyphons and hyphonation</li>
+ <li id="l-480" _a="astearns"><a href="#l-480">#</a> [18:34] &lt;astearns&gt; +1 to this change</li>
+ <li id="l-481" _a="dael" _r="fantasai"><a href="#l-481">#</a> [18:34] &lt;dael&gt; fantasai: We had said if you have a soft hyphen, that's prioritized. epub said it was breaking anywhere close to soft hyphen. So we said that if there's a soft hyphen you can only break at the soft hyphen, not anywhere else in the word.</li>
+ <li id="l-482" _a="dael" _r="Mike"><a href="#l-482">#</a> [18:34] &lt;dael&gt; Mike: I agree.</li>
+ <li id="l-483" _a="glazou"><a href="#l-483">#</a> [18:34] * glazou is ok with the change</li>
+ <li id="l-484" _a="dael" _r="??"><a href="#l-484">#</a> [18:35] &lt;dael&gt; ??: So what happens if the word is too long. Any you break again?</li>
+ <li id="l-485" _a="dael" _r="fantasai"><a href="#l-485">#</a> [18:35] &lt;dael&gt; fantasai: I think it's just unbreakable.</li>
+ <li id="l-486" _a="astearns"><a href="#l-486">#</a> [18:35] &lt;astearns&gt; s/??/florian/</li>
+ <li id="l-487" _a="dael" _r="florian"><a href="#l-487">#</a> [18:35] &lt;dael&gt; florian: If the word is so long, it's good CSS is smart.</li>
+ <li id="l-488" _a="dael" _r="fantasai"><a href="#l-488">#</a> [18:35] &lt;dael&gt; fantasai: But most words aren't that long.</li>
+ <li id="l-489" _a="liam"><a href="#l-489">#</a> [18:35] * liam thinks fantasai doesn't speak German or Finnish ;-)</li>
+ <li id="l-490" _a="Ms2ger"><a href="#l-490">#</a> [18:35] * Ms2ger ^</li>
+ <li id="l-491" _a="fantasai"><a href="#l-491">#</a> [18:35] * fantasai fair</li>
+ <li id="l-492" _a="dauwhe"><a href="#l-492">#</a> [18:36] &lt;dauwhe&gt; s/Mike/dauwhe/</li>
+ <li id="l-493" _a="dael" _r="glenn_"><a href="#l-493">#</a> [18:36] &lt;dael&gt; glenn_: I've found in thai that they often have long thigns that are space sperated. It's a cheap way of breaking without a dictionary.</li>
+ <li id="l-494" _a="dael" _r="fantasai"><a href="#l-494">#</a> [18:36] &lt;dael&gt; fantasai: Shouldn't they be using zero break space?</li>
+ <li id="l-495" _a="fantasai"><a href="#l-495">#</a> [18:36] &lt;fantasai&gt; zero width space</li>
+ <li id="l-496" _a="dael" _r="glenn_"><a href="#l-496">#</a> [18:36] &lt;dael&gt; glenn_: I'm saying that we're seen that.</li>
+ <li id="l-497" _a="dael" _r="dauwhe"><a href="#l-497">#</a> [18:36] &lt;dael&gt; dauwhe: And you're using this is a space where the algorythm is inappropirate?</li>
+ <li id="l-498" _a="dael" _r="fantasai"><a href="#l-498">#</a> [18:36] &lt;dael&gt; fantasai: Yes.</li>
+ <li id="l-499" _a="dauwhe"><a href="#l-499">#</a> [18:37] &lt;dauwhe&gt; s/dauwhe/???/</li>
+ <li id="l-500"><a href="#l-500">#</a> [18:37] * Quits: Bogdan_Brinza (~Bogdan_Brinza@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-501" _a="dael" _r="florian"><a href="#l-501">#</a> [18:37] &lt;dael&gt; florian: I'm just wondering if the word is too long should you say that if the additional break is needed you can say use the soft break and then if needed other break rules apply? Would that be useful?</li>
+ <li id="l-502" _a="dael" _r="fantasai"><a href="#l-502">#</a> [18:37] &lt;dael&gt; fantasai: I think that's a good question and I don't know.</li>
+ <li id="l-503" _a="dael" _r="florian"><a href="#l-503">#</a> [18:37] &lt;dael&gt; florian: I don't have an answer either, but I think it's worth answering.</li>
+ <li id="l-504" _a="fantasai"><a href="#l-504">#</a> [18:37] &lt;fantasai&gt; s/the soft break/automatic hyphenation/</li>
+ <li id="l-505" _a="dael" _r="glazou"><a href="#l-505">#</a> [18:38] &lt;dael&gt; glazou: So does this mean we need more investigation?</li>
+ <li id="l-506" _a="astearns"><a href="#l-506">#</a> [18:38] &lt;astearns&gt; (change the whole inappropriate line to: astearns: this is used to turn off algorithmic hyphenation when it has an inappropriate result)</li>
+ <li id="l-507" _a="dael" _r="fantasai"><a href="#l-507">#</a> [18:38] &lt;dael&gt; fantasai: I don't know how to get the answer.</li>
+ <li id="l-508" _a="dael" _r="dauwhe"><a href="#l-508">#</a> [18:38] &lt;dael&gt; dauwhe: If needed sounds pretty complex.</li>
+ <li id="l-509" _a="dael" _r="fantasai"><a href="#l-509">#</a> [18:38] &lt;dael&gt; fantasai: I think in this case it's if the word is too long.</li>
+ <li id="l-510" _a="dael" _r="bert"><a href="#l-510">#</a> [18:38] &lt;dael&gt; bert: But it may depend on what's on the next line.</li>
+ <li id="l-511" _a="liam"><a href="#l-511">#</a> [18:38] &lt;liam&gt; Barrow-in-Fur&amp;shy;ness</li>
+ <li id="l-512" _a="glazou"><a href="#l-512">#</a> [18:38] &lt;glazou&gt; « Rindfleischetikettierungsüberwachungsaufgabenübertragungsgesetz »</li>
+ <li id="l-513" _a="glazou"><a href="#l-513">#</a> [18:39] &lt;glazou&gt; or « λοπαδο­τεμαχο­σελαχο­γαλεο­κρανιο­λειψανο­δριμ­υπο­τριμματο­σιλφιο­καραβο­μελιτο­κατακεχυ­μενο­κιχλ­επι­κοσσυφο­φαττο­περιστερ­αλεκτρυον­οπτο­κεφαλλιο­κιγκλο­πελειο­λαγῳο­σιραιο­βαφη­τραγανο­πτερύγων » for Lea</li>
+ <li id="l-514" _a="dael" _r="fantasai"><a href="#l-514">#</a> [18:39] &lt;dael&gt; fantasai: No, If you broke at the soft hyphen and you still can't fit...florian is talking about if you have a long word, you break at a soft hyphen, and the second half of the word is longer than the line. THere's just this half a word. Are you then allowed to break at an auto-hyphen point, with that being the only thing?</li>
+ <li id="l-515" _a="fantasai"><a href="#l-515">#</a> [18:40] &lt;fantasai&gt; s/thing/thing on the line/</li>
+ <li id="l-516" _a="dael" _r="bert"><a href="#l-516">#</a> [18:40] &lt;dael&gt; bert: So not with a float? Or if you have another way to break the letters? It's hard to say it's absolutely needed.</li>
+ <li id="l-517" _a="astearns"><a href="#l-517">#</a> [18:40] &lt;astearns&gt; the correct solution for that case is to add more soft hyphens to the word. You started adding them, so you need to add as many as may be required</li>
+ <li id="l-518" _a="dael" _r="liam"><a href="#l-518">#</a> [18:40] &lt;dael&gt; liam: This is the same with a word that can't be hyphen. Usually systems give up and hyphen.</li>
+ <li id="l-519" _a="leaverou"><a href="#l-519">#</a> [18:40] * leaverou glazou: is that supposed to mean anything? It’s hard to understand it, but it seems like random words stiched together :p</li>
+ <li id="l-520" _a="dael" _r="??"><a href="#l-520">#</a> [18:40] &lt;dael&gt; ??: But we're the ones saying you can't break.</li>
+ <li id="l-521" _a="glazou"><a href="#l-521">#</a> [18:40] * glazou Lea, see <a href="http://en.wikipedia.org/wiki/Longest_words#Greek">http://en.wikipedia.org/wiki/Longest_words#Greek</a></li>
+ <li id="l-522" _a="glazou"><a href="#l-522">#</a> [18:41] &lt;glazou&gt; ancient greek then</li>
+ <li id="l-523"><a href="#l-523">#</a> [18:41] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-524" _a="dael" _r="liam"><a href="#l-524">#</a> [18:41] &lt;dael&gt; liam: You can get something similar with place names. I pasted one. There's two questions, can you break at the explicit hyphen or can you break at other places in the compound work.</li>
+ <li id="l-525" _a="dael" _r="florian"><a href="#l-525">#</a> [18:41] &lt;dael&gt; florian: I'd break at the algorythmic hyphen points.</li>
+ <li id="l-526" _a="leaverou"><a href="#l-526">#</a> [18:41] * leaverou glazou thanks! I learned something new :)</li>
+ <li id="l-527" _a="glazou"><a href="#l-527">#</a> [18:41] &lt;glazou&gt; :)</li>
+ <li id="l-528" _a="SteveZ"><a href="#l-528">#</a> [18:41] &lt;SteveZ&gt; for what is it worth, it is also possible that neither half of the broken word fit on the very short line</li>
+ <li id="l-529" _a="dael" _r="fantasai"><a href="#l-529">#</a> [18:41] &lt;dael&gt; fantasai: I'm okay to say that if there's no other break points, the word had a soft hyphen and you already broke there, you can then auto-hyphen.</li>
+ <li id="l-530" _a="dael" _r="dauwhe"><a href="#l-530">#</a> [18:42] &lt;dael&gt; dauwhe: I can't live with that. It's a rare situation.</li>
+ <li id="l-531" _a="liam"><a href="#l-531">#</a> [18:42] &lt;liam&gt; Rindfleischetikettierungsüberwachungsaufgabenübertragungsge&amp;shy;setz</li>
+ <li id="l-532" _a="Zakim"><a href="#l-532">#</a> [18:42] &lt;Zakim&gt; +[Microsoft.aa]</li>
+ <li id="l-533" _a="MaRakow" _r="Zakim"><a href="#l-533">#</a> [18:42] &lt;MaRakow&gt; Zakim, [Microsoft.aa] is me</li>
+ <li id="l-534" _a="Zakim" _r="+MaRakow"><a href="#l-534">#</a> [18:42] &lt;Zakim&gt; +MaRakow; got it</li>
+ <li id="l-535" _a="dael" _r="liam"><a href="#l-535">#</a> [18:42] &lt;dael&gt; liam: Not only if you already broke there. You may not fit the text before as witht he crazy example above.</li>
+ <li id="l-536" _a="dael"><a href="#l-536">#</a> [18:42] &lt;dael&gt; s/can't/can</li>
+ <li id="l-537" _a="dael" _r="dauwhe"><a href="#l-537">#</a> [18:42] &lt;dael&gt; dauwhe: So only hyphennate at the soft hyphen unless something really bad happens.</li>
+ <li id="l-538" _a="dael" _r="fantasai"><a href="#l-538">#</a> [18:43] &lt;dael&gt; fantasai: That seems reasonable to me and if we need to we can revisit.</li>
+ <li id="l-539" _a="dael" _r="glazou"><a href="#l-539">#</a> [18:43] &lt;dael&gt; glazou: Okay.</li>
+ <li id="l-540" _a="dael" _r="fantasai"><a href="#l-540">#</a> [18:43] &lt;dael&gt; fantasai: Let's do issue 65</li>
+ <li id="l-541" _a="fantasai"><a href="#l-541">#</a> [18:43] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-65">http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-65</a></li>
+ <li id="l-542" _a="dael" _r="fantasai"><a href="#l-542">#</a> [18:43] &lt;dael&gt; fantasai: That was i18n asking for more details on how Indic does letter spacing. WE said no because we don't have the knowledge to do that. THe uA is given the ability to do the right thing and you can figure that out.</li>
+ <li id="l-543" _a="dael" _r="florian"><a href="#l-543">#</a> [18:44] &lt;dael&gt; florian: You have a note below that Chrome does an impressive thing.</li>
+ <li id="l-544" _a="Zakim"><a href="#l-544">#</a> [18:44] &lt;Zakim&gt; -MaRakow</li>
+ <li id="l-545" _a="dael" _r="fantasai"><a href="#l-545">#</a> [18:44] &lt;dael&gt; fantasai: Yes, but Indic would be a spec to itself.</li>
+ <li id="l-546" _a="dael" _r="liam"><a href="#l-546">#</a> [18:44] &lt;dael&gt; liam: Does indic have it's own group and we can defer to them until they come back? That allows us to defer the definition of correctly until they come to it.</li>
+ <li id="l-547" _a="dael" _r="fantasai"><a href="#l-547">#</a> [18:44] &lt;dael&gt; fantasai: I think it should be a sep document that we can refer to.</li>
+ <li id="l-548" _a="ChrisL"><a href="#l-548">#</a> [18:44] &lt;ChrisL&gt; s/liam/chris</li>
+ <li id="l-549" _a="dael" _r="glazou"><a href="#l-549">#</a> [18:45] &lt;dael&gt; glazou: I agree with fantasai</li>
+ <li id="l-550" _a="florian"><a href="#l-550">#</a> [18:45] &lt;florian&gt; +1</li>
+ <li id="l-551" _a="dael" _r="glazou"><a href="#l-551">#</a> [18:45] &lt;dael&gt; glazou: So do we want the rejection? any objections?</li>
+ <li id="l-552" _a="dael" _r="RESOLVED"><a href="#l-552">#</a> [18:45] &lt;dael&gt; RESOLVED: Reject the issue (65)</li>
+ <li id="l-553" _a="dael" _r="fantasai"><a href="#l-553">#</a> [18:45] &lt;dael&gt; fantasai: 72 is about control characters is waiting for microsoft.</li>
+ <li id="l-554" _a="ChrisL"><a href="#l-554">#</a> [18:45] &lt;ChrisL&gt; s/Does indic have it's own group/There is an Indic language layout task force</li>
+ <li id="l-555" _a="dael" _r="fantasai"><a href="#l-555">#</a> [18:46] &lt;dael&gt; fantasai: So that's open on you Microsoft people.</li>
+ <li id="l-556" _a="fantasai"><a href="#l-556">#</a> [18:46] &lt;fantasai&gt; <a href="http://lists.w3.org/Archives/Public/www-style/2014Aug/0217.html">http://lists.w3.org/Archives/Public/www-style/2014Aug/0217.html</a></li>
+ <li id="l-557" _a="dael" _r="fantasai"><a href="#l-557">#</a> [18:46] &lt;dael&gt; fantasai: We're coming to consensus about cross inline properties. That might go into fonts.</li>
+ <li id="l-558" _a="dael" _r="??"><a href="#l-558">#</a> [18:46] &lt;dael&gt; ??: What's the proposal?</li>
+ <li id="l-559" _a="fantasai"><a href="#l-559">#</a> [18:46] &lt;fantasai&gt; <a href="http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-59">http://dev.w3.org/csswg/css-text/issues-lc-2013#issue-59</a></li>
+ <li id="l-560" _a="dael" _r="fantasai"><a href="#l-560">#</a> [18:46] &lt;dael&gt; fantasai: I'm not sure I'm quite clear on it.</li>
+ <li id="l-561" _a="dbaron"><a href="#l-561">#</a> [18:46] * dbaron Zakim, who is noisy?</li>
+ <li id="l-562" _a="Zakim"><a href="#l-562">#</a> [18:46] * Zakim dbaron, listening for 12 seconds I heard sound from the following: glazou (45%), TabAtkins (24%), Bert (8%), ChrisL (72%)</li>
+ <li id="l-563" _a="dael" _r="fantasai"><a href="#l-563">#</a> [18:46] &lt;dael&gt; fantasai: The last issue was rename distribute to inter-character</li>
+ <li id="l-564" _a="dbaron"><a href="#l-564">#</a> [18:46] * dbaron Zakim, mute ChrisL</li>
+ <li id="l-565" _a="Zakim"><a href="#l-565">#</a> [18:46] * Zakim ChrisL should now be muted</li>
+ <li id="l-566" _a="MaRakow"><a href="#l-566">#</a> [18:47] * MaRakow lllllllllllet's get ready to rumbllllllllllllle</li>
+ <li id="l-567" _a="ChrisL"><a href="#l-567">#</a> [18:47] * ChrisL sorry</li>
+ <li id="l-568" _a="dauwhe"><a href="#l-568">#</a> [18:47] * dauwhe Zakim, teach yourself math.</li>
+ <li id="l-569" _a="Zakim"><a href="#l-569">#</a> [18:47] * Zakim I don't understand 'teach yourself math', dauwhe</li>
+ <li id="l-570" _a="dael" _r="fantasai"><a href="#l-570">#</a> [18:47] &lt;dael&gt; fantasai: We initially rejected this because distribute has been around since IE6. It's also fairly true it's not clear and doesn't match other values of the spec. This would be clearer and just by looking you can guess what it means.</li>
+ <li id="l-571" _a="dael" _r="fantasai"><a href="#l-571">#</a> [18:48] &lt;dael&gt; fantasai: We'd have to keep distribute, but should we make it legacy and have intercharacter.</li>
+ <li id="l-572" _a="dael" _r="???"><a href="#l-572">#</a> [18:48] &lt;dael&gt; ???: The problem is with scripting. Is this often used with scripts?</li>
+ <li id="l-573" _a="glazou"><a href="#l-573">#</a> [18:48] &lt;glazou&gt; s/??/florian</li>
+ <li id="l-574" _a="dael" _r="fantasai"><a href="#l-574">#</a> [18:49] &lt;dael&gt; fantasai: I can't image people would expect archane cases.</li>
+ <li id="l-575" _a="dael" _r="dbaron"><a href="#l-575">#</a> [18:49] &lt;dael&gt; dbaron: I'm not a fan of aliasing. I'd rather not have it.</li>
+ <li id="l-576" _a="fantasai"><a href="#l-576">#</a> [18:49] &lt;fantasai&gt; s/expect/except/</li>
+ <li id="l-577" _a="dael" _r="florian"><a href="#l-577">#</a> [18:49] &lt;dael&gt; florian: The more I do, the more I like aliasing. But we have to define it.</li>
+ <li id="l-578" _a="dael" _r="glenn_"><a href="#l-578">#</a> [18:49] &lt;dael&gt; glenn_: It's a serialization problem.</li>
+ <li id="l-579" _a="dael" _r="fantasai"><a href="#l-579">#</a> [18:49] &lt;dael&gt; fantasai: I think we were make it more of a duplicate rather than an alias.</li>
+ <li id="l-580" _a="dael" _r="florian"><a href="#l-580">#</a> [18:50] &lt;dael&gt; florian: I don't feel great, but I can live with it depending on browser vendors.</li>
+ <li id="l-581" _a="dael" _r="Rossen_"><a href="#l-581">#</a> [18:50] &lt;dael&gt; Rossen_: I wasn't here and I have to catch up on this. Can we table to next week or F2F? By that time I can talk to my tech guys and have a position on this.</li>
+ <li id="l-582" _a="dael" _r="fantasai"><a href="#l-582">#</a> [18:50] &lt;dael&gt; fantasai: Is this control characters or this one?</li>
+ <li id="l-583" _a="dael" _r="Rossen_"><a href="#l-583">#</a> [18:50] &lt;dael&gt; Rossen_: This one.</li>
+ <li id="l-584" _a="dael" _r="glazou"><a href="#l-584">#</a> [18:50] &lt;dael&gt; glazou: 59 right?</li>
+ <li id="l-585" _a="dael" _r="Rossen_"><a href="#l-585">#</a> [18:50] &lt;dael&gt; Rossen_: 59.</li>
+ <li id="l-586" _a="dael" _r="fantasai"><a href="#l-586">#</a> [18:51] &lt;dael&gt; fantasai: I don't mind waiting another week.</li>
+ <li id="l-587" _a="dael" _r="Rossen_"><a href="#l-587">#</a> [18:51] &lt;dael&gt; Rossen_: Control characters is the same.</li>
+ <li id="l-588" _a="dael" _r="glazou"><a href="#l-588">#</a> [18:51] &lt;dael&gt; glazou: Okay.</li>
+ <li id="l-589" _a="dael" _r="Rossen_"><a href="#l-589">#</a> [18:51] &lt;dael&gt; Rossen_: What's the urgency. Are you trying to push so it's ready for LC at F2F? Or is it okay at F2F?</li>
+ <li id="l-590" _a="dael" _r="fantasai"><a href="#l-590">#</a> [18:51] &lt;dael&gt; fantasai: WE want to pub LC at the F2F at the latest. I think it will need to go there.</li>
+ <li id="l-591" _a="dael" _r="fantasai"><a href="#l-591">#</a> [18:51] &lt;dael&gt; fantasai: WE can discuss there, but we want to be able to resolve.</li>
+ <li id="l-592" _a="dael" _r="Rossen_"><a href="#l-592">#</a> [18:52] &lt;dael&gt; Rossen_: I can have a responce at the F2F at the latest. I'll see if I can get on the call next week from London.</li>
+ <li id="l-593" _a="dael" _r="glazou"><a href="#l-593">#</a> [18:52] &lt;dael&gt; glazou: We only have 5 minutes. Anything we can do on text?</li>
+ <li id="l-594" _a="dael" _r="fantasai"><a href="#l-594">#</a> [18:52] &lt;dael&gt; fantasai: Do we have another? WE can move on.</li>
+ <li id="l-595" _a="florian"><a href="#l-595">#</a> [18:52] &lt;florian&gt; s/The more I do, the more I like aliasing/The more scripts are involved, the less I like aliasing/</li>
+ <li id="l-596" _a="dael" _r="glazou"><a href="#l-596">#</a> [18:52] &lt;dael&gt; glazou: So we have #6 or #8</li>
+ <li id="l-597" _a="dael" _r="TabAtkins"><a href="#l-597">#</a> [18:53] &lt;dael&gt; TabAtkins: I don't think we can do 6.</li>
+ <li id="l-598" _a="glazou"><a href="#l-598">#</a> [18:53] &lt;glazou&gt; <a href="http://wiki.csswg.org/spec#dead-need-to-be-turned-into-notes">http://wiki.csswg.org/spec#dead-need-to-be-turned-into-notes</a></li>
+ <li id="l-599" _a="dael" _r="Topic"><a href="#l-599">#</a> [18:53] &lt;dael&gt; Topic: BECSS to Notes</li>
+ <li id="l-600" _a="florian"><a href="#l-600">#</a> [18:53] &lt;florian&gt; <a href="http://wiki.csswg.org/spec#dead-need-to-be-turned-into-notes">http://wiki.csswg.org/spec#dead-need-to-be-turned-into-notes</a></li>
+ <li id="l-601" _a="dael" _r="TabAtkins"><a href="#l-601">#</a> [18:53] &lt;dael&gt; TabAtkins: There's a handful of old specs that show up on TR, but they're dead. They don't even appear on our repository. Per W3C we're supposed to gravestone and make them notes. Does anyone object to doing it with these? The list i on the wiki</li>
+ <li id="l-602" _a="dael" _r="fantasai"><a href="#l-602">#</a> [18:54] &lt;dael&gt; fantasai: Behaviour extentions, hyperlinks, and marquiee</li>
+ <li id="l-603" _a="dael" _r="fantasai"><a href="#l-603">#</a> [18:54] &lt;dael&gt; fantasai: Can we resind a recommendation?</li>
+ <li id="l-604" _a="dael" _r="Bert"><a href="#l-604">#</a> [18:54] &lt;dael&gt; Bert: Yeah.</li>
+ <li id="l-605" _a="dbaron"><a href="#l-605">#</a> [18:54] &lt;dbaron&gt; s/recommendation/non-recommendation/</li>
+ <li id="l-606" _a="ChrisL"><a href="#l-606">#</a> [18:54] * ChrisL talks into a muted phone and says the same as Bert pretty much</li>
+ <li id="l-607" _a="dael" _r="fantasai"><a href="#l-607">#</a> [18:54] &lt;dael&gt; fantasai: It would be nice to have styling to say don't use.</li>
+ <li id="l-608" _a="SteveZ"><a href="#l-608">#</a> [18:54] &lt;SteveZ&gt; a tombstone water mark</li>
+ <li id="l-609" _a="ChrisL"><a href="#l-609">#</a> [18:54] &lt;ChrisL&gt; we can't rescind it but we can publish as a note</li>
+ <li id="l-610" _a="dael" _r="??"><a href="#l-610">#</a> [18:55] &lt;dael&gt; ??: There's a note on the wiki saying Blink dropped support, but I think it was a different thing.</li>
+ <li id="l-611" _a="glazou"><a href="#l-611">#</a> [18:55] &lt;glazou&gt; s/??/florian</li>
+ <li id="l-612" _a="dael" _r="TabAtkins"><a href="#l-612">#</a> [18:55] &lt;dael&gt; TabAtkins: So any objections to these three being re-pub as gravestone notes?</li>
+ <li id="l-613" _a="dael" _r="glazou"><a href="#l-613">#</a> [18:55] &lt;dael&gt; glazou: No obj from me. Strong support.</li>
+ <li id="l-614" _a="dael" _r="Bert"><a href="#l-614">#</a> [18:56] &lt;dael&gt; Bert: I agree. As an additional point, I put this topic on the F2F topic list. There are others that might needd to be updated.</li>
+ <li id="l-615" _a="dael" _r="TabAtkins"><a href="#l-615">#</a> [18:56] &lt;dael&gt; TabAtkins: These were the super obvious. There were others that would need discussion.</li>
+ <li id="l-616" _a="dauwhe"><a href="#l-616">#</a> [18:56] * dauwhe +1 to discussing others at F2F</li>
+ <li id="l-617" _a="dael" _r="glazou"><a href="#l-617">#</a> [18:56] &lt;dael&gt; glazou: Any objection to moving the three doc to notes?</li>
+ <li id="l-618" _a="florian"><a href="#l-618">#</a> [18:56] &lt;florian&gt; s/Blink dropped support, but I think it was a different thing./Blink dropped support for marquee, but that implementation was not even in line with the spec/</li>
+ <li id="l-619" _a="dael" _r="RESOLVED"><a href="#l-619">#</a> [18:56] &lt;dael&gt; RESOLVED: Move the three documents to notes</li>
+ <li id="l-620" _a="dael" _r="TabAtkins"><a href="#l-620">#</a> [18:56] &lt;dael&gt; TabAtkins: I'll prepare if you'll publish?</li>
+ <li id="l-621" _a="dael" _r="Bert"><a href="#l-621">#</a> [18:56] &lt;dael&gt; Bert: Okay.</li>
+ <li id="l-622" _a="dael" _r="fantasai"><a href="#l-622">#</a> [18:56] &lt;dael&gt; fantasai: Are we okay to publish counter styles tomorrow?</li>
+ <li id="l-623" _a="dael" _r="TabAtkins"><a href="#l-623">#</a> [18:56] &lt;dael&gt; TabAtkins: Bert did a pre-request so he got an okay.</li>
+ <li id="l-624" _a="ChrisL"><a href="#l-624">#</a> [18:57] &lt;ChrisL&gt; nice work bert</li>
+ <li id="l-625" _a="dael" _r="fantasai"><a href="#l-625">#</a> [18:57] &lt;dael&gt; fantasai: Excellent. Thank you.</li>
+ <li id="l-626" _a="dael" _r="glazou"><a href="#l-626">#</a> [18:57] &lt;dael&gt; glazou: That's the top of the hour. Thanks everyone.</li>
+ <li id="l-627" _a="ChrisL"><a href="#l-627">#</a> [18:57] &lt;ChrisL&gt; my regrets for next week (returning from SVG f2f)</li>
+ <li id="l-628" _a="Zakim"><a href="#l-628">#</a> [18:57] &lt;Zakim&gt; -[Microsoft.a]</li>
+ <li id="l-629" _a="Zakim"><a href="#l-629">#</a> [18:57] &lt;Zakim&gt; -SGalineau</li>
+ <li id="l-630" _a="Zakim"><a href="#l-630">#</a> [18:57] &lt;Zakim&gt; - +1.479.764.aaaa</li>
+ <li id="l-631" _a="Zakim"><a href="#l-631">#</a> [18:58] &lt;Zakim&gt; -TabAtkins</li>
+ <li id="l-632" _a="liam"><a href="#l-632">#</a> [18:58] * liam zakim, drop liam</li>
+ <li id="l-633" _a="Zakim"><a href="#l-633">#</a> [18:58] &lt;Zakim&gt; -fantasai</li>
+ <li id="l-634" _a="Zakim"><a href="#l-634">#</a> [18:58] * Zakim Liam is being disconnected</li>
+ <li id="l-635" _a="Zakim"><a href="#l-635">#</a> [18:58] &lt;Zakim&gt; -Liam</li>
+ <li id="l-636" _a="Zakim"><a href="#l-636">#</a> [18:58] &lt;Zakim&gt; -astearns</li>
+ <li id="l-637" _a="Zakim"><a href="#l-637">#</a> [18:58] &lt;Zakim&gt; -[Microsoft]</li>
+ <li id="l-638" _a="Zakim"><a href="#l-638">#</a> [18:58] &lt;Zakim&gt; -Bert</li>
+ <li id="l-639" _a="Zakim"><a href="#l-639">#</a> [18:58] &lt;Zakim&gt; -mike_miller</li>
+ <li id="l-640" _a="Zakim"><a href="#l-640">#</a> [18:58] &lt;Zakim&gt; -murakami</li>
+ <li id="l-641" _a="Zakim"><a href="#l-641">#</a> [18:58] &lt;Zakim&gt; -dauwhe</li>
+ <li id="l-642" _a="Zakim"><a href="#l-642">#</a> [18:58] &lt;Zakim&gt; -antonp</li>
+ <li id="l-643" _a="Zakim"><a href="#l-643">#</a> [18:58] &lt;Zakim&gt; -glenn</li>
+ <li id="l-644" _a="Zakim"><a href="#l-644">#</a> [18:58] &lt;Zakim&gt; -koji</li>
+ <li id="l-645" _a="Zakim"><a href="#l-645">#</a> [18:58] &lt;Zakim&gt; -SteveZ</li>
+ <li id="l-646" _a="Zakim"><a href="#l-646">#</a> [18:58] &lt;Zakim&gt; -dbaron</li>
+ <li id="l-647" _a="Zakim"><a href="#l-647">#</a> [18:58] &lt;Zakim&gt; -glazou</li>
+ <li id="l-648" _a="Zakim"><a href="#l-648">#</a> [18:58] &lt;Zakim&gt; -dael</li>
+ <li id="l-649" _a="Zakim"><a href="#l-649">#</a> [18:58] &lt;Zakim&gt; -plinss</li>
+ <li id="l-650" _a="Zakim"><a href="#l-650">#</a> [18:58] &lt;Zakim&gt; -SimonSapin</li>
+ <li id="l-651"><a href="#l-651">#</a> [18:58] * Quits: AH_Miller (~mike@public.cloak) (&quot;&quot;)</li>
+ <li id="l-652"><a href="#l-652">#</a> [18:58] * Quits: koji (~koji@public.cloak) (&quot;Leaving...&quot;)</li>
+ <li id="l-653" _a="Zakim"><a href="#l-653">#</a> [18:58] &lt;Zakim&gt; -??P43</li>
+ <li id="l-654"><a href="#l-654">#</a> [18:58] * Quits: glazou (~glazou@public.cloak) (glazou)</li>
+ <li id="l-655" _a="Zakim"><a href="#l-655">#</a> [18:58] &lt;Zakim&gt; -MaRakow.a</li>
+ <li id="l-656"><a href="#l-656">#</a> [18:58] * Quits: alex_antennahouse (~458c94ae@public.cloak) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-657" _a="Zakim"><a href="#l-657">#</a> [18:58] &lt;Zakim&gt; - +1.631.398.aaee</li>
+ <li id="l-658" _a="Zakim"><a href="#l-658">#</a> [18:58] &lt;Zakim&gt; - +1.301.526.aagg</li>
+ <li id="l-659"><a href="#l-659">#</a> [18:58] * Quits: dael (~dael@public.cloak) (&quot;Page closed&quot;)</li>
+ <li id="l-660"><a href="#l-660">#</a> [18:59] * Quits: murakami (~769ad103@public.cloak) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+ <li id="l-661"><a href="#l-661">#</a> [19:03] * Quits: zcorpan_ (~zcorpan@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-662" _a="Zakim"><a href="#l-662">#</a> [19:03] &lt;Zakim&gt; disconnecting the lone participant, ChrisL, in Style_CSS FP()12:00PM</li>
+ <li id="l-663" _a="Zakim"><a href="#l-663">#</a> [19:03] &lt;Zakim&gt; Style_CSS FP()12:00PM has ended</li>
+ <li id="l-664" _a="Zakim"><a href="#l-664">#</a> [19:03] &lt;Zakim&gt; Attendees were mike_miller, glazou, dael, glenn, +1.479.764.aaaa, florian, SGalineau, +1.206.675.aabb, +1.917.207.aacc, astearns, dauwhe, Lea, plinss, murakami, +1.281.305.aadd,</li>
+ <li id="l-665" _a="Zakim"><a href="#l-665">#</a> [19:03] &lt;Zakim&gt; ... Bert, TabAtkins, +1.631.398.aaee, antonp, Liam, SimonSapin, +1.301.526.aagg, dbaron, koji, MaRakow, Rossen_, ChrisL, [Microsoft], fantasai, SteveZ</li>
+ <li id="l-666"><a href="#l-666">#</a> [19:03] * Quits: ChrisL (clilley@public.cloak) (&quot;Client combusted&quot;)</li>
+ <li id="l-667"><a href="#l-667">#</a> [19:07] * Joins: jcraig (~jcraig@public.cloak)</li>
+ <li id="l-668"><a href="#l-668">#</a> [19:11] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-669" _a="leaverou"><a href="#l-669">#</a> [19:14] * leaverou is now known as leaverou_away</li>
+ <li id="l-670"><a href="#l-670">#</a> [19:17] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-671"><a href="#l-671">#</a> [19:25] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Client closed connection)</li>
+ <li id="l-672"><a href="#l-672">#</a> [19:26] * Joins: tommyjtl (~tommyjtl@public.cloak)</li>
+ <li id="l-673"><a href="#l-673">#</a> [19:28] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-674"><a href="#l-674">#</a> [19:29] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-675"><a href="#l-675">#</a> [19:31] * Joins: tommyjtl_ (~tommyjtl@public.cloak)</li>
+ <li id="l-676"><a href="#l-676">#</a> [19:36] * Joins: tommyjt__ (~tommyjtl@public.cloak)</li>
+ <li id="l-677"><a href="#l-677">#</a> [19:37] * Quits: tommyjtl (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-678"><a href="#l-678">#</a> [19:37] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-679"><a href="#l-679">#</a> [19:39] * Quits: tommyjtl_ (~tommyjtl@public.cloak) (Ping timeout: 180 seconds)</li>
+ <li id="l-680"><a href="#l-680">#</a> [19:40] * Joins: {Darktears} (~darktears@public.cloak)</li>
+ <li id="l-681"><a href="#l-681">#</a> [19:44] * Joins: plh (plehegar@public.cloak)</li>
+ <li id="l-682"><a href="#l-682">#</a> [19:45] * Quits: darktears (~darktears@public.cloak) (Client closed connection)</li>
+ <li id="l-683" _a="leaverou_away"><a href="#l-683">#</a> [20:03] * leaverou_away is now known as leaverou</li>
+ <li id="l-684"><a href="#l-684">#</a> [20:15] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+ <li id="l-685"><a href="#l-685">#</a> [20:16] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-686"><a href="#l-686">#</a> [20:26] * Quits: dbaron (~dbaron@public.cloak) (&quot;8403864 bytes have been tenured, next gc will be global.&quot;)</li>
+ <li id="l-687"><a href="#l-687">#</a> [20:37] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-688"><a href="#l-688">#</a> [20:41] * Quits: Rossen_ (~Rossen@public.cloak) (&quot;Page closed&quot;)</li>
+ <li id="l-689"><a href="#l-689">#</a> [20:58] * Quits: bkardell_ (~uid10373@public.cloak) (&quot;Connection closed for inactivity&quot;)</li>
+ <li id="l-690" _a="Zakim"><a href="#l-690">#</a> [21:02] * Zakim excuses himself; his presence no longer seems to be needed</li>
+ <li id="l-691"><a href="#l-691">#</a> [21:02] * Parts: Zakim (zakim@public.cloak) (Zakim)</li>
+ <li id="l-692"><a href="#l-692">#</a> [21:07] * Joins: zcorpan_ (~zcorpan@public.cloak)</li>
+ <li id="l-693"><a href="#l-693">#</a> [21:15] * Quits: zcorpan_ (~zcorpan@public.cloak) (Client closed connection)</li>
+ <li id="l-694" _a="leaverou"><a href="#l-694">#</a> [21:25] * leaverou is now known as leaverou_away</li>
+ <li id="l-695"><a href="#l-695">#</a> [21:32] * Joins: dbaron (~dbaron@public.cloak)</li>
+ <li id="l-696"><a href="#l-696">#</a> [21:38] * Joins: dauwhe_ (~dauwhe@public.cloak)</li>
+ <li id="l-697"><a href="#l-697">#</a> [21:38] * Quits: dauwhe (~dauwhe@public.cloak) (Client closed connection)</li>
+ <li id="l-698"><a href="#l-698">#</a> [21:43] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-699"><a href="#l-699">#</a> [22:25] * Quits: shepazu (schepers@public.cloak) (&quot;is sleepy&quot;)</li>
+ <li id="l-700"><a href="#l-700">#</a> [22:35] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-701"><a href="#l-701">#</a> [22:36] * Joins: florian (~Florian@public.cloak)</li>
+ <li id="l-702"><a href="#l-702">#</a> [22:48] * Quits: florian (~Florian@public.cloak) (&quot;Leaving.&quot;)</li>
+ <li id="l-703"><a href="#l-703">#</a> [22:55] * Quits: plh (plehegar@public.cloak) (&quot;Leaving&quot;)</li>
+ <li id="l-704"><a href="#l-704">#</a> [22:56] * Quits: Ms2ger (~Ms2ger@public.cloak) (&quot;nn&quot;)</li>
+ <li id="l-705" _a="leaverou_away"><a href="#l-705">#</a> [22:59] * leaverou_away is now known as leaverou</li>
+ <li id="l-706" _a="leaverou"><a href="#l-706">#</a> [23:18] * leaverou is now known as leaverou_away</li>
+ <li id="l-707"><a href="#l-707">#</a> Session Close: Thu Aug 21 00:00:00 2014</li>
+</ol>
+<p id="end">The end :)

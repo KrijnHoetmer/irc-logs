@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<title>IRC logs: w3c / #css / 20150225</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="w3c/css.20150225.log"><a href="/irc-logs/">/irc-logs</a> / w3c / <a href="irc://irc.w3.org:6665/css">#css</a> / 2015-02-25 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20150224>Previous day</a>, <a href=20150226>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Wed Feb 25 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #css</li>
+<li id=l-3 class=hide _a="leaverou"><a href=#l-3>#</a> [00:30] * leaverou is now known as leaverou_away</li>
+<li id=l-4 class=hide _a="leaverou_away"><a href=#l-4>#</a> [00:31] * leaverou_away is now known as leaverou</li>
+<li id=l-5 class=hide><a href=#l-5>#</a> [00:52] * Quits: antonp (~Thunderbird@public.cloak) (antonp)</li>
+<li id=l-6 class=hide><a href=#l-6>#</a> [01:06] * Quits: dauwhe (~dauwhe@public.cloak) (Client closed connection)</li>
+<li id=l-7 class=hide><a href=#l-7>#</a> [01:08] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+<li id=l-8 class=hide><a href=#l-8>#</a> [01:11] * Joins: dauwhe_ (~dauwhe@public.cloak)</li>
+<li id=l-9 class=hide><a href=#l-9>#</a> [01:11] * Quits: dauwhe (~dauwhe@public.cloak) (Client closed connection)</li>
+<li id=l-10 _a="plinss" _r="TabAtkins"><a href=#l-10>#</a> [01:17] &lt;plinss&gt; TabAtkins: hopefully that’s not a naive split on comma, because there are values like: FontFace/FontFace(family, source, descriptors)</li>
+<li id=l-11 _a="TabAtkins" _r="plinss"><a href=#l-11>#</a> [01:17] &lt;TabAtkins&gt; plinss: Correct, it's not. ^_^</li>
+<li id=l-12 _a="TabAtkins"><a href=#l-12>#</a> [01:17] &lt;TabAtkins&gt; It's a proper parse that pays attention to parens.</li>
+<li id=l-13 _a="TabAtkins"><a href=#l-13>#</a> [01:18] &lt;TabAtkins&gt; <a href="https://github.com/tabatkins/bikeshed/blob/master/bikeshed/ReferenceManager.py#L583">https://github.com/tabatkins/bikeshed/blob/master/bikeshed/ReferenceManager.py#L583</a></li>
+<li id=l-14 _a="plinss"><a href=#l-14>#</a> [01:22] &lt;plinss&gt; (you do realize that code won’t deal with nested parens…)</li>
+<li id=l-15 _a="TabAtkins"><a href=#l-15>#</a> [01:22] &lt;TabAtkins&gt; Nested parens don't happen yet, so shrug.</li>
+<li id=l-16 _a="TabAtkins"><a href=#l-16>#</a> [01:22] &lt;TabAtkins&gt; It's a for value.</li>
+<li id=l-17 _a="TabAtkins"><a href=#l-17>#</a> [01:23] &lt;TabAtkins&gt; But yeah, I could do better.</li>
+<li id=l-18 _a="TabAtkins"><a href=#l-18>#</a> [01:23] &lt;TabAtkins&gt; Not even totally sure why I wrote it this way, it seems really complicated.</li>
+<li id=l-19 _a="plinss" _r="yeah"><a href=#l-19>#</a> [01:23] &lt;plinss&gt; yeah, for what you have a regex could have done it</li>
+<li id=l-20 _a="TabAtkins"><a href=#l-20>#</a> [01:24] &lt;TabAtkins&gt; All right, nuts to this, I'll rewrite.</li>
+<li id=l-21 _a="plinss" _r="fwiw"><a href=#l-21>#</a> [01:24] &lt;plinss&gt; fwiw, shepherd just stores the entire value of the for attribute in the db, the api handler parses it</li>
+<li id=l-22 _a="TabAtkins" _r="ANYWAY"><a href=#l-22>#</a> [01:24] &lt;TabAtkins&gt; ANYWAY, you know what to do. ^_^</li>
+<li id=l-23 _a="TabAtkins" _r="Ah"><a href=#l-23>#</a> [01:24] &lt;TabAtkins&gt; Ah, kk.</li>
+<li id=l-24 _a="plinss"><a href=#l-24>#</a> [01:24] &lt;plinss&gt; so this leaves me with both space and comma separated values in the db…</li>
+<li id=l-25 _a="plinss"><a href=#l-25>#</a> [01:25] &lt;plinss&gt; so I’ll have to make the parser (which knows the bikeshed version) normalize for the db</li>
+<li id=l-26 _a="TabAtkins"><a href=#l-26>#</a> [01:25] &lt;TabAtkins&gt; Kinda sorta. Like I said, I've already changed a bunch of the space-separated (and a bunch of them were comma-separated anyway, and were being treated incorrectly).</li>
+<li id=l-27 _a="TabAtkins"><a href=#l-27>#</a> [01:25] &lt;TabAtkins&gt; If you just switch to comma-separation, I can manually go through and figure out where that goes wrong.</li>
+<li id=l-28 _a="plinss" _r="yeah"><a href=#l-28>#</a> [01:25] &lt;plinss&gt; yeah, but some of them are on /TR so won’t get updated for a while</li>
+<li id=l-29 _a="TabAtkins"><a href=#l-29>#</a> [01:25] &lt;TabAtkins&gt; (I'll just look at everything with a space that's not inside of parens, and see if it meant to be multiple for values instead.</li>
+<li id=l-30 _a="TabAtkins"><a href=#l-30>#</a> [01:26] &lt;TabAtkins&gt; That just means we have to publish again!</li>
+<li id=l-31 _a="plinss"><a href=#l-31>#</a> [01:26] &lt;plinss&gt; that too</li>
+<li id=l-32 _a="TabAtkins"><a href=#l-32>#</a> [01:26] &lt;TabAtkins&gt; That's not even a problem. ^_^</li>
+<li id=l-33 _a="plinss"><a href=#l-33>#</a> [01:27] &lt;plinss&gt; since the API returns an array, I want it to return the right thing, so I’ll handle the space vs comma normalization on my end</li>
+<li id=l-34 class=hide><a href=#l-34>#</a> [01:27] * Quits: dauwhe_ (~dauwhe@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-35 _a="TabAtkins"><a href=#l-35>#</a> [01:32] &lt;TabAtkins&gt; Okay.  It's okay to return duplicates in the for array if you want.</li>
+<li id=l-36 _a="TabAtkins"><a href=#l-36>#</a> [01:32] * TabAtkins is curious how you'll dedup.</li>
+<li id=l-37 _a="TabAtkins" _r="Rather"><a href=#l-37>#</a> [01:32] &lt;TabAtkins&gt; Rather, how you'll normalize.</li>
+<li id=l-38 _a="TabAtkins"><a href=#l-38>#</a> [01:32] &lt;TabAtkins&gt; I guess you can infer that &quot;dfn&quot; types with spaces probably intend to be a single term, but anything else with spaces intends to be space-separated. (Assuming no commas in either situation.)</li>
+<li id=l-39 _a="plinss"><a href=#l-39>#</a> [01:35] &lt;plinss&gt; Actually I was just goint to look at the bikeshed version meta tag, anything 1.0.0 or better will split on commas, everything else split on spaces</li>
+<li id=l-40 _a="plinss"><a href=#l-40>#</a> [01:35] &lt;plinss&gt; (ignoring spaces and commas inside parens)</li>
+<li id=l-41 _a="TabAtkins"><a href=#l-41>#</a> [01:38] &lt;TabAtkins&gt; Oh duh, yeah, that'll work.</li>
+<li id=l-42 _a="TabAtkins"><a href=#l-42>#</a> [01:38] &lt;TabAtkins&gt; Yay for versioning!</li>
+<li id=l-43 _a="plinss" _r="TabAtkins"><a href=#l-43>#</a> [01:45] &lt;plinss&gt; TabAtkins: fwiw, here’s a regex that will split on commas except within parens: re.split(r',(?![^()]*\))', text)</li>
+<li id=l-44 _a="TabAtkins"><a href=#l-44>#</a> [01:46] &lt;TabAtkins&gt; danke</li>
+<li id=l-45 _a="plinss"><a href=#l-45>#</a> [01:46] &lt;plinss&gt; bitte</li>
+<li id=l-46 _a="TabAtkins"><a href=#l-46>#</a> [01:48] &lt;TabAtkins&gt; Just pushed it, so hopefully you're right. ^_^  It looks good, though - pretty clever.</li>
+<li id=l-47 class=hide><a href=#l-47>#</a> [01:51] * Joins: dauwhe (~dauwhe@public.cloak)</li>
+<li id=l-48 class=hide><a href=#l-48>#</a> [01:51] * Quits: lajava (~javi@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-49 class=hide _a="leaverou"><a href=#l-49>#</a> [02:02] * leaverou is now known as leaverou_away</li>
+<li id=l-50 _a="plinss" _r="TabAtkins"><a href=#l-50>#</a> [02:14] &lt;plinss&gt; TabAtkins: if you want to strip whitespace and filter empty values, use: return [value.strip() for value in re.split(r',(?![^()]*\))', forValues) if value.strip()]</li>
+<li id=l-51 _a="TabAtkins" _r="Ah"><a href=#l-51>#</a> [02:14] &lt;TabAtkins&gt; Ah, duh.  Yeah, I definitely need to.</li>
+<li id=l-52 _a="TabAtkins" _r="Sorry"><a href=#l-52>#</a> [02:15] &lt;TabAtkins&gt; Sorry, alternating between watching youtube, writing a spec, and drinking, so my coding is a little off at the moment.</li>
+<li id=l-53 _a="plinss"><a href=#l-53>#</a> [02:16] &lt;plinss&gt; friends don’t let friends code loaded</li>
+<li id=l-54 _a="TabAtkins" _r="plinss"><a href=#l-54>#</a> [02:17] &lt;TabAtkins&gt; plinss: Do we have the auto-building thing set up for Houdini?</li>
+<li id=l-55 _a="plinss"><a href=#l-55>#</a> [02:17] &lt;plinss&gt; yes</li>
+<li id=l-56 _a="TabAtkins" _r="Oh"><a href=#l-56>#</a> [02:17] &lt;TabAtkins&gt; Oh, duh, of course we do.</li>
+<li id=l-57 _a="TabAtkins" _r="k"><a href=#l-57>#</a> [02:17] &lt;TabAtkins&gt; k, gonna add a gitignore to the repo and kill all the .htmls.</li>
+<li id=l-58 _a="plinss"><a href=#l-58>#</a> [02:18] &lt;plinss&gt; thought I already did that</li>
+<li id=l-59 _a="TabAtkins" _r="Ah"><a href=#l-59>#</a> [02:18] &lt;TabAtkins&gt; Ah, you did.</li>
+<li id=l-60 _a="TabAtkins" _r="Okay"><a href=#l-60>#</a> [02:18] &lt;TabAtkins&gt; Okay, then I just need to delete a bunch of .htmls.</li>
+<li id=l-61 _a="TabAtkins"><a href=#l-61>#</a> [02:18] &lt;TabAtkins&gt; Or I guess they're all building cleanly.</li>
+<li id=l-62 _a="TabAtkins"><a href=#l-62>#</a> [02:19] &lt;TabAtkins&gt; And that's why I'm not getting any emails.</li>
+<li id=l-63 _a="plinss"><a href=#l-63>#</a> [02:19] &lt;plinss&gt; shepherd is currently re-parsing all the specs to update the db, so generation is pending that...</li>
+<li id=l-64 _a="plinss"><a href=#l-64>#</a> [02:19] &lt;plinss&gt; (almost done)</li>
+<li id=l-65 _a="TabAtkins" _r="ah"><a href=#l-65>#</a> [02:19] &lt;TabAtkins&gt; ah, k</li>
+<li id=l-66 class=hide _a="heycam"><a href=#l-66>#</a> [02:28] * heycam is now known as heycam|away</li>
+<li id=l-67 _a="TabAtkins" _r="zcorpan"><a href=#l-67>#</a> [02:31] &lt;TabAtkins&gt; zcorpan: Your CSSOM conversion to Bikeshed left almost all of your autolinks as &lt;span&gt; or &lt;code&gt;, which means they aren't autolinking at all.  You also kept most of your linking texts in the silly concept-foo form, when that should just be the ID.  I'm fixing for you.</li>
+<li id=l-68 class=hide><a href=#l-68>#</a> [03:34] * Quits: dwim (~dwim@public.cloak) (&quot;Leaving.&quot;)</li>
+<li id=l-69 class=hide><a href=#l-69>#</a> [03:37] * Joins: dwim (~dwim@public.cloak)</li>
+<li id=l-70 class=hide _a="heycam|away"><a href=#l-70>#</a> [03:48] * heycam|away is now known as heycam</li>
+<li id=l-71 class=hide><a href=#l-71>#</a> [03:51] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-72 class=hide _a="leaverou_away"><a href=#l-72>#</a> [04:12] * leaverou_away is now known as leaverou</li>
+<li id=l-73 class=hide><a href=#l-73>#</a> [04:46] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+<li id=l-74 class=hide><a href=#l-74>#</a> [04:48] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-75 class=hide><a href=#l-75>#</a> [04:53] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+<li id=l-76 class=hide><a href=#l-76>#</a> [05:02] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-77 class=hide><a href=#l-77>#</a> [05:04] * Joins: tantek (~tantek@public.cloak)</li>
+<li id=l-78 class=hide><a href=#l-78>#</a> [05:09] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+<li id=l-79 class=hide _a="heycam"><a href=#l-79>#</a> [06:16] * heycam is now known as heycam|away</li>
+<li id=l-80 class=hide _a="heycam|away"><a href=#l-80>#</a> [06:38] * heycam|away is now known as heycam</li>
+<li id=l-81 class=hide><a href=#l-81>#</a> [07:03] * Joins: tantek (~tantek@public.cloak)</li>
+<li id=l-82 class=hide _a="heycam"><a href=#l-82>#</a> [07:40] * heycam is now known as heycam|away</li>
+<li id=l-83 class=hide><a href=#l-83>#</a> [07:48] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+<li id=l-84 class=hide><a href=#l-84>#</a> [07:51] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+<li id=l-85 class=hide><a href=#l-85>#</a> [09:06] * Joins: svillar (~sergio@public.cloak)</li>
+<li id=l-86 class=hide><a href=#l-86>#</a> [09:18] * Quits: svillar (~sergio@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-87 class=hide><a href=#l-87>#</a> [09:41] * Quits: jdaggett (~jdaggett@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-88 class=hide><a href=#l-88>#</a> [09:53] * Joins: antonp (~Thunderbird@public.cloak)</li>
+<li id=l-89 class=hide><a href=#l-89>#</a> [09:55] * Quits: antonp (~Thunderbird@public.cloak) (Client closed connection)</li>
+<li id=l-90 class=hide><a href=#l-90>#</a> [09:59] * Joins: antonp (~Thunderbird@public.cloak)</li>
+<li id=l-91 class=hide><a href=#l-91>#</a> [10:01] * Quits: antonp (~Thunderbird@public.cloak) (Client closed connection)</li>
+<li id=l-92 class=hide><a href=#l-92>#</a> [10:02] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+<li id=l-93 class=hide><a href=#l-93>#</a> [10:12] * Joins: antonp (~Thunderbird@public.cloak)</li>
+<li id=l-94 class=hide><a href=#l-94>#</a> [10:14] * Quits: antonp (~Thunderbird@public.cloak) (Client closed connection)</li>
+<li id=l-95 class=hide><a href=#l-95>#</a> [10:26] * Joins: antonp (~Thunderbird@public.cloak)</li>
+<li id=l-96 class=hide><a href=#l-96>#</a> [10:28] * Quits: antonp (~Thunderbird@public.cloak) (Client closed connection)</li>
+<li id=l-97 class=hide><a href=#l-97>#</a> [10:36] * Joins: svillar (~sergio@public.cloak)</li>
+<li id=l-98 class=hide><a href=#l-98>#</a> [10:37] * Joins: glazou (~glazou@public.cloak)</li>
+<li id=l-99 class=hide><a href=#l-99>#</a> [10:39] * Quits: svillar (~sergio@public.cloak) (&quot;Ex-Chat&quot;)</li>
+<li id=l-100 class=hide><a href=#l-100>#</a> [10:41] * Joins: svillar (~sergio@public.cloak)</li>
+<li id=l-101 class=hide><a href=#l-101>#</a> [10:53] * Joins: lajava (~javi@public.cloak)</li>
+<li id=l-102 class=hide><a href=#l-102>#</a> [10:56] * Joins: Ms2ger (~Ms2ger@public.cloak)</li>
+<li id=l-103 class=hide><a href=#l-103>#</a> [11:06] * Joins: antonp (~Thunderbird@public.cloak)</li>
+<li id=l-104 class=hide><a href=#l-104>#</a> [12:01] * Quits: Bert (bbos@public.cloak) (Client closed connection)</li>
+<li id=l-105 class=hide><a href=#l-105>#</a> [12:10] * Joins: Bert (bbos@public.cloak)</li>
+<li id=l-106 class=hide><a href=#l-106>#</a> [12:12] * Joins: jdaggett (~jdaggett@public.cloak)</li>
+<li id=l-107 class=hide><a href=#l-107>#</a> [12:29] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+<li id=l-108 class=hide><a href=#l-108>#</a> [13:15] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+<li id=l-109 class=hide><a href=#l-109>#</a> [13:24] * Quits: svillar (~sergio@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-110 class=hide><a href=#l-110>#</a> [13:50] * Quits: jdaggett (~jdaggett@public.cloak) (jdaggett)</li>
+<li id=l-111 class=hide><a href=#l-111>#</a> [14:07] * Joins: plh (plehegar@public.cloak)</li>
+<li id=l-112 class=hide><a href=#l-112>#</a> [14:16] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+<li id=l-113 class=hide><a href=#l-113>#</a> [14:19] * Joins: svillar (~sergio@public.cloak)</li>
+<li id=l-114 class=hide _a="plh"><a href=#l-114>#</a> [16:08] * plh is now known as plh-roof</li>
+<li id=l-115 class=hide><a href=#l-115>#</a> [17:19] * Joins: Florian (~Florian@public.cloak)</li>
+<li id=l-116 class=hide><a href=#l-116>#</a> [17:31] * Joins: Zakim (zakim@public.cloak)</li>
+<li id=l-117 _a="glazou" _r="Zakim"><a href=#l-117>#</a> [17:31] &lt;glazou&gt; Zakim, this will be Style</li>
+<li id=l-118 _a="Zakim" _r="ok"><a href=#l-118>#</a> [17:31] &lt;Zakim&gt; ok, glazou; I see Style_CSS FP()12:00PM scheduled to start in 32 minutes</li>
+<li id=l-119 class=hide><a href=#l-119>#</a> [17:32] * Joins: RRSAgent (rrsagent@public.cloak)</li>
+<li id=l-120 _a="RRSAgent"><a href=#l-120>#</a> [17:32] &lt;RRSAgent&gt; logging to <a href="http://www.w3.org/2015/02/25-css-irc">http://www.w3.org/2015/02/25-css-irc</a></li>
+<li id=l-121 _a="glazou" _r="RRSAgent"><a href=#l-121>#</a> [17:32] &lt;glazou&gt; RRSAgent, make logs public</li>
+<li id=l-122 _a="RRSAgent"><a href=#l-122>#</a> [17:32] &lt;RRSAgent&gt; I have made the request, glazou</li>
+<li id=l-123 _a="glazou"><a href=#l-123>#</a> [17:33] * glazou changes topic to 'See also #fx for minutes - logs: <a href="http://krijnhoetmer.nl/irc-logs/css">http://krijnhoetmer.nl/irc-logs/css</a> - Agenda confcall 20150225 <a href="https://lists.w3.org/Archives/Public/www-style/2015Feb/0494.html">https://lists.w3.org/Archives/Public/www-style/2015Feb/0494.html</a> (JS only logs: <a href="https://log.csswg.org/irc.w3.org/css/today">https://log.csswg.org/irc.w3.org/css/today</a> )'</li>
+<li id=l-124 _a="Florian"><a href=#l-124>#</a> [17:42] &lt;Florian&gt; There are lots of things that are very nice about Japan. 2am telecons is not one of them</li>
+<li id=l-125 class=hide><a href=#l-125>#</a> [17:42] * Joins: bkardell_ (~uid10373@public.cloak)</li>
+<li id=l-126 _a="glazou" _r="Florian"><a href=#l-126>#</a> [17:44] &lt;glazou&gt; Florian: oh come on, don’t start complaining like all french people ;-)</li>
+<li id=l-127 _a="glazou"><a href=#l-127>#</a> [17:44] &lt;glazou&gt; hey bkardell_ you were the first one this morning for the bday wishes, even before the family eh !</li>
+<li id=l-128 _a="glazou"><a href=#l-128>#</a> [17:44] &lt;glazou&gt; thx :-D</li>
+<li id=l-129 _a="bkardell_"><a href=#l-129>#</a> [17:44] &lt;bkardell_&gt; :)</li>
+<li id=l-130 _a="Florian" _r="glazou"><a href=#l-130>#</a> [17:48] &lt;Florian&gt; glazou: but I am French, why should I not complain? Also, happy birthday.</li>
+<li id=l-131 _a="glazou"><a href=#l-131>#</a> [17:49] &lt;glazou&gt; :-) thx!</li>
+<li id=l-132 _a="Ms2ger"><a href=#l-132>#</a> [17:53] &lt;Ms2ger&gt; Happy birthday, or so I hear :)</li>
+<li id=l-133 class=hide><a href=#l-133>#</a> [17:55] * Joins: tantek (~tantek@public.cloak)</li>
+<li id=l-134 _a="glazou"><a href=#l-134>#</a> [17:55] &lt;glazou&gt; thanks Ms2ger !</li>
+<li id=l-135 _a="bkardell_"><a href=#l-135>#</a> [17:56] &lt;bkardell_&gt; I have a conflict today, so regrets for not being able to call in... will try to follow on IRC</li>
+<li id=l-136 _a="glazou"><a href=#l-136>#</a> [17:56] &lt;glazou&gt; ok</li>
+<li id=l-137 _a="tantek"><a href=#l-137>#</a> [17:58] &lt;tantek&gt; good morning</li>
+<li id=l-138 _a="glazou"><a href=#l-138>#</a> [17:58] &lt;glazou&gt; hi tantek</li>
+<li id=l-139 _a="Florian"><a href=#l-139>#</a> [17:58] &lt;Florian&gt; Hi Tantek</li>
+<li id=l-140 _a="tantek"><a href=#l-140>#</a> [17:59] &lt;tantek&gt; hello glazou Florian</li>
+<li id=l-141 _a="Zakim"><a href=#l-141>#</a> [17:59] &lt;Zakim&gt; Style_CSS FP()12:00PM has now started</li>
+<li id=l-142 _a="Zakim"><a href=#l-142>#</a> [17:59] &lt;Zakim&gt; +??P26</li>
+<li id=l-143 _a="tantek"><a href=#l-143>#</a> [17:59] &lt;tantek&gt; good news css3ui TR draft published</li>
+<li id=l-144 _a="SimonSapin" _r="Zakim"><a href=#l-144>#</a> [17:59] &lt;SimonSapin&gt; Zakim, ??P26 is me</li>
+<li id=l-145 _a="Zakim" _r="+SimonSapin"><a href=#l-145>#</a> [17:59] &lt;Zakim&gt; +SimonSapin; got it</li>
+<li id=l-146 _a="Zakim"><a href=#l-146>#</a> [17:59] &lt;Zakim&gt; +??P28</li>
+<li id=l-147 _a="glazou" _r="Zakim"><a href=#l-147>#</a> [17:59] &lt;glazou&gt; Zakim, ??P28 is me</li>
+<li id=l-148 _a="Zakim" _r="+glazou"><a href=#l-148>#</a> [17:59] &lt;Zakim&gt; +glazou; got it</li>
+<li id=l-149 _a="tantek"><a href=#l-149>#</a> [17:59] &lt;tantek&gt; so I hope to get all the pending edits in in the next couple of weeks or so</li>
+<li id=l-150 _a="tantek"><a href=#l-150>#</a> [18:00] &lt;tantek&gt; and then I want to do another WD with all of those, since that seems to be what the current publishing process allows for</li>
+<li id=l-151 _a="Zakim"><a href=#l-151>#</a> [18:00] &lt;Zakim&gt; + +1.479.764.aaaa</li>
+<li id=l-152 class=hide><a href=#l-152>#</a> [18:00] * Joins: dael (~dael@public.cloak)</li>
+<li id=l-153 _a="Florian" _r="Zakim"><a href=#l-153>#</a> [18:00] &lt;Florian&gt; Zakim, I am aaaa</li>
+<li id=l-154 _a="Zakim" _r="+Florian"><a href=#l-154>#</a> [18:00] &lt;Zakim&gt; +Florian; got it</li>
+<li id=l-155 _a="Zakim"><a href=#l-155>#</a> [18:00] &lt;Zakim&gt; +plinss</li>
+<li id=l-156 _a="Zakim"><a href=#l-156>#</a> [18:01] &lt;Zakim&gt; +dael</li>
+<li id=l-157 class=hide><a href=#l-157>#</a> [18:01] * Joins: antenna (~antenna@public.cloak)</li>
+<li id=l-158 class=hide><a href=#l-158>#</a> [18:02] * Joins: kwkbtr (~kwkbtr@public.cloak)</li>
+<li id=l-159 _a="Zakim"><a href=#l-159>#</a> [18:02] &lt;Zakim&gt; +[Microsoft]</li>
+<li id=l-160 _a="Rossen" _r="zakim"><a href=#l-160>#</a> [18:02] &lt;Rossen&gt; zakim, microsoft has me</li>
+<li id=l-161 _a="Zakim" _r="+Rossen"><a href=#l-161>#</a> [18:02] &lt;Zakim&gt; +Rossen; got it</li>
+<li id=l-162 class=hide><a href=#l-162>#</a> [18:02] * Joins: gregwhitworth (~gregwhitworth@public.cloak)</li>
+<li id=l-163 class=hide><a href=#l-163>#</a> [18:03] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-164 _a="Zakim"><a href=#l-164>#</a> [18:03] &lt;Zakim&gt; +dauwhe</li>
+<li id=l-165 class=hide><a href=#l-165>#</a> [18:03] * Joins: AH_Miller (~mike@public.cloak)</li>
+<li id=l-166 _a="Zakim"><a href=#l-166>#</a> [18:03] &lt;Zakim&gt; +??P38</li>
+<li id=l-167 _a="adenilson" _r="Zakim"><a href=#l-167>#</a> [18:03] &lt;adenilson&gt; Zakim, ?P38 is me.</li>
+<li id=l-168 _a="Zakim" _r="sorry"><a href=#l-168>#</a> [18:03] &lt;Zakim&gt; sorry, adenilson, I do not recognize a party named '?P38'</li>
+<li id=l-169 _a="Zakim"><a href=#l-169>#</a> [18:03] &lt;Zakim&gt; +[Microsoft.a]</li>
+<li id=l-170 class=hide><a href=#l-170>#</a> [18:03] * Joins: alex_antennahouse (~458c94ae@public.cloak)</li>
+<li id=l-171 class=hide><a href=#l-171>#</a> [18:03] * Joins: smfr (~smfr@public.cloak)</li>
+<li id=l-172 _a="adenilson" _r="Zakim"><a href=#l-172>#</a> [18:03] &lt;adenilson&gt; Zakim, ??P38 is me.</li>
+<li id=l-173 _a="Zakim" _r="+adenilson"><a href=#l-173>#</a> [18:03] &lt;Zakim&gt; +adenilson; got it</li>
+<li id=l-174 _a="gregwhitworth" _r="Zakim"><a href=#l-174>#</a> [18:04] &lt;gregwhitworth&gt; Zakim, Microsoft.a is me</li>
+<li id=l-175 _a="Zakim" _r="+gregwhitworth"><a href=#l-175>#</a> [18:04] &lt;Zakim&gt; +gregwhitworth; got it</li>
+<li id=l-176 _a="Zakim"><a href=#l-176>#</a> [18:04] &lt;Zakim&gt; +[IPcaller]</li>
+<li id=l-177 class=hide><a href=#l-177>#</a> [18:04] * Joins: andreyr (~andreyr@public.cloak)</li>
+<li id=l-178 _a="Zakim"><a href=#l-178>#</a> [18:04] &lt;Zakim&gt; +[IPcaller.a]</li>
+<li id=l-179 _a="Zakim"><a href=#l-179>#</a> [18:04] &lt;Zakim&gt; +fantasai</li>
+<li id=l-180 _a="tgraham" _r="Zakim"><a href=#l-180>#</a> [18:04] &lt;tgraham&gt; Zakim, IPCaller is me</li>
+<li id=l-181 _a="Zakim" _r="+tgraham"><a href=#l-181>#</a> [18:04] &lt;Zakim&gt; +tgraham; got it</li>
+<li id=l-182 _a="Zakim"><a href=#l-182>#</a> [18:05] &lt;Zakim&gt; + +1.631.398.aabb</li>
+<li id=l-183 _a="alex_antennahouse"><a href=#l-183>#</a> [18:05] &lt;alex_antennahouse&gt; I think im IPcaller.a</li>
+<li id=l-184 _a="Zakim"><a href=#l-184>#</a> [18:05] &lt;Zakim&gt; +MikeMiller</li>
+<li id=l-185 _a="dael" _r="ScribeNick"><a href=#l-185>#</a> [18:05] &lt;dael&gt; ScribeNick: dael</li>
+<li id=l-186 _a="dael" _r="zakim"><a href=#l-186>#</a> [18:05] &lt;dael&gt; zakim, IPCaller.a is alex_antennahouse</li>
+<li id=l-187 _a="Zakim" _r="+alex_antennahouse"><a href=#l-187>#</a> [18:05] &lt;Zakim&gt; +alex_antennahouse; got it</li>
+<li id=l-188 _a="dael"><a href=#l-188>#</a> [18:06] * dael fantasai, did you get the e-mails with minutes from the F2F? I know my e-mails sometimes end up in your spam folder ^-^</li>
+<li id=l-189 _a="Zakim"><a href=#l-189>#</a> [18:06] &lt;Zakim&gt; +??P11</li>
+<li id=l-190 class=hide><a href=#l-190>#</a> [18:06] * Joins: bcampbell (~chatzilla@public.cloak)</li>
+<li id=l-191 _a="kwkbtr" _r="Zakim"><a href=#l-191>#</a> [18:06] &lt;kwkbtr&gt; Zakim, ??P11 is me</li>
+<li id=l-192 _a="Zakim" _r="+kwkbtr"><a href=#l-192>#</a> [18:06] &lt;Zakim&gt; +kwkbtr; got it</li>
+<li id=l-193 _a="Zakim"><a href=#l-193>#</a> [18:06] &lt;Zakim&gt; +smfr</li>
+<li id=l-194 class=hide><a href=#l-194>#</a> [18:07] * Joins: sanja (~sanja@public.cloak)</li>
+<li id=l-195 _a="Zakim"><a href=#l-195>#</a> [18:07] &lt;Zakim&gt; +[IPcaller]</li>
+<li id=l-196 _a="bcampbell"><a href=#l-196>#</a> [18:07] &lt;bcampbell&gt; IPCaller is me</li>
+<li id=l-197 _a="dael" _r="Zakim"><a href=#l-197>#</a> [18:07] &lt;dael&gt; Zakim, IPCaller is bcampbell</li>
+<li id=l-198 _a="Zakim" _r="+bcampbell"><a href=#l-198>#</a> [18:07] &lt;Zakim&gt; +bcampbell; got it</li>
+<li id=l-199 _a="dael" _r="plinss"><a href=#l-199>#</a> [18:08] &lt;dael&gt; plinss: Let's get started. Anything to add to the agenda?</li>
+<li id=l-200 _a="dael" _r="??"><a href=#l-200>#</a> [18:08] &lt;dael&gt; ??: I have something remove.</li>
+<li id=l-201 _a="smfr"><a href=#l-201>#</a> [18:08] * smfr changes topic to 'https://lists.w3.org/Archives/Public/www-style/2015Feb/0494.html'</li>
+<li id=l-202 _a="Zakim"><a href=#l-202>#</a> [18:08] &lt;Zakim&gt; + +43.134.001.00aacc</li>
+<li id=l-203 _a="dael" _r="??"><a href=#l-203>#</a> [18:08] &lt;dael&gt; ??: Transform-style 3d issue has been resolved by now.</li>
+<li id=l-204 _a="dael" _r="plinss"><a href=#l-204>#</a> [18:08] &lt;dael&gt; plinss: Okay.</li>
+<li id=l-205 _a="fantasai"><a href=#l-205>#</a> [18:08] &lt;fantasai&gt; s/now/email/</li>
+<li id=l-206 _a="smfr"><a href=#l-206>#</a> [18:08] &lt;smfr&gt; s/??/smfr/</li>
+<li id=l-207 class=hide><a href=#l-207>#</a> [18:08] * Joins: BradK (~bradk@public.cloak)</li>
+<li id=l-208 _a="dauwhe"><a href=#l-208>#</a> [18:08] * dauwhe +1</li>
+<li id=l-209 _a="dael" _r="plinss"><a href=#l-209>#</a> [18:08] &lt;dael&gt; plinss: To start, happy birthday glazou</li>
+<li id=l-210 _a="dael" _r="Topic"><a href=#l-210>#</a> [18:08] &lt;dael&gt; Topic: WebVTT review.</li>
+<li id=l-211 _a="dael" _r="plinss"><a href=#l-211>#</a> [18:09] &lt;dael&gt; plinss: There's been discussion on e-mail, but do we have group concensus feedback to send? Do folks need time to review?</li>
+<li id=l-212 _a="Zakim"><a href=#l-212>#</a> [18:09] &lt;Zakim&gt; +BradK</li>
+<li id=l-213 _a="Zakim"><a href=#l-213>#</a> [18:09] &lt;Zakim&gt; + +1.860.479.aadd</li>
+<li id=l-214 _a="Zakim"><a href=#l-214>#</a> [18:09] &lt;Zakim&gt; + +1.281.305.aaee</li>
+<li id=l-215 _a="TabAtkins" _r="Zakim"><a href=#l-215>#</a> [18:09] &lt;TabAtkins&gt; Zakim, aaee is me</li>
+<li id=l-216 _a="Zakim" _r="+TabAtkins"><a href=#l-216>#</a> [18:09] &lt;Zakim&gt; +TabAtkins; got it</li>
+<li id=l-217 _a="dael" _r="plinss"><a href=#l-217>#</a> [18:09] &lt;dael&gt; plinss: I'll take that as a no. So everyone should review and send comments on the e-mail. We'll gather feedback as a group reply.</li>
+<li id=l-218 _a="sanja"><a href=#l-218>#</a> [18:09] &lt;sanja&gt; +43.134.001.00aacc is me</li>
+<li id=l-219 _a="dael" _r="Topic"><a href=#l-219>#</a> [18:09] &lt;dael&gt; Topic: abspos change compat risk</li>
+<li id=l-220 _a="Bert"><a href=#l-220>#</a> [18:10] * Bert a few minutes late. Will dial-in soon.</li>
+<li id=l-221 _a="sanja" _r="Zakim"><a href=#l-221>#</a> [18:10] &lt;sanja&gt; Zakim, aacc is me</li>
+<li id=l-222 _a="Zakim" _r="+sanja"><a href=#l-222>#</a> [18:10] &lt;Zakim&gt; +sanja; got it</li>
+<li id=l-223 _a="Zakim"><a href=#l-223>#</a> [18:10] &lt;Zakim&gt; +hober</li>
+<li id=l-224 _a="dael" _r="gregwhitworth"><a href=#l-224>#</a> [18:10] &lt;dael&gt; gregwhitworth: We made the abspos change where it goes like 0,0 for flex items. Google docs has an issue. I posted the flipboard issue. I've got two bugs open against those.</li>
+<li id=l-225 _a="dael" _r="gregwhitworth"><a href=#l-225>#</a> [18:10] &lt;dael&gt; gregwhitworth: I don't know what we do because I understand why we have the change. I guess I wanted to maket he group aware of it.</li>
+<li id=l-226 _a="Zakim"><a href=#l-226>#</a> [18:10] &lt;Zakim&gt; +Jerome</li>
+<li id=l-227 _a="dael" _r="fantasai"><a href=#l-227>#</a> [18:11] &lt;dael&gt; fantasai: I thought the change was there to simplify what's going on. If the old behavior is what's useful we might want to go with that.</li>
+<li id=l-228 _a="Bert"><a href=#l-228>#</a> [18:11] * Bert zakim, jerome is me</li>
+<li id=l-229 _a="Zakim"><a href=#l-229>#</a> [18:11] * Zakim +Bert; got it</li>
+<li id=l-230 _a="dael" _r="fantasai"><a href=#l-230>#</a> [18:11] &lt;dael&gt; fantasai: I think we ran into issues with complexity where you have aplaceholder that has to follow layout and can't affect order and there's an invisable thing adding space so we took it out of flow.</li>
+<li id=l-231 _a="dael" _r="fantasai"><a href=#l-231>#</a> [18:11] &lt;dael&gt; fantasai: If websites want this behaiour we need to dig into these cases.</li>
+<li id=l-232 _a="dael" _r="Rossen"><a href=#l-232>#</a> [18:11] &lt;dael&gt; Rossen: I don't believe this is what people want, it's what people have. They're using what they have.</li>
+<li id=l-233 _a="dael" _r="Rossen"><a href=#l-233>#</a> [18:12] &lt;dael&gt; Rossen: When we were discussing inSophia, we agreed the simplified algo gets us quicker to better interop. The abspos inline algo will be tricky, though everyone had a impl of it.</li>
+<li id=l-234 _a="TabAtkins"><a href=#l-234>#</a> [18:12] * TabAtkins Man, who keeps pressing phone buttons?</li>
+<li id=l-235 _a="dael" _r="Rossen"><a href=#l-235>#</a> [18:13] &lt;dael&gt; Rossen: I think what gregwhitworth is bringing is relivant and if we stick tot he current algo which I personally prefer, then the q is are the other impl going to follow soon. If they do this will basically dictate when content will change</li>
+<li id=l-236 _a="dael" _r="Rossen"><a href=#l-236>#</a> [18:13] &lt;dael&gt; Rossen: Does that make sense?</li>
+<li id=l-237 _a="dael" _r="gregwhitworth"><a href=#l-237>#</a> [18:13] &lt;dael&gt; gregwhitworth: That's similar to what I was going to say. It's not that they were asking for a specfic use case, they just happened to fall into it.</li>
+<li id=l-238 _a="Zakim"><a href=#l-238>#</a> [18:13] &lt;Zakim&gt; +??P12</li>
+<li id=l-239 _a="tantek" _r="zakim"><a href=#l-239>#</a> [18:13] &lt;tantek&gt; zakim, ??p12 is me</li>
+<li id=l-240 _a="Zakim" _r="+tantek"><a href=#l-240>#</a> [18:13] &lt;Zakim&gt; +tantek; got it</li>
+<li id=l-241 _a="dael" _r="gregwhitworth"><a href=#l-241>#</a> [18:14] &lt;dael&gt; gregwhitworth: It's an unfortunate thing. The sooner all other browsers change the devs will see it. I thinkw e should keep it because we're moving to better layout.</li>
+<li id=l-242 _a="dael" _r="fantasai"><a href=#l-242>#</a> [18:14] &lt;dael&gt; fantasai: Okay.</li>
+<li id=l-243 _a="dael" _r="fantasai"><a href=#l-243>#</a> [18:14] &lt;dael&gt; fantasai: What can we put to tell impl they need to change?</li>
+<li id=l-244 _a="dael" _r="gregwhitworth"><a href=#l-244>#</a> [18:14] &lt;dael&gt; gregwhitworth: Is TabAtkins on the call?</li>
+<li id=l-245 _a="dael" _r="TabAtkins"><a href=#l-245>#</a> [18:14] &lt;dael&gt; TabAtkins: Yes.</li>
+<li id=l-246 _a="dael" _r="gregwhitworth"><a href=#l-246>#</a> [18:14] &lt;dael&gt; gregwhitworth: What do you think?</li>
+<li id=l-247 _a="fantasai"><a href=#l-247>#</a> [18:14] &lt;fantasai&gt; s/What can we put to tell impl they need to change?/need to hear from other implementers/</li>
+<li id=l-248 _a="dael" _r="TabAtkins"><a href=#l-248>#</a> [18:14] &lt;dael&gt; TabAtkins: I haven't had the change to check with my team.</li>
+<li id=l-249 _a="dael" _r="gregwhitworth"><a href=#l-249>#</a> [18:14] &lt;dael&gt; gregwhitworth: Why don't we circle back. dbaron isn't on.</li>
+<li id=l-250 _a="dael" _r="fantasai"><a href=#l-250>#</a> [18:15] &lt;dael&gt; fantasai: While we're on flexbox, TabAtkins did you sort out the margins?</li>
+<li id=l-251 _a="dael" _r="TabAtkins"><a href=#l-251>#</a> [18:15] &lt;dael&gt; TabAtkins: I couldn't figure out where so it was yesterday. Let me see if anyone commented.</li>
+<li id=l-252 _a="dael" _r="fantasai"><a href=#l-252>#</a> [18:15] &lt;dael&gt; fantasai: That holds up pub.</li>
+<li id=l-253 _a="dael" _r="TabAtkins"><a href=#l-253>#</a> [18:15] &lt;dael&gt; TabAtkins: No responce yet. I'll let you know when I do.</li>
+<li id=l-254 _a="dael" _r="fantasai"><a href=#l-254>#</a> [18:15] &lt;dael&gt; fantasai: We'll have to come back next week.</li>
+<li id=l-255 _a="dael" _r="TabAtkins"><a href=#l-255>#</a> [18:15] &lt;dael&gt; TabAtkins: Yes.</li>
+<li id=l-256 _a="dael" _r="Topic"><a href=#l-256>#</a> [18:15] &lt;dael&gt; Topic: CSS3 UI</li>
+<li id=l-257 _a="Zakim"><a href=#l-257>#</a> [18:15] &lt;Zakim&gt; +??P0</li>
+<li id=l-258 _a="dael" _r="Florian"><a href=#l-258>#</a> [18:15] &lt;dael&gt; Florian: We just got a WD out</li>
+<li id=l-259 _a="dael" _r="Florian"><a href=#l-259>#</a> [18:16] &lt;dael&gt; Florian: Also I sent a mail about issue 69 which was the long standing one about box sizing.</li>
+<li id=l-260 _a="Zakim"><a href=#l-260>#</a> [18:16] &lt;Zakim&gt; +deirdrelee</li>
+<li id=l-261 _a="dael" _r="Florian"><a href=#l-261>#</a> [18:16] &lt;dael&gt; Florian: I went through CSS 2.1 and figured out where everything should be and wrote the patch and put into CSS3 UI where it goes. WE don't need to discuss, but I appriciate review.</li>
+<li id=l-262 _a="dael" _r="Florian"><a href=#l-262>#</a> [18:16] &lt;dael&gt; Florian: I erred on more explicit.</li>
+<li id=l-263 _a="Florian"><a href=#l-263>#</a> [18:17] &lt;Florian&gt; <a href="https://lists.w3.org/Archives/Public/www-style/2015Feb/0357.html">https://lists.w3.org/Archives/Public/www-style/2015Feb/0357.html</a></li>
+<li id=l-264 _a="dael" _r="Florian"><a href=#l-264>#</a> [18:17] &lt;dael&gt; Florian: Things to discuss, issue 79</li>
+<li id=l-265 _a="dael" _r="Florian"><a href=#l-265>#</a> [18:17] &lt;dael&gt; Florian: CSS3 UI doens't define outline overlap. CSS2.1 does, but it gives 2 options. Does anybody remember why we have 2? All the browsers seem to do the same thing.</li>
+<li id=l-266 _a="dael" _r="tantek"><a href=#l-266>#</a> [18:17] &lt;dael&gt; tantek: That's desktop only.</li>
+<li id=l-267 _a="dael" _r="tantek"><a href=#l-267>#</a> [18:18] &lt;dael&gt; tantek: A lot of the loosness in outline has been based on experience on platforms where outline is essential for indicating user focus and that's not common on desktop. It's common on TV or other devices with directional nav like a remote</li>
+<li id=l-268 _a="Zakim"><a href=#l-268>#</a> [18:18] &lt;Zakim&gt; -adenilson</li>
+<li id=l-269 _a="dael" _r="tantek"><a href=#l-269>#</a> [18:19] &lt;dael&gt; tantek: The rendering of the outline was left looser in CSS3 UI because platofrms needed it for better UI. This is where 2.1 specified too much precision. On some platforms we choose a better UI instead of strictly what CSS2.1 said.</li>
+<li id=l-270 _a="dael" _r="tantek"><a href=#l-270>#</a> [18:19] &lt;dael&gt; tantek: That's the experience from like early 2000 to now on nondesktop. It's important to keep that in and it's easy to forget since it's non-desktop specific.</li>
+<li id=l-271 _a="dael" _r="Florian"><a href=#l-271>#</a> [18:19] &lt;dael&gt; Florian: Okay.</li>
+<li id=l-272 _a="dael" _r="tantek"><a href=#l-272>#</a> [18:19] &lt;dael&gt; tantek: That's the history. Maybe we should have a note that mentions that. This isn't the first time it was mentioned.</li>
+<li id=l-273 _a="Zakim"><a href=#l-273>#</a> [18:20] &lt;Zakim&gt; +??P3</li>
+<li id=l-274 _a="dael" _r="Florian"><a href=#l-274>#</a> [18:20] &lt;dael&gt; Florian: I'd go even futher since CSS UI doesn't replace. If we have a note saying we don't define it's only in 2.1 If you want looser it should be normative</li>
+<li id=l-275 _a="dael" _r="tantek"><a href=#l-275>#</a> [18:20] &lt;dael&gt; tantek: That makes sense.</li>
+<li id=l-276 _a="adenilson" _r="Zakim"><a href=#l-276>#</a> [18:20] &lt;adenilson&gt; Zakim, ??P3 is me.</li>
+<li id=l-277 _a="Zakim" _r="+adenilson"><a href=#l-277>#</a> [18:20] &lt;Zakim&gt; +adenilson; got it</li>
+<li id=l-278 _a="dael" _r="Florian"><a href=#l-278>#</a> [18:20] &lt;dael&gt; Florian: Do you have examples of current non-desktop browser?</li>
+<li id=l-279 _a="dael" _r="tantek"><a href=#l-279>#</a> [18:21] &lt;dael&gt; tantek: Last I checked every set top box was violating it because it's more important to have the line visable to the user. It's not the easiest to set up, but I don't see why browsers would regress their UI</li>
+<li id=l-280 _a="dael" _r="Florian"><a href=#l-280>#</a> [18:21] &lt;dael&gt; Florian: I was just trying to figure out why one is looser than the other with no clear resolution. But do these TV UIs do the same and we can spec that?</li>
+<li id=l-281 _a="dael" _r="tantek"><a href=#l-281>#</a> [18:22] &lt;dael&gt; tantek: They did similar as of 10 years ago, but I don't have modern set top devices to check today. My presumption is they stayed similar, but I can't gaur. I wouldn't want to spec their behaviour.</li>
+<li id=l-282 _a="dael" _r="tantek"><a href=#l-282>#</a> [18:22] &lt;dael&gt; tantek: The other things is there's a lot of experimentations with Web VR and we're going to want hooks into CSS. Outline and focus behave even more differently in 3D. I don't see this convergine.</li>
+<li id=l-283 _a="dael" _r="tantek"><a href=#l-283>#</a> [18:23] &lt;dael&gt; tantek: Seeing the spectrum of implementation will broden. We can add some normative text to make it explicit that the stacking of focus outline is left to the impl to provide better user experience.</li>
+<li id=l-284 _a="dael" _r="Florian"><a href=#l-284>#</a> [18:23] &lt;dael&gt; Florian: I have no direct knowledge, but that sounds reasonable. I think it would be better.</li>
+<li id=l-285 _a="dael" _r="tantek"><a href=#l-285>#</a> [18:23] &lt;dael&gt; tantek: Since it's normative in 2.1 it needs to be normative here.</li>
+<li id=l-286 _a="dael" _r="tantek"><a href=#l-286>#</a> [18:24] &lt;dael&gt; tantek: Two use cases are setop boxes and web VR</li>
+<li id=l-287 _a="dael" _r="Florian"><a href=#l-287>#</a> [18:24] &lt;dael&gt; Florian: Anyone else have something to add?</li>
+<li id=l-288 _a="dael" _r="tantek"><a href=#l-288>#</a> [18:24] &lt;dael&gt; tantek: I would welcome input from anyone working on a non-desktop platform, especially if you have experience with outline rendering. More expereince gives us more data.</li>
+<li id=l-289 _a="dael" _r="plinss"><a href=#l-289>#</a> [18:24] &lt;dael&gt; plinss: Other opinions?</li>
+<li id=l-290 _a="dael" _r="RESOLVED"><a href=#l-290>#</a> [18:25] &lt;dael&gt; RESOLVED: add some normative text to make it explicit that the stacking of focus outline is left to the impl to provide better user experience</li>
+<li id=l-291 _a="dael" _r="Florian"><a href=#l-291>#</a> [18:25] &lt;dael&gt; Florian: If we have more time, I'd like to do issue 78.</li>
+<li id=l-292 _a="Florian"><a href=#l-292>#</a> [18:25] &lt;Florian&gt; <a href="https://lists.w3.org/Archives/Public/www-style/2015Feb/0344.html">https://lists.w3.org/Archives/Public/www-style/2015Feb/0344.html</a></li>
+<li id=l-293 _a="glazou"><a href=#l-293>#</a> [18:25] * glazou sorry for bg noise</li>
+<li id=l-294 _a="dael" _r="Florian"><a href=#l-294>#</a> [18:25] &lt;dael&gt; Florian: This is about the directional focus prop</li>
+<li id=l-295 _a="dael" _r="Florian"><a href=#l-295>#</a> [18:26] &lt;dael&gt; Florian: The way it's written you can make something focus-able that wasn't before. It's not implicit, but it's intended that the focus connector will match. I think explicit wouldn't hurt.</li>
+<li id=l-296 class=hide _a="Rossen"><a href=#l-296>#</a> [18:26] * Rossen is now known as Rossen_away</li>
+<li id=l-297 _a="dael" _r="tantek"><a href=#l-297>#</a> [18:26] &lt;dael&gt; tantek: Last time we discussed I thought we couldn't resolve on if you did a nav up, should it make the element focusable. Someone was arguing it should nav to the first focusable thing.</li>
+<li id=l-298 _a="leaverou"><a href=#l-298>#</a> [18:26] * leaverou glazou Happy birthday!!</li>
+<li id=l-299 _a="dael" _r="Florian"><a href=#l-299>#</a> [18:26] &lt;dael&gt; Florian: That was fantasai disputing this. I think the current intent is what you say.</li>
+<li id=l-300 _a="dael" _r="Florian"><a href=#l-300>#</a> [18:26] &lt;dael&gt; Florian: The spec is currently implicit but ambig.</li>
+<li id=l-301 _a="glazou"><a href=#l-301>#</a> [18:26] * glazou thanks leaverou</li>
+<li id=l-302 _a="tantek"><a href=#l-302>#</a> [18:27] * tantek happy birthday glazou too!</li>
+<li id=l-303 _a="glazou"><a href=#l-303>#</a> [18:27] * glazou thx tantek !</li>
+<li id=l-304 class=hide _a="Rossen_away"><a href=#l-304>#</a> [18:27] * Rossen_away is now known as Rossen</li>
+<li id=l-305 _a="dael" _r="Florian"><a href=#l-305>#</a> [18:27] &lt;dael&gt; Florian: We should make the intenet explicit and that a selector should match, but we should consider that it makes things unfocusable and focusable.</li>
+<li id=l-306 _a="dael" _r="tantek"><a href=#l-306>#</a> [18:27] &lt;dael&gt; tantek: I agree with your conclusion, but I wasnted to bring it up since it wasn't consensus. I want to be upfront witht he group that those are the idea on the table. Even if Florian and I agree, the group should know about the debate.</li>
+<li id=l-307 _a="dael" _r="tantek"><a href=#l-307>#</a> [18:28] &lt;dael&gt; tantek: I want the group to approve or tell us to do more.</li>
+<li id=l-308 _a="dael" _r="Florian"><a href=#l-308>#</a> [18:28] &lt;dael&gt; Florian: Both behaviours are useful and I'm not strongly minded about which. Which one should be the default I'm not sure.</li>
+<li id=l-309 _a="dael" _r="tantek"><a href=#l-309>#</a> [18:28] &lt;dael&gt; tantek: I'd rather a smart default instead of a switch unless there's a usecase that both are useful.</li>
+<li id=l-310 _a="dael" _r="tantek"><a href=#l-310>#</a> [18:29] &lt;dael&gt; tantek: From that prospective, consider this a call for examples or experience from anyone using directional focus prop, especially if you're using them for otherwise unnav-able properties.</li>
+<li id=l-311 _a="dael" _r="tantek"><a href=#l-311>#</a> [18:29] &lt;dael&gt; tantek: We haven't heard a lot so far.</li>
+<li id=l-312 _a="dael" _r="fantasai"><a href=#l-312>#</a> [18:30] &lt;dael&gt; fantasai: Two other things. Existing impl may have content so we might not have a choice. Second is this interacts with HTML and a11y in widgets so those people might have feedback. Making something focusable without HTML, is that a thing we want in the web platform</li>
+<li id=l-313 _a="dael" _r="TabAtkins"><a href=#l-313>#</a> [18:30] &lt;dael&gt; TabAtkins: In particular some things are only focusable when other things are the active focus.</li>
+<li id=l-314 _a="fantasai"><a href=#l-314>#</a> [18:30] &lt;fantasai&gt; s/without HTML/without reflecting this in the HTML/</li>
+<li id=l-315 _a="bcampbell"><a href=#l-315>#</a> [18:30] &lt;bcampbell&gt; thanks for mentioning the a11y implications, would like to investigate further and help there.</li>
+<li id=l-316 _a="dael" _r="tantek"><a href=#l-316>#</a> [18:31] &lt;dael&gt; tantek: fantasai insight is correct thatwe might not have a choice if impl have converged here. If impl are different, then we can reaccess and understand why impl are different.</li>
+<li id=l-317 _a="dael" _r="tantek"><a href=#l-317>#</a> [18:31] &lt;dael&gt; tantek: IN that case, content across impl is unlikely</li>
+<li id=l-318 _a="dael" _r="Florian"><a href=#l-318>#</a> [18:32] &lt;dael&gt; Florian: In terms of current impl I think they do agree in terms of making unfocusable things focusable, but I don't know what depends on that. There's nuance. If yo're doing through the keyboard it works, bt not else.</li>
+<li id=l-319 _a="dael" _r="plinss"><a href=#l-319>#</a> [18:32] &lt;dael&gt; plinss: What does it mean to focus on something unfocusable? If it can't take imput what's the value?</li>
+<li id=l-320 _a="dael" _r="TabAtkins"><a href=#l-320>#</a> [18:32] &lt;dael&gt; TabAtkins: You can always do tabindex=url</li>
+<li id=l-321 _a="dael" _r="tantek"><a href=#l-321>#</a> [18:32] &lt;dael&gt; tantek: That's already in the platform.</li>
+<li id=l-322 _a="dael" _r="plinss"><a href=#l-322>#</a> [18:32] &lt;dael&gt; plinss: Seems like a bug. Should we perpetuate.</li>
+<li id=l-323 _a="gregwhitworth" _r="IE"><a href=#l-323>#</a> [18:32] &lt;gregwhitworth&gt; IE: with tabindex-1 allows both active and focus to work</li>
+<li id=l-324 _a="gregwhitworth" _r="without"><a href=#l-324>#</a> [18:33] &lt;gregwhitworth&gt; without, :active only works</li>
+<li id=l-325 _a="dael" _r="tantek"><a href=#l-325>#</a> [18:33] &lt;dael&gt; tantek: I think we'll find out through testing. I wouldn't block CR on this issue. Write a doc saying this is what we think, test, and see how it falls out. If the tests show impl converge the other way we don't have a choice</li>
+<li id=l-326 _a="dael" _r="fantasai"><a href=#l-326>#</a> [18:33] &lt;dael&gt; fantasai: I think we should clearly document the issue and narrow the scope. WE're considering these ways, this is how we'll decide, here's the background data, now it's down to testing and impl.</li>
+<li id=l-327 _a="dael" _r="fantasai"><a href=#l-327>#</a> [18:34] &lt;dael&gt; fantasai: That's what we need to push to CR&gt;</li>
+<li id=l-328 _a="dael" _r="Florian"><a href=#l-328>#</a> [18:34] &lt;dael&gt; Florian: Sounds fair.</li>
+<li id=l-329 _a="fantasai"><a href=#l-329>#</a> [18:34] &lt;fantasai&gt; s/need/can/</li>
+<li id=l-330 _a="dael" _r="tantek"><a href=#l-330>#</a> [18:34] &lt;dael&gt; tantek: I'm happy to have an informal note that saying we think it should work this way and we need to test.</li>
+<li id=l-331 _a="dael" _r="tantek"><a href=#l-331>#</a> [18:34] &lt;dael&gt; tantek: Normatively we should pick one so we can test and have an informative note that says we think this is right and we think this is what's being done, bt testing will reveal if that's true.</li>
+<li id=l-332 _a="dael" _r="tantek"><a href=#l-332>#</a> [18:35] &lt;dael&gt; tantek: I think we have an idea of what we want to do and we can have in the spec this is how you do this with informative.</li>
+<li id=l-333 _a="dael" _r="Florian"><a href=#l-333>#</a> [18:35] &lt;dael&gt; Florian: I do think this is the right way, but I think fantasai has a good point. I'm happy with the current, I'm okay with it, I'm not sure I prefer.</li>
+<li id=l-334 _a="dael" _r="tantek"><a href=#l-334>#</a> [18:35] &lt;dael&gt; tantek: If there's feedback before CR we'll take it and if it's after we'll take it.</li>
+<li id=l-335 _a="dael" _r="fantasai"><a href=#l-335>#</a> [18:36] &lt;dael&gt; fantasai: I think you should ping HTML, a11y and maybe TAG for more feedback since it's a where's the boundry issue.</li>
+<li id=l-336 _a="dael" _r="plinss"><a href=#l-336>#</a> [18:36] &lt;dael&gt; plinss: I'd especially like to hear from a11y.</li>
+<li id=l-337 _a="dael" _r="TabAtkins"><a href=#l-337>#</a> [18:36] &lt;dael&gt; TabAtkins: If you're doing a game UI or something, this is very useful. It shouldn't limit focus to things you can type into</li>
+<li id=l-338 _a="Florian"><a href=#l-338>#</a> [18:36] &lt;Florian&gt; clarifying my point above: I am ok with the current behavior, but I am not sure I prefer it over fantasai's suggestion, so I would definitely welcome author feedback (and feedback form HTML and accessibility)</li>
+<li id=l-339 _a="Zakim"><a href=#l-339>#</a> [18:37] &lt;Zakim&gt; -kwkbtr</li>
+<li id=l-340 _a="bcampbell"><a href=#l-340>#</a> [18:37] &lt;bcampbell&gt; I am unable to cut in on the phone but can volunteer to bring this to a greater group for accessibility.</li>
+<li id=l-341 _a="dael" _r="fantasai"><a href=#l-341>#</a> [18:37] &lt;dael&gt; fantasai: The issue isn't about focusability, the interesting question here is can CSS be a mech for this and can it be reflected any way in the DOM. If it's purely CSS that effects if this can be focused.</li>
+<li id=l-342 _a="Zakim"><a href=#l-342>#</a> [18:37] &lt;Zakim&gt; +??P7</li>
+<li id=l-343 _a="dael" _r="tantek"><a href=#l-343>#</a> [18:37] &lt;dael&gt; tantek: I think TabAtkins disagreed with the game example, such as getting focus and then getting event.</li>
+<li id=l-344 _a="kwkbtr" _r="Zakim"><a href=#l-344>#</a> [18:37] &lt;kwkbtr&gt; Zakim, ??P7 is me</li>
+<li id=l-345 _a="Zakim" _r="+kwkbtr"><a href=#l-345>#</a> [18:37] &lt;Zakim&gt; +kwkbtr; got it</li>
+<li id=l-346 _a="dael" _r="tantek"><a href=#l-346>#</a> [18:37] &lt;dael&gt; tantek: It might not be a bug.</li>
+<li id=l-347 _a="fantasai"><a href=#l-347>#</a> [18:37] &lt;fantasai&gt; s/focusability/nature of focusability/</li>
+<li id=l-348 _a="fantasai"><a href=#l-348>#</a> [18:37] &lt;fantasai&gt; s/can it be/without it being/</li>
+<li id=l-349 _a="dael" _r="Florian"><a href=#l-349>#</a> [18:38] &lt;dael&gt; Florian: Which is why I'm inclined to say both is reasonable and switch to one in the future.</li>
+<li id=l-350 _a="fantasai" _r="fantasai"><a href=#l-350>#</a> [18:38] &lt;fantasai&gt; fantasai: Tab's example could be done with HTML</li>
+<li id=l-351 _a="Florian"><a href=#l-351>#</a> [18:38] &lt;Florian&gt; s/switch to one/we should have a swtich for it/</li>
+<li id=l-352 _a="dael" _r="tantek"><a href=#l-352>#</a> [18:38] &lt;dael&gt; tantek: I agree we shouldn't do a switch now. Tighten the language of the behavior and include an informative note about the behaviors we're considering and welcome input?</li>
+<li id=l-353 _a="dael" _r="plinss"><a href=#l-353>#</a> [18:38] &lt;dael&gt; plinss: Obj?</li>
+<li id=l-354 _a="dael" _r="fantasai"><a href=#l-354>#</a> [18:39] &lt;dael&gt; fantasai: And also actively solicit input. Don't jsut put it in the spec and expect feedback.</li>
+<li id=l-355 _a="dael" _r="tantek"><a href=#l-355>#</a> [18:39] &lt;dael&gt; tantek: That's reasonable.</li>
+<li id=l-356 _a="dael" _r="RESOLVED"><a href=#l-356>#</a> [18:39] &lt;dael&gt; RESOLVED: Tighten the language of the behavior and include an informative note about the behaviors we're considering and welcome/actively solicit input</li>
+<li id=l-357 _a="fantasai"><a href=#l-357>#</a> [18:40] &lt;fantasai&gt; plinss++</li>
+<li id=l-358 _a="dael" _r="plinss"><a href=#l-358>#</a> [18:40] &lt;dael&gt; plinss: I accept that focusablitiy may be something you want only in CSS, but I don't like these features that are sideeffects of other features. I'd like us to create specific prop that say we're taking control of this. You can always have tha behavior actually set. I don't like magical properties that are side effects.</li>
+<li id=l-359 _a="smfr"><a href=#l-359>#</a> [18:40] * smfr has to drop off, sorry</li>
+<li id=l-360 _a="Zakim"><a href=#l-360>#</a> [18:41] &lt;Zakim&gt; -smfr</li>
+<li id=l-361 _a="dael" _r="tantek"><a href=#l-361>#</a> [18:41] &lt;dael&gt; tantek: I think I had a prop in an earlier CSS3 UI and it was dropped for lack of interest or obj. What we're dealing with is we have directional nav supported. This seemed the best result. In general I agree with your philosophy. WE can try and introduc in 4.</li>
+<li id=l-362 _a="dael" _r="Florian"><a href=#l-362>#</a> [18:41] &lt;dael&gt; Florian: The switch you suggest is what I have in mind, so I agree.</li>
+<li id=l-363 _a="dael" _r="plinss"><a href=#l-363>#</a> [18:41] &lt;dael&gt; plinss: I think this is something for 4 since 3 is heading to CR.</li>
+<li id=l-364 _a="dael" _r="Florian"><a href=#l-364>#</a> [18:41] &lt;dael&gt; Florian: I think we're okay with CSS3. There's another, but it can go in e-mail.</li>
+<li id=l-365 _a="dael" _r="tantek"><a href=#l-365>#</a> [18:41] &lt;dael&gt; tantek: Is that clip?</li>
+<li id=l-366 _a="dael" _r="Florian"><a href=#l-366>#</a> [18:41] &lt;dael&gt; Florian: Yes.</li>
+<li id=l-367 _a="dael" _r="tantek"><a href=#l-367>#</a> [18:42] &lt;dael&gt; tantek: It does seem editorial. So yeah, that should be it.</li>
+<li id=l-368 _a="dael" _r="Topic"><a href=#l-368>#</a> [18:42] &lt;dael&gt; Topic: Allowing @import to be conditional on @supports queries</li>
+<li id=l-369 _a="dael" _r="TabAtkins"><a href=#l-369>#</a> [18:43] &lt;dael&gt; TabAtkins: We have multi conditional rules, but the number of places that invoke media quesries explicitly only involke @media, so you can't import a stylesheet that has new features. Right now you have to include everything inline</li>
+<li id=l-370 _a="fantasai"><a href=#l-370>#</a> [18:43] * fantasai TabAtkins link?</li>
+<li id=l-371 _a="dael" _r="TabAtkins"><a href=#l-371>#</a> [18:43] &lt;dael&gt; TabAtkins: So my prop is extending the grammar to support the other conditional rules. You can do a straight meda query or you do a supports funtion.</li>
+<li id=l-372 _a="fantasai"><a href=#l-372>#</a> [18:43] * fantasai finds it</li>
+<li id=l-373 _a="fantasai"><a href=#l-373>#</a> [18:43] &lt;fantasai&gt; <a href="https://lists.w3.org/Archives/Public/www-style/2015Jan/0292.html">https://lists.w3.org/Archives/Public/www-style/2015Jan/0292.html</a></li>
+<li id=l-374 _a="dael" _r="TabAtkins"><a href=#l-374>#</a> [18:44] &lt;dael&gt; TabAtkins: Boris pointed out that in order for this to be useful we'd have to be stricter in spec that says you don't load @imports speculatively. You only load if it matches.</li>
+<li id=l-375 _a="dael" _r="TabAtkins"><a href=#l-375>#</a> [18:44] &lt;dael&gt; TabAtkins: So I propose to extend the @import grammar so it can support any grammar.</li>
+<li id=l-376 _a="dael" _r="TabAtkins"><a href=#l-376>#</a> [18:44] &lt;dael&gt; TabAtkins: Also tighten up the lang in CSSOM as to where in the cascade we load conditionally imported style sheets</li>
+<li id=l-377 _a="Bert"><a href=#l-377>#</a> [18:44] &lt;Bert&gt; q+ to ask if *not* loading the style sheet is a security/privacy risk.</li>
+<li id=l-378 _a="Zakim"><a href=#l-378>#</a> [18:44] * Zakim sees Bert on the speaker queue</li>
+<li id=l-379 _a="dael" _r="TabAtkins"><a href=#l-379>#</a> [18:44] &lt;dael&gt; TabAtkins: Any comments? Otherwise I'd like a resolution</li>
+<li id=l-380 _a="gregwhitworth"><a href=#l-380>#</a> [18:45] &lt;gregwhitworth&gt; yes please!!!</li>
+<li id=l-381 _a="dael" _r="fantasai"><a href=#l-381>#</a> [18:45] &lt;dael&gt; fantasai: Seems like a good idea.</li>
+<li id=l-382 _a="dael" _r="fantasai"><a href=#l-382>#</a> [18:45] &lt;dael&gt; fantasai: It seems necessary and reasonable syntax. Add to cascade 4?</li>
+<li id=l-383 _a="dael" _r="TabAtkins"><a href=#l-383>#</a> [18:45] &lt;dael&gt; TabAtkins: Yes, I'm fine with 4. This isn't urgent, it's useful.</li>
+<li id=l-384 _a="plinss"><a href=#l-384>#</a> [18:45] &lt;plinss&gt; ack bert</li>
+<li id=l-385 _a="Zakim" _r="Bert"><a href=#l-385>#</a> [18:45] &lt;Zakim&gt; Bert, you wanted to ask if *not* loading the style sheet is a security/privacy risk.</li>
+<li id=l-386 _a="Zakim"><a href=#l-386>#</a> [18:45] * Zakim sees no one on the speaker queue</li>
+<li id=l-387 _a="dael" _r="Bert"><a href=#l-387>#</a> [18:46] &lt;dael&gt; Bert: I think it's a cool idea. I was wondering you said don't load the stylesheets because you're risking whatever. I think more and more loading unconditionally because privacy concerns. Do you not expose anything about your browser by not loading?</li>
+<li id=l-388 _a="dael" _r="TabAtkins"><a href=#l-388>#</a> [18:46] &lt;dael&gt; TabAtkins: No more than you do with scripts</li>
+<li id=l-389 _a="fantasai" _r="TabAtkins"><a href=#l-389>#</a> [18:46] &lt;fantasai&gt; TabAtkins, I think either Cascade 4 or Conditional 4 would make sense. Cascade lets you mess around with @import handling rules a little more directly.</li>
+<li id=l-390 _a="dael" _r="TabAtkins"><a href=#l-390>#</a> [18:46] &lt;dael&gt; TabAtkins: Even without script you can use the standard put the BG image with a URL pointing to something on your server trick. There's no additional privacy concerns.</li>
+<li id=l-391 _a="dael" _r="plinss"><a href=#l-391>#</a> [18:47] &lt;dael&gt; plinss: It is part of the fingerprinting surface, but it's already exposed through other means.</li>
+<li id=l-392 _a="fantasai" _r="TabAtkins"><a href=#l-392>#</a> [18:47] &lt;fantasai&gt; TabAtkins, Cascade 3 is in CR, pretty stable. Think it's fair to bikeshed 3, then fork off 4 to add this.</li>
+<li id=l-393 _a="fantasai"><a href=#l-393>#</a> [18:47] &lt;fantasai&gt; (Would definitely bikeshed 3 first, so 3 is bikeshedded onto /TR)</li>
+<li id=l-394 class=hide _a="leaverou"><a href=#l-394>#</a> [18:47] * leaverou is now known as leaverou_away</li>
+<li id=l-395 _a="dael" _r="Bert"><a href=#l-395>#</a> [18:47] &lt;dael&gt; Bert: BG images aren't conditional anymore. Webkit recently fixed BG of scrollbars because they were exposed. OKay. I jsut wanted to think about those.</li>
+<li id=l-396 _a="dael" _r="TabAtkins"><a href=#l-396>#</a> [18:48] &lt;dael&gt; TabAtkins: If you have script, you can evaluate MQ whenever you want so exposing more doesn't hurt.</li>
+<li id=l-397 _a="dael" _r="fantasai"><a href=#l-397>#</a> [18:48] &lt;dael&gt; fantasai: I'm thinking we should bikeshed cascade 3 and work up level 4 so we can maybe add this and also introduce default</li>
+<li id=l-398 _a="dael" _r="TabAtkins"><a href=#l-398>#</a> [18:48] &lt;dael&gt; TabAtkins: We do need to add default</li>
+<li id=l-399 _a="dael" _r="plinss"><a href=#l-399>#</a> [18:48] &lt;dael&gt; plinss: Anyone object to adding @supports?</li>
+<li id=l-400 _a="Florian"><a href=#l-400>#</a> [18:48] * Florian sound distorting made it sound here like Bert said &quot;Netscape recently fixed....&quot; which was somewhat surprising :)</li>
+<li id=l-401 _a="dael" _r="RESOLVED"><a href=#l-401>#</a> [18:49] &lt;dael&gt; RESOLVED: Add @supports to Cascade Level 4</li>
+<li id=l-402 _a="dael" _r="TabAtkins"><a href=#l-402>#</a> [18:49] &lt;dael&gt; TabAtkins: Can we get a resolution for level 4 ED?</li>
+<li id=l-403 _a="dael" _r="fantasai"><a href=#l-403>#</a> [18:49] &lt;dael&gt; fantasai: If you bikeshed 3 first and then fork it.</li>
+<li id=l-404 _a="Florian"><a href=#l-404>#</a> [18:49] * Florian s/distorting/distortion/</li>
+<li id=l-405 _a="dael" _r="TabAtkins"><a href=#l-405>#</a> [18:49] &lt;dael&gt; TabAtkins: Yeah.</li>
+<li id=l-406 _a="dael" _r="RESOLVED"><a href=#l-406>#</a> [18:49] &lt;dael&gt; RESOLVED: Create an ED for Cascade Level 4</li>
+<li id=l-407 _a="dael" _r="fantasai"><a href=#l-407>#</a> [18:49] &lt;dael&gt; fantasai: Do people want to resoolve on default now?</li>
+<li id=l-408 _a="tantek" _r="Note"><a href=#l-408>#</a> [18:49] &lt;tantek&gt; Note: resolutions for CSS3-UI issues 78 and 79 captured <a href="https://wiki.csswg.org/spec/css3-ui#issue-78">https://wiki.csswg.org/spec/css3-ui#issue-78</a> and <a href="https://wiki.csswg.org/spec/css3-ui#issue-79">https://wiki.csswg.org/spec/css3-ui#issue-79</a> as discussed earlier in the telcon. Thanks for everyone's input.</li>
+<li id=l-409 _a="dael" _r="TabAtkins"><a href=#l-409>#</a> [18:49] &lt;dael&gt; TabAtkins: I'd rather do that on the list.</li>
+<li id=l-410 _a="dael" _r="fantasai"><a href=#l-410>#</a> [18:49] &lt;dael&gt; fantasai: Okay.</li>
+<li id=l-411 _a="dael" _r="plinss"><a href=#l-411>#</a> [18:49] &lt;dael&gt; plinss: Anything else?</li>
+<li id=l-412 _a="dael" _r="Topic"><a href=#l-412>#</a> [18:50] &lt;dael&gt; Topic: Logical border radius properties</li>
+<li id=l-413 _a="fantasai"><a href=#l-413>#</a> [18:50] &lt;fantasai&gt; <a href="https://lists.w3.org/Archives/Public/www-style/2015Jan/0313.html">https://lists.w3.org/Archives/Public/www-style/2015Jan/0313.html</a></li>
+<li id=l-414 _a="dael" _r="TabAtkins"><a href=#l-414>#</a> [18:50] &lt;dael&gt; TabAtkins: Was that fantasai or was that from cameron?</li>
+<li id=l-415 _a="dael" _r="plinss"><a href=#l-415>#</a> [18:50] &lt;dael&gt; plinss: Cameron brought it up.</li>
+<li id=l-416 _a="fantasai"><a href=#l-416>#</a> [18:50] &lt;fantasai&gt; <a href="https://lists.w3.org/Archives/Public/www-style/2015Jan/0327.html">https://lists.w3.org/Archives/Public/www-style/2015Jan/0327.html</a></li>
+<li id=l-417 _a="Zakim"><a href=#l-417>#</a> [18:50] &lt;Zakim&gt; -adenilson</li>
+<li id=l-418 _a="dael" _r="plinss"><a href=#l-418>#</a> [18:50] &lt;dael&gt; plinss: Anyone want to talk on it?</li>
+<li id=l-419 _a="dael" _r="Rossen"><a href=#l-419>#</a> [18:50] &lt;dael&gt; Rossen: What about?</li>
+<li id=l-420 _a="dael" _r="fantasai"><a href=#l-420>#</a> [18:50] &lt;dael&gt; fantasai: Naming conventions. border-block-start-order-????? is really wrong.</li>
+<li id=l-421 _a="dael" _r="fantasai"><a href=#l-421>#</a> [18:51] &lt;dael&gt; fantasai: There was a convention to do block first. We would jsut want to resolve on that.</li>
+<li id=l-422 _a="dael" _r="TabAtkins"><a href=#l-422>#</a> [18:51] &lt;dael&gt; TabAtkins: Sounds good to me.</li>
+<li id=l-423 _a="dael" _r="fantasai"><a href=#l-423>#</a> [18:51] &lt;dael&gt; fantasai: I posted the proposal in IRC</li>
+<li id=l-424 _a="TabAtkins"><a href=#l-424>#</a> [18:51] &lt;TabAtkins&gt; s/order-?????/inline-start-corner/</li>
+<li id=l-425 _a="TabAtkins"><a href=#l-425>#</a> [18:51] &lt;TabAtkins&gt; s/-corner/-radius/</li>
+<li id=l-426 _a="dael" _r="plinss"><a href=#l-426>#</a> [18:52] &lt;dael&gt; plinss: Okay. Any thoughts about adding this?</li>
+<li id=l-427 _a="dael" _r="Rossen"><a href=#l-427>#</a> [18:52] &lt;dael&gt; Rossen: Sounds reasonable.</li>
+<li id=l-428 _a="Zakim"><a href=#l-428>#</a> [18:52] &lt;Zakim&gt; +??P3</li>
+<li id=l-429 _a="dael" _r="TabAtkins"><a href=#l-429>#</a> [18:52] &lt;dael&gt; TabAtkins: As part of the logical prop it would logicalizing most things. It would be let's use this pattern for things that are extra long.</li>
+<li id=l-430 _a="adenilson" _r="Zakim"><a href=#l-430>#</a> [18:52] &lt;adenilson&gt; Zakim, ??P3 is me.</li>
+<li id=l-431 _a="Zakim" _r="+adenilson"><a href=#l-431>#</a> [18:52] &lt;Zakim&gt; +adenilson; got it</li>
+<li id=l-432 _a="dael" _r="Rossen"><a href=#l-432>#</a> [18:52] &lt;dael&gt; Rossen: fantasai and I have quite a bit of work on that spec. This is good input and makes sense.</li>
+<li id=l-433 _a="dael" _r="fantasai"><a href=#l-433>#</a> [18:52] &lt;dael&gt; fantasai: This would be the pattern for things that reference corners</li>
+<li id=l-434 _a="dael" _r="plinss"><a href=#l-434>#</a> [18:52] &lt;dael&gt; plinss: Okay. Want a resolution?</li>
+<li id=l-435 class=hide><a href=#l-435>#</a> [18:53] * Quits: svillar (~sergio@public.cloak) (&quot;Ex-Chat&quot;)</li>
+<li id=l-436 _a="dael" _r="fantasai"><a href=#l-436>#</a> [18:53] &lt;dael&gt; fantasai: Properties referencing corners dropt he axis mentions and go into the block access first, for example border-start-end-radius</li>
+<li id=l-437 class=hide><a href=#l-437>#</a> [18:53] * Joins: svillar (~sergio@public.cloak)</li>
+<li id=l-438 _a="dael" _r="plinss"><a href=#l-438>#</a> [18:53] &lt;dael&gt; plinss: Obj?</li>
+<li id=l-439 _a="tantek"><a href=#l-439>#</a> [18:53] * tantek so many border-* properties</li>
+<li id=l-440 _a="TabAtkins"><a href=#l-440>#</a> [18:53] &lt;TabAtkins&gt; s/access/axis/</li>
+<li id=l-441 _a="dael" _r="RESOLVED"><a href=#l-441>#</a> [18:53] &lt;dael&gt; RESOLVED: Properties referencing corners drop the axis mentions and go into the block access first, for example border-start-end-radius</li>
+<li id=l-442 _a="dael" _r="Rossen"><a href=#l-442>#</a> [18:54] &lt;dael&gt; Rossen: Is fantasai auto-sizing of ruby not on the agenda anymore?</li>
+<li id=l-443 _a="dael" _r="plinss"><a href=#l-443>#</a> [18:54] &lt;dael&gt; plinss: I think we did it at the F2F</li>
+<li id=l-444 _a="dael" _r="plinss"><a href=#l-444>#</a> [18:54] &lt;dael&gt; plinss: Anything else?</li>
+<li id=l-445 _a="dael" _r="fantasai"><a href=#l-445>#</a> [18:54] &lt;dael&gt; fantasai: I have DoC for flexbox and a couple more issues were raised. Upcoming will be dealing with that, but it's mostly done</li>
+<li id=l-446 _a="dael" _r="plinss"><a href=#l-446>#</a> [18:54] &lt;dael&gt; plinss: That's a future call?</li>
+<li id=l-447 _a="dael" _r="fantasai"><a href=#l-447>#</a> [18:54] &lt;dael&gt; fantasai: Yeah. Prob next week.</li>
+<li id=l-448 _a="Zakim"><a href=#l-448>#</a> [18:55] &lt;Zakim&gt; -hober</li>
+<li id=l-449 _a="Zakim"><a href=#l-449>#</a> [18:55] &lt;Zakim&gt; -TabAtkins</li>
+<li id=l-450 _a="Zakim"><a href=#l-450>#</a> [18:55] &lt;Zakim&gt; -gregwhitworth</li>
+<li id=l-451 _a="alex_antennahouse"><a href=#l-451>#</a> [18:55] &lt;alex_antennahouse&gt; bye</li>
+<li id=l-452 _a="Zakim"><a href=#l-452>#</a> [18:55] &lt;Zakim&gt; - +1.860.479.aadd</li>
+<li id=l-453 _a="Zakim"><a href=#l-453>#</a> [18:55] &lt;Zakim&gt; -BradK</li>
+<li id=l-454 _a="Zakim"><a href=#l-454>#</a> [18:55] &lt;Zakim&gt; -dauwhe</li>
+<li id=l-455 _a="Zakim"><a href=#l-455>#</a> [18:55] &lt;Zakim&gt; -adenilson</li>
+<li id=l-456 _a="Zakim"><a href=#l-456>#</a> [18:55] &lt;Zakim&gt; -[Microsoft]</li>
+<li id=l-457 _a="Zakim"><a href=#l-457>#</a> [18:55] &lt;Zakim&gt; -tgraham</li>
+<li id=l-458 _a="Zakim"><a href=#l-458>#</a> [18:55] &lt;Zakim&gt; -glazou</li>
+<li id=l-459 _a="Zakim"><a href=#l-459>#</a> [18:55] &lt;Zakim&gt; -fantasai</li>
+<li id=l-460 _a="Zakim"><a href=#l-460>#</a> [18:55] &lt;Zakim&gt; -alex_antennahouse</li>
+<li id=l-461 _a="Zakim"><a href=#l-461>#</a> [18:55] &lt;Zakim&gt; -Florian</li>
+<li id=l-462 _a="dael" _r="plinss"><a href=#l-462>#</a> [18:55] &lt;dael&gt; plinss: Alright, everyone gets 10 minutes.</li>
+<li id=l-463 _a="Zakim"><a href=#l-463>#</a> [18:55] &lt;Zakim&gt; -kwkbtr</li>
+<li id=l-464 _a="Zakim"><a href=#l-464>#</a> [18:55] &lt;Zakim&gt; -bcampbell</li>
+<li id=l-465 _a="Zakim"><a href=#l-465>#</a> [18:55] &lt;Zakim&gt; -deirdrelee</li>
+<li id=l-466 _a="Zakim"><a href=#l-466>#</a> [18:55] &lt;Zakim&gt; -tantek</li>
+<li id=l-467 _a="Zakim"><a href=#l-467>#</a> [18:55] &lt;Zakim&gt; -plinss</li>
+<li id=l-468 _a="Zakim"><a href=#l-468>#</a> [18:55] &lt;Zakim&gt; -sanja</li>
+<li id=l-469 class=hide><a href=#l-469>#</a> [18:55] * Quits: AH_Miller (~mike@public.cloak) (&quot;&quot;)</li>
+<li id=l-470 _a="Zakim"><a href=#l-470>#</a> [18:55] &lt;Zakim&gt; -SimonSapin</li>
+<li id=l-471 _a="Zakim"><a href=#l-471>#</a> [18:55] &lt;Zakim&gt; -Bert</li>
+<li id=l-472 _a="Zakim"><a href=#l-472>#</a> [18:55] &lt;Zakim&gt; -dael</li>
+<li id=l-473 _a="Zakim"><a href=#l-473>#</a> [18:55] &lt;Zakim&gt; -??P0</li>
+<li id=l-474 class=hide><a href=#l-474>#</a> [18:55] * Quits: alex_antennahouse (~458c94ae@public.cloak) (&quot;<a href="http://www.mibbit.com">http://www.mibbit.com</a> ajax IRC Client&quot;)</li>
+<li id=l-475 _a="Zakim"><a href=#l-475>#</a> [18:55] &lt;Zakim&gt; -MikeMiller</li>
+<li id=l-476 class=hide><a href=#l-476>#</a> [18:55] * Quits: kwkbtr (~kwkbtr@public.cloak) (&quot;&quot;)</li>
+<li id=l-477 class=hide><a href=#l-477>#</a> [18:55] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-478 class=hide><a href=#l-478>#</a> [18:56] * Quits: dael (~dael@public.cloak) (&quot;Page closed&quot;)</li>
+<li id=l-479 _a="sanja" _r="Zakim"><a href=#l-479>#</a> [18:56] &lt;sanja&gt; Zakim, who is on the phone?</li>
+<li id=l-480 _a="Zakim"><a href=#l-480>#</a> [18:56] &lt;Zakim&gt; On the phone I see +1.631.398.aabb</li>
+<li id=l-481 _a="Zakim"><a href=#l-481>#</a> [18:56] &lt;Zakim&gt; - +1.631.398.aabb</li>
+<li id=l-482 _a="Zakim"><a href=#l-482>#</a> [18:56] &lt;Zakim&gt; Style_CSS FP()12:00PM has ended</li>
+<li id=l-483 _a="Zakim"><a href=#l-483>#</a> [18:56] &lt;Zakim&gt; Attendees were SimonSapin, glazou, +1.479.764.aaaa, Florian, plinss, dael, Rossen, dauwhe, [Microsoft], adenilson, gregwhitworth, fantasai, tgraham, +1.631.398.aabb, MikeMiller,</li>
+<li id=l-484 _a="Zakim"><a href=#l-484>#</a> [18:56] &lt;Zakim&gt; ... alex_antennahouse, kwkbtr, smfr, bcampbell, +43.134.001.00aacc, BradK, +1.860.479.aadd, +1.281.305.aaee, TabAtkins, sanja, hober, Bert, tantek, deirdrelee</li>
+<li id=l-485 class=hide><a href=#l-485>#</a> [18:56] * Parts: glazou (~glazou@public.cloak) (glazou)</li>
+<li id=l-486 class=hide _a="plh-roof"><a href=#l-486>#</a> [18:56] * plh-roof is now known as plh</li>
+<li id=l-487 class=hide><a href=#l-487>#</a> [18:57] * Quits: sanja (~sanja@public.cloak) (&quot;&quot;)</li>
+<li id=l-488 class=hide><a href=#l-488>#</a> [18:57] * Quits: antenna (~antenna@public.cloak) (&quot;Leaving&quot;)</li>
+<li id=l-489 class=hide><a href=#l-489>#</a> [18:58] * Quits: gregwhitworth (~gregwhitworth@public.cloak) (&quot;Page closed&quot;)</li>
+<li id=l-490 class=hide><a href=#l-490>#</a> [19:00] * Quits: smfr (~smfr@public.cloak) (smfr)</li>
+<li id=l-491 _a="tantek"><a href=#l-491>#</a> [19:00] &lt;tantek&gt; hello bcampbell you had a question about nav-* props and a11y?</li>
+<li id=l-492 class=hide><a href=#l-492>#</a> [19:00] * Quits: svillar (~sergio@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-493 _a="bcampbell"><a href=#l-493>#</a> [19:01] &lt;bcampbell&gt; hello tantek, yes. I am looking at the spec, just trying to understand the issue better so I can discuss with a11y experts on my side to better inform you.</li>
+<li id=l-494 _a="bcampbell"><a href=#l-494>#</a> [19:02] &lt;bcampbell&gt; As I understand it, the issue is whether to give items focus when stating a focus direction that were not going to get focus originally in the DOM?</li>
+<li id=l-495 _a="bcampbell"><a href=#l-495>#</a> [19:02] &lt;bcampbell&gt; as opposed to simply jumping from the original focussable items</li>
+<li id=l-496 _a="TabAtkins" _r="bcampbell"><a href=#l-496>#</a> [19:03] &lt;TabAtkins&gt; bcampbell: Right, 'nav-up' explicitly points to a target element that should receive focus when you do an &quot;upwards&quot; spatial navigation from the (focused) source element.</li>
+<li id=l-497 _a="bcampbell"><a href=#l-497>#</a> [19:03] &lt;bcampbell&gt; when I try the jsbin example, the paragraph does not get focus as it says it might.</li>
+<li id=l-498 _a="tantek"><a href=#l-498>#</a> [19:04] &lt;tantek&gt; bcampbell - try it with a div or span destination</li>
+<li id=l-499 _a="TabAtkins" _r="bcampbell"><a href=#l-499>#</a> [19:04] &lt;TabAtkins&gt; bcampbell: Note that desktop browsers dont' generally implement nav-*.</li>
+<li id=l-500 _a="TabAtkins"><a href=#l-500>#</a> [19:04] &lt;TabAtkins&gt; Or do they?</li>
+<li id=l-501 _a="tantek"><a href=#l-501>#</a> [19:04] &lt;tantek&gt; and that</li>
+<li id=l-502 _a="TabAtkins" _r="Anyway"><a href=#l-502>#</a> [19:04] &lt;TabAtkins&gt; Anyway, some TV browsers do.</li>
+<li id=l-503 _a="bcampbell" _r="Okay"><a href=#l-503>#</a> [19:04] &lt;bcampbell&gt; Okay, but I can understand the issue without that working.</li>
+<li id=l-504 _a="tantek" _r="bcampbell"><a href=#l-504>#</a> [19:04] &lt;tantek&gt; bcampbell: for any such test you need an &quot;atomic&quot; test first on the page that shows whether the property is supported *at all* in the browser you're using</li>
+<li id=l-505 _a="Florian" _r="bcampbell"><a href=#l-505>#</a> [19:04] &lt;Florian&gt; bcampbell: yes. The currently implied behavior is to make the target of nav-* focusable if it wasn't before. A alternative would be to follow dom order, starting with children, order until you find a focusable element and focus that instead.</li>
+<li id=l-506 _a="tantek"><a href=#l-506>#</a> [19:04] &lt;tantek&gt; e.g. nav-right from one &lt;a href&gt; to another &lt;a href&gt;</li>
+<li id=l-507 _a="tantek"><a href=#l-507>#</a> [19:05] &lt;tantek&gt; which is the common case</li>
+<li id=l-508 _a="tantek"><a href=#l-508>#</a> [19:05] &lt;tantek&gt; so if you're testing a particular browser/implementation, start with that</li>
+<li id=l-509 _a="tantek"><a href=#l-509>#</a> [19:05] &lt;tantek&gt; the point is that as spec'd (and will be tightened), nav-* properties can make any element focusable as the destination of directional navigation</li>
+<li id=l-510 _a="tantek"><a href=#l-510>#</a> [19:06] &lt;tantek&gt; that has TWO impacts</li>
+<li id=l-511 _a="tantek"><a href=#l-511>#</a> [19:06] &lt;tantek&gt; 1. that element is in :focus</li>
+<li id=l-512 _a="tantek"><a href=#l-512>#</a> [19:06] &lt;tantek&gt; 2. that element receives events as focused elements do</li>
+<li id=l-513 _a="tantek"><a href=#l-513>#</a> [19:06] &lt;tantek&gt; TabAtkins pointed that out</li>
+<li id=l-514 _a="Florian" _r="TabAtkins"><a href=#l-514>#</a> [19:06] &lt;Florian&gt; TabAtkins: Presto Opera implements nav-* on desktop. Webkit needs a command line argument to activate it, but does implement spatial navigation on desktop</li>
+<li id=l-515 _a="tantek"><a href=#l-515>#</a> [19:06] &lt;tantek&gt; and the &quot;obvious&quot; use-case for that is games</li>
+<li id=l-516 _a="TabAtkins" _r="Florian"><a href=#l-516>#</a> [19:06] &lt;TabAtkins&gt; Florian: Ah, thanks.</li>
+<li id=l-517 _a="tantek"><a href=#l-517>#</a> [19:06] &lt;tantek&gt; which are typically an a11y challenge in general</li>
+<li id=l-518 class=hide _a="leaverou_away"><a href=#l-518>#</a> [19:06] * leaverou_away is now known as leaverou</li>
+<li id=l-519 _a="Florian" _r="TabAtkins"><a href=#l-519>#</a> [19:06] &lt;Florian&gt; TabAtkins: Blink same as webkit, as the predates the fork</li>
+<li id=l-520 _a="tantek"><a href=#l-520>#</a> [19:06] &lt;tantek&gt; so if we can figure out how to make things better here for a11y, we can *try* to improve the situation with games</li>
+<li id=l-521 _a="TabAtkins" _r="Or"><a href=#l-521>#</a> [19:06] &lt;TabAtkins&gt; Or, for example, SVG graphs.</li>
+<li id=l-522 _a="TabAtkins"><a href=#l-522>#</a> [19:07] &lt;TabAtkins&gt; spatial navigation across graph links.</li>
+<li id=l-523 _a="tantek"><a href=#l-523>#</a> [19:07] &lt;tantek&gt; Florian - do you have a URL documenting how to activate WebKit directional navigation?</li>
+<li id=l-524 _a="tantek"><a href=#l-524>#</a> [19:07] &lt;tantek&gt; I'd like to link to those in the spec or at least wiki</li>
+<li id=l-525 _a="tantek"><a href=#l-525>#</a> [19:07] &lt;tantek&gt; both for a11y folks to try out</li>
+<li id=l-526 _a="tantek"><a href=#l-526>#</a> [19:07] &lt;tantek&gt; and for other implementers to play with while they themselves are implementing</li>
+<li id=l-527 _a="tantek"><a href=#l-527>#</a> [19:07] &lt;tantek&gt; e.g. FirefoxOS is looking at directional nav now</li>
+<li id=l-528 _a="bcampbell"><a href=#l-528>#</a> [19:08] &lt;bcampbell&gt; Would all the elements receive focus automatically or would you need to tag them as such? I'm assuming here that it would be automtic within the frame that all elements receive focus?</li>
+<li id=l-529 _a="tantek"><a href=#l-529>#</a> [19:08] &lt;tantek&gt; because of the growing number of different devices using it</li>
+<li id=l-530 _a="tantek"><a href=#l-530>#</a> [19:08] &lt;tantek&gt; or working on using it, e.g. TVs or those USB sticks that plug into tvs</li>
+<li id=l-531 _a="bcampbell" _r="yes"><a href=#l-531>#</a> [19:08] &lt;bcampbell&gt; yes, a working demo would be really great</li>
+<li id=l-532 _a="tantek" _r="bcampbell"><a href=#l-532>#</a> [19:08] &lt;tantek&gt; bcampbell: yes I'm going to add a working example to the spec</li>
+<li id=l-533 _a="tantek"><a href=#l-533>#</a> [19:08] &lt;tantek&gt; as I have with other features</li>
+<li id=l-534 _a="tantek"><a href=#l-534>#</a> [19:08] &lt;tantek&gt; e.g. box-sizing, cursor, text-overflow</li>
+<li id=l-535 _a="tantek" _r="bcampbell"><a href=#l-535>#</a> [19:09] &lt;tantek&gt; bcampbell: I don't know what you mean by within the frame</li>
+<li id=l-536 _a="Florian" _r="tantek"><a href=#l-536>#</a> [19:09] &lt;Florian&gt; tantek: no url. Just entries in my bash history.</li>
+<li id=l-537 _a="bcampbell"><a href=#l-537>#</a> [19:09] &lt;bcampbell&gt; I was trying to use the draft language :)</li>
+<li id=l-538 _a="TabAtkins" _r="LIke"><a href=#l-538>#</a> [19:09] &lt;TabAtkins&gt; LIke, they're not tab-focusable (unless you use the tabindex attribute, or we reintroduce the dropped nav-index property).</li>
+<li id=l-539 _a="bcampbell"><a href=#l-539>#</a> [19:09] &lt;bcampbell&gt; right</li>
+<li id=l-540 _a="tantek"><a href=#l-540>#</a> [19:10] &lt;tantek&gt; Florian - maybe you could write up something brief on the CSSWG wiki?</li>
+<li id=l-541 _a="tantek"><a href=#l-541>#</a> [19:10] &lt;tantek&gt; or a blog post</li>
+<li id=l-542 _a="Florian" _r="actually"><a href=#l-542>#</a> [19:10] &lt;Florian&gt; actually, it looks like I was wrong, this seems to be a blink only feature, not a webkit one</li>
+<li id=l-543 _a="Florian"><a href=#l-543>#</a> [19:11] &lt;Florian&gt; open /Applications/Google\ Chrome.app --args --enable-spatial-navigation</li>
+<li id=l-544 _a="bcampbell" _r="Sorry"><a href=#l-544>#</a> [19:11] &lt;bcampbell&gt; Sorry, yes, it's a bit muddy to me now. For instance, if you put a nav-down on  a button mid-way down a page, does everything after come into focus, just the next focusable element, or all things after the button.</li>
+<li id=l-545 _a="Florian" _r="tantek"><a href=#l-545>#</a> [19:11] &lt;Florian&gt; tantek: which wiki page do you want this in?</li>
+<li id=l-546 _a="TabAtkins" _r="bcampbell"><a href=#l-546>#</a> [19:11] &lt;TabAtkins&gt; bcampbell: OH, you misunderstand the feature entirely!</li>
+<li id=l-547 _a="bcampbell"><a href=#l-547>#</a> [19:11] &lt;bcampbell&gt; oh geez, figures</li>
+<li id=l-548 _a="TabAtkins"><a href=#l-548>#</a> [19:11] &lt;TabAtkins&gt; nav-down contains an ID of the element that'll be navigated to when you press down from the source element.</li>
+<li id=l-549 _a="bcampbell"><a href=#l-549>#</a> [19:11] &lt;bcampbell&gt; so I have it upside-down in my head</li>
+<li id=l-550 _a="bcampbell"><a href=#l-550>#</a> [19:12] &lt;bcampbell&gt; when you say &quot;press down&quot; you mean literally the down arrow (when talking keyboard).</li>
+<li id=l-551 _a="TabAtkins"><a href=#l-551>#</a> [19:12] &lt;TabAtkins&gt; Yeah (or equivalent button on your input device).</li>
+<li id=l-552 _a="bcampbell" _r="ok"><a href=#l-552>#</a> [19:12] &lt;bcampbell&gt; ok, right</li>
+<li id=l-553 _a="bcampbell" _r="ok"><a href=#l-553>#</a> [19:13] &lt;bcampbell&gt; ok, this is coming together now thanks</li>
+<li id=l-554 _a="bcampbell"><a href=#l-554>#</a> [19:13] &lt;bcampbell&gt; and thus the question of widgets</li>
+<li id=l-555 _a="TabAtkins"><a href=#l-555>#</a> [19:13] &lt;TabAtkins&gt; So I have #a { nav-down: #b; }, then if #a is focused, I can press Down to move the focus to #b.</li>
+<li id=l-556 _a="bcampbell"><a href=#l-556>#</a> [19:13] &lt;bcampbell&gt; that use arrows</li>
+<li id=l-557 _a="tantek"><a href=#l-557>#</a> [19:14] &lt;tantek&gt; Florian - probably a new one?</li>
+<li id=l-558 _a="tantek"><a href=#l-558>#</a> [19:14] &lt;tantek&gt; let me check</li>
+<li id=l-559 _a="bcampbell"><a href=#l-559>#</a> [19:15] &lt;bcampbell&gt; so they are not in the tab order, they are in a nav order, such as being in a nav-tree for a keyboard user</li>
+<li id=l-560 _a="tantek" _r="bcampbell"><a href=#l-560>#</a> [19:15] &lt;tantek&gt; bcampbell: correct!</li>
+<li id=l-561 _a="tantek"><a href=#l-561>#</a> [19:15] &lt;tantek&gt; except I would say not in the *sequential or linear nav order* rather than *tab*</li>
+<li id=l-562 _a="tantek"><a href=#l-562>#</a> [19:15] &lt;tantek&gt; the *tab key* is just one way to do sequential or linear nav</li>
+<li id=l-563 _a="bcampbell"><a href=#l-563>#</a> [19:16] &lt;bcampbell&gt; yes</li>
+<li id=l-564 _a="bcampbell"><a href=#l-564>#</a> [19:16] &lt;bcampbell&gt; gotcha</li>
+<li id=l-565 _a="tantek"><a href=#l-565>#</a> [19:16] &lt;tantek&gt; tab / ctrl-tab to go backwards</li>
+<li id=l-566 _a="Florian"><a href=#l-566>#</a> [19:17] &lt;Florian&gt; A new one means no-one will find it, and then it isn't terribly useful. If there is a good place for info like this, I'll put it there. Otherwise, maybe this is the excuse I needed to get a (self hosted) blog :) The last one (a while ago) died when the host gave up on hosting.</li>
+<li id=l-567 _a="tantek"><a href=#l-567>#</a> [19:17] &lt;tantek&gt; Florian - not true about no one finding it</li>
+<li id=l-568 _a="tantek"><a href=#l-568>#</a> [19:17] &lt;tantek&gt; that's what links are for :)</li>
+<li id=l-569 _a="tantek"><a href=#l-569>#</a> [19:18] &lt;tantek&gt; and ++ to a self-hosted blog!</li>
+<li id=l-570 _a="bcampbell"><a href=#l-570>#</a> [19:18] &lt;bcampbell&gt; Ultimately this is for jumping around to elements non-sequentially</li>
+<li id=l-571 _a="tantek"><a href=#l-571>#</a> [19:18] &lt;tantek&gt; even if you just put up static HTML pages for now at stable permalinks</li>
+<li id=l-572 _a="tantek" _r="bcampbell"><a href=#l-572>#</a> [19:18] &lt;tantek&gt; bcampbell: rather than &quot;non-sequentially&quot; - the point is, *directionally*</li>
+<li id=l-573 _a="tantek"><a href=#l-573>#</a> [19:18] &lt;tantek&gt; I prefer a positive framing</li>
+<li id=l-574 _a="bcampbell"><a href=#l-574>#</a> [19:18] &lt;bcampbell&gt; ok</li>
+<li id=l-575 _a="tantek"><a href=#l-575>#</a> [19:18] &lt;tantek&gt; rather than a &quot;this is not x&quot; framing</li>
+<li id=l-576 _a="bcampbell"><a href=#l-576>#</a> [19:18] &lt;bcampbell&gt; sure</li>
+<li id=l-577 _a="bcampbell"><a href=#l-577>#</a> [19:18] &lt;bcampbell&gt; sorry</li>
+<li id=l-578 _a="bcampbell"><a href=#l-578>#</a> [19:18] &lt;bcampbell&gt; cup is half full, that works for me</li>
+<li id=l-579 _a="TabAtkins"><a href=#l-579>#</a> [19:18] &lt;TabAtkins&gt; There is a sequence, it's just not linear. ^_^</li>
+<li id=l-580 _a="tantek"><a href=#l-580>#</a> [19:19] &lt;tantek&gt; that ^^^</li>
+<li id=l-581 _a="tantek"><a href=#l-581>#</a> [19:19] &lt;tantek&gt; it's a 2D sequence</li>
+<li id=l-582 _a="tantek"><a href=#l-582>#</a> [19:19] &lt;tantek&gt; we may introduce a 3D sequence in the future :)</li>
+<li id=l-583 _a="tantek"><a href=#l-583>#</a> [19:19] &lt;tantek&gt; per webVR</li>
+<li id=l-584 _a="bcampbell"><a href=#l-584>#</a> [19:19] &lt;bcampbell&gt; I have to look at it the reverse, but what I really like to hear is what you just said, the purposes in a positive way so I can make valid arguments.</li>
+<li id=l-585 _a="bcampbell" _r="yes"><a href=#l-585>#</a> [19:19] &lt;bcampbell&gt; yes, quantum sequencing</li>
+<li id=l-586 class=hide _a="Rossen"><a href=#l-586>#</a> [19:20] * Rossen is now known as Rossen_away</li>
+<li id=l-587 _a="tantek" _r="bcampbell"><a href=#l-587>#</a> [19:20] &lt;tantek&gt; bcampbell: most UIs on TVs are 2D</li>
+<li id=l-588 _a="tantek"><a href=#l-588>#</a> [19:20] &lt;tantek&gt; think of DVD UIs for example</li>
+<li id=l-589 _a="bcampbell"><a href=#l-589>#</a> [19:20] &lt;bcampbell&gt; right</li>
+<li id=l-590 _a="tantek"><a href=#l-590>#</a> [19:20] &lt;tantek&gt; where you have a bunch of &quot;hot&quot; areas scattered around some graphic image, or moving background</li>
+<li id=l-591 _a="bcampbell"><a href=#l-591>#</a> [19:20] &lt;bcampbell&gt; and right now, generally, you can only arrow in the sequence of the tab order?</li>
+<li id=l-592 _a="tantek"><a href=#l-592>#</a> [19:20] &lt;tantek&gt; and you need a way to say, when you press the &quot;&gt;&quot; button, it should go from focusing hot area A to hot area B</li>
+<li id=l-593 _a="bcampbell"><a href=#l-593>#</a> [19:20] &lt;bcampbell&gt; ok</li>
+<li id=l-594 _a="tantek"><a href=#l-594>#</a> [19:20] &lt;tantek&gt; on a DVD there is no tab order for example</li>
+<li id=l-595 _a="tantek"><a href=#l-595>#</a> [19:21] &lt;tantek&gt; there is ONLY directional nav</li>
+<li id=l-596 _a="tantek"><a href=#l-596>#</a> [19:21] &lt;tantek&gt; that's the experience we're talking about</li>
+<li id=l-597 _a="bcampbell"><a href=#l-597>#</a> [19:21] &lt;bcampbell&gt; makes sense</li>
+<li id=l-598 _a="tantek"><a href=#l-598>#</a> [19:21] &lt;tantek&gt; except instead of a DVD UI, imagine it's built in HTML</li>
+<li id=l-599 _a="tantek"><a href=#l-599>#</a> [19:21] &lt;tantek&gt; + CSS of course</li>
+<li id=l-600 _a="tantek"><a href=#l-600>#</a> [19:21] &lt;tantek&gt; but it could look exactly the same</li>
+<li id=l-601 _a="tantek"><a href=#l-601>#</a> [19:21] &lt;tantek&gt; I started mocking one up years ago</li>
+<li id=l-602 _a="tantek"><a href=#l-602>#</a> [19:21] &lt;tantek&gt; hmm maybe I should put it in the spec</li>
+<li id=l-603 _a="bcampbell"><a href=#l-603>#</a> [19:22] &lt;bcampbell&gt; I'm working on a11y implications in my head, but it would also probably be a general usability issue when talking about keyboards.</li>
+<li id=l-604 _a="tantek" _r="here"><a href=#l-604>#</a> [19:23] &lt;tantek&gt; here: <a href="http://tantek.com/CSS/Examples/matrixdvdmenu.html">http://tantek.com/CSS/Examples/matrixdvdmenu.html</a></li>
+<li id=l-605 _a="TabAtkins" _r="tantek"><a href=#l-605>#</a> [19:24] &lt;TabAtkins&gt; tantek: Most DVD menus would just be a bunch of abspos images, of course. ^_^</li>
+<li id=l-606 _a="tantek"><a href=#l-606>#</a> [19:24] * tantek is impressed with TabAtkins's knowledge of &quot;most DVD menus&quot; ;)</li>
+<li id=l-607 _a="TabAtkins"><a href=#l-607>#</a> [19:25] &lt;TabAtkins&gt; I've seen a lot of DVDs!</li>
+<li id=l-608 _a="TabAtkins"><a href=#l-608>#</a> [19:25] &lt;TabAtkins&gt; They're all pretty consistent.</li>
+<li id=l-609 _a="TabAtkins"><a href=#l-609>#</a> [19:25] &lt;TabAtkins&gt; In other words, they could all be described with SVG.</li>
+<li id=l-610 _a="bcampbell"><a href=#l-610>#</a> [19:26] &lt;bcampbell&gt; ignorant question: where is the crossover with tv interfaces and html/css?</li>
+<li id=l-611 _a="bcampbell"><a href=#l-611>#</a> [19:26] &lt;bcampbell&gt; Is DirectTv's interface in html?</li>
+<li id=l-612 _a="bcampbell"><a href=#l-612>#</a> [19:27] &lt;bcampbell&gt; or is this just an example for tv &quot;on a browser&quot; - or am I just lost and need more coffee?</li>
+<li id=l-613 _a="tantek" _r="TabAtkins"><a href=#l-613>#</a> [19:29] &lt;tantek&gt; TabAtkins: I know, let's just use SVG as the UI platform :P ;)</li>
+<li id=l-614 _a="tantek" _r="bcampbell"><a href=#l-614>#</a> [19:29] &lt;tantek&gt; bcampbell: set top boxes from Microsoft (e.g. WebTV) since 2000s all have UI in HTML+CSS+JS</li>
+<li id=l-615 _a="tantek"><a href=#l-615>#</a> [19:30] &lt;tantek&gt; I personally worked on that 2000-2004.</li>
+<li id=l-616 _a="tantek"><a href=#l-616>#</a> [19:30] &lt;tantek&gt; and they've continued to the present day</li>
+<li id=l-617 _a="bcampbell"><a href=#l-617>#</a> [19:30] &lt;bcampbell&gt; Excellent. I was unaware what platform they have been on.</li>
+<li id=l-618 _a="tantek"><a href=#l-618>#</a> [19:31] &lt;tantek&gt; WebTV was the pioneer here</li>
+<li id=l-619 _a="tantek"><a href=#l-619>#</a> [19:31] &lt;tantek&gt; but they did most of it with custom HTML</li>
+<li id=l-620 _a="tantek"><a href=#l-620>#</a> [19:31] &lt;tantek&gt; the MSTV platform stuff was what I worked on, which used the Tasman rendering engine, and we built our UIs with proper (X)HTML+CSS+JS</li>
+<li id=l-621 _a="tantek"><a href=#l-621>#</a> [19:31] &lt;tantek&gt; some of the first set top boxes to do so (if not the first)</li>
+<li id=l-622 _a="TabAtkins"><a href=#l-622>#</a> [19:31] &lt;TabAtkins&gt; I know there are more these days, but not sure of specifics. Generally, though, embedding WebKit as your UI layer is pretty common.</li>
+<li id=l-623 _a="shepazu"><a href=#l-623>#</a> [19:31] &lt;shepazu&gt; Opera was used as the embedded UI (and browser) on many set-top boxes, with HTML+CSS+JS+SVG as the UI</li>
+<li id=l-624 _a="tantek"><a href=#l-624>#</a> [19:32] &lt;tantek&gt; there were also other industry-vertical specific attempts like DVB-HTML</li>
+<li id=l-625 _a="shepazu"><a href=#l-625>#</a> [19:33] &lt;shepazu&gt; around 2003-2007, there were many set-top boxes using embedded SVG UAs as the UI, with the UI typically being SVG-Tiny 1.1 or 1.2</li>
+<li id=l-626 _a="shepazu"><a href=#l-626>#</a> [19:33] &lt;shepazu&gt; I think (?) that faded off in 2008-2010, but I'm not sure</li>
+<li id=l-627 _a="shepazu"><a href=#l-627>#</a> [19:33] &lt;shepazu&gt; BitFlash and Ikivo were big players in that space</li>
+<li id=l-628 _a="shepazu"><a href=#l-628>#</a> [19:33] &lt;shepazu&gt; Opera too</li>
+<li id=l-629 _a="tantek" _r="bcampbell"><a href=#l-629>#</a> [19:36] &lt;tantek&gt; bcampbell: here's further documentation: <a href="https://en.wikipedia.org/wiki/Tasman_%28layout_engine%29#Version_history">https://en.wikipedia.org/wiki/Tasman_%28layout_engine%29#Version_history</a> specifically note &quot;The Tasman engine is now used in the Microsoft TV Mediaroom Edition.&quot;</li>
+<li id=l-630 _a="bcampbell" _r="So"><a href=#l-630>#</a> [19:37] &lt;bcampbell&gt; So, is directional navigation for this use case specifically?</li>
+<li id=l-631 _a="bcampbell"><a href=#l-631>#</a> [19:38] &lt;bcampbell&gt; and thank you, I find this very interesting and could get lost now for hours if it weren't for several more meetings I must not miss.</li>
+<li id=l-632 _a="shepazu" _r="Joost"><a href=#l-632>#</a> [19:38] &lt;shepazu&gt; Joost, an IPTV company, used SVG exclusively as it UI for the first iterations <a href="https://en.wikipedia.org/wiki/Joost">https://en.wikipedia.org/wiki/Joost</a></li>
+<li id=l-633 _a="tantek" _r="bcampbell"><a href=#l-633>#</a> [19:39] &lt;tantek&gt; bcampbell: yes</li>
+<li id=l-634 _a="shepazu"><a href=#l-634>#</a> [19:39] &lt;shepazu&gt; I think Joost might have moved to Silverlight later on</li>
+<li id=l-635 _a="tantek"><a href=#l-635>#</a> [19:39] &lt;tantek&gt; in fact it started in WebTV as proprietary extensions to HTML</li>
+<li id=l-636 _a="tantek"><a href=#l-636>#</a> [19:40] &lt;tantek&gt; but when we were looking at follow-on platform updates, e.g. for the UltimateTV and MSTV product lines, I worked actively on opening those features up, in proposals</li>
+<li id=l-637 _a="tantek"><a href=#l-637>#</a> [19:40] &lt;tantek&gt; hence the nav-* directional properties proposed in CSS3-UI back when I was working on set top boxes</li>
+<li id=l-638 _a="bcampbell"><a href=#l-638>#</a> [19:42] &lt;bcampbell&gt; I would think a creative designer could also figure out ways to leverage this in web apps/pages... the problem being the usual: devs hacking to save time, using things like this to fix the order rather than doing good code.</li>
+<li id=l-639 _a="tantek" _r="bcampbell"><a href=#l-639>#</a> [19:45] &lt;tantek&gt; bcampbell: it is *definitely* a design problem</li>
+<li id=l-640 _a="tantek"><a href=#l-640>#</a> [19:45] &lt;tantek&gt; that's why we included it in the CSS</li>
+<li id=l-641 _a="tantek"><a href=#l-641>#</a> [19:45] &lt;tantek&gt; specifically *directional* 2D navigation is heavily tied to the layout of the elements</li>
+<li id=l-642 _a="tantek"><a href=#l-642>#</a> [19:45] &lt;tantek&gt; thus it makes sense to specify them in the same place, ergo style sheet</li>
+<li id=l-643 _a="tantek"><a href=#l-643>#</a> [19:46] &lt;tantek&gt; more important than an abstract notion of &quot;separate behavior and presentation&quot;</li>
+<li id=l-644 _a="bcampbell"><a href=#l-644>#</a> [19:47] &lt;bcampbell&gt; I think I see what you mean when you say 2D vs 3D ... you can have a widget literally on top of others, with layering... you could either tab to the next widget, or arrow to something somewhere else on the screen.</li>
+<li id=l-645 _a="bcampbell" _r="yeah"><a href=#l-645>#</a> [19:47] &lt;bcampbell&gt; yeah, wow.</li>
+<li id=l-646 _a="bcampbell"><a href=#l-646>#</a> [19:50] &lt;bcampbell&gt; It would be interesting to see an example of directional nav surrounding other sequential nav with some widget there which uses the arrow keys, also.</li>
+<li id=l-647 _a="tantek" _r="bcampbell"><a href=#l-647>#</a> [19:52] &lt;tantek&gt; bcampbell: with current display devices, only 2D or 2.5D really makes sense</li>
+<li id=l-648 _a="tantek"><a href=#l-648>#</a> [19:52] &lt;tantek&gt; maybe with some overlap</li>
+<li id=l-649 _a="tantek"><a href=#l-649>#</a> [19:52] &lt;tantek&gt; and hence sometimes the focus outline of something *in the back* showing up *on top* of stuff *in front*</li>
+<li id=l-650 _a="tantek"><a href=#l-650>#</a> [19:52] &lt;tantek&gt; but once we get to VR screens, all bets are off</li>
+<li id=l-651 _a="tantek"><a href=#l-651>#</a> [19:53] &lt;tantek&gt; designers are coming up with new ways to make webVR more usable than just an extension of the 2D/2.5D experience</li>
+<li id=l-652 _a="tantek"><a href=#l-652>#</a> [19:53] &lt;tantek&gt; thus we don't actually know yet what they'll settle on</li>
+<li id=l-653 _a="tantek"><a href=#l-653>#</a> [19:53] &lt;tantek&gt; they're still experimenting with UX!</li>
+<li id=l-654 _a="bcampbell"><a href=#l-654>#</a> [19:53] &lt;bcampbell&gt; ha</li>
+<li id=l-655 _a="bcampbell"><a href=#l-655>#</a> [19:53] &lt;bcampbell&gt; that's my thing</li>
+<li id=l-656 _a="bcampbell"><a href=#l-656>#</a> [19:54] &lt;bcampbell&gt; used to be</li>
+<li id=l-657 _a="tantek"><a href=#l-657>#</a> [19:55] &lt;tantek&gt; UX or VR?</li>
+<li id=l-658 _a="bcampbell"><a href=#l-658>#</a> [19:56] &lt;bcampbell&gt; Interaction - UX</li>
+<li id=l-659 _a="bcampbell"><a href=#l-659>#</a> [19:56] &lt;bcampbell&gt; HCI</li>
+<li id=l-660 _a="bcampbell"><a href=#l-660>#</a> [19:56] &lt;bcampbell&gt; I jumped into accessibility about a year ago</li>
+<li id=l-661 _a="bcampbell"><a href=#l-661>#</a> [19:58] &lt;bcampbell&gt; the usual story, web dev for many years, specialized in ux, then more into HCI (MS), consulted and now trying to use it all to help people with disabilities :)</li>
+<li id=l-662 _a="bcampbell"><a href=#l-662>#</a> [19:59] &lt;bcampbell&gt; thank you so much for clarifying this for me. I have to drop for another meeting, but would like to stay in this loop and can bring this to the a11y experts here, too, for help.</li>
+<li id=l-663 class=hide><a href=#l-663>#</a> [20:04] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-664 class=hide _a="leaverou"><a href=#l-664>#</a> [20:10] * leaverou is now known as leaverou_away</li>
+<li id=l-665 _a="tantek" _r="bcampbell"><a href=#l-665>#</a> [20:11] &lt;tantek&gt; bcampbell: that's a very logical progression. makes a lot of empathetic sense :)</li>
+<li id=l-666 _a="tantek"><a href=#l-666>#</a> [20:11] &lt;tantek&gt; I really appreciate you getting and bringing a11y perspective to our UI work. It's super important.</li>
+<li id=l-667 class=hide><a href=#l-667>#</a> [20:12] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+<li id=l-668 class=hide><a href=#l-668>#</a> [20:12] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+<li id=l-669 _a="bcampbell"><a href=#l-669>#</a> [20:12] &lt;bcampbell&gt; Thank you. It might sound funny but I'm honored to be involved and always hoping to have more time to be more involved than I am now.</li>
+<li id=l-670 _a="bcampbell"><a href=#l-670>#</a> [20:15] &lt;bcampbell&gt; Really hoping to be at f2f in NY, too.</li>
+<li id=l-671 _a="tantek"><a href=#l-671>#</a> [20:15] &lt;tantek&gt; I'm also happy we've got more people interested and participating in UI related discussions in CSS. For a while it seemed like no one else cared.</li>
+<li id=l-672 _a="tantek"><a href=#l-672>#</a> [20:16] &lt;tantek&gt; Hope to see you in NY also.</li>
+<li id=l-673 class=hide><a href=#l-673>#</a> [20:18] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-674 class=hide><a href=#l-674>#</a> [20:27] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-675 class=hide><a href=#l-675>#</a> [20:35] * Quits: RRSAgent (rrsagent@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-676 class=hide><a href=#l-676>#</a> [20:37] * Quits: BradK (~bradk@public.cloak) (&quot;Buh bye&quot;)</li>
+<li id=l-677 class=hide><a href=#l-677>#</a> [20:42] * Quits: zcorpan (~zcorpan@public.cloak) (Client closed connection)</li>
+<li id=l-678 class=hide><a href=#l-678>#</a> [20:46] * Quits: andreyr (~andreyr@public.cloak) (&quot;Page closed&quot;)</li>
+<li id=l-679 class=hide><a href=#l-679>#</a> [20:47] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-680 class=hide><a href=#l-680>#</a> [20:47] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-681 class=hide _a="leaverou_away"><a href=#l-681>#</a> [21:05] * leaverou_away is now known as leaverou</li>
+<li id=l-682 _a="Zakim"><a href=#l-682>#</a> [21:11] * Zakim excuses himself; his presence no longer seems to be needed</li>
+<li id=l-683 class=hide><a href=#l-683>#</a> [21:11] * Parts: Zakim (zakim@public.cloak) (Zakim)</li>
+<li id=l-684 class=hide><a href=#l-684>#</a> [21:12] * Quits: Florian (~Florian@public.cloak) (Client closed connection)</li>
+<li id=l-685 class=hide><a href=#l-685>#</a> [21:12] * Joins: Florian (~Florian@public.cloak)</li>
+<li id=l-686 class=hide><a href=#l-686>#</a> [21:15] * Quits: Florian (~Florian@public.cloak) (Client closed connection)</li>
+<li id=l-687 class=hide><a href=#l-687>#</a> [21:17] * Joins: Florian (~Florian@public.cloak)</li>
+<li id=l-688 class=hide><a href=#l-688>#</a> [21:21] * Quits: adenilson (~anonymous@public.cloak) (adenilson)</li>
+<li id=l-689 class=hide><a href=#l-689>#</a> [21:29] * Quits: Florian (~Florian@public.cloak) (Client closed connection)</li>
+<li id=l-690 class=hide><a href=#l-690>#</a> [21:58] * Joins: zcorpan (~zcorpan@public.cloak)</li>
+<li id=l-691 class=hide><a href=#l-691>#</a> [21:58] * Quits: bcampbell (~chatzilla@public.cloak) (&quot;ChatZilla 0.9.91.1 [Firefox 31.4.0/20150105205548]&quot;)</li>
+<li id=l-692 class=hide><a href=#l-692>#</a> [22:11] * Joins: elijah_ (~elijah@public.cloak)</li>
+<li id=l-693 class=hide><a href=#l-693>#</a> [22:11] * Quits: elijah_ (~elijah@public.cloak) (&quot;Page closed&quot;)</li>
+<li id=l-694 class=hide><a href=#l-694>#</a> [22:11] * Joins: elijah (~sid21431@public.cloak)</li>
+<li id=l-695 _a="elijah"><a href=#l-695>#</a> [22:11] &lt;elijah&gt; help</li>
+<li id=l-696 _a="elijah"><a href=#l-696>#</a> [22:12] &lt;elijah&gt; help?</li>
+<li id=l-697 _a="elijah"><a href=#l-697>#</a> [22:12] &lt;elijah&gt; channellist?</li>
+<li id=l-698 class=hide _a="Rossen_away"><a href=#l-698>#</a> [22:15] * Rossen_away is now known as Rossen</li>
+<li id=l-699 class=hide _a="Rossen"><a href=#l-699>#</a> [22:25] * Rossen is now known as Rossen_away</li>
+<li id=l-700 _a="tantek"><a href=#l-700>#</a> [22:26] &lt;tantek&gt; elijah what channel are you looking for?</li>
+<li id=l-701 class=hide><a href=#l-701>#</a> [22:29] * Joins: Florian (~Florian@public.cloak)</li>
+<li id=l-702 class=hide><a href=#l-702>#</a> [22:36] * Quits: Florian (~Florian@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-703 class=hide _a="heycam|away"><a href=#l-703>#</a> [22:42] * heycam|away is now known as heycam</li>
+<li id=l-704 _a="elijah" _r="tantek"><a href=#l-704>#</a> [22:51] &lt;elijah&gt; tantek: was just trying to lurk on some more channels</li>
+<li id=l-705 _a="elijah" _r="tantek"><a href=#l-705>#</a> [22:51] &lt;elijah&gt; tantek: I found a small list on the web so that is good to start; #css, #html-wg, #html, #webapps</li>
+<li id=l-706 _a="tantek"><a href=#l-706>#</a> [22:52] &lt;tantek&gt; that's a decent start yes</li>
+<li id=l-707 _a="elijah" _r="tantek"><a href=#l-707>#</a> [22:52] &lt;elijah&gt; tantek: if you have any others that have activity from time to time that would be appreciated</li>
+<li id=l-708 _a="tantek"><a href=#l-708>#</a> [22:54] &lt;tantek&gt; elijah are you interested in social web related topics?</li>
+<li id=l-709 _a="elijah" _r="tantek"><a href=#l-709>#</a> [22:56] &lt;elijah&gt; tantek: sure</li>
+<li id=l-710 _a="tantek"><a href=#l-710>#</a> [22:57] &lt;tantek&gt; feel free to lurk in #social also then</li>
+<li id=l-711 _a="elijah" _r="tantek"><a href=#l-711>#</a> [22:57] &lt;elijah&gt; tantek: thanks!</li>
+<li id=l-712 _a="tantek"><a href=#l-712>#</a> [22:58] &lt;tantek&gt; np!</li>
+<li id=l-713 class=hide><a href=#l-713>#</a> [23:11] * Quits: tantek (~tantek@public.cloak) (tantek)</li>
+<li id=l-714 class=hide><a href=#l-714>#</a> [23:12] * Quits: Ms2ger (~Ms2ger@public.cloak) (&quot;nn&quot;)</li>
+<li id=l-715 class=hide><a href=#l-715>#</a> [23:16] * Quits: antonp (~Thunderbird@public.cloak) (antonp)</li>
+<li id=l-716 class=hide><a href=#l-716>#</a> [23:26] * Quits: bkardell_ (~uid10373@public.cloak) (&quot;Connection closed for inactivity&quot;)</li>
+<li id=l-717 class=hide _a="leaverou"><a href=#l-717>#</a> [23:43] * leaverou is now known as leaverou_away</li>
+<li id=l-718 class=hide><a href=#l-718>#</a> [23:47] * Joins: Florian (~Florian@public.cloak)</li>
+<li id=l-719 class=hide><a href=#l-719>#</a> [23:47] * Joins: adenilson (~anonymous@public.cloak)</li>
+<li id=l-720 class=hide><a href=#l-720>#</a> [23:54] * Quits: Florian (~Florian@public.cloak) (Ping timeout: 180 seconds)</li>
+<li id=l-721 class=hide><a href=#l-721>#</a> Session Close: Thu Feb 26 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20150224>Previous day</a>, <a href=20150226>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>

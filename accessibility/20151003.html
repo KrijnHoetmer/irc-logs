@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<title>IRC logs: mozilla / #accessibility / 20151003</title>
+<meta name="viewport" content="width=device-width">
+<style>
+ol { font-family: monospace; color: #000; font-size: 90%; list-style: none; margin: 0; padding: 0; }
+li { margin: 0; padding: 0; white-space: pre-wrap; word-wrap: break-word; }
+li:target { background: #f90; }
+li.hide { display: none; }
+li.flagged { background: yellow; }
+li.filtered { color: #aaa; font-size: 60%; }
+li.filtered:hover { font-size: 100%; color: #000; height: auto; }
+li span { display: inline; margin: 0; padding: 0 10px; background: #eee; color: #000; text-decoration: none; cursor: pointer; }
+li.flagged span { background: #f00; }
+li:hover span { background: #ff0 }
+input#filter { margin: 0 10px; }
+label { cursor: pointer; }
+p span { background: #ff0; margin-left: 10px; }
+</style>
+<h1 id="mozilla/accessibility.20151003.log"><a href="/irc-logs/">/irc-logs</a> / mozilla / #accessibility / 2015-10-03 / <a href="#end">end</a></h1>
+<p>Options: 
+<p><a href=20151002>Previous day</a>, <a href=20151004>Next day</a></p>
+<ol id=lines>
+<li id=l-1 class=hide><a href=#l-1>#</a> Session Start: Sat Oct 03 00:00:00 2015</li>
+<li id=l-2 class=hide><a href=#l-2>#</a> Session Ident: #accessibility</li>
+<li id=l-3 _a="smaug"><a href=#l-3>#</a> [00:00] &lt;smaug&gt; (in other words, what part could be moved to child process)</li>
+<li id=l-4 _a="smaug"><a href=#l-4>#</a> [00:00] &lt;smaug&gt; (or do I need to somehow access parent atk object in parent process)</li>
+<li id=l-5 _a="smaug" _r="hmm"><a href=#l-5>#</a> [00:01] &lt;smaug&gt; hmm, I need to also check if AtkAction is actually AtkObject</li>
+<li id=l-6 _a="smaug" _r="oh"><a href=#l-6>#</a> [00:04] &lt;smaug&gt; oh, sure it does</li>
+<li id=l-7 _a="@tbsaunde" _r="smaug"><a href=#l-7>#</a> [00:07] &lt;@tbsaunde&gt; smaug: ugh, I forgot about that weird keybind stuff</li>
+<li id=l-8 _a="@tbsaunde" _r="smaug"><a href=#l-8>#</a> [00:08] &lt;@tbsaunde&gt; smaug: I think its always AtkObject but you need to do the downcasting thing we do to get an AtkObject out of the AtkAction*</li>
+<li id=l-9 _a="smaug" _r="tbsaunde"><a href=#l-9>#</a> [00:10] &lt;smaug&gt; tbsaunde: sure, ATK_OBJECT is used there</li>
+<li id=l-10 _a="@tbsaunde" _r="smaug"><a href=#l-10>#</a> [00:12] &lt;@tbsaunde&gt; smaug: I think other than the methods on accessible its all atk specific, but I might just do it all in the child anyway (esp since it doesn't need to touch atk specific stuff)</li>
+<li id=l-11 _a="smaug" _r="tbsaunde"><a href=#l-11>#</a> [00:13] &lt;smaug&gt; tbsaunde: right. other platforms indeed don't seem to do anything like that</li>
+<li id=l-12 _a="smaug"><a href=#l-12>#</a> [00:13] &lt;smaug&gt; but will it break them then if we start to do the same thing everywhere?</li>
+<li id=l-13 _a="smaug"><a href=#l-13>#</a> [00:13] &lt;smaug&gt; are there some platform conventions here?</li>
+<li id=l-14 _a="@tbsaunde" _r="smaug"><a href=#l-14>#</a> [00:13] &lt;@tbsaunde&gt; smaug: I mean add a new ipc method</li>
+<li id=l-15 _a="@tbsaunde" _r="smaug"><a href=#l-15>#</a> [00:14] &lt;@tbsaunde&gt; smaug: well each platform's method has a spec, want links?</li>
+<li id=l-16 _a="smaug" _r="tbsaunde"><a href=#l-16>#</a> [00:14] &lt;smaug&gt; tbsaunde: some Atk specific ipc method?</li>
+<li id=l-17 _a="@tbsaunde" _r="smaug"><a href=#l-17>#</a> [00:14] &lt;@tbsaunde&gt; smaug: yeah, that was my thought</li>
+<li id=l-18 _a="smaug" _r="ok"><a href=#l-18>#</a> [00:14] &lt;smaug&gt; ok, I could do that</li>
+<li id=l-19 _a="smaug"><a href=#l-19>#</a> [00:14] &lt;smaug&gt; I'll use Atk somewhere in the name then</li>
+<li id=l-20 _a="@tbsaunde"><a href=#l-20>#</a> [00:15] &lt;@tbsaunde&gt; makes sense</li>
+<li id=l-21 _a="smaug" _r="tbsaunde"><a href=#l-21>#</a> [00:18] &lt;smaug&gt; tbsaunde: so getKeyBindingCB(AtkAction *aAction, gint aActionIndex) doesn't actually use the latter param for anything</li>
+<li id=l-22 _a="smaug"><a href=#l-22>#</a> [00:18] &lt;smaug&gt; but I won't change that</li>
+<li id=l-23 class=hide><a href=#l-23>#</a> [00:21] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-24 _a="ChanServ"><a href=#l-24>#</a> [00:21] * ChanServ sets mode: +o yzen</li>
+<li id=l-25 _a="@tbsaunde" _r="smaug"><a href=#l-25>#</a> [00:22] &lt;@tbsaunde&gt; smaug: yeah, the prototype is determined by the function pointer we assign it to</li>
+<li id=l-26 _a="@tbsaunde"><a href=#l-26>#</a> [00:22] &lt;@tbsaunde&gt; I'm not totally convinced the action index never matters to what the key binding is, but I'll worry about that possible bug later ;)</li>
+<li id=l-27 _a="Jamie"><a href=#l-27>#</a> [00:24] &lt;Jamie&gt; data:text/html,&lt;bdy contenTeditable=&quot;true&quot;&gt;foo&lt;div&gt;--&lt;br&gt;Jamie&lt;/div&gt;&lt;/body&gt;</li>
+<li id=l-28 _a="Jamie" _r="joanie"><a href=#l-28>#</a> [00:35] &lt;Jamie&gt; joanie: foobar&lt;br&gt;*bas</li>
+<li id=l-29 class=hide><a href=#l-29>#</a> [00:39] * Quits: fredw (Icedove@moz-8b1urf.fnjk.s0pt.0450.2001.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-30 class=hide><a href=#l-30>#</a> [00:43] * Joins: fredw (Icedove@moz-8b1urf.fnjk.s0pt.0450.2001.IP)</li>
+<li id=l-31 class=hide><a href=#l-31>#</a> [00:52] * Quits: fredw (Icedove@moz-8b1urf.fnjk.s0pt.0450.2001.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-32 _a="Jamie" _r="joanie"><a href=#l-32>#</a> [00:53] &lt;Jamie&gt; joanie: bug 1052504</li>
+<li id=l-33 _a="@firebot"><a href=#l-33>#</a> [00:53] &lt;@firebot&gt; <a href="https://bugzil.la/1052504">https://bugzil.la/1052504</a> — NEW, nobody@mozilla.org — atk_text_get_text_at_offset sometimes returns an empty line instead of the line at offset</li>
+<li id=l-34 class=hide><a href=#l-34>#</a> [00:54] * Joins: fredw (Icedove@moz-i5m.05u.207.66.IP)</li>
+<li id=l-35 _a="Jamie" _r="joanie"><a href=#l-35>#</a> [00:55] &lt;Jamie&gt; joanie: bug 1096071</li>
+<li id=l-36 _a="@firebot"><a href=#l-36>#</a> [00:55] &lt;@firebot&gt; <a href="https://bugzil.la/1096071">https://bugzil.la/1096071</a> — NEW, nobody@mozilla.org — atk_text_get_text_at_offset, IAccessibleText::textAtOffset is broken for CSS-generated content</li>
+<li id=l-37 _a="Jamie" _r="joanie"><a href=#l-37>#</a> [01:09] &lt;Jamie&gt; joanie: bug 1149415</li>
+<li id=l-38 _a="@firebot"><a href=#l-38>#</a> [01:09] &lt;@firebot&gt; <a href="https://bugzil.la/1149415">https://bugzil.la/1149415</a> — NEW, nobody@mozilla.org — Inline embedded object with no text breaks line offsets</li>
+<li id=l-39 class=hide _a="yzen"><a href=#l-39>#</a> [01:21] * yzen is now known as yzen_</li>
+<li id=l-40 class=hide><a href=#l-40>#</a> [01:26] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-41 _a="fredw" _r="joanie"><a href=#l-41>#</a> [01:28] &lt;fredw&gt; joanie: bug 1182469</li>
+<li id=l-42 _a="@firebot"><a href=#l-42>#</a> [01:28] &lt;@firebot&gt; <a href="https://bugzil.la/1182469">https://bugzil.la/1182469</a> — NEW, nobody@mozilla.org — The mathvariant transformation is not visible in the accessible tree</li>
+<li id=l-43 _a="smaug" _r="tbsaunde"><a href=#l-43>#</a> [01:28] &lt;smaug&gt; tbsaunde: curious, which tool do you prefer for reviewing?</li>
+<li id=l-44 _a="fredw" _r="joanie"><a href=#l-44>#</a> [01:31] &lt;fredw&gt; joanie: the relevant patch is the &quot;WIP&quot; one I think</li>
+<li id=l-45 _a="@tbsaunde" _r="smaug"><a href=#l-45>#</a> [01:31] &lt;@tbsaunde&gt; smaug: at this point bugzilla since its easy to read diffs</li>
+<li id=l-46 _a="smaug"><a href=#l-46>#</a> [01:32] &lt;smaug&gt; k</li>
+<li id=l-47 _a="@tbsaunde" _r="smaug"><a href=#l-47>#</a> [01:32] &lt;@tbsaunde&gt; smaug: don't tell me you actually like something new ;p</li>
+<li id=l-48 _a="smaug"><a href=#l-48>#</a> [01:32] &lt;smaug&gt; still no reason to use MozReview then ;)</li>
+<li id=l-49 _a="@firebot"><a href=#l-49>#</a> [01:39] &lt;@firebot&gt; bugs@pettay.fi changed the Assignee on bug 1210408 from nobody@mozilla.org to bugs@pettay.fi.</li>
+<li id=l-50 _a="Jamie" _r="joanie"><a href=#l-50>#</a> [01:39] &lt;Jamie&gt; joanie: bug 919508</li>
+<li id=l-51 _a="@firebot"><a href=#l-51>#</a> [01:39] &lt;@firebot&gt; <a href="https://bugzil.la/1210408">https://bugzil.la/1210408</a> — NEW, bugs@pettay.fi — make nsMaiInterfaceAction work with proxies</li>
+<li id=l-52 _a="@firebot"><a href=#l-52>#</a> [01:39] &lt;@firebot&gt; <a href="https://bugzil.la/919508">https://bugzil.la/919508</a> — REOPENED, nobody@mozilla.org — Incorrect results when get_text_at_offset() is used to get the last word on the line in wrapped text</li>
+<li id=l-53 class=hide><a href=#l-53>#</a> [01:42] * Joins: davidb (davidb@moz-lsu4ch.dsl.bell.ca)</li>
+<li id=l-54 _a="ChanServ"><a href=#l-54>#</a> [01:42] * ChanServ sets mode: +qo davidb davidb</li>
+<li id=l-55 class=hide><a href=#l-55>#</a> [01:43] * Quits: ~davidb (davidb@moz-lsu4ch.dsl.bell.ca) (Quit: peace out)</li>
+<li id=l-56 class=hide><a href=#l-56>#</a> [01:43] * Quits: fredw (Icedove@moz-i5m.05u.207.66.IP) (Client exited)</li>
+<li id=l-57 _a="Jamie" _r="joanie"><a href=#l-57>#</a> [01:50] &lt;Jamie&gt; joanie: bug 1177014</li>
+<li id=l-58 _a="@firebot"><a href=#l-58>#</a> [01:51] &lt;@firebot&gt; <a href="https://bugzil.la/1177014">https://bugzil.la/1177014</a> — NEW, nobody@mozilla.org — Line offsets incorrect for block followed by list</li>
+<li id=l-59 _a="Jamie"><a href=#l-59>#</a> [01:58] &lt;Jamie&gt; &lt;span onClick=&quot;;&quot;&gt;foo&lt;/span&gt; &lt;span&gt;onClick=&quot;;&quot;&gt;bar&lt;/span&gt;</li>
+<li id=l-60 _a="Jamie" _r="joanie"><a href=#l-60>#</a> [01:59] &lt;Jamie&gt; joanie: &lt;span onClick=&quot;;&quot;&gt;foo&lt;/span&gt; &lt;span onClick=&quot;;&quot;&gt;bar&lt;/span&gt;</li>
+<li id=l-61 class=hide><a href=#l-61>#</a> [02:11] * Quits: Jamie (Instantbird@moz-drd3bh.fnjk.s0pt.0450.2001.IP) (Quit: Instantbird 1.6a1pre -- <a href="http://www.instantbird.com">http://www.instantbird.com</a>)</li>
+<li id=l-62 _a="smaug" _r="tbsaunde"><a href=#l-62>#</a> [02:18] &lt;smaug&gt; tbsaunde: any idea why getCaptionCB doesn't g_object_ref the return value?</li>
+<li id=l-63 _a="smaug"><a href=#l-63>#</a> [02:20] &lt;smaug&gt; same with getColumnHeaderCB</li>
+<li id=l-64 _a="smaug"><a href=#l-64>#</a> [02:20] &lt;smaug&gt; and some others</li>
+<li id=l-65 _a="smaug"><a href=#l-65>#</a> [02:20] &lt;smaug&gt; in other words, I don't understand when to  g_object_ref the return AtkObject</li>
+<li id=l-66 class=hide><a href=#l-66>#</a> [02:31] * Joins: surkov (surkov@moz-an5vm5.cable.teksavvy.com)</li>
+<li id=l-67 _a="ChanServ"><a href=#l-67>#</a> [02:31] * ChanServ sets mode: +o surkov</li>
+<li id=l-68 _a="@firebot"><a href=#l-68>#</a> [02:43] &lt;@firebot&gt; bugs@pettay.fi requested needinfo from tbsaunde+mozbugs@tbsaunde.org on bug 1210407.</li>
+<li id=l-69 _a="@firebot"><a href=#l-69>#</a> [02:44] &lt;@firebot&gt; <a href="https://bugzil.la/1210407">https://bugzil.la/1210407</a> — NEW, nobody@mozilla.org — teach nsMaiInterfaceTable to use proxies</li>
+<li id=l-70 _a="@firebot"><a href=#l-70>#</a> [03:03] &lt;@firebot&gt; bugs@pettay.fi changed the Assignee on bug 1210407 from nobody@mozilla.org to bugs@pettay.fi.</li>
+<li id=l-71 _a="@firebot"><a href=#l-71>#</a> [03:03] &lt;@firebot&gt; <a href="https://bugzil.la/1210407">https://bugzil.la/1210407</a> — NEW, bugs@pettay.fi — teach nsMaiInterfaceTable to use proxies</li>
+<li id=l-72 class=hide><a href=#l-72>#</a> [03:14] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-73 _a="ChanServ"><a href=#l-73>#</a> [03:14] * ChanServ sets mode: +o yzen</li>
+<li id=l-74 class=hide _a="yzen"><a href=#l-74>#</a> [03:22] * yzen is now known as yzen_</li>
+<li id=l-75 class=hide _a="yzen_"><a href=#l-75>#</a> [03:23] * yzen_ is now known as yzen</li>
+<li id=l-76 class=hide _a="yzen"><a href=#l-76>#</a> [03:24] * yzen is now known as yzen_</li>
+<li id=l-77 class=hide _a="yzen_"><a href=#l-77>#</a> [03:25] * yzen_ is now known as yzen</li>
+<li id=l-78 class=hide><a href=#l-78>#</a> [03:29] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-79 class=hide><a href=#l-79>#</a> [04:27] * Quits: @surkov (surkov@moz-an5vm5.cable.teksavvy.com) (Client exited)</li>
+<li id=l-80 class=hide _a="yzen"><a href=#l-80>#</a> [05:20] * yzen is now known as yzen_</li>
+<li id=l-81 class=hide><a href=#l-81>#</a> [05:25] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-82 class=hide><a href=#l-82>#</a> [05:55] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-83 _a="ChanServ"><a href=#l-83>#</a> [05:55] * ChanServ sets mode: +o yzen</li>
+<li id=l-84 class=hide _a="yzen"><a href=#l-84>#</a> [06:13] * yzen is now known as yzen_</li>
+<li id=l-85 class=hide><a href=#l-85>#</a> [06:18] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-86 _a="@firebot"><a href=#l-86>#</a> [08:22] &lt;@firebot&gt; gijskruitbosch+bugs@gmail.com requested needinfo from surkov.alexander@gmail.com on bug 1210982.</li>
+<li id=l-87 _a="@firebot"><a href=#l-87>#</a> [08:22] &lt;@firebot&gt; <a href="https://bugzil.la/1210982">https://bugzil.la/1210982</a> — NEW, nobody@mozilla.org — JavaScript alert dialogs should be exposed as ROLE_DIALOG rather than ROLE_ALERT in ATK and IA2</li>
+<li id=l-88 class=hide><a href=#l-88>#</a> [09:03] * Quits: Yakulu (Yakulu@moz-8a4.fkm.194.78.IP) (Quit: WeeChat 1.3)</li>
+<li id=l-89 class=hide><a href=#l-89>#</a> [09:04] * Joins: Yakulu (Yakulu@moz-8a4.fkm.194.78.IP)</li>
+<li id=l-90 class=hide><a href=#l-90>#</a> [11:25] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-91 class=hide><a href=#l-91>#</a> [11:45] * Quits: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com) (Ping timeout: 121 seconds)</li>
+<li id=l-92 class=hide><a href=#l-92>#</a> [11:52] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-93 _a="@firebot"><a href=#l-93>#</a> [13:10] &lt;@firebot&gt; jdiggs@igalia.com requested needinfo from jdiggs@igalia.com on bug 1210982.</li>
+<li id=l-94 _a="@firebot"><a href=#l-94>#</a> [13:10] &lt;@firebot&gt; <a href="https://bugzil.la/1210982">https://bugzil.la/1210982</a> — NEW, nobody@mozilla.org — JavaScript alert dialogs should be exposed as ROLE_DIALOG rather than ROLE_ALERT in ATK and IA2</li>
+<li id=l-95 class=hide><a href=#l-95>#</a> [13:55] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-96 _a="ChanServ"><a href=#l-96>#</a> [13:55] * ChanServ sets mode: +o yzen</li>
+<li id=l-97 class=hide _a="yzen"><a href=#l-97>#</a> [14:11] * yzen is now known as yzen_</li>
+<li id=l-98 class=hide><a href=#l-98>#</a> [14:15] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-99 class=hide><a href=#l-99>#</a> [14:22] * Joins: surkov (surkov@moz-an5vm5.cable.teksavvy.com)</li>
+<li id=l-100 _a="ChanServ"><a href=#l-100>#</a> [14:22] * ChanServ sets mode: +o surkov</li>
+<li id=l-101 class=hide><a href=#l-101>#</a> [14:32] * Quits: @surkov (surkov@moz-an5vm5.cable.teksavvy.com) (Client exited)</li>
+<li id=l-102 class=hide><a href=#l-102>#</a> [14:53] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-103 class=hide><a href=#l-103>#</a> [15:02] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-104 class=hide><a href=#l-104>#</a> [15:20] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-105 _a="ChanServ"><a href=#l-105>#</a> [15:20] * ChanServ sets mode: +o yzen</li>
+<li id=l-106 _a="@firebot"><a href=#l-106>#</a> [15:22] &lt;@firebot&gt; masayuki@d-toybox.com requested needinfo from mark@wolfbeast.com on bug 1210739.</li>
+<li id=l-107 _a="@firebot"><a href=#l-107>#</a> [15:22] &lt;@firebot&gt; <a href="https://bugzil.la/1210739">https://bugzil.la/1210739</a> — UNCONFIRMED, nobody@mozilla.org — Input confusion when Numlock is off</li>
+<li id=l-108 class=hide><a href=#l-108>#</a> [15:30] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-109 class=hide _a="yzen"><a href=#l-109>#</a> [15:34] * yzen is now known as yzen_</li>
+<li id=l-110 class=hide><a href=#l-110>#</a> [15:38] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-111 class=hide><a href=#l-111>#</a> [15:47] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-112 _a="@firebot"><a href=#l-112>#</a> [15:49] &lt;@firebot&gt; mark@wolfbeast.com cancelled needinfo?(mark@wolfbeast.com) on bug 1210739.</li>
+<li id=l-113 _a="@firebot"><a href=#l-113>#</a> [15:50] &lt;@firebot&gt; <a href="https://bugzil.la/1210739">https://bugzil.la/1210739</a> — UNCONFIRMED, nobody@mozilla.org — Input confusion when Numlock is off</li>
+<li id=l-114 _a="@firebot"><a href=#l-114>#</a> [15:56] &lt;@firebot&gt; masayuki@d-toybox.com requested needinfo from mark@wolfbeast.com on bug 1210739.</li>
+<li id=l-115 class=hide><a href=#l-115>#</a> [16:01] * Joins: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com)</li>
+<li id=l-116 _a="@firebot"><a href=#l-116>#</a> [16:10] &lt;@firebot&gt; mark@wolfbeast.com cancelled needinfo?(mark@wolfbeast.com) on bug 1210739.</li>
+<li id=l-117 _a="@firebot"><a href=#l-117>#</a> [16:10] &lt;@firebot&gt; <a href="https://bugzil.la/1210739">https://bugzil.la/1210739</a> — UNCONFIRMED, nobody@mozilla.org — Input confusion when Numlock is off</li>
+<li id=l-118 class=hide><a href=#l-118>#</a> [16:21] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-119 class=hide><a href=#l-119>#</a> [16:22] * Quits: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com) (Ping timeout: 121 seconds)</li>
+<li id=l-120 class=hide><a href=#l-120>#</a> [16:52] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-121 class=hide><a href=#l-121>#</a> [17:41] * Joins: a-865 (fmcz@moz-ipbm7f.cable.mindspring.com)</li>
+<li id=l-122 class=hide><a href=#l-122>#</a> [18:15] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-123 _a="@firebot"><a href=#l-123>#</a> [18:34] &lt;@firebot&gt; vseerror@lehigh.edu changed the Resolution on bug 1115551 from --- to INVALID.</li>
+<li id=l-124 _a="@firebot"><a href=#l-124>#</a> [18:35] &lt;@firebot&gt; vseerror@lehigh.edu changed the Status on bug 1115551 from UNCONFIRMED to RESOLVED.</li>
+<li id=l-125 _a="@firebot"><a href=#l-125>#</a> [18:35] &lt;@firebot&gt; <a href="https://bugzil.la/1115551">https://bugzil.la/1115551</a> — INVALID, nobody@mozilla.org — Missing important page elements in Windows High Contrast Theme</li>
+<li id=l-126 class=hide><a href=#l-126>#</a> [18:40] * Joins: yzen (yzen@moz-ql1r6k.cpe.pppoe.ca)</li>
+<li id=l-127 _a="ChanServ"><a href=#l-127>#</a> [18:40] * ChanServ sets mode: +o yzen</li>
+<li id=l-128 _a="@firebot"><a href=#l-128>#</a> [18:42] &lt;@firebot&gt; jamie@nvaccess.org cancelled needinfo?(jamie@nvaccess.org) on bug 1052866.</li>
+<li id=l-129 _a="@firebot"><a href=#l-129>#</a> [18:42] &lt;@firebot&gt; <a href="https://bugzil.la/1052866">https://bugzil.la/1052866</a> — NEW, nobody@mozilla.org — Expose IAccessibleText on tables, rows, etc.</li>
+<li id=l-130 class=hide><a href=#l-130>#</a> [18:48] * Quits: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi) (Ping timeout: 121 seconds)</li>
+<li id=l-131 class=hide _a="yzen"><a href=#l-131>#</a> [18:49] * yzen is now known as yzen_</li>
+<li id=l-132 class=hide><a href=#l-132>#</a> [18:53] * Quits: @yzen_ (yzen@moz-ql1r6k.cpe.pppoe.ca) (Ping timeout: 121 seconds)</li>
+<li id=l-133 class=hide><a href=#l-133>#</a> [20:06] * Joins: smaug (chatzilla@moz-kn7naf.elisa-laajakaista.fi)</li>
+<li id=l-134 class=hide><a href=#l-134>#</a> [22:05] * Quits: funnel (hegel@moz-hmd.ddu.4.81.IP) (Ping timeout: 121 seconds)</li>
+<li id=l-135 class=hide><a href=#l-135>#</a> [22:05] * Joins: funnel (hegel@moz-hmd.ddu.4.81.IP)</li>
+<li id=l-136 class=hide><a href=#l-136>#</a> Session Close: Sun Oct 04 00:00:00 2015</li>
+</ol>
+<p id=end><a href=20151002>Previous day</a>, <a href=20151004>Next day</a></p>
+<p>Think <a href="/irc-logs/">these logs</a> are useful? Then <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=PMXKLAEH53JSS&amp;lc=GB&amp;item_name=Krijn%20Hoetmer&amp;item_number=IRC%20Logs&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><strong>please donate</strong></a> to show your gratitude (and keep them up, of course). <a href="https://twitter.com/krijnhoetmer/status/414824591337734144">Thanks! — Krijn</a></p>
+<script src=/irc-logs/s2.js></script>
